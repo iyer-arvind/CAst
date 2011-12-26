@@ -135,10 +135,10 @@ void comment()
 	char c, c1;
 
 loop:
-	while ((c = input()) != '*' && c != 0)
+	while ((c = yyinput()) != '*' && c != 0)
 		putchar(c);
 
-	if ((c1 = input()) != '/' && c != 0)
+	if ((c1 = yyinput()) != '/' && c != 0)
 	{
 		unput(c1);
 		goto loop;
@@ -153,6 +153,7 @@ int column = 0;
 
 void count()
 {
+/*
 	int i;
 
 	for (i = 0; yytext[i] != '\0'; i++)
@@ -162,8 +163,15 @@ void count()
 			column += 8 - (column % 8);
 		else
 			column++;
+*/	
+	
 
-	//printf("reading: \033[31m%s\033[0m\n",yytext);
+	yylval._t_str=new char[strlen(yytext)+1];
+	strcpy((char*)yylval._t_str,yytext);
+	if(strcmp(yytext,"\n"))
+		printf("reading: \033[37;41;1m%s\033[0m\n",yytext);
+
+
 }
 
 

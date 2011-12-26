@@ -14,6 +14,7 @@ class Rule(object):
 	def __init__(self,ruleName):
 		self.ruleName=ruleName
 		self.patterns=[]
+		self.isStart=False
 
 	def append(self,pattern):
 		val=Pattern(pattern)
@@ -58,10 +59,10 @@ class Rule(object):
 		#fh.write("/*test comment*/\n")
 		fh.write(self.ruleName+"\n")
 		for i,p in enumerate(self.patterns):
-			rule="\t"+("|" if i else ":")+", ".join([ repr(t) for t in p ])
+			rule="\t"+("|" if i else ":")+" ".join([ repr(t) for t in p ])
 			fh.write(rule+" "*(85-len(rule)))
 			p.constructor._setParameters()
-			p.constructor._dumpYacc(fh)
+			p.constructor._dumpYacc(fh,self.isStart)
 			fh.write("\n")
 		fh.write("\t;\n\n\n")
 
