@@ -52,11 +52,11 @@ class ConstructorClassCoder(object):
 		fh.write("):\n"+"\t"*5+"_s_matchedPattern(_arg__s_matchedPattern)"+(",\n" if len(self.parameters) else "\n"))
 		fh.write(",\n".join(["\t"*5+"%s(_arg_%s)"%(n,n) for t,n,p,v,i in self.parameters ]))
 		fh.write("\n{\n")
-		fh.write("\n\tLOG(\"CREATING %s\")\n"%self.className);
+		fh.write("\n\tLOG(\"\\033[32mCREATING\\033[0m %s\")\n"%self.className);
 		fh.write("}\n")
 		fh.write("%s::~%s()"%(self.className,self.className))
 		fh.write("\n{\n")
-		fh.write("\n\tLOG(\"DELETING %s\")\n"%self.className);
+		fh.write("\n\tLOG(\"\\033[32mDELETING\\033[0m %s\")\n"%self.className);
 		fh.write("\n".join(["\tif (%s)%s{delete(%s);%s=0;}"%(n," "*(30-len(n)),n,n) for t,n,p,v,i in self.parameters]))
 		fh.write("\n}\n")
 
@@ -134,7 +134,7 @@ class ListAccumulatorClassCoder(ConstructorClassCoder):
 		fh.write("\t"*5+"_s_matchedPattern(_arg__s_matchedPattern)"+(",\n" if len(self.parameters) else "\n"))
 		fh.write(",\n".join(["\t"*5+"%s(_arg_%s)"%(n,n) for t,n,p,v,i in self.parameters if i != self.constructor.selfIndex]))
 		fh.write("\n{\n")
-		fh.write("\n\tLOG(\"CREATING %s_item\")\n"%self.className);
+		fh.write("\n\tLOG(\"\\033[32mCREATING\033[0m %s_item\")\n"%self.className);
 		fh.write("\tLOG(\"[ \"<<_refCount<<\" ]\t\"<<\"refCount after creation:\"<<(*_refCount))")
 		fh.write("\n}\n")
 
@@ -152,11 +152,11 @@ class ListAccumulatorClassCoder(ConstructorClassCoder):
 
 		fh.write("%s_item::~%s_item()"%(self.className,self.className))
 		fh.write("\n{\n")
-		fh.write("\n\tLOG(\"DELETING(?) %s_item\")\n"%self.className);
+		fh.write("\n\tLOG(\"\\033[31mDELETING\\033[0m(?) %s_item\")\n"%self.className);
 		fh.write("\n\t(*_refCount)--;")
 		fh.write("\tLOG(\"[ \"<<_refCount<<\" ]\t\"<<\"refCount after decrement:\"<<(*_refCount))")
 		fh.write("\n\tif((*_refCount)>0)return;")
-		fh.write("\n\tLOG(\"DELETING %s_item\")\n"%self.className);
+		fh.write("\n\tLOG(\"\\033[31mDELETING\\033[0m %s_item\")\n"%self.className);
 		fh.write("\n\tdelete(_refCount);_refCount=0;")
 		fh.write("\n".join(["\tif (%s)%s{delete(%s);%s=0;}"%(n," "*(30-len(n)),n,n) for t,n,p,v,i in self.parameters if i != self.constructor.selfIndex]))
 		fh.write("\n}\n")

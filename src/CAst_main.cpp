@@ -4,7 +4,7 @@
 #include "CAst.h"
 int yyparse(void);
 extern FILE* yyin;
-YYSTYPE root;
+CAst::translation_unit *root;
 
 int main(int argc,char **argv)
 {
@@ -13,9 +13,7 @@ int main(int argc,char **argv)
 	yyparse();
 	
 	std::cout<<"yyval:"<<root<<"\n";
-	CAst::translation_unit *yroot=dynamic_cast<CAst::translation_unit*>(root);
-//	std::cout<<"delete\n\n";
-	delete yroot;
+	delete root;
 //	std::cout<<"deleted\n\n";
 	return 0;
 }

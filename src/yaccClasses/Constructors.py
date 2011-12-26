@@ -39,7 +39,19 @@ class _Constructor_(object):
 			else:
 				return "<noname>"
 
+	def __getBaseClassName(self):
+		if(self.parent is not None):
+			return self.parent.baseClassName
+		else:
+			if hasattr(self,"_name"):
+				return self._name
+			else:
+				return "<noname>"
+
+
+
 	className = property(__getClassName,None,None,"")
+	baseClassName = property(__getBaseClassName,None,None,"")
 
 	def __repr__(self):
 		if(not hasattr(self,"parameters")):self._setParameters()
@@ -63,13 +75,14 @@ class _Constructor_(object):
 		if(not hasattr(self,"parameters")):self._setParameters()
 		self.classCoder._dumpCSource(fh)
 
-	def _dumpYacc(self,fh):
+	def _dumpYacc(self,fh,isStart):
 		if(not hasattr(self,"parameters")):self._setParameters()
 		fh.write("{")
 		fh.write("RULE_MARKER(%30s);"%("\""+self.className+"\""))
-		fh.write("$$=(CAst::CAst*)(new CAst::%s"%self.className+"(\"%s\","%repr(self.originalPattern))
-		fh.write(", ".join([ "%s"%(("CAST_PTR(%s,%s)"%(t,v) if v!="NULL" else "NULL")) for t,n,p,v,i in self.parameters]))
-		fh.write("));")
+		fh.write("$<_t_%s>$=new CAst::%s"%(self.baseClassName,self.className)+"(\"%s\","%repr(self.originalPattern))
+		fh.write(", ".join([ "%s"%(v if v!="NULL" else "NULL") for t,n,p,v,i in self.parameters]))
+		fh.write(");")
+		if(isStart):fh.write("root=$<_t_%s>$;"%self.className)
 		fh.write("}")
 
 		
@@ -96,7 +109,7 @@ class _Constructor_(object):
 				if(i in self.nullParameterIndices):
 					val="NULL"
 				else:
-					val="$%d"%n
+					val="new CAst::Token($<_t_str>%d)"%n if typName=="Token" else "$<_t_%s>%d"%(typName,n) 
 					n+=1
 				self.parameters.append((typName,varName,p,val,i))
 			else:
@@ -194,14 +207,14 @@ class __ListAccumulateConstructor(_Constructor_):
 		st+=")"
 		return st
 
-	def _dumpYacc(self,fh):
+	def _dumpYacc(self,fh,isStart):
 		if(not hasattr(self,"parameters")):self._setParameters()
 		fh.write("{")
 		fh.write("RULE_MARKER(%30s);"%("\""+self.className+"\""))
-		fh.write("CAST_PTR(%s,$%d)->append(\"%s\", "%(self.className,self.selfIndex+1,repr(self.originalPattern)))
+		fh.write("CAST_PTR(%s,$<_t_%s>%d)->append(\"%s\", "%(self.className,self.baseClassName,self.selfIndex+1,repr(self.originalPattern)))
 		print self.className,self.parameters
-		fh.write(", ".join([ "%s"%(("CAST_PTR(%s,%s)"%(t,v) if v!="NULL" else "NULL")) for t,n,p,v,i in self.parameters]))
-		fh.write(");$$=$%d;"%(self.selfIndex+1))
+		fh.write(", ".join([ "%s"%(v if v!="NULL" else "NULL") for t,n,p,v,i in self.parameters]))
+		fh.write(");$<_t_%s>$=$<_t_%s>%d;"%(self.baseClassName,self.baseClassName,self.selfIndex+1))
 		fh.write("}")
 
 		
@@ -243,7 +256,7 @@ class __ListInitializeConstructor(_Constructor_):
 					typName="Token"
 					varName="_p_token%d"%(counts[t]+1)
 				if(p in self.originalPattern):
-					val="$%d"%(self.originalPattern.index(p)+1)
+					val="$<_t_%s>%d"%(typName,self.originalPattern.index(p)+1)
 				else:
 					val="NULL"
 					n+=1

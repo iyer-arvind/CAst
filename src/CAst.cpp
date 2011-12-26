@@ -20,12 +20,12 @@ storage_class_specifier::storage_class_specifier(std::string _arg__s_matchedPatt
 					_p_token1(_arg__p_token1)
 {
 
-	LOG("CREATING storage_class_specifier")
+	LOG("\033[32mCREATING\033[0m storage_class_specifier")
 }
 storage_class_specifier::~storage_class_specifier()
 {
 
-	LOG("DELETING storage_class_specifier")
+	LOG("\033[32mDELETING\033[0m storage_class_specifier")
 	if (_p_token1)                     {delete(_p_token1);_p_token1=0;}
 }
 
@@ -50,12 +50,12 @@ expression_statement::expression_statement(std::string _arg__s_matchedPattern, e
 					_p_expression(_arg__p_expression)
 {
 
-	LOG("CREATING expression_statement")
+	LOG("\033[32mCREATING\033[0m expression_statement")
 }
 expression_statement::~expression_statement()
 {
 
-	LOG("DELETING expression_statement")
+	LOG("\033[32mDELETING\033[0m expression_statement")
 	if (_p_expression)                 {delete(_p_expression);_p_expression=0;}
 }
 
@@ -81,12 +81,12 @@ type_name::type_name(std::string _arg__s_matchedPattern, specifier_qualifier_lis
 					_p_abstract_declarator(_arg__p_abstract_declarator)
 {
 
-	LOG("CREATING type_name")
+	LOG("\033[32mCREATING\033[0m type_name")
 }
 type_name::~type_name()
 {
 
-	LOG("DELETING type_name")
+	LOG("\033[32mDELETING\033[0m type_name")
 	if (_p_specifier_qualifier_list)   {delete(_p_specifier_qualifier_list);_p_specifier_qualifier_list=0;}
 	if (_p_abstract_declarator)        {delete(_p_abstract_declarator);_p_abstract_declarator=0;}
 }
@@ -112,12 +112,12 @@ unary_expression1::unary_expression1(std::string _arg__s_matchedPattern, type_na
 					_p_type_name(_arg__p_type_name)
 {
 
-	LOG("CREATING unary_expression1")
+	LOG("\033[32mCREATING\033[0m unary_expression1")
 }
 unary_expression1::~unary_expression1()
 {
 
-	LOG("DELETING unary_expression1")
+	LOG("\033[32mDELETING\033[0m unary_expression1")
 	if (_p_type_name)                  {delete(_p_type_name);_p_type_name=0;}
 }
 std::string unary_expression2::name()const
@@ -136,12 +136,12 @@ unary_expression2::unary_expression2(std::string _arg__s_matchedPattern, Token *
 					_p_unary_expression(_arg__p_unary_expression)
 {
 
-	LOG("CREATING unary_expression2")
+	LOG("\033[32mCREATING\033[0m unary_expression2")
 }
 unary_expression2::~unary_expression2()
 {
 
-	LOG("DELETING unary_expression2")
+	LOG("\033[32mDELETING\033[0m unary_expression2")
 	if (_p_token1)                     {delete(_p_token1);_p_token1=0;}
 	if (_p_unary_expression)           {delete(_p_unary_expression);_p_unary_expression=0;}
 }
@@ -161,12 +161,12 @@ unary_expression3::unary_expression3(std::string _arg__s_matchedPattern, unary_o
 					_p_cast_expression(_arg__p_cast_expression)
 {
 
-	LOG("CREATING unary_expression3")
+	LOG("\033[32mCREATING\033[0m unary_expression3")
 }
 unary_expression3::~unary_expression3()
 {
 
-	LOG("DELETING unary_expression3")
+	LOG("\033[32mDELETING\033[0m unary_expression3")
 	if (_p_unary_operator)             {delete(_p_unary_operator);_p_unary_operator=0;}
 	if (_p_cast_expression)            {delete(_p_cast_expression);_p_cast_expression=0;}
 }
@@ -185,12 +185,12 @@ unary_expression4::unary_expression4(std::string _arg__s_matchedPattern, postfix
 					_p_postfix_expression(_arg__p_postfix_expression)
 {
 
-	LOG("CREATING unary_expression4")
+	LOG("\033[32mCREATING\033[0m unary_expression4")
 }
 unary_expression4::~unary_expression4()
 {
 
-	LOG("DELETING unary_expression4")
+	LOG("\033[32mDELETING\033[0m unary_expression4")
 	if (_p_postfix_expression)         {delete(_p_postfix_expression);_p_postfix_expression=0;}
 }
 
@@ -207,7 +207,7 @@ conditional_expression_item::conditional_expression_item(std::string _arg__s_mat
 					_p_expression(_arg__p_expression)
 {
 
-	LOG("CREATING conditional_expression_item")
+	LOG("\033[32mCREATING[0m conditional_expression_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	conditional_expression_item::conditional_expression_item(const conditional_expression_item &other):
@@ -224,11 +224,11 @@ conditional_expression_item::conditional_expression_item(std::string _arg__s_mat
 conditional_expression_item::~conditional_expression_item()
 {
 
-	LOG("DELETING(?) conditional_expression_item")
+	LOG("\033[31mDELETING\033[0m(?) conditional_expression_item")
 
 	(*_refCount)--;	LOG("[ "<<_refCount<<" ]	"<<"refCount after decrement:"<<(*_refCount))
 	if((*_refCount)>0)return;
-	LOG("DELETING conditional_expression_item")
+	LOG("\033[31mDELETING\033[0m conditional_expression_item")
 
 	delete(_refCount);_refCount=0;	if (_p_logical_or_expression)      {delete(_p_logical_or_expression);_p_logical_or_expression=0;}
 	if (_p_expression)                 {delete(_p_expression);_p_expression=0;}
@@ -289,12 +289,12 @@ struct_or_union_specifier::struct_or_union_specifier(std::string _arg__s_matched
 					_p_token3(_arg__p_token3)
 {
 
-	LOG("CREATING struct_or_union_specifier")
+	LOG("\033[32mCREATING\033[0m struct_or_union_specifier")
 }
 struct_or_union_specifier::~struct_or_union_specifier()
 {
 
-	LOG("DELETING struct_or_union_specifier")
+	LOG("\033[32mDELETING\033[0m struct_or_union_specifier")
 	if (_p_struct_or_union)            {delete(_p_struct_or_union);_p_struct_or_union=0;}
 	if (_p_token1)                     {delete(_p_token1);_p_token1=0;}
 	if (_p_token2)                     {delete(_p_token2);_p_token2=0;}
@@ -314,7 +314,7 @@ exclusive_or_expression_item::exclusive_or_expression_item(std::string _arg__s_m
 					_p_and_expression(_arg__p_and_expression)
 {
 
-	LOG("CREATING exclusive_or_expression_item")
+	LOG("\033[32mCREATING[0m exclusive_or_expression_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	exclusive_or_expression_item::exclusive_or_expression_item(const exclusive_or_expression_item &other):
@@ -330,11 +330,11 @@ exclusive_or_expression_item::exclusive_or_expression_item(std::string _arg__s_m
 exclusive_or_expression_item::~exclusive_or_expression_item()
 {
 
-	LOG("DELETING(?) exclusive_or_expression_item")
+	LOG("\033[31mDELETING\033[0m(?) exclusive_or_expression_item")
 
 	(*_refCount)--;	LOG("[ "<<_refCount<<" ]	"<<"refCount after decrement:"<<(*_refCount))
 	if((*_refCount)>0)return;
-	LOG("DELETING exclusive_or_expression_item")
+	LOG("\033[31mDELETING\033[0m exclusive_or_expression_item")
 
 	delete(_refCount);_refCount=0;	if (_p_and_expression)             {delete(_p_and_expression);_p_and_expression=0;}
 }
@@ -391,12 +391,12 @@ initializer1::initializer1(std::string _arg__s_matchedPattern, initializer_list 
 					_p_token1(_arg__p_token1)
 {
 
-	LOG("CREATING initializer1")
+	LOG("\033[32mCREATING\033[0m initializer1")
 }
 initializer1::~initializer1()
 {
 
-	LOG("DELETING initializer1")
+	LOG("\033[32mDELETING\033[0m initializer1")
 	if (_p_initializer_list)           {delete(_p_initializer_list);_p_initializer_list=0;}
 	if (_p_token1)                     {delete(_p_token1);_p_token1=0;}
 }
@@ -415,12 +415,12 @@ initializer2::initializer2(std::string _arg__s_matchedPattern, assignment_expres
 					_p_assignment_expression(_arg__p_assignment_expression)
 {
 
-	LOG("CREATING initializer2")
+	LOG("\033[32mCREATING\033[0m initializer2")
 }
 initializer2::~initializer2()
 {
 
-	LOG("DELETING initializer2")
+	LOG("\033[32mDELETING\033[0m initializer2")
 	if (_p_assignment_expression)      {delete(_p_assignment_expression);_p_assignment_expression=0;}
 }
 
@@ -436,7 +436,7 @@ struct_declaration_list_item::struct_declaration_list_item(std::string _arg__s_m
 					_p_struct_declaration(_arg__p_struct_declaration)
 {
 
-	LOG("CREATING struct_declaration_list_item")
+	LOG("\033[32mCREATING[0m struct_declaration_list_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	struct_declaration_list_item::struct_declaration_list_item(const struct_declaration_list_item &other):
@@ -452,11 +452,11 @@ struct_declaration_list_item::struct_declaration_list_item(std::string _arg__s_m
 struct_declaration_list_item::~struct_declaration_list_item()
 {
 
-	LOG("DELETING(?) struct_declaration_list_item")
+	LOG("\033[31mDELETING\033[0m(?) struct_declaration_list_item")
 
 	(*_refCount)--;	LOG("[ "<<_refCount<<" ]	"<<"refCount after decrement:"<<(*_refCount))
 	if((*_refCount)>0)return;
-	LOG("DELETING struct_declaration_list_item")
+	LOG("\033[31mDELETING\033[0m struct_declaration_list_item")
 
 	delete(_refCount);_refCount=0;	if (_p_struct_declaration)         {delete(_p_struct_declaration);_p_struct_declaration=0;}
 }
@@ -512,12 +512,12 @@ assignment_operator::assignment_operator(std::string _arg__s_matchedPattern, Tok
 					_p_token1(_arg__p_token1)
 {
 
-	LOG("CREATING assignment_operator")
+	LOG("\033[32mCREATING\033[0m assignment_operator")
 }
 assignment_operator::~assignment_operator()
 {
 
-	LOG("DELETING assignment_operator")
+	LOG("\033[32mDELETING\033[0m assignment_operator")
 	if (_p_token1)                     {delete(_p_token1);_p_token1=0;}
 }
 
@@ -543,12 +543,12 @@ struct_declaration::struct_declaration(std::string _arg__s_matchedPattern, speci
 					_p_struct_declarator_list(_arg__p_struct_declarator_list)
 {
 
-	LOG("CREATING struct_declaration")
+	LOG("\033[32mCREATING\033[0m struct_declaration")
 }
 struct_declaration::~struct_declaration()
 {
 
-	LOG("DELETING struct_declaration")
+	LOG("\033[32mDELETING\033[0m struct_declaration")
 	if (_p_specifier_qualifier_list)   {delete(_p_specifier_qualifier_list);_p_specifier_qualifier_list=0;}
 	if (_p_struct_declarator_list)     {delete(_p_struct_declarator_list);_p_struct_declarator_list=0;}
 }
@@ -575,12 +575,12 @@ abstract_declarator::abstract_declarator(std::string _arg__s_matchedPattern, poi
 					_p_direct_abstract_declarator(_arg__p_direct_abstract_declarator)
 {
 
-	LOG("CREATING abstract_declarator")
+	LOG("\033[32mCREATING\033[0m abstract_declarator")
 }
 abstract_declarator::~abstract_declarator()
 {
 
-	LOG("DELETING abstract_declarator")
+	LOG("\033[32mDELETING\033[0m abstract_declarator")
 	if (_p_pointer)                    {delete(_p_pointer);_p_pointer=0;}
 	if (_p_direct_abstract_declarator) {delete(_p_direct_abstract_declarator);_p_direct_abstract_declarator=0;}
 }
@@ -607,12 +607,12 @@ iteration_statement1::iteration_statement1(std::string _arg__s_matchedPattern, s
 					_p_expression(_arg__p_expression)
 {
 
-	LOG("CREATING iteration_statement1")
+	LOG("\033[32mCREATING\033[0m iteration_statement1")
 }
 iteration_statement1::~iteration_statement1()
 {
 
-	LOG("DELETING iteration_statement1")
+	LOG("\033[32mDELETING\033[0m iteration_statement1")
 	if (_p_statement)                  {delete(_p_statement);_p_statement=0;}
 	if (_p_expression)                 {delete(_p_expression);_p_expression=0;}
 }
@@ -634,12 +634,12 @@ iteration_statement2::iteration_statement2(std::string _arg__s_matchedPattern, e
 					_p_statement(_arg__p_statement)
 {
 
-	LOG("CREATING iteration_statement2")
+	LOG("\033[32mCREATING\033[0m iteration_statement2")
 }
 iteration_statement2::~iteration_statement2()
 {
 
-	LOG("DELETING iteration_statement2")
+	LOG("\033[32mDELETING\033[0m iteration_statement2")
 	if (_p_expression_statement)       {delete(_p_expression_statement);_p_expression_statement=0;}
 	if (_p_expression_statement1)      {delete(_p_expression_statement1);_p_expression_statement1=0;}
 	if (_p_expression)                 {delete(_p_expression);_p_expression=0;}
@@ -661,12 +661,12 @@ iteration_statement3::iteration_statement3(std::string _arg__s_matchedPattern, e
 					_p_statement(_arg__p_statement)
 {
 
-	LOG("CREATING iteration_statement3")
+	LOG("\033[32mCREATING\033[0m iteration_statement3")
 }
 iteration_statement3::~iteration_statement3()
 {
 
-	LOG("DELETING iteration_statement3")
+	LOG("\033[32mDELETING\033[0m iteration_statement3")
 	if (_p_expression)                 {delete(_p_expression);_p_expression=0;}
 	if (_p_statement)                  {delete(_p_statement);_p_statement=0;}
 }
@@ -683,7 +683,7 @@ and_expression_item::and_expression_item(std::string _arg__s_matchedPattern, equ
 					_p_equality_expression(_arg__p_equality_expression)
 {
 
-	LOG("CREATING and_expression_item")
+	LOG("\033[32mCREATING[0m and_expression_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	and_expression_item::and_expression_item(const and_expression_item &other):
@@ -699,11 +699,11 @@ and_expression_item::and_expression_item(std::string _arg__s_matchedPattern, equ
 and_expression_item::~and_expression_item()
 {
 
-	LOG("DELETING(?) and_expression_item")
+	LOG("\033[31mDELETING\033[0m(?) and_expression_item")
 
 	(*_refCount)--;	LOG("[ "<<_refCount<<" ]	"<<"refCount after decrement:"<<(*_refCount))
 	if((*_refCount)>0)return;
-	LOG("DELETING and_expression_item")
+	LOG("\033[31mDELETING\033[0m and_expression_item")
 
 	delete(_refCount);_refCount=0;	if (_p_equality_expression)        {delete(_p_equality_expression);_p_equality_expression=0;}
 }
@@ -759,12 +759,12 @@ external_declaration1::external_declaration1(std::string _arg__s_matchedPattern,
 					_p_function_definition(_arg__p_function_definition)
 {
 
-	LOG("CREATING external_declaration1")
+	LOG("\033[32mCREATING\033[0m external_declaration1")
 }
 external_declaration1::~external_declaration1()
 {
 
-	LOG("DELETING external_declaration1")
+	LOG("\033[32mDELETING\033[0m external_declaration1")
 	if (_p_function_definition)        {delete(_p_function_definition);_p_function_definition=0;}
 }
 std::string external_declaration2::name()const
@@ -782,12 +782,12 @@ external_declaration2::external_declaration2(std::string _arg__s_matchedPattern,
 					_p_declaration(_arg__p_declaration)
 {
 
-	LOG("CREATING external_declaration2")
+	LOG("\033[32mCREATING\033[0m external_declaration2")
 }
 external_declaration2::~external_declaration2()
 {
 
-	LOG("DELETING external_declaration2")
+	LOG("\033[32mDELETING\033[0m external_declaration2")
 	if (_p_declaration)                {delete(_p_declaration);_p_declaration=0;}
 }
 
@@ -812,12 +812,12 @@ type_specifier1::type_specifier1(std::string _arg__s_matchedPattern, Token *_arg
 					_p_token1(_arg__p_token1)
 {
 
-	LOG("CREATING type_specifier1")
+	LOG("\033[32mCREATING\033[0m type_specifier1")
 }
 type_specifier1::~type_specifier1()
 {
 
-	LOG("DELETING type_specifier1")
+	LOG("\033[32mDELETING\033[0m type_specifier1")
 	if (_p_token1)                     {delete(_p_token1);_p_token1=0;}
 }
 std::string type_specifier2::name()const
@@ -835,12 +835,12 @@ type_specifier2::type_specifier2(std::string _arg__s_matchedPattern, struct_or_u
 					_p_struct_or_union_specifier(_arg__p_struct_or_union_specifier)
 {
 
-	LOG("CREATING type_specifier2")
+	LOG("\033[32mCREATING\033[0m type_specifier2")
 }
 type_specifier2::~type_specifier2()
 {
 
-	LOG("DELETING type_specifier2")
+	LOG("\033[32mDELETING\033[0m type_specifier2")
 	if (_p_struct_or_union_specifier)  {delete(_p_struct_or_union_specifier);_p_struct_or_union_specifier=0;}
 }
 std::string type_specifier3::name()const
@@ -858,12 +858,12 @@ type_specifier3::type_specifier3(std::string _arg__s_matchedPattern, enum_specif
 					_p_enum_specifier(_arg__p_enum_specifier)
 {
 
-	LOG("CREATING type_specifier3")
+	LOG("\033[32mCREATING\033[0m type_specifier3")
 }
 type_specifier3::~type_specifier3()
 {
 
-	LOG("DELETING type_specifier3")
+	LOG("\033[32mDELETING\033[0m type_specifier3")
 	if (_p_enum_specifier)             {delete(_p_enum_specifier);_p_enum_specifier=0;}
 }
 
@@ -889,12 +889,12 @@ compound_statement::compound_statement(std::string _arg__s_matchedPattern, decla
 					_p_statement_list(_arg__p_statement_list)
 {
 
-	LOG("CREATING compound_statement")
+	LOG("\033[32mCREATING\033[0m compound_statement")
 }
 compound_statement::~compound_statement()
 {
 
-	LOG("DELETING compound_statement")
+	LOG("\033[32mDELETING\033[0m compound_statement")
 	if (_p_declaration_list)           {delete(_p_declaration_list);_p_declaration_list=0;}
 	if (_p_statement_list)             {delete(_p_statement_list);_p_statement_list=0;}
 }
@@ -911,7 +911,7 @@ inclusive_or_expression_item::inclusive_or_expression_item(std::string _arg__s_m
 					_p_exclusive_or_expression(_arg__p_exclusive_or_expression)
 {
 
-	LOG("CREATING inclusive_or_expression_item")
+	LOG("\033[32mCREATING[0m inclusive_or_expression_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	inclusive_or_expression_item::inclusive_or_expression_item(const inclusive_or_expression_item &other):
@@ -927,11 +927,11 @@ inclusive_or_expression_item::inclusive_or_expression_item(std::string _arg__s_m
 inclusive_or_expression_item::~inclusive_or_expression_item()
 {
 
-	LOG("DELETING(?) inclusive_or_expression_item")
+	LOG("\033[31mDELETING\033[0m(?) inclusive_or_expression_item")
 
 	(*_refCount)--;	LOG("[ "<<_refCount<<" ]	"<<"refCount after decrement:"<<(*_refCount))
 	if((*_refCount)>0)return;
-	LOG("DELETING inclusive_or_expression_item")
+	LOG("\033[31mDELETING\033[0m inclusive_or_expression_item")
 
 	delete(_refCount);_refCount=0;	if (_p_exclusive_or_expression)    {delete(_p_exclusive_or_expression);_p_exclusive_or_expression=0;}
 }
@@ -978,7 +978,7 @@ pointer_item::pointer_item(std::string _arg__s_matchedPattern, type_qualifier_li
 					_p_type_qualifier_list(_arg__p_type_qualifier_list)
 {
 
-	LOG("CREATING pointer_item")
+	LOG("\033[32mCREATING[0m pointer_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	pointer_item::pointer_item(const pointer_item &other):
@@ -994,11 +994,11 @@ pointer_item::pointer_item(std::string _arg__s_matchedPattern, type_qualifier_li
 pointer_item::~pointer_item()
 {
 
-	LOG("DELETING(?) pointer_item")
+	LOG("\033[31mDELETING\033[0m(?) pointer_item")
 
 	(*_refCount)--;	LOG("[ "<<_refCount<<" ]	"<<"refCount after decrement:"<<(*_refCount))
 	if((*_refCount)>0)return;
-	LOG("DELETING pointer_item")
+	LOG("\033[31mDELETING\033[0m pointer_item")
 
 	delete(_refCount);_refCount=0;	if (_p_type_qualifier_list)        {delete(_p_type_qualifier_list);_p_type_qualifier_list=0;}
 }
@@ -1057,12 +1057,12 @@ selection_statement1::selection_statement1(std::string _arg__s_matchedPattern, e
 					_p_statement1(_arg__p_statement1)
 {
 
-	LOG("CREATING selection_statement1")
+	LOG("\033[32mCREATING\033[0m selection_statement1")
 }
 selection_statement1::~selection_statement1()
 {
 
-	LOG("DELETING selection_statement1")
+	LOG("\033[32mDELETING\033[0m selection_statement1")
 	if (_p_expression)                 {delete(_p_expression);_p_expression=0;}
 	if (_p_statement)                  {delete(_p_statement);_p_statement=0;}
 	if (_p_token1)                     {delete(_p_token1);_p_token1=0;}
@@ -1084,12 +1084,12 @@ selection_statement2::selection_statement2(std::string _arg__s_matchedPattern, e
 					_p_statement(_arg__p_statement)
 {
 
-	LOG("CREATING selection_statement2")
+	LOG("\033[32mCREATING\033[0m selection_statement2")
 }
 selection_statement2::~selection_statement2()
 {
 
-	LOG("DELETING selection_statement2")
+	LOG("\033[32mDELETING\033[0m selection_statement2")
 	if (_p_expression)                 {delete(_p_expression);_p_expression=0;}
 	if (_p_statement)                  {delete(_p_statement);_p_statement=0;}
 }
@@ -1116,12 +1116,12 @@ postfix_expression1::postfix_expression1(std::string _arg__s_matchedPattern, pos
 					_p_expression(_arg__p_expression)
 {
 
-	LOG("CREATING postfix_expression1")
+	LOG("\033[32mCREATING\033[0m postfix_expression1")
 }
 postfix_expression1::~postfix_expression1()
 {
 
-	LOG("DELETING postfix_expression1")
+	LOG("\033[32mDELETING\033[0m postfix_expression1")
 	if (_p_postfix_expression)         {delete(_p_postfix_expression);_p_postfix_expression=0;}
 	if (_p_expression)                 {delete(_p_expression);_p_expression=0;}
 }
@@ -1141,12 +1141,12 @@ postfix_expression2::postfix_expression2(std::string _arg__s_matchedPattern, pos
 					_p_argument_expression_list(_arg__p_argument_expression_list)
 {
 
-	LOG("CREATING postfix_expression2")
+	LOG("\033[32mCREATING\033[0m postfix_expression2")
 }
 postfix_expression2::~postfix_expression2()
 {
 
-	LOG("DELETING postfix_expression2")
+	LOG("\033[32mDELETING\033[0m postfix_expression2")
 	if (_p_postfix_expression)         {delete(_p_postfix_expression);_p_postfix_expression=0;}
 	if (_p_argument_expression_list)   {delete(_p_argument_expression_list);_p_argument_expression_list=0;}
 }
@@ -1167,12 +1167,12 @@ postfix_expression3::postfix_expression3(std::string _arg__s_matchedPattern, pos
 					_p_token2(_arg__p_token2)
 {
 
-	LOG("CREATING postfix_expression3")
+	LOG("\033[32mCREATING\033[0m postfix_expression3")
 }
 postfix_expression3::~postfix_expression3()
 {
 
-	LOG("DELETING postfix_expression3")
+	LOG("\033[32mDELETING\033[0m postfix_expression3")
 	if (_p_postfix_expression)         {delete(_p_postfix_expression);_p_postfix_expression=0;}
 	if (_p_token1)                     {delete(_p_token1);_p_token1=0;}
 	if (_p_token2)                     {delete(_p_token2);_p_token2=0;}
@@ -1193,12 +1193,12 @@ postfix_expression4::postfix_expression4(std::string _arg__s_matchedPattern, pos
 					_p_token1(_arg__p_token1)
 {
 
-	LOG("CREATING postfix_expression4")
+	LOG("\033[32mCREATING\033[0m postfix_expression4")
 }
 postfix_expression4::~postfix_expression4()
 {
 
-	LOG("DELETING postfix_expression4")
+	LOG("\033[32mDELETING\033[0m postfix_expression4")
 	if (_p_postfix_expression)         {delete(_p_postfix_expression);_p_postfix_expression=0;}
 	if (_p_token1)                     {delete(_p_token1);_p_token1=0;}
 }
@@ -1217,12 +1217,12 @@ postfix_expression5::postfix_expression5(std::string _arg__s_matchedPattern, pri
 					_p_primary_expression(_arg__p_primary_expression)
 {
 
-	LOG("CREATING postfix_expression5")
+	LOG("\033[32mCREATING\033[0m postfix_expression5")
 }
 postfix_expression5::~postfix_expression5()
 {
 
-	LOG("DELETING postfix_expression5")
+	LOG("\033[32mDELETING\033[0m postfix_expression5")
 	if (_p_primary_expression)         {delete(_p_primary_expression);_p_primary_expression=0;}
 }
 
@@ -1239,7 +1239,7 @@ additive_expression_item::additive_expression_item(std::string _arg__s_matchedPa
 					_p_multiplicative_expression(_arg__p_multiplicative_expression)
 {
 
-	LOG("CREATING additive_expression_item")
+	LOG("\033[32mCREATING[0m additive_expression_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	additive_expression_item::additive_expression_item(const additive_expression_item &other):
@@ -1256,11 +1256,11 @@ additive_expression_item::additive_expression_item(std::string _arg__s_matchedPa
 additive_expression_item::~additive_expression_item()
 {
 
-	LOG("DELETING(?) additive_expression_item")
+	LOG("\033[31mDELETING\033[0m(?) additive_expression_item")
 
 	(*_refCount)--;	LOG("[ "<<_refCount<<" ]	"<<"refCount after decrement:"<<(*_refCount))
 	if((*_refCount)>0)return;
-	LOG("DELETING additive_expression_item")
+	LOG("\033[31mDELETING\033[0m additive_expression_item")
 
 	delete(_refCount);_refCount=0;	if (_p_token1)                     {delete(_p_token1);_p_token1=0;}
 	if (_p_multiplicative_expression)  {delete(_p_multiplicative_expression);_p_multiplicative_expression=0;}
@@ -1317,12 +1317,12 @@ statement1::statement1(std::string _arg__s_matchedPattern, labeled_statement *_a
 					_p_labeled_statement(_arg__p_labeled_statement)
 {
 
-	LOG("CREATING statement1")
+	LOG("\033[32mCREATING\033[0m statement1")
 }
 statement1::~statement1()
 {
 
-	LOG("DELETING statement1")
+	LOG("\033[32mDELETING\033[0m statement1")
 	if (_p_labeled_statement)          {delete(_p_labeled_statement);_p_labeled_statement=0;}
 }
 std::string statement2::name()const
@@ -1340,12 +1340,12 @@ statement2::statement2(std::string _arg__s_matchedPattern, compound_statement *_
 					_p_compound_statement(_arg__p_compound_statement)
 {
 
-	LOG("CREATING statement2")
+	LOG("\033[32mCREATING\033[0m statement2")
 }
 statement2::~statement2()
 {
 
-	LOG("DELETING statement2")
+	LOG("\033[32mDELETING\033[0m statement2")
 	if (_p_compound_statement)         {delete(_p_compound_statement);_p_compound_statement=0;}
 }
 std::string statement3::name()const
@@ -1363,12 +1363,12 @@ statement3::statement3(std::string _arg__s_matchedPattern, expression_statement 
 					_p_expression_statement(_arg__p_expression_statement)
 {
 
-	LOG("CREATING statement3")
+	LOG("\033[32mCREATING\033[0m statement3")
 }
 statement3::~statement3()
 {
 
-	LOG("DELETING statement3")
+	LOG("\033[32mDELETING\033[0m statement3")
 	if (_p_expression_statement)       {delete(_p_expression_statement);_p_expression_statement=0;}
 }
 std::string statement4::name()const
@@ -1386,12 +1386,12 @@ statement4::statement4(std::string _arg__s_matchedPattern, selection_statement *
 					_p_selection_statement(_arg__p_selection_statement)
 {
 
-	LOG("CREATING statement4")
+	LOG("\033[32mCREATING\033[0m statement4")
 }
 statement4::~statement4()
 {
 
-	LOG("DELETING statement4")
+	LOG("\033[32mDELETING\033[0m statement4")
 	if (_p_selection_statement)        {delete(_p_selection_statement);_p_selection_statement=0;}
 }
 std::string statement5::name()const
@@ -1409,12 +1409,12 @@ statement5::statement5(std::string _arg__s_matchedPattern, iteration_statement *
 					_p_iteration_statement(_arg__p_iteration_statement)
 {
 
-	LOG("CREATING statement5")
+	LOG("\033[32mCREATING\033[0m statement5")
 }
 statement5::~statement5()
 {
 
-	LOG("DELETING statement5")
+	LOG("\033[32mDELETING\033[0m statement5")
 	if (_p_iteration_statement)        {delete(_p_iteration_statement);_p_iteration_statement=0;}
 }
 std::string statement6::name()const
@@ -1432,12 +1432,12 @@ statement6::statement6(std::string _arg__s_matchedPattern, jump_statement *_arg_
 					_p_jump_statement(_arg__p_jump_statement)
 {
 
-	LOG("CREATING statement6")
+	LOG("\033[32mCREATING\033[0m statement6")
 }
 statement6::~statement6()
 {
 
-	LOG("DELETING statement6")
+	LOG("\033[32mDELETING\033[0m statement6")
 	if (_p_jump_statement)             {delete(_p_jump_statement);_p_jump_statement=0;}
 }
 
@@ -1463,12 +1463,12 @@ cast_expression1::cast_expression1(std::string _arg__s_matchedPattern, type_name
 					_p_cast_expression(_arg__p_cast_expression)
 {
 
-	LOG("CREATING cast_expression1")
+	LOG("\033[32mCREATING\033[0m cast_expression1")
 }
 cast_expression1::~cast_expression1()
 {
 
-	LOG("DELETING cast_expression1")
+	LOG("\033[32mDELETING\033[0m cast_expression1")
 	if (_p_type_name)                  {delete(_p_type_name);_p_type_name=0;}
 	if (_p_cast_expression)            {delete(_p_cast_expression);_p_cast_expression=0;}
 }
@@ -1487,12 +1487,12 @@ cast_expression2::cast_expression2(std::string _arg__s_matchedPattern, unary_exp
 					_p_unary_expression(_arg__p_unary_expression)
 {
 
-	LOG("CREATING cast_expression2")
+	LOG("\033[32mCREATING\033[0m cast_expression2")
 }
 cast_expression2::~cast_expression2()
 {
 
-	LOG("DELETING cast_expression2")
+	LOG("\033[32mDELETING\033[0m cast_expression2")
 	if (_p_unary_expression)           {delete(_p_unary_expression);_p_unary_expression=0;}
 }
 
@@ -1519,12 +1519,12 @@ init_declarator::init_declarator(std::string _arg__s_matchedPattern, declarator 
 					_p_initializer(_arg__p_initializer)
 {
 
-	LOG("CREATING init_declarator")
+	LOG("\033[32mCREATING\033[0m init_declarator")
 }
 init_declarator::~init_declarator()
 {
 
-	LOG("DELETING init_declarator")
+	LOG("\033[32mDELETING\033[0m init_declarator")
 	if (_p_declarator)                 {delete(_p_declarator);_p_declarator=0;}
 	if (_p_token1)                     {delete(_p_token1);_p_token1=0;}
 	if (_p_initializer)                {delete(_p_initializer);_p_initializer=0;}
@@ -1542,7 +1542,7 @@ struct_declarator_list_item::struct_declarator_list_item(std::string _arg__s_mat
 					_p_struct_declarator(_arg__p_struct_declarator)
 {
 
-	LOG("CREATING struct_declarator_list_item")
+	LOG("\033[32mCREATING[0m struct_declarator_list_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	struct_declarator_list_item::struct_declarator_list_item(const struct_declarator_list_item &other):
@@ -1558,11 +1558,11 @@ struct_declarator_list_item::struct_declarator_list_item(std::string _arg__s_mat
 struct_declarator_list_item::~struct_declarator_list_item()
 {
 
-	LOG("DELETING(?) struct_declarator_list_item")
+	LOG("\033[31mDELETING\033[0m(?) struct_declarator_list_item")
 
 	(*_refCount)--;	LOG("[ "<<_refCount<<" ]	"<<"refCount after decrement:"<<(*_refCount))
 	if((*_refCount)>0)return;
-	LOG("DELETING struct_declarator_list_item")
+	LOG("\033[31mDELETING\033[0m struct_declarator_list_item")
 
 	delete(_refCount);_refCount=0;	if (_p_struct_declarator)          {delete(_p_struct_declarator);_p_struct_declarator=0;}
 }
@@ -1609,7 +1609,7 @@ logical_or_expression_item::logical_or_expression_item(std::string _arg__s_match
 					_p_logical_and_expression(_arg__p_logical_and_expression)
 {
 
-	LOG("CREATING logical_or_expression_item")
+	LOG("\033[32mCREATING[0m logical_or_expression_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	logical_or_expression_item::logical_or_expression_item(const logical_or_expression_item &other):
@@ -1625,11 +1625,11 @@ logical_or_expression_item::logical_or_expression_item(std::string _arg__s_match
 logical_or_expression_item::~logical_or_expression_item()
 {
 
-	LOG("DELETING(?) logical_or_expression_item")
+	LOG("\033[31mDELETING\033[0m(?) logical_or_expression_item")
 
 	(*_refCount)--;	LOG("[ "<<_refCount<<" ]	"<<"refCount after decrement:"<<(*_refCount))
 	if((*_refCount)>0)return;
-	LOG("DELETING logical_or_expression_item")
+	LOG("\033[31mDELETING\033[0m logical_or_expression_item")
 
 	delete(_refCount);_refCount=0;	if (_p_logical_and_expression)     {delete(_p_logical_and_expression);_p_logical_and_expression=0;}
 }
@@ -1676,7 +1676,7 @@ translation_unit_item::translation_unit_item(std::string _arg__s_matchedPattern,
 					_p_external_declaration(_arg__p_external_declaration)
 {
 
-	LOG("CREATING translation_unit_item")
+	LOG("\033[32mCREATING[0m translation_unit_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	translation_unit_item::translation_unit_item(const translation_unit_item &other):
@@ -1692,11 +1692,11 @@ translation_unit_item::translation_unit_item(std::string _arg__s_matchedPattern,
 translation_unit_item::~translation_unit_item()
 {
 
-	LOG("DELETING(?) translation_unit_item")
+	LOG("\033[31mDELETING\033[0m(?) translation_unit_item")
 
 	(*_refCount)--;	LOG("[ "<<_refCount<<" ]	"<<"refCount after decrement:"<<(*_refCount))
 	if((*_refCount)>0)return;
-	LOG("DELETING translation_unit_item")
+	LOG("\033[31mDELETING\033[0m translation_unit_item")
 
 	delete(_refCount);_refCount=0;	if (_p_external_declaration)       {delete(_p_external_declaration);_p_external_declaration=0;}
 }
@@ -1744,7 +1744,7 @@ relational_expression_item::relational_expression_item(std::string _arg__s_match
 					_p_shift_expression(_arg__p_shift_expression)
 {
 
-	LOG("CREATING relational_expression_item")
+	LOG("\033[32mCREATING[0m relational_expression_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	relational_expression_item::relational_expression_item(const relational_expression_item &other):
@@ -1761,11 +1761,11 @@ relational_expression_item::relational_expression_item(std::string _arg__s_match
 relational_expression_item::~relational_expression_item()
 {
 
-	LOG("DELETING(?) relational_expression_item")
+	LOG("\033[31mDELETING\033[0m(?) relational_expression_item")
 
 	(*_refCount)--;	LOG("[ "<<_refCount<<" ]	"<<"refCount after decrement:"<<(*_refCount))
 	if((*_refCount)>0)return;
-	LOG("DELETING relational_expression_item")
+	LOG("\033[31mDELETING\033[0m relational_expression_item")
 
 	delete(_refCount);_refCount=0;	if (_p_token1)                     {delete(_p_token1);_p_token1=0;}
 	if (_p_shift_expression)           {delete(_p_shift_expression);_p_shift_expression=0;}
@@ -1822,12 +1822,12 @@ struct_or_union::struct_or_union(std::string _arg__s_matchedPattern, Token *_arg
 					_p_token1(_arg__p_token1)
 {
 
-	LOG("CREATING struct_or_union")
+	LOG("\033[32mCREATING\033[0m struct_or_union")
 }
 struct_or_union::~struct_or_union()
 {
 
-	LOG("DELETING struct_or_union")
+	LOG("\033[32mDELETING\033[0m struct_or_union")
 	if (_p_token1)                     {delete(_p_token1);_p_token1=0;}
 }
 
@@ -1854,12 +1854,12 @@ enumerator::enumerator(std::string _arg__s_matchedPattern, Token *_arg__p_token1
 					_p_constant_expression(_arg__p_constant_expression)
 {
 
-	LOG("CREATING enumerator")
+	LOG("\033[32mCREATING\033[0m enumerator")
 }
 enumerator::~enumerator()
 {
 
-	LOG("DELETING enumerator")
+	LOG("\033[32mDELETING\033[0m enumerator")
 	if (_p_token1)                     {delete(_p_token1);_p_token1=0;}
 	if (_p_token2)                     {delete(_p_token2);_p_token2=0;}
 	if (_p_constant_expression)        {delete(_p_constant_expression);_p_constant_expression=0;}
@@ -1888,12 +1888,12 @@ assignment_expression1::assignment_expression1(std::string _arg__s_matchedPatter
 					_p_assignment_expression(_arg__p_assignment_expression)
 {
 
-	LOG("CREATING assignment_expression1")
+	LOG("\033[32mCREATING\033[0m assignment_expression1")
 }
 assignment_expression1::~assignment_expression1()
 {
 
-	LOG("DELETING assignment_expression1")
+	LOG("\033[32mDELETING\033[0m assignment_expression1")
 	if (_p_unary_expression)           {delete(_p_unary_expression);_p_unary_expression=0;}
 	if (_p_assignment_operator)        {delete(_p_assignment_operator);_p_assignment_operator=0;}
 	if (_p_assignment_expression)      {delete(_p_assignment_expression);_p_assignment_expression=0;}
@@ -1913,12 +1913,12 @@ assignment_expression2::assignment_expression2(std::string _arg__s_matchedPatter
 					_p_conditional_expression(_arg__p_conditional_expression)
 {
 
-	LOG("CREATING assignment_expression2")
+	LOG("\033[32mCREATING\033[0m assignment_expression2")
 }
 assignment_expression2::~assignment_expression2()
 {
 
-	LOG("DELETING assignment_expression2")
+	LOG("\033[32mDELETING\033[0m assignment_expression2")
 	if (_p_conditional_expression)     {delete(_p_conditional_expression);_p_conditional_expression=0;}
 }
 
@@ -1945,12 +1945,12 @@ parameter_type_list::parameter_type_list(std::string _arg__s_matchedPattern, par
 					_p_token2(_arg__p_token2)
 {
 
-	LOG("CREATING parameter_type_list")
+	LOG("\033[32mCREATING\033[0m parameter_type_list")
 }
 parameter_type_list::~parameter_type_list()
 {
 
-	LOG("DELETING parameter_type_list")
+	LOG("\033[32mDELETING\033[0m parameter_type_list")
 	if (_p_parameter_list)             {delete(_p_parameter_list);_p_parameter_list=0;}
 	if (_p_token1)                     {delete(_p_token1);_p_token1=0;}
 	if (_p_token2)                     {delete(_p_token2);_p_token2=0;}
@@ -1978,12 +1978,12 @@ parameter_declaration1::parameter_declaration1(std::string _arg__s_matchedPatter
 					_p_declarator(_arg__p_declarator)
 {
 
-	LOG("CREATING parameter_declaration1")
+	LOG("\033[32mCREATING\033[0m parameter_declaration1")
 }
 parameter_declaration1::~parameter_declaration1()
 {
 
-	LOG("DELETING parameter_declaration1")
+	LOG("\033[32mDELETING\033[0m parameter_declaration1")
 	if (_p_declaration_specifiers)     {delete(_p_declaration_specifiers);_p_declaration_specifiers=0;}
 	if (_p_declarator)                 {delete(_p_declarator);_p_declarator=0;}
 }
@@ -2003,12 +2003,12 @@ parameter_declaration2::parameter_declaration2(std::string _arg__s_matchedPatter
 					_p_abstract_declarator(_arg__p_abstract_declarator)
 {
 
-	LOG("CREATING parameter_declaration2")
+	LOG("\033[32mCREATING\033[0m parameter_declaration2")
 }
 parameter_declaration2::~parameter_declaration2()
 {
 
-	LOG("DELETING parameter_declaration2")
+	LOG("\033[32mDELETING\033[0m parameter_declaration2")
 	if (_p_declaration_specifiers)     {delete(_p_declaration_specifiers);_p_declaration_specifiers=0;}
 	if (_p_abstract_declarator)        {delete(_p_abstract_declarator);_p_abstract_declarator=0;}
 }
@@ -2026,7 +2026,7 @@ multiplicative_expression_item::multiplicative_expression_item(std::string _arg_
 					_p_cast_expression(_arg__p_cast_expression)
 {
 
-	LOG("CREATING multiplicative_expression_item")
+	LOG("\033[32mCREATING[0m multiplicative_expression_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	multiplicative_expression_item::multiplicative_expression_item(const multiplicative_expression_item &other):
@@ -2043,11 +2043,11 @@ multiplicative_expression_item::multiplicative_expression_item(std::string _arg_
 multiplicative_expression_item::~multiplicative_expression_item()
 {
 
-	LOG("DELETING(?) multiplicative_expression_item")
+	LOG("\033[31mDELETING\033[0m(?) multiplicative_expression_item")
 
 	(*_refCount)--;	LOG("[ "<<_refCount<<" ]	"<<"refCount after decrement:"<<(*_refCount))
 	if((*_refCount)>0)return;
-	LOG("DELETING multiplicative_expression_item")
+	LOG("\033[31mDELETING\033[0m multiplicative_expression_item")
 
 	delete(_refCount);_refCount=0;	if (_p_token1)                     {delete(_p_token1);_p_token1=0;}
 	if (_p_cast_expression)            {delete(_p_cast_expression);_p_cast_expression=0;}
@@ -2095,7 +2095,7 @@ type_qualifier_list_item::type_qualifier_list_item(std::string _arg__s_matchedPa
 					_p_type_qualifier(_arg__p_type_qualifier)
 {
 
-	LOG("CREATING type_qualifier_list_item")
+	LOG("\033[32mCREATING[0m type_qualifier_list_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	type_qualifier_list_item::type_qualifier_list_item(const type_qualifier_list_item &other):
@@ -2111,11 +2111,11 @@ type_qualifier_list_item::type_qualifier_list_item(std::string _arg__s_matchedPa
 type_qualifier_list_item::~type_qualifier_list_item()
 {
 
-	LOG("DELETING(?) type_qualifier_list_item")
+	LOG("\033[31mDELETING\033[0m(?) type_qualifier_list_item")
 
 	(*_refCount)--;	LOG("[ "<<_refCount<<" ]	"<<"refCount after decrement:"<<(*_refCount))
 	if((*_refCount)>0)return;
-	LOG("DELETING type_qualifier_list_item")
+	LOG("\033[31mDELETING\033[0m type_qualifier_list_item")
 
 	delete(_refCount);_refCount=0;	if (_p_type_qualifier)             {delete(_p_type_qualifier);_p_type_qualifier=0;}
 }
@@ -2162,7 +2162,7 @@ argument_expression_list_item::argument_expression_list_item(std::string _arg__s
 					_p_assignment_expression(_arg__p_assignment_expression)
 {
 
-	LOG("CREATING argument_expression_list_item")
+	LOG("\033[32mCREATING[0m argument_expression_list_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	argument_expression_list_item::argument_expression_list_item(const argument_expression_list_item &other):
@@ -2178,11 +2178,11 @@ argument_expression_list_item::argument_expression_list_item(std::string _arg__s
 argument_expression_list_item::~argument_expression_list_item()
 {
 
-	LOG("DELETING(?) argument_expression_list_item")
+	LOG("\033[31mDELETING\033[0m(?) argument_expression_list_item")
 
 	(*_refCount)--;	LOG("[ "<<_refCount<<" ]	"<<"refCount after decrement:"<<(*_refCount))
 	if((*_refCount)>0)return;
-	LOG("DELETING argument_expression_list_item")
+	LOG("\033[31mDELETING\033[0m argument_expression_list_item")
 
 	delete(_refCount);_refCount=0;	if (_p_assignment_expression)      {delete(_p_assignment_expression);_p_assignment_expression=0;}
 }
@@ -2239,12 +2239,12 @@ direct_abstract_declarator1::direct_abstract_declarator1(std::string _arg__s_mat
 					_p_constant_expression(_arg__p_constant_expression)
 {
 
-	LOG("CREATING direct_abstract_declarator1")
+	LOG("\033[32mCREATING\033[0m direct_abstract_declarator1")
 }
 direct_abstract_declarator1::~direct_abstract_declarator1()
 {
 
-	LOG("DELETING direct_abstract_declarator1")
+	LOG("\033[32mDELETING\033[0m direct_abstract_declarator1")
 	if (_p_direct_abstract_declarator) {delete(_p_direct_abstract_declarator);_p_direct_abstract_declarator=0;}
 	if (_p_constant_expression)        {delete(_p_constant_expression);_p_constant_expression=0;}
 }
@@ -2264,12 +2264,12 @@ direct_abstract_declarator2::direct_abstract_declarator2(std::string _arg__s_mat
 					_p_parameter_type_list(_arg__p_parameter_type_list)
 {
 
-	LOG("CREATING direct_abstract_declarator2")
+	LOG("\033[32mCREATING\033[0m direct_abstract_declarator2")
 }
 direct_abstract_declarator2::~direct_abstract_declarator2()
 {
 
-	LOG("DELETING direct_abstract_declarator2")
+	LOG("\033[32mDELETING\033[0m direct_abstract_declarator2")
 	if (_p_direct_abstract_declarator) {delete(_p_direct_abstract_declarator);_p_direct_abstract_declarator=0;}
 	if (_p_parameter_type_list)        {delete(_p_parameter_type_list);_p_parameter_type_list=0;}
 }
@@ -2288,12 +2288,12 @@ direct_abstract_declarator3::direct_abstract_declarator3(std::string _arg__s_mat
 					_p_abstract_declarator(_arg__p_abstract_declarator)
 {
 
-	LOG("CREATING direct_abstract_declarator3")
+	LOG("\033[32mCREATING\033[0m direct_abstract_declarator3")
 }
 direct_abstract_declarator3::~direct_abstract_declarator3()
 {
 
-	LOG("DELETING direct_abstract_declarator3")
+	LOG("\033[32mDELETING\033[0m direct_abstract_declarator3")
 	if (_p_abstract_declarator)        {delete(_p_abstract_declarator);_p_abstract_declarator=0;}
 }
 
@@ -2318,12 +2318,12 @@ constant_expression::constant_expression(std::string _arg__s_matchedPattern, con
 					_p_conditional_expression(_arg__p_conditional_expression)
 {
 
-	LOG("CREATING constant_expression")
+	LOG("\033[32mCREATING\033[0m constant_expression")
 }
 constant_expression::~constant_expression()
 {
 
-	LOG("DELETING constant_expression")
+	LOG("\033[32mDELETING\033[0m constant_expression")
 	if (_p_conditional_expression)     {delete(_p_conditional_expression);_p_conditional_expression=0;}
 }
 
@@ -2340,7 +2340,7 @@ equality_expression_item::equality_expression_item(std::string _arg__s_matchedPa
 					_p_relational_expression(_arg__p_relational_expression)
 {
 
-	LOG("CREATING equality_expression_item")
+	LOG("\033[32mCREATING[0m equality_expression_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	equality_expression_item::equality_expression_item(const equality_expression_item &other):
@@ -2357,11 +2357,11 @@ equality_expression_item::equality_expression_item(std::string _arg__s_matchedPa
 equality_expression_item::~equality_expression_item()
 {
 
-	LOG("DELETING(?) equality_expression_item")
+	LOG("\033[31mDELETING\033[0m(?) equality_expression_item")
 
 	(*_refCount)--;	LOG("[ "<<_refCount<<" ]	"<<"refCount after decrement:"<<(*_refCount))
 	if((*_refCount)>0)return;
-	LOG("DELETING equality_expression_item")
+	LOG("\033[31mDELETING\033[0m equality_expression_item")
 
 	delete(_refCount);_refCount=0;	if (_p_token1)                     {delete(_p_token1);_p_token1=0;}
 	if (_p_relational_expression)      {delete(_p_relational_expression);_p_relational_expression=0;}
@@ -2418,12 +2418,12 @@ primary_expression1::primary_expression1(std::string _arg__s_matchedPattern, exp
 					_p_expression(_arg__p_expression)
 {
 
-	LOG("CREATING primary_expression1")
+	LOG("\033[32mCREATING\033[0m primary_expression1")
 }
 primary_expression1::~primary_expression1()
 {
 
-	LOG("DELETING primary_expression1")
+	LOG("\033[32mDELETING\033[0m primary_expression1")
 	if (_p_expression)                 {delete(_p_expression);_p_expression=0;}
 }
 std::string primary_expression2::name()const
@@ -2441,12 +2441,12 @@ primary_expression2::primary_expression2(std::string _arg__s_matchedPattern, Tok
 					_p_token1(_arg__p_token1)
 {
 
-	LOG("CREATING primary_expression2")
+	LOG("\033[32mCREATING\033[0m primary_expression2")
 }
 primary_expression2::~primary_expression2()
 {
 
-	LOG("DELETING primary_expression2")
+	LOG("\033[32mDELETING\033[0m primary_expression2")
 	if (_p_token1)                     {delete(_p_token1);_p_token1=0;}
 }
 
@@ -2462,7 +2462,7 @@ declaration_specifiers1_item::declaration_specifiers1_item(std::string _arg__s_m
 					_p_storage_class_specifier(_arg__p_storage_class_specifier)
 {
 
-	LOG("CREATING declaration_specifiers1_item")
+	LOG("\033[32mCREATING[0m declaration_specifiers1_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	declaration_specifiers1_item::declaration_specifiers1_item(const declaration_specifiers1_item &other):
@@ -2478,11 +2478,11 @@ declaration_specifiers1_item::declaration_specifiers1_item(std::string _arg__s_m
 declaration_specifiers1_item::~declaration_specifiers1_item()
 {
 
-	LOG("DELETING(?) declaration_specifiers1_item")
+	LOG("\033[31mDELETING\033[0m(?) declaration_specifiers1_item")
 
 	(*_refCount)--;	LOG("[ "<<_refCount<<" ]	"<<"refCount after decrement:"<<(*_refCount))
 	if((*_refCount)>0)return;
-	LOG("DELETING declaration_specifiers1_item")
+	LOG("\033[31mDELETING\033[0m declaration_specifiers1_item")
 
 	delete(_refCount);_refCount=0;	if (_p_storage_class_specifier)    {delete(_p_storage_class_specifier);_p_storage_class_specifier=0;}
 }
@@ -2522,7 +2522,7 @@ declaration_specifiers2_item::declaration_specifiers2_item(std::string _arg__s_m
 					_p_type_specifier(_arg__p_type_specifier)
 {
 
-	LOG("CREATING declaration_specifiers2_item")
+	LOG("\033[32mCREATING[0m declaration_specifiers2_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	declaration_specifiers2_item::declaration_specifiers2_item(const declaration_specifiers2_item &other):
@@ -2538,11 +2538,11 @@ declaration_specifiers2_item::declaration_specifiers2_item(std::string _arg__s_m
 declaration_specifiers2_item::~declaration_specifiers2_item()
 {
 
-	LOG("DELETING(?) declaration_specifiers2_item")
+	LOG("\033[31mDELETING\033[0m(?) declaration_specifiers2_item")
 
 	(*_refCount)--;	LOG("[ "<<_refCount<<" ]	"<<"refCount after decrement:"<<(*_refCount))
 	if((*_refCount)>0)return;
-	LOG("DELETING declaration_specifiers2_item")
+	LOG("\033[31mDELETING\033[0m declaration_specifiers2_item")
 
 	delete(_refCount);_refCount=0;	if (_p_type_specifier)             {delete(_p_type_specifier);_p_type_specifier=0;}
 }
@@ -2582,7 +2582,7 @@ declaration_specifiers3_item::declaration_specifiers3_item(std::string _arg__s_m
 					_p_type_qualifier(_arg__p_type_qualifier)
 {
 
-	LOG("CREATING declaration_specifiers3_item")
+	LOG("\033[32mCREATING[0m declaration_specifiers3_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	declaration_specifiers3_item::declaration_specifiers3_item(const declaration_specifiers3_item &other):
@@ -2598,11 +2598,11 @@ declaration_specifiers3_item::declaration_specifiers3_item(std::string _arg__s_m
 declaration_specifiers3_item::~declaration_specifiers3_item()
 {
 
-	LOG("DELETING(?) declaration_specifiers3_item")
+	LOG("\033[31mDELETING\033[0m(?) declaration_specifiers3_item")
 
 	(*_refCount)--;	LOG("[ "<<_refCount<<" ]	"<<"refCount after decrement:"<<(*_refCount))
 	if((*_refCount)>0)return;
-	LOG("DELETING declaration_specifiers3_item")
+	LOG("\033[31mDELETING\033[0m declaration_specifiers3_item")
 
 	delete(_refCount);_refCount=0;	if (_p_type_qualifier)             {delete(_p_type_qualifier);_p_type_qualifier=0;}
 }
@@ -2659,12 +2659,12 @@ declaration::declaration(std::string _arg__s_matchedPattern, declaration_specifi
 					_p_init_declarator_list(_arg__p_init_declarator_list)
 {
 
-	LOG("CREATING declaration")
+	LOG("\033[32mCREATING\033[0m declaration")
 }
 declaration::~declaration()
 {
 
-	LOG("DELETING declaration")
+	LOG("\033[32mDELETING\033[0m declaration")
 	if (_p_declaration_specifiers)     {delete(_p_declaration_specifiers);_p_declaration_specifiers=0;}
 	if (_p_init_declarator_list)       {delete(_p_init_declarator_list);_p_init_declarator_list=0;}
 }
@@ -2691,12 +2691,12 @@ direct_declarator1::direct_declarator1(std::string _arg__s_matchedPattern, direc
 					_p_constant_expression(_arg__p_constant_expression)
 {
 
-	LOG("CREATING direct_declarator1")
+	LOG("\033[32mCREATING\033[0m direct_declarator1")
 }
 direct_declarator1::~direct_declarator1()
 {
 
-	LOG("DELETING direct_declarator1")
+	LOG("\033[32mDELETING\033[0m direct_declarator1")
 	if (_p_direct_declarator)          {delete(_p_direct_declarator);_p_direct_declarator=0;}
 	if (_p_constant_expression)        {delete(_p_constant_expression);_p_constant_expression=0;}
 }
@@ -2716,12 +2716,12 @@ direct_declarator2::direct_declarator2(std::string _arg__s_matchedPattern, direc
 					_p_parameter_type_list(_arg__p_parameter_type_list)
 {
 
-	LOG("CREATING direct_declarator2")
+	LOG("\033[32mCREATING\033[0m direct_declarator2")
 }
 direct_declarator2::~direct_declarator2()
 {
 
-	LOG("DELETING direct_declarator2")
+	LOG("\033[32mDELETING\033[0m direct_declarator2")
 	if (_p_direct_declarator)          {delete(_p_direct_declarator);_p_direct_declarator=0;}
 	if (_p_parameter_type_list)        {delete(_p_parameter_type_list);_p_parameter_type_list=0;}
 }
@@ -2741,12 +2741,12 @@ direct_declarator3::direct_declarator3(std::string _arg__s_matchedPattern, direc
 					_p_identifier_list(_arg__p_identifier_list)
 {
 
-	LOG("CREATING direct_declarator3")
+	LOG("\033[32mCREATING\033[0m direct_declarator3")
 }
 direct_declarator3::~direct_declarator3()
 {
 
-	LOG("DELETING direct_declarator3")
+	LOG("\033[32mDELETING\033[0m direct_declarator3")
 	if (_p_direct_declarator)          {delete(_p_direct_declarator);_p_direct_declarator=0;}
 	if (_p_identifier_list)            {delete(_p_identifier_list);_p_identifier_list=0;}
 }
@@ -2765,12 +2765,12 @@ direct_declarator4::direct_declarator4(std::string _arg__s_matchedPattern, decla
 					_p_declarator(_arg__p_declarator)
 {
 
-	LOG("CREATING direct_declarator4")
+	LOG("\033[32mCREATING\033[0m direct_declarator4")
 }
 direct_declarator4::~direct_declarator4()
 {
 
-	LOG("DELETING direct_declarator4")
+	LOG("\033[32mDELETING\033[0m direct_declarator4")
 	if (_p_declarator)                 {delete(_p_declarator);_p_declarator=0;}
 }
 std::string direct_declarator5::name()const
@@ -2788,12 +2788,12 @@ direct_declarator5::direct_declarator5(std::string _arg__s_matchedPattern, Token
 					_p_token1(_arg__p_token1)
 {
 
-	LOG("CREATING direct_declarator5")
+	LOG("\033[32mCREATING\033[0m direct_declarator5")
 }
 direct_declarator5::~direct_declarator5()
 {
 
-	LOG("DELETING direct_declarator5")
+	LOG("\033[32mDELETING\033[0m direct_declarator5")
 	if (_p_token1)                     {delete(_p_token1);_p_token1=0;}
 }
 
@@ -2809,7 +2809,7 @@ logical_and_expression_item::logical_and_expression_item(std::string _arg__s_mat
 					_p_inclusive_or_expression(_arg__p_inclusive_or_expression)
 {
 
-	LOG("CREATING logical_and_expression_item")
+	LOG("\033[32mCREATING[0m logical_and_expression_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	logical_and_expression_item::logical_and_expression_item(const logical_and_expression_item &other):
@@ -2825,11 +2825,11 @@ logical_and_expression_item::logical_and_expression_item(std::string _arg__s_mat
 logical_and_expression_item::~logical_and_expression_item()
 {
 
-	LOG("DELETING(?) logical_and_expression_item")
+	LOG("\033[31mDELETING\033[0m(?) logical_and_expression_item")
 
 	(*_refCount)--;	LOG("[ "<<_refCount<<" ]	"<<"refCount after decrement:"<<(*_refCount))
 	if((*_refCount)>0)return;
-	LOG("DELETING logical_and_expression_item")
+	LOG("\033[31mDELETING\033[0m logical_and_expression_item")
 
 	delete(_refCount);_refCount=0;	if (_p_inclusive_or_expression)    {delete(_p_inclusive_or_expression);_p_inclusive_or_expression=0;}
 }
@@ -2876,7 +2876,7 @@ init_declarator_list_item::init_declarator_list_item(std::string _arg__s_matched
 					_p_init_declarator(_arg__p_init_declarator)
 {
 
-	LOG("CREATING init_declarator_list_item")
+	LOG("\033[32mCREATING[0m init_declarator_list_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	init_declarator_list_item::init_declarator_list_item(const init_declarator_list_item &other):
@@ -2892,11 +2892,11 @@ init_declarator_list_item::init_declarator_list_item(std::string _arg__s_matched
 init_declarator_list_item::~init_declarator_list_item()
 {
 
-	LOG("DELETING(?) init_declarator_list_item")
+	LOG("\033[31mDELETING\033[0m(?) init_declarator_list_item")
 
 	(*_refCount)--;	LOG("[ "<<_refCount<<" ]	"<<"refCount after decrement:"<<(*_refCount))
 	if((*_refCount)>0)return;
-	LOG("DELETING init_declarator_list_item")
+	LOG("\033[31mDELETING\033[0m init_declarator_list_item")
 
 	delete(_refCount);_refCount=0;	if (_p_init_declarator)            {delete(_p_init_declarator);_p_init_declarator=0;}
 }
@@ -2944,7 +2944,7 @@ shift_expression_item::shift_expression_item(std::string _arg__s_matchedPattern,
 					_p_additive_expression(_arg__p_additive_expression)
 {
 
-	LOG("CREATING shift_expression_item")
+	LOG("\033[32mCREATING[0m shift_expression_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	shift_expression_item::shift_expression_item(const shift_expression_item &other):
@@ -2961,11 +2961,11 @@ shift_expression_item::shift_expression_item(std::string _arg__s_matchedPattern,
 shift_expression_item::~shift_expression_item()
 {
 
-	LOG("DELETING(?) shift_expression_item")
+	LOG("\033[31mDELETING\033[0m(?) shift_expression_item")
 
 	(*_refCount)--;	LOG("[ "<<_refCount<<" ]	"<<"refCount after decrement:"<<(*_refCount))
 	if((*_refCount)>0)return;
-	LOG("DELETING shift_expression_item")
+	LOG("\033[31mDELETING\033[0m shift_expression_item")
 
 	delete(_refCount);_refCount=0;	if (_p_token1)                     {delete(_p_token1);_p_token1=0;}
 	if (_p_additive_expression)        {delete(_p_additive_expression);_p_additive_expression=0;}
@@ -3013,7 +3013,7 @@ identifier_list_item::identifier_list_item(std::string _arg__s_matchedPattern, T
 					_p_token1(_arg__p_token1)
 {
 
-	LOG("CREATING identifier_list_item")
+	LOG("\033[32mCREATING[0m identifier_list_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	identifier_list_item::identifier_list_item(const identifier_list_item &other):
@@ -3029,11 +3029,11 @@ identifier_list_item::identifier_list_item(std::string _arg__s_matchedPattern, T
 identifier_list_item::~identifier_list_item()
 {
 
-	LOG("DELETING(?) identifier_list_item")
+	LOG("\033[31mDELETING\033[0m(?) identifier_list_item")
 
 	(*_refCount)--;	LOG("[ "<<_refCount<<" ]	"<<"refCount after decrement:"<<(*_refCount))
 	if((*_refCount)>0)return;
-	LOG("DELETING identifier_list_item")
+	LOG("\033[31mDELETING\033[0m identifier_list_item")
 
 	delete(_refCount);_refCount=0;	if (_p_token1)                     {delete(_p_token1);_p_token1=0;}
 }
@@ -3089,12 +3089,12 @@ jump_statement1::jump_statement1(std::string _arg__s_matchedPattern, Token *_arg
 					_p_token1(_arg__p_token1)
 {
 
-	LOG("CREATING jump_statement1")
+	LOG("\033[32mCREATING\033[0m jump_statement1")
 }
 jump_statement1::~jump_statement1()
 {
 
-	LOG("DELETING jump_statement1")
+	LOG("\033[32mDELETING\033[0m jump_statement1")
 	if (_p_token1)                     {delete(_p_token1);_p_token1=0;}
 }
 std::string jump_statement2::name()const
@@ -3112,12 +3112,12 @@ jump_statement2::jump_statement2(std::string _arg__s_matchedPattern, expression 
 					_p_expression(_arg__p_expression)
 {
 
-	LOG("CREATING jump_statement2")
+	LOG("\033[32mCREATING\033[0m jump_statement2")
 }
 jump_statement2::~jump_statement2()
 {
 
-	LOG("DELETING jump_statement2")
+	LOG("\033[32mDELETING\033[0m jump_statement2")
 	if (_p_expression)                 {delete(_p_expression);_p_expression=0;}
 }
 std::string jump_statement3::name()const
@@ -3135,12 +3135,12 @@ jump_statement3::jump_statement3(std::string _arg__s_matchedPattern, Token *_arg
 					_p_token1(_arg__p_token1)
 {
 
-	LOG("CREATING jump_statement3")
+	LOG("\033[32mCREATING\033[0m jump_statement3")
 }
 jump_statement3::~jump_statement3()
 {
 
-	LOG("DELETING jump_statement3")
+	LOG("\033[32mDELETING\033[0m jump_statement3")
 	if (_p_token1)                     {delete(_p_token1);_p_token1=0;}
 }
 
@@ -3167,12 +3167,12 @@ struct_declarator::struct_declarator(std::string _arg__s_matchedPattern, declara
 					_p_constant_expression(_arg__p_constant_expression)
 {
 
-	LOG("CREATING struct_declarator")
+	LOG("\033[32mCREATING\033[0m struct_declarator")
 }
 struct_declarator::~struct_declarator()
 {
 
-	LOG("DELETING struct_declarator")
+	LOG("\033[32mDELETING\033[0m struct_declarator")
 	if (_p_declarator)                 {delete(_p_declarator);_p_declarator=0;}
 	if (_p_token1)                     {delete(_p_token1);_p_token1=0;}
 	if (_p_constant_expression)        {delete(_p_constant_expression);_p_constant_expression=0;}
@@ -3202,12 +3202,12 @@ function_definition::function_definition(std::string _arg__s_matchedPattern, dec
 					_p_compound_statement(_arg__p_compound_statement)
 {
 
-	LOG("CREATING function_definition")
+	LOG("\033[32mCREATING\033[0m function_definition")
 }
 function_definition::~function_definition()
 {
 
-	LOG("DELETING function_definition")
+	LOG("\033[32mDELETING\033[0m function_definition")
 	if (_p_declaration_specifiers)     {delete(_p_declaration_specifiers);_p_declaration_specifiers=0;}
 	if (_p_declarator)                 {delete(_p_declarator);_p_declarator=0;}
 	if (_p_declaration_list)           {delete(_p_declaration_list);_p_declaration_list=0;}
@@ -3226,7 +3226,7 @@ parameter_list_item::parameter_list_item(std::string _arg__s_matchedPattern, par
 					_p_parameter_declaration(_arg__p_parameter_declaration)
 {
 
-	LOG("CREATING parameter_list_item")
+	LOG("\033[32mCREATING[0m parameter_list_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	parameter_list_item::parameter_list_item(const parameter_list_item &other):
@@ -3242,11 +3242,11 @@ parameter_list_item::parameter_list_item(std::string _arg__s_matchedPattern, par
 parameter_list_item::~parameter_list_item()
 {
 
-	LOG("DELETING(?) parameter_list_item")
+	LOG("\033[31mDELETING\033[0m(?) parameter_list_item")
 
 	(*_refCount)--;	LOG("[ "<<_refCount<<" ]	"<<"refCount after decrement:"<<(*_refCount))
 	if((*_refCount)>0)return;
-	LOG("DELETING parameter_list_item")
+	LOG("\033[31mDELETING\033[0m parameter_list_item")
 
 	delete(_refCount);_refCount=0;	if (_p_parameter_declaration)      {delete(_p_parameter_declaration);_p_parameter_declaration=0;}
 }
@@ -3305,12 +3305,12 @@ enum_specifier::enum_specifier(std::string _arg__s_matchedPattern, Token *_arg__
 					_p_token3(_arg__p_token3)
 {
 
-	LOG("CREATING enum_specifier")
+	LOG("\033[32mCREATING\033[0m enum_specifier")
 }
 enum_specifier::~enum_specifier()
 {
 
-	LOG("DELETING enum_specifier")
+	LOG("\033[32mDELETING\033[0m enum_specifier")
 	if (_p_token1)                     {delete(_p_token1);_p_token1=0;}
 	if (_p_token2)                     {delete(_p_token2);_p_token2=0;}
 	if (_p_enumerator_list)            {delete(_p_enumerator_list);_p_enumerator_list=0;}
@@ -3338,12 +3338,12 @@ type_qualifier::type_qualifier(std::string _arg__s_matchedPattern, Token *_arg__
 					_p_token1(_arg__p_token1)
 {
 
-	LOG("CREATING type_qualifier")
+	LOG("\033[32mCREATING\033[0m type_qualifier")
 }
 type_qualifier::~type_qualifier()
 {
 
-	LOG("DELETING type_qualifier")
+	LOG("\033[32mDELETING\033[0m type_qualifier")
 	if (_p_token1)                     {delete(_p_token1);_p_token1=0;}
 }
 
@@ -3359,7 +3359,7 @@ enumerator_list_item::enumerator_list_item(std::string _arg__s_matchedPattern, e
 					_p_enumerator(_arg__p_enumerator)
 {
 
-	LOG("CREATING enumerator_list_item")
+	LOG("\033[32mCREATING[0m enumerator_list_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	enumerator_list_item::enumerator_list_item(const enumerator_list_item &other):
@@ -3375,11 +3375,11 @@ enumerator_list_item::enumerator_list_item(std::string _arg__s_matchedPattern, e
 enumerator_list_item::~enumerator_list_item()
 {
 
-	LOG("DELETING(?) enumerator_list_item")
+	LOG("\033[31mDELETING\033[0m(?) enumerator_list_item")
 
 	(*_refCount)--;	LOG("[ "<<_refCount<<" ]	"<<"refCount after decrement:"<<(*_refCount))
 	if((*_refCount)>0)return;
-	LOG("DELETING enumerator_list_item")
+	LOG("\033[31mDELETING\033[0m enumerator_list_item")
 
 	delete(_refCount);_refCount=0;	if (_p_enumerator)                 {delete(_p_enumerator);_p_enumerator=0;}
 }
@@ -3436,12 +3436,12 @@ labeled_statement1::labeled_statement1(std::string _arg__s_matchedPattern, const
 					_p_statement(_arg__p_statement)
 {
 
-	LOG("CREATING labeled_statement1")
+	LOG("\033[32mCREATING\033[0m labeled_statement1")
 }
 labeled_statement1::~labeled_statement1()
 {
 
-	LOG("DELETING labeled_statement1")
+	LOG("\033[32mDELETING\033[0m labeled_statement1")
 	if (_p_constant_expression)        {delete(_p_constant_expression);_p_constant_expression=0;}
 	if (_p_statement)                  {delete(_p_statement);_p_statement=0;}
 }
@@ -3461,12 +3461,12 @@ labeled_statement2::labeled_statement2(std::string _arg__s_matchedPattern, Token
 					_p_statement(_arg__p_statement)
 {
 
-	LOG("CREATING labeled_statement2")
+	LOG("\033[32mCREATING\033[0m labeled_statement2")
 }
 labeled_statement2::~labeled_statement2()
 {
 
-	LOG("DELETING labeled_statement2")
+	LOG("\033[32mDELETING\033[0m labeled_statement2")
 	if (_p_token1)                     {delete(_p_token1);_p_token1=0;}
 	if (_p_statement)                  {delete(_p_statement);_p_statement=0;}
 }
@@ -3483,7 +3483,7 @@ declaration_list_item::declaration_list_item(std::string _arg__s_matchedPattern,
 					_p_declaration(_arg__p_declaration)
 {
 
-	LOG("CREATING declaration_list_item")
+	LOG("\033[32mCREATING[0m declaration_list_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	declaration_list_item::declaration_list_item(const declaration_list_item &other):
@@ -3499,11 +3499,11 @@ declaration_list_item::declaration_list_item(std::string _arg__s_matchedPattern,
 declaration_list_item::~declaration_list_item()
 {
 
-	LOG("DELETING(?) declaration_list_item")
+	LOG("\033[31mDELETING\033[0m(?) declaration_list_item")
 
 	(*_refCount)--;	LOG("[ "<<_refCount<<" ]	"<<"refCount after decrement:"<<(*_refCount))
 	if((*_refCount)>0)return;
-	LOG("DELETING declaration_list_item")
+	LOG("\033[31mDELETING\033[0m declaration_list_item")
 
 	delete(_refCount);_refCount=0;	if (_p_declaration)                {delete(_p_declaration);_p_declaration=0;}
 }
@@ -3550,7 +3550,7 @@ specifier_qualifier_list1_item::specifier_qualifier_list1_item(std::string _arg_
 					_p_type_specifier(_arg__p_type_specifier)
 {
 
-	LOG("CREATING specifier_qualifier_list1_item")
+	LOG("\033[32mCREATING[0m specifier_qualifier_list1_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	specifier_qualifier_list1_item::specifier_qualifier_list1_item(const specifier_qualifier_list1_item &other):
@@ -3566,11 +3566,11 @@ specifier_qualifier_list1_item::specifier_qualifier_list1_item(std::string _arg_
 specifier_qualifier_list1_item::~specifier_qualifier_list1_item()
 {
 
-	LOG("DELETING(?) specifier_qualifier_list1_item")
+	LOG("\033[31mDELETING\033[0m(?) specifier_qualifier_list1_item")
 
 	(*_refCount)--;	LOG("[ "<<_refCount<<" ]	"<<"refCount after decrement:"<<(*_refCount))
 	if((*_refCount)>0)return;
-	LOG("DELETING specifier_qualifier_list1_item")
+	LOG("\033[31mDELETING\033[0m specifier_qualifier_list1_item")
 
 	delete(_refCount);_refCount=0;	if (_p_type_specifier)             {delete(_p_type_specifier);_p_type_specifier=0;}
 }
@@ -3610,7 +3610,7 @@ specifier_qualifier_list2_item::specifier_qualifier_list2_item(std::string _arg_
 					_p_type_qualifier(_arg__p_type_qualifier)
 {
 
-	LOG("CREATING specifier_qualifier_list2_item")
+	LOG("\033[32mCREATING[0m specifier_qualifier_list2_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	specifier_qualifier_list2_item::specifier_qualifier_list2_item(const specifier_qualifier_list2_item &other):
@@ -3626,11 +3626,11 @@ specifier_qualifier_list2_item::specifier_qualifier_list2_item(std::string _arg_
 specifier_qualifier_list2_item::~specifier_qualifier_list2_item()
 {
 
-	LOG("DELETING(?) specifier_qualifier_list2_item")
+	LOG("\033[31mDELETING\033[0m(?) specifier_qualifier_list2_item")
 
 	(*_refCount)--;	LOG("[ "<<_refCount<<" ]	"<<"refCount after decrement:"<<(*_refCount))
 	if((*_refCount)>0)return;
-	LOG("DELETING specifier_qualifier_list2_item")
+	LOG("\033[31mDELETING\033[0m specifier_qualifier_list2_item")
 
 	delete(_refCount);_refCount=0;	if (_p_type_qualifier)             {delete(_p_type_qualifier);_p_type_qualifier=0;}
 }
@@ -3686,12 +3686,12 @@ unary_operator::unary_operator(std::string _arg__s_matchedPattern, Token *_arg__
 					_p_token1(_arg__p_token1)
 {
 
-	LOG("CREATING unary_operator")
+	LOG("\033[32mCREATING\033[0m unary_operator")
 }
 unary_operator::~unary_operator()
 {
 
-	LOG("DELETING unary_operator")
+	LOG("\033[32mDELETING\033[0m unary_operator")
 	if (_p_token1)                     {delete(_p_token1);_p_token1=0;}
 }
 
@@ -3707,7 +3707,7 @@ initializer_list_item::initializer_list_item(std::string _arg__s_matchedPattern,
 					_p_initializer(_arg__p_initializer)
 {
 
-	LOG("CREATING initializer_list_item")
+	LOG("\033[32mCREATING[0m initializer_list_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	initializer_list_item::initializer_list_item(const initializer_list_item &other):
@@ -3723,11 +3723,11 @@ initializer_list_item::initializer_list_item(std::string _arg__s_matchedPattern,
 initializer_list_item::~initializer_list_item()
 {
 
-	LOG("DELETING(?) initializer_list_item")
+	LOG("\033[31mDELETING\033[0m(?) initializer_list_item")
 
 	(*_refCount)--;	LOG("[ "<<_refCount<<" ]	"<<"refCount after decrement:"<<(*_refCount))
 	if((*_refCount)>0)return;
-	LOG("DELETING initializer_list_item")
+	LOG("\033[31mDELETING\033[0m initializer_list_item")
 
 	delete(_refCount);_refCount=0;	if (_p_initializer)                {delete(_p_initializer);_p_initializer=0;}
 }
@@ -3774,7 +3774,7 @@ statement_list_item::statement_list_item(std::string _arg__s_matchedPattern, sta
 					_p_statement(_arg__p_statement)
 {
 
-	LOG("CREATING statement_list_item")
+	LOG("\033[32mCREATING[0m statement_list_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	statement_list_item::statement_list_item(const statement_list_item &other):
@@ -3790,11 +3790,11 @@ statement_list_item::statement_list_item(std::string _arg__s_matchedPattern, sta
 statement_list_item::~statement_list_item()
 {
 
-	LOG("DELETING(?) statement_list_item")
+	LOG("\033[31mDELETING\033[0m(?) statement_list_item")
 
 	(*_refCount)--;	LOG("[ "<<_refCount<<" ]	"<<"refCount after decrement:"<<(*_refCount))
 	if((*_refCount)>0)return;
-	LOG("DELETING statement_list_item")
+	LOG("\033[31mDELETING\033[0m statement_list_item")
 
 	delete(_refCount);_refCount=0;	if (_p_statement)                  {delete(_p_statement);_p_statement=0;}
 }
@@ -3841,7 +3841,7 @@ expression_item::expression_item(std::string _arg__s_matchedPattern, assignment_
 					_p_assignment_expression(_arg__p_assignment_expression)
 {
 
-	LOG("CREATING expression_item")
+	LOG("\033[32mCREATING[0m expression_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	expression_item::expression_item(const expression_item &other):
@@ -3857,11 +3857,11 @@ expression_item::expression_item(std::string _arg__s_matchedPattern, assignment_
 expression_item::~expression_item()
 {
 
-	LOG("DELETING(?) expression_item")
+	LOG("\033[31mDELETING\033[0m(?) expression_item")
 
 	(*_refCount)--;	LOG("[ "<<_refCount<<" ]	"<<"refCount after decrement:"<<(*_refCount))
 	if((*_refCount)>0)return;
-	LOG("DELETING expression_item")
+	LOG("\033[31mDELETING\033[0m expression_item")
 
 	delete(_refCount);_refCount=0;	if (_p_assignment_expression)      {delete(_p_assignment_expression);_p_assignment_expression=0;}
 }
@@ -3918,12 +3918,12 @@ declarator::declarator(std::string _arg__s_matchedPattern, pointer *_arg__p_poin
 					_p_direct_declarator(_arg__p_direct_declarator)
 {
 
-	LOG("CREATING declarator")
+	LOG("\033[32mCREATING\033[0m declarator")
 }
 declarator::~declarator()
 {
 
-	LOG("DELETING declarator")
+	LOG("\033[32mDELETING\033[0m declarator")
 	if (_p_pointer)                    {delete(_p_pointer);_p_pointer=0;}
 	if (_p_direct_declarator)          {delete(_p_direct_declarator);_p_direct_declarator=0;}
 }

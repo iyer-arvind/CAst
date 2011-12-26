@@ -10,469 +10,537 @@
 %token DOUBLE TYPE_NAME OR_ASSIGN SIGNED FLOAT 
 %token BREAK CONTINUE MUL_ASSIGN LEFT_ASSIGN LONG 
 %token INC_OP NE_OP DIV_ASSIGN 
+
+%union {
+	const char*                           _t_str;
+	CAst::Token*                          _t_Token;
+	CAst::storage_class_specifier*        _t_storage_class_specifier;
+	CAst::expression_statement*           _t_expression_statement;
+	CAst::type_name*                      _t_type_name;
+	CAst::unary_expression*               _t_unary_expression;
+	CAst::conditional_expression*         _t_conditional_expression;
+	CAst::struct_or_union_specifier*      _t_struct_or_union_specifier;
+	CAst::exclusive_or_expression*        _t_exclusive_or_expression;
+	CAst::initializer*                    _t_initializer;
+	CAst::struct_declaration_list*        _t_struct_declaration_list;
+	CAst::assignment_operator*            _t_assignment_operator;
+	CAst::struct_declaration*             _t_struct_declaration;
+	CAst::abstract_declarator*            _t_abstract_declarator;
+	CAst::iteration_statement*            _t_iteration_statement;
+	CAst::and_expression*                 _t_and_expression;
+	CAst::external_declaration*           _t_external_declaration;
+	CAst::type_specifier*                 _t_type_specifier;
+	CAst::compound_statement*             _t_compound_statement;
+	CAst::inclusive_or_expression*        _t_inclusive_or_expression;
+	CAst::pointer*                        _t_pointer;
+	CAst::selection_statement*            _t_selection_statement;
+	CAst::postfix_expression*             _t_postfix_expression;
+	CAst::additive_expression*            _t_additive_expression;
+	CAst::statement*                      _t_statement;
+	CAst::cast_expression*                _t_cast_expression;
+	CAst::init_declarator*                _t_init_declarator;
+	CAst::struct_declarator_list*         _t_struct_declarator_list;
+	CAst::logical_or_expression*          _t_logical_or_expression;
+	CAst::translation_unit*               _t_translation_unit;
+	CAst::relational_expression*          _t_relational_expression;
+	CAst::struct_or_union*                _t_struct_or_union;
+	CAst::enumerator*                     _t_enumerator;
+	CAst::assignment_expression*          _t_assignment_expression;
+	CAst::parameter_type_list*            _t_parameter_type_list;
+	CAst::parameter_declaration*          _t_parameter_declaration;
+	CAst::multiplicative_expression*      _t_multiplicative_expression;
+	CAst::type_qualifier_list*            _t_type_qualifier_list;
+	CAst::argument_expression_list*       _t_argument_expression_list;
+	CAst::direct_abstract_declarator*     _t_direct_abstract_declarator;
+	CAst::constant_expression*            _t_constant_expression;
+	CAst::equality_expression*            _t_equality_expression;
+	CAst::primary_expression*             _t_primary_expression;
+	CAst::declaration_specifiers*         _t_declaration_specifiers;
+	CAst::declaration*                    _t_declaration;
+	CAst::direct_declarator*              _t_direct_declarator;
+	CAst::logical_and_expression*         _t_logical_and_expression;
+	CAst::init_declarator_list*           _t_init_declarator_list;
+	CAst::shift_expression*               _t_shift_expression;
+	CAst::identifier_list*                _t_identifier_list;
+	CAst::jump_statement*                 _t_jump_statement;
+	CAst::struct_declarator*              _t_struct_declarator;
+	CAst::function_definition*            _t_function_definition;
+	CAst::parameter_list*                 _t_parameter_list;
+	CAst::enum_specifier*                 _t_enum_specifier;
+	CAst::type_qualifier*                 _t_type_qualifier;
+	CAst::enumerator_list*                _t_enumerator_list;
+	CAst::labeled_statement*              _t_labeled_statement;
+	CAst::declaration_list*               _t_declaration_list;
+	CAst::specifier_qualifier_list*       _t_specifier_qualifier_list;
+	CAst::unary_operator*                 _t_unary_operator;
+	CAst::initializer_list*               _t_initializer_list;
+	CAst::statement_list*                 _t_statement_list;
+	CAst::expression*                     _t_expression;
+	CAst::declarator*                     _t_declarator;
+}
 %start translation_unit
 %%
 
 storage_class_specifier
-	:TYPEDEF                                                                            {RULE_MARKER(     "storage_class_specifier");$$=(CAst::CAst*)(new CAst::storage_class_specifier("[TYPEDEF]",CAST_PTR(Token,$1)));}
-	|EXTERN                                                                             {RULE_MARKER(     "storage_class_specifier");$$=(CAst::CAst*)(new CAst::storage_class_specifier("[EXTERN]",CAST_PTR(Token,$1)));}
-	|STATIC                                                                             {RULE_MARKER(     "storage_class_specifier");$$=(CAst::CAst*)(new CAst::storage_class_specifier("[STATIC]",CAST_PTR(Token,$1)));}
-	|AUTO                                                                               {RULE_MARKER(     "storage_class_specifier");$$=(CAst::CAst*)(new CAst::storage_class_specifier("[AUTO]",CAST_PTR(Token,$1)));}
-	|REGISTER                                                                           {RULE_MARKER(     "storage_class_specifier");$$=(CAst::CAst*)(new CAst::storage_class_specifier("[REGISTER]",CAST_PTR(Token,$1)));}
+	:TYPEDEF                                                                            {RULE_MARKER(     "storage_class_specifier");$<_t_storage_class_specifier>$=new CAst::storage_class_specifier("[TYPEDEF]",new CAst::Token($<_t_str>1));}
+	|EXTERN                                                                             {RULE_MARKER(     "storage_class_specifier");$<_t_storage_class_specifier>$=new CAst::storage_class_specifier("[EXTERN]",new CAst::Token($<_t_str>1));}
+	|STATIC                                                                             {RULE_MARKER(     "storage_class_specifier");$<_t_storage_class_specifier>$=new CAst::storage_class_specifier("[STATIC]",new CAst::Token($<_t_str>1));}
+	|AUTO                                                                               {RULE_MARKER(     "storage_class_specifier");$<_t_storage_class_specifier>$=new CAst::storage_class_specifier("[AUTO]",new CAst::Token($<_t_str>1));}
+	|REGISTER                                                                           {RULE_MARKER(     "storage_class_specifier");$<_t_storage_class_specifier>$=new CAst::storage_class_specifier("[REGISTER]",new CAst::Token($<_t_str>1));}
 	;
 
 
 expression_statement
-	:expression, ';'                                                                    {RULE_MARKER(        "expression_statement");$$=(CAst::CAst*)(new CAst::expression_statement("[expression,';']",CAST_PTR(expression,$1)));}
-	|';'                                                                                {RULE_MARKER(        "expression_statement");$$=(CAst::CAst*)(new CAst::expression_statement("[';']",NULL));}
+	:expression ';'                                                                     {RULE_MARKER(        "expression_statement");$<_t_expression_statement>$=new CAst::expression_statement("[expression,';']",$<_t_expression>1);}
+	|';'                                                                                {RULE_MARKER(        "expression_statement");$<_t_expression_statement>$=new CAst::expression_statement("[';']",NULL);}
 	;
 
 
 type_name
-	:specifier_qualifier_list, abstract_declarator                                      {RULE_MARKER(                   "type_name");$$=(CAst::CAst*)(new CAst::type_name("[specifier_qualifier_list,abstract_declarator]",CAST_PTR(specifier_qualifier_list,$1), CAST_PTR(abstract_declarator,$2)));}
-	|specifier_qualifier_list                                                           {RULE_MARKER(                   "type_name");$$=(CAst::CAst*)(new CAst::type_name("[specifier_qualifier_list]",CAST_PTR(specifier_qualifier_list,$1), NULL));}
+	:specifier_qualifier_list abstract_declarator                                       {RULE_MARKER(                   "type_name");$<_t_type_name>$=new CAst::type_name("[specifier_qualifier_list,abstract_declarator]",$<_t_specifier_qualifier_list>1, $<_t_abstract_declarator>2);}
+	|specifier_qualifier_list                                                           {RULE_MARKER(                   "type_name");$<_t_type_name>$=new CAst::type_name("[specifier_qualifier_list]",$<_t_specifier_qualifier_list>1, NULL);}
 	;
 
 
 unary_expression
-	:SIZEOF, '(', type_name, ')'                                                        {RULE_MARKER(           "unary_expression1");$$=(CAst::CAst*)(new CAst::unary_expression1("[SIZEOF,'(',type_name,')']",CAST_PTR(type_name,$3)));}
-	|INC_OP, unary_expression                                                           {RULE_MARKER(           "unary_expression2");$$=(CAst::CAst*)(new CAst::unary_expression2("[INC_OP,unary_expression]",CAST_PTR(Token,$1), CAST_PTR(unary_expression,$2)));}
-	|DEC_OP, unary_expression                                                           {RULE_MARKER(           "unary_expression2");$$=(CAst::CAst*)(new CAst::unary_expression2("[DEC_OP,unary_expression]",CAST_PTR(Token,$1), CAST_PTR(unary_expression,$2)));}
-	|unary_operator, cast_expression                                                    {RULE_MARKER(           "unary_expression3");$$=(CAst::CAst*)(new CAst::unary_expression3("[unary_operator,cast_expression]",CAST_PTR(unary_operator,$1), CAST_PTR(cast_expression,$2)));}
-	|SIZEOF, unary_expression                                                           {RULE_MARKER(           "unary_expression2");$$=(CAst::CAst*)(new CAst::unary_expression2("[SIZEOF,unary_expression]",CAST_PTR(Token,$1), CAST_PTR(unary_expression,$2)));}
-	|postfix_expression                                                                 {RULE_MARKER(           "unary_expression4");$$=(CAst::CAst*)(new CAst::unary_expression4("[postfix_expression]",CAST_PTR(postfix_expression,$1)));}
+	:SIZEOF '(' type_name ')'                                                           {RULE_MARKER(           "unary_expression1");$<_t_unary_expression>$=new CAst::unary_expression1("[SIZEOF,'(',type_name,')']",$<_t_type_name>3);}
+	|INC_OP unary_expression                                                            {RULE_MARKER(           "unary_expression2");$<_t_unary_expression>$=new CAst::unary_expression2("[INC_OP,unary_expression]",new CAst::Token($<_t_str>1), $<_t_unary_expression>2);}
+	|DEC_OP unary_expression                                                            {RULE_MARKER(           "unary_expression2");$<_t_unary_expression>$=new CAst::unary_expression2("[DEC_OP,unary_expression]",new CAst::Token($<_t_str>1), $<_t_unary_expression>2);}
+	|unary_operator cast_expression                                                     {RULE_MARKER(           "unary_expression3");$<_t_unary_expression>$=new CAst::unary_expression3("[unary_operator,cast_expression]",$<_t_unary_operator>1, $<_t_cast_expression>2);}
+	|SIZEOF unary_expression                                                            {RULE_MARKER(           "unary_expression2");$<_t_unary_expression>$=new CAst::unary_expression2("[SIZEOF,unary_expression]",new CAst::Token($<_t_str>1), $<_t_unary_expression>2);}
+	|postfix_expression                                                                 {RULE_MARKER(           "unary_expression4");$<_t_unary_expression>$=new CAst::unary_expression4("[postfix_expression]",$<_t_postfix_expression>1);}
 	;
 
 
 conditional_expression
-	:logical_or_expression, '?', expression, ':', conditional_expression                {RULE_MARKER(      "conditional_expression");CAST_PTR(conditional_expression,$5)->append("[logical_or_expression,'?',expression,':',conditional_expression]", CAST_PTR(logical_or_expression,$1), CAST_PTR(expression,$3));$$=$5;}
-	|logical_or_expression                                                              {RULE_MARKER(      "conditional_expression");$$=(CAst::CAst*)(new CAst::conditional_expression("[logical_or_expression]",CAST_PTR(logical_or_expression,$1)));}
+	:logical_or_expression '?' expression ':' conditional_expression                    {RULE_MARKER(      "conditional_expression");CAST_PTR(conditional_expression,$<_t_conditional_expression>5)->append("[logical_or_expression,'?',expression,':',conditional_expression]", $<_t_logical_or_expression>1, $<_t_expression>3);$<_t_conditional_expression>$=$<_t_conditional_expression>5;}
+	|logical_or_expression                                                              {RULE_MARKER(      "conditional_expression");$<_t_conditional_expression>$=new CAst::conditional_expression("[logical_or_expression]",$<_t_logical_or_expression>1);}
 	;
 
 
 struct_or_union_specifier
-	:struct_or_union, IDENTIFIER, '{', struct_declaration_list, '}'                     {RULE_MARKER(   "struct_or_union_specifier");$$=(CAst::CAst*)(new CAst::struct_or_union_specifier("[struct_or_union,IDENTIFIER,'{',struct_declaration_list,'}']",CAST_PTR(struct_or_union,$1), CAST_PTR(Token,$2), CAST_PTR(Token,$3), CAST_PTR(struct_declaration_list,$4), CAST_PTR(Token,$5)));}
-	|struct_or_union, '{', struct_declaration_list, '}'                                 {RULE_MARKER(   "struct_or_union_specifier");$$=(CAst::CAst*)(new CAst::struct_or_union_specifier("[struct_or_union,'{',struct_declaration_list,'}']",CAST_PTR(struct_or_union,$1), NULL, CAST_PTR(Token,$2), CAST_PTR(struct_declaration_list,$3), CAST_PTR(Token,$4)));}
-	|struct_or_union, IDENTIFIER                                                        {RULE_MARKER(   "struct_or_union_specifier");$$=(CAst::CAst*)(new CAst::struct_or_union_specifier("[struct_or_union,IDENTIFIER]",CAST_PTR(struct_or_union,$1), CAST_PTR(Token,$2), NULL, NULL, NULL));}
+	:struct_or_union IDENTIFIER '{' struct_declaration_list '}'                         {RULE_MARKER(   "struct_or_union_specifier");$<_t_struct_or_union_specifier>$=new CAst::struct_or_union_specifier("[struct_or_union,IDENTIFIER,'{',struct_declaration_list,'}']",$<_t_struct_or_union>1, new CAst::Token($<_t_str>2), new CAst::Token($<_t_str>3), $<_t_struct_declaration_list>4, new CAst::Token($<_t_str>5));}
+	|struct_or_union '{' struct_declaration_list '}'                                    {RULE_MARKER(   "struct_or_union_specifier");$<_t_struct_or_union_specifier>$=new CAst::struct_or_union_specifier("[struct_or_union,'{',struct_declaration_list,'}']",$<_t_struct_or_union>1, NULL, new CAst::Token($<_t_str>2), $<_t_struct_declaration_list>3, new CAst::Token($<_t_str>4));}
+	|struct_or_union IDENTIFIER                                                         {RULE_MARKER(   "struct_or_union_specifier");$<_t_struct_or_union_specifier>$=new CAst::struct_or_union_specifier("[struct_or_union,IDENTIFIER]",$<_t_struct_or_union>1, new CAst::Token($<_t_str>2), NULL, NULL, NULL);}
 	;
 
 
 exclusive_or_expression
-	:exclusive_or_expression, '^', and_expression                                       {RULE_MARKER(     "exclusive_or_expression");CAST_PTR(exclusive_or_expression,$1)->append("[exclusive_or_expression,'^',and_expression]", CAST_PTR(and_expression,$3));$$=$1;}
-	|and_expression                                                                     {RULE_MARKER(     "exclusive_or_expression");$$=(CAst::CAst*)(new CAst::exclusive_or_expression("[and_expression]",CAST_PTR(and_expression,$1)));}
+	:exclusive_or_expression '^' and_expression                                         {RULE_MARKER(     "exclusive_or_expression");CAST_PTR(exclusive_or_expression,$<_t_exclusive_or_expression>1)->append("[exclusive_or_expression,'^',and_expression]", $<_t_and_expression>3);$<_t_exclusive_or_expression>$=$<_t_exclusive_or_expression>1;}
+	|and_expression                                                                     {RULE_MARKER(     "exclusive_or_expression");$<_t_exclusive_or_expression>$=new CAst::exclusive_or_expression("[and_expression]",$<_t_and_expression>1);}
 	;
 
 
 initializer
-	:'{', initializer_list, ',', '}'                                                    {RULE_MARKER(                "initializer1");$$=(CAst::CAst*)(new CAst::initializer1("['{',initializer_list,',','}']",CAST_PTR(initializer_list,$2), CAST_PTR(Token,$3)));}
-	|'{', initializer_list, '}'                                                         {RULE_MARKER(                "initializer1");$$=(CAst::CAst*)(new CAst::initializer1("['{',initializer_list,'}']",CAST_PTR(initializer_list,$2), NULL));}
-	|assignment_expression                                                              {RULE_MARKER(                "initializer2");$$=(CAst::CAst*)(new CAst::initializer2("[assignment_expression]",CAST_PTR(assignment_expression,$1)));}
+	:'{' initializer_list ',' '}'                                                       {RULE_MARKER(                "initializer1");$<_t_initializer>$=new CAst::initializer1("['{',initializer_list,',','}']",$<_t_initializer_list>2, new CAst::Token($<_t_str>3));}
+	|'{' initializer_list '}'                                                           {RULE_MARKER(                "initializer1");$<_t_initializer>$=new CAst::initializer1("['{',initializer_list,'}']",$<_t_initializer_list>2, NULL);}
+	|assignment_expression                                                              {RULE_MARKER(                "initializer2");$<_t_initializer>$=new CAst::initializer2("[assignment_expression]",$<_t_assignment_expression>1);}
 	;
 
 
 struct_declaration_list
-	:struct_declaration_list, struct_declaration                                        {RULE_MARKER(     "struct_declaration_list");CAST_PTR(struct_declaration_list,$1)->append("[struct_declaration_list,struct_declaration]", CAST_PTR(struct_declaration,$2));$$=$1;}
-	|struct_declaration                                                                 {RULE_MARKER(     "struct_declaration_list");$$=(CAst::CAst*)(new CAst::struct_declaration_list("[struct_declaration]",CAST_PTR(struct_declaration,$1)));}
+	:struct_declaration_list struct_declaration                                         {RULE_MARKER(     "struct_declaration_list");CAST_PTR(struct_declaration_list,$<_t_struct_declaration_list>1)->append("[struct_declaration_list,struct_declaration]", $<_t_struct_declaration>2);$<_t_struct_declaration_list>$=$<_t_struct_declaration_list>1;}
+	|struct_declaration                                                                 {RULE_MARKER(     "struct_declaration_list");$<_t_struct_declaration_list>$=new CAst::struct_declaration_list("[struct_declaration]",$<_t_struct_declaration>1);}
 	;
 
 
 assignment_operator
-	:'='                                                                                {RULE_MARKER(         "assignment_operator");$$=(CAst::CAst*)(new CAst::assignment_operator("['=']",CAST_PTR(Token,$1)));}
-	|MUL_ASSIGN                                                                         {RULE_MARKER(         "assignment_operator");$$=(CAst::CAst*)(new CAst::assignment_operator("[MUL_ASSIGN]",CAST_PTR(Token,$1)));}
-	|DIV_ASSIGN                                                                         {RULE_MARKER(         "assignment_operator");$$=(CAst::CAst*)(new CAst::assignment_operator("[DIV_ASSIGN]",CAST_PTR(Token,$1)));}
-	|MOD_ASSIGN                                                                         {RULE_MARKER(         "assignment_operator");$$=(CAst::CAst*)(new CAst::assignment_operator("[MOD_ASSIGN]",CAST_PTR(Token,$1)));}
-	|ADD_ASSIGN                                                                         {RULE_MARKER(         "assignment_operator");$$=(CAst::CAst*)(new CAst::assignment_operator("[ADD_ASSIGN]",CAST_PTR(Token,$1)));}
-	|SUB_ASSIGN                                                                         {RULE_MARKER(         "assignment_operator");$$=(CAst::CAst*)(new CAst::assignment_operator("[SUB_ASSIGN]",CAST_PTR(Token,$1)));}
-	|LEFT_ASSIGN                                                                        {RULE_MARKER(         "assignment_operator");$$=(CAst::CAst*)(new CAst::assignment_operator("[LEFT_ASSIGN]",CAST_PTR(Token,$1)));}
-	|RIGHT_ASSIGN                                                                       {RULE_MARKER(         "assignment_operator");$$=(CAst::CAst*)(new CAst::assignment_operator("[RIGHT_ASSIGN]",CAST_PTR(Token,$1)));}
-	|AND_ASSIGN                                                                         {RULE_MARKER(         "assignment_operator");$$=(CAst::CAst*)(new CAst::assignment_operator("[AND_ASSIGN]",CAST_PTR(Token,$1)));}
-	|XOR_ASSIGN                                                                         {RULE_MARKER(         "assignment_operator");$$=(CAst::CAst*)(new CAst::assignment_operator("[XOR_ASSIGN]",CAST_PTR(Token,$1)));}
-	|OR_ASSIGN                                                                          {RULE_MARKER(         "assignment_operator");$$=(CAst::CAst*)(new CAst::assignment_operator("[OR_ASSIGN]",CAST_PTR(Token,$1)));}
+	:'='                                                                                {RULE_MARKER(         "assignment_operator");$<_t_assignment_operator>$=new CAst::assignment_operator("['=']",new CAst::Token($<_t_str>1));}
+	|MUL_ASSIGN                                                                         {RULE_MARKER(         "assignment_operator");$<_t_assignment_operator>$=new CAst::assignment_operator("[MUL_ASSIGN]",new CAst::Token($<_t_str>1));}
+	|DIV_ASSIGN                                                                         {RULE_MARKER(         "assignment_operator");$<_t_assignment_operator>$=new CAst::assignment_operator("[DIV_ASSIGN]",new CAst::Token($<_t_str>1));}
+	|MOD_ASSIGN                                                                         {RULE_MARKER(         "assignment_operator");$<_t_assignment_operator>$=new CAst::assignment_operator("[MOD_ASSIGN]",new CAst::Token($<_t_str>1));}
+	|ADD_ASSIGN                                                                         {RULE_MARKER(         "assignment_operator");$<_t_assignment_operator>$=new CAst::assignment_operator("[ADD_ASSIGN]",new CAst::Token($<_t_str>1));}
+	|SUB_ASSIGN                                                                         {RULE_MARKER(         "assignment_operator");$<_t_assignment_operator>$=new CAst::assignment_operator("[SUB_ASSIGN]",new CAst::Token($<_t_str>1));}
+	|LEFT_ASSIGN                                                                        {RULE_MARKER(         "assignment_operator");$<_t_assignment_operator>$=new CAst::assignment_operator("[LEFT_ASSIGN]",new CAst::Token($<_t_str>1));}
+	|RIGHT_ASSIGN                                                                       {RULE_MARKER(         "assignment_operator");$<_t_assignment_operator>$=new CAst::assignment_operator("[RIGHT_ASSIGN]",new CAst::Token($<_t_str>1));}
+	|AND_ASSIGN                                                                         {RULE_MARKER(         "assignment_operator");$<_t_assignment_operator>$=new CAst::assignment_operator("[AND_ASSIGN]",new CAst::Token($<_t_str>1));}
+	|XOR_ASSIGN                                                                         {RULE_MARKER(         "assignment_operator");$<_t_assignment_operator>$=new CAst::assignment_operator("[XOR_ASSIGN]",new CAst::Token($<_t_str>1));}
+	|OR_ASSIGN                                                                          {RULE_MARKER(         "assignment_operator");$<_t_assignment_operator>$=new CAst::assignment_operator("[OR_ASSIGN]",new CAst::Token($<_t_str>1));}
 	;
 
 
 struct_declaration
-	:specifier_qualifier_list, struct_declarator_list, ';'                              {RULE_MARKER(          "struct_declaration");$$=(CAst::CAst*)(new CAst::struct_declaration("[specifier_qualifier_list,struct_declarator_list,';']",CAST_PTR(specifier_qualifier_list,$1), CAST_PTR(struct_declarator_list,$2)));}
+	:specifier_qualifier_list struct_declarator_list ';'                                {RULE_MARKER(          "struct_declaration");$<_t_struct_declaration>$=new CAst::struct_declaration("[specifier_qualifier_list,struct_declarator_list,';']",$<_t_specifier_qualifier_list>1, $<_t_struct_declarator_list>2);}
 	;
 
 
 abstract_declarator
-	:pointer, direct_abstract_declarator                                                {RULE_MARKER(         "abstract_declarator");$$=(CAst::CAst*)(new CAst::abstract_declarator("[pointer,direct_abstract_declarator]",CAST_PTR(pointer,$1), CAST_PTR(direct_abstract_declarator,$2)));}
-	|pointer                                                                            {RULE_MARKER(         "abstract_declarator");$$=(CAst::CAst*)(new CAst::abstract_declarator("[pointer]",CAST_PTR(pointer,$1), NULL));}
-	|direct_abstract_declarator                                                         {RULE_MARKER(         "abstract_declarator");$$=(CAst::CAst*)(new CAst::abstract_declarator("[direct_abstract_declarator]",NULL, CAST_PTR(direct_abstract_declarator,$1)));}
+	:pointer direct_abstract_declarator                                                 {RULE_MARKER(         "abstract_declarator");$<_t_abstract_declarator>$=new CAst::abstract_declarator("[pointer,direct_abstract_declarator]",$<_t_pointer>1, $<_t_direct_abstract_declarator>2);}
+	|pointer                                                                            {RULE_MARKER(         "abstract_declarator");$<_t_abstract_declarator>$=new CAst::abstract_declarator("[pointer]",$<_t_pointer>1, NULL);}
+	|direct_abstract_declarator                                                         {RULE_MARKER(         "abstract_declarator");$<_t_abstract_declarator>$=new CAst::abstract_declarator("[direct_abstract_declarator]",NULL, $<_t_direct_abstract_declarator>1);}
 	;
 
 
 iteration_statement
-	:DO, statement, WHILE, '(', expression, ')', ';'                                    {RULE_MARKER(        "iteration_statement1");$$=(CAst::CAst*)(new CAst::iteration_statement1("[DO,statement,WHILE,'(',expression,')',';']",CAST_PTR(statement,$2), CAST_PTR(expression,$5)));}
-	|FOR, '(', expression_statement, expression_statement, expression, ')', statement   {RULE_MARKER(        "iteration_statement2");$$=(CAst::CAst*)(new CAst::iteration_statement2("[FOR,'(',expression_statement,expression_statement,expression,')',statement]",CAST_PTR(expression_statement,$3), CAST_PTR(expression_statement,$4), CAST_PTR(expression,$5), CAST_PTR(statement,$7)));}
-	|FOR, '(', expression_statement, expression_statement, ')', statement               {RULE_MARKER(        "iteration_statement2");$$=(CAst::CAst*)(new CAst::iteration_statement2("[FOR,'(',expression_statement,expression_statement,')',statement]",CAST_PTR(expression_statement,$3), CAST_PTR(expression_statement,$4), NULL, CAST_PTR(statement,$6)));}
-	|WHILE, '(', expression, ')', statement                                             {RULE_MARKER(        "iteration_statement3");$$=(CAst::CAst*)(new CAst::iteration_statement3("[WHILE,'(',expression,')',statement]",CAST_PTR(expression,$3), CAST_PTR(statement,$5)));}
+	:DO statement WHILE '(' expression ')' ';'                                          {RULE_MARKER(        "iteration_statement1");$<_t_iteration_statement>$=new CAst::iteration_statement1("[DO,statement,WHILE,'(',expression,')',';']",$<_t_statement>2, $<_t_expression>5);}
+	|FOR '(' expression_statement expression_statement expression ')' statement         {RULE_MARKER(        "iteration_statement2");$<_t_iteration_statement>$=new CAst::iteration_statement2("[FOR,'(',expression_statement,expression_statement,expression,')',statement]",$<_t_expression_statement>3, $<_t_expression_statement>4, $<_t_expression>5, $<_t_statement>7);}
+	|FOR '(' expression_statement expression_statement ')' statement                    {RULE_MARKER(        "iteration_statement2");$<_t_iteration_statement>$=new CAst::iteration_statement2("[FOR,'(',expression_statement,expression_statement,')',statement]",$<_t_expression_statement>3, $<_t_expression_statement>4, NULL, $<_t_statement>6);}
+	|WHILE '(' expression ')' statement                                                 {RULE_MARKER(        "iteration_statement3");$<_t_iteration_statement>$=new CAst::iteration_statement3("[WHILE,'(',expression,')',statement]",$<_t_expression>3, $<_t_statement>5);}
 	;
 
 
 and_expression
-	:and_expression, '&', equality_expression                                           {RULE_MARKER(              "and_expression");CAST_PTR(and_expression,$1)->append("[and_expression,'&',equality_expression]", CAST_PTR(equality_expression,$3));$$=$1;}
-	|equality_expression                                                                {RULE_MARKER(              "and_expression");$$=(CAst::CAst*)(new CAst::and_expression("[equality_expression]",CAST_PTR(equality_expression,$1)));}
+	:and_expression '&' equality_expression                                             {RULE_MARKER(              "and_expression");CAST_PTR(and_expression,$<_t_and_expression>1)->append("[and_expression,'&',equality_expression]", $<_t_equality_expression>3);$<_t_and_expression>$=$<_t_and_expression>1;}
+	|equality_expression                                                                {RULE_MARKER(              "and_expression");$<_t_and_expression>$=new CAst::and_expression("[equality_expression]",$<_t_equality_expression>1);}
 	;
 
 
 external_declaration
-	:function_definition                                                                {RULE_MARKER(       "external_declaration1");$$=(CAst::CAst*)(new CAst::external_declaration1("[function_definition]",CAST_PTR(function_definition,$1)));}
-	|declaration                                                                        {RULE_MARKER(       "external_declaration2");$$=(CAst::CAst*)(new CAst::external_declaration2("[declaration]",CAST_PTR(declaration,$1)));}
+	:function_definition                                                                {RULE_MARKER(       "external_declaration1");$<_t_external_declaration>$=new CAst::external_declaration1("[function_definition]",$<_t_function_definition>1);}
+	|declaration                                                                        {RULE_MARKER(       "external_declaration2");$<_t_external_declaration>$=new CAst::external_declaration2("[declaration]",$<_t_declaration>1);}
 	;
 
 
 type_specifier
-	:VOID                                                                               {RULE_MARKER(             "type_specifier1");$$=(CAst::CAst*)(new CAst::type_specifier1("[VOID]",CAST_PTR(Token,$1)));}
-	|CHAR                                                                               {RULE_MARKER(             "type_specifier1");$$=(CAst::CAst*)(new CAst::type_specifier1("[CHAR]",CAST_PTR(Token,$1)));}
-	|SHORT                                                                              {RULE_MARKER(             "type_specifier1");$$=(CAst::CAst*)(new CAst::type_specifier1("[SHORT]",CAST_PTR(Token,$1)));}
-	|INT                                                                                {RULE_MARKER(             "type_specifier1");$$=(CAst::CAst*)(new CAst::type_specifier1("[INT]",CAST_PTR(Token,$1)));}
-	|LONG                                                                               {RULE_MARKER(             "type_specifier1");$$=(CAst::CAst*)(new CAst::type_specifier1("[LONG]",CAST_PTR(Token,$1)));}
-	|FLOAT                                                                              {RULE_MARKER(             "type_specifier1");$$=(CAst::CAst*)(new CAst::type_specifier1("[FLOAT]",CAST_PTR(Token,$1)));}
-	|DOUBLE                                                                             {RULE_MARKER(             "type_specifier1");$$=(CAst::CAst*)(new CAst::type_specifier1("[DOUBLE]",CAST_PTR(Token,$1)));}
-	|SIGNED                                                                             {RULE_MARKER(             "type_specifier1");$$=(CAst::CAst*)(new CAst::type_specifier1("[SIGNED]",CAST_PTR(Token,$1)));}
-	|UNSIGNED                                                                           {RULE_MARKER(             "type_specifier1");$$=(CAst::CAst*)(new CAst::type_specifier1("[UNSIGNED]",CAST_PTR(Token,$1)));}
-	|struct_or_union_specifier                                                          {RULE_MARKER(             "type_specifier2");$$=(CAst::CAst*)(new CAst::type_specifier2("[struct_or_union_specifier]",CAST_PTR(struct_or_union_specifier,$1)));}
-	|enum_specifier                                                                     {RULE_MARKER(             "type_specifier3");$$=(CAst::CAst*)(new CAst::type_specifier3("[enum_specifier]",CAST_PTR(enum_specifier,$1)));}
-	|TYPE_NAME                                                                          {RULE_MARKER(             "type_specifier1");$$=(CAst::CAst*)(new CAst::type_specifier1("[TYPE_NAME]",CAST_PTR(Token,$1)));}
+	:VOID                                                                               {RULE_MARKER(             "type_specifier1");$<_t_type_specifier>$=new CAst::type_specifier1("[VOID]",new CAst::Token($<_t_str>1));}
+	|CHAR                                                                               {RULE_MARKER(             "type_specifier1");$<_t_type_specifier>$=new CAst::type_specifier1("[CHAR]",new CAst::Token($<_t_str>1));}
+	|SHORT                                                                              {RULE_MARKER(             "type_specifier1");$<_t_type_specifier>$=new CAst::type_specifier1("[SHORT]",new CAst::Token($<_t_str>1));}
+	|INT                                                                                {RULE_MARKER(             "type_specifier1");$<_t_type_specifier>$=new CAst::type_specifier1("[INT]",new CAst::Token($<_t_str>1));}
+	|LONG                                                                               {RULE_MARKER(             "type_specifier1");$<_t_type_specifier>$=new CAst::type_specifier1("[LONG]",new CAst::Token($<_t_str>1));}
+	|FLOAT                                                                              {RULE_MARKER(             "type_specifier1");$<_t_type_specifier>$=new CAst::type_specifier1("[FLOAT]",new CAst::Token($<_t_str>1));}
+	|DOUBLE                                                                             {RULE_MARKER(             "type_specifier1");$<_t_type_specifier>$=new CAst::type_specifier1("[DOUBLE]",new CAst::Token($<_t_str>1));}
+	|SIGNED                                                                             {RULE_MARKER(             "type_specifier1");$<_t_type_specifier>$=new CAst::type_specifier1("[SIGNED]",new CAst::Token($<_t_str>1));}
+	|UNSIGNED                                                                           {RULE_MARKER(             "type_specifier1");$<_t_type_specifier>$=new CAst::type_specifier1("[UNSIGNED]",new CAst::Token($<_t_str>1));}
+	|struct_or_union_specifier                                                          {RULE_MARKER(             "type_specifier2");$<_t_type_specifier>$=new CAst::type_specifier2("[struct_or_union_specifier]",$<_t_struct_or_union_specifier>1);}
+	|enum_specifier                                                                     {RULE_MARKER(             "type_specifier3");$<_t_type_specifier>$=new CAst::type_specifier3("[enum_specifier]",$<_t_enum_specifier>1);}
+	|TYPE_NAME                                                                          {RULE_MARKER(             "type_specifier1");$<_t_type_specifier>$=new CAst::type_specifier1("[TYPE_NAME]",new CAst::Token($<_t_str>1));}
 	;
 
 
 compound_statement
-	:'{', declaration_list, statement_list, '}'                                         {RULE_MARKER(          "compound_statement");$$=(CAst::CAst*)(new CAst::compound_statement("['{',declaration_list,statement_list,'}']",CAST_PTR(declaration_list,$2), CAST_PTR(statement_list,$3)));}
-	|'{', statement_list, '}'                                                           {RULE_MARKER(          "compound_statement");$$=(CAst::CAst*)(new CAst::compound_statement("['{',statement_list,'}']",NULL, CAST_PTR(statement_list,$2)));}
-	|'{', declaration_list, '}'                                                         {RULE_MARKER(          "compound_statement");$$=(CAst::CAst*)(new CAst::compound_statement("['{',declaration_list,'}']",CAST_PTR(declaration_list,$2), NULL));}
-	|'{', '}'                                                                           {RULE_MARKER(          "compound_statement");$$=(CAst::CAst*)(new CAst::compound_statement("['{','}']",NULL, NULL));}
+	:'{' declaration_list statement_list '}'                                            {RULE_MARKER(          "compound_statement");$<_t_compound_statement>$=new CAst::compound_statement("['{',declaration_list,statement_list,'}']",$<_t_declaration_list>2, $<_t_statement_list>3);}
+	|'{' statement_list '}'                                                             {RULE_MARKER(          "compound_statement");$<_t_compound_statement>$=new CAst::compound_statement("['{',statement_list,'}']",NULL, $<_t_statement_list>2);}
+	|'{' declaration_list '}'                                                           {RULE_MARKER(          "compound_statement");$<_t_compound_statement>$=new CAst::compound_statement("['{',declaration_list,'}']",$<_t_declaration_list>2, NULL);}
+	|'{' '}'                                                                            {RULE_MARKER(          "compound_statement");$<_t_compound_statement>$=new CAst::compound_statement("['{','}']",NULL, NULL);}
 	;
 
 
 inclusive_or_expression
-	:inclusive_or_expression, '|', exclusive_or_expression                              {RULE_MARKER(     "inclusive_or_expression");CAST_PTR(inclusive_or_expression,$1)->append("[inclusive_or_expression,'|',exclusive_or_expression]", CAST_PTR(exclusive_or_expression,$3));$$=$1;}
-	|exclusive_or_expression                                                            {RULE_MARKER(     "inclusive_or_expression");$$=(CAst::CAst*)(new CAst::inclusive_or_expression("[exclusive_or_expression]",CAST_PTR(exclusive_or_expression,$1)));}
+	:inclusive_or_expression '|' exclusive_or_expression                                {RULE_MARKER(     "inclusive_or_expression");CAST_PTR(inclusive_or_expression,$<_t_inclusive_or_expression>1)->append("[inclusive_or_expression,'|',exclusive_or_expression]", $<_t_exclusive_or_expression>3);$<_t_inclusive_or_expression>$=$<_t_inclusive_or_expression>1;}
+	|exclusive_or_expression                                                            {RULE_MARKER(     "inclusive_or_expression");$<_t_inclusive_or_expression>$=new CAst::inclusive_or_expression("[exclusive_or_expression]",$<_t_exclusive_or_expression>1);}
 	;
 
 
 pointer
-	:'*', type_qualifier_list, pointer                                                  {RULE_MARKER(                     "pointer");CAST_PTR(pointer,$3)->append("['*',type_qualifier_list,pointer]", CAST_PTR(type_qualifier_list,$2));$$=$3;}
-	|'*', type_qualifier_list                                                           {RULE_MARKER(                     "pointer");$$=(CAst::CAst*)(new CAst::pointer("['*',type_qualifier_list]",CAST_PTR(type_qualifier_list,$2)));}
-	|'*', pointer                                                                       {RULE_MARKER(                     "pointer");CAST_PTR(pointer,$2)->append("['*',pointer]", NULL);$$=$2;}
-	|'*'                                                                                {RULE_MARKER(                     "pointer");$$=(CAst::CAst*)(new CAst::pointer("['*']",NULL));}
+	:'*' type_qualifier_list pointer                                                    {RULE_MARKER(                     "pointer");CAST_PTR(pointer,$<_t_pointer>3)->append("['*',type_qualifier_list,pointer]", $<_t_type_qualifier_list>2);$<_t_pointer>$=$<_t_pointer>3;}
+	|'*' type_qualifier_list                                                            {RULE_MARKER(                     "pointer");$<_t_pointer>$=new CAst::pointer("['*',type_qualifier_list]",$<_t_type_qualifier_list>2);}
+	|'*' pointer                                                                        {RULE_MARKER(                     "pointer");CAST_PTR(pointer,$<_t_pointer>2)->append("['*',pointer]", NULL);$<_t_pointer>$=$<_t_pointer>2;}
+	|'*'                                                                                {RULE_MARKER(                     "pointer");$<_t_pointer>$=new CAst::pointer("['*']",NULL);}
 	;
 
 
 selection_statement
-	:IF, '(', expression, ')', statement, ELSE, statement                               {RULE_MARKER(        "selection_statement1");$$=(CAst::CAst*)(new CAst::selection_statement1("[IF,'(',expression,')',statement,ELSE,statement]",CAST_PTR(expression,$3), CAST_PTR(statement,$5), CAST_PTR(Token,$6), CAST_PTR(statement,$7)));}
-	|IF, '(', expression, ')', statement                                                {RULE_MARKER(        "selection_statement1");$$=(CAst::CAst*)(new CAst::selection_statement1("[IF,'(',expression,')',statement]",CAST_PTR(expression,$3), CAST_PTR(statement,$5), NULL, NULL));}
-	|SWITCH, '(', expression, ')', statement                                            {RULE_MARKER(        "selection_statement2");$$=(CAst::CAst*)(new CAst::selection_statement2("[SWITCH,'(',expression,')',statement]",CAST_PTR(expression,$3), CAST_PTR(statement,$5)));}
+	:IF '(' expression ')' statement ELSE statement                                     {RULE_MARKER(        "selection_statement1");$<_t_selection_statement>$=new CAst::selection_statement1("[IF,'(',expression,')',statement,ELSE,statement]",$<_t_expression>3, $<_t_statement>5, new CAst::Token($<_t_str>6), $<_t_statement>7);}
+	|IF '(' expression ')' statement                                                    {RULE_MARKER(        "selection_statement1");$<_t_selection_statement>$=new CAst::selection_statement1("[IF,'(',expression,')',statement]",$<_t_expression>3, $<_t_statement>5, NULL, NULL);}
+	|SWITCH '(' expression ')' statement                                                {RULE_MARKER(        "selection_statement2");$<_t_selection_statement>$=new CAst::selection_statement2("[SWITCH,'(',expression,')',statement]",$<_t_expression>3, $<_t_statement>5);}
 	;
 
 
 postfix_expression
-	:postfix_expression, '[', expression, ']'                                           {RULE_MARKER(         "postfix_expression1");$$=(CAst::CAst*)(new CAst::postfix_expression1("[postfix_expression,'[',expression,']']",CAST_PTR(postfix_expression,$1), CAST_PTR(expression,$3)));}
-	|postfix_expression, '(', argument_expression_list, ')'                             {RULE_MARKER(         "postfix_expression2");$$=(CAst::CAst*)(new CAst::postfix_expression2("[postfix_expression,'(',argument_expression_list,')']",CAST_PTR(postfix_expression,$1), CAST_PTR(argument_expression_list,$3)));}
-	|postfix_expression, '(', ')'                                                       {RULE_MARKER(         "postfix_expression2");$$=(CAst::CAst*)(new CAst::postfix_expression2("[postfix_expression,'(',')']",CAST_PTR(postfix_expression,$1), NULL));}
-	|postfix_expression, '.', IDENTIFIER                                                {RULE_MARKER(         "postfix_expression3");$$=(CAst::CAst*)(new CAst::postfix_expression3("[postfix_expression,'.',IDENTIFIER]",CAST_PTR(postfix_expression,$1), CAST_PTR(Token,$2), CAST_PTR(Token,$3)));}
-	|postfix_expression, PTR_OP, IDENTIFIER                                             {RULE_MARKER(         "postfix_expression3");$$=(CAst::CAst*)(new CAst::postfix_expression3("[postfix_expression,PTR_OP,IDENTIFIER]",CAST_PTR(postfix_expression,$1), CAST_PTR(Token,$2), CAST_PTR(Token,$3)));}
-	|postfix_expression, INC_OP                                                         {RULE_MARKER(         "postfix_expression4");$$=(CAst::CAst*)(new CAst::postfix_expression4("[postfix_expression,INC_OP]",CAST_PTR(postfix_expression,$1), CAST_PTR(Token,$2)));}
-	|postfix_expression, DEC_OP                                                         {RULE_MARKER(         "postfix_expression4");$$=(CAst::CAst*)(new CAst::postfix_expression4("[postfix_expression,DEC_OP]",CAST_PTR(postfix_expression,$1), CAST_PTR(Token,$2)));}
-	|primary_expression                                                                 {RULE_MARKER(         "postfix_expression5");$$=(CAst::CAst*)(new CAst::postfix_expression5("[primary_expression]",CAST_PTR(primary_expression,$1)));}
+	:postfix_expression '[' expression ']'                                              {RULE_MARKER(         "postfix_expression1");$<_t_postfix_expression>$=new CAst::postfix_expression1("[postfix_expression,'[',expression,']']",$<_t_postfix_expression>1, $<_t_expression>3);}
+	|postfix_expression '(' argument_expression_list ')'                                {RULE_MARKER(         "postfix_expression2");$<_t_postfix_expression>$=new CAst::postfix_expression2("[postfix_expression,'(',argument_expression_list,')']",$<_t_postfix_expression>1, $<_t_argument_expression_list>3);}
+	|postfix_expression '(' ')'                                                         {RULE_MARKER(         "postfix_expression2");$<_t_postfix_expression>$=new CAst::postfix_expression2("[postfix_expression,'(',')']",$<_t_postfix_expression>1, NULL);}
+	|postfix_expression '.' IDENTIFIER                                                  {RULE_MARKER(         "postfix_expression3");$<_t_postfix_expression>$=new CAst::postfix_expression3("[postfix_expression,'.',IDENTIFIER]",$<_t_postfix_expression>1, new CAst::Token($<_t_str>2), new CAst::Token($<_t_str>3));}
+	|postfix_expression PTR_OP IDENTIFIER                                               {RULE_MARKER(         "postfix_expression3");$<_t_postfix_expression>$=new CAst::postfix_expression3("[postfix_expression,PTR_OP,IDENTIFIER]",$<_t_postfix_expression>1, new CAst::Token($<_t_str>2), new CAst::Token($<_t_str>3));}
+	|postfix_expression INC_OP                                                          {RULE_MARKER(         "postfix_expression4");$<_t_postfix_expression>$=new CAst::postfix_expression4("[postfix_expression,INC_OP]",$<_t_postfix_expression>1, new CAst::Token($<_t_str>2));}
+	|postfix_expression DEC_OP                                                          {RULE_MARKER(         "postfix_expression4");$<_t_postfix_expression>$=new CAst::postfix_expression4("[postfix_expression,DEC_OP]",$<_t_postfix_expression>1, new CAst::Token($<_t_str>2));}
+	|primary_expression                                                                 {RULE_MARKER(         "postfix_expression5");$<_t_postfix_expression>$=new CAst::postfix_expression5("[primary_expression]",$<_t_primary_expression>1);}
 	;
 
 
 additive_expression
-	:additive_expression, '+', multiplicative_expression                                {RULE_MARKER(         "additive_expression");CAST_PTR(additive_expression,$1)->append("[additive_expression,'+',multiplicative_expression]", CAST_PTR(Token,$2), CAST_PTR(multiplicative_expression,$3));$$=$1;}
-	|additive_expression, '-', multiplicative_expression                                {RULE_MARKER(         "additive_expression");CAST_PTR(additive_expression,$1)->append("[additive_expression,'-',multiplicative_expression]", CAST_PTR(Token,$2), CAST_PTR(multiplicative_expression,$3));$$=$1;}
-	|multiplicative_expression                                                          {RULE_MARKER(         "additive_expression");$$=(CAst::CAst*)(new CAst::additive_expression("[multiplicative_expression]",CAST_PTR(multiplicative_expression,$1)));}
+	:additive_expression '+' multiplicative_expression                                  {RULE_MARKER(         "additive_expression");CAST_PTR(additive_expression,$<_t_additive_expression>1)->append("[additive_expression,'+',multiplicative_expression]", new CAst::Token($<_t_str>2), $<_t_multiplicative_expression>3);$<_t_additive_expression>$=$<_t_additive_expression>1;}
+	|additive_expression '-' multiplicative_expression                                  {RULE_MARKER(         "additive_expression");CAST_PTR(additive_expression,$<_t_additive_expression>1)->append("[additive_expression,'-',multiplicative_expression]", new CAst::Token($<_t_str>2), $<_t_multiplicative_expression>3);$<_t_additive_expression>$=$<_t_additive_expression>1;}
+	|multiplicative_expression                                                          {RULE_MARKER(         "additive_expression");$<_t_additive_expression>$=new CAst::additive_expression("[multiplicative_expression]",$<_t_multiplicative_expression>1);}
 	;
 
 
 statement
-	:labeled_statement                                                                  {RULE_MARKER(                  "statement1");$$=(CAst::CAst*)(new CAst::statement1("[labeled_statement]",CAST_PTR(labeled_statement,$1)));}
-	|compound_statement                                                                 {RULE_MARKER(                  "statement2");$$=(CAst::CAst*)(new CAst::statement2("[compound_statement]",CAST_PTR(compound_statement,$1)));}
-	|expression_statement                                                               {RULE_MARKER(                  "statement3");$$=(CAst::CAst*)(new CAst::statement3("[expression_statement]",CAST_PTR(expression_statement,$1)));}
-	|selection_statement                                                                {RULE_MARKER(                  "statement4");$$=(CAst::CAst*)(new CAst::statement4("[selection_statement]",CAST_PTR(selection_statement,$1)));}
-	|iteration_statement                                                                {RULE_MARKER(                  "statement5");$$=(CAst::CAst*)(new CAst::statement5("[iteration_statement]",CAST_PTR(iteration_statement,$1)));}
-	|jump_statement                                                                     {RULE_MARKER(                  "statement6");$$=(CAst::CAst*)(new CAst::statement6("[jump_statement]",CAST_PTR(jump_statement,$1)));}
+	:labeled_statement                                                                  {RULE_MARKER(                  "statement1");$<_t_statement>$=new CAst::statement1("[labeled_statement]",$<_t_labeled_statement>1);}
+	|compound_statement                                                                 {RULE_MARKER(                  "statement2");$<_t_statement>$=new CAst::statement2("[compound_statement]",$<_t_compound_statement>1);}
+	|expression_statement                                                               {RULE_MARKER(                  "statement3");$<_t_statement>$=new CAst::statement3("[expression_statement]",$<_t_expression_statement>1);}
+	|selection_statement                                                                {RULE_MARKER(                  "statement4");$<_t_statement>$=new CAst::statement4("[selection_statement]",$<_t_selection_statement>1);}
+	|iteration_statement                                                                {RULE_MARKER(                  "statement5");$<_t_statement>$=new CAst::statement5("[iteration_statement]",$<_t_iteration_statement>1);}
+	|jump_statement                                                                     {RULE_MARKER(                  "statement6");$<_t_statement>$=new CAst::statement6("[jump_statement]",$<_t_jump_statement>1);}
 	;
 
 
 cast_expression
-	:'(', type_name, ')', cast_expression                                               {RULE_MARKER(            "cast_expression1");$$=(CAst::CAst*)(new CAst::cast_expression1("['(',type_name,')',cast_expression]",CAST_PTR(type_name,$2), CAST_PTR(cast_expression,$4)));}
-	|unary_expression                                                                   {RULE_MARKER(            "cast_expression2");$$=(CAst::CAst*)(new CAst::cast_expression2("[unary_expression]",CAST_PTR(unary_expression,$1)));}
+	:'(' type_name ')' cast_expression                                                  {RULE_MARKER(            "cast_expression1");$<_t_cast_expression>$=new CAst::cast_expression1("['(',type_name,')',cast_expression]",$<_t_type_name>2, $<_t_cast_expression>4);}
+	|unary_expression                                                                   {RULE_MARKER(            "cast_expression2");$<_t_cast_expression>$=new CAst::cast_expression2("[unary_expression]",$<_t_unary_expression>1);}
 	;
 
 
 init_declarator
-	:declarator, '=', initializer                                                       {RULE_MARKER(             "init_declarator");$$=(CAst::CAst*)(new CAst::init_declarator("[declarator,'=',initializer]",CAST_PTR(declarator,$1), CAST_PTR(Token,$2), CAST_PTR(initializer,$3)));}
-	|declarator                                                                         {RULE_MARKER(             "init_declarator");$$=(CAst::CAst*)(new CAst::init_declarator("[declarator]",CAST_PTR(declarator,$1), NULL, NULL));}
+	:declarator '=' initializer                                                         {RULE_MARKER(             "init_declarator");$<_t_init_declarator>$=new CAst::init_declarator("[declarator,'=',initializer]",$<_t_declarator>1, new CAst::Token($<_t_str>2), $<_t_initializer>3);}
+	|declarator                                                                         {RULE_MARKER(             "init_declarator");$<_t_init_declarator>$=new CAst::init_declarator("[declarator]",$<_t_declarator>1, NULL, NULL);}
 	;
 
 
 struct_declarator_list
-	:struct_declarator_list, ',', struct_declarator                                     {RULE_MARKER(      "struct_declarator_list");CAST_PTR(struct_declarator_list,$1)->append("[struct_declarator_list,',',struct_declarator]", CAST_PTR(struct_declarator,$3));$$=$1;}
-	|struct_declarator                                                                  {RULE_MARKER(      "struct_declarator_list");$$=(CAst::CAst*)(new CAst::struct_declarator_list("[struct_declarator]",CAST_PTR(struct_declarator,$1)));}
+	:struct_declarator_list ',' struct_declarator                                       {RULE_MARKER(      "struct_declarator_list");CAST_PTR(struct_declarator_list,$<_t_struct_declarator_list>1)->append("[struct_declarator_list,',',struct_declarator]", $<_t_struct_declarator>3);$<_t_struct_declarator_list>$=$<_t_struct_declarator_list>1;}
+	|struct_declarator                                                                  {RULE_MARKER(      "struct_declarator_list");$<_t_struct_declarator_list>$=new CAst::struct_declarator_list("[struct_declarator]",$<_t_struct_declarator>1);}
 	;
 
 
 logical_or_expression
-	:logical_or_expression, OR_OP, logical_and_expression                               {RULE_MARKER(       "logical_or_expression");CAST_PTR(logical_or_expression,$1)->append("[logical_or_expression,OR_OP,logical_and_expression]", CAST_PTR(logical_and_expression,$3));$$=$1;}
-	|logical_and_expression                                                             {RULE_MARKER(       "logical_or_expression");$$=(CAst::CAst*)(new CAst::logical_or_expression("[logical_and_expression]",CAST_PTR(logical_and_expression,$1)));}
+	:logical_or_expression OR_OP logical_and_expression                                 {RULE_MARKER(       "logical_or_expression");CAST_PTR(logical_or_expression,$<_t_logical_or_expression>1)->append("[logical_or_expression,OR_OP,logical_and_expression]", $<_t_logical_and_expression>3);$<_t_logical_or_expression>$=$<_t_logical_or_expression>1;}
+	|logical_and_expression                                                             {RULE_MARKER(       "logical_or_expression");$<_t_logical_or_expression>$=new CAst::logical_or_expression("[logical_and_expression]",$<_t_logical_and_expression>1);}
 	;
 
 
 translation_unit
-	:translation_unit, external_declaration                                             {RULE_MARKER(            "translation_unit");CAST_PTR(translation_unit,$1)->append("[translation_unit,external_declaration]", CAST_PTR(external_declaration,$2));$$=$1;}
-	|external_declaration                                                               {RULE_MARKER(            "translation_unit");$$=(CAst::CAst*)(new CAst::translation_unit("[external_declaration]",CAST_PTR(external_declaration,$1)));root=$$;}
+	:translation_unit external_declaration                                              {RULE_MARKER(            "translation_unit");CAST_PTR(translation_unit,$<_t_translation_unit>1)->append("[translation_unit,external_declaration]", $<_t_external_declaration>2);$<_t_translation_unit>$=$<_t_translation_unit>1;}
+	|external_declaration                                                               {RULE_MARKER(            "translation_unit");$<_t_translation_unit>$=new CAst::translation_unit("[external_declaration]",$<_t_external_declaration>1);root=$<_t_translation_unit>$;}
 	;
 
 
 relational_expression
-	:relational_expression, '<', shift_expression                                       {RULE_MARKER(       "relational_expression");CAST_PTR(relational_expression,$1)->append("[relational_expression,'<',shift_expression]", CAST_PTR(Token,$2), CAST_PTR(shift_expression,$3));$$=$1;}
-	|relational_expression, '>', shift_expression                                       {RULE_MARKER(       "relational_expression");CAST_PTR(relational_expression,$1)->append("[relational_expression,'>',shift_expression]", CAST_PTR(Token,$2), CAST_PTR(shift_expression,$3));$$=$1;}
-	|relational_expression, LE_OP, shift_expression                                     {RULE_MARKER(       "relational_expression");CAST_PTR(relational_expression,$1)->append("[relational_expression,LE_OP,shift_expression]", CAST_PTR(Token,$2), CAST_PTR(shift_expression,$3));$$=$1;}
-	|relational_expression, GE_OP, shift_expression                                     {RULE_MARKER(       "relational_expression");CAST_PTR(relational_expression,$1)->append("[relational_expression,GE_OP,shift_expression]", CAST_PTR(Token,$2), CAST_PTR(shift_expression,$3));$$=$1;}
-	|shift_expression                                                                   {RULE_MARKER(       "relational_expression");$$=(CAst::CAst*)(new CAst::relational_expression("[shift_expression]",CAST_PTR(shift_expression,$1)));}
+	:relational_expression '<' shift_expression                                         {RULE_MARKER(       "relational_expression");CAST_PTR(relational_expression,$<_t_relational_expression>1)->append("[relational_expression,'<',shift_expression]", new CAst::Token($<_t_str>2), $<_t_shift_expression>3);$<_t_relational_expression>$=$<_t_relational_expression>1;}
+	|relational_expression '>' shift_expression                                         {RULE_MARKER(       "relational_expression");CAST_PTR(relational_expression,$<_t_relational_expression>1)->append("[relational_expression,'>',shift_expression]", new CAst::Token($<_t_str>2), $<_t_shift_expression>3);$<_t_relational_expression>$=$<_t_relational_expression>1;}
+	|relational_expression LE_OP shift_expression                                       {RULE_MARKER(       "relational_expression");CAST_PTR(relational_expression,$<_t_relational_expression>1)->append("[relational_expression,LE_OP,shift_expression]", new CAst::Token($<_t_str>2), $<_t_shift_expression>3);$<_t_relational_expression>$=$<_t_relational_expression>1;}
+	|relational_expression GE_OP shift_expression                                       {RULE_MARKER(       "relational_expression");CAST_PTR(relational_expression,$<_t_relational_expression>1)->append("[relational_expression,GE_OP,shift_expression]", new CAst::Token($<_t_str>2), $<_t_shift_expression>3);$<_t_relational_expression>$=$<_t_relational_expression>1;}
+	|shift_expression                                                                   {RULE_MARKER(       "relational_expression");$<_t_relational_expression>$=new CAst::relational_expression("[shift_expression]",$<_t_shift_expression>1);}
 	;
 
 
 struct_or_union
-	:STRUCT                                                                             {RULE_MARKER(             "struct_or_union");$$=(CAst::CAst*)(new CAst::struct_or_union("[STRUCT]",CAST_PTR(Token,$1)));}
-	|UNION                                                                              {RULE_MARKER(             "struct_or_union");$$=(CAst::CAst*)(new CAst::struct_or_union("[UNION]",CAST_PTR(Token,$1)));}
+	:STRUCT                                                                             {RULE_MARKER(             "struct_or_union");$<_t_struct_or_union>$=new CAst::struct_or_union("[STRUCT]",new CAst::Token($<_t_str>1));}
+	|UNION                                                                              {RULE_MARKER(             "struct_or_union");$<_t_struct_or_union>$=new CAst::struct_or_union("[UNION]",new CAst::Token($<_t_str>1));}
 	;
 
 
 enumerator
-	:IDENTIFIER, '=', constant_expression                                               {RULE_MARKER(                  "enumerator");$$=(CAst::CAst*)(new CAst::enumerator("[IDENTIFIER,'=',constant_expression]",CAST_PTR(Token,$1), CAST_PTR(Token,$2), CAST_PTR(constant_expression,$3)));}
-	|IDENTIFIER                                                                         {RULE_MARKER(                  "enumerator");$$=(CAst::CAst*)(new CAst::enumerator("[IDENTIFIER]",CAST_PTR(Token,$1), NULL, NULL));}
+	:IDENTIFIER '=' constant_expression                                                 {RULE_MARKER(                  "enumerator");$<_t_enumerator>$=new CAst::enumerator("[IDENTIFIER,'=',constant_expression]",new CAst::Token($<_t_str>1), new CAst::Token($<_t_str>2), $<_t_constant_expression>3);}
+	|IDENTIFIER                                                                         {RULE_MARKER(                  "enumerator");$<_t_enumerator>$=new CAst::enumerator("[IDENTIFIER]",new CAst::Token($<_t_str>1), NULL, NULL);}
 	;
 
 
 assignment_expression
-	:unary_expression, assignment_operator, assignment_expression                       {RULE_MARKER(      "assignment_expression1");$$=(CAst::CAst*)(new CAst::assignment_expression1("[unary_expression,assignment_operator,assignment_expression]",CAST_PTR(unary_expression,$1), CAST_PTR(assignment_operator,$2), CAST_PTR(assignment_expression,$3)));}
-	|conditional_expression                                                             {RULE_MARKER(      "assignment_expression2");$$=(CAst::CAst*)(new CAst::assignment_expression2("[conditional_expression]",CAST_PTR(conditional_expression,$1)));}
+	:unary_expression assignment_operator assignment_expression                         {RULE_MARKER(      "assignment_expression1");$<_t_assignment_expression>$=new CAst::assignment_expression1("[unary_expression,assignment_operator,assignment_expression]",$<_t_unary_expression>1, $<_t_assignment_operator>2, $<_t_assignment_expression>3);}
+	|conditional_expression                                                             {RULE_MARKER(      "assignment_expression2");$<_t_assignment_expression>$=new CAst::assignment_expression2("[conditional_expression]",$<_t_conditional_expression>1);}
 	;
 
 
 parameter_type_list
-	:parameter_list, ',', ELLIPSIS                                                      {RULE_MARKER(         "parameter_type_list");$$=(CAst::CAst*)(new CAst::parameter_type_list("[parameter_list,',',ELLIPSIS]",CAST_PTR(parameter_list,$1), CAST_PTR(Token,$2), CAST_PTR(Token,$3)));}
-	|parameter_list                                                                     {RULE_MARKER(         "parameter_type_list");$$=(CAst::CAst*)(new CAst::parameter_type_list("[parameter_list]",CAST_PTR(parameter_list,$1), NULL, NULL));}
+	:parameter_list ',' ELLIPSIS                                                        {RULE_MARKER(         "parameter_type_list");$<_t_parameter_type_list>$=new CAst::parameter_type_list("[parameter_list,',',ELLIPSIS]",$<_t_parameter_list>1, new CAst::Token($<_t_str>2), new CAst::Token($<_t_str>3));}
+	|parameter_list                                                                     {RULE_MARKER(         "parameter_type_list");$<_t_parameter_type_list>$=new CAst::parameter_type_list("[parameter_list]",$<_t_parameter_list>1, NULL, NULL);}
 	;
 
 
 parameter_declaration
-	:declaration_specifiers, declarator                                                 {RULE_MARKER(      "parameter_declaration1");$$=(CAst::CAst*)(new CAst::parameter_declaration1("[declaration_specifiers,declarator]",CAST_PTR(declaration_specifiers,$1), CAST_PTR(declarator,$2)));}
-	|declaration_specifiers, abstract_declarator                                        {RULE_MARKER(      "parameter_declaration2");$$=(CAst::CAst*)(new CAst::parameter_declaration2("[declaration_specifiers,abstract_declarator]",CAST_PTR(declaration_specifiers,$1), CAST_PTR(abstract_declarator,$2)));}
-	|declaration_specifiers                                                             {RULE_MARKER(      "parameter_declaration1");$$=(CAst::CAst*)(new CAst::parameter_declaration1("[declaration_specifiers]",CAST_PTR(declaration_specifiers,$1), NULL));}
+	:declaration_specifiers declarator                                                  {RULE_MARKER(      "parameter_declaration1");$<_t_parameter_declaration>$=new CAst::parameter_declaration1("[declaration_specifiers,declarator]",$<_t_declaration_specifiers>1, $<_t_declarator>2);}
+	|declaration_specifiers abstract_declarator                                         {RULE_MARKER(      "parameter_declaration2");$<_t_parameter_declaration>$=new CAst::parameter_declaration2("[declaration_specifiers,abstract_declarator]",$<_t_declaration_specifiers>1, $<_t_abstract_declarator>2);}
+	|declaration_specifiers                                                             {RULE_MARKER(      "parameter_declaration1");$<_t_parameter_declaration>$=new CAst::parameter_declaration1("[declaration_specifiers]",$<_t_declaration_specifiers>1, NULL);}
 	;
 
 
 multiplicative_expression
-	:multiplicative_expression, '*', cast_expression                                    {RULE_MARKER(   "multiplicative_expression");CAST_PTR(multiplicative_expression,$1)->append("[multiplicative_expression,'*',cast_expression]", CAST_PTR(Token,$2), CAST_PTR(cast_expression,$3));$$=$1;}
-	|multiplicative_expression, '/', cast_expression                                    {RULE_MARKER(   "multiplicative_expression");CAST_PTR(multiplicative_expression,$1)->append("[multiplicative_expression,'/',cast_expression]", CAST_PTR(Token,$2), CAST_PTR(cast_expression,$3));$$=$1;}
-	|multiplicative_expression, '%', cast_expression                                    {RULE_MARKER(   "multiplicative_expression");CAST_PTR(multiplicative_expression,$1)->append("[multiplicative_expression,'%',cast_expression]", CAST_PTR(Token,$2), CAST_PTR(cast_expression,$3));$$=$1;}
-	|cast_expression                                                                    {RULE_MARKER(   "multiplicative_expression");$$=(CAst::CAst*)(new CAst::multiplicative_expression("[cast_expression]",CAST_PTR(cast_expression,$1)));}
+	:multiplicative_expression '*' cast_expression                                      {RULE_MARKER(   "multiplicative_expression");CAST_PTR(multiplicative_expression,$<_t_multiplicative_expression>1)->append("[multiplicative_expression,'*',cast_expression]", new CAst::Token($<_t_str>2), $<_t_cast_expression>3);$<_t_multiplicative_expression>$=$<_t_multiplicative_expression>1;}
+	|multiplicative_expression '/' cast_expression                                      {RULE_MARKER(   "multiplicative_expression");CAST_PTR(multiplicative_expression,$<_t_multiplicative_expression>1)->append("[multiplicative_expression,'/',cast_expression]", new CAst::Token($<_t_str>2), $<_t_cast_expression>3);$<_t_multiplicative_expression>$=$<_t_multiplicative_expression>1;}
+	|multiplicative_expression '%' cast_expression                                      {RULE_MARKER(   "multiplicative_expression");CAST_PTR(multiplicative_expression,$<_t_multiplicative_expression>1)->append("[multiplicative_expression,'%',cast_expression]", new CAst::Token($<_t_str>2), $<_t_cast_expression>3);$<_t_multiplicative_expression>$=$<_t_multiplicative_expression>1;}
+	|cast_expression                                                                    {RULE_MARKER(   "multiplicative_expression");$<_t_multiplicative_expression>$=new CAst::multiplicative_expression("[cast_expression]",$<_t_cast_expression>1);}
 	;
 
 
 type_qualifier_list
-	:type_qualifier_list, type_qualifier                                                {RULE_MARKER(         "type_qualifier_list");CAST_PTR(type_qualifier_list,$1)->append("[type_qualifier_list,type_qualifier]", CAST_PTR(type_qualifier,$2));$$=$1;}
-	|type_qualifier                                                                     {RULE_MARKER(         "type_qualifier_list");$$=(CAst::CAst*)(new CAst::type_qualifier_list("[type_qualifier]",CAST_PTR(type_qualifier,$1)));}
+	:type_qualifier_list type_qualifier                                                 {RULE_MARKER(         "type_qualifier_list");CAST_PTR(type_qualifier_list,$<_t_type_qualifier_list>1)->append("[type_qualifier_list,type_qualifier]", $<_t_type_qualifier>2);$<_t_type_qualifier_list>$=$<_t_type_qualifier_list>1;}
+	|type_qualifier                                                                     {RULE_MARKER(         "type_qualifier_list");$<_t_type_qualifier_list>$=new CAst::type_qualifier_list("[type_qualifier]",$<_t_type_qualifier>1);}
 	;
 
 
 argument_expression_list
-	:argument_expression_list, ',', assignment_expression                               {RULE_MARKER(    "argument_expression_list");CAST_PTR(argument_expression_list,$1)->append("[argument_expression_list,',',assignment_expression]", CAST_PTR(assignment_expression,$3));$$=$1;}
-	|assignment_expression                                                              {RULE_MARKER(    "argument_expression_list");$$=(CAst::CAst*)(new CAst::argument_expression_list("[assignment_expression]",CAST_PTR(assignment_expression,$1)));}
+	:argument_expression_list ',' assignment_expression                                 {RULE_MARKER(    "argument_expression_list");CAST_PTR(argument_expression_list,$<_t_argument_expression_list>1)->append("[argument_expression_list,',',assignment_expression]", $<_t_assignment_expression>3);$<_t_argument_expression_list>$=$<_t_argument_expression_list>1;}
+	|assignment_expression                                                              {RULE_MARKER(    "argument_expression_list");$<_t_argument_expression_list>$=new CAst::argument_expression_list("[assignment_expression]",$<_t_assignment_expression>1);}
 	;
 
 
 direct_abstract_declarator
-	:direct_abstract_declarator, '[', constant_expression, ']'                          {RULE_MARKER( "direct_abstract_declarator1");$$=(CAst::CAst*)(new CAst::direct_abstract_declarator1("[direct_abstract_declarator,'[',constant_expression,']']",CAST_PTR(direct_abstract_declarator,$1), CAST_PTR(constant_expression,$3)));}
-	|direct_abstract_declarator, '(', parameter_type_list, ')'                          {RULE_MARKER( "direct_abstract_declarator2");$$=(CAst::CAst*)(new CAst::direct_abstract_declarator2("[direct_abstract_declarator,'(',parameter_type_list,')']",CAST_PTR(direct_abstract_declarator,$1), CAST_PTR(parameter_type_list,$3)));}
-	|'(', abstract_declarator, ')'                                                      {RULE_MARKER( "direct_abstract_declarator3");$$=(CAst::CAst*)(new CAst::direct_abstract_declarator3("['(',abstract_declarator,')']",CAST_PTR(abstract_declarator,$2)));}
-	|'[', constant_expression, ']'                                                      {RULE_MARKER( "direct_abstract_declarator1");$$=(CAst::CAst*)(new CAst::direct_abstract_declarator1("['[',constant_expression,']']",NULL, CAST_PTR(constant_expression,$2)));}
-	|direct_abstract_declarator, '[', ']'                                               {RULE_MARKER( "direct_abstract_declarator1");$$=(CAst::CAst*)(new CAst::direct_abstract_declarator1("[direct_abstract_declarator,'[',']']",CAST_PTR(direct_abstract_declarator,$1), NULL));}
-	|'(', parameter_type_list, ')'                                                      {RULE_MARKER( "direct_abstract_declarator2");$$=(CAst::CAst*)(new CAst::direct_abstract_declarator2("['(',parameter_type_list,')']",NULL, CAST_PTR(parameter_type_list,$2)));}
-	|direct_abstract_declarator, '(', ')'                                               {RULE_MARKER( "direct_abstract_declarator2");$$=(CAst::CAst*)(new CAst::direct_abstract_declarator2("[direct_abstract_declarator,'(',')']",CAST_PTR(direct_abstract_declarator,$1), NULL));}
-	|'[', ']'                                                                           {RULE_MARKER( "direct_abstract_declarator1");$$=(CAst::CAst*)(new CAst::direct_abstract_declarator1("['[',']']",NULL, NULL));}
-	|'(', ')'                                                                           {RULE_MARKER( "direct_abstract_declarator2");$$=(CAst::CAst*)(new CAst::direct_abstract_declarator2("['(',')']",NULL, NULL));}
+	:direct_abstract_declarator '[' constant_expression ']'                             {RULE_MARKER( "direct_abstract_declarator1");$<_t_direct_abstract_declarator>$=new CAst::direct_abstract_declarator1("[direct_abstract_declarator,'[',constant_expression,']']",$<_t_direct_abstract_declarator>1, $<_t_constant_expression>3);}
+	|direct_abstract_declarator '(' parameter_type_list ')'                             {RULE_MARKER( "direct_abstract_declarator2");$<_t_direct_abstract_declarator>$=new CAst::direct_abstract_declarator2("[direct_abstract_declarator,'(',parameter_type_list,')']",$<_t_direct_abstract_declarator>1, $<_t_parameter_type_list>3);}
+	|'(' abstract_declarator ')'                                                        {RULE_MARKER( "direct_abstract_declarator3");$<_t_direct_abstract_declarator>$=new CAst::direct_abstract_declarator3("['(',abstract_declarator,')']",$<_t_abstract_declarator>2);}
+	|'[' constant_expression ']'                                                        {RULE_MARKER( "direct_abstract_declarator1");$<_t_direct_abstract_declarator>$=new CAst::direct_abstract_declarator1("['[',constant_expression,']']",NULL, $<_t_constant_expression>2);}
+	|direct_abstract_declarator '[' ']'                                                 {RULE_MARKER( "direct_abstract_declarator1");$<_t_direct_abstract_declarator>$=new CAst::direct_abstract_declarator1("[direct_abstract_declarator,'[',']']",$<_t_direct_abstract_declarator>1, NULL);}
+	|'(' parameter_type_list ')'                                                        {RULE_MARKER( "direct_abstract_declarator2");$<_t_direct_abstract_declarator>$=new CAst::direct_abstract_declarator2("['(',parameter_type_list,')']",NULL, $<_t_parameter_type_list>2);}
+	|direct_abstract_declarator '(' ')'                                                 {RULE_MARKER( "direct_abstract_declarator2");$<_t_direct_abstract_declarator>$=new CAst::direct_abstract_declarator2("[direct_abstract_declarator,'(',')']",$<_t_direct_abstract_declarator>1, NULL);}
+	|'[' ']'                                                                            {RULE_MARKER( "direct_abstract_declarator1");$<_t_direct_abstract_declarator>$=new CAst::direct_abstract_declarator1("['[',']']",NULL, NULL);}
+	|'(' ')'                                                                            {RULE_MARKER( "direct_abstract_declarator2");$<_t_direct_abstract_declarator>$=new CAst::direct_abstract_declarator2("['(',')']",NULL, NULL);}
 	;
 
 
 constant_expression
-	:conditional_expression                                                             {RULE_MARKER(         "constant_expression");$$=(CAst::CAst*)(new CAst::constant_expression("[conditional_expression]",CAST_PTR(conditional_expression,$1)));}
+	:conditional_expression                                                             {RULE_MARKER(         "constant_expression");$<_t_constant_expression>$=new CAst::constant_expression("[conditional_expression]",$<_t_conditional_expression>1);}
 	;
 
 
 equality_expression
-	:equality_expression, EQ_OP, relational_expression                                  {RULE_MARKER(         "equality_expression");CAST_PTR(equality_expression,$1)->append("[equality_expression,EQ_OP,relational_expression]", CAST_PTR(Token,$2), CAST_PTR(relational_expression,$3));$$=$1;}
-	|equality_expression, NE_OP, relational_expression                                  {RULE_MARKER(         "equality_expression");CAST_PTR(equality_expression,$1)->append("[equality_expression,NE_OP,relational_expression]", CAST_PTR(Token,$2), CAST_PTR(relational_expression,$3));$$=$1;}
-	|relational_expression                                                              {RULE_MARKER(         "equality_expression");$$=(CAst::CAst*)(new CAst::equality_expression("[relational_expression]",CAST_PTR(relational_expression,$1)));}
+	:equality_expression EQ_OP relational_expression                                    {RULE_MARKER(         "equality_expression");CAST_PTR(equality_expression,$<_t_equality_expression>1)->append("[equality_expression,EQ_OP,relational_expression]", new CAst::Token($<_t_str>2), $<_t_relational_expression>3);$<_t_equality_expression>$=$<_t_equality_expression>1;}
+	|equality_expression NE_OP relational_expression                                    {RULE_MARKER(         "equality_expression");CAST_PTR(equality_expression,$<_t_equality_expression>1)->append("[equality_expression,NE_OP,relational_expression]", new CAst::Token($<_t_str>2), $<_t_relational_expression>3);$<_t_equality_expression>$=$<_t_equality_expression>1;}
+	|relational_expression                                                              {RULE_MARKER(         "equality_expression");$<_t_equality_expression>$=new CAst::equality_expression("[relational_expression]",$<_t_relational_expression>1);}
 	;
 
 
 primary_expression
-	:'(', expression, ')'                                                               {RULE_MARKER(         "primary_expression1");$$=(CAst::CAst*)(new CAst::primary_expression1("['(',expression,')']",CAST_PTR(expression,$2)));}
-	|IDENTIFIER                                                                         {RULE_MARKER(         "primary_expression2");$$=(CAst::CAst*)(new CAst::primary_expression2("[IDENTIFIER]",CAST_PTR(Token,$1)));}
-	|CONSTANT                                                                           {RULE_MARKER(         "primary_expression2");$$=(CAst::CAst*)(new CAst::primary_expression2("[CONSTANT]",CAST_PTR(Token,$1)));}
-	|STRING_LITERAL                                                                     {RULE_MARKER(         "primary_expression2");$$=(CAst::CAst*)(new CAst::primary_expression2("[STRING_LITERAL]",CAST_PTR(Token,$1)));}
+	:'(' expression ')'                                                                 {RULE_MARKER(         "primary_expression1");$<_t_primary_expression>$=new CAst::primary_expression1("['(',expression,')']",$<_t_expression>2);}
+	|IDENTIFIER                                                                         {RULE_MARKER(         "primary_expression2");$<_t_primary_expression>$=new CAst::primary_expression2("[IDENTIFIER]",new CAst::Token($<_t_str>1));}
+	|CONSTANT                                                                           {RULE_MARKER(         "primary_expression2");$<_t_primary_expression>$=new CAst::primary_expression2("[CONSTANT]",new CAst::Token($<_t_str>1));}
+	|STRING_LITERAL                                                                     {RULE_MARKER(         "primary_expression2");$<_t_primary_expression>$=new CAst::primary_expression2("[STRING_LITERAL]",new CAst::Token($<_t_str>1));}
 	;
 
 
 declaration_specifiers
-	:storage_class_specifier, declaration_specifiers                                    {RULE_MARKER(     "declaration_specifiers1");CAST_PTR(declaration_specifiers1,$2)->append("[storage_class_specifier,declaration_specifiers]", CAST_PTR(storage_class_specifier,$1));$$=$2;}
-	|type_specifier, declaration_specifiers                                             {RULE_MARKER(     "declaration_specifiers2");CAST_PTR(declaration_specifiers2,$2)->append("[type_specifier,declaration_specifiers]", CAST_PTR(type_specifier,$1));$$=$2;}
-	|type_qualifier, declaration_specifiers                                             {RULE_MARKER(     "declaration_specifiers3");CAST_PTR(declaration_specifiers3,$2)->append("[type_qualifier,declaration_specifiers]", CAST_PTR(type_qualifier,$1));$$=$2;}
-	|storage_class_specifier                                                            {RULE_MARKER(     "declaration_specifiers1");$$=(CAst::CAst*)(new CAst::declaration_specifiers1("[storage_class_specifier]",CAST_PTR(storage_class_specifier,$1)));}
-	|type_specifier                                                                     {RULE_MARKER(     "declaration_specifiers2");$$=(CAst::CAst*)(new CAst::declaration_specifiers2("[type_specifier]",CAST_PTR(type_specifier,$1)));}
-	|type_qualifier                                                                     {RULE_MARKER(     "declaration_specifiers3");$$=(CAst::CAst*)(new CAst::declaration_specifiers3("[type_qualifier]",CAST_PTR(type_qualifier,$1)));}
+	:storage_class_specifier declaration_specifiers                                     {RULE_MARKER(     "declaration_specifiers1");CAST_PTR(declaration_specifiers1,$<_t_declaration_specifiers>2)->append("[storage_class_specifier,declaration_specifiers]", $<_t_storage_class_specifier>1);$<_t_declaration_specifiers>$=$<_t_declaration_specifiers>2;}
+	|type_specifier declaration_specifiers                                              {RULE_MARKER(     "declaration_specifiers2");CAST_PTR(declaration_specifiers2,$<_t_declaration_specifiers>2)->append("[type_specifier,declaration_specifiers]", $<_t_type_specifier>1);$<_t_declaration_specifiers>$=$<_t_declaration_specifiers>2;}
+	|type_qualifier declaration_specifiers                                              {RULE_MARKER(     "declaration_specifiers3");CAST_PTR(declaration_specifiers3,$<_t_declaration_specifiers>2)->append("[type_qualifier,declaration_specifiers]", $<_t_type_qualifier>1);$<_t_declaration_specifiers>$=$<_t_declaration_specifiers>2;}
+	|storage_class_specifier                                                            {RULE_MARKER(     "declaration_specifiers1");$<_t_declaration_specifiers>$=new CAst::declaration_specifiers1("[storage_class_specifier]",$<_t_storage_class_specifier>1);}
+	|type_specifier                                                                     {RULE_MARKER(     "declaration_specifiers2");$<_t_declaration_specifiers>$=new CAst::declaration_specifiers2("[type_specifier]",$<_t_type_specifier>1);}
+	|type_qualifier                                                                     {RULE_MARKER(     "declaration_specifiers3");$<_t_declaration_specifiers>$=new CAst::declaration_specifiers3("[type_qualifier]",$<_t_type_qualifier>1);}
 	;
 
 
 declaration
-	:declaration_specifiers, init_declarator_list, ';'                                  {RULE_MARKER(                 "declaration");$$=(CAst::CAst*)(new CAst::declaration("[declaration_specifiers,init_declarator_list,';']",CAST_PTR(declaration_specifiers,$1), CAST_PTR(init_declarator_list,$2)));}
-	|declaration_specifiers, ';'                                                        {RULE_MARKER(                 "declaration");$$=(CAst::CAst*)(new CAst::declaration("[declaration_specifiers,';']",CAST_PTR(declaration_specifiers,$1), NULL));}
+	:declaration_specifiers init_declarator_list ';'                                    {RULE_MARKER(                 "declaration");$<_t_declaration>$=new CAst::declaration("[declaration_specifiers,init_declarator_list,';']",$<_t_declaration_specifiers>1, $<_t_init_declarator_list>2);}
+	|declaration_specifiers ';'                                                         {RULE_MARKER(                 "declaration");$<_t_declaration>$=new CAst::declaration("[declaration_specifiers,';']",$<_t_declaration_specifiers>1, NULL);}
 	;
 
 
 direct_declarator
-	:direct_declarator, '[', constant_expression, ']'                                   {RULE_MARKER(          "direct_declarator1");$$=(CAst::CAst*)(new CAst::direct_declarator1("[direct_declarator,'[',constant_expression,']']",CAST_PTR(direct_declarator,$1), CAST_PTR(constant_expression,$3)));}
-	|direct_declarator, '(', parameter_type_list, ')'                                   {RULE_MARKER(          "direct_declarator2");$$=(CAst::CAst*)(new CAst::direct_declarator2("[direct_declarator,'(',parameter_type_list,')']",CAST_PTR(direct_declarator,$1), CAST_PTR(parameter_type_list,$3)));}
-	|direct_declarator, '(', identifier_list, ')'                                       {RULE_MARKER(          "direct_declarator3");$$=(CAst::CAst*)(new CAst::direct_declarator3("[direct_declarator,'(',identifier_list,')']",CAST_PTR(direct_declarator,$1), CAST_PTR(identifier_list,$3)));}
-	|'(', declarator, ')'                                                               {RULE_MARKER(          "direct_declarator4");$$=(CAst::CAst*)(new CAst::direct_declarator4("['(',declarator,')']",CAST_PTR(declarator,$2)));}
-	|direct_declarator, '[', ']'                                                        {RULE_MARKER(          "direct_declarator1");$$=(CAst::CAst*)(new CAst::direct_declarator1("[direct_declarator,'[',']']",CAST_PTR(direct_declarator,$1), NULL));}
-	|direct_declarator, '(', ')'                                                        {RULE_MARKER(          "direct_declarator2");$$=(CAst::CAst*)(new CAst::direct_declarator2("[direct_declarator,'(',')']",CAST_PTR(direct_declarator,$1), NULL));}
-	|IDENTIFIER                                                                         {RULE_MARKER(          "direct_declarator5");$$=(CAst::CAst*)(new CAst::direct_declarator5("[IDENTIFIER]",CAST_PTR(Token,$1)));}
+	:direct_declarator '[' constant_expression ']'                                      {RULE_MARKER(          "direct_declarator1");$<_t_direct_declarator>$=new CAst::direct_declarator1("[direct_declarator,'[',constant_expression,']']",$<_t_direct_declarator>1, $<_t_constant_expression>3);}
+	|direct_declarator '(' parameter_type_list ')'                                      {RULE_MARKER(          "direct_declarator2");$<_t_direct_declarator>$=new CAst::direct_declarator2("[direct_declarator,'(',parameter_type_list,')']",$<_t_direct_declarator>1, $<_t_parameter_type_list>3);}
+	|direct_declarator '(' identifier_list ')'                                          {RULE_MARKER(          "direct_declarator3");$<_t_direct_declarator>$=new CAst::direct_declarator3("[direct_declarator,'(',identifier_list,')']",$<_t_direct_declarator>1, $<_t_identifier_list>3);}
+	|'(' declarator ')'                                                                 {RULE_MARKER(          "direct_declarator4");$<_t_direct_declarator>$=new CAst::direct_declarator4("['(',declarator,')']",$<_t_declarator>2);}
+	|direct_declarator '[' ']'                                                          {RULE_MARKER(          "direct_declarator1");$<_t_direct_declarator>$=new CAst::direct_declarator1("[direct_declarator,'[',']']",$<_t_direct_declarator>1, NULL);}
+	|direct_declarator '(' ')'                                                          {RULE_MARKER(          "direct_declarator2");$<_t_direct_declarator>$=new CAst::direct_declarator2("[direct_declarator,'(',')']",$<_t_direct_declarator>1, NULL);}
+	|IDENTIFIER                                                                         {RULE_MARKER(          "direct_declarator5");$<_t_direct_declarator>$=new CAst::direct_declarator5("[IDENTIFIER]",new CAst::Token($<_t_str>1));}
 	;
 
 
 logical_and_expression
-	:logical_and_expression, AND_OP, inclusive_or_expression                            {RULE_MARKER(      "logical_and_expression");CAST_PTR(logical_and_expression,$1)->append("[logical_and_expression,AND_OP,inclusive_or_expression]", CAST_PTR(inclusive_or_expression,$3));$$=$1;}
-	|inclusive_or_expression                                                            {RULE_MARKER(      "logical_and_expression");$$=(CAst::CAst*)(new CAst::logical_and_expression("[inclusive_or_expression]",CAST_PTR(inclusive_or_expression,$1)));}
+	:logical_and_expression AND_OP inclusive_or_expression                              {RULE_MARKER(      "logical_and_expression");CAST_PTR(logical_and_expression,$<_t_logical_and_expression>1)->append("[logical_and_expression,AND_OP,inclusive_or_expression]", $<_t_inclusive_or_expression>3);$<_t_logical_and_expression>$=$<_t_logical_and_expression>1;}
+	|inclusive_or_expression                                                            {RULE_MARKER(      "logical_and_expression");$<_t_logical_and_expression>$=new CAst::logical_and_expression("[inclusive_or_expression]",$<_t_inclusive_or_expression>1);}
 	;
 
 
 init_declarator_list
-	:init_declarator_list, ',', init_declarator                                         {RULE_MARKER(        "init_declarator_list");CAST_PTR(init_declarator_list,$1)->append("[init_declarator_list,',',init_declarator]", CAST_PTR(init_declarator,$3));$$=$1;}
-	|init_declarator                                                                    {RULE_MARKER(        "init_declarator_list");$$=(CAst::CAst*)(new CAst::init_declarator_list("[init_declarator]",CAST_PTR(init_declarator,$1)));}
+	:init_declarator_list ',' init_declarator                                           {RULE_MARKER(        "init_declarator_list");CAST_PTR(init_declarator_list,$<_t_init_declarator_list>1)->append("[init_declarator_list,',',init_declarator]", $<_t_init_declarator>3);$<_t_init_declarator_list>$=$<_t_init_declarator_list>1;}
+	|init_declarator                                                                    {RULE_MARKER(        "init_declarator_list");$<_t_init_declarator_list>$=new CAst::init_declarator_list("[init_declarator]",$<_t_init_declarator>1);}
 	;
 
 
 shift_expression
-	:shift_expression, LEFT_OP, additive_expression                                     {RULE_MARKER(            "shift_expression");CAST_PTR(shift_expression,$1)->append("[shift_expression,LEFT_OP,additive_expression]", CAST_PTR(Token,$2), CAST_PTR(additive_expression,$3));$$=$1;}
-	|shift_expression, RIGHT_OP, additive_expression                                    {RULE_MARKER(            "shift_expression");CAST_PTR(shift_expression,$1)->append("[shift_expression,RIGHT_OP,additive_expression]", CAST_PTR(Token,$2), CAST_PTR(additive_expression,$3));$$=$1;}
-	|additive_expression                                                                {RULE_MARKER(            "shift_expression");$$=(CAst::CAst*)(new CAst::shift_expression("[additive_expression]",CAST_PTR(additive_expression,$1)));}
+	:shift_expression LEFT_OP additive_expression                                       {RULE_MARKER(            "shift_expression");CAST_PTR(shift_expression,$<_t_shift_expression>1)->append("[shift_expression,LEFT_OP,additive_expression]", new CAst::Token($<_t_str>2), $<_t_additive_expression>3);$<_t_shift_expression>$=$<_t_shift_expression>1;}
+	|shift_expression RIGHT_OP additive_expression                                      {RULE_MARKER(            "shift_expression");CAST_PTR(shift_expression,$<_t_shift_expression>1)->append("[shift_expression,RIGHT_OP,additive_expression]", new CAst::Token($<_t_str>2), $<_t_additive_expression>3);$<_t_shift_expression>$=$<_t_shift_expression>1;}
+	|additive_expression                                                                {RULE_MARKER(            "shift_expression");$<_t_shift_expression>$=new CAst::shift_expression("[additive_expression]",$<_t_additive_expression>1);}
 	;
 
 
 identifier_list
-	:identifier_list, ',', IDENTIFIER                                                   {RULE_MARKER(             "identifier_list");CAST_PTR(identifier_list,$1)->append("[identifier_list,',',IDENTIFIER]", CAST_PTR(Token,$3));$$=$1;}
-	|IDENTIFIER                                                                         {RULE_MARKER(             "identifier_list");$$=(CAst::CAst*)(new CAst::identifier_list("[IDENTIFIER]",CAST_PTR(Token,$1)));}
+	:identifier_list ',' IDENTIFIER                                                     {RULE_MARKER(             "identifier_list");CAST_PTR(identifier_list,$<_t_identifier_list>1)->append("[identifier_list,',',IDENTIFIER]", new CAst::Token($<_t_str>3));$<_t_identifier_list>$=$<_t_identifier_list>1;}
+	|IDENTIFIER                                                                         {RULE_MARKER(             "identifier_list");$<_t_identifier_list>$=new CAst::identifier_list("[IDENTIFIER]",$<_t_Token>1);}
 	;
 
 
 jump_statement
-	:GOTO, IDENTIFIER, ';'                                                              {RULE_MARKER(             "jump_statement1");$$=(CAst::CAst*)(new CAst::jump_statement1("[GOTO,IDENTIFIER,';']",CAST_PTR(Token,$2)));}
-	|RETURN, expression, ';'                                                            {RULE_MARKER(             "jump_statement2");$$=(CAst::CAst*)(new CAst::jump_statement2("[RETURN,expression,';']",CAST_PTR(expression,$2)));}
-	|CONTINUE, ';'                                                                      {RULE_MARKER(             "jump_statement3");$$=(CAst::CAst*)(new CAst::jump_statement3("[CONTINUE,';']",CAST_PTR(Token,$1)));}
-	|BREAK, ';'                                                                         {RULE_MARKER(             "jump_statement3");$$=(CAst::CAst*)(new CAst::jump_statement3("[BREAK,';']",CAST_PTR(Token,$1)));}
-	|RETURN, ';'                                                                        {RULE_MARKER(             "jump_statement2");$$=(CAst::CAst*)(new CAst::jump_statement2("[RETURN,';']",NULL));}
+	:GOTO IDENTIFIER ';'                                                                {RULE_MARKER(             "jump_statement1");$<_t_jump_statement>$=new CAst::jump_statement1("[GOTO,IDENTIFIER,';']",new CAst::Token($<_t_str>2));}
+	|RETURN expression ';'                                                              {RULE_MARKER(             "jump_statement2");$<_t_jump_statement>$=new CAst::jump_statement2("[RETURN,expression,';']",$<_t_expression>2);}
+	|CONTINUE ';'                                                                       {RULE_MARKER(             "jump_statement3");$<_t_jump_statement>$=new CAst::jump_statement3("[CONTINUE,';']",new CAst::Token($<_t_str>1));}
+	|BREAK ';'                                                                          {RULE_MARKER(             "jump_statement3");$<_t_jump_statement>$=new CAst::jump_statement3("[BREAK,';']",new CAst::Token($<_t_str>1));}
+	|RETURN ';'                                                                         {RULE_MARKER(             "jump_statement2");$<_t_jump_statement>$=new CAst::jump_statement2("[RETURN,';']",NULL);}
 	;
 
 
 struct_declarator
-	:declarator, ':', constant_expression                                               {RULE_MARKER(           "struct_declarator");$$=(CAst::CAst*)(new CAst::struct_declarator("[declarator,':',constant_expression]",CAST_PTR(declarator,$1), CAST_PTR(Token,$2), CAST_PTR(constant_expression,$3)));}
-	|':', constant_expression                                                           {RULE_MARKER(           "struct_declarator");$$=(CAst::CAst*)(new CAst::struct_declarator("[':',constant_expression]",NULL, CAST_PTR(Token,$1), CAST_PTR(constant_expression,$2)));}
-	|declarator                                                                         {RULE_MARKER(           "struct_declarator");$$=(CAst::CAst*)(new CAst::struct_declarator("[declarator]",CAST_PTR(declarator,$1), NULL, NULL));}
+	:declarator ':' constant_expression                                                 {RULE_MARKER(           "struct_declarator");$<_t_struct_declarator>$=new CAst::struct_declarator("[declarator,':',constant_expression]",$<_t_declarator>1, new CAst::Token($<_t_str>2), $<_t_constant_expression>3);}
+	|':' constant_expression                                                            {RULE_MARKER(           "struct_declarator");$<_t_struct_declarator>$=new CAst::struct_declarator("[':',constant_expression]",NULL, new CAst::Token($<_t_str>1), $<_t_constant_expression>2);}
+	|declarator                                                                         {RULE_MARKER(           "struct_declarator");$<_t_struct_declarator>$=new CAst::struct_declarator("[declarator]",$<_t_declarator>1, NULL, NULL);}
 	;
 
 
 function_definition
-	:declaration_specifiers, declarator, declaration_list, compound_statement           {RULE_MARKER(         "function_definition");$$=(CAst::CAst*)(new CAst::function_definition("[declaration_specifiers,declarator,declaration_list,compound_statement]",CAST_PTR(declaration_specifiers,$1), CAST_PTR(declarator,$2), CAST_PTR(declaration_list,$3), CAST_PTR(compound_statement,$4)));}
-	|declaration_specifiers, declarator, compound_statement                             {RULE_MARKER(         "function_definition");$$=(CAst::CAst*)(new CAst::function_definition("[declaration_specifiers,declarator,compound_statement]",CAST_PTR(declaration_specifiers,$1), CAST_PTR(declarator,$2), NULL, CAST_PTR(compound_statement,$3)));}
-	|declarator, declaration_list, compound_statement                                   {RULE_MARKER(         "function_definition");$$=(CAst::CAst*)(new CAst::function_definition("[declarator,declaration_list,compound_statement]",NULL, CAST_PTR(declarator,$1), CAST_PTR(declaration_list,$2), CAST_PTR(compound_statement,$3)));}
-	|declarator, compound_statement                                                     {RULE_MARKER(         "function_definition");$$=(CAst::CAst*)(new CAst::function_definition("[declarator,compound_statement]",NULL, CAST_PTR(declarator,$1), NULL, CAST_PTR(compound_statement,$2)));}
+	:declaration_specifiers declarator declaration_list compound_statement              {RULE_MARKER(         "function_definition");$<_t_function_definition>$=new CAst::function_definition("[declaration_specifiers,declarator,declaration_list,compound_statement]",$<_t_declaration_specifiers>1, $<_t_declarator>2, $<_t_declaration_list>3, $<_t_compound_statement>4);}
+	|declaration_specifiers declarator compound_statement                               {RULE_MARKER(         "function_definition");$<_t_function_definition>$=new CAst::function_definition("[declaration_specifiers,declarator,compound_statement]",$<_t_declaration_specifiers>1, $<_t_declarator>2, NULL, $<_t_compound_statement>3);}
+	|declarator declaration_list compound_statement                                     {RULE_MARKER(         "function_definition");$<_t_function_definition>$=new CAst::function_definition("[declarator,declaration_list,compound_statement]",NULL, $<_t_declarator>1, $<_t_declaration_list>2, $<_t_compound_statement>3);}
+	|declarator compound_statement                                                      {RULE_MARKER(         "function_definition");$<_t_function_definition>$=new CAst::function_definition("[declarator,compound_statement]",NULL, $<_t_declarator>1, NULL, $<_t_compound_statement>2);}
 	;
 
 
 parameter_list
-	:parameter_list, ',', parameter_declaration                                         {RULE_MARKER(              "parameter_list");CAST_PTR(parameter_list,$1)->append("[parameter_list,',',parameter_declaration]", CAST_PTR(parameter_declaration,$3));$$=$1;}
-	|parameter_declaration                                                              {RULE_MARKER(              "parameter_list");$$=(CAst::CAst*)(new CAst::parameter_list("[parameter_declaration]",CAST_PTR(parameter_declaration,$1)));}
+	:parameter_list ',' parameter_declaration                                           {RULE_MARKER(              "parameter_list");CAST_PTR(parameter_list,$<_t_parameter_list>1)->append("[parameter_list,',',parameter_declaration]", $<_t_parameter_declaration>3);$<_t_parameter_list>$=$<_t_parameter_list>1;}
+	|parameter_declaration                                                              {RULE_MARKER(              "parameter_list");$<_t_parameter_list>$=new CAst::parameter_list("[parameter_declaration]",$<_t_parameter_declaration>1);}
 	;
 
 
 enum_specifier
-	:ENUM, IDENTIFIER, '{', enumerator_list, '}'                                        {RULE_MARKER(              "enum_specifier");$$=(CAst::CAst*)(new CAst::enum_specifier("[ENUM,IDENTIFIER,'{',enumerator_list,'}']",CAST_PTR(Token,$2), CAST_PTR(Token,$3), CAST_PTR(enumerator_list,$4), CAST_PTR(Token,$5)));}
-	|ENUM, '{', enumerator_list, '}'                                                    {RULE_MARKER(              "enum_specifier");$$=(CAst::CAst*)(new CAst::enum_specifier("[ENUM,'{',enumerator_list,'}']",NULL, CAST_PTR(Token,$2), CAST_PTR(enumerator_list,$3), CAST_PTR(Token,$4)));}
-	|ENUM, IDENTIFIER                                                                   {RULE_MARKER(              "enum_specifier");$$=(CAst::CAst*)(new CAst::enum_specifier("[ENUM,IDENTIFIER]",CAST_PTR(Token,$2), NULL, NULL, NULL));}
+	:ENUM IDENTIFIER '{' enumerator_list '}'                                            {RULE_MARKER(              "enum_specifier");$<_t_enum_specifier>$=new CAst::enum_specifier("[ENUM,IDENTIFIER,'{',enumerator_list,'}']",new CAst::Token($<_t_str>2), new CAst::Token($<_t_str>3), $<_t_enumerator_list>4, new CAst::Token($<_t_str>5));}
+	|ENUM '{' enumerator_list '}'                                                       {RULE_MARKER(              "enum_specifier");$<_t_enum_specifier>$=new CAst::enum_specifier("[ENUM,'{',enumerator_list,'}']",NULL, new CAst::Token($<_t_str>2), $<_t_enumerator_list>3, new CAst::Token($<_t_str>4));}
+	|ENUM IDENTIFIER                                                                    {RULE_MARKER(              "enum_specifier");$<_t_enum_specifier>$=new CAst::enum_specifier("[ENUM,IDENTIFIER]",new CAst::Token($<_t_str>2), NULL, NULL, NULL);}
 	;
 
 
 type_qualifier
-	:CONST                                                                              {RULE_MARKER(              "type_qualifier");$$=(CAst::CAst*)(new CAst::type_qualifier("[CONST]",CAST_PTR(Token,$1)));}
-	|VOLATILE                                                                           {RULE_MARKER(              "type_qualifier");$$=(CAst::CAst*)(new CAst::type_qualifier("[VOLATILE]",CAST_PTR(Token,$1)));}
+	:CONST                                                                              {RULE_MARKER(              "type_qualifier");$<_t_type_qualifier>$=new CAst::type_qualifier("[CONST]",new CAst::Token($<_t_str>1));}
+	|VOLATILE                                                                           {RULE_MARKER(              "type_qualifier");$<_t_type_qualifier>$=new CAst::type_qualifier("[VOLATILE]",new CAst::Token($<_t_str>1));}
 	;
 
 
 enumerator_list
-	:enumerator_list, ',', enumerator                                                   {RULE_MARKER(             "enumerator_list");CAST_PTR(enumerator_list,$1)->append("[enumerator_list,',',enumerator]", CAST_PTR(enumerator,$3));$$=$1;}
-	|enumerator                                                                         {RULE_MARKER(             "enumerator_list");$$=(CAst::CAst*)(new CAst::enumerator_list("[enumerator]",CAST_PTR(enumerator,$1)));}
+	:enumerator_list ',' enumerator                                                     {RULE_MARKER(             "enumerator_list");CAST_PTR(enumerator_list,$<_t_enumerator_list>1)->append("[enumerator_list,',',enumerator]", $<_t_enumerator>3);$<_t_enumerator_list>$=$<_t_enumerator_list>1;}
+	|enumerator                                                                         {RULE_MARKER(             "enumerator_list");$<_t_enumerator_list>$=new CAst::enumerator_list("[enumerator]",$<_t_enumerator>1);}
 	;
 
 
 labeled_statement
-	:CASE, constant_expression, ':', statement                                          {RULE_MARKER(          "labeled_statement1");$$=(CAst::CAst*)(new CAst::labeled_statement1("[CASE,constant_expression,':',statement]",CAST_PTR(constant_expression,$2), CAST_PTR(statement,$4)));}
-	|IDENTIFIER, ':', statement                                                         {RULE_MARKER(          "labeled_statement2");$$=(CAst::CAst*)(new CAst::labeled_statement2("[IDENTIFIER,':',statement]",CAST_PTR(Token,$1), CAST_PTR(statement,$3)));}
-	|DEFAULT, ':', statement                                                            {RULE_MARKER(          "labeled_statement2");$$=(CAst::CAst*)(new CAst::labeled_statement2("[DEFAULT,':',statement]",CAST_PTR(Token,$1), CAST_PTR(statement,$3)));}
+	:CASE constant_expression ':' statement                                             {RULE_MARKER(          "labeled_statement1");$<_t_labeled_statement>$=new CAst::labeled_statement1("[CASE,constant_expression,':',statement]",$<_t_constant_expression>2, $<_t_statement>4);}
+	|IDENTIFIER ':' statement                                                           {RULE_MARKER(          "labeled_statement2");$<_t_labeled_statement>$=new CAst::labeled_statement2("[IDENTIFIER,':',statement]",new CAst::Token($<_t_str>1), $<_t_statement>3);}
+	|DEFAULT ':' statement                                                              {RULE_MARKER(          "labeled_statement2");$<_t_labeled_statement>$=new CAst::labeled_statement2("[DEFAULT,':',statement]",new CAst::Token($<_t_str>1), $<_t_statement>3);}
 	;
 
 
 declaration_list
-	:declaration_list, declaration                                                      {RULE_MARKER(            "declaration_list");CAST_PTR(declaration_list,$1)->append("[declaration_list,declaration]", CAST_PTR(declaration,$2));$$=$1;}
-	|declaration                                                                        {RULE_MARKER(            "declaration_list");$$=(CAst::CAst*)(new CAst::declaration_list("[declaration]",CAST_PTR(declaration,$1)));}
+	:declaration_list declaration                                                       {RULE_MARKER(            "declaration_list");CAST_PTR(declaration_list,$<_t_declaration_list>1)->append("[declaration_list,declaration]", $<_t_declaration>2);$<_t_declaration_list>$=$<_t_declaration_list>1;}
+	|declaration                                                                        {RULE_MARKER(            "declaration_list");$<_t_declaration_list>$=new CAst::declaration_list("[declaration]",$<_t_declaration>1);}
 	;
 
 
 specifier_qualifier_list
-	:type_specifier, specifier_qualifier_list                                           {RULE_MARKER(   "specifier_qualifier_list1");CAST_PTR(specifier_qualifier_list1,$2)->append("[type_specifier,specifier_qualifier_list]", CAST_PTR(type_specifier,$1));$$=$2;}
-	|type_qualifier, specifier_qualifier_list                                           {RULE_MARKER(   "specifier_qualifier_list2");CAST_PTR(specifier_qualifier_list2,$2)->append("[type_qualifier,specifier_qualifier_list]", CAST_PTR(type_qualifier,$1));$$=$2;}
-	|type_specifier                                                                     {RULE_MARKER(   "specifier_qualifier_list1");$$=(CAst::CAst*)(new CAst::specifier_qualifier_list1("[type_specifier]",CAST_PTR(type_specifier,$1)));}
-	|type_qualifier                                                                     {RULE_MARKER(   "specifier_qualifier_list2");$$=(CAst::CAst*)(new CAst::specifier_qualifier_list2("[type_qualifier]",CAST_PTR(type_qualifier,$1)));}
+	:type_specifier specifier_qualifier_list                                            {RULE_MARKER(   "specifier_qualifier_list1");CAST_PTR(specifier_qualifier_list1,$<_t_specifier_qualifier_list>2)->append("[type_specifier,specifier_qualifier_list]", $<_t_type_specifier>1);$<_t_specifier_qualifier_list>$=$<_t_specifier_qualifier_list>2;}
+	|type_qualifier specifier_qualifier_list                                            {RULE_MARKER(   "specifier_qualifier_list2");CAST_PTR(specifier_qualifier_list2,$<_t_specifier_qualifier_list>2)->append("[type_qualifier,specifier_qualifier_list]", $<_t_type_qualifier>1);$<_t_specifier_qualifier_list>$=$<_t_specifier_qualifier_list>2;}
+	|type_specifier                                                                     {RULE_MARKER(   "specifier_qualifier_list1");$<_t_specifier_qualifier_list>$=new CAst::specifier_qualifier_list1("[type_specifier]",$<_t_type_specifier>1);}
+	|type_qualifier                                                                     {RULE_MARKER(   "specifier_qualifier_list2");$<_t_specifier_qualifier_list>$=new CAst::specifier_qualifier_list2("[type_qualifier]",$<_t_type_qualifier>1);}
 	;
 
 
 unary_operator
-	:'&'                                                                                {RULE_MARKER(              "unary_operator");$$=(CAst::CAst*)(new CAst::unary_operator("['&']",CAST_PTR(Token,$1)));}
-	|'*'                                                                                {RULE_MARKER(              "unary_operator");$$=(CAst::CAst*)(new CAst::unary_operator("['*']",CAST_PTR(Token,$1)));}
-	|'+'                                                                                {RULE_MARKER(              "unary_operator");$$=(CAst::CAst*)(new CAst::unary_operator("['+']",CAST_PTR(Token,$1)));}
-	|'-'                                                                                {RULE_MARKER(              "unary_operator");$$=(CAst::CAst*)(new CAst::unary_operator("['-']",CAST_PTR(Token,$1)));}
-	|'~'                                                                                {RULE_MARKER(              "unary_operator");$$=(CAst::CAst*)(new CAst::unary_operator("['~']",CAST_PTR(Token,$1)));}
-	|'!'                                                                                {RULE_MARKER(              "unary_operator");$$=(CAst::CAst*)(new CAst::unary_operator("['!']",CAST_PTR(Token,$1)));}
+	:'&'                                                                                {RULE_MARKER(              "unary_operator");$<_t_unary_operator>$=new CAst::unary_operator("['&']",new CAst::Token($<_t_str>1));}
+	|'*'                                                                                {RULE_MARKER(              "unary_operator");$<_t_unary_operator>$=new CAst::unary_operator("['*']",new CAst::Token($<_t_str>1));}
+	|'+'                                                                                {RULE_MARKER(              "unary_operator");$<_t_unary_operator>$=new CAst::unary_operator("['+']",new CAst::Token($<_t_str>1));}
+	|'-'                                                                                {RULE_MARKER(              "unary_operator");$<_t_unary_operator>$=new CAst::unary_operator("['-']",new CAst::Token($<_t_str>1));}
+	|'~'                                                                                {RULE_MARKER(              "unary_operator");$<_t_unary_operator>$=new CAst::unary_operator("['~']",new CAst::Token($<_t_str>1));}
+	|'!'                                                                                {RULE_MARKER(              "unary_operator");$<_t_unary_operator>$=new CAst::unary_operator("['!']",new CAst::Token($<_t_str>1));}
 	;
 
 
 initializer_list
-	:initializer_list, ',', initializer                                                 {RULE_MARKER(            "initializer_list");CAST_PTR(initializer_list,$1)->append("[initializer_list,',',initializer]", CAST_PTR(initializer,$3));$$=$1;}
-	|initializer                                                                        {RULE_MARKER(            "initializer_list");$$=(CAst::CAst*)(new CAst::initializer_list("[initializer]",CAST_PTR(initializer,$1)));}
+	:initializer_list ',' initializer                                                   {RULE_MARKER(            "initializer_list");CAST_PTR(initializer_list,$<_t_initializer_list>1)->append("[initializer_list,',',initializer]", $<_t_initializer>3);$<_t_initializer_list>$=$<_t_initializer_list>1;}
+	|initializer                                                                        {RULE_MARKER(            "initializer_list");$<_t_initializer_list>$=new CAst::initializer_list("[initializer]",$<_t_initializer>1);}
 	;
 
 
 statement_list
-	:statement_list, statement                                                          {RULE_MARKER(              "statement_list");CAST_PTR(statement_list,$1)->append("[statement_list,statement]", CAST_PTR(statement,$2));$$=$1;}
-	|statement                                                                          {RULE_MARKER(              "statement_list");$$=(CAst::CAst*)(new CAst::statement_list("[statement]",CAST_PTR(statement,$1)));}
+	:statement_list statement                                                           {RULE_MARKER(              "statement_list");CAST_PTR(statement_list,$<_t_statement_list>1)->append("[statement_list,statement]", $<_t_statement>2);$<_t_statement_list>$=$<_t_statement_list>1;}
+	|statement                                                                          {RULE_MARKER(              "statement_list");$<_t_statement_list>$=new CAst::statement_list("[statement]",$<_t_statement>1);}
 	;
 
 
 expression
-	:expression, ',', assignment_expression                                             {RULE_MARKER(                  "expression");CAST_PTR(expression,$1)->append("[expression,',',assignment_expression]", CAST_PTR(assignment_expression,$3));$$=$1;}
-	|assignment_expression                                                              {RULE_MARKER(                  "expression");$$=(CAst::CAst*)(new CAst::expression("[assignment_expression]",CAST_PTR(assignment_expression,$1)));}
+	:expression ',' assignment_expression                                               {RULE_MARKER(                  "expression");CAST_PTR(expression,$<_t_expression>1)->append("[expression,',',assignment_expression]", $<_t_assignment_expression>3);$<_t_expression>$=$<_t_expression>1;}
+	|assignment_expression                                                              {RULE_MARKER(                  "expression");$<_t_expression>$=new CAst::expression("[assignment_expression]",$<_t_assignment_expression>1);}
 	;
 
 
 declarator
-	:pointer, direct_declarator                                                         {RULE_MARKER(                  "declarator");$$=(CAst::CAst*)(new CAst::declarator("[pointer,direct_declarator]",CAST_PTR(pointer,$1), CAST_PTR(direct_declarator,$2)));}
-	|direct_declarator                                                                  {RULE_MARKER(                  "declarator");$$=(CAst::CAst*)(new CAst::declarator("[direct_declarator]",NULL, CAST_PTR(direct_declarator,$1)));}
+	:pointer direct_declarator                                                          {RULE_MARKER(                  "declarator");$<_t_declarator>$=new CAst::declarator("[pointer,direct_declarator]",$<_t_pointer>1, $<_t_direct_declarator>2);}
+	|direct_declarator                                                                  {RULE_MARKER(                  "declarator");$<_t_declarator>$=new CAst::declarator("[direct_declarator]",NULL, $<_t_direct_declarator>1);}
 	;
 
 
