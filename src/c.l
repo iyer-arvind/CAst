@@ -165,6 +165,7 @@ void count()
 			column++;
 */	
 	
+
 	yylval._t_str=new char[strlen(yytext)+1];
 	strcpy((char*)yylval._t_str,yytext);
 	if(strcmp(yytext,"\n"))
