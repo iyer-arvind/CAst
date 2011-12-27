@@ -5,6 +5,7 @@
 #define RULE_MARKER(txt) printf("\t\t\t\t\033[36m%s:%d\033[0m: %s\n",__FILE__,__LINE__,txt)
 #define CAST_PTR(TYPE,PTR) dynamic_cast<CAst::TYPE*>(PTR)
 #include <string>
+#include <cstring>
 #include <stdio.h>
 #include <list>
 #include <iostream>
@@ -25,11 +26,41 @@ class CAst
 	public:
 		virtual std::string name()const=0;
 };
-class Token
+class Token: public CAst
 {
 	public:
-		Token(const char* txt){LOG("\033[35m TOKEN \033[0m"<<txt);}
+		virtual std::string name()const=0;
+		Token()
+		{
+			LOG("\033[32mCREATING\033[0m Token")
+		}
+		virtual ~Token()
+		{
+			LOG("\033[31mDELETING\033[0m Token")
+		}
 };
+class GenericToken:public Token
+{
+	const char* _txt;
+public:
+	
+	virtual std::string name()const{return "Generic Token";}
+	GenericToken(const char *txt):
+		Token(),
+		_txt(new char[strlen(txt)+1])
+	{
+		strcpy((char*)_txt,txt);
+	}
+	
+	virtual ~GenericToken()
+	{
+		delete[] _txt;
+	}
+};
+inline Token* GetToken(const char* txt)
+{
+	return new GenericToken(txt);
+}
 /*----------------------------------------------------------------------------------------------------*\
                     storage_class_specifier
 \*----------------------------------------------------------------------------------------------------*/
@@ -112,8 +143,10 @@ public:
 \*----------------------------------------------------------------------------------------------------*/
 class unary_expression:public CAst
 {
+public:
 	virtual std::string name()const=0;
 	virtual std::string pattern()const=0;
+	virtual ~unary_expression(){}
 };
 
 
@@ -311,8 +344,10 @@ public:
 \*----------------------------------------------------------------------------------------------------*/
 class initializer:public CAst
 {
+public:
 	virtual std::string name()const=0;
 	virtual std::string pattern()const=0;
+	virtual ~initializer(){}
 };
 
 
@@ -479,8 +514,10 @@ public:
 \*----------------------------------------------------------------------------------------------------*/
 class iteration_statement:public CAst
 {
+public:
 	virtual std::string name()const=0;
 	virtual std::string pattern()const=0;
+	virtual ~iteration_statement(){}
 };
 
 
@@ -594,8 +631,10 @@ public:
 \*----------------------------------------------------------------------------------------------------*/
 class external_declaration:public CAst
 {
+public:
 	virtual std::string name()const=0;
 	virtual std::string pattern()const=0;
+	virtual ~external_declaration(){}
 };
 
 
@@ -644,8 +683,10 @@ public:
 \*----------------------------------------------------------------------------------------------------*/
 class type_specifier:public CAst
 {
+public:
 	virtual std::string name()const=0;
 	virtual std::string pattern()const=0;
+	virtual ~type_specifier(){}
 };
 
 
@@ -813,8 +854,10 @@ public:
 \*----------------------------------------------------------------------------------------------------*/
 class selection_statement:public CAst
 {
+public:
 	virtual std::string name()const=0;
 	virtual std::string pattern()const=0;
+	virtual ~selection_statement(){}
 };
 
 
@@ -871,8 +914,10 @@ public:
 \*----------------------------------------------------------------------------------------------------*/
 class postfix_expression:public CAst
 {
+public:
 	virtual std::string name()const=0;
 	virtual std::string pattern()const=0;
+	virtual ~postfix_expression(){}
 };
 
 
@@ -1024,8 +1069,10 @@ public:
 \*----------------------------------------------------------------------------------------------------*/
 class statement:public CAst
 {
+public:
 	virtual std::string name()const=0;
 	virtual std::string pattern()const=0;
+	virtual ~statement(){}
 };
 
 
@@ -1146,8 +1193,10 @@ public:
 \*----------------------------------------------------------------------------------------------------*/
 class cast_expression:public CAst
 {
+public:
 	virtual std::string name()const=0;
 	virtual std::string pattern()const=0;
+	virtual ~cast_expression(){}
 };
 
 
@@ -1431,8 +1480,10 @@ public:
 \*----------------------------------------------------------------------------------------------------*/
 class assignment_expression:public CAst
 {
+public:
 	virtual std::string name()const=0;
 	virtual std::string pattern()const=0;
+	virtual ~assignment_expression(){}
 };
 
 
@@ -1514,8 +1565,10 @@ public:
 \*----------------------------------------------------------------------------------------------------*/
 class parameter_declaration:public CAst
 {
+public:
 	virtual std::string name()const=0;
 	virtual std::string pattern()const=0;
+	virtual ~parameter_declaration(){}
 };
 
 
@@ -1681,8 +1734,10 @@ public:
 \*----------------------------------------------------------------------------------------------------*/
 class direct_abstract_declarator:public CAst
 {
+public:
 	virtual std::string name()const=0;
 	virtual std::string pattern()const=0;
+	virtual ~direct_abstract_declarator(){}
 };
 
 
@@ -1817,8 +1872,10 @@ public:
 \*----------------------------------------------------------------------------------------------------*/
 class primary_expression:public CAst
 {
+public:
 	virtual std::string name()const=0;
 	virtual std::string pattern()const=0;
+	virtual ~primary_expression(){}
 };
 
 
@@ -1867,8 +1924,10 @@ public:
 \*----------------------------------------------------------------------------------------------------*/
 class declaration_specifiers:public CAst
 {
+public:
 	virtual std::string name()const=0;
 	virtual std::string pattern()const=0;
+	virtual ~declaration_specifiers(){}
 };
 
 
@@ -1998,8 +2057,10 @@ public:
 \*----------------------------------------------------------------------------------------------------*/
 class direct_declarator:public CAst
 {
+public:
 	virtual std::string name()const=0;
 	virtual std::string pattern()const=0;
+	virtual ~direct_declarator(){}
 };
 
 
@@ -2258,8 +2319,10 @@ public:
 \*----------------------------------------------------------------------------------------------------*/
 class jump_statement:public CAst
 {
+public:
 	virtual std::string name()const=0;
 	virtual std::string pattern()const=0;
+	virtual ~jump_statement(){}
 };
 
 
@@ -2516,8 +2579,10 @@ public:
 \*----------------------------------------------------------------------------------------------------*/
 class labeled_statement:public CAst
 {
+public:
 	virtual std::string name()const=0;
 	virtual std::string pattern()const=0;
+	virtual ~labeled_statement(){}
 };
 
 
@@ -2607,8 +2672,10 @@ public:
 \*----------------------------------------------------------------------------------------------------*/
 class specifier_qualifier_list:public CAst
 {
+public:
 	virtual std::string name()const=0;
 	virtual std::string pattern()const=0;
+	virtual ~specifier_qualifier_list(){}
 };
 
 

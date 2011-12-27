@@ -105,6 +105,7 @@ class YaccFile(object):
 		fh.write("#define RULE_MARKER(txt) printf(\"\\t\\t\\t\\t\\033[36m%s:%d\\033[0m: %s\\n\",__FILE__,__LINE__,txt)\n")
 		fh.write("#define CAST_PTR(TYPE,PTR) dynamic_cast<CAst::TYPE*>(PTR)\n")
 		fh.write("#include <string>\n")
+		fh.write("#include <cstring>\n")
 		fh.write("#include <stdio.h>\n")
 		fh.write("#include <list>\n")
 		fh.write("#include <iostream>\n")
@@ -146,9 +147,39 @@ class CAst
 	public:
 		virtual std::string name()const=0;
 };
-class Token
+class Token: public CAst
 {
 	public:
-		Token(const char* txt){LOG("\\033[35m TOKEN \\033[0m"<<txt);}
+		virtual std::string name()const=0;
+		Token()
+		{
+			LOG("\\033[32mCREATING\\033[0m Token")
+		}
+		virtual ~Token()
+		{
+			LOG("\\033[31mDELETING\\033[0m Token")
+		}
 };
+class GenericToken:public Token
+{
+	const char* _txt;
+public:
+	
+	virtual std::string name()const{return "Generic Token";}
+	GenericToken(const char *txt):
+		Token(),
+		_txt(new char[strlen(txt)+1])
+	{
+		strcpy((char*)_txt,txt);
+	}
+	
+	virtual ~GenericToken()
+	{
+		delete[] _txt;
+	}
+};
+inline Token* GetToken(const char* txt)
+{
+	return new GenericToken(txt);
+}
 """

@@ -56,15 +56,17 @@ class ConstructorClassCoder(object):
 		fh.write("}\n")
 		fh.write("%s::~%s()"%(self.className,self.className))
 		fh.write("\n{\n")
-		fh.write("\n\tLOG(\"\\033[32mDELETING\\033[0m %s\")\n"%self.className);
+		fh.write("\n\tLOG(\"\\033[31mDELETING\\033[0m %s\")\n"%self.className);
 		fh.write("\n".join(["\tif (%s)%s{delete(%s);%s=0;}"%(n," "*(30-len(n)),n,n) for t,n,p,v,i in self.parameters]))
 		fh.write("\n}\n")
 
 	def _dumpBaseClassCHeader(self,fh):
 		fh.write("class %s"%self.constructor._name)
 		fh.write(":public CAst\n{\n")
+		fh.write("public:\n")
 		fh.write("\tvirtual std::string name()const=0;\n")
 		fh.write("\tvirtual std::string pattern()const=0;\n")
+		fh.write("\tvirtual ~%s(){}\n"%self.constructor._name)
 		fh.write("};\n"+"\n"*2)
 		
 class ListAccumulatorClassCoder(ConstructorClassCoder):
@@ -157,8 +159,10 @@ class ListAccumulatorClassCoder(ConstructorClassCoder):
 		fh.write("\tLOG(\"[ \"<<_refCount<<\" ]\t\"<<\"refCount after decrement:\"<<(*_refCount))")
 		fh.write("\n\tif((*_refCount)>0)return;")
 		fh.write("\n\tLOG(\"\\033[31mDELETING\\033[0m %s_item\")\n"%self.className);
-		fh.write("\n\tdelete(_refCount);_refCount=0;")
-		fh.write("\n".join(["\tif (%s)%s{delete(%s);%s=0;}"%(n," "*(30-len(n)),n,n) for t,n,p,v,i in self.parameters if i != self.constructor.selfIndex]))
+		fh.write("\n\tdelete(_refCount);_refCount=0;\n")
+		fh.write("\n".join(["\tif (%s)%s\n\t{\n\t\tdelete(%s);\n\t\t%s=0;\n\t}"%(n," "*(30-len(n)),n,n) for t,n,p,v,i in self.parameters if i != self.constructor.selfIndex]))
+		fh.write("\n\tLOG(\"\\033[31mDELETED\\033[0m %s_item\")\n"%self.className);
+		
 		fh.write("\n}\n")
 
 
