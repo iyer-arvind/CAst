@@ -8,11 +8,13 @@ IS			(u|U|l|L)*
 
 %{
 #include <stdio.h>
+#include <list>
+#include <string>
 #include "cYacc.hpp"
 void count();
 void comment();
 int check_type();
-
+std::list<std::string> toks;
 %}
 
 %%
@@ -166,11 +168,14 @@ void count()
 */	
 	
 
-	
-	yylval._t_str=yytext;
-	strcpy((char*)yylval._t_str,yytext);
-	if(strcmp(yytext,"\n"))
-		printf("reading: \033[37;41;1m%s\033[0m\n",yytext);
+	if(yytext)
+	{
+		if(strcmp(yytext,"\n"))
+			printf("reading: \033[37;41;1m%s\033[0m\n",yytext);
+		std::string s(yytext);
+		toks.push_back(s);
+		yylval._t_str=toks.back().c_str();
+	}
 	//delete[] yylval._t_str;
 	//yylval._t_str=0;
 	

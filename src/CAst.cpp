@@ -700,80 +700,73 @@ iteration_statement3::~iteration_statement3()
 
 
 /*----------------------------------------------------------------------------------------------------*\
-                    additive_expression
+                    and_expression
 \*----------------------------------------------------------------------------------------------------*/
-additive_expression_item::additive_expression_item(std::string _arg__s_matchedPattern, Token *_arg__p_token1, multiplicative_expression *_arg__p_multiplicative_expression):
+and_expression_item::and_expression_item(std::string _arg__s_matchedPattern, equality_expression *_arg__p_equality_expression):
 					_refCount(new int(1)),
 					_s_matchedPattern(_arg__s_matchedPattern),
-					_p_token1(_arg__p_token1),
-					_p_multiplicative_expression(_arg__p_multiplicative_expression)
+					_p_equality_expression(_arg__p_equality_expression)
 {
 
-	LOG("\033[32mCREATING[0m additive_expression_item")
+	LOG("\033[32mCREATING[0m and_expression_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
-	additive_expression_item::additive_expression_item(const additive_expression_item &other):
+	and_expression_item::and_expression_item(const and_expression_item &other):
 					_refCount(other._refCount),
 					_s_matchedPattern(other._s_matchedPattern),
-					_p_token1(other._p_token1),
-					_p_multiplicative_expression(other._p_multiplicative_expression)
+					_p_equality_expression(other._p_equality_expression)
 {
 
-	LOG("COPYING additive_expression_item")
+	LOG("COPYING and_expression_item")
 	(*_refCount)++;
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after increment:"<<(*_refCount))
 }
-additive_expression_item::~additive_expression_item()
+and_expression_item::~and_expression_item()
 {
 
-	LOG("\033[31mDELETING\033[0m(?) additive_expression_item")
+	LOG("\033[31mDELETING\033[0m(?) and_expression_item")
 
 	(*_refCount)--;	LOG("[ "<<_refCount<<" ]	"<<"refCount after decrement:"<<(*_refCount))
 	if((*_refCount)>0)return;
-	LOG("\033[31mDELETING\033[0m additive_expression_item")
+	LOG("\033[31mDELETING\033[0m and_expression_item")
 
 	delete(_refCount);_refCount=0;
-	if (_p_token1)                     
+	if (_p_equality_expression)        
 	{
-		delete(_p_token1);
-		_p_token1=0;
+		delete(_p_equality_expression);
+		_p_equality_expression=0;
 	}
-	if (_p_multiplicative_expression)  
-	{
-		delete(_p_multiplicative_expression);
-		_p_multiplicative_expression=0;
-	}
-	LOG("\033[31mDELETED\033[0m additive_expression_item")
+	LOG("\033[31mDELETED\033[0m and_expression_item")
 
 }
-std::string additive_expression::name()const
+std::string and_expression::name()const
 {
-	return std::string("additive_expression");
+	return std::string("and_expression");
 }
 
-std::string additive_expression::pattern()const
+std::string and_expression::pattern()const
 {
-	return std::string("additive_expression,'+',multiplicative_expression");
+	return std::string("and_expression,'&',equality_expression");
 }
 
-additive_expression::additive_expression(std::string _arg__s_matchedPattern, multiplicative_expression *_arg__p_multiplicative_expression)
+and_expression::and_expression(std::string _arg__s_matchedPattern, equality_expression *_arg__p_equality_expression)
 {
 
-	LOG("CREATING additive_expression")
-	additive_expression_item item(_arg__s_matchedPattern, NULL, _arg__p_multiplicative_expression);
+	LOG("CREATING and_expression")
+	and_expression_item item(_arg__s_matchedPattern, _arg__p_equality_expression);
 
-	LOG("APPENDING to additive_expression")
+	LOG("APPENDING to and_expression")
 	_items.push_back(item);
 }
-void additive_expression::append(std::string _arg__s_matchedPattern, Token *_arg__p_token1, multiplicative_expression *_arg__p_multiplicative_expression)
+void and_expression::append(std::string _arg__s_matchedPattern, equality_expression *_arg__p_equality_expression)
 {
-	additive_expression_item item(_arg__s_matchedPattern, _arg__p_token1, _arg__p_multiplicative_expression);
+	and_expression_item item(_arg__s_matchedPattern, _arg__p_equality_expression);
 	_items.push_back(item);
 }
-additive_expression::~additive_expression()
+and_expression::~and_expression()
 {
 
-	LOG("DELETING additive_expression")
+	LOG("DELETING and_expression")
 	_items.clear();
 }
 
@@ -1283,73 +1276,80 @@ postfix_expression5::~postfix_expression5()
 
 
 /*----------------------------------------------------------------------------------------------------*\
-                    and_expression
+                    additive_expression
 \*----------------------------------------------------------------------------------------------------*/
-and_expression_item::and_expression_item(std::string _arg__s_matchedPattern, equality_expression *_arg__p_equality_expression):
+additive_expression_item::additive_expression_item(std::string _arg__s_matchedPattern, Token *_arg__p_token1, multiplicative_expression *_arg__p_multiplicative_expression):
 					_refCount(new int(1)),
 					_s_matchedPattern(_arg__s_matchedPattern),
-					_p_equality_expression(_arg__p_equality_expression)
+					_p_token1(_arg__p_token1),
+					_p_multiplicative_expression(_arg__p_multiplicative_expression)
 {
 
-	LOG("\033[32mCREATING[0m and_expression_item")
+	LOG("\033[32mCREATING[0m additive_expression_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
-	and_expression_item::and_expression_item(const and_expression_item &other):
+	additive_expression_item::additive_expression_item(const additive_expression_item &other):
 					_refCount(other._refCount),
 					_s_matchedPattern(other._s_matchedPattern),
-					_p_equality_expression(other._p_equality_expression)
+					_p_token1(other._p_token1),
+					_p_multiplicative_expression(other._p_multiplicative_expression)
 {
 
-	LOG("COPYING and_expression_item")
+	LOG("COPYING additive_expression_item")
 	(*_refCount)++;
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after increment:"<<(*_refCount))
 }
-and_expression_item::~and_expression_item()
+additive_expression_item::~additive_expression_item()
 {
 
-	LOG("\033[31mDELETING\033[0m(?) and_expression_item")
+	LOG("\033[31mDELETING\033[0m(?) additive_expression_item")
 
 	(*_refCount)--;	LOG("[ "<<_refCount<<" ]	"<<"refCount after decrement:"<<(*_refCount))
 	if((*_refCount)>0)return;
-	LOG("\033[31mDELETING\033[0m and_expression_item")
+	LOG("\033[31mDELETING\033[0m additive_expression_item")
 
 	delete(_refCount);_refCount=0;
-	if (_p_equality_expression)        
+	if (_p_token1)                     
 	{
-		delete(_p_equality_expression);
-		_p_equality_expression=0;
+		delete(_p_token1);
+		_p_token1=0;
 	}
-	LOG("\033[31mDELETED\033[0m and_expression_item")
+	if (_p_multiplicative_expression)  
+	{
+		delete(_p_multiplicative_expression);
+		_p_multiplicative_expression=0;
+	}
+	LOG("\033[31mDELETED\033[0m additive_expression_item")
 
 }
-std::string and_expression::name()const
+std::string additive_expression::name()const
 {
-	return std::string("and_expression");
+	return std::string("additive_expression");
 }
 
-std::string and_expression::pattern()const
+std::string additive_expression::pattern()const
 {
-	return std::string("and_expression,'&',equality_expression");
+	return std::string("additive_expression,'+',multiplicative_expression");
 }
 
-and_expression::and_expression(std::string _arg__s_matchedPattern, equality_expression *_arg__p_equality_expression)
+additive_expression::additive_expression(std::string _arg__s_matchedPattern, multiplicative_expression *_arg__p_multiplicative_expression)
 {
 
-	LOG("CREATING and_expression")
-	and_expression_item item(_arg__s_matchedPattern, _arg__p_equality_expression);
+	LOG("CREATING additive_expression")
+	additive_expression_item item(_arg__s_matchedPattern, NULL, _arg__p_multiplicative_expression);
 
-	LOG("APPENDING to and_expression")
+	LOG("APPENDING to additive_expression")
 	_items.push_back(item);
 }
-void and_expression::append(std::string _arg__s_matchedPattern, equality_expression *_arg__p_equality_expression)
+void additive_expression::append(std::string _arg__s_matchedPattern, Token *_arg__p_token1, multiplicative_expression *_arg__p_multiplicative_expression)
 {
-	and_expression_item item(_arg__s_matchedPattern, _arg__p_equality_expression);
+	additive_expression_item item(_arg__s_matchedPattern, _arg__p_token1, _arg__p_multiplicative_expression);
 	_items.push_back(item);
 }
-and_expression::~and_expression()
+additive_expression::~additive_expression()
 {
 
-	LOG("DELETING and_expression")
+	LOG("DELETING additive_expression")
 	_items.clear();
 }
 
@@ -1739,30 +1739,74 @@ logical_or_expression::~logical_or_expression()
 
 
 /*----------------------------------------------------------------------------------------------------*\
-                    unary_operator
+                    translation_unit
 \*----------------------------------------------------------------------------------------------------*/
-std::string unary_operator::name()const
-{
-	return std::string("unary_operator");
-}
-
-std::string unary_operator::pattern()const
-{
-	return std::string("'&'");
-}
-
-unary_operator::unary_operator(std::string _arg__s_matchedPattern, Token *_arg__p_token1):
+translation_unit_item::translation_unit_item(std::string _arg__s_matchedPattern, external_declaration *_arg__p_external_declaration):
+					_refCount(new int(1)),
 					_s_matchedPattern(_arg__s_matchedPattern),
-					_p_token1(_arg__p_token1)
+					_p_external_declaration(_arg__p_external_declaration)
 {
 
-	LOG("\033[32mCREATING\033[0m unary_operator")
+	LOG("\033[32mCREATING[0m translation_unit_item")
+	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
-unary_operator::~unary_operator()
+	translation_unit_item::translation_unit_item(const translation_unit_item &other):
+					_refCount(other._refCount),
+					_s_matchedPattern(other._s_matchedPattern),
+					_p_external_declaration(other._p_external_declaration)
 {
 
-	LOG("\033[31mDELETING\033[0m unary_operator")
-	if (_p_token1)                     {delete(_p_token1);_p_token1=0;}
+	LOG("COPYING translation_unit_item")
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]	"<<"refCount after increment:"<<(*_refCount))
+}
+translation_unit_item::~translation_unit_item()
+{
+
+	LOG("\033[31mDELETING\033[0m(?) translation_unit_item")
+
+	(*_refCount)--;	LOG("[ "<<_refCount<<" ]	"<<"refCount after decrement:"<<(*_refCount))
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING\033[0m translation_unit_item")
+
+	delete(_refCount);_refCount=0;
+	if (_p_external_declaration)       
+	{
+		delete(_p_external_declaration);
+		_p_external_declaration=0;
+	}
+	LOG("\033[31mDELETED\033[0m translation_unit_item")
+
+}
+std::string translation_unit::name()const
+{
+	return std::string("translation_unit");
+}
+
+std::string translation_unit::pattern()const
+{
+	return std::string("translation_unit,external_declaration");
+}
+
+translation_unit::translation_unit(std::string _arg__s_matchedPattern, external_declaration *_arg__p_external_declaration)
+{
+
+	LOG("CREATING translation_unit")
+	translation_unit_item item(_arg__s_matchedPattern, _arg__p_external_declaration);
+
+	LOG("APPENDING to translation_unit")
+	_items.push_back(item);
+}
+void translation_unit::append(std::string _arg__s_matchedPattern, external_declaration *_arg__p_external_declaration)
+{
+	translation_unit_item item(_arg__s_matchedPattern, _arg__p_external_declaration);
+	_items.push_back(item);
+}
+translation_unit::~translation_unit()
+{
+
+	LOG("DELETING translation_unit")
+	_items.clear();
 }
 
 
@@ -2365,6 +2409,36 @@ direct_abstract_declarator3::~direct_abstract_declarator3()
 
 	LOG("\033[31mDELETING\033[0m direct_abstract_declarator3")
 	if (_p_abstract_declarator)        {delete(_p_abstract_declarator);_p_abstract_declarator=0;}
+}
+
+
+
+
+/*----------------------------------------------------------------------------------------------------*\
+                    constant_expression
+\*----------------------------------------------------------------------------------------------------*/
+std::string constant_expression::name()const
+{
+	return std::string("constant_expression");
+}
+
+std::string constant_expression::pattern()const
+{
+	return std::string("conditional_expression");
+}
+
+constant_expression::constant_expression(std::string _arg__s_matchedPattern, conditional_expression *_arg__p_conditional_expression):
+					_s_matchedPattern(_arg__s_matchedPattern),
+					_p_conditional_expression(_arg__p_conditional_expression)
+{
+
+	LOG("\033[32mCREATING\033[0m constant_expression")
+}
+constant_expression::~constant_expression()
+{
+
+	LOG("\033[31mDELETING\033[0m constant_expression")
+	if (_p_conditional_expression)     {delete(_p_conditional_expression);_p_conditional_expression=0;}
 }
 
 
@@ -3808,104 +3882,30 @@ specifier_qualifier_list2::~specifier_qualifier_list2()
 
 
 /*----------------------------------------------------------------------------------------------------*\
-                    translation_unit
+                    unary_operator
 \*----------------------------------------------------------------------------------------------------*/
-translation_unit_item::translation_unit_item(std::string _arg__s_matchedPattern, external_declaration *_arg__p_external_declaration):
-					_refCount(new int(1)),
+std::string unary_operator::name()const
+{
+	return std::string("unary_operator");
+}
+
+std::string unary_operator::pattern()const
+{
+	return std::string("'&'");
+}
+
+unary_operator::unary_operator(std::string _arg__s_matchedPattern, Token *_arg__p_token1):
 					_s_matchedPattern(_arg__s_matchedPattern),
-					_p_external_declaration(_arg__p_external_declaration)
+					_p_token1(_arg__p_token1)
 {
 
-	LOG("\033[32mCREATING[0m translation_unit_item")
-	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
+	LOG("\033[32mCREATING\033[0m unary_operator")
 }
-	translation_unit_item::translation_unit_item(const translation_unit_item &other):
-					_refCount(other._refCount),
-					_s_matchedPattern(other._s_matchedPattern),
-					_p_external_declaration(other._p_external_declaration)
+unary_operator::~unary_operator()
 {
 
-	LOG("COPYING translation_unit_item")
-	(*_refCount)++;
-	LOG("[ "<<_refCount<<" ]	"<<"refCount after increment:"<<(*_refCount))
-}
-translation_unit_item::~translation_unit_item()
-{
-
-	LOG("\033[31mDELETING\033[0m(?) translation_unit_item")
-
-	(*_refCount)--;	LOG("[ "<<_refCount<<" ]	"<<"refCount after decrement:"<<(*_refCount))
-	if((*_refCount)>0)return;
-	LOG("\033[31mDELETING\033[0m translation_unit_item")
-
-	delete(_refCount);_refCount=0;
-	if (_p_external_declaration)       
-	{
-		delete(_p_external_declaration);
-		_p_external_declaration=0;
-	}
-	LOG("\033[31mDELETED\033[0m translation_unit_item")
-
-}
-std::string translation_unit::name()const
-{
-	return std::string("translation_unit");
-}
-
-std::string translation_unit::pattern()const
-{
-	return std::string("translation_unit,external_declaration");
-}
-
-translation_unit::translation_unit(std::string _arg__s_matchedPattern, external_declaration *_arg__p_external_declaration)
-{
-
-	LOG("CREATING translation_unit")
-	translation_unit_item item(_arg__s_matchedPattern, _arg__p_external_declaration);
-
-	LOG("APPENDING to translation_unit")
-	_items.push_back(item);
-}
-void translation_unit::append(std::string _arg__s_matchedPattern, external_declaration *_arg__p_external_declaration)
-{
-	translation_unit_item item(_arg__s_matchedPattern, _arg__p_external_declaration);
-	_items.push_back(item);
-}
-translation_unit::~translation_unit()
-{
-
-	LOG("DELETING translation_unit")
-	_items.clear();
-}
-
-
-
-
-/*----------------------------------------------------------------------------------------------------*\
-                    constant_expression
-\*----------------------------------------------------------------------------------------------------*/
-std::string constant_expression::name()const
-{
-	return std::string("constant_expression");
-}
-
-std::string constant_expression::pattern()const
-{
-	return std::string("conditional_expression");
-}
-
-constant_expression::constant_expression(std::string _arg__s_matchedPattern, conditional_expression *_arg__p_conditional_expression):
-					_s_matchedPattern(_arg__s_matchedPattern),
-					_p_conditional_expression(_arg__p_conditional_expression)
-{
-
-	LOG("\033[32mCREATING\033[0m constant_expression")
-}
-constant_expression::~constant_expression()
-{
-
-	LOG("\033[31mDELETING\033[0m constant_expression")
-	if (_p_conditional_expression)     {delete(_p_conditional_expression);_p_conditional_expression=0;}
+	LOG("\033[31mDELETING\033[0m unary_operator")
+	if (_p_token1)                     {delete(_p_token1);_p_token1=0;}
 }
 
 
