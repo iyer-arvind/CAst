@@ -109,7 +109,7 @@ class _Constructor_(object):
 				if(i in self.nullParameterIndices):
 					val="NULL"
 				else:
-					val="new CAst::Token($<_t_str>%d)"%n if typName=="Token" else "$<_t_%s>%d"%(typName,n) 
+					val="CAst::GetToken($<_t_str>%d)"%n if typName=="Token" else "$<_t_%s>%d"%(typName,n) 
 					n+=1
 				self.parameters.append((typName,varName,p,val,i))
 			else:

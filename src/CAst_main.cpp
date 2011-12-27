@@ -14,6 +14,7 @@ int main(int argc,char **argv)
 	
 	std::cout<<"yyval:"<<root<<"\n";
 	delete root;
+	root=0;
 //	std::cout<<"deleted\n\n";
 	return 0;
 }
