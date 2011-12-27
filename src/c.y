@@ -27,7 +27,7 @@
 	CAst::struct_declaration*             _t_struct_declaration;
 	CAst::abstract_declarator*            _t_abstract_declarator;
 	CAst::iteration_statement*            _t_iteration_statement;
-	CAst::and_expression*                 _t_and_expression;
+	CAst::additive_expression*            _t_additive_expression;
 	CAst::external_declaration*           _t_external_declaration;
 	CAst::type_specifier*                 _t_type_specifier;
 	CAst::compound_statement*             _t_compound_statement;
@@ -35,13 +35,13 @@
 	CAst::pointer*                        _t_pointer;
 	CAst::selection_statement*            _t_selection_statement;
 	CAst::postfix_expression*             _t_postfix_expression;
-	CAst::additive_expression*            _t_additive_expression;
+	CAst::and_expression*                 _t_and_expression;
 	CAst::statement*                      _t_statement;
 	CAst::cast_expression*                _t_cast_expression;
 	CAst::init_declarator*                _t_init_declarator;
 	CAst::struct_declarator_list*         _t_struct_declarator_list;
 	CAst::logical_or_expression*          _t_logical_or_expression;
-	CAst::translation_unit*               _t_translation_unit;
+	CAst::unary_operator*                 _t_unary_operator;
 	CAst::relational_expression*          _t_relational_expression;
 	CAst::struct_or_union*                _t_struct_or_union;
 	CAst::enumerator*                     _t_enumerator;
@@ -52,7 +52,6 @@
 	CAst::type_qualifier_list*            _t_type_qualifier_list;
 	CAst::argument_expression_list*       _t_argument_expression_list;
 	CAst::direct_abstract_declarator*     _t_direct_abstract_declarator;
-	CAst::constant_expression*            _t_constant_expression;
 	CAst::equality_expression*            _t_equality_expression;
 	CAst::primary_expression*             _t_primary_expression;
 	CAst::declaration_specifiers*         _t_declaration_specifiers;
@@ -72,7 +71,8 @@
 	CAst::labeled_statement*              _t_labeled_statement;
 	CAst::declaration_list*               _t_declaration_list;
 	CAst::specifier_qualifier_list*       _t_specifier_qualifier_list;
-	CAst::unary_operator*                 _t_unary_operator;
+	CAst::translation_unit*               _t_translation_unit;
+	CAst::constant_expression*            _t_constant_expression;
 	CAst::initializer_list*               _t_initializer_list;
 	CAst::statement_list*                 _t_statement_list;
 	CAst::expression*                     _t_expression;
@@ -82,11 +82,11 @@
 %%
 
 storage_class_specifier
-	:TYPEDEF                                                                            {RULE_MARKER(     "storage_class_specifier");$<_t_storage_class_specifier>$=new CAst::storage_class_specifier("[TYPEDEF]",CAst::GetToken($<_t_str>1));}
-	|EXTERN                                                                             {RULE_MARKER(     "storage_class_specifier");$<_t_storage_class_specifier>$=new CAst::storage_class_specifier("[EXTERN]",CAst::GetToken($<_t_str>1));}
-	|STATIC                                                                             {RULE_MARKER(     "storage_class_specifier");$<_t_storage_class_specifier>$=new CAst::storage_class_specifier("[STATIC]",CAst::GetToken($<_t_str>1));}
-	|AUTO                                                                               {RULE_MARKER(     "storage_class_specifier");$<_t_storage_class_specifier>$=new CAst::storage_class_specifier("[AUTO]",CAst::GetToken($<_t_str>1));}
-	|REGISTER                                                                           {RULE_MARKER(     "storage_class_specifier");$<_t_storage_class_specifier>$=new CAst::storage_class_specifier("[REGISTER]",CAst::GetToken($<_t_str>1));}
+	:TYPEDEF                                                                            {RULE_MARKER(     "storage_class_specifier");$<_t_storage_class_specifier>$=new CAst::storage_class_specifier("[TYPEDEF]",CAst::GetToken(TYPEDEF,$<_t_str>1));}
+	|EXTERN                                                                             {RULE_MARKER(     "storage_class_specifier");$<_t_storage_class_specifier>$=new CAst::storage_class_specifier("[EXTERN]",CAst::GetToken(TYPEDEF,$<_t_str>1));}
+	|STATIC                                                                             {RULE_MARKER(     "storage_class_specifier");$<_t_storage_class_specifier>$=new CAst::storage_class_specifier("[STATIC]",CAst::GetToken(TYPEDEF,$<_t_str>1));}
+	|AUTO                                                                               {RULE_MARKER(     "storage_class_specifier");$<_t_storage_class_specifier>$=new CAst::storage_class_specifier("[AUTO]",CAst::GetToken(TYPEDEF,$<_t_str>1));}
+	|REGISTER                                                                           {RULE_MARKER(     "storage_class_specifier");$<_t_storage_class_specifier>$=new CAst::storage_class_specifier("[REGISTER]",CAst::GetToken(TYPEDEF,$<_t_str>1));}
 	;
 
 
@@ -104,10 +104,10 @@ type_name
 
 unary_expression
 	:SIZEOF '(' type_name ')'                                                           {RULE_MARKER(           "unary_expression1");$<_t_unary_expression>$=new CAst::unary_expression1("[SIZEOF,'(',type_name,')']",$<_t_type_name>3);}
-	|INC_OP unary_expression                                                            {RULE_MARKER(           "unary_expression2");$<_t_unary_expression>$=new CAst::unary_expression2("[INC_OP,unary_expression]",CAst::GetToken($<_t_str>1), $<_t_unary_expression>2);}
-	|DEC_OP unary_expression                                                            {RULE_MARKER(           "unary_expression2");$<_t_unary_expression>$=new CAst::unary_expression2("[DEC_OP,unary_expression]",CAst::GetToken($<_t_str>1), $<_t_unary_expression>2);}
+	|INC_OP unary_expression                                                            {RULE_MARKER(           "unary_expression2");$<_t_unary_expression>$=new CAst::unary_expression2("[INC_OP,unary_expression]",CAst::GetToken(INC_OP,$<_t_str>1), $<_t_unary_expression>2);}
+	|DEC_OP unary_expression                                                            {RULE_MARKER(           "unary_expression2");$<_t_unary_expression>$=new CAst::unary_expression2("[DEC_OP,unary_expression]",CAst::GetToken(INC_OP,$<_t_str>1), $<_t_unary_expression>2);}
 	|unary_operator cast_expression                                                     {RULE_MARKER(           "unary_expression3");$<_t_unary_expression>$=new CAst::unary_expression3("[unary_operator,cast_expression]",$<_t_unary_operator>1, $<_t_cast_expression>2);}
-	|SIZEOF unary_expression                                                            {RULE_MARKER(           "unary_expression2");$<_t_unary_expression>$=new CAst::unary_expression2("[SIZEOF,unary_expression]",CAst::GetToken($<_t_str>1), $<_t_unary_expression>2);}
+	|SIZEOF unary_expression                                                            {RULE_MARKER(           "unary_expression2");$<_t_unary_expression>$=new CAst::unary_expression2("[SIZEOF,unary_expression]",CAst::GetToken(INC_OP,$<_t_str>1), $<_t_unary_expression>2);}
 	|postfix_expression                                                                 {RULE_MARKER(           "unary_expression4");$<_t_unary_expression>$=new CAst::unary_expression4("[postfix_expression]",$<_t_postfix_expression>1);}
 	;
 
@@ -119,9 +119,9 @@ conditional_expression
 
 
 struct_or_union_specifier
-	:struct_or_union IDENTIFIER '{' struct_declaration_list '}'                         {RULE_MARKER(   "struct_or_union_specifier");$<_t_struct_or_union_specifier>$=new CAst::struct_or_union_specifier("[struct_or_union,IDENTIFIER,'{',struct_declaration_list,'}']",$<_t_struct_or_union>1, CAst::GetToken($<_t_str>2), CAst::GetToken($<_t_str>3), $<_t_struct_declaration_list>4, CAst::GetToken($<_t_str>5));}
-	|struct_or_union '{' struct_declaration_list '}'                                    {RULE_MARKER(   "struct_or_union_specifier");$<_t_struct_or_union_specifier>$=new CAst::struct_or_union_specifier("[struct_or_union,'{',struct_declaration_list,'}']",$<_t_struct_or_union>1, NULL, CAst::GetToken($<_t_str>2), $<_t_struct_declaration_list>3, CAst::GetToken($<_t_str>4));}
-	|struct_or_union IDENTIFIER                                                         {RULE_MARKER(   "struct_or_union_specifier");$<_t_struct_or_union_specifier>$=new CAst::struct_or_union_specifier("[struct_or_union,IDENTIFIER]",$<_t_struct_or_union>1, CAst::GetToken($<_t_str>2), NULL, NULL, NULL);}
+	:struct_or_union IDENTIFIER '{' struct_declaration_list '}'                         {RULE_MARKER(   "struct_or_union_specifier");$<_t_struct_or_union_specifier>$=new CAst::struct_or_union_specifier("[struct_or_union,IDENTIFIER,'{',struct_declaration_list,'}']",$<_t_struct_or_union>1, CAst::GetToken(IDENTIFIER,$<_t_str>2), CAst::GetToken('{',$<_t_str>3), $<_t_struct_declaration_list>4, CAst::GetToken('}',$<_t_str>5));}
+	|struct_or_union '{' struct_declaration_list '}'                                    {RULE_MARKER(   "struct_or_union_specifier");$<_t_struct_or_union_specifier>$=new CAst::struct_or_union_specifier("[struct_or_union,'{',struct_declaration_list,'}']",$<_t_struct_or_union>1, NULL, CAst::GetToken('{',$<_t_str>2), $<_t_struct_declaration_list>3, CAst::GetToken('}',$<_t_str>4));}
+	|struct_or_union IDENTIFIER                                                         {RULE_MARKER(   "struct_or_union_specifier");$<_t_struct_or_union_specifier>$=new CAst::struct_or_union_specifier("[struct_or_union,IDENTIFIER]",$<_t_struct_or_union>1, CAst::GetToken(IDENTIFIER,$<_t_str>2), NULL, NULL, NULL);}
 	;
 
 
@@ -132,7 +132,7 @@ exclusive_or_expression
 
 
 initializer
-	:'{' initializer_list ',' '}'                                                       {RULE_MARKER(                "initializer1");$<_t_initializer>$=new CAst::initializer1("['{',initializer_list,',','}']",$<_t_initializer_list>2, CAst::GetToken($<_t_str>3));}
+	:'{' initializer_list ',' '}'                                                       {RULE_MARKER(                "initializer1");$<_t_initializer>$=new CAst::initializer1("['{',initializer_list,',','}']",$<_t_initializer_list>2, CAst::GetToken(',',$<_t_str>3));}
 	|'{' initializer_list '}'                                                           {RULE_MARKER(                "initializer1");$<_t_initializer>$=new CAst::initializer1("['{',initializer_list,'}']",$<_t_initializer_list>2, NULL);}
 	|assignment_expression                                                              {RULE_MARKER(                "initializer2");$<_t_initializer>$=new CAst::initializer2("[assignment_expression]",$<_t_assignment_expression>1);}
 	;
@@ -145,17 +145,17 @@ struct_declaration_list
 
 
 assignment_operator
-	:'='                                                                                {RULE_MARKER(         "assignment_operator");$<_t_assignment_operator>$=new CAst::assignment_operator("['=']",CAst::GetToken($<_t_str>1));}
-	|MUL_ASSIGN                                                                         {RULE_MARKER(         "assignment_operator");$<_t_assignment_operator>$=new CAst::assignment_operator("[MUL_ASSIGN]",CAst::GetToken($<_t_str>1));}
-	|DIV_ASSIGN                                                                         {RULE_MARKER(         "assignment_operator");$<_t_assignment_operator>$=new CAst::assignment_operator("[DIV_ASSIGN]",CAst::GetToken($<_t_str>1));}
-	|MOD_ASSIGN                                                                         {RULE_MARKER(         "assignment_operator");$<_t_assignment_operator>$=new CAst::assignment_operator("[MOD_ASSIGN]",CAst::GetToken($<_t_str>1));}
-	|ADD_ASSIGN                                                                         {RULE_MARKER(         "assignment_operator");$<_t_assignment_operator>$=new CAst::assignment_operator("[ADD_ASSIGN]",CAst::GetToken($<_t_str>1));}
-	|SUB_ASSIGN                                                                         {RULE_MARKER(         "assignment_operator");$<_t_assignment_operator>$=new CAst::assignment_operator("[SUB_ASSIGN]",CAst::GetToken($<_t_str>1));}
-	|LEFT_ASSIGN                                                                        {RULE_MARKER(         "assignment_operator");$<_t_assignment_operator>$=new CAst::assignment_operator("[LEFT_ASSIGN]",CAst::GetToken($<_t_str>1));}
-	|RIGHT_ASSIGN                                                                       {RULE_MARKER(         "assignment_operator");$<_t_assignment_operator>$=new CAst::assignment_operator("[RIGHT_ASSIGN]",CAst::GetToken($<_t_str>1));}
-	|AND_ASSIGN                                                                         {RULE_MARKER(         "assignment_operator");$<_t_assignment_operator>$=new CAst::assignment_operator("[AND_ASSIGN]",CAst::GetToken($<_t_str>1));}
-	|XOR_ASSIGN                                                                         {RULE_MARKER(         "assignment_operator");$<_t_assignment_operator>$=new CAst::assignment_operator("[XOR_ASSIGN]",CAst::GetToken($<_t_str>1));}
-	|OR_ASSIGN                                                                          {RULE_MARKER(         "assignment_operator");$<_t_assignment_operator>$=new CAst::assignment_operator("[OR_ASSIGN]",CAst::GetToken($<_t_str>1));}
+	:'='                                                                                {RULE_MARKER(         "assignment_operator");$<_t_assignment_operator>$=new CAst::assignment_operator("['=']",CAst::GetToken('=',$<_t_str>1));}
+	|MUL_ASSIGN                                                                         {RULE_MARKER(         "assignment_operator");$<_t_assignment_operator>$=new CAst::assignment_operator("[MUL_ASSIGN]",CAst::GetToken('=',$<_t_str>1));}
+	|DIV_ASSIGN                                                                         {RULE_MARKER(         "assignment_operator");$<_t_assignment_operator>$=new CAst::assignment_operator("[DIV_ASSIGN]",CAst::GetToken('=',$<_t_str>1));}
+	|MOD_ASSIGN                                                                         {RULE_MARKER(         "assignment_operator");$<_t_assignment_operator>$=new CAst::assignment_operator("[MOD_ASSIGN]",CAst::GetToken('=',$<_t_str>1));}
+	|ADD_ASSIGN                                                                         {RULE_MARKER(         "assignment_operator");$<_t_assignment_operator>$=new CAst::assignment_operator("[ADD_ASSIGN]",CAst::GetToken('=',$<_t_str>1));}
+	|SUB_ASSIGN                                                                         {RULE_MARKER(         "assignment_operator");$<_t_assignment_operator>$=new CAst::assignment_operator("[SUB_ASSIGN]",CAst::GetToken('=',$<_t_str>1));}
+	|LEFT_ASSIGN                                                                        {RULE_MARKER(         "assignment_operator");$<_t_assignment_operator>$=new CAst::assignment_operator("[LEFT_ASSIGN]",CAst::GetToken('=',$<_t_str>1));}
+	|RIGHT_ASSIGN                                                                       {RULE_MARKER(         "assignment_operator");$<_t_assignment_operator>$=new CAst::assignment_operator("[RIGHT_ASSIGN]",CAst::GetToken('=',$<_t_str>1));}
+	|AND_ASSIGN                                                                         {RULE_MARKER(         "assignment_operator");$<_t_assignment_operator>$=new CAst::assignment_operator("[AND_ASSIGN]",CAst::GetToken('=',$<_t_str>1));}
+	|XOR_ASSIGN                                                                         {RULE_MARKER(         "assignment_operator");$<_t_assignment_operator>$=new CAst::assignment_operator("[XOR_ASSIGN]",CAst::GetToken('=',$<_t_str>1));}
+	|OR_ASSIGN                                                                          {RULE_MARKER(         "assignment_operator");$<_t_assignment_operator>$=new CAst::assignment_operator("[OR_ASSIGN]",CAst::GetToken('=',$<_t_str>1));}
 	;
 
 
@@ -179,9 +179,10 @@ iteration_statement
 	;
 
 
-and_expression
-	:and_expression '&' equality_expression                                             {RULE_MARKER(              "and_expression");CAST_PTR(and_expression,$<_t_and_expression>1)->append("[and_expression,'&',equality_expression]", $<_t_equality_expression>3);$<_t_and_expression>$=$<_t_and_expression>1;}
-	|equality_expression                                                                {RULE_MARKER(              "and_expression");$<_t_and_expression>$=new CAst::and_expression("[equality_expression]",$<_t_equality_expression>1);}
+additive_expression
+	:additive_expression '+' multiplicative_expression                                  {RULE_MARKER(         "additive_expression");CAST_PTR(additive_expression,$<_t_additive_expression>1)->append("[additive_expression,'+',multiplicative_expression]", CAst::GetToken('+',$<_t_str>2), $<_t_multiplicative_expression>3);$<_t_additive_expression>$=$<_t_additive_expression>1;}
+	|additive_expression '-' multiplicative_expression                                  {RULE_MARKER(         "additive_expression");CAST_PTR(additive_expression,$<_t_additive_expression>1)->append("[additive_expression,'-',multiplicative_expression]", CAst::GetToken('+',$<_t_str>2), $<_t_multiplicative_expression>3);$<_t_additive_expression>$=$<_t_additive_expression>1;}
+	|multiplicative_expression                                                          {RULE_MARKER(         "additive_expression");$<_t_additive_expression>$=new CAst::additive_expression("[multiplicative_expression]",$<_t_multiplicative_expression>1);}
 	;
 
 
@@ -192,18 +193,18 @@ external_declaration
 
 
 type_specifier
-	:VOID                                                                               {RULE_MARKER(             "type_specifier1");$<_t_type_specifier>$=new CAst::type_specifier1("[VOID]",CAst::GetToken($<_t_str>1));}
-	|CHAR                                                                               {RULE_MARKER(             "type_specifier1");$<_t_type_specifier>$=new CAst::type_specifier1("[CHAR]",CAst::GetToken($<_t_str>1));}
-	|SHORT                                                                              {RULE_MARKER(             "type_specifier1");$<_t_type_specifier>$=new CAst::type_specifier1("[SHORT]",CAst::GetToken($<_t_str>1));}
-	|INT                                                                                {RULE_MARKER(             "type_specifier1");$<_t_type_specifier>$=new CAst::type_specifier1("[INT]",CAst::GetToken($<_t_str>1));}
-	|LONG                                                                               {RULE_MARKER(             "type_specifier1");$<_t_type_specifier>$=new CAst::type_specifier1("[LONG]",CAst::GetToken($<_t_str>1));}
-	|FLOAT                                                                              {RULE_MARKER(             "type_specifier1");$<_t_type_specifier>$=new CAst::type_specifier1("[FLOAT]",CAst::GetToken($<_t_str>1));}
-	|DOUBLE                                                                             {RULE_MARKER(             "type_specifier1");$<_t_type_specifier>$=new CAst::type_specifier1("[DOUBLE]",CAst::GetToken($<_t_str>1));}
-	|SIGNED                                                                             {RULE_MARKER(             "type_specifier1");$<_t_type_specifier>$=new CAst::type_specifier1("[SIGNED]",CAst::GetToken($<_t_str>1));}
-	|UNSIGNED                                                                           {RULE_MARKER(             "type_specifier1");$<_t_type_specifier>$=new CAst::type_specifier1("[UNSIGNED]",CAst::GetToken($<_t_str>1));}
+	:VOID                                                                               {RULE_MARKER(             "type_specifier1");$<_t_type_specifier>$=new CAst::type_specifier1("[VOID]",CAst::GetToken(VOID,$<_t_str>1));}
+	|CHAR                                                                               {RULE_MARKER(             "type_specifier1");$<_t_type_specifier>$=new CAst::type_specifier1("[CHAR]",CAst::GetToken(VOID,$<_t_str>1));}
+	|SHORT                                                                              {RULE_MARKER(             "type_specifier1");$<_t_type_specifier>$=new CAst::type_specifier1("[SHORT]",CAst::GetToken(VOID,$<_t_str>1));}
+	|INT                                                                                {RULE_MARKER(             "type_specifier1");$<_t_type_specifier>$=new CAst::type_specifier1("[INT]",CAst::GetToken(VOID,$<_t_str>1));}
+	|LONG                                                                               {RULE_MARKER(             "type_specifier1");$<_t_type_specifier>$=new CAst::type_specifier1("[LONG]",CAst::GetToken(VOID,$<_t_str>1));}
+	|FLOAT                                                                              {RULE_MARKER(             "type_specifier1");$<_t_type_specifier>$=new CAst::type_specifier1("[FLOAT]",CAst::GetToken(VOID,$<_t_str>1));}
+	|DOUBLE                                                                             {RULE_MARKER(             "type_specifier1");$<_t_type_specifier>$=new CAst::type_specifier1("[DOUBLE]",CAst::GetToken(VOID,$<_t_str>1));}
+	|SIGNED                                                                             {RULE_MARKER(             "type_specifier1");$<_t_type_specifier>$=new CAst::type_specifier1("[SIGNED]",CAst::GetToken(VOID,$<_t_str>1));}
+	|UNSIGNED                                                                           {RULE_MARKER(             "type_specifier1");$<_t_type_specifier>$=new CAst::type_specifier1("[UNSIGNED]",CAst::GetToken(VOID,$<_t_str>1));}
 	|struct_or_union_specifier                                                          {RULE_MARKER(             "type_specifier2");$<_t_type_specifier>$=new CAst::type_specifier2("[struct_or_union_specifier]",$<_t_struct_or_union_specifier>1);}
 	|enum_specifier                                                                     {RULE_MARKER(             "type_specifier3");$<_t_type_specifier>$=new CAst::type_specifier3("[enum_specifier]",$<_t_enum_specifier>1);}
-	|TYPE_NAME                                                                          {RULE_MARKER(             "type_specifier1");$<_t_type_specifier>$=new CAst::type_specifier1("[TYPE_NAME]",CAst::GetToken($<_t_str>1));}
+	|TYPE_NAME                                                                          {RULE_MARKER(             "type_specifier1");$<_t_type_specifier>$=new CAst::type_specifier1("[TYPE_NAME]",CAst::GetToken(VOID,$<_t_str>1));}
 	;
 
 
@@ -230,7 +231,7 @@ pointer
 
 
 selection_statement
-	:IF '(' expression ')' statement ELSE statement                                     {RULE_MARKER(        "selection_statement1");$<_t_selection_statement>$=new CAst::selection_statement1("[IF,'(',expression,')',statement,ELSE,statement]",$<_t_expression>3, $<_t_statement>5, CAst::GetToken($<_t_str>6), $<_t_statement>7);}
+	:IF '(' expression ')' statement ELSE statement                                     {RULE_MARKER(        "selection_statement1");$<_t_selection_statement>$=new CAst::selection_statement1("[IF,'(',expression,')',statement,ELSE,statement]",$<_t_expression>3, $<_t_statement>5, CAst::GetToken(ELSE,$<_t_str>6), $<_t_statement>7);}
 	|IF '(' expression ')' statement                                                    {RULE_MARKER(        "selection_statement1");$<_t_selection_statement>$=new CAst::selection_statement1("[IF,'(',expression,')',statement]",$<_t_expression>3, $<_t_statement>5, NULL, NULL);}
 	|SWITCH '(' expression ')' statement                                                {RULE_MARKER(        "selection_statement2");$<_t_selection_statement>$=new CAst::selection_statement2("[SWITCH,'(',expression,')',statement]",$<_t_expression>3, $<_t_statement>5);}
 	;
@@ -240,18 +241,17 @@ postfix_expression
 	:postfix_expression '[' expression ']'                                              {RULE_MARKER(         "postfix_expression1");$<_t_postfix_expression>$=new CAst::postfix_expression1("[postfix_expression,'[',expression,']']",$<_t_postfix_expression>1, $<_t_expression>3);}
 	|postfix_expression '(' argument_expression_list ')'                                {RULE_MARKER(         "postfix_expression2");$<_t_postfix_expression>$=new CAst::postfix_expression2("[postfix_expression,'(',argument_expression_list,')']",$<_t_postfix_expression>1, $<_t_argument_expression_list>3);}
 	|postfix_expression '(' ')'                                                         {RULE_MARKER(         "postfix_expression2");$<_t_postfix_expression>$=new CAst::postfix_expression2("[postfix_expression,'(',')']",$<_t_postfix_expression>1, NULL);}
-	|postfix_expression '.' IDENTIFIER                                                  {RULE_MARKER(         "postfix_expression3");$<_t_postfix_expression>$=new CAst::postfix_expression3("[postfix_expression,'.',IDENTIFIER]",$<_t_postfix_expression>1, CAst::GetToken($<_t_str>2), CAst::GetToken($<_t_str>3));}
-	|postfix_expression PTR_OP IDENTIFIER                                               {RULE_MARKER(         "postfix_expression3");$<_t_postfix_expression>$=new CAst::postfix_expression3("[postfix_expression,PTR_OP,IDENTIFIER]",$<_t_postfix_expression>1, CAst::GetToken($<_t_str>2), CAst::GetToken($<_t_str>3));}
-	|postfix_expression INC_OP                                                          {RULE_MARKER(         "postfix_expression4");$<_t_postfix_expression>$=new CAst::postfix_expression4("[postfix_expression,INC_OP]",$<_t_postfix_expression>1, CAst::GetToken($<_t_str>2));}
-	|postfix_expression DEC_OP                                                          {RULE_MARKER(         "postfix_expression4");$<_t_postfix_expression>$=new CAst::postfix_expression4("[postfix_expression,DEC_OP]",$<_t_postfix_expression>1, CAst::GetToken($<_t_str>2));}
+	|postfix_expression '.' IDENTIFIER                                                  {RULE_MARKER(         "postfix_expression3");$<_t_postfix_expression>$=new CAst::postfix_expression3("[postfix_expression,'.',IDENTIFIER]",$<_t_postfix_expression>1, CAst::GetToken('.',$<_t_str>2), CAst::GetToken(IDENTIFIER,$<_t_str>3));}
+	|postfix_expression PTR_OP IDENTIFIER                                               {RULE_MARKER(         "postfix_expression3");$<_t_postfix_expression>$=new CAst::postfix_expression3("[postfix_expression,PTR_OP,IDENTIFIER]",$<_t_postfix_expression>1, CAst::GetToken('.',$<_t_str>2), CAst::GetToken(IDENTIFIER,$<_t_str>3));}
+	|postfix_expression INC_OP                                                          {RULE_MARKER(         "postfix_expression4");$<_t_postfix_expression>$=new CAst::postfix_expression4("[postfix_expression,INC_OP]",$<_t_postfix_expression>1, CAst::GetToken(INC_OP,$<_t_str>2));}
+	|postfix_expression DEC_OP                                                          {RULE_MARKER(         "postfix_expression4");$<_t_postfix_expression>$=new CAst::postfix_expression4("[postfix_expression,DEC_OP]",$<_t_postfix_expression>1, CAst::GetToken(INC_OP,$<_t_str>2));}
 	|primary_expression                                                                 {RULE_MARKER(         "postfix_expression5");$<_t_postfix_expression>$=new CAst::postfix_expression5("[primary_expression]",$<_t_primary_expression>1);}
 	;
 
 
-additive_expression
-	:additive_expression '+' multiplicative_expression                                  {RULE_MARKER(         "additive_expression");CAST_PTR(additive_expression,$<_t_additive_expression>1)->append("[additive_expression,'+',multiplicative_expression]", CAst::GetToken($<_t_str>2), $<_t_multiplicative_expression>3);$<_t_additive_expression>$=$<_t_additive_expression>1;}
-	|additive_expression '-' multiplicative_expression                                  {RULE_MARKER(         "additive_expression");CAST_PTR(additive_expression,$<_t_additive_expression>1)->append("[additive_expression,'-',multiplicative_expression]", CAst::GetToken($<_t_str>2), $<_t_multiplicative_expression>3);$<_t_additive_expression>$=$<_t_additive_expression>1;}
-	|multiplicative_expression                                                          {RULE_MARKER(         "additive_expression");$<_t_additive_expression>$=new CAst::additive_expression("[multiplicative_expression]",$<_t_multiplicative_expression>1);}
+and_expression
+	:and_expression '&' equality_expression                                             {RULE_MARKER(              "and_expression");CAST_PTR(and_expression,$<_t_and_expression>1)->append("[and_expression,'&',equality_expression]", $<_t_equality_expression>3);$<_t_and_expression>$=$<_t_and_expression>1;}
+	|equality_expression                                                                {RULE_MARKER(              "and_expression");$<_t_and_expression>$=new CAst::and_expression("[equality_expression]",$<_t_equality_expression>1);}
 	;
 
 
@@ -272,7 +272,7 @@ cast_expression
 
 
 init_declarator
-	:declarator '=' initializer                                                         {RULE_MARKER(             "init_declarator");$<_t_init_declarator>$=new CAst::init_declarator("[declarator,'=',initializer]",$<_t_declarator>1, CAst::GetToken($<_t_str>2), $<_t_initializer>3);}
+	:declarator '=' initializer                                                         {RULE_MARKER(             "init_declarator");$<_t_init_declarator>$=new CAst::init_declarator("[declarator,'=',initializer]",$<_t_declarator>1, CAst::GetToken('=',$<_t_str>2), $<_t_initializer>3);}
 	|declarator                                                                         {RULE_MARKER(             "init_declarator");$<_t_init_declarator>$=new CAst::init_declarator("[declarator]",$<_t_declarator>1, NULL, NULL);}
 	;
 
@@ -289,30 +289,34 @@ logical_or_expression
 	;
 
 
-translation_unit
-	:translation_unit external_declaration                                              {RULE_MARKER(            "translation_unit");CAST_PTR(translation_unit,$<_t_translation_unit>1)->append("[translation_unit,external_declaration]", $<_t_external_declaration>2);$<_t_translation_unit>$=$<_t_translation_unit>1;}
-	|external_declaration                                                               {RULE_MARKER(            "translation_unit");$<_t_translation_unit>$=new CAst::translation_unit("[external_declaration]",$<_t_external_declaration>1);root=$<_t_translation_unit>$;}
+unary_operator
+	:'&'                                                                                {RULE_MARKER(              "unary_operator");$<_t_unary_operator>$=new CAst::unary_operator("['&']",CAst::GetToken('&',$<_t_str>1));}
+	|'*'                                                                                {RULE_MARKER(              "unary_operator");$<_t_unary_operator>$=new CAst::unary_operator("['*']",CAst::GetToken('&',$<_t_str>1));}
+	|'+'                                                                                {RULE_MARKER(              "unary_operator");$<_t_unary_operator>$=new CAst::unary_operator("['+']",CAst::GetToken('&',$<_t_str>1));}
+	|'-'                                                                                {RULE_MARKER(              "unary_operator");$<_t_unary_operator>$=new CAst::unary_operator("['-']",CAst::GetToken('&',$<_t_str>1));}
+	|'~'                                                                                {RULE_MARKER(              "unary_operator");$<_t_unary_operator>$=new CAst::unary_operator("['~']",CAst::GetToken('&',$<_t_str>1));}
+	|'!'                                                                                {RULE_MARKER(              "unary_operator");$<_t_unary_operator>$=new CAst::unary_operator("['!']",CAst::GetToken('&',$<_t_str>1));}
 	;
 
 
 relational_expression
-	:relational_expression '<' shift_expression                                         {RULE_MARKER(       "relational_expression");CAST_PTR(relational_expression,$<_t_relational_expression>1)->append("[relational_expression,'<',shift_expression]", CAst::GetToken($<_t_str>2), $<_t_shift_expression>3);$<_t_relational_expression>$=$<_t_relational_expression>1;}
-	|relational_expression '>' shift_expression                                         {RULE_MARKER(       "relational_expression");CAST_PTR(relational_expression,$<_t_relational_expression>1)->append("[relational_expression,'>',shift_expression]", CAst::GetToken($<_t_str>2), $<_t_shift_expression>3);$<_t_relational_expression>$=$<_t_relational_expression>1;}
-	|relational_expression LE_OP shift_expression                                       {RULE_MARKER(       "relational_expression");CAST_PTR(relational_expression,$<_t_relational_expression>1)->append("[relational_expression,LE_OP,shift_expression]", CAst::GetToken($<_t_str>2), $<_t_shift_expression>3);$<_t_relational_expression>$=$<_t_relational_expression>1;}
-	|relational_expression GE_OP shift_expression                                       {RULE_MARKER(       "relational_expression");CAST_PTR(relational_expression,$<_t_relational_expression>1)->append("[relational_expression,GE_OP,shift_expression]", CAst::GetToken($<_t_str>2), $<_t_shift_expression>3);$<_t_relational_expression>$=$<_t_relational_expression>1;}
+	:relational_expression '<' shift_expression                                         {RULE_MARKER(       "relational_expression");CAST_PTR(relational_expression,$<_t_relational_expression>1)->append("[relational_expression,'<',shift_expression]", CAst::GetToken('<',$<_t_str>2), $<_t_shift_expression>3);$<_t_relational_expression>$=$<_t_relational_expression>1;}
+	|relational_expression '>' shift_expression                                         {RULE_MARKER(       "relational_expression");CAST_PTR(relational_expression,$<_t_relational_expression>1)->append("[relational_expression,'>',shift_expression]", CAst::GetToken('<',$<_t_str>2), $<_t_shift_expression>3);$<_t_relational_expression>$=$<_t_relational_expression>1;}
+	|relational_expression LE_OP shift_expression                                       {RULE_MARKER(       "relational_expression");CAST_PTR(relational_expression,$<_t_relational_expression>1)->append("[relational_expression,LE_OP,shift_expression]", CAst::GetToken('<',$<_t_str>2), $<_t_shift_expression>3);$<_t_relational_expression>$=$<_t_relational_expression>1;}
+	|relational_expression GE_OP shift_expression                                       {RULE_MARKER(       "relational_expression");CAST_PTR(relational_expression,$<_t_relational_expression>1)->append("[relational_expression,GE_OP,shift_expression]", CAst::GetToken('<',$<_t_str>2), $<_t_shift_expression>3);$<_t_relational_expression>$=$<_t_relational_expression>1;}
 	|shift_expression                                                                   {RULE_MARKER(       "relational_expression");$<_t_relational_expression>$=new CAst::relational_expression("[shift_expression]",$<_t_shift_expression>1);}
 	;
 
 
 struct_or_union
-	:STRUCT                                                                             {RULE_MARKER(             "struct_or_union");$<_t_struct_or_union>$=new CAst::struct_or_union("[STRUCT]",CAst::GetToken($<_t_str>1));}
-	|UNION                                                                              {RULE_MARKER(             "struct_or_union");$<_t_struct_or_union>$=new CAst::struct_or_union("[UNION]",CAst::GetToken($<_t_str>1));}
+	:STRUCT                                                                             {RULE_MARKER(             "struct_or_union");$<_t_struct_or_union>$=new CAst::struct_or_union("[STRUCT]",CAst::GetToken(STRUCT,$<_t_str>1));}
+	|UNION                                                                              {RULE_MARKER(             "struct_or_union");$<_t_struct_or_union>$=new CAst::struct_or_union("[UNION]",CAst::GetToken(STRUCT,$<_t_str>1));}
 	;
 
 
 enumerator
-	:IDENTIFIER '=' constant_expression                                                 {RULE_MARKER(                  "enumerator");$<_t_enumerator>$=new CAst::enumerator("[IDENTIFIER,'=',constant_expression]",CAst::GetToken($<_t_str>1), CAst::GetToken($<_t_str>2), $<_t_constant_expression>3);}
-	|IDENTIFIER                                                                         {RULE_MARKER(                  "enumerator");$<_t_enumerator>$=new CAst::enumerator("[IDENTIFIER]",CAst::GetToken($<_t_str>1), NULL, NULL);}
+	:IDENTIFIER '=' constant_expression                                                 {RULE_MARKER(                  "enumerator");$<_t_enumerator>$=new CAst::enumerator("[IDENTIFIER,'=',constant_expression]",CAst::GetToken(IDENTIFIER,$<_t_str>1), CAst::GetToken('=',$<_t_str>2), $<_t_constant_expression>3);}
+	|IDENTIFIER                                                                         {RULE_MARKER(                  "enumerator");$<_t_enumerator>$=new CAst::enumerator("[IDENTIFIER]",CAst::GetToken(IDENTIFIER,$<_t_str>1), NULL, NULL);}
 	;
 
 
@@ -323,7 +327,7 @@ assignment_expression
 
 
 parameter_type_list
-	:parameter_list ',' ELLIPSIS                                                        {RULE_MARKER(         "parameter_type_list");$<_t_parameter_type_list>$=new CAst::parameter_type_list("[parameter_list,',',ELLIPSIS]",$<_t_parameter_list>1, CAst::GetToken($<_t_str>2), CAst::GetToken($<_t_str>3));}
+	:parameter_list ',' ELLIPSIS                                                        {RULE_MARKER(         "parameter_type_list");$<_t_parameter_type_list>$=new CAst::parameter_type_list("[parameter_list,',',ELLIPSIS]",$<_t_parameter_list>1, CAst::GetToken(',',$<_t_str>2), CAst::GetToken(ELLIPSIS,$<_t_str>3));}
 	|parameter_list                                                                     {RULE_MARKER(         "parameter_type_list");$<_t_parameter_type_list>$=new CAst::parameter_type_list("[parameter_list]",$<_t_parameter_list>1, NULL, NULL);}
 	;
 
@@ -336,9 +340,9 @@ parameter_declaration
 
 
 multiplicative_expression
-	:multiplicative_expression '*' cast_expression                                      {RULE_MARKER(   "multiplicative_expression");CAST_PTR(multiplicative_expression,$<_t_multiplicative_expression>1)->append("[multiplicative_expression,'*',cast_expression]", CAst::GetToken($<_t_str>2), $<_t_cast_expression>3);$<_t_multiplicative_expression>$=$<_t_multiplicative_expression>1;}
-	|multiplicative_expression '/' cast_expression                                      {RULE_MARKER(   "multiplicative_expression");CAST_PTR(multiplicative_expression,$<_t_multiplicative_expression>1)->append("[multiplicative_expression,'/',cast_expression]", CAst::GetToken($<_t_str>2), $<_t_cast_expression>3);$<_t_multiplicative_expression>$=$<_t_multiplicative_expression>1;}
-	|multiplicative_expression '%' cast_expression                                      {RULE_MARKER(   "multiplicative_expression");CAST_PTR(multiplicative_expression,$<_t_multiplicative_expression>1)->append("[multiplicative_expression,'%',cast_expression]", CAst::GetToken($<_t_str>2), $<_t_cast_expression>3);$<_t_multiplicative_expression>$=$<_t_multiplicative_expression>1;}
+	:multiplicative_expression '*' cast_expression                                      {RULE_MARKER(   "multiplicative_expression");CAST_PTR(multiplicative_expression,$<_t_multiplicative_expression>1)->append("[multiplicative_expression,'*',cast_expression]", CAst::GetToken('*',$<_t_str>2), $<_t_cast_expression>3);$<_t_multiplicative_expression>$=$<_t_multiplicative_expression>1;}
+	|multiplicative_expression '/' cast_expression                                      {RULE_MARKER(   "multiplicative_expression");CAST_PTR(multiplicative_expression,$<_t_multiplicative_expression>1)->append("[multiplicative_expression,'/',cast_expression]", CAst::GetToken('*',$<_t_str>2), $<_t_cast_expression>3);$<_t_multiplicative_expression>$=$<_t_multiplicative_expression>1;}
+	|multiplicative_expression '%' cast_expression                                      {RULE_MARKER(   "multiplicative_expression");CAST_PTR(multiplicative_expression,$<_t_multiplicative_expression>1)->append("[multiplicative_expression,'%',cast_expression]", CAst::GetToken('*',$<_t_str>2), $<_t_cast_expression>3);$<_t_multiplicative_expression>$=$<_t_multiplicative_expression>1;}
 	|cast_expression                                                                    {RULE_MARKER(   "multiplicative_expression");$<_t_multiplicative_expression>$=new CAst::multiplicative_expression("[cast_expression]",$<_t_cast_expression>1);}
 	;
 
@@ -368,23 +372,18 @@ direct_abstract_declarator
 	;
 
 
-constant_expression
-	:conditional_expression                                                             {RULE_MARKER(         "constant_expression");$<_t_constant_expression>$=new CAst::constant_expression("[conditional_expression]",$<_t_conditional_expression>1);}
-	;
-
-
 equality_expression
-	:equality_expression EQ_OP relational_expression                                    {RULE_MARKER(         "equality_expression");CAST_PTR(equality_expression,$<_t_equality_expression>1)->append("[equality_expression,EQ_OP,relational_expression]", CAst::GetToken($<_t_str>2), $<_t_relational_expression>3);$<_t_equality_expression>$=$<_t_equality_expression>1;}
-	|equality_expression NE_OP relational_expression                                    {RULE_MARKER(         "equality_expression");CAST_PTR(equality_expression,$<_t_equality_expression>1)->append("[equality_expression,NE_OP,relational_expression]", CAst::GetToken($<_t_str>2), $<_t_relational_expression>3);$<_t_equality_expression>$=$<_t_equality_expression>1;}
+	:equality_expression EQ_OP relational_expression                                    {RULE_MARKER(         "equality_expression");CAST_PTR(equality_expression,$<_t_equality_expression>1)->append("[equality_expression,EQ_OP,relational_expression]", CAst::GetToken(EQ_OP,$<_t_str>2), $<_t_relational_expression>3);$<_t_equality_expression>$=$<_t_equality_expression>1;}
+	|equality_expression NE_OP relational_expression                                    {RULE_MARKER(         "equality_expression");CAST_PTR(equality_expression,$<_t_equality_expression>1)->append("[equality_expression,NE_OP,relational_expression]", CAst::GetToken(EQ_OP,$<_t_str>2), $<_t_relational_expression>3);$<_t_equality_expression>$=$<_t_equality_expression>1;}
 	|relational_expression                                                              {RULE_MARKER(         "equality_expression");$<_t_equality_expression>$=new CAst::equality_expression("[relational_expression]",$<_t_relational_expression>1);}
 	;
 
 
 primary_expression
 	:'(' expression ')'                                                                 {RULE_MARKER(         "primary_expression1");$<_t_primary_expression>$=new CAst::primary_expression1("['(',expression,')']",$<_t_expression>2);}
-	|IDENTIFIER                                                                         {RULE_MARKER(         "primary_expression2");$<_t_primary_expression>$=new CAst::primary_expression2("[IDENTIFIER]",CAst::GetToken($<_t_str>1));}
-	|CONSTANT                                                                           {RULE_MARKER(         "primary_expression2");$<_t_primary_expression>$=new CAst::primary_expression2("[CONSTANT]",CAst::GetToken($<_t_str>1));}
-	|STRING_LITERAL                                                                     {RULE_MARKER(         "primary_expression2");$<_t_primary_expression>$=new CAst::primary_expression2("[STRING_LITERAL]",CAst::GetToken($<_t_str>1));}
+	|IDENTIFIER                                                                         {RULE_MARKER(         "primary_expression2");$<_t_primary_expression>$=new CAst::primary_expression2("[IDENTIFIER]",CAst::GetToken(IDENTIFIER,$<_t_str>1));}
+	|CONSTANT                                                                           {RULE_MARKER(         "primary_expression2");$<_t_primary_expression>$=new CAst::primary_expression2("[CONSTANT]",CAst::GetToken(IDENTIFIER,$<_t_str>1));}
+	|STRING_LITERAL                                                                     {RULE_MARKER(         "primary_expression2");$<_t_primary_expression>$=new CAst::primary_expression2("[STRING_LITERAL]",CAst::GetToken(IDENTIFIER,$<_t_str>1));}
 	;
 
 
@@ -411,7 +410,7 @@ direct_declarator
 	|'(' declarator ')'                                                                 {RULE_MARKER(          "direct_declarator4");$<_t_direct_declarator>$=new CAst::direct_declarator4("['(',declarator,')']",$<_t_declarator>2);}
 	|direct_declarator '[' ']'                                                          {RULE_MARKER(          "direct_declarator1");$<_t_direct_declarator>$=new CAst::direct_declarator1("[direct_declarator,'[',']']",$<_t_direct_declarator>1, NULL);}
 	|direct_declarator '(' ')'                                                          {RULE_MARKER(          "direct_declarator2");$<_t_direct_declarator>$=new CAst::direct_declarator2("[direct_declarator,'(',')']",$<_t_direct_declarator>1, NULL);}
-	|IDENTIFIER                                                                         {RULE_MARKER(          "direct_declarator5");$<_t_direct_declarator>$=new CAst::direct_declarator5("[IDENTIFIER]",CAst::GetToken($<_t_str>1));}
+	|IDENTIFIER                                                                         {RULE_MARKER(          "direct_declarator5");$<_t_direct_declarator>$=new CAst::direct_declarator5("[IDENTIFIER]",CAst::GetToken(IDENTIFIER,$<_t_str>1));}
 	;
 
 
@@ -428,30 +427,30 @@ init_declarator_list
 
 
 shift_expression
-	:shift_expression LEFT_OP additive_expression                                       {RULE_MARKER(            "shift_expression");CAST_PTR(shift_expression,$<_t_shift_expression>1)->append("[shift_expression,LEFT_OP,additive_expression]", CAst::GetToken($<_t_str>2), $<_t_additive_expression>3);$<_t_shift_expression>$=$<_t_shift_expression>1;}
-	|shift_expression RIGHT_OP additive_expression                                      {RULE_MARKER(            "shift_expression");CAST_PTR(shift_expression,$<_t_shift_expression>1)->append("[shift_expression,RIGHT_OP,additive_expression]", CAst::GetToken($<_t_str>2), $<_t_additive_expression>3);$<_t_shift_expression>$=$<_t_shift_expression>1;}
+	:shift_expression LEFT_OP additive_expression                                       {RULE_MARKER(            "shift_expression");CAST_PTR(shift_expression,$<_t_shift_expression>1)->append("[shift_expression,LEFT_OP,additive_expression]", CAst::GetToken(LEFT_OP,$<_t_str>2), $<_t_additive_expression>3);$<_t_shift_expression>$=$<_t_shift_expression>1;}
+	|shift_expression RIGHT_OP additive_expression                                      {RULE_MARKER(            "shift_expression");CAST_PTR(shift_expression,$<_t_shift_expression>1)->append("[shift_expression,RIGHT_OP,additive_expression]", CAst::GetToken(LEFT_OP,$<_t_str>2), $<_t_additive_expression>3);$<_t_shift_expression>$=$<_t_shift_expression>1;}
 	|additive_expression                                                                {RULE_MARKER(            "shift_expression");$<_t_shift_expression>$=new CAst::shift_expression("[additive_expression]",$<_t_additive_expression>1);}
 	;
 
 
 identifier_list
-	:identifier_list ',' IDENTIFIER                                                     {RULE_MARKER(             "identifier_list");CAST_PTR(identifier_list,$<_t_identifier_list>1)->append("[identifier_list,',',IDENTIFIER]", CAst::GetToken($<_t_str>3));$<_t_identifier_list>$=$<_t_identifier_list>1;}
-	|IDENTIFIER                                                                         {RULE_MARKER(             "identifier_list");$<_t_identifier_list>$=new CAst::identifier_list("[IDENTIFIER]",$<_t_Token>1);}
+	:identifier_list ',' IDENTIFIER                                                     {RULE_MARKER(             "identifier_list");CAST_PTR(identifier_list,$<_t_identifier_list>1)->append("[identifier_list,',',IDENTIFIER]", CAst::GetToken(IDENTIFIER,$<_t_str>3));$<_t_identifier_list>$=$<_t_identifier_list>1;}
+	|IDENTIFIER                                                                         {RULE_MARKER(             "identifier_list");$<_t_identifier_list>$=new CAst::identifier_list("[IDENTIFIER]",CAst::GetToken(IDENTIFIER,$<_t_str>1));}
 	;
 
 
 jump_statement
-	:GOTO IDENTIFIER ';'                                                                {RULE_MARKER(             "jump_statement1");$<_t_jump_statement>$=new CAst::jump_statement1("[GOTO,IDENTIFIER,';']",CAst::GetToken($<_t_str>2));}
+	:GOTO IDENTIFIER ';'                                                                {RULE_MARKER(             "jump_statement1");$<_t_jump_statement>$=new CAst::jump_statement1("[GOTO,IDENTIFIER,';']",CAst::GetToken(IDENTIFIER,$<_t_str>2));}
 	|RETURN expression ';'                                                              {RULE_MARKER(             "jump_statement2");$<_t_jump_statement>$=new CAst::jump_statement2("[RETURN,expression,';']",$<_t_expression>2);}
-	|CONTINUE ';'                                                                       {RULE_MARKER(             "jump_statement3");$<_t_jump_statement>$=new CAst::jump_statement3("[CONTINUE,';']",CAst::GetToken($<_t_str>1));}
-	|BREAK ';'                                                                          {RULE_MARKER(             "jump_statement3");$<_t_jump_statement>$=new CAst::jump_statement3("[BREAK,';']",CAst::GetToken($<_t_str>1));}
+	|CONTINUE ';'                                                                       {RULE_MARKER(             "jump_statement3");$<_t_jump_statement>$=new CAst::jump_statement3("[CONTINUE,';']",CAst::GetToken(CONTINUE,$<_t_str>1));}
+	|BREAK ';'                                                                          {RULE_MARKER(             "jump_statement3");$<_t_jump_statement>$=new CAst::jump_statement3("[BREAK,';']",CAst::GetToken(CONTINUE,$<_t_str>1));}
 	|RETURN ';'                                                                         {RULE_MARKER(             "jump_statement2");$<_t_jump_statement>$=new CAst::jump_statement2("[RETURN,';']",NULL);}
 	;
 
 
 struct_declarator
-	:declarator ':' constant_expression                                                 {RULE_MARKER(           "struct_declarator");$<_t_struct_declarator>$=new CAst::struct_declarator("[declarator,':',constant_expression]",$<_t_declarator>1, CAst::GetToken($<_t_str>2), $<_t_constant_expression>3);}
-	|':' constant_expression                                                            {RULE_MARKER(           "struct_declarator");$<_t_struct_declarator>$=new CAst::struct_declarator("[':',constant_expression]",NULL, CAst::GetToken($<_t_str>1), $<_t_constant_expression>2);}
+	:declarator ':' constant_expression                                                 {RULE_MARKER(           "struct_declarator");$<_t_struct_declarator>$=new CAst::struct_declarator("[declarator,':',constant_expression]",$<_t_declarator>1, CAst::GetToken(':',$<_t_str>2), $<_t_constant_expression>3);}
+	|':' constant_expression                                                            {RULE_MARKER(           "struct_declarator");$<_t_struct_declarator>$=new CAst::struct_declarator("[':',constant_expression]",NULL, CAst::GetToken(':',$<_t_str>1), $<_t_constant_expression>2);}
 	|declarator                                                                         {RULE_MARKER(           "struct_declarator");$<_t_struct_declarator>$=new CAst::struct_declarator("[declarator]",$<_t_declarator>1, NULL, NULL);}
 	;
 
@@ -471,15 +470,15 @@ parameter_list
 
 
 enum_specifier
-	:ENUM IDENTIFIER '{' enumerator_list '}'                                            {RULE_MARKER(              "enum_specifier");$<_t_enum_specifier>$=new CAst::enum_specifier("[ENUM,IDENTIFIER,'{',enumerator_list,'}']",CAst::GetToken($<_t_str>2), CAst::GetToken($<_t_str>3), $<_t_enumerator_list>4, CAst::GetToken($<_t_str>5));}
-	|ENUM '{' enumerator_list '}'                                                       {RULE_MARKER(              "enum_specifier");$<_t_enum_specifier>$=new CAst::enum_specifier("[ENUM,'{',enumerator_list,'}']",NULL, CAst::GetToken($<_t_str>2), $<_t_enumerator_list>3, CAst::GetToken($<_t_str>4));}
-	|ENUM IDENTIFIER                                                                    {RULE_MARKER(              "enum_specifier");$<_t_enum_specifier>$=new CAst::enum_specifier("[ENUM,IDENTIFIER]",CAst::GetToken($<_t_str>2), NULL, NULL, NULL);}
+	:ENUM IDENTIFIER '{' enumerator_list '}'                                            {RULE_MARKER(              "enum_specifier");$<_t_enum_specifier>$=new CAst::enum_specifier("[ENUM,IDENTIFIER,'{',enumerator_list,'}']",CAst::GetToken(IDENTIFIER,$<_t_str>2), CAst::GetToken('{',$<_t_str>3), $<_t_enumerator_list>4, CAst::GetToken('}',$<_t_str>5));}
+	|ENUM '{' enumerator_list '}'                                                       {RULE_MARKER(              "enum_specifier");$<_t_enum_specifier>$=new CAst::enum_specifier("[ENUM,'{',enumerator_list,'}']",NULL, CAst::GetToken('{',$<_t_str>2), $<_t_enumerator_list>3, CAst::GetToken('}',$<_t_str>4));}
+	|ENUM IDENTIFIER                                                                    {RULE_MARKER(              "enum_specifier");$<_t_enum_specifier>$=new CAst::enum_specifier("[ENUM,IDENTIFIER]",CAst::GetToken(IDENTIFIER,$<_t_str>2), NULL, NULL, NULL);}
 	;
 
 
 type_qualifier
-	:CONST                                                                              {RULE_MARKER(              "type_qualifier");$<_t_type_qualifier>$=new CAst::type_qualifier("[CONST]",CAst::GetToken($<_t_str>1));}
-	|VOLATILE                                                                           {RULE_MARKER(              "type_qualifier");$<_t_type_qualifier>$=new CAst::type_qualifier("[VOLATILE]",CAst::GetToken($<_t_str>1));}
+	:CONST                                                                              {RULE_MARKER(              "type_qualifier");$<_t_type_qualifier>$=new CAst::type_qualifier("[CONST]",CAst::GetToken(CONST,$<_t_str>1));}
+	|VOLATILE                                                                           {RULE_MARKER(              "type_qualifier");$<_t_type_qualifier>$=new CAst::type_qualifier("[VOLATILE]",CAst::GetToken(CONST,$<_t_str>1));}
 	;
 
 
@@ -491,8 +490,8 @@ enumerator_list
 
 labeled_statement
 	:CASE constant_expression ':' statement                                             {RULE_MARKER(          "labeled_statement1");$<_t_labeled_statement>$=new CAst::labeled_statement1("[CASE,constant_expression,':',statement]",$<_t_constant_expression>2, $<_t_statement>4);}
-	|IDENTIFIER ':' statement                                                           {RULE_MARKER(          "labeled_statement2");$<_t_labeled_statement>$=new CAst::labeled_statement2("[IDENTIFIER,':',statement]",CAst::GetToken($<_t_str>1), $<_t_statement>3);}
-	|DEFAULT ':' statement                                                              {RULE_MARKER(          "labeled_statement2");$<_t_labeled_statement>$=new CAst::labeled_statement2("[DEFAULT,':',statement]",CAst::GetToken($<_t_str>1), $<_t_statement>3);}
+	|IDENTIFIER ':' statement                                                           {RULE_MARKER(          "labeled_statement2");$<_t_labeled_statement>$=new CAst::labeled_statement2("[IDENTIFIER,':',statement]",CAst::GetToken(IDENTIFIER,$<_t_str>1), $<_t_statement>3);}
+	|DEFAULT ':' statement                                                              {RULE_MARKER(          "labeled_statement2");$<_t_labeled_statement>$=new CAst::labeled_statement2("[DEFAULT,':',statement]",CAst::GetToken(IDENTIFIER,$<_t_str>1), $<_t_statement>3);}
 	;
 
 
@@ -510,13 +509,14 @@ specifier_qualifier_list
 	;
 
 
-unary_operator
-	:'&'                                                                                {RULE_MARKER(              "unary_operator");$<_t_unary_operator>$=new CAst::unary_operator("['&']",CAst::GetToken($<_t_str>1));}
-	|'*'                                                                                {RULE_MARKER(              "unary_operator");$<_t_unary_operator>$=new CAst::unary_operator("['*']",CAst::GetToken($<_t_str>1));}
-	|'+'                                                                                {RULE_MARKER(              "unary_operator");$<_t_unary_operator>$=new CAst::unary_operator("['+']",CAst::GetToken($<_t_str>1));}
-	|'-'                                                                                {RULE_MARKER(              "unary_operator");$<_t_unary_operator>$=new CAst::unary_operator("['-']",CAst::GetToken($<_t_str>1));}
-	|'~'                                                                                {RULE_MARKER(              "unary_operator");$<_t_unary_operator>$=new CAst::unary_operator("['~']",CAst::GetToken($<_t_str>1));}
-	|'!'                                                                                {RULE_MARKER(              "unary_operator");$<_t_unary_operator>$=new CAst::unary_operator("['!']",CAst::GetToken($<_t_str>1));}
+translation_unit
+	:translation_unit external_declaration                                              {RULE_MARKER(            "translation_unit");CAST_PTR(translation_unit,$<_t_translation_unit>1)->append("[translation_unit,external_declaration]", $<_t_external_declaration>2);$<_t_translation_unit>$=$<_t_translation_unit>1;}
+	|external_declaration                                                               {RULE_MARKER(            "translation_unit");$<_t_translation_unit>$=new CAst::translation_unit("[external_declaration]",$<_t_external_declaration>1);root=$<_t_translation_unit>$;}
+	;
+
+
+constant_expression
+	:conditional_expression                                                             {RULE_MARKER(         "constant_expression");$<_t_constant_expression>$=new CAst::constant_expression("[conditional_expression]",$<_t_conditional_expression>1);}
 	;
 
 

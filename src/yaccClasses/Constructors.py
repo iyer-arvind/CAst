@@ -58,7 +58,7 @@ class _Constructor_(object):
 		from Rule import Rule
 		st=self.className
 		st+="\033[0m("
-		st+=", ".join([ "\033[1m%s\033[0m"%(v if v!='NULL' else "\033[38;5;236m"+v+"\033[0m") for t,n,p,v,i in self.parameters])
+		st+=", ".join([ "\033[1m%s\033[0m"%(v if v!='NULL' else "\033[38;5;236m"+v+"\033[0m") for t,n,p,v,i,v1 in self.parameters])
 		st+=")"
 		return st
 
@@ -80,9 +80,10 @@ class _Constructor_(object):
 		fh.write("{")
 		fh.write("RULE_MARKER(%30s);"%("\""+self.className+"\""))
 		fh.write("$<_t_%s>$=new CAst::%s"%(self.baseClassName,self.className)+"(\"%s\","%repr(self.originalPattern))
-		fh.write(", ".join([ "%s"%(v if v!="NULL" else "NULL") for t,n,p,v,i in self.parameters]))
+		fh.write(", ".join([ "%s"%(v if v!="NULL" else "NULL") for t,n,p,v,i,v1 in self.parameters]))
 		fh.write(");")
 		if(isStart):fh.write("root=$<_t_%s>$;"%self.className)
+		#fh.write(";".join([ "delete %s;%s=0;"%(v1,v1) for t,n,p,v,i,v1 in self.parameters if t =='Token' and p.typeName=='tok' and v!='NULL']))
 		fh.write("}")
 
 		
@@ -106,12 +107,15 @@ class _Constructor_(object):
 				else:
 					typName="Token"
 					varName="_p_token%d"%(counts[t]+1)
+
 				if(i in self.nullParameterIndices):
 					val="NULL"
+					val1="NULL"
 				else:
-					val="CAst::GetToken($<_t_str>%d)"%n if typName=="Token" else "$<_t_%s>%d"%(typName,n) 
+					val="CAst::GetToken(%s,$<_t_str>%d)"%((p.tokName if p.typeName=='tok' else "\'%s\'"%p.tokName),n) if typName=="Token" else "$<_t_%s>%d"%(typName,n) 
+					val1="$<_t_str>%d"%n
 					n+=1
-				self.parameters.append((typName,varName,p,val,i))
+				self.parameters.append((typName,varName,p,val,i,val1))
 			else:
 				if(i not in self.nullParameterIndices):
 					n+=1
@@ -213,7 +217,7 @@ class __ListAccumulateConstructor(_Constructor_):
 		fh.write("RULE_MARKER(%30s);"%("\""+self.className+"\""))
 		fh.write("CAST_PTR(%s,$<_t_%s>%d)->append(\"%s\", "%(self.className,self.baseClassName,self.selfIndex+1,repr(self.originalPattern)))
 		print self.className,self.parameters
-		fh.write(", ".join([ "%s"%(v if v!="NULL" else "NULL") for t,n,p,v,i in self.parameters]))
+		fh.write(", ".join([ "%s"%(v if v!="NULL" else "NULL") for t,n,p,v,i,v1 in self.parameters]))
 		fh.write(");$<_t_%s>$=$<_t_%s>%d;"%(self.baseClassName,self.baseClassName,self.selfIndex+1))
 		fh.write("}")
 
@@ -256,11 +260,13 @@ class __ListInitializeConstructor(_Constructor_):
 					typName="Token"
 					varName="_p_token%d"%(counts[t]+1)
 				if(p in self.originalPattern):
-					val="$<_t_%s>%d"%(typName,self.originalPattern.index(p)+1)
+					val="CAst::GetToken(%s,$<_t_str>%d)"%((p.tokName if p.typeName=='tok' else "\'%s\'"%p.tokName),self.originalPattern.index(p)+1) if typName=="Token" else "$<_t_%s>%d"%(typName,self.originalPattern.index(p)+1) 
+					val1="$<_t_%s>%d"%(typName,self.originalPattern.index(p)+1)
 				else:
 					val="NULL"
+					val1="NULL"
 					n+=1
-				self.parameters.append((typName,varName,p,val,i))
+				self.parameters.append((typName,varName,p,val,i,val1))
 			else:
 				if(i not in self.nullParameterIndices):
 					n+=1

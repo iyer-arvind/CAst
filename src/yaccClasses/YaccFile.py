@@ -162,24 +162,23 @@ class Token: public CAst
 };
 class GenericToken:public Token
 {
-	const char* _txt;
+	std::string _txt;
 public:
 	
 	virtual std::string name()const{return "Generic Token";}
-	GenericToken(const char *txt):
+	GenericToken(std::string txt):
 		Token(),
-		_txt(new char[strlen(txt)+1])
+		_txt(txt)
 	{
-		strcpy((char*)_txt,txt);
 	}
 	
 	virtual ~GenericToken()
 	{
-		delete[] _txt;
 	}
 };
-inline Token* GetToken(const char* txt)
+inline Token* GetToken(int i,std::string txt)
 {
+	std::cerr<<"\\033[34m GENERATING TOKEN \\033[0m"<<"i"<<i<<" txt:"<<txt;
 	return new GenericToken(txt);
 }
 """

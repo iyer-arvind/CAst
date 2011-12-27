@@ -41,24 +41,23 @@ class Token: public CAst
 };
 class GenericToken:public Token
 {
-	const char* _txt;
+	std::string _txt;
 public:
 	
 	virtual std::string name()const{return "Generic Token";}
-	GenericToken(const char *txt):
+	GenericToken(std::string txt):
 		Token(),
-		_txt(new char[strlen(txt)+1])
+		_txt(txt)
 	{
-		strcpy((char*)_txt,txt);
 	}
 	
 	virtual ~GenericToken()
 	{
-		delete[] _txt;
 	}
 };
-inline Token* GetToken(const char* txt)
+inline Token* GetToken(int i,std::string txt)
 {
+	std::cerr<<"\033[34m GENERATING TOKEN \033[0m"<<"i"<<i<<" txt:"<<txt;
 	return new GenericToken(txt);
 }
 /*----------------------------------------------------------------------------------------------------*\
@@ -590,35 +589,37 @@ public:
 
 
 /*----------------------------------------------------------------------------------------------------*\
-                    and_expression
+                    additive_expression
 \*----------------------------------------------------------------------------------------------------*/
-//[and_expression,'&',equality_expression]
+//[additive_expression,'+',multiplicative_expression]
 
 //Forward Declaration --
-class equality_expression;
+class Token;
+class multiplicative_expression;
 //List Element Declaration--
-class and_expression_item
+class additive_expression_item
 {
 private:
 	int *_refCount;
 	std::string _s_matchedPattern;
-	equality_expression *_p_equality_expression;                   //equality_expression
+	Token *_p_token1;                                              //'+'
+	multiplicative_expression *_p_multiplicative_expression;       //multiplicative_expression
 public:
-	and_expression_item(std::string _arg__s_matchedPattern, equality_expression *_arg__p_equality_expression);
-	and_expression_item(const and_expression_item&);
-	virtual ~and_expression_item();
+	additive_expression_item(std::string _arg__s_matchedPattern, Token *_arg__p_token1, multiplicative_expression *_arg__p_multiplicative_expression);
+	additive_expression_item(const additive_expression_item&);
+	virtual ~additive_expression_item();
 };
 //class declaration --
-class and_expression:public CAst
+class additive_expression:public CAst
 {
 private:
-	std::list<and_expression_item> _items;
+	std::list<additive_expression_item> _items;
 public:
-	and_expression(std::string _arg__s_matchedPattern, equality_expression *_arg__p_equality_expression);
-	void append(std::string _arg__s_matchedPattern, equality_expression *_arg__p_equality_expression);
+	additive_expression(std::string _arg__s_matchedPattern, multiplicative_expression *_arg__p_multiplicative_expression);
+	void append(std::string _arg__s_matchedPattern, Token *_arg__p_token1, multiplicative_expression *_arg__p_multiplicative_expression);
 	virtual std::string name()const;
 	virtual std::string pattern()const;
-	virtual ~and_expression();
+	virtual ~additive_expression();
 };
 
 
@@ -1026,37 +1027,35 @@ public:
 
 
 /*----------------------------------------------------------------------------------------------------*\
-                    additive_expression
+                    and_expression
 \*----------------------------------------------------------------------------------------------------*/
-//[additive_expression,'+',multiplicative_expression]
+//[and_expression,'&',equality_expression]
 
 //Forward Declaration --
-class Token;
-class multiplicative_expression;
+class equality_expression;
 //List Element Declaration--
-class additive_expression_item
+class and_expression_item
 {
 private:
 	int *_refCount;
 	std::string _s_matchedPattern;
-	Token *_p_token1;                                              //'+'
-	multiplicative_expression *_p_multiplicative_expression;       //multiplicative_expression
+	equality_expression *_p_equality_expression;                   //equality_expression
 public:
-	additive_expression_item(std::string _arg__s_matchedPattern, Token *_arg__p_token1, multiplicative_expression *_arg__p_multiplicative_expression);
-	additive_expression_item(const additive_expression_item&);
-	virtual ~additive_expression_item();
+	and_expression_item(std::string _arg__s_matchedPattern, equality_expression *_arg__p_equality_expression);
+	and_expression_item(const and_expression_item&);
+	virtual ~and_expression_item();
 };
 //class declaration --
-class additive_expression:public CAst
+class and_expression:public CAst
 {
 private:
-	std::list<additive_expression_item> _items;
+	std::list<and_expression_item> _items;
 public:
-	additive_expression(std::string _arg__s_matchedPattern, multiplicative_expression *_arg__p_multiplicative_expression);
-	void append(std::string _arg__s_matchedPattern, Token *_arg__p_token1, multiplicative_expression *_arg__p_multiplicative_expression);
+	and_expression(std::string _arg__s_matchedPattern, equality_expression *_arg__p_equality_expression);
+	void append(std::string _arg__s_matchedPattern, equality_expression *_arg__p_equality_expression);
 	virtual std::string name()const;
 	virtual std::string pattern()const;
-	virtual ~additive_expression();
+	virtual ~and_expression();
 };
 
 
@@ -1346,35 +1345,23 @@ public:
 
 
 /*----------------------------------------------------------------------------------------------------*\
-                    translation_unit
+                    unary_operator
 \*----------------------------------------------------------------------------------------------------*/
-//[translation_unit,external_declaration]
+//['&']
 
 //Forward Declaration --
-class external_declaration;
-//List Element Declaration--
-class translation_unit_item
-{
-private:
-	int *_refCount;
-	std::string _s_matchedPattern;
-	external_declaration *_p_external_declaration;                 //external_declaration
-public:
-	translation_unit_item(std::string _arg__s_matchedPattern, external_declaration *_arg__p_external_declaration);
-	translation_unit_item(const translation_unit_item&);
-	virtual ~translation_unit_item();
-};
+class Token;
 //class declaration --
-class translation_unit:public CAst
+class unary_operator:public CAst
 {
 private:
-	std::list<translation_unit_item> _items;
+	std::string _s_matchedPattern;
+	Token *_p_token1;                                              //'&'
 public:
-	translation_unit(std::string _arg__s_matchedPattern, external_declaration *_arg__p_external_declaration);
-	void append(std::string _arg__s_matchedPattern, external_declaration *_arg__p_external_declaration);
+	unary_operator(std::string _arg__s_matchedPattern, Token *_arg__p_token1);
 	virtual std::string name()const;
 	virtual std::string pattern()const;
-	virtual ~translation_unit();
+	virtual ~unary_operator();
 };
 
 
@@ -1796,31 +1783,6 @@ public:
 	virtual std::string name()const;
 	virtual std::string pattern()const;
 	virtual ~direct_abstract_declarator3();
-};
-
-
-
-
-
-
-/*----------------------------------------------------------------------------------------------------*\
-                    constant_expression
-\*----------------------------------------------------------------------------------------------------*/
-//[conditional_expression]
-
-//Forward Declaration --
-class conditional_expression;
-//class declaration --
-class constant_expression:public CAst
-{
-private:
-	std::string _s_matchedPattern;
-	conditional_expression *_p_conditional_expression;             //conditional_expression
-public:
-	constant_expression(std::string _arg__s_matchedPattern, conditional_expression *_arg__p_conditional_expression);
-	virtual std::string name()const;
-	virtual std::string pattern()const;
-	virtual ~constant_expression();
 };
 
 
@@ -2744,23 +2706,60 @@ public:
 
 
 /*----------------------------------------------------------------------------------------------------*\
-                    unary_operator
+                    translation_unit
 \*----------------------------------------------------------------------------------------------------*/
-//['&']
+//[translation_unit,external_declaration]
 
 //Forward Declaration --
-class Token;
+class external_declaration;
+//List Element Declaration--
+class translation_unit_item
+{
+private:
+	int *_refCount;
+	std::string _s_matchedPattern;
+	external_declaration *_p_external_declaration;                 //external_declaration
+public:
+	translation_unit_item(std::string _arg__s_matchedPattern, external_declaration *_arg__p_external_declaration);
+	translation_unit_item(const translation_unit_item&);
+	virtual ~translation_unit_item();
+};
 //class declaration --
-class unary_operator:public CAst
+class translation_unit:public CAst
+{
+private:
+	std::list<translation_unit_item> _items;
+public:
+	translation_unit(std::string _arg__s_matchedPattern, external_declaration *_arg__p_external_declaration);
+	void append(std::string _arg__s_matchedPattern, external_declaration *_arg__p_external_declaration);
+	virtual std::string name()const;
+	virtual std::string pattern()const;
+	virtual ~translation_unit();
+};
+
+
+
+
+
+
+/*----------------------------------------------------------------------------------------------------*\
+                    constant_expression
+\*----------------------------------------------------------------------------------------------------*/
+//[conditional_expression]
+
+//Forward Declaration --
+class conditional_expression;
+//class declaration --
+class constant_expression:public CAst
 {
 private:
 	std::string _s_matchedPattern;
-	Token *_p_token1;                                              //'&'
+	conditional_expression *_p_conditional_expression;             //conditional_expression
 public:
-	unary_operator(std::string _arg__s_matchedPattern, Token *_arg__p_token1);
+	constant_expression(std::string _arg__s_matchedPattern, conditional_expression *_arg__p_conditional_expression);
 	virtual std::string name()const;
 	virtual std::string pattern()const;
-	virtual ~unary_operator();
+	virtual ~constant_expression();
 };
 
 

@@ -166,11 +166,14 @@ void count()
 */	
 	
 
+	
 	yylval._t_str=yytext;
+	strcpy((char*)yylval._t_str,yytext);
 	if(strcmp(yytext,"\n"))
 		printf("reading: \033[37;41;1m%s\033[0m\n",yytext);
-
-
+	//delete[] yylval._t_str;
+	//yylval._t_str=0;
+	
 }
 
 
