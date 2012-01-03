@@ -171,7 +171,7 @@ void count()
 	if(yytext)
 	{
 		if(strcmp(yytext,"\n"))
-			printf("reading: \033[37;41;1m%s\033[0m\n",yytext);
+			std::cerr<<"reading: \033[37;41;1m"<<yytext<<"\033[0m\n";
 		std::string s(yytext);
 		toks.push_back(s);
 		yylval._t_str=toks.back().c_str();

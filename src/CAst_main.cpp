@@ -13,6 +13,7 @@ int main(int argc,char **argv)
 	yyparse();
 	
 	std::cout<<"yyval:"<<root<<"\n";
+	std::cout<<"yyval:"<<root->getPropertiesList()<<"\n";
 	delete root;
 	root=0;
 //	std::cout<<"deleted\n\n";

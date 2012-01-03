@@ -41,6 +41,11 @@ class ConstructorClassCoder(object):
 		fh.write(");\n")
 		fh.write("\tvirtual std::string name()const;\n")
 		fh.write("\tvirtual std::string pattern()const;\n")
+		fh.write("\tvirtual bool isList()const{return false;}\n")
+		fh.write("\tvirtual Properties getProperties()const;\n")
+		fh.write("\tvirtual PropertiesList getPropertiesList()const{return PropertiesList();}\n")
+		
+	
 		fh.write("\tvirtual ~%s();\n"%self.className)
 		fh.write("};\n"+"\n"*2)
 		
@@ -54,11 +59,24 @@ class ConstructorClassCoder(object):
 		fh.write("\n{\n")
 		fh.write("\n\tLOG(\"\\033[32mCREATING\\033[0m %s\")\n"%self.className);
 		fh.write("}\n")
+
+		fh.write("Properties %s::getProperties()const\n"%self.className)
+		fh.write("{\n")
+		fh.write("\tProperties props;\n")
+		fh.write("".join(["\tprops[\"%s\"]=%s;\n"%(n.replace('_p_',''),n) for t,n,p,v,i,v1 in self.parameters]))
+		fh.write("\treturn props;\n")
+		fh.write("}\n")
+
+
+		
+
+		
 		fh.write("%s::~%s()"%(self.className,self.className))
 		fh.write("\n{\n")
 		fh.write("\n\tLOG(\"\\033[31mDELETING\\033[0m %s\")\n"%self.className);
 		fh.write("\n".join(["\tif (%s)%s{delete(%s);%s=0;}"%(n," "*(30-len(n)),n,n) for t,n,p,v,i,v1 in self.parameters]))
 		fh.write("\n}\n")
+		
 
 	def _dumpBaseClassCHeader(self,fh):
 		fh.write("class %s"%self.constructor._name)
@@ -66,6 +84,9 @@ class ConstructorClassCoder(object):
 		fh.write("public:\n")
 		fh.write("\tvirtual std::string name()const=0;\n")
 		fh.write("\tvirtual std::string pattern()const=0;\n")
+		fh.write("\tvirtual bool isList()const=0;\n")
+		fh.write("\tvirtual Properties getProperties()const=0;\n")
+		fh.write("\tvirtual PropertiesList getPropertiesList()const=0;\n")
 		fh.write("\tvirtual ~%s(){}\n"%self.constructor._name)
 		fh.write("};\n"+"\n"*2)
 		
@@ -98,6 +119,7 @@ class ListAccumulatorClassCoder(ConstructorClassCoder):
 		fh.write(", ".join(["%s *_arg_%s"%(t,n) for t,n,p,v,i,v1 in self.parameters if i!=self.constructor.selfIndex]))
 		fh.write(");\n")
 		fh.write("\t%s_item(const %s_item&);\n"%(self.className,self.className))
+		fh.write("\tvirtual Properties getProperties()const;\n")
 		fh.write("\tvirtual ~%s_item();\n"%self.className)
 		fh.write("};\n")
 
@@ -109,6 +131,9 @@ class ListAccumulatorClassCoder(ConstructorClassCoder):
 			fh.write(":public "+" ".join(self.inheritancePublic)+"\n")
 		fh.write("{\n")
 		fh.write("private:\n")
+		fh.write("\ttypedef std::list<%s_item> ItemsListType;\n"%(self.className))
+		fh.write("\ttypedef ItemsListType::iterator ItemsListIter;\n")
+		fh.write("\ttypedef ItemsListType::const_iterator CItemsListIter;\n")
 		fh.write("\tstd::list<%s_item> _items;\n"%(self.className))
 		fh.write("public:\n")
 		fh.write("\t%s(std::string _arg__s_matchedPattern, "%(self.className))
@@ -123,6 +148,9 @@ class ListAccumulatorClassCoder(ConstructorClassCoder):
 		
 		fh.write("\tvirtual std::string name()const;\n")
 		fh.write("\tvirtual std::string pattern()const;\n")
+		fh.write("\tvirtual bool isList()const{return true;}\n")
+		fh.write("\tvirtual Properties getProperties()const{return Properties();}\n")
+		fh.write("\tvirtual PropertiesList getPropertiesList()const;\n")
 		fh.write("\tvirtual ~%s();\n"%self.className)
 		fh.write("};\n"+"\n"*2)
 
@@ -149,7 +177,15 @@ class ListAccumulatorClassCoder(ConstructorClassCoder):
 		fh.write("\n\tLOG(\"COPYING %s_item\")\n"%self.className);
 		fh.write("\t(*_refCount)++;\n")
 		fh.write("\tLOG(\"[ \"<<_refCount<<\" ]\t\"<<\"refCount after increment:\"<<(*_refCount))")
-		fh.write("\n}\n")
+		fh.write("\n}\n\n")
+
+		fh.write("\tProperties %s_item::getProperties()const"%(self.className))
+		fh.write("\n{\n")
+		fh.write("\tProperties props;\n")
+#		fh.write("\n".join(["\t"+"props[%s]=%s;"%(n,n) for t,n,p,v,i,v1 in self.parameters if i != self.constructor.selfIndex]))
+		fh.write("".join(["\tprops[\"%s\"]=%s;\n"%(n.replace('_p_',''),n) for t,n,p,v,i,v1 in self.parameters if i != self.constructor.selfIndex]))
+		fh.write("\treturn props;\n")
+		fh.write("\n}\n\n")
 
 
 		fh.write("%s_item::~%s_item()"%(self.className,self.className))
@@ -193,8 +229,20 @@ class ListAccumulatorClassCoder(ConstructorClassCoder):
 		fh.write("\t_items.push_back(item);\n")
 		fh.write("}\n")
 		
+		fh.write("PropertiesList %s::getPropertiesList()const\n"%self.className)
+		fh.write("{\n")
+		fh.write("\tPropertiesList pList;\n");
+		fh.write("\tfor(CItemsListIter i=_items.begin();i!=_items.end();i++)\n")
+		fh.write("\t{\n")
+		fh.write("\t\tpList.push_back(i->getProperties());\n")
+		fh.write("\t}\n")
+	
+		fh.write("\treturn pList;\n");
+		fh.write("}\n\n")
+
+
 		fh.write("%s::~%s()\n{\n"%(self.className,self.className))
 		fh.write("\n\tLOG(\"DELETING %s\")\n"%self.className);
 		fh.write("\t_items.clear();\n")
-		fh.write("}\n")
+		fh.write("}\n\n")
 		

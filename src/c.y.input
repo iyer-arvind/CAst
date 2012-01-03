@@ -417,10 +417,6 @@ function_definition
 	;
 
 %%
-#include <stdio.h>
-#include "CAst.h"
-#define RULE_MARKER(txt) printf("\t\t\t\t\033[36m%s:%d\033[0m: %s\n",__FILE__,__LINE__,txt)
-#define CAST_PTR(TYPE,PTR) dynamic_cast<CAst::TYPE*>(PTR)
 
 
 extern char yytext[];
