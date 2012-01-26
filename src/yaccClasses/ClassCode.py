@@ -18,6 +18,11 @@ class ConstructorClassCoder(object):
 		self.parameters=self.constructor.parameters
 
 
+	def _dumpPython(self,fh):
+
+		if(self.baseClassFlag):
+			pass
+	
 
 	def _dumpCHeader(self,fh):
 		if(self.baseClassFlag):self._dumpBaseClassCHeader(fh)
@@ -43,7 +48,7 @@ class ConstructorClassCoder(object):
 		fh.write("\tvirtual std::string pattern()const;\n")
 		fh.write("\tvirtual bool isList()const{return false;}\n")
 		fh.write("\tvirtual Properties getProperties()const;\n")
-		fh.write("\tvirtual PropertiesList getPropertiesList()const{return PropertiesList();}\n")
+		fh.write("\tvirtual PropertiesList getPropertiesList()const{return PropertiesList(name());}\n")
 		
 	
 		fh.write("\tvirtual ~%s();\n"%self.className)
@@ -62,7 +67,7 @@ class ConstructorClassCoder(object):
 
 		fh.write("Properties %s::getProperties()const\n"%self.className)
 		fh.write("{\n")
-		fh.write("\tProperties props;\n")
+		fh.write("\tProperties props(name());\n")
 		fh.write("".join(["\tprops[\"%s\"]=%s;\n"%(n.replace('_p_',''),n) for t,n,p,v,i,v1 in self.parameters]))
 		fh.write("\treturn props;\n")
 		fh.write("}\n")
@@ -149,7 +154,7 @@ class ListAccumulatorClassCoder(ConstructorClassCoder):
 		fh.write("\tvirtual std::string name()const;\n")
 		fh.write("\tvirtual std::string pattern()const;\n")
 		fh.write("\tvirtual bool isList()const{return true;}\n")
-		fh.write("\tvirtual Properties getProperties()const{return Properties();}\n")
+		fh.write("\tvirtual Properties getProperties()const{return Properties(name());}\n")
 		fh.write("\tvirtual PropertiesList getPropertiesList()const;\n")
 		fh.write("\tvirtual ~%s();\n"%self.className)
 		fh.write("};\n"+"\n"*2)
@@ -181,7 +186,7 @@ class ListAccumulatorClassCoder(ConstructorClassCoder):
 
 		fh.write("\tProperties %s_item::getProperties()const"%(self.className))
 		fh.write("\n{\n")
-		fh.write("\tProperties props;\n")
+		fh.write("\tProperties props(\"%s_item\");\n"%(self.className))
 #		fh.write("\n".join(["\t"+"props[%s]=%s;"%(n,n) for t,n,p,v,i,v1 in self.parameters if i != self.constructor.selfIndex]))
 		fh.write("".join(["\tprops[\"%s\"]=%s;\n"%(n.replace('_p_',''),n) for t,n,p,v,i,v1 in self.parameters if i != self.constructor.selfIndex]))
 		fh.write("\treturn props;\n")
@@ -231,7 +236,7 @@ class ListAccumulatorClassCoder(ConstructorClassCoder):
 		
 		fh.write("PropertiesList %s::getPropertiesList()const\n"%self.className)
 		fh.write("{\n")
-		fh.write("\tPropertiesList pList;\n");
+		fh.write("\tPropertiesList pList(name());\n");
 		fh.write("\tfor(CItemsListIter i=_items.begin();i!=_items.end();i++)\n")
 		fh.write("\t{\n")
 		fh.write("\t\tpList.push_back(i->getProperties());\n")
@@ -245,4 +250,8 @@ class ListAccumulatorClassCoder(ConstructorClassCoder):
 		fh.write("\n\tLOG(\"DELETING %s\")\n"%self.className);
 		fh.write("\t_items.clear();\n")
 		fh.write("}\n\n")
-		
+
+	def _dumpPython(self,fh):
+
+		if(self.baseClassFlag):
+			pass

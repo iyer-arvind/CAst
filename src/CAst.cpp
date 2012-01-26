@@ -3,36 +3,66 @@ namespace CAst
 {
 
 
-std::ostream& Properties::toStream(std::ostream& stream)const
+std::ostream& Properties::toStream(std::ostream& stream,int indent)const
 {
-
-	stream<<"{";
-	bool flag=false;
-	for(std::map<std::string,CAst*>::const_iterator i=begin();i!=end();i++)
+	if(__className=="token")
 	{
-		if(i->second)
-		{
-			if(flag)
-				stream<<",";
-			stream<<"\""<<i->first<<"\":";
-			stream<<"("<<i->second->name()<<",";
-			if(i->second->isList())
-			{
-				i->second->getPropertiesList().toStream(stream);
-			}
-			else
-			{
-				i->second->getProperties().toStream(stream);
-			}
-			stream<<")";
-			flag=true;
-		}
-		else
-		{
-			//stream<<"NULL";
-		}
+		return stream<<"\""<<__tokValue<<"\"";
 	}
-	stream<<"}";
+	std::string sp="  ";
+	std::string nl="\n";
+	std::string tab=nl;
+	for(register int i=0;i<indent;i++)tab+=sp;
+	int n=0;
+	for(const_iterator i=begin();(i!=end())&&(n<=1);i++)
+	{
+		if(i->second)n++;
+	}
+	if(n>1)
+	{
+		bool flag=false;
+		stream<<tab<<"{"<<tab<<sp<<"\"type\":\""<<__className<<"\","<<tab<<sp<<"\"value\":"<<tab<<sp<<"{";
+		for(const_iterator i=begin();i!=end();i++)
+		{
+			if(i->second)
+			{
+				if(flag)stream<<",";
+				stream<<tab<<sp<<sp<<"\""<<i->first<<"\":";
+				if(i->second->isList())
+				{
+					i->second->getPropertiesList().toStream(stream,indent+2);
+				}
+				else
+				{
+					i->second->getProperties().toStream(stream,indent+2);
+				}
+				flag=true;
+			}
+		}
+		stream<<tab<<sp<<"}";
+		stream<<tab<<"}";
+	}
+	else if(n==1)
+	{
+		for(const_iterator i=begin();i!=end();i++)
+		{
+			if(i->second)
+			{
+				if(i->second->isList())
+				{
+					i->second->getPropertiesList().toStream(stream,indent);
+				}
+				else
+				{
+					i->second->getProperties().toStream(stream,indent);
+				}
+				break;
+			}
+		}
+		
+	}
+	else
+		stream<<"\"\"";
 	return stream;
 }/*----------------------------------------------------------------------------------------------------*\
                     storage_class_specifier
@@ -56,7 +86,7 @@ storage_class_specifier::storage_class_specifier(std::string _arg__s_matchedPatt
 }
 Properties storage_class_specifier::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["token1"]=_p_token1;
 	return props;
 }
@@ -92,7 +122,7 @@ expression_statement::expression_statement(std::string _arg__s_matchedPattern, e
 }
 Properties expression_statement::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["expression"]=_p_expression;
 	return props;
 }
@@ -129,7 +159,7 @@ type_name::type_name(std::string _arg__s_matchedPattern, specifier_qualifier_lis
 }
 Properties type_name::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["specifier_qualifier_list"]=_p_specifier_qualifier_list;
 	props["abstract_declarator"]=_p_abstract_declarator;
 	return props;
@@ -167,7 +197,7 @@ unary_expression1::unary_expression1(std::string _arg__s_matchedPattern, type_na
 }
 Properties unary_expression1::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["type_name"]=_p_type_name;
 	return props;
 }
@@ -197,7 +227,7 @@ unary_expression2::unary_expression2(std::string _arg__s_matchedPattern, Token *
 }
 Properties unary_expression2::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["token1"]=_p_token1;
 	props["unary_expression"]=_p_unary_expression;
 	return props;
@@ -229,7 +259,7 @@ unary_expression3::unary_expression3(std::string _arg__s_matchedPattern, unary_o
 }
 Properties unary_expression3::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["unary_operator"]=_p_unary_operator;
 	props["cast_expression"]=_p_cast_expression;
 	return props;
@@ -260,7 +290,7 @@ unary_expression4::unary_expression4(std::string _arg__s_matchedPattern, postfix
 }
 Properties unary_expression4::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["postfix_expression"]=_p_postfix_expression;
 	return props;
 }
@@ -301,7 +331,7 @@ conditional_expression_item::conditional_expression_item(std::string _arg__s_mat
 
 	Properties conditional_expression_item::getProperties()const
 {
-	Properties props;
+	Properties props("conditional_expression_item");
 	props["logical_or_expression"]=_p_logical_or_expression;
 	props["expression"]=_p_expression;
 	return props;
@@ -357,7 +387,7 @@ void conditional_expression::append(std::string _arg__s_matchedPattern, logical_
 }
 PropertiesList conditional_expression::getPropertiesList()const
 {
-	PropertiesList pList;
+	PropertiesList pList(name());
 	for(CItemsListIter i=_items.begin();i!=_items.end();i++)
 	{
 		pList.push_back(i->getProperties());
@@ -402,7 +432,7 @@ struct_or_union_specifier::struct_or_union_specifier(std::string _arg__s_matched
 }
 Properties struct_or_union_specifier::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["struct_or_union"]=_p_struct_or_union;
 	props["token1"]=_p_token1;
 	props["token2"]=_p_token2;
@@ -449,7 +479,7 @@ exclusive_or_expression_item::exclusive_or_expression_item(std::string _arg__s_m
 
 	Properties exclusive_or_expression_item::getProperties()const
 {
-	Properties props;
+	Properties props("exclusive_or_expression_item");
 	props["and_expression"]=_p_and_expression;
 	return props;
 
@@ -499,7 +529,7 @@ void exclusive_or_expression::append(std::string _arg__s_matchedPattern, and_exp
 }
 PropertiesList exclusive_or_expression::getPropertiesList()const
 {
-	PropertiesList pList;
+	PropertiesList pList(name());
 	for(CItemsListIter i=_items.begin();i!=_items.end();i++)
 	{
 		pList.push_back(i->getProperties());
@@ -541,7 +571,7 @@ initializer1::initializer1(std::string _arg__s_matchedPattern, initializer_list 
 }
 Properties initializer1::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["initializer_list"]=_p_initializer_list;
 	props["token1"]=_p_token1;
 	return props;
@@ -572,7 +602,7 @@ initializer2::initializer2(std::string _arg__s_matchedPattern, assignment_expres
 }
 Properties initializer2::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["assignment_expression"]=_p_assignment_expression;
 	return props;
 }
@@ -611,7 +641,7 @@ struct_declaration_list_item::struct_declaration_list_item(std::string _arg__s_m
 
 	Properties struct_declaration_list_item::getProperties()const
 {
-	Properties props;
+	Properties props("struct_declaration_list_item");
 	props["struct_declaration"]=_p_struct_declaration;
 	return props;
 
@@ -661,7 +691,7 @@ void struct_declaration_list::append(std::string _arg__s_matchedPattern, struct_
 }
 PropertiesList struct_declaration_list::getPropertiesList()const
 {
-	PropertiesList pList;
+	PropertiesList pList(name());
 	for(CItemsListIter i=_items.begin();i!=_items.end();i++)
 	{
 		pList.push_back(i->getProperties());
@@ -702,7 +732,7 @@ assignment_operator::assignment_operator(std::string _arg__s_matchedPattern, Tok
 }
 Properties assignment_operator::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["token1"]=_p_token1;
 	return props;
 }
@@ -739,7 +769,7 @@ struct_declaration::struct_declaration(std::string _arg__s_matchedPattern, speci
 }
 Properties struct_declaration::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["specifier_qualifier_list"]=_p_specifier_qualifier_list;
 	props["struct_declarator_list"]=_p_struct_declarator_list;
 	return props;
@@ -778,7 +808,7 @@ abstract_declarator::abstract_declarator(std::string _arg__s_matchedPattern, poi
 }
 Properties abstract_declarator::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["pointer"]=_p_pointer;
 	props["direct_abstract_declarator"]=_p_direct_abstract_declarator;
 	return props;
@@ -817,7 +847,7 @@ iteration_statement1::iteration_statement1(std::string _arg__s_matchedPattern, s
 }
 Properties iteration_statement1::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["statement"]=_p_statement;
 	props["expression"]=_p_expression;
 	return props;
@@ -851,7 +881,7 @@ iteration_statement2::iteration_statement2(std::string _arg__s_matchedPattern, e
 }
 Properties iteration_statement2::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["expression_statement"]=_p_expression_statement;
 	props["expression_statement1"]=_p_expression_statement1;
 	props["expression"]=_p_expression;
@@ -887,7 +917,7 @@ iteration_statement3::iteration_statement3(std::string _arg__s_matchedPattern, e
 }
 Properties iteration_statement3::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["expression"]=_p_expression;
 	props["statement"]=_p_statement;
 	return props;
@@ -930,7 +960,7 @@ additive_expression_item::additive_expression_item(std::string _arg__s_matchedPa
 
 	Properties additive_expression_item::getProperties()const
 {
-	Properties props;
+	Properties props("additive_expression_item");
 	props["token1"]=_p_token1;
 	props["multiplicative_expression"]=_p_multiplicative_expression;
 	return props;
@@ -986,7 +1016,7 @@ void additive_expression::append(std::string _arg__s_matchedPattern, Token *_arg
 }
 PropertiesList additive_expression::getPropertiesList()const
 {
-	PropertiesList pList;
+	PropertiesList pList(name());
 	for(CItemsListIter i=_items.begin();i!=_items.end();i++)
 	{
 		pList.push_back(i->getProperties());
@@ -1027,7 +1057,7 @@ external_declaration1::external_declaration1(std::string _arg__s_matchedPattern,
 }
 Properties external_declaration1::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["function_definition"]=_p_function_definition;
 	return props;
 }
@@ -1056,7 +1086,7 @@ external_declaration2::external_declaration2(std::string _arg__s_matchedPattern,
 }
 Properties external_declaration2::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["declaration"]=_p_declaration;
 	return props;
 }
@@ -1092,7 +1122,7 @@ type_specifier1::type_specifier1(std::string _arg__s_matchedPattern, Token *_arg
 }
 Properties type_specifier1::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["token1"]=_p_token1;
 	return props;
 }
@@ -1121,7 +1151,7 @@ type_specifier2::type_specifier2(std::string _arg__s_matchedPattern, struct_or_u
 }
 Properties type_specifier2::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["struct_or_union_specifier"]=_p_struct_or_union_specifier;
 	return props;
 }
@@ -1150,7 +1180,7 @@ type_specifier3::type_specifier3(std::string _arg__s_matchedPattern, enum_specif
 }
 Properties type_specifier3::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["enum_specifier"]=_p_enum_specifier;
 	return props;
 }
@@ -1187,7 +1217,7 @@ compound_statement::compound_statement(std::string _arg__s_matchedPattern, decla
 }
 Properties compound_statement::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["declaration_list"]=_p_declaration_list;
 	props["statement_list"]=_p_statement_list;
 	return props;
@@ -1228,7 +1258,7 @@ inclusive_or_expression_item::inclusive_or_expression_item(std::string _arg__s_m
 
 	Properties inclusive_or_expression_item::getProperties()const
 {
-	Properties props;
+	Properties props("inclusive_or_expression_item");
 	props["exclusive_or_expression"]=_p_exclusive_or_expression;
 	return props;
 
@@ -1278,7 +1308,7 @@ void inclusive_or_expression::append(std::string _arg__s_matchedPattern, exclusi
 }
 PropertiesList inclusive_or_expression::getPropertiesList()const
 {
-	PropertiesList pList;
+	PropertiesList pList(name());
 	for(CItemsListIter i=_items.begin();i!=_items.end();i++)
 	{
 		pList.push_back(i->getProperties());
@@ -1322,7 +1352,7 @@ pointer_item::pointer_item(std::string _arg__s_matchedPattern, type_qualifier_li
 
 	Properties pointer_item::getProperties()const
 {
-	Properties props;
+	Properties props("pointer_item");
 	props["type_qualifier_list"]=_p_type_qualifier_list;
 	return props;
 
@@ -1372,7 +1402,7 @@ void pointer::append(std::string _arg__s_matchedPattern, type_qualifier_list *_a
 }
 PropertiesList pointer::getPropertiesList()const
 {
-	PropertiesList pList;
+	PropertiesList pList(name());
 	for(CItemsListIter i=_items.begin();i!=_items.end();i++)
 	{
 		pList.push_back(i->getProperties());
@@ -1416,7 +1446,7 @@ selection_statement1::selection_statement1(std::string _arg__s_matchedPattern, e
 }
 Properties selection_statement1::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["expression"]=_p_expression;
 	props["statement"]=_p_statement;
 	props["token1"]=_p_token1;
@@ -1452,7 +1482,7 @@ selection_statement2::selection_statement2(std::string _arg__s_matchedPattern, e
 }
 Properties selection_statement2::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["expression"]=_p_expression;
 	props["statement"]=_p_statement;
 	return props;
@@ -1491,7 +1521,7 @@ postfix_expression1::postfix_expression1(std::string _arg__s_matchedPattern, pos
 }
 Properties postfix_expression1::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["postfix_expression"]=_p_postfix_expression;
 	props["expression"]=_p_expression;
 	return props;
@@ -1523,7 +1553,7 @@ postfix_expression2::postfix_expression2(std::string _arg__s_matchedPattern, pos
 }
 Properties postfix_expression2::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["postfix_expression"]=_p_postfix_expression;
 	props["argument_expression_list"]=_p_argument_expression_list;
 	return props;
@@ -1556,7 +1586,7 @@ postfix_expression3::postfix_expression3(std::string _arg__s_matchedPattern, pos
 }
 Properties postfix_expression3::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["postfix_expression"]=_p_postfix_expression;
 	props["token1"]=_p_token1;
 	props["token2"]=_p_token2;
@@ -1590,7 +1620,7 @@ postfix_expression4::postfix_expression4(std::string _arg__s_matchedPattern, pos
 }
 Properties postfix_expression4::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["postfix_expression"]=_p_postfix_expression;
 	props["token1"]=_p_token1;
 	return props;
@@ -1621,7 +1651,7 @@ postfix_expression5::postfix_expression5(std::string _arg__s_matchedPattern, pri
 }
 Properties postfix_expression5::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["primary_expression"]=_p_primary_expression;
 	return props;
 }
@@ -1660,7 +1690,7 @@ and_expression_item::and_expression_item(std::string _arg__s_matchedPattern, equ
 
 	Properties and_expression_item::getProperties()const
 {
-	Properties props;
+	Properties props("and_expression_item");
 	props["equality_expression"]=_p_equality_expression;
 	return props;
 
@@ -1710,7 +1740,7 @@ void and_expression::append(std::string _arg__s_matchedPattern, equality_express
 }
 PropertiesList and_expression::getPropertiesList()const
 {
-	PropertiesList pList;
+	PropertiesList pList(name());
 	for(CItemsListIter i=_items.begin();i!=_items.end();i++)
 	{
 		pList.push_back(i->getProperties());
@@ -1751,7 +1781,7 @@ statement1::statement1(std::string _arg__s_matchedPattern, labeled_statement *_a
 }
 Properties statement1::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["labeled_statement"]=_p_labeled_statement;
 	return props;
 }
@@ -1780,7 +1810,7 @@ statement2::statement2(std::string _arg__s_matchedPattern, compound_statement *_
 }
 Properties statement2::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["compound_statement"]=_p_compound_statement;
 	return props;
 }
@@ -1809,7 +1839,7 @@ statement3::statement3(std::string _arg__s_matchedPattern, expression_statement 
 }
 Properties statement3::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["expression_statement"]=_p_expression_statement;
 	return props;
 }
@@ -1838,7 +1868,7 @@ statement4::statement4(std::string _arg__s_matchedPattern, selection_statement *
 }
 Properties statement4::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["selection_statement"]=_p_selection_statement;
 	return props;
 }
@@ -1867,7 +1897,7 @@ statement5::statement5(std::string _arg__s_matchedPattern, iteration_statement *
 }
 Properties statement5::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["iteration_statement"]=_p_iteration_statement;
 	return props;
 }
@@ -1896,7 +1926,7 @@ statement6::statement6(std::string _arg__s_matchedPattern, jump_statement *_arg_
 }
 Properties statement6::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["jump_statement"]=_p_jump_statement;
 	return props;
 }
@@ -1933,7 +1963,7 @@ cast_expression1::cast_expression1(std::string _arg__s_matchedPattern, type_name
 }
 Properties cast_expression1::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["type_name"]=_p_type_name;
 	props["cast_expression"]=_p_cast_expression;
 	return props;
@@ -1964,7 +1994,7 @@ cast_expression2::cast_expression2(std::string _arg__s_matchedPattern, unary_exp
 }
 Properties cast_expression2::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["unary_expression"]=_p_unary_expression;
 	return props;
 }
@@ -2002,7 +2032,7 @@ init_declarator::init_declarator(std::string _arg__s_matchedPattern, declarator 
 }
 Properties init_declarator::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["declarator"]=_p_declarator;
 	props["token1"]=_p_token1;
 	props["initializer"]=_p_initializer;
@@ -2045,7 +2075,7 @@ struct_declarator_list_item::struct_declarator_list_item(std::string _arg__s_mat
 
 	Properties struct_declarator_list_item::getProperties()const
 {
-	Properties props;
+	Properties props("struct_declarator_list_item");
 	props["struct_declarator"]=_p_struct_declarator;
 	return props;
 
@@ -2095,7 +2125,7 @@ void struct_declarator_list::append(std::string _arg__s_matchedPattern, struct_d
 }
 PropertiesList struct_declarator_list::getPropertiesList()const
 {
-	PropertiesList pList;
+	PropertiesList pList(name());
 	for(CItemsListIter i=_items.begin();i!=_items.end();i++)
 	{
 		pList.push_back(i->getProperties());
@@ -2139,7 +2169,7 @@ logical_or_expression_item::logical_or_expression_item(std::string _arg__s_match
 
 	Properties logical_or_expression_item::getProperties()const
 {
-	Properties props;
+	Properties props("logical_or_expression_item");
 	props["logical_and_expression"]=_p_logical_and_expression;
 	return props;
 
@@ -2189,7 +2219,7 @@ void logical_or_expression::append(std::string _arg__s_matchedPattern, logical_a
 }
 PropertiesList logical_or_expression::getPropertiesList()const
 {
-	PropertiesList pList;
+	PropertiesList pList(name());
 	for(CItemsListIter i=_items.begin();i!=_items.end();i++)
 	{
 		pList.push_back(i->getProperties());
@@ -2230,7 +2260,7 @@ unary_operator::unary_operator(std::string _arg__s_matchedPattern, Token *_arg__
 }
 Properties unary_operator::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["token1"]=_p_token1;
 	return props;
 }
@@ -2271,7 +2301,7 @@ relational_expression_item::relational_expression_item(std::string _arg__s_match
 
 	Properties relational_expression_item::getProperties()const
 {
-	Properties props;
+	Properties props("relational_expression_item");
 	props["token1"]=_p_token1;
 	props["shift_expression"]=_p_shift_expression;
 	return props;
@@ -2327,7 +2357,7 @@ void relational_expression::append(std::string _arg__s_matchedPattern, Token *_a
 }
 PropertiesList relational_expression::getPropertiesList()const
 {
-	PropertiesList pList;
+	PropertiesList pList(name());
 	for(CItemsListIter i=_items.begin();i!=_items.end();i++)
 	{
 		pList.push_back(i->getProperties());
@@ -2368,7 +2398,7 @@ struct_or_union::struct_or_union(std::string _arg__s_matchedPattern, Token *_arg
 }
 Properties struct_or_union::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["token1"]=_p_token1;
 	return props;
 }
@@ -2406,7 +2436,7 @@ enumerator::enumerator(std::string _arg__s_matchedPattern, Token *_arg__p_token1
 }
 Properties enumerator::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["token1"]=_p_token1;
 	props["token2"]=_p_token2;
 	props["constant_expression"]=_p_constant_expression;
@@ -2448,7 +2478,7 @@ assignment_expression1::assignment_expression1(std::string _arg__s_matchedPatter
 }
 Properties assignment_expression1::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["unary_expression"]=_p_unary_expression;
 	props["assignment_operator"]=_p_assignment_operator;
 	props["assignment_expression"]=_p_assignment_expression;
@@ -2481,7 +2511,7 @@ assignment_expression2::assignment_expression2(std::string _arg__s_matchedPatter
 }
 Properties assignment_expression2::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["conditional_expression"]=_p_conditional_expression;
 	return props;
 }
@@ -2519,7 +2549,7 @@ parameter_type_list::parameter_type_list(std::string _arg__s_matchedPattern, par
 }
 Properties parameter_type_list::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["parameter_list"]=_p_parameter_list;
 	props["token1"]=_p_token1;
 	props["token2"]=_p_token2;
@@ -2560,7 +2590,7 @@ parameter_declaration1::parameter_declaration1(std::string _arg__s_matchedPatter
 }
 Properties parameter_declaration1::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["declaration_specifiers"]=_p_declaration_specifiers;
 	props["declarator"]=_p_declarator;
 	return props;
@@ -2592,7 +2622,7 @@ parameter_declaration2::parameter_declaration2(std::string _arg__s_matchedPatter
 }
 Properties parameter_declaration2::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["declaration_specifiers"]=_p_declaration_specifiers;
 	props["abstract_declarator"]=_p_abstract_declarator;
 	return props;
@@ -2635,7 +2665,7 @@ multiplicative_expression_item::multiplicative_expression_item(std::string _arg_
 
 	Properties multiplicative_expression_item::getProperties()const
 {
-	Properties props;
+	Properties props("multiplicative_expression_item");
 	props["token1"]=_p_token1;
 	props["cast_expression"]=_p_cast_expression;
 	return props;
@@ -2691,7 +2721,7 @@ void multiplicative_expression::append(std::string _arg__s_matchedPattern, Token
 }
 PropertiesList multiplicative_expression::getPropertiesList()const
 {
-	PropertiesList pList;
+	PropertiesList pList(name());
 	for(CItemsListIter i=_items.begin();i!=_items.end();i++)
 	{
 		pList.push_back(i->getProperties());
@@ -2735,7 +2765,7 @@ type_qualifier_list_item::type_qualifier_list_item(std::string _arg__s_matchedPa
 
 	Properties type_qualifier_list_item::getProperties()const
 {
-	Properties props;
+	Properties props("type_qualifier_list_item");
 	props["type_qualifier"]=_p_type_qualifier;
 	return props;
 
@@ -2785,7 +2815,7 @@ void type_qualifier_list::append(std::string _arg__s_matchedPattern, type_qualif
 }
 PropertiesList type_qualifier_list::getPropertiesList()const
 {
-	PropertiesList pList;
+	PropertiesList pList(name());
 	for(CItemsListIter i=_items.begin();i!=_items.end();i++)
 	{
 		pList.push_back(i->getProperties());
@@ -2829,7 +2859,7 @@ argument_expression_list_item::argument_expression_list_item(std::string _arg__s
 
 	Properties argument_expression_list_item::getProperties()const
 {
-	Properties props;
+	Properties props("argument_expression_list_item");
 	props["assignment_expression"]=_p_assignment_expression;
 	return props;
 
@@ -2879,7 +2909,7 @@ void argument_expression_list::append(std::string _arg__s_matchedPattern, assign
 }
 PropertiesList argument_expression_list::getPropertiesList()const
 {
-	PropertiesList pList;
+	PropertiesList pList(name());
 	for(CItemsListIter i=_items.begin();i!=_items.end();i++)
 	{
 		pList.push_back(i->getProperties());
@@ -2921,7 +2951,7 @@ direct_abstract_declarator1::direct_abstract_declarator1(std::string _arg__s_mat
 }
 Properties direct_abstract_declarator1::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["direct_abstract_declarator"]=_p_direct_abstract_declarator;
 	props["constant_expression"]=_p_constant_expression;
 	return props;
@@ -2953,7 +2983,7 @@ direct_abstract_declarator2::direct_abstract_declarator2(std::string _arg__s_mat
 }
 Properties direct_abstract_declarator2::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["direct_abstract_declarator"]=_p_direct_abstract_declarator;
 	props["parameter_type_list"]=_p_parameter_type_list;
 	return props;
@@ -2984,7 +3014,7 @@ direct_abstract_declarator3::direct_abstract_declarator3(std::string _arg__s_mat
 }
 Properties direct_abstract_declarator3::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["abstract_declarator"]=_p_abstract_declarator;
 	return props;
 }
@@ -3025,7 +3055,7 @@ equality_expression_item::equality_expression_item(std::string _arg__s_matchedPa
 
 	Properties equality_expression_item::getProperties()const
 {
-	Properties props;
+	Properties props("equality_expression_item");
 	props["token1"]=_p_token1;
 	props["relational_expression"]=_p_relational_expression;
 	return props;
@@ -3081,7 +3111,7 @@ void equality_expression::append(std::string _arg__s_matchedPattern, Token *_arg
 }
 PropertiesList equality_expression::getPropertiesList()const
 {
-	PropertiesList pList;
+	PropertiesList pList(name());
 	for(CItemsListIter i=_items.begin();i!=_items.end();i++)
 	{
 		pList.push_back(i->getProperties());
@@ -3122,7 +3152,7 @@ primary_expression1::primary_expression1(std::string _arg__s_matchedPattern, exp
 }
 Properties primary_expression1::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["expression"]=_p_expression;
 	return props;
 }
@@ -3151,7 +3181,7 @@ primary_expression2::primary_expression2(std::string _arg__s_matchedPattern, Tok
 }
 Properties primary_expression2::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["token1"]=_p_token1;
 	return props;
 }
@@ -3190,7 +3220,7 @@ declaration_specifiers1_item::declaration_specifiers1_item(std::string _arg__s_m
 
 	Properties declaration_specifiers1_item::getProperties()const
 {
-	Properties props;
+	Properties props("declaration_specifiers1_item");
 	props["storage_class_specifier"]=_p_storage_class_specifier;
 	return props;
 
@@ -3240,7 +3270,7 @@ void declaration_specifiers1::append(std::string _arg__s_matchedPattern, storage
 }
 PropertiesList declaration_specifiers1::getPropertiesList()const
 {
-	PropertiesList pList;
+	PropertiesList pList(name());
 	for(CItemsListIter i=_items.begin();i!=_items.end();i++)
 	{
 		pList.push_back(i->getProperties());
@@ -3277,7 +3307,7 @@ declaration_specifiers2_item::declaration_specifiers2_item(std::string _arg__s_m
 
 	Properties declaration_specifiers2_item::getProperties()const
 {
-	Properties props;
+	Properties props("declaration_specifiers2_item");
 	props["type_specifier"]=_p_type_specifier;
 	return props;
 
@@ -3327,7 +3357,7 @@ void declaration_specifiers2::append(std::string _arg__s_matchedPattern, type_sp
 }
 PropertiesList declaration_specifiers2::getPropertiesList()const
 {
-	PropertiesList pList;
+	PropertiesList pList(name());
 	for(CItemsListIter i=_items.begin();i!=_items.end();i++)
 	{
 		pList.push_back(i->getProperties());
@@ -3364,7 +3394,7 @@ declaration_specifiers3_item::declaration_specifiers3_item(std::string _arg__s_m
 
 	Properties declaration_specifiers3_item::getProperties()const
 {
-	Properties props;
+	Properties props("declaration_specifiers3_item");
 	props["type_qualifier"]=_p_type_qualifier;
 	return props;
 
@@ -3414,7 +3444,7 @@ void declaration_specifiers3::append(std::string _arg__s_matchedPattern, type_qu
 }
 PropertiesList declaration_specifiers3::getPropertiesList()const
 {
-	PropertiesList pList;
+	PropertiesList pList(name());
 	for(CItemsListIter i=_items.begin();i!=_items.end();i++)
 	{
 		pList.push_back(i->getProperties());
@@ -3456,7 +3486,7 @@ declaration::declaration(std::string _arg__s_matchedPattern, declaration_specifi
 }
 Properties declaration::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["declaration_specifiers"]=_p_declaration_specifiers;
 	props["init_declarator_list"]=_p_init_declarator_list;
 	return props;
@@ -3495,7 +3525,7 @@ direct_declarator1::direct_declarator1(std::string _arg__s_matchedPattern, direc
 }
 Properties direct_declarator1::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["direct_declarator"]=_p_direct_declarator;
 	props["constant_expression"]=_p_constant_expression;
 	return props;
@@ -3527,7 +3557,7 @@ direct_declarator2::direct_declarator2(std::string _arg__s_matchedPattern, direc
 }
 Properties direct_declarator2::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["direct_declarator"]=_p_direct_declarator;
 	props["parameter_type_list"]=_p_parameter_type_list;
 	return props;
@@ -3559,7 +3589,7 @@ direct_declarator3::direct_declarator3(std::string _arg__s_matchedPattern, direc
 }
 Properties direct_declarator3::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["direct_declarator"]=_p_direct_declarator;
 	props["identifier_list"]=_p_identifier_list;
 	return props;
@@ -3590,7 +3620,7 @@ direct_declarator4::direct_declarator4(std::string _arg__s_matchedPattern, decla
 }
 Properties direct_declarator4::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["declarator"]=_p_declarator;
 	return props;
 }
@@ -3619,7 +3649,7 @@ direct_declarator5::direct_declarator5(std::string _arg__s_matchedPattern, Token
 }
 Properties direct_declarator5::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["token1"]=_p_token1;
 	return props;
 }
@@ -3658,7 +3688,7 @@ logical_and_expression_item::logical_and_expression_item(std::string _arg__s_mat
 
 	Properties logical_and_expression_item::getProperties()const
 {
-	Properties props;
+	Properties props("logical_and_expression_item");
 	props["inclusive_or_expression"]=_p_inclusive_or_expression;
 	return props;
 
@@ -3708,7 +3738,7 @@ void logical_and_expression::append(std::string _arg__s_matchedPattern, inclusiv
 }
 PropertiesList logical_and_expression::getPropertiesList()const
 {
-	PropertiesList pList;
+	PropertiesList pList(name());
 	for(CItemsListIter i=_items.begin();i!=_items.end();i++)
 	{
 		pList.push_back(i->getProperties());
@@ -3752,7 +3782,7 @@ init_declarator_list_item::init_declarator_list_item(std::string _arg__s_matched
 
 	Properties init_declarator_list_item::getProperties()const
 {
-	Properties props;
+	Properties props("init_declarator_list_item");
 	props["init_declarator"]=_p_init_declarator;
 	return props;
 
@@ -3802,7 +3832,7 @@ void init_declarator_list::append(std::string _arg__s_matchedPattern, init_decla
 }
 PropertiesList init_declarator_list::getPropertiesList()const
 {
-	PropertiesList pList;
+	PropertiesList pList(name());
 	for(CItemsListIter i=_items.begin();i!=_items.end();i++)
 	{
 		pList.push_back(i->getProperties());
@@ -3848,7 +3878,7 @@ shift_expression_item::shift_expression_item(std::string _arg__s_matchedPattern,
 
 	Properties shift_expression_item::getProperties()const
 {
-	Properties props;
+	Properties props("shift_expression_item");
 	props["token1"]=_p_token1;
 	props["additive_expression"]=_p_additive_expression;
 	return props;
@@ -3904,7 +3934,7 @@ void shift_expression::append(std::string _arg__s_matchedPattern, Token *_arg__p
 }
 PropertiesList shift_expression::getPropertiesList()const
 {
-	PropertiesList pList;
+	PropertiesList pList(name());
 	for(CItemsListIter i=_items.begin();i!=_items.end();i++)
 	{
 		pList.push_back(i->getProperties());
@@ -3948,7 +3978,7 @@ identifier_list_item::identifier_list_item(std::string _arg__s_matchedPattern, T
 
 	Properties identifier_list_item::getProperties()const
 {
-	Properties props;
+	Properties props("identifier_list_item");
 	props["token1"]=_p_token1;
 	return props;
 
@@ -3998,7 +4028,7 @@ void identifier_list::append(std::string _arg__s_matchedPattern, Token *_arg__p_
 }
 PropertiesList identifier_list::getPropertiesList()const
 {
-	PropertiesList pList;
+	PropertiesList pList(name());
 	for(CItemsListIter i=_items.begin();i!=_items.end();i++)
 	{
 		pList.push_back(i->getProperties());
@@ -4039,7 +4069,7 @@ jump_statement1::jump_statement1(std::string _arg__s_matchedPattern, Token *_arg
 }
 Properties jump_statement1::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["token1"]=_p_token1;
 	return props;
 }
@@ -4068,7 +4098,7 @@ jump_statement2::jump_statement2(std::string _arg__s_matchedPattern, expression 
 }
 Properties jump_statement2::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["expression"]=_p_expression;
 	return props;
 }
@@ -4097,7 +4127,7 @@ jump_statement3::jump_statement3(std::string _arg__s_matchedPattern, Token *_arg
 }
 Properties jump_statement3::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["token1"]=_p_token1;
 	return props;
 }
@@ -4135,7 +4165,7 @@ struct_declarator::struct_declarator(std::string _arg__s_matchedPattern, declara
 }
 Properties struct_declarator::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["declarator"]=_p_declarator;
 	props["token1"]=_p_token1;
 	props["constant_expression"]=_p_constant_expression;
@@ -4178,7 +4208,7 @@ function_definition::function_definition(std::string _arg__s_matchedPattern, dec
 }
 Properties function_definition::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["declaration_specifiers"]=_p_declaration_specifiers;
 	props["declarator"]=_p_declarator;
 	props["declaration_list"]=_p_declaration_list;
@@ -4223,7 +4253,7 @@ parameter_list_item::parameter_list_item(std::string _arg__s_matchedPattern, par
 
 	Properties parameter_list_item::getProperties()const
 {
-	Properties props;
+	Properties props("parameter_list_item");
 	props["parameter_declaration"]=_p_parameter_declaration;
 	return props;
 
@@ -4273,7 +4303,7 @@ void parameter_list::append(std::string _arg__s_matchedPattern, parameter_declar
 }
 PropertiesList parameter_list::getPropertiesList()const
 {
-	PropertiesList pList;
+	PropertiesList pList(name());
 	for(CItemsListIter i=_items.begin();i!=_items.end();i++)
 	{
 		pList.push_back(i->getProperties());
@@ -4317,7 +4347,7 @@ enum_specifier::enum_specifier(std::string _arg__s_matchedPattern, Token *_arg__
 }
 Properties enum_specifier::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["token1"]=_p_token1;
 	props["token2"]=_p_token2;
 	props["enumerator_list"]=_p_enumerator_list;
@@ -4359,7 +4389,7 @@ type_qualifier::type_qualifier(std::string _arg__s_matchedPattern, Token *_arg__
 }
 Properties type_qualifier::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["token1"]=_p_token1;
 	return props;
 }
@@ -4398,7 +4428,7 @@ enumerator_list_item::enumerator_list_item(std::string _arg__s_matchedPattern, e
 
 	Properties enumerator_list_item::getProperties()const
 {
-	Properties props;
+	Properties props("enumerator_list_item");
 	props["enumerator"]=_p_enumerator;
 	return props;
 
@@ -4448,7 +4478,7 @@ void enumerator_list::append(std::string _arg__s_matchedPattern, enumerator *_ar
 }
 PropertiesList enumerator_list::getPropertiesList()const
 {
-	PropertiesList pList;
+	PropertiesList pList(name());
 	for(CItemsListIter i=_items.begin();i!=_items.end();i++)
 	{
 		pList.push_back(i->getProperties());
@@ -4490,7 +4520,7 @@ labeled_statement1::labeled_statement1(std::string _arg__s_matchedPattern, const
 }
 Properties labeled_statement1::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["constant_expression"]=_p_constant_expression;
 	props["statement"]=_p_statement;
 	return props;
@@ -4522,7 +4552,7 @@ labeled_statement2::labeled_statement2(std::string _arg__s_matchedPattern, Token
 }
 Properties labeled_statement2::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["token1"]=_p_token1;
 	props["statement"]=_p_statement;
 	return props;
@@ -4563,7 +4593,7 @@ declaration_list_item::declaration_list_item(std::string _arg__s_matchedPattern,
 
 	Properties declaration_list_item::getProperties()const
 {
-	Properties props;
+	Properties props("declaration_list_item");
 	props["declaration"]=_p_declaration;
 	return props;
 
@@ -4613,7 +4643,7 @@ void declaration_list::append(std::string _arg__s_matchedPattern, declaration *_
 }
 PropertiesList declaration_list::getPropertiesList()const
 {
-	PropertiesList pList;
+	PropertiesList pList(name());
 	for(CItemsListIter i=_items.begin();i!=_items.end();i++)
 	{
 		pList.push_back(i->getProperties());
@@ -4657,7 +4687,7 @@ specifier_qualifier_list1_item::specifier_qualifier_list1_item(std::string _arg_
 
 	Properties specifier_qualifier_list1_item::getProperties()const
 {
-	Properties props;
+	Properties props("specifier_qualifier_list1_item");
 	props["type_specifier"]=_p_type_specifier;
 	return props;
 
@@ -4707,7 +4737,7 @@ void specifier_qualifier_list1::append(std::string _arg__s_matchedPattern, type_
 }
 PropertiesList specifier_qualifier_list1::getPropertiesList()const
 {
-	PropertiesList pList;
+	PropertiesList pList(name());
 	for(CItemsListIter i=_items.begin();i!=_items.end();i++)
 	{
 		pList.push_back(i->getProperties());
@@ -4744,7 +4774,7 @@ specifier_qualifier_list2_item::specifier_qualifier_list2_item(std::string _arg_
 
 	Properties specifier_qualifier_list2_item::getProperties()const
 {
-	Properties props;
+	Properties props("specifier_qualifier_list2_item");
 	props["type_qualifier"]=_p_type_qualifier;
 	return props;
 
@@ -4794,7 +4824,7 @@ void specifier_qualifier_list2::append(std::string _arg__s_matchedPattern, type_
 }
 PropertiesList specifier_qualifier_list2::getPropertiesList()const
 {
-	PropertiesList pList;
+	PropertiesList pList(name());
 	for(CItemsListIter i=_items.begin();i!=_items.end();i++)
 	{
 		pList.push_back(i->getProperties());
@@ -4838,7 +4868,7 @@ translation_unit_item::translation_unit_item(std::string _arg__s_matchedPattern,
 
 	Properties translation_unit_item::getProperties()const
 {
-	Properties props;
+	Properties props("translation_unit_item");
 	props["external_declaration"]=_p_external_declaration;
 	return props;
 
@@ -4888,7 +4918,7 @@ void translation_unit::append(std::string _arg__s_matchedPattern, external_decla
 }
 PropertiesList translation_unit::getPropertiesList()const
 {
-	PropertiesList pList;
+	PropertiesList pList(name());
 	for(CItemsListIter i=_items.begin();i!=_items.end();i++)
 	{
 		pList.push_back(i->getProperties());
@@ -4929,7 +4959,7 @@ constant_expression::constant_expression(std::string _arg__s_matchedPattern, con
 }
 Properties constant_expression::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["conditional_expression"]=_p_conditional_expression;
 	return props;
 }
@@ -4968,7 +4998,7 @@ initializer_list_item::initializer_list_item(std::string _arg__s_matchedPattern,
 
 	Properties initializer_list_item::getProperties()const
 {
-	Properties props;
+	Properties props("initializer_list_item");
 	props["initializer"]=_p_initializer;
 	return props;
 
@@ -5018,7 +5048,7 @@ void initializer_list::append(std::string _arg__s_matchedPattern, initializer *_
 }
 PropertiesList initializer_list::getPropertiesList()const
 {
-	PropertiesList pList;
+	PropertiesList pList(name());
 	for(CItemsListIter i=_items.begin();i!=_items.end();i++)
 	{
 		pList.push_back(i->getProperties());
@@ -5062,7 +5092,7 @@ statement_list_item::statement_list_item(std::string _arg__s_matchedPattern, sta
 
 	Properties statement_list_item::getProperties()const
 {
-	Properties props;
+	Properties props("statement_list_item");
 	props["statement"]=_p_statement;
 	return props;
 
@@ -5112,7 +5142,7 @@ void statement_list::append(std::string _arg__s_matchedPattern, statement *_arg_
 }
 PropertiesList statement_list::getPropertiesList()const
 {
-	PropertiesList pList;
+	PropertiesList pList(name());
 	for(CItemsListIter i=_items.begin();i!=_items.end();i++)
 	{
 		pList.push_back(i->getProperties());
@@ -5156,7 +5186,7 @@ expression_item::expression_item(std::string _arg__s_matchedPattern, assignment_
 
 	Properties expression_item::getProperties()const
 {
-	Properties props;
+	Properties props("expression_item");
 	props["assignment_expression"]=_p_assignment_expression;
 	return props;
 
@@ -5206,7 +5236,7 @@ void expression::append(std::string _arg__s_matchedPattern, assignment_expressio
 }
 PropertiesList expression::getPropertiesList()const
 {
-	PropertiesList pList;
+	PropertiesList pList(name());
 	for(CItemsListIter i=_items.begin();i!=_items.end();i++)
 	{
 		pList.push_back(i->getProperties());
@@ -5248,7 +5278,7 @@ declarator::declarator(std::string _arg__s_matchedPattern, pointer *_arg__p_poin
 }
 Properties declarator::getProperties()const
 {
-	Properties props;
+	Properties props(name());
 	props["pointer"]=_p_pointer;
 	props["direct_declarator"]=_p_direct_declarator;
 	return props;

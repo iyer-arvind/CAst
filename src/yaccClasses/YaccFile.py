@@ -74,11 +74,21 @@ class YaccFile(object):
 			rule=self.ruleMap[rn]
 			rule.resolve()
 	
-	def dump(self,yaccFileHandle,cHeaderFileHandle,cSourceFileHandle):
+	def dump(self,yaccFileHandle,cHeaderFileHandle,cSourceFileHandle,pythonFileHandle):
 		self._dumpYacc(yaccFileHandle)
 		self._dumpCHeader(cHeaderFileHandle)
 		self._dumpCSource(cSourceFileHandle)
+		self._dumpPython ( pythonFileHandle)
 
+
+	def _dumpPython(self,fh):
+		fh.write("""
+#include <Python.h>
+""")
+		for rn in self.ruleMap:
+			rule=self.ruleMap[rn]
+			rule._dumpPython(fh)
+		
 	def _dumpYacc(self,fh):
 		for j,t in enumerate([ i for i in self.tokens.values() if i.typeName=='tok' ]):
 			if(j%5==0):
@@ -141,42 +151,92 @@ namespace CAst
 		fh.write("#include \"%s.h\"\n"%(os.path.splitext(os.path.basename(fh.name))[0]))
 		fh.write("namespace CAst\n{\n\n")
 		fh.write("""
-std::ostream& Properties::toStream(std::ostream& stream)const
+std::ostream& Properties::toStream(std::ostream& stream,int indent)const
 {
-
-	stream<<"{";
-	bool flag=false;
-	for(std::map<std::string,CAst*>::const_iterator i=begin();i!=end();i++)
+	if(__className=="token")
 	{
-		if(i->second)
-		{
-			if(flag)
-				stream<<",";
-			stream<<"\\""<<i->first<<"\\":";
-			stream<<"("<<i->second->name()<<",";
-			if(i->second->isList())
-			{
-				i->second->getPropertiesList().toStream(stream);
-			}
-			else
-			{
-				i->second->getProperties().toStream(stream);
-			}
-			stream<<")";
-			flag=true;
-		}
-		else
-		{
-			//stream<<"NULL";
-		}
+		return stream<<"\\\""<<__tokValue<<"\\\"";
 	}
-	stream<<"}";
+	std::string sp="  ";
+	std::string nl="\\n";
+	std::string tab=nl;
+	for(register int i=0;i<indent;i++)tab+=sp;
+	int n=0;
+	for(const_iterator i=begin();(i!=end())&&(n<=1);i++)
+	{
+		if(i->second)n++;
+	}
+	if(n>1)
+	{
+		bool flag=false;
+		stream<<tab<<"{"<<tab<<sp<<"\\\"type\\\":\\\""<<__className<<"\\\","<<tab<<sp<<"\\\"value\\\":"<<tab<<sp<<"{";
+		for(const_iterator i=begin();i!=end();i++)
+		{
+			if(i->second)
+			{
+				if(flag)stream<<",";
+				stream<<tab<<sp<<sp<<"\\\""<<i->first<<"\\\":";
+				if(i->second->isList())
+				{
+					i->second->getPropertiesList().toStream(stream,indent+2);
+				}
+				else
+				{
+					i->second->getProperties().toStream(stream,indent+2);
+				}
+				flag=true;
+			}
+		}
+		stream<<tab<<sp<<"}";
+		stream<<tab<<"}";
+	}
+	else if(n==1)
+	{
+		for(const_iterator i=begin();i!=end();i++)
+		{
+			if(i->second)
+			{
+				if(i->second->isList())
+				{
+					i->second->getPropertiesList().toStream(stream,indent);
+				}
+				else
+				{
+					i->second->getProperties().toStream(stream,indent);
+				}
+				break;
+			}
+		}
+		
+	}
+	else
+		stream<<"\\\"\\\"";
 	return stream;
 }""")
 		for rn in self.ruleMap:
 			rule=self.ruleMap[rn]
 			rule._dumpCSource(fh)
 		fh.write("}//namespace CAst\n")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 baseClass="""
@@ -187,24 +247,54 @@ class CAst;
 
 class Properties:public std::map<std::string,CAst*> 
 {
+private:
+	std::string __className;
+	std::string __tokValue;
 public:
-	std::ostream& toStream(std::ostream& stream)const;
+	Properties(std::string className):
+		std::map<std::string,CAst*>(),
+		__className(className)
+	{}
+	void setTokValue(std::string v){__tokValue=v;}
+	
+	std::ostream& toStream(std::ostream& stream,int indent=0)const;
 };
-inline std::ostream& operator<<(std::ostream &stream,const Properties &p){return p.toStream(stream);}
+inline std::ostream& operator<<(std::ostream &stream,const Properties &p)
+{
+	return p.toStream(stream);
+}
 
 class PropertiesList:public std::list<Properties>
 {
-
+private:
+	std::string __className;
 public:
-	std::ostream& toStream(std::ostream& stream)const
+	PropertiesList(std::string className):
+			std::list<Properties>(),
+			__className(className)
+	{}
+			
+	std::ostream& toStream(std::ostream& stream,int indent=0)const
 	{
-		if(size()==1)
-			front().toStream(stream);
+		std::string sp="  ";
+		std::string nl="\\n";
+		std::string tab=nl;
+		for(register int i=0;i<indent;i++)tab+=sp;
+		if(size()>1)
+		{
+			stream<<tab<<"{"<<tab<<sp<<"\\\"type\\\":\\\""<<__className<<"\\\","<<tab<<sp<<"\\\"value\\\":";
+			stream<<tab<<sp<<"[";
+			for(const_iterator i=begin();i!=end();i++)
+			{
+				if(i!=begin())stream<<","<<tab<<sp;
+				i->toStream(stream,indent+2);
+			}
+			stream<<tab<<sp<<"]";
+			stream<<tab<<"}";
+		}
 		else
 		{
-			stream<<"[";
-			for(std::list<Properties>::const_iterator i=begin();i!=end();i++){i->toStream(stream);stream<<",";}
-			stream<<"]";
+			begin()->toStream(stream,indent);
 		}
 		return stream;
 	}
@@ -241,7 +331,7 @@ class GenericToken:public Token
 	std::string _txt;
 public:
 	
-	virtual std::string name()const{return "generic_token";}
+	virtual std::string name()const{return "token";}
 	GenericToken(std::string txt):
 		Token(),
 		_txt(txt)
@@ -249,8 +339,8 @@ public:
 	}
 	
 	virtual bool isList()const			{return false;}
-	virtual Properties getProperties()const		{return Properties();}
-	virtual PropertiesList getPropertiesList()const	{return PropertiesList();}
+	virtual Properties getProperties()const		{Properties p(name());p.setTokValue(_txt);return p;}
+	virtual PropertiesList getPropertiesList()const	{return PropertiesList(name());}
 	virtual ~GenericToken()
 	{
 	}

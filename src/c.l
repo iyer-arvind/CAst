@@ -172,7 +172,15 @@ void count()
 	{
 		if(strcmp(yytext,"\n"))
 			std::cerr<<"reading: \033[37;41;1m"<<yytext<<"\033[0m\n";
-		std::string s(yytext);
+
+		std::string s;
+		for(register int i=0;i<strlen(yytext);i++)
+		{
+			if(yytext[i]=='\"')
+				s+=std::string("\\\"");
+			else
+				s=s+yytext[i];
+		}
 		toks.push_back(s);
 		yylval._t_str=toks.back().c_str();
 	}

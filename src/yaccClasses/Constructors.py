@@ -65,6 +65,12 @@ class _Constructor_(object):
 	def __str__(self):
 		return "\033[31m"+self.NAME+"\033[0m:  "+repr(self)
 
+	
+	def _dumpPython(self,fh):
+		if(not hasattr(self,"classCoder")):self._setClassCoder()
+		if(not hasattr(self,"parameters")):self._setParameters()
+		self.classCoder._dumpPython(fh)
+	
 	def _dumpCHeader(self,fh):
 		if(not hasattr(self,"classCoder")):self._setClassCoder()
 		if(not hasattr(self,"parameters")):self._setParameters()

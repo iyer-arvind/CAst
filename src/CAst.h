@@ -31,24 +31,54 @@ class CAst;
 
 class Properties:public std::map<std::string,CAst*> 
 {
+private:
+	std::string __className;
+	std::string __tokValue;
 public:
-	std::ostream& toStream(std::ostream& stream)const;
+	Properties(std::string className):
+		std::map<std::string,CAst*>(),
+		__className(className)
+	{}
+	void setTokValue(std::string v){__tokValue=v;}
+	
+	std::ostream& toStream(std::ostream& stream,int indent=0)const;
 };
-inline std::ostream& operator<<(std::ostream &stream,const Properties &p){return p.toStream(stream);}
+inline std::ostream& operator<<(std::ostream &stream,const Properties &p)
+{
+	return p.toStream(stream);
+}
 
 class PropertiesList:public std::list<Properties>
 {
-
+private:
+	std::string __className;
 public:
-	std::ostream& toStream(std::ostream& stream)const
+	PropertiesList(std::string className):
+			std::list<Properties>(),
+			__className(className)
+	{}
+			
+	std::ostream& toStream(std::ostream& stream,int indent=0)const
 	{
-		if(size()==1)
-			front().toStream(stream);
+		std::string sp="  ";
+		std::string nl="\n";
+		std::string tab=nl;
+		for(register int i=0;i<indent;i++)tab+=sp;
+		if(size()>1)
+		{
+			stream<<tab<<"{"<<tab<<sp<<"\"type\":\""<<__className<<"\","<<tab<<sp<<"\"value\":";
+			stream<<tab<<sp<<"[";
+			for(const_iterator i=begin();i!=end();i++)
+			{
+				if(i!=begin())stream<<","<<tab<<sp;
+				i->toStream(stream,indent+2);
+			}
+			stream<<tab<<sp<<"]";
+			stream<<tab<<"}";
+		}
 		else
 		{
-			stream<<"[";
-			for(std::list<Properties>::const_iterator i=begin();i!=end();i++){i->toStream(stream);stream<<",";}
-			stream<<"]";
+			begin()->toStream(stream,indent);
 		}
 		return stream;
 	}
@@ -85,7 +115,7 @@ class GenericToken:public Token
 	std::string _txt;
 public:
 	
-	virtual std::string name()const{return "generic_token";}
+	virtual std::string name()const{return "token";}
 	GenericToken(std::string txt):
 		Token(),
 		_txt(txt)
@@ -93,8 +123,8 @@ public:
 	}
 	
 	virtual bool isList()const			{return false;}
-	virtual Properties getProperties()const		{return Properties();}
-	virtual PropertiesList getPropertiesList()const	{return PropertiesList();}
+	virtual Properties getProperties()const		{Properties p(name());p.setTokValue(_txt);return p;}
+	virtual PropertiesList getPropertiesList()const	{return PropertiesList(name());}
 	virtual ~GenericToken()
 	{
 	}
@@ -123,7 +153,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~storage_class_specifier();
 };
 
@@ -151,7 +181,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~expression_statement();
 };
 
@@ -181,7 +211,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~type_name();
 };
 
@@ -221,7 +251,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~unary_expression1();
 };
 
@@ -244,7 +274,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~unary_expression2();
 };
 
@@ -267,7 +297,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~unary_expression3();
 };
 
@@ -288,7 +318,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~unary_expression4();
 };
 
@@ -333,7 +363,7 @@ public:
 	virtual std::string name()const;
 	virtual std::string pattern()const;
 	virtual bool isList()const{return true;}
-	virtual Properties getProperties()const{return Properties();}
+	virtual Properties getProperties()const{return Properties(name());}
 	virtual PropertiesList getPropertiesList()const;
 	virtual ~conditional_expression();
 };
@@ -370,7 +400,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~struct_or_union_specifier();
 };
 
@@ -413,7 +443,7 @@ public:
 	virtual std::string name()const;
 	virtual std::string pattern()const;
 	virtual bool isList()const{return true;}
-	virtual Properties getProperties()const{return Properties();}
+	virtual Properties getProperties()const{return Properties(name());}
 	virtual PropertiesList getPropertiesList()const;
 	virtual ~exclusive_or_expression();
 };
@@ -456,7 +486,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~initializer1();
 };
 
@@ -477,7 +507,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~initializer2();
 };
 
@@ -520,7 +550,7 @@ public:
 	virtual std::string name()const;
 	virtual std::string pattern()const;
 	virtual bool isList()const{return true;}
-	virtual Properties getProperties()const{return Properties();}
+	virtual Properties getProperties()const{return Properties(name());}
 	virtual PropertiesList getPropertiesList()const;
 	virtual ~struct_declaration_list();
 };
@@ -549,7 +579,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~assignment_operator();
 };
 
@@ -579,7 +609,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~struct_declaration();
 };
 
@@ -609,7 +639,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~abstract_declarator();
 };
 
@@ -651,7 +681,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~iteration_statement1();
 };
 
@@ -678,7 +708,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~iteration_statement2();
 };
 
@@ -701,7 +731,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~iteration_statement3();
 };
 
@@ -746,7 +776,7 @@ public:
 	virtual std::string name()const;
 	virtual std::string pattern()const;
 	virtual bool isList()const{return true;}
-	virtual Properties getProperties()const{return Properties();}
+	virtual Properties getProperties()const{return Properties(name());}
 	virtual PropertiesList getPropertiesList()const;
 	virtual ~additive_expression();
 };
@@ -787,7 +817,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~external_declaration1();
 };
 
@@ -808,7 +838,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~external_declaration2();
 };
 
@@ -848,7 +878,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~type_specifier1();
 };
 
@@ -869,7 +899,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~type_specifier2();
 };
 
@@ -890,7 +920,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~type_specifier3();
 };
 
@@ -920,7 +950,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~compound_statement();
 };
 
@@ -963,7 +993,7 @@ public:
 	virtual std::string name()const;
 	virtual std::string pattern()const;
 	virtual bool isList()const{return true;}
-	virtual Properties getProperties()const{return Properties();}
+	virtual Properties getProperties()const{return Properties(name());}
 	virtual PropertiesList getPropertiesList()const;
 	virtual ~inclusive_or_expression();
 };
@@ -1007,7 +1037,7 @@ public:
 	virtual std::string name()const;
 	virtual std::string pattern()const;
 	virtual bool isList()const{return true;}
-	virtual Properties getProperties()const{return Properties();}
+	virtual Properties getProperties()const{return Properties(name());}
 	virtual PropertiesList getPropertiesList()const;
 	virtual ~pointer();
 };
@@ -1054,7 +1084,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~selection_statement1();
 };
 
@@ -1077,7 +1107,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~selection_statement2();
 };
 
@@ -1119,7 +1149,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~postfix_expression1();
 };
 
@@ -1142,7 +1172,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~postfix_expression2();
 };
 
@@ -1167,7 +1197,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~postfix_expression3();
 };
 
@@ -1190,7 +1220,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~postfix_expression4();
 };
 
@@ -1211,7 +1241,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~postfix_expression5();
 };
 
@@ -1254,7 +1284,7 @@ public:
 	virtual std::string name()const;
 	virtual std::string pattern()const;
 	virtual bool isList()const{return true;}
-	virtual Properties getProperties()const{return Properties();}
+	virtual Properties getProperties()const{return Properties(name());}
 	virtual PropertiesList getPropertiesList()const;
 	virtual ~and_expression();
 };
@@ -1295,7 +1325,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~statement1();
 };
 
@@ -1316,7 +1346,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~statement2();
 };
 
@@ -1337,7 +1367,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~statement3();
 };
 
@@ -1358,7 +1388,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~statement4();
 };
 
@@ -1379,7 +1409,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~statement5();
 };
 
@@ -1400,7 +1430,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~statement6();
 };
 
@@ -1442,7 +1472,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~cast_expression1();
 };
 
@@ -1463,7 +1493,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~cast_expression2();
 };
 
@@ -1495,7 +1525,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~init_declarator();
 };
 
@@ -1538,7 +1568,7 @@ public:
 	virtual std::string name()const;
 	virtual std::string pattern()const;
 	virtual bool isList()const{return true;}
-	virtual Properties getProperties()const{return Properties();}
+	virtual Properties getProperties()const{return Properties(name());}
 	virtual PropertiesList getPropertiesList()const;
 	virtual ~struct_declarator_list();
 };
@@ -1582,7 +1612,7 @@ public:
 	virtual std::string name()const;
 	virtual std::string pattern()const;
 	virtual bool isList()const{return true;}
-	virtual Properties getProperties()const{return Properties();}
+	virtual Properties getProperties()const{return Properties(name());}
 	virtual PropertiesList getPropertiesList()const;
 	virtual ~logical_or_expression();
 };
@@ -1611,7 +1641,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~unary_operator();
 };
 
@@ -1656,7 +1686,7 @@ public:
 	virtual std::string name()const;
 	virtual std::string pattern()const;
 	virtual bool isList()const{return true;}
-	virtual Properties getProperties()const{return Properties();}
+	virtual Properties getProperties()const{return Properties(name());}
 	virtual PropertiesList getPropertiesList()const;
 	virtual ~relational_expression();
 };
@@ -1685,7 +1715,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~struct_or_union();
 };
 
@@ -1717,7 +1747,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~enumerator();
 };
 
@@ -1761,7 +1791,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~assignment_expression1();
 };
 
@@ -1782,7 +1812,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~assignment_expression2();
 };
 
@@ -1814,7 +1844,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~parameter_type_list();
 };
 
@@ -1856,7 +1886,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~parameter_declaration1();
 };
 
@@ -1879,7 +1909,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~parameter_declaration2();
 };
 
@@ -1924,7 +1954,7 @@ public:
 	virtual std::string name()const;
 	virtual std::string pattern()const;
 	virtual bool isList()const{return true;}
-	virtual Properties getProperties()const{return Properties();}
+	virtual Properties getProperties()const{return Properties(name());}
 	virtual PropertiesList getPropertiesList()const;
 	virtual ~multiplicative_expression();
 };
@@ -1968,7 +1998,7 @@ public:
 	virtual std::string name()const;
 	virtual std::string pattern()const;
 	virtual bool isList()const{return true;}
-	virtual Properties getProperties()const{return Properties();}
+	virtual Properties getProperties()const{return Properties(name());}
 	virtual PropertiesList getPropertiesList()const;
 	virtual ~type_qualifier_list();
 };
@@ -2012,7 +2042,7 @@ public:
 	virtual std::string name()const;
 	virtual std::string pattern()const;
 	virtual bool isList()const{return true;}
-	virtual Properties getProperties()const{return Properties();}
+	virtual Properties getProperties()const{return Properties(name());}
 	virtual PropertiesList getPropertiesList()const;
 	virtual ~argument_expression_list();
 };
@@ -2055,7 +2085,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~direct_abstract_declarator1();
 };
 
@@ -2078,7 +2108,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~direct_abstract_declarator2();
 };
 
@@ -2099,7 +2129,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~direct_abstract_declarator3();
 };
 
@@ -2144,7 +2174,7 @@ public:
 	virtual std::string name()const;
 	virtual std::string pattern()const;
 	virtual bool isList()const{return true;}
-	virtual Properties getProperties()const{return Properties();}
+	virtual Properties getProperties()const{return Properties(name());}
 	virtual PropertiesList getPropertiesList()const;
 	virtual ~equality_expression();
 };
@@ -2185,7 +2215,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~primary_expression1();
 };
 
@@ -2206,7 +2236,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~primary_expression2();
 };
 
@@ -2261,7 +2291,7 @@ public:
 	virtual std::string name()const;
 	virtual std::string pattern()const;
 	virtual bool isList()const{return true;}
-	virtual Properties getProperties()const{return Properties();}
+	virtual Properties getProperties()const{return Properties(name());}
 	virtual PropertiesList getPropertiesList()const;
 	virtual ~declaration_specifiers1();
 };
@@ -2298,7 +2328,7 @@ public:
 	virtual std::string name()const;
 	virtual std::string pattern()const;
 	virtual bool isList()const{return true;}
-	virtual Properties getProperties()const{return Properties();}
+	virtual Properties getProperties()const{return Properties(name());}
 	virtual PropertiesList getPropertiesList()const;
 	virtual ~declaration_specifiers2();
 };
@@ -2335,7 +2365,7 @@ public:
 	virtual std::string name()const;
 	virtual std::string pattern()const;
 	virtual bool isList()const{return true;}
-	virtual Properties getProperties()const{return Properties();}
+	virtual Properties getProperties()const{return Properties(name());}
 	virtual PropertiesList getPropertiesList()const;
 	virtual ~declaration_specifiers3();
 };
@@ -2366,7 +2396,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~declaration();
 };
 
@@ -2408,7 +2438,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~direct_declarator1();
 };
 
@@ -2431,7 +2461,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~direct_declarator2();
 };
 
@@ -2454,7 +2484,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~direct_declarator3();
 };
 
@@ -2475,7 +2505,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~direct_declarator4();
 };
 
@@ -2496,7 +2526,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~direct_declarator5();
 };
 
@@ -2539,7 +2569,7 @@ public:
 	virtual std::string name()const;
 	virtual std::string pattern()const;
 	virtual bool isList()const{return true;}
-	virtual Properties getProperties()const{return Properties();}
+	virtual Properties getProperties()const{return Properties(name());}
 	virtual PropertiesList getPropertiesList()const;
 	virtual ~logical_and_expression();
 };
@@ -2583,7 +2613,7 @@ public:
 	virtual std::string name()const;
 	virtual std::string pattern()const;
 	virtual bool isList()const{return true;}
-	virtual Properties getProperties()const{return Properties();}
+	virtual Properties getProperties()const{return Properties(name());}
 	virtual PropertiesList getPropertiesList()const;
 	virtual ~init_declarator_list();
 };
@@ -2629,7 +2659,7 @@ public:
 	virtual std::string name()const;
 	virtual std::string pattern()const;
 	virtual bool isList()const{return true;}
-	virtual Properties getProperties()const{return Properties();}
+	virtual Properties getProperties()const{return Properties(name());}
 	virtual PropertiesList getPropertiesList()const;
 	virtual ~shift_expression();
 };
@@ -2673,7 +2703,7 @@ public:
 	virtual std::string name()const;
 	virtual std::string pattern()const;
 	virtual bool isList()const{return true;}
-	virtual Properties getProperties()const{return Properties();}
+	virtual Properties getProperties()const{return Properties(name());}
 	virtual PropertiesList getPropertiesList()const;
 	virtual ~identifier_list();
 };
@@ -2714,7 +2744,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~jump_statement1();
 };
 
@@ -2735,7 +2765,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~jump_statement2();
 };
 
@@ -2756,7 +2786,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~jump_statement3();
 };
 
@@ -2788,7 +2818,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~struct_declarator();
 };
 
@@ -2822,7 +2852,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~function_definition();
 };
 
@@ -2865,7 +2895,7 @@ public:
 	virtual std::string name()const;
 	virtual std::string pattern()const;
 	virtual bool isList()const{return true;}
-	virtual Properties getProperties()const{return Properties();}
+	virtual Properties getProperties()const{return Properties(name());}
 	virtual PropertiesList getPropertiesList()const;
 	virtual ~parameter_list();
 };
@@ -2900,7 +2930,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~enum_specifier();
 };
 
@@ -2928,7 +2958,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~type_qualifier();
 };
 
@@ -2971,7 +3001,7 @@ public:
 	virtual std::string name()const;
 	virtual std::string pattern()const;
 	virtual bool isList()const{return true;}
-	virtual Properties getProperties()const{return Properties();}
+	virtual Properties getProperties()const{return Properties(name());}
 	virtual PropertiesList getPropertiesList()const;
 	virtual ~enumerator_list();
 };
@@ -3014,7 +3044,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~labeled_statement1();
 };
 
@@ -3037,7 +3067,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~labeled_statement2();
 };
 
@@ -3080,7 +3110,7 @@ public:
 	virtual std::string name()const;
 	virtual std::string pattern()const;
 	virtual bool isList()const{return true;}
-	virtual Properties getProperties()const{return Properties();}
+	virtual Properties getProperties()const{return Properties(name());}
 	virtual PropertiesList getPropertiesList()const;
 	virtual ~declaration_list();
 };
@@ -3136,7 +3166,7 @@ public:
 	virtual std::string name()const;
 	virtual std::string pattern()const;
 	virtual bool isList()const{return true;}
-	virtual Properties getProperties()const{return Properties();}
+	virtual Properties getProperties()const{return Properties(name());}
 	virtual PropertiesList getPropertiesList()const;
 	virtual ~specifier_qualifier_list1();
 };
@@ -3173,7 +3203,7 @@ public:
 	virtual std::string name()const;
 	virtual std::string pattern()const;
 	virtual bool isList()const{return true;}
-	virtual Properties getProperties()const{return Properties();}
+	virtual Properties getProperties()const{return Properties(name());}
 	virtual PropertiesList getPropertiesList()const;
 	virtual ~specifier_qualifier_list2();
 };
@@ -3217,7 +3247,7 @@ public:
 	virtual std::string name()const;
 	virtual std::string pattern()const;
 	virtual bool isList()const{return true;}
-	virtual Properties getProperties()const{return Properties();}
+	virtual Properties getProperties()const{return Properties(name());}
 	virtual PropertiesList getPropertiesList()const;
 	virtual ~translation_unit();
 };
@@ -3246,7 +3276,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~constant_expression();
 };
 
@@ -3289,7 +3319,7 @@ public:
 	virtual std::string name()const;
 	virtual std::string pattern()const;
 	virtual bool isList()const{return true;}
-	virtual Properties getProperties()const{return Properties();}
+	virtual Properties getProperties()const{return Properties(name());}
 	virtual PropertiesList getPropertiesList()const;
 	virtual ~initializer_list();
 };
@@ -3333,7 +3363,7 @@ public:
 	virtual std::string name()const;
 	virtual std::string pattern()const;
 	virtual bool isList()const{return true;}
-	virtual Properties getProperties()const{return Properties();}
+	virtual Properties getProperties()const{return Properties(name());}
 	virtual PropertiesList getPropertiesList()const;
 	virtual ~statement_list();
 };
@@ -3377,7 +3407,7 @@ public:
 	virtual std::string name()const;
 	virtual std::string pattern()const;
 	virtual bool isList()const{return true;}
-	virtual Properties getProperties()const{return Properties();}
+	virtual Properties getProperties()const{return Properties(name());}
 	virtual PropertiesList getPropertiesList()const;
 	virtual ~expression();
 };
@@ -3408,7 +3438,7 @@ public:
 	virtual std::string pattern()const;
 	virtual bool isList()const{return false;}
 	virtual Properties getProperties()const;
-	virtual PropertiesList getPropertiesList()const{return PropertiesList();}
+	virtual PropertiesList getPropertiesList()const{return PropertiesList(name());}
 	virtual ~declarator();
 };
 
