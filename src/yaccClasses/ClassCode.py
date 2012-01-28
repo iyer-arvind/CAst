@@ -19,9 +19,14 @@ class ConstructorClassCoder(object):
 
 
 	def _dumpPython(self,fh):
-
 		if(self.baseClassFlag):
 			pass
+		fh.write("""typedef struct
+{
+	PyObject_HEAD
+	%s *_p_cast_object
+}PyCAst_object_%s;\n\n\n
+"""%(self.className,self.className))
 	
 
 	def _dumpCHeader(self,fh):

@@ -84,6 +84,7 @@ class YaccFile(object):
 	def _dumpPython(self,fh):
 		fh.write("""
 #include <Python.h>
+
 """)
 		for rn in self.ruleMap:
 			rule=self.ruleMap[rn]
