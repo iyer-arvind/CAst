@@ -57,9 +57,10 @@ class Rule(object):
 
 	def _dumpPython(self,fh):
 		constructors=[ p.constructor for p in self.patterns if p.constructor.parent is None ]
-
+		classList=[]
 		for c in constructors:
-			c._dumpPython(fh)
+			classList.extend(c._dumpPython(fh))
+		return classList
 	
 	def _dumpYacc(self,fh):
 		#fh.write("/*test comment*/\n")

@@ -1,7 +1,24 @@
 #include "CAst.h"
+
+CAst::translation_unit *root;
+extern FILE* yyin;
+extern int yyparse(void);
 namespace CAst
 {
 
+
+
+
+
+
+
+
+translation_unit* parseFile(const char *fileName)
+{
+	yyin=fopen(fileName,"r");
+	yyparse();
+	return root;
+}
 
 std::ostream& Properties::toStream(std::ostream& stream,int indent)const
 {

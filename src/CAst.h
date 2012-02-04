@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <list>
 #include <iostream>
+#include <sstream>
 #include <iomanip>
 #include <map>
 #define LOG(txt) std::cerr<<"[\033[33m "<<std::setw(20)<<std::left<<this<<" \033[0m	]"<<txt<<"\n";
@@ -42,6 +43,12 @@ public:
 	void setTokValue(std::string v){__tokValue=v;}
 	
 	std::ostream& toStream(std::ostream& stream,int indent=0)const;
+	std::string str()const
+	{
+		std::stringstream stream;
+		toStream(stream);
+		return stream.str();
+	}
 };
 inline std::ostream& operator<<(std::ostream &stream,const Properties &p)
 {
@@ -81,6 +88,12 @@ public:
 			begin()->toStream(stream,indent);
 		}
 		return stream;
+	}
+	std::string str()const
+	{
+		std::stringstream stream;
+		toStream(stream);
+		return stream.str();
 	}
 };
 
@@ -3447,6 +3460,7 @@ public:
 
 
 
+translation_unit* parseFile(const char *fileName);
 
 
 }

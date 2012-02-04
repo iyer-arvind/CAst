@@ -2,20 +2,22 @@
 #include <iostream>
 #include <cstdio>
 #include "CAst.h"
-int yyparse(void);
-extern FILE* yyin;
-CAst::translation_unit *root;
+
+
+
+
 
 int main(int argc,char **argv)
 {
-	root=0;
-	yyin=fopen(argv[1],"r");
-	yyparse();
+
+	CAst::translation_unit* root=CAst::parseFile(argv[1]);
 	
+//	yyin=fopen(argv[1],"r");
+//	yyparse();
 	std::cout<<root->getPropertiesList()<<"\n";
 	delete root;
 	root=0;
-//	std::cout<<"deleted\n\n";
+////	std::cout<<"deleted\n\n";
 	return 0;
 }
 

@@ -69,7 +69,7 @@ class _Constructor_(object):
 	def _dumpPython(self,fh):
 		if(not hasattr(self,"classCoder")):self._setClassCoder()
 		if(not hasattr(self,"parameters")):self._setParameters()
-		self.classCoder._dumpPython(fh)
+		return self.classCoder._dumpPython(fh)
 	
 	def _dumpCHeader(self,fh):
 		if(not hasattr(self,"classCoder")):self._setClassCoder()

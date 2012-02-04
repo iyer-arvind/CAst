@@ -1,4 +1,7 @@
 from Token import Token
+from string import Template
+
+
 
 class ConstructorClassCoder(object):
 	def __init__(self,constructor):
@@ -21,18 +24,120 @@ class ConstructorClassCoder(object):
 	def _dumpPython(self,fh):
 		if(self.baseClassFlag):
 			pass
-		fh.write("""typedef struct
+		template=Template("""
+\n\n\n\n
+/*==============================================================*\\
+DEFINITION OF $className
+
+\\*==============================================================*/
+typedef struct
 {
 	PyObject_HEAD
-	%s *_p_cast_object
-}PyCAst_object_%s;\n\n\n
-"""%(self.className,self.className))
-	
+	CAst::$className *_p_cast_object;
+}PyCAst_object_$className;
+
+
+
+static PyMethodDef PyCAst_methods_$className [] = {
+    {NULL}
+};
+static PyMemberDef PyCAst_members_$className [] = {
+    {NULL}
+};
+static int PyCAst_init_$className(PyCAst_object_$className *self, PyObject *args, PyObject *kwds)
+{
+    printf("initializing PyCAst::$className\\n\\n");
+    return 0;
+}
+static PyObject *PyCAst_ast_getter_$className(PyObject *_self)
+{
+	PyCAst_object_$className *self=(PyCAst_object_$className*)(_self);
+	if(self->_p_cast_object->isList())
+		return PyString_FromString
+		(
+			self->_p_cast_object->getPropertiesList().str().c_str()
+		);
+	else 
+		return PyString_FromString
+		(
+			self->_p_cast_object->getProperties().str().c_str()
+		);
+
+
+}
+
+static PyGetSetDef PyCAst_getsetter_$className[] = 
+{
+	{"ast", (getter)PyCAst_ast_getter_$className,NULL,"Abstract Syntax Tree", NULL},
+	NULL
+};
+
+
+static PyObject * PyCAst_new_$className(PyTypeObject *type, PyObject *args, PyObject *kwds)
+{
+    printf("new PyCAst::$className\\n\\n");
+    PyCAst_object_$className *self;
+    self = (PyCAst_object_$className*)type->tp_alloc(type, 0);
+    return (PyObject *)self;
+}
+
+
+static PyTypeObject  PyCAst_type_$className = {
+    PyObject_HEAD_INIT(NULL)
+    0,
+    "CAst.$className",
+    sizeof(PyCAst_object_$className),
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    Py_TPFLAGS_DEFAULT,
+    "Object representing the $className for pattern $pattern",
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    PyCAst_methods_$className,
+    PyCAst_members_$className,
+    PyCAst_getsetter_$className,
+    0,
+    0,
+    0,
+    0,
+    0,
+    (initproc)PyCAst_init_${className},
+    0,
+    PyCAst_new_$className,
+
+
+
+};
+
+
+""")
+		fh.write(template.substitute(className=self.className,pattern=str(self.pattern)))
+		return [self.className]
+
+
 
 	def _dumpCHeader(self,fh):
 		if(self.baseClassFlag):self._dumpBaseClassCHeader(fh)
 		fh.write("//%s\n\n"%self.pattern)
-		
+
 		fh.write("//Forward Declaration --\n")
 		for t,n,p,v,i,v1 in self.parameters:
 			fh.write("class %s;\n"%t)
@@ -54,11 +159,11 @@ class ConstructorClassCoder(object):
 		fh.write("\tvirtual bool isList()const{return false;}\n")
 		fh.write("\tvirtual Properties getProperties()const;\n")
 		fh.write("\tvirtual PropertiesList getPropertiesList()const{return PropertiesList(name());}\n")
-		
-	
+
+
 		fh.write("\tvirtual ~%s();\n"%self.className)
 		fh.write("};\n"+"\n"*2)
-		
+
 	def _dumpCSource(self,fh):
 		fh.write("std::string %s::name()const\n{\n\treturn std::string(\"%s\");\n}"%(self.className,self.className)+"\n"*2)
 		fh.write("std::string %s::pattern()const\n{\n\treturn std::string(\"%s\");\n}"%(self.className,self.pattern[1:-1])+"\n"*2)
@@ -78,15 +183,15 @@ class ConstructorClassCoder(object):
 		fh.write("}\n")
 
 
-		
 
-		
+
+
 		fh.write("%s::~%s()"%(self.className,self.className))
 		fh.write("\n{\n")
 		fh.write("\n\tLOG(\"\\033[31mDELETING\\033[0m %s\")\n"%self.className);
 		fh.write("\n".join(["\tif (%s)%s{delete(%s);%s=0;}"%(n," "*(30-len(n)),n,n) for t,n,p,v,i,v1 in self.parameters]))
 		fh.write("\n}\n")
-		
+
 
 	def _dumpBaseClassCHeader(self,fh):
 		fh.write("class %s"%self.constructor._name)
@@ -99,20 +204,20 @@ class ConstructorClassCoder(object):
 		fh.write("\tvirtual PropertiesList getPropertiesList()const=0;\n")
 		fh.write("\tvirtual ~%s(){}\n"%self.constructor._name)
 		fh.write("};\n"+"\n"*2)
-		
+
 class ListAccumulatorClassCoder(ConstructorClassCoder):
 
 	def _dumpCHeader(self,fh):
 		#base class if necessary
 		if(self.baseClassFlag):self._dumpBaseClassCHeader(fh)
 
-		
+
 		fh.write("//%s\n\n"%self.pattern)
-		
+
 		fh.write("//Forward Declaration --\n")
 		for t,n,p,v,i,v1 in self.parameters:
 			fh.write("class %s;\n"%t)
-	
+
 
 		#item class
 		fh.write("//List Element Declaration--\n")
@@ -155,7 +260,7 @@ class ListAccumulatorClassCoder(ConstructorClassCoder):
 		fh.write(", ".join(["%s *_arg_%s"%(t,n) for t,n,p,v,i,v1 in self.parameters if i != self.constructor.selfIndex]))
 		fh.write(");\n")
 
-		
+
 		fh.write("\tvirtual std::string name()const;\n")
 		fh.write("\tvirtual std::string pattern()const;\n")
 		fh.write("\tvirtual bool isList()const{return true;}\n")
@@ -164,7 +269,7 @@ class ListAccumulatorClassCoder(ConstructorClassCoder):
 		fh.write("\tvirtual ~%s();\n"%self.className)
 		fh.write("};\n"+"\n"*2)
 
-	
+
 	def _dumpCSource(self,fh):
 		#item class
 		fh.write("%s_item::%s_item(std::string _arg__s_matchedPattern, "%(self.className,self.className))
@@ -212,7 +317,7 @@ class ListAccumulatorClassCoder(ConstructorClassCoder):
 
 
 
-		
+
 		#main class
 		fh.write("std::string %s::name()const\n{\n\treturn std::string(\"%s\");\n}"%(self.className,self.className)+"\n"*2)
 		fh.write("std::string %s::pattern()const\n{\n\treturn std::string(\"%s\");\n}"%(self.className,self.pattern[1:-1])+"\n"*2)
@@ -228,7 +333,7 @@ class ListAccumulatorClassCoder(ConstructorClassCoder):
 		fh.write("\n\tLOG(\"APPENDING to %s\")\n"%self.className);
 		fh.write("\t_items.push_back(item);\n")
 		fh.write("}\n")
-		
+
 		fh.write("void %s::append(std::string _arg__s_matchedPattern, "%(self.className))
 		fh.write(", ".join(["%s *_arg_%s"%(t,n) for t,n,p,v,i,v1 in self.parameters if i != self.constructor.selfIndex]))
 		fh.write(")")
@@ -238,7 +343,7 @@ class ListAccumulatorClassCoder(ConstructorClassCoder):
 		fh.write(");\n")
 		fh.write("\t_items.push_back(item);\n")
 		fh.write("}\n")
-		
+
 		fh.write("PropertiesList %s::getPropertiesList()const\n"%self.className)
 		fh.write("{\n")
 		fh.write("\tPropertiesList pList(name());\n");
@@ -246,7 +351,7 @@ class ListAccumulatorClassCoder(ConstructorClassCoder):
 		fh.write("\t{\n")
 		fh.write("\t\tpList.push_back(i->getProperties());\n")
 		fh.write("\t}\n")
-	
+
 		fh.write("\treturn pList;\n");
 		fh.write("}\n\n")
 
@@ -256,7 +361,9 @@ class ListAccumulatorClassCoder(ConstructorClassCoder):
 		fh.write("\t_items.clear();\n")
 		fh.write("}\n\n")
 
-	def _dumpPython(self,fh):
-
-		if(self.baseClassFlag):
-			pass
+#	def _dumpPython(self,fh):
+#
+#		if(self.baseClassFlag):
+#			pass
+#
+#		return [self.className]

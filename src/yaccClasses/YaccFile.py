@@ -84,11 +84,52 @@ class YaccFile(object):
 	def _dumpPython(self,fh):
 		fh.write("""
 #include <Python.h>
+#include <structmember.h>
 
 """)
+		classNames=[]
 		for rn in self.ruleMap:
 			rule=self.ruleMap[rn]
-			rule._dumpPython(fh)
+			classNames.extend(rule._dumpPython(fh))
+		
+		fh.write("""
+
+static PyObject* parseFile(PyObject *args,PyObject *kwargs)
+{
+	CAst::translation_unit *tu=CAst::parseFile("test.c");
+	PyCAst_object_translation_unit *pyTu=(PyCAst_object_translation_unit*)PyCAst_type_translation_unit.tp_new(&PyCAst_type_translation_unit,NULL,NULL);
+	pyTu->_p_cast_object=tu;
+	return (PyObject*)pyTu;
+}
+
+static PyMethodDef module_methods[] = {
+	{ "parseFile",(PyCFunction)parseFile,METH_KEYWORDS,"parses a file"},
+	NULL
+};
+
+
+#ifndef PyMODINIT_FUNC
+#define PyMODINIT_FUNC void
+#endif
+PyMODINIT_FUNC
+initPyCAst(void) 
+{
+    PyObject* m;
+""")
+
+		for c in classNames:
+    			fh.write("\tif (PyType_Ready(&PyCAst_type_%(className)s) < 0) {printf(\"Initialization of PyCAst_type_%(className)s FAILED\\n\\n\");return;}\n"%{"className":c})
+
+		fh.write("""
+    m = Py_InitModule3("PyCAst", module_methods,"The PyCAst Module");
+
+    if (m == NULL) return;
+""")
+		for c in classNames:
+    			fh.write("""
+	Py_INCREF(&PyCAst_type_%(className)s);
+	PyModule_AddObject(m,"%(className)s", (PyObject *)&PyCAst_type_%(className)s);\n"""%{"className":c})
+		fh.write("}")
 		
 	def _dumpYacc(self,fh):
 		for j,t in enumerate([ i for i in self.tokens.values() if i.typeName=='tok' ]):
@@ -120,6 +161,7 @@ class YaccFile(object):
 		fh.write("#include <stdio.h>\n")
 		fh.write("#include <list>\n")
 		fh.write("#include <iostream>\n")
+		fh.write("#include <sstream>\n")
 		fh.write("#include <iomanip>\n")
 		fh.write("#include <map>\n")
 		fh.write("#define LOG(txt) std::cerr<<\"[\\033[33m \"<<std::setw(20)<<std::left<<this<<\" \\033[0m\t]\"<<txt<<\"\\n\";\n")
@@ -143,6 +185,7 @@ namespace CAst
 		for rn in self.ruleMap:
 			rule=self.ruleMap[rn]
 			rule._dumpCHeader(fh)
+		fh.write("%s* parseFile(const char *fileName);\n"%self.start)
 		fh.write("\n\n}\n\n//namespace CAst\n")
 		fh.write("#include \"cYacc.hpp\"\n")
 		fh.write("extern CAst::%s* root;\n"%self.start)
@@ -150,8 +193,26 @@ namespace CAst
 	
 	def _dumpCSource(self,fh):
 		fh.write("#include \"%s.h\"\n"%(os.path.splitext(os.path.basename(fh.name))[0]))
+		fh.write("""
+CAst::translation_unit *root;
+extern FILE* yyin;
+extern int yyparse(void);
+""")
 		fh.write("namespace CAst\n{\n\n")
 		fh.write("""
+
+
+
+
+
+
+translation_unit* parseFile(const char *fileName)
+{
+	yyin=fopen(fileName,"r");
+	yyparse();
+	return root;
+}
+
 std::ostream& Properties::toStream(std::ostream& stream,int indent)const
 {
 	if(__className=="token")
@@ -259,6 +320,12 @@ public:
 	void setTokValue(std::string v){__tokValue=v;}
 	
 	std::ostream& toStream(std::ostream& stream,int indent=0)const;
+	std::string str()const
+	{
+		std::stringstream stream;
+		toStream(stream);
+		return stream.str();
+	}
 };
 inline std::ostream& operator<<(std::ostream &stream,const Properties &p)
 {
@@ -298,6 +365,12 @@ public:
 			begin()->toStream(stream,indent);
 		}
 		return stream;
+	}
+	std::string str()const
+	{
+		std::stringstream stream;
+		toStream(stream);
+		return stream.str();
 	}
 };
 
