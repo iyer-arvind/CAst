@@ -24,6 +24,14 @@ class ConstructorClassCoder(object):
 	def _dumpPython(self,fh):
 		if(self.baseClassFlag):
 			pass
+
+		table="";
+		functionText="";
+		for t,n,p,v,i,v1 in self.parameters:
+			functionText="PyObject* PyCAst_getter_%(className)s_%(varName)s(PyObject* attr)\n{\n\treturn PyString_FromString(\"test\");\n}\n"%{"className":self.className,"varName":n.replace("_p_","")};
+			table+="""{(char*)"%(varName)s", (getter)PyCAst_getter_%(className)s_%(varName)s,NULL,(char*)"%(varName)s", NULL},"""%{"className":self.className,"varName":n.replace("_p_","")}
+
+			
 		template=Template("""
 \n\n\n\n
 /*==============================================================*\\
@@ -49,7 +57,7 @@ static int PyCAst_init_$className(PyCAst_object_$className *self, PyObject *args
     printf("initializing PyCAst::$className\\n\\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_$className(PyObject *_self)
+static PyObject *PyCAst_getter_${className}_ast(PyObject *_self)
 {
 	PyCAst_object_$className *self=(PyCAst_object_$className*)(_self);
 	if(self->_p_cast_object->isList())
@@ -66,9 +74,12 @@ static PyObject *PyCAst_ast_getter_$className(PyObject *_self)
 
 }
 
+${functionText}
+
 static PyGetSetDef PyCAst_getsetter_$className[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_$className,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_${className}_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	$table
 	NULL
 };
 
@@ -129,7 +140,7 @@ static PyTypeObject  PyCAst_type_$className = {
 
 
 """)
-		fh.write(template.substitute(className=self.className,pattern=str(self.pattern)))
+		fh.write(template.substitute(functionText=functionText,className=self.className,table=table,pattern=str(self.pattern)))
 		return [self.className]
 
 
@@ -279,7 +290,7 @@ class ListAccumulatorClassCoder(ConstructorClassCoder):
 		fh.write("\t"*5+"_s_matchedPattern(_arg__s_matchedPattern)"+(",\n" if len(self.parameters) else "\n"))
 		fh.write(",\n".join(["\t"*5+"%s(_arg_%s)"%(n,n) for t,n,p,v,i,v1 in self.parameters if i != self.constructor.selfIndex]))
 		fh.write("\n{\n")
-		fh.write("\n\tLOG(\"\\033[32mCREATING\033[0m %s_item\")\n"%self.className);
+		fh.write("\n\tLOG(\"\\033[32mCREATING\\033[0m %s_item\")\n"%self.className);
 		fh.write("\tLOG(\"[ \"<<_refCount<<\" ]\t\"<<\"refCount after creation:\"<<(*_refCount))")
 		fh.write("\n}\n")
 

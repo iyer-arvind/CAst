@@ -331,7 +331,7 @@ conditional_expression_item::conditional_expression_item(std::string _arg__s_mat
 					_p_expression(_arg__p_expression)
 {
 
-	LOG("\033[32mCREATING[0m conditional_expression_item")
+	LOG("\033[32mCREATING\033[0m conditional_expression_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	conditional_expression_item::conditional_expression_item(const conditional_expression_item &other):
@@ -480,7 +480,7 @@ exclusive_or_expression_item::exclusive_or_expression_item(std::string _arg__s_m
 					_p_and_expression(_arg__p_and_expression)
 {
 
-	LOG("\033[32mCREATING[0m exclusive_or_expression_item")
+	LOG("\033[32mCREATING\033[0m exclusive_or_expression_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	exclusive_or_expression_item::exclusive_or_expression_item(const exclusive_or_expression_item &other):
@@ -642,7 +642,7 @@ struct_declaration_list_item::struct_declaration_list_item(std::string _arg__s_m
 					_p_struct_declaration(_arg__p_struct_declaration)
 {
 
-	LOG("\033[32mCREATING[0m struct_declaration_list_item")
+	LOG("\033[32mCREATING\033[0m struct_declaration_list_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	struct_declaration_list_item::struct_declaration_list_item(const struct_declaration_list_item &other):
@@ -960,7 +960,7 @@ additive_expression_item::additive_expression_item(std::string _arg__s_matchedPa
 					_p_multiplicative_expression(_arg__p_multiplicative_expression)
 {
 
-	LOG("\033[32mCREATING[0m additive_expression_item")
+	LOG("\033[32mCREATING\033[0m additive_expression_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	additive_expression_item::additive_expression_item(const additive_expression_item &other):
@@ -1259,7 +1259,7 @@ inclusive_or_expression_item::inclusive_or_expression_item(std::string _arg__s_m
 					_p_exclusive_or_expression(_arg__p_exclusive_or_expression)
 {
 
-	LOG("\033[32mCREATING[0m inclusive_or_expression_item")
+	LOG("\033[32mCREATING\033[0m inclusive_or_expression_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	inclusive_or_expression_item::inclusive_or_expression_item(const inclusive_or_expression_item &other):
@@ -1353,7 +1353,7 @@ pointer_item::pointer_item(std::string _arg__s_matchedPattern, type_qualifier_li
 					_p_type_qualifier_list(_arg__p_type_qualifier_list)
 {
 
-	LOG("\033[32mCREATING[0m pointer_item")
+	LOG("\033[32mCREATING\033[0m pointer_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	pointer_item::pointer_item(const pointer_item &other):
@@ -1691,7 +1691,7 @@ and_expression_item::and_expression_item(std::string _arg__s_matchedPattern, equ
 					_p_equality_expression(_arg__p_equality_expression)
 {
 
-	LOG("\033[32mCREATING[0m and_expression_item")
+	LOG("\033[32mCREATING\033[0m and_expression_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	and_expression_item::and_expression_item(const and_expression_item &other):
@@ -2076,7 +2076,7 @@ struct_declarator_list_item::struct_declarator_list_item(std::string _arg__s_mat
 					_p_struct_declarator(_arg__p_struct_declarator)
 {
 
-	LOG("\033[32mCREATING[0m struct_declarator_list_item")
+	LOG("\033[32mCREATING\033[0m struct_declarator_list_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	struct_declarator_list_item::struct_declarator_list_item(const struct_declarator_list_item &other):
@@ -2170,7 +2170,7 @@ logical_or_expression_item::logical_or_expression_item(std::string _arg__s_match
 					_p_logical_and_expression(_arg__p_logical_and_expression)
 {
 
-	LOG("\033[32mCREATING[0m logical_or_expression_item")
+	LOG("\033[32mCREATING\033[0m logical_or_expression_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	logical_or_expression_item::logical_or_expression_item(const logical_or_expression_item &other):
@@ -2301,7 +2301,7 @@ relational_expression_item::relational_expression_item(std::string _arg__s_match
 					_p_shift_expression(_arg__p_shift_expression)
 {
 
-	LOG("\033[32mCREATING[0m relational_expression_item")
+	LOG("\033[32mCREATING\033[0m relational_expression_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	relational_expression_item::relational_expression_item(const relational_expression_item &other):
@@ -2665,7 +2665,7 @@ multiplicative_expression_item::multiplicative_expression_item(std::string _arg_
 					_p_cast_expression(_arg__p_cast_expression)
 {
 
-	LOG("\033[32mCREATING[0m multiplicative_expression_item")
+	LOG("\033[32mCREATING\033[0m multiplicative_expression_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	multiplicative_expression_item::multiplicative_expression_item(const multiplicative_expression_item &other):
@@ -2766,7 +2766,7 @@ type_qualifier_list_item::type_qualifier_list_item(std::string _arg__s_matchedPa
 					_p_type_qualifier(_arg__p_type_qualifier)
 {
 
-	LOG("\033[32mCREATING[0m type_qualifier_list_item")
+	LOG("\033[32mCREATING\033[0m type_qualifier_list_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	type_qualifier_list_item::type_qualifier_list_item(const type_qualifier_list_item &other):
@@ -2860,7 +2860,7 @@ argument_expression_list_item::argument_expression_list_item(std::string _arg__s
 					_p_assignment_expression(_arg__p_assignment_expression)
 {
 
-	LOG("\033[32mCREATING[0m argument_expression_list_item")
+	LOG("\033[32mCREATING\033[0m argument_expression_list_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	argument_expression_list_item::argument_expression_list_item(const argument_expression_list_item &other):
@@ -3055,7 +3055,7 @@ equality_expression_item::equality_expression_item(std::string _arg__s_matchedPa
 					_p_relational_expression(_arg__p_relational_expression)
 {
 
-	LOG("\033[32mCREATING[0m equality_expression_item")
+	LOG("\033[32mCREATING\033[0m equality_expression_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	equality_expression_item::equality_expression_item(const equality_expression_item &other):
@@ -3221,7 +3221,7 @@ declaration_specifiers1_item::declaration_specifiers1_item(std::string _arg__s_m
 					_p_storage_class_specifier(_arg__p_storage_class_specifier)
 {
 
-	LOG("\033[32mCREATING[0m declaration_specifiers1_item")
+	LOG("\033[32mCREATING\033[0m declaration_specifiers1_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	declaration_specifiers1_item::declaration_specifiers1_item(const declaration_specifiers1_item &other):
@@ -3308,7 +3308,7 @@ declaration_specifiers2_item::declaration_specifiers2_item(std::string _arg__s_m
 					_p_type_specifier(_arg__p_type_specifier)
 {
 
-	LOG("\033[32mCREATING[0m declaration_specifiers2_item")
+	LOG("\033[32mCREATING\033[0m declaration_specifiers2_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	declaration_specifiers2_item::declaration_specifiers2_item(const declaration_specifiers2_item &other):
@@ -3395,7 +3395,7 @@ declaration_specifiers3_item::declaration_specifiers3_item(std::string _arg__s_m
 					_p_type_qualifier(_arg__p_type_qualifier)
 {
 
-	LOG("\033[32mCREATING[0m declaration_specifiers3_item")
+	LOG("\033[32mCREATING\033[0m declaration_specifiers3_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	declaration_specifiers3_item::declaration_specifiers3_item(const declaration_specifiers3_item &other):
@@ -3689,7 +3689,7 @@ logical_and_expression_item::logical_and_expression_item(std::string _arg__s_mat
 					_p_inclusive_or_expression(_arg__p_inclusive_or_expression)
 {
 
-	LOG("\033[32mCREATING[0m logical_and_expression_item")
+	LOG("\033[32mCREATING\033[0m logical_and_expression_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	logical_and_expression_item::logical_and_expression_item(const logical_and_expression_item &other):
@@ -3783,7 +3783,7 @@ init_declarator_list_item::init_declarator_list_item(std::string _arg__s_matched
 					_p_init_declarator(_arg__p_init_declarator)
 {
 
-	LOG("\033[32mCREATING[0m init_declarator_list_item")
+	LOG("\033[32mCREATING\033[0m init_declarator_list_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	init_declarator_list_item::init_declarator_list_item(const init_declarator_list_item &other):
@@ -3878,7 +3878,7 @@ shift_expression_item::shift_expression_item(std::string _arg__s_matchedPattern,
 					_p_additive_expression(_arg__p_additive_expression)
 {
 
-	LOG("\033[32mCREATING[0m shift_expression_item")
+	LOG("\033[32mCREATING\033[0m shift_expression_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	shift_expression_item::shift_expression_item(const shift_expression_item &other):
@@ -3979,7 +3979,7 @@ identifier_list_item::identifier_list_item(std::string _arg__s_matchedPattern, T
 					_p_token1(_arg__p_token1)
 {
 
-	LOG("\033[32mCREATING[0m identifier_list_item")
+	LOG("\033[32mCREATING\033[0m identifier_list_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	identifier_list_item::identifier_list_item(const identifier_list_item &other):
@@ -4254,7 +4254,7 @@ parameter_list_item::parameter_list_item(std::string _arg__s_matchedPattern, par
 					_p_parameter_declaration(_arg__p_parameter_declaration)
 {
 
-	LOG("\033[32mCREATING[0m parameter_list_item")
+	LOG("\033[32mCREATING\033[0m parameter_list_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	parameter_list_item::parameter_list_item(const parameter_list_item &other):
@@ -4429,7 +4429,7 @@ enumerator_list_item::enumerator_list_item(std::string _arg__s_matchedPattern, e
 					_p_enumerator(_arg__p_enumerator)
 {
 
-	LOG("\033[32mCREATING[0m enumerator_list_item")
+	LOG("\033[32mCREATING\033[0m enumerator_list_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	enumerator_list_item::enumerator_list_item(const enumerator_list_item &other):
@@ -4594,7 +4594,7 @@ declaration_list_item::declaration_list_item(std::string _arg__s_matchedPattern,
 					_p_declaration(_arg__p_declaration)
 {
 
-	LOG("\033[32mCREATING[0m declaration_list_item")
+	LOG("\033[32mCREATING\033[0m declaration_list_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	declaration_list_item::declaration_list_item(const declaration_list_item &other):
@@ -4688,7 +4688,7 @@ specifier_qualifier_list1_item::specifier_qualifier_list1_item(std::string _arg_
 					_p_type_specifier(_arg__p_type_specifier)
 {
 
-	LOG("\033[32mCREATING[0m specifier_qualifier_list1_item")
+	LOG("\033[32mCREATING\033[0m specifier_qualifier_list1_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	specifier_qualifier_list1_item::specifier_qualifier_list1_item(const specifier_qualifier_list1_item &other):
@@ -4775,7 +4775,7 @@ specifier_qualifier_list2_item::specifier_qualifier_list2_item(std::string _arg_
 					_p_type_qualifier(_arg__p_type_qualifier)
 {
 
-	LOG("\033[32mCREATING[0m specifier_qualifier_list2_item")
+	LOG("\033[32mCREATING\033[0m specifier_qualifier_list2_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	specifier_qualifier_list2_item::specifier_qualifier_list2_item(const specifier_qualifier_list2_item &other):
@@ -4869,7 +4869,7 @@ translation_unit_item::translation_unit_item(std::string _arg__s_matchedPattern,
 					_p_external_declaration(_arg__p_external_declaration)
 {
 
-	LOG("\033[32mCREATING[0m translation_unit_item")
+	LOG("\033[32mCREATING\033[0m translation_unit_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	translation_unit_item::translation_unit_item(const translation_unit_item &other):
@@ -4999,7 +4999,7 @@ initializer_list_item::initializer_list_item(std::string _arg__s_matchedPattern,
 					_p_initializer(_arg__p_initializer)
 {
 
-	LOG("\033[32mCREATING[0m initializer_list_item")
+	LOG("\033[32mCREATING\033[0m initializer_list_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	initializer_list_item::initializer_list_item(const initializer_list_item &other):
@@ -5093,7 +5093,7 @@ statement_list_item::statement_list_item(std::string _arg__s_matchedPattern, sta
 					_p_statement(_arg__p_statement)
 {
 
-	LOG("\033[32mCREATING[0m statement_list_item")
+	LOG("\033[32mCREATING\033[0m statement_list_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	statement_list_item::statement_list_item(const statement_list_item &other):
@@ -5187,7 +5187,7 @@ expression_item::expression_item(std::string _arg__s_matchedPattern, assignment_
 					_p_assignment_expression(_arg__p_assignment_expression)
 {
 
-	LOG("\033[32mCREATING[0m expression_item")
+	LOG("\033[32mCREATING\033[0m expression_item")
 	LOG("[ "<<_refCount<<" ]	"<<"refCount after creation:"<<(*_refCount))
 }
 	expression_item::expression_item(const expression_item &other):

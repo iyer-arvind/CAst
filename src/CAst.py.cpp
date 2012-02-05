@@ -31,7 +31,7 @@ static int PyCAst_init_storage_class_specifier(PyCAst_object_storage_class_speci
     printf("initializing PyCAst::storage_class_specifier\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_storage_class_specifier(PyObject *_self)
+static PyObject *PyCAst_getter_storage_class_specifier_ast(PyObject *_self)
 {
 	PyCAst_object_storage_class_specifier *self=(PyCAst_object_storage_class_specifier*)(_self);
 	if(self->_p_cast_object->isList())
@@ -48,9 +48,16 @@ static PyObject *PyCAst_ast_getter_storage_class_specifier(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_storage_class_specifier_token1(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_storage_class_specifier[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_storage_class_specifier,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_storage_class_specifier_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"token1", (getter)PyCAst_getter_storage_class_specifier_token1,NULL,(char*)"token1", NULL},
 	NULL
 };
 
@@ -139,7 +146,7 @@ static int PyCAst_init_expression_statement(PyCAst_object_expression_statement *
     printf("initializing PyCAst::expression_statement\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_expression_statement(PyObject *_self)
+static PyObject *PyCAst_getter_expression_statement_ast(PyObject *_self)
 {
 	PyCAst_object_expression_statement *self=(PyCAst_object_expression_statement*)(_self);
 	if(self->_p_cast_object->isList())
@@ -156,9 +163,16 @@ static PyObject *PyCAst_ast_getter_expression_statement(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_expression_statement_expression(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_expression_statement[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_expression_statement,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_expression_statement_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"expression", (getter)PyCAst_getter_expression_statement_expression,NULL,(char*)"expression", NULL},
 	NULL
 };
 
@@ -247,7 +261,7 @@ static int PyCAst_init_type_name(PyCAst_object_type_name *self, PyObject *args, 
     printf("initializing PyCAst::type_name\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_type_name(PyObject *_self)
+static PyObject *PyCAst_getter_type_name_ast(PyObject *_self)
 {
 	PyCAst_object_type_name *self=(PyCAst_object_type_name*)(_self);
 	if(self->_p_cast_object->isList())
@@ -264,9 +278,16 @@ static PyObject *PyCAst_ast_getter_type_name(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_type_name_abstract_declarator(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_type_name[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_type_name,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_type_name_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"specifier_qualifier_list", (getter)PyCAst_getter_type_name_specifier_qualifier_list,NULL,(char*)"specifier_qualifier_list", NULL},{(char*)"abstract_declarator", (getter)PyCAst_getter_type_name_abstract_declarator,NULL,(char*)"abstract_declarator", NULL},
 	NULL
 };
 
@@ -355,7 +376,7 @@ static int PyCAst_init_unary_expression1(PyCAst_object_unary_expression1 *self, 
     printf("initializing PyCAst::unary_expression1\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_unary_expression1(PyObject *_self)
+static PyObject *PyCAst_getter_unary_expression1_ast(PyObject *_self)
 {
 	PyCAst_object_unary_expression1 *self=(PyCAst_object_unary_expression1*)(_self);
 	if(self->_p_cast_object->isList())
@@ -372,9 +393,16 @@ static PyObject *PyCAst_ast_getter_unary_expression1(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_unary_expression1_type_name(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_unary_expression1[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_unary_expression1,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_unary_expression1_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"type_name", (getter)PyCAst_getter_unary_expression1_type_name,NULL,(char*)"type_name", NULL},
 	NULL
 };
 
@@ -463,7 +491,7 @@ static int PyCAst_init_unary_expression2(PyCAst_object_unary_expression2 *self, 
     printf("initializing PyCAst::unary_expression2\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_unary_expression2(PyObject *_self)
+static PyObject *PyCAst_getter_unary_expression2_ast(PyObject *_self)
 {
 	PyCAst_object_unary_expression2 *self=(PyCAst_object_unary_expression2*)(_self);
 	if(self->_p_cast_object->isList())
@@ -480,9 +508,16 @@ static PyObject *PyCAst_ast_getter_unary_expression2(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_unary_expression2_unary_expression(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_unary_expression2[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_unary_expression2,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_unary_expression2_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"token1", (getter)PyCAst_getter_unary_expression2_token1,NULL,(char*)"token1", NULL},{(char*)"unary_expression", (getter)PyCAst_getter_unary_expression2_unary_expression,NULL,(char*)"unary_expression", NULL},
 	NULL
 };
 
@@ -571,7 +606,7 @@ static int PyCAst_init_unary_expression3(PyCAst_object_unary_expression3 *self, 
     printf("initializing PyCAst::unary_expression3\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_unary_expression3(PyObject *_self)
+static PyObject *PyCAst_getter_unary_expression3_ast(PyObject *_self)
 {
 	PyCAst_object_unary_expression3 *self=(PyCAst_object_unary_expression3*)(_self);
 	if(self->_p_cast_object->isList())
@@ -588,9 +623,16 @@ static PyObject *PyCAst_ast_getter_unary_expression3(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_unary_expression3_cast_expression(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_unary_expression3[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_unary_expression3,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_unary_expression3_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"unary_operator", (getter)PyCAst_getter_unary_expression3_unary_operator,NULL,(char*)"unary_operator", NULL},{(char*)"cast_expression", (getter)PyCAst_getter_unary_expression3_cast_expression,NULL,(char*)"cast_expression", NULL},
 	NULL
 };
 
@@ -679,7 +721,7 @@ static int PyCAst_init_unary_expression4(PyCAst_object_unary_expression4 *self, 
     printf("initializing PyCAst::unary_expression4\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_unary_expression4(PyObject *_self)
+static PyObject *PyCAst_getter_unary_expression4_ast(PyObject *_self)
 {
 	PyCAst_object_unary_expression4 *self=(PyCAst_object_unary_expression4*)(_self);
 	if(self->_p_cast_object->isList())
@@ -696,9 +738,16 @@ static PyObject *PyCAst_ast_getter_unary_expression4(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_unary_expression4_postfix_expression(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_unary_expression4[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_unary_expression4,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_unary_expression4_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"postfix_expression", (getter)PyCAst_getter_unary_expression4_postfix_expression,NULL,(char*)"postfix_expression", NULL},
 	NULL
 };
 
@@ -787,7 +836,7 @@ static int PyCAst_init_conditional_expression(PyCAst_object_conditional_expressi
     printf("initializing PyCAst::conditional_expression\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_conditional_expression(PyObject *_self)
+static PyObject *PyCAst_getter_conditional_expression_ast(PyObject *_self)
 {
 	PyCAst_object_conditional_expression *self=(PyCAst_object_conditional_expression*)(_self);
 	if(self->_p_cast_object->isList())
@@ -804,9 +853,16 @@ static PyObject *PyCAst_ast_getter_conditional_expression(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_conditional_expression_expression(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_conditional_expression[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_conditional_expression,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_conditional_expression_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"logical_or_expression", (getter)PyCAst_getter_conditional_expression_logical_or_expression,NULL,(char*)"logical_or_expression", NULL},{(char*)"expression", (getter)PyCAst_getter_conditional_expression_expression,NULL,(char*)"expression", NULL},
 	NULL
 };
 
@@ -895,7 +951,7 @@ static int PyCAst_init_struct_or_union_specifier(PyCAst_object_struct_or_union_s
     printf("initializing PyCAst::struct_or_union_specifier\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_struct_or_union_specifier(PyObject *_self)
+static PyObject *PyCAst_getter_struct_or_union_specifier_ast(PyObject *_self)
 {
 	PyCAst_object_struct_or_union_specifier *self=(PyCAst_object_struct_or_union_specifier*)(_self);
 	if(self->_p_cast_object->isList())
@@ -912,9 +968,16 @@ static PyObject *PyCAst_ast_getter_struct_or_union_specifier(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_struct_or_union_specifier_token3(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_struct_or_union_specifier[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_struct_or_union_specifier,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_struct_or_union_specifier_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"struct_or_union", (getter)PyCAst_getter_struct_or_union_specifier_struct_or_union,NULL,(char*)"struct_or_union", NULL},{(char*)"token1", (getter)PyCAst_getter_struct_or_union_specifier_token1,NULL,(char*)"token1", NULL},{(char*)"token2", (getter)PyCAst_getter_struct_or_union_specifier_token2,NULL,(char*)"token2", NULL},{(char*)"struct_declaration_list", (getter)PyCAst_getter_struct_or_union_specifier_struct_declaration_list,NULL,(char*)"struct_declaration_list", NULL},{(char*)"token3", (getter)PyCAst_getter_struct_or_union_specifier_token3,NULL,(char*)"token3", NULL},
 	NULL
 };
 
@@ -1003,7 +1066,7 @@ static int PyCAst_init_exclusive_or_expression(PyCAst_object_exclusive_or_expres
     printf("initializing PyCAst::exclusive_or_expression\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_exclusive_or_expression(PyObject *_self)
+static PyObject *PyCAst_getter_exclusive_or_expression_ast(PyObject *_self)
 {
 	PyCAst_object_exclusive_or_expression *self=(PyCAst_object_exclusive_or_expression*)(_self);
 	if(self->_p_cast_object->isList())
@@ -1020,9 +1083,16 @@ static PyObject *PyCAst_ast_getter_exclusive_or_expression(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_exclusive_or_expression_and_expression(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_exclusive_or_expression[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_exclusive_or_expression,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_exclusive_or_expression_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"and_expression", (getter)PyCAst_getter_exclusive_or_expression_and_expression,NULL,(char*)"and_expression", NULL},
 	NULL
 };
 
@@ -1111,7 +1181,7 @@ static int PyCAst_init_initializer1(PyCAst_object_initializer1 *self, PyObject *
     printf("initializing PyCAst::initializer1\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_initializer1(PyObject *_self)
+static PyObject *PyCAst_getter_initializer1_ast(PyObject *_self)
 {
 	PyCAst_object_initializer1 *self=(PyCAst_object_initializer1*)(_self);
 	if(self->_p_cast_object->isList())
@@ -1128,9 +1198,16 @@ static PyObject *PyCAst_ast_getter_initializer1(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_initializer1_token1(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_initializer1[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_initializer1,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_initializer1_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"initializer_list", (getter)PyCAst_getter_initializer1_initializer_list,NULL,(char*)"initializer_list", NULL},{(char*)"token1", (getter)PyCAst_getter_initializer1_token1,NULL,(char*)"token1", NULL},
 	NULL
 };
 
@@ -1219,7 +1296,7 @@ static int PyCAst_init_initializer2(PyCAst_object_initializer2 *self, PyObject *
     printf("initializing PyCAst::initializer2\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_initializer2(PyObject *_self)
+static PyObject *PyCAst_getter_initializer2_ast(PyObject *_self)
 {
 	PyCAst_object_initializer2 *self=(PyCAst_object_initializer2*)(_self);
 	if(self->_p_cast_object->isList())
@@ -1236,9 +1313,16 @@ static PyObject *PyCAst_ast_getter_initializer2(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_initializer2_assignment_expression(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_initializer2[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_initializer2,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_initializer2_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"assignment_expression", (getter)PyCAst_getter_initializer2_assignment_expression,NULL,(char*)"assignment_expression", NULL},
 	NULL
 };
 
@@ -1327,7 +1411,7 @@ static int PyCAst_init_struct_declaration_list(PyCAst_object_struct_declaration_
     printf("initializing PyCAst::struct_declaration_list\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_struct_declaration_list(PyObject *_self)
+static PyObject *PyCAst_getter_struct_declaration_list_ast(PyObject *_self)
 {
 	PyCAst_object_struct_declaration_list *self=(PyCAst_object_struct_declaration_list*)(_self);
 	if(self->_p_cast_object->isList())
@@ -1344,9 +1428,16 @@ static PyObject *PyCAst_ast_getter_struct_declaration_list(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_struct_declaration_list_struct_declaration(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_struct_declaration_list[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_struct_declaration_list,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_struct_declaration_list_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"struct_declaration", (getter)PyCAst_getter_struct_declaration_list_struct_declaration,NULL,(char*)"struct_declaration", NULL},
 	NULL
 };
 
@@ -1435,7 +1526,7 @@ static int PyCAst_init_assignment_operator(PyCAst_object_assignment_operator *se
     printf("initializing PyCAst::assignment_operator\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_assignment_operator(PyObject *_self)
+static PyObject *PyCAst_getter_assignment_operator_ast(PyObject *_self)
 {
 	PyCAst_object_assignment_operator *self=(PyCAst_object_assignment_operator*)(_self);
 	if(self->_p_cast_object->isList())
@@ -1452,9 +1543,16 @@ static PyObject *PyCAst_ast_getter_assignment_operator(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_assignment_operator_token1(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_assignment_operator[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_assignment_operator,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_assignment_operator_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"token1", (getter)PyCAst_getter_assignment_operator_token1,NULL,(char*)"token1", NULL},
 	NULL
 };
 
@@ -1543,7 +1641,7 @@ static int PyCAst_init_struct_declaration(PyCAst_object_struct_declaration *self
     printf("initializing PyCAst::struct_declaration\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_struct_declaration(PyObject *_self)
+static PyObject *PyCAst_getter_struct_declaration_ast(PyObject *_self)
 {
 	PyCAst_object_struct_declaration *self=(PyCAst_object_struct_declaration*)(_self);
 	if(self->_p_cast_object->isList())
@@ -1560,9 +1658,16 @@ static PyObject *PyCAst_ast_getter_struct_declaration(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_struct_declaration_struct_declarator_list(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_struct_declaration[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_struct_declaration,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_struct_declaration_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"specifier_qualifier_list", (getter)PyCAst_getter_struct_declaration_specifier_qualifier_list,NULL,(char*)"specifier_qualifier_list", NULL},{(char*)"struct_declarator_list", (getter)PyCAst_getter_struct_declaration_struct_declarator_list,NULL,(char*)"struct_declarator_list", NULL},
 	NULL
 };
 
@@ -1651,7 +1756,7 @@ static int PyCAst_init_abstract_declarator(PyCAst_object_abstract_declarator *se
     printf("initializing PyCAst::abstract_declarator\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_abstract_declarator(PyObject *_self)
+static PyObject *PyCAst_getter_abstract_declarator_ast(PyObject *_self)
 {
 	PyCAst_object_abstract_declarator *self=(PyCAst_object_abstract_declarator*)(_self);
 	if(self->_p_cast_object->isList())
@@ -1668,9 +1773,16 @@ static PyObject *PyCAst_ast_getter_abstract_declarator(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_abstract_declarator_direct_abstract_declarator(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_abstract_declarator[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_abstract_declarator,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_abstract_declarator_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"pointer", (getter)PyCAst_getter_abstract_declarator_pointer,NULL,(char*)"pointer", NULL},{(char*)"direct_abstract_declarator", (getter)PyCAst_getter_abstract_declarator_direct_abstract_declarator,NULL,(char*)"direct_abstract_declarator", NULL},
 	NULL
 };
 
@@ -1759,7 +1871,7 @@ static int PyCAst_init_iteration_statement1(PyCAst_object_iteration_statement1 *
     printf("initializing PyCAst::iteration_statement1\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_iteration_statement1(PyObject *_self)
+static PyObject *PyCAst_getter_iteration_statement1_ast(PyObject *_self)
 {
 	PyCAst_object_iteration_statement1 *self=(PyCAst_object_iteration_statement1*)(_self);
 	if(self->_p_cast_object->isList())
@@ -1776,9 +1888,16 @@ static PyObject *PyCAst_ast_getter_iteration_statement1(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_iteration_statement1_expression(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_iteration_statement1[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_iteration_statement1,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_iteration_statement1_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"statement", (getter)PyCAst_getter_iteration_statement1_statement,NULL,(char*)"statement", NULL},{(char*)"expression", (getter)PyCAst_getter_iteration_statement1_expression,NULL,(char*)"expression", NULL},
 	NULL
 };
 
@@ -1867,7 +1986,7 @@ static int PyCAst_init_iteration_statement2(PyCAst_object_iteration_statement2 *
     printf("initializing PyCAst::iteration_statement2\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_iteration_statement2(PyObject *_self)
+static PyObject *PyCAst_getter_iteration_statement2_ast(PyObject *_self)
 {
 	PyCAst_object_iteration_statement2 *self=(PyCAst_object_iteration_statement2*)(_self);
 	if(self->_p_cast_object->isList())
@@ -1884,9 +2003,16 @@ static PyObject *PyCAst_ast_getter_iteration_statement2(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_iteration_statement2_statement(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_iteration_statement2[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_iteration_statement2,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_iteration_statement2_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"expression_statement", (getter)PyCAst_getter_iteration_statement2_expression_statement,NULL,(char*)"expression_statement", NULL},{(char*)"expression_statement1", (getter)PyCAst_getter_iteration_statement2_expression_statement1,NULL,(char*)"expression_statement1", NULL},{(char*)"expression", (getter)PyCAst_getter_iteration_statement2_expression,NULL,(char*)"expression", NULL},{(char*)"statement", (getter)PyCAst_getter_iteration_statement2_statement,NULL,(char*)"statement", NULL},
 	NULL
 };
 
@@ -1975,7 +2101,7 @@ static int PyCAst_init_iteration_statement3(PyCAst_object_iteration_statement3 *
     printf("initializing PyCAst::iteration_statement3\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_iteration_statement3(PyObject *_self)
+static PyObject *PyCAst_getter_iteration_statement3_ast(PyObject *_self)
 {
 	PyCAst_object_iteration_statement3 *self=(PyCAst_object_iteration_statement3*)(_self);
 	if(self->_p_cast_object->isList())
@@ -1992,9 +2118,16 @@ static PyObject *PyCAst_ast_getter_iteration_statement3(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_iteration_statement3_statement(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_iteration_statement3[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_iteration_statement3,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_iteration_statement3_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"expression", (getter)PyCAst_getter_iteration_statement3_expression,NULL,(char*)"expression", NULL},{(char*)"statement", (getter)PyCAst_getter_iteration_statement3_statement,NULL,(char*)"statement", NULL},
 	NULL
 };
 
@@ -2083,7 +2216,7 @@ static int PyCAst_init_additive_expression(PyCAst_object_additive_expression *se
     printf("initializing PyCAst::additive_expression\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_additive_expression(PyObject *_self)
+static PyObject *PyCAst_getter_additive_expression_ast(PyObject *_self)
 {
 	PyCAst_object_additive_expression *self=(PyCAst_object_additive_expression*)(_self);
 	if(self->_p_cast_object->isList())
@@ -2100,9 +2233,16 @@ static PyObject *PyCAst_ast_getter_additive_expression(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_additive_expression_multiplicative_expression(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_additive_expression[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_additive_expression,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_additive_expression_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"token1", (getter)PyCAst_getter_additive_expression_token1,NULL,(char*)"token1", NULL},{(char*)"multiplicative_expression", (getter)PyCAst_getter_additive_expression_multiplicative_expression,NULL,(char*)"multiplicative_expression", NULL},
 	NULL
 };
 
@@ -2191,7 +2331,7 @@ static int PyCAst_init_external_declaration1(PyCAst_object_external_declaration1
     printf("initializing PyCAst::external_declaration1\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_external_declaration1(PyObject *_self)
+static PyObject *PyCAst_getter_external_declaration1_ast(PyObject *_self)
 {
 	PyCAst_object_external_declaration1 *self=(PyCAst_object_external_declaration1*)(_self);
 	if(self->_p_cast_object->isList())
@@ -2208,9 +2348,16 @@ static PyObject *PyCAst_ast_getter_external_declaration1(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_external_declaration1_function_definition(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_external_declaration1[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_external_declaration1,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_external_declaration1_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"function_definition", (getter)PyCAst_getter_external_declaration1_function_definition,NULL,(char*)"function_definition", NULL},
 	NULL
 };
 
@@ -2299,7 +2446,7 @@ static int PyCAst_init_external_declaration2(PyCAst_object_external_declaration2
     printf("initializing PyCAst::external_declaration2\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_external_declaration2(PyObject *_self)
+static PyObject *PyCAst_getter_external_declaration2_ast(PyObject *_self)
 {
 	PyCAst_object_external_declaration2 *self=(PyCAst_object_external_declaration2*)(_self);
 	if(self->_p_cast_object->isList())
@@ -2316,9 +2463,16 @@ static PyObject *PyCAst_ast_getter_external_declaration2(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_external_declaration2_declaration(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_external_declaration2[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_external_declaration2,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_external_declaration2_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"declaration", (getter)PyCAst_getter_external_declaration2_declaration,NULL,(char*)"declaration", NULL},
 	NULL
 };
 
@@ -2407,7 +2561,7 @@ static int PyCAst_init_type_specifier1(PyCAst_object_type_specifier1 *self, PyOb
     printf("initializing PyCAst::type_specifier1\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_type_specifier1(PyObject *_self)
+static PyObject *PyCAst_getter_type_specifier1_ast(PyObject *_self)
 {
 	PyCAst_object_type_specifier1 *self=(PyCAst_object_type_specifier1*)(_self);
 	if(self->_p_cast_object->isList())
@@ -2424,9 +2578,16 @@ static PyObject *PyCAst_ast_getter_type_specifier1(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_type_specifier1_token1(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_type_specifier1[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_type_specifier1,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_type_specifier1_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"token1", (getter)PyCAst_getter_type_specifier1_token1,NULL,(char*)"token1", NULL},
 	NULL
 };
 
@@ -2515,7 +2676,7 @@ static int PyCAst_init_type_specifier2(PyCAst_object_type_specifier2 *self, PyOb
     printf("initializing PyCAst::type_specifier2\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_type_specifier2(PyObject *_self)
+static PyObject *PyCAst_getter_type_specifier2_ast(PyObject *_self)
 {
 	PyCAst_object_type_specifier2 *self=(PyCAst_object_type_specifier2*)(_self);
 	if(self->_p_cast_object->isList())
@@ -2532,9 +2693,16 @@ static PyObject *PyCAst_ast_getter_type_specifier2(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_type_specifier2_struct_or_union_specifier(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_type_specifier2[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_type_specifier2,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_type_specifier2_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"struct_or_union_specifier", (getter)PyCAst_getter_type_specifier2_struct_or_union_specifier,NULL,(char*)"struct_or_union_specifier", NULL},
 	NULL
 };
 
@@ -2623,7 +2791,7 @@ static int PyCAst_init_type_specifier3(PyCAst_object_type_specifier3 *self, PyOb
     printf("initializing PyCAst::type_specifier3\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_type_specifier3(PyObject *_self)
+static PyObject *PyCAst_getter_type_specifier3_ast(PyObject *_self)
 {
 	PyCAst_object_type_specifier3 *self=(PyCAst_object_type_specifier3*)(_self);
 	if(self->_p_cast_object->isList())
@@ -2640,9 +2808,16 @@ static PyObject *PyCAst_ast_getter_type_specifier3(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_type_specifier3_enum_specifier(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_type_specifier3[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_type_specifier3,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_type_specifier3_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"enum_specifier", (getter)PyCAst_getter_type_specifier3_enum_specifier,NULL,(char*)"enum_specifier", NULL},
 	NULL
 };
 
@@ -2731,7 +2906,7 @@ static int PyCAst_init_compound_statement(PyCAst_object_compound_statement *self
     printf("initializing PyCAst::compound_statement\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_compound_statement(PyObject *_self)
+static PyObject *PyCAst_getter_compound_statement_ast(PyObject *_self)
 {
 	PyCAst_object_compound_statement *self=(PyCAst_object_compound_statement*)(_self);
 	if(self->_p_cast_object->isList())
@@ -2748,9 +2923,16 @@ static PyObject *PyCAst_ast_getter_compound_statement(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_compound_statement_statement_list(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_compound_statement[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_compound_statement,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_compound_statement_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"declaration_list", (getter)PyCAst_getter_compound_statement_declaration_list,NULL,(char*)"declaration_list", NULL},{(char*)"statement_list", (getter)PyCAst_getter_compound_statement_statement_list,NULL,(char*)"statement_list", NULL},
 	NULL
 };
 
@@ -2839,7 +3021,7 @@ static int PyCAst_init_inclusive_or_expression(PyCAst_object_inclusive_or_expres
     printf("initializing PyCAst::inclusive_or_expression\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_inclusive_or_expression(PyObject *_self)
+static PyObject *PyCAst_getter_inclusive_or_expression_ast(PyObject *_self)
 {
 	PyCAst_object_inclusive_or_expression *self=(PyCAst_object_inclusive_or_expression*)(_self);
 	if(self->_p_cast_object->isList())
@@ -2856,9 +3038,16 @@ static PyObject *PyCAst_ast_getter_inclusive_or_expression(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_inclusive_or_expression_exclusive_or_expression(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_inclusive_or_expression[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_inclusive_or_expression,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_inclusive_or_expression_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"exclusive_or_expression", (getter)PyCAst_getter_inclusive_or_expression_exclusive_or_expression,NULL,(char*)"exclusive_or_expression", NULL},
 	NULL
 };
 
@@ -2947,7 +3136,7 @@ static int PyCAst_init_pointer(PyCAst_object_pointer *self, PyObject *args, PyOb
     printf("initializing PyCAst::pointer\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_pointer(PyObject *_self)
+static PyObject *PyCAst_getter_pointer_ast(PyObject *_self)
 {
 	PyCAst_object_pointer *self=(PyCAst_object_pointer*)(_self);
 	if(self->_p_cast_object->isList())
@@ -2964,9 +3153,16 @@ static PyObject *PyCAst_ast_getter_pointer(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_pointer_type_qualifier_list(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_pointer[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_pointer,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_pointer_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"type_qualifier_list", (getter)PyCAst_getter_pointer_type_qualifier_list,NULL,(char*)"type_qualifier_list", NULL},
 	NULL
 };
 
@@ -3055,7 +3251,7 @@ static int PyCAst_init_selection_statement1(PyCAst_object_selection_statement1 *
     printf("initializing PyCAst::selection_statement1\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_selection_statement1(PyObject *_self)
+static PyObject *PyCAst_getter_selection_statement1_ast(PyObject *_self)
 {
 	PyCAst_object_selection_statement1 *self=(PyCAst_object_selection_statement1*)(_self);
 	if(self->_p_cast_object->isList())
@@ -3072,9 +3268,16 @@ static PyObject *PyCAst_ast_getter_selection_statement1(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_selection_statement1_statement1(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_selection_statement1[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_selection_statement1,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_selection_statement1_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"expression", (getter)PyCAst_getter_selection_statement1_expression,NULL,(char*)"expression", NULL},{(char*)"statement", (getter)PyCAst_getter_selection_statement1_statement,NULL,(char*)"statement", NULL},{(char*)"token1", (getter)PyCAst_getter_selection_statement1_token1,NULL,(char*)"token1", NULL},{(char*)"statement1", (getter)PyCAst_getter_selection_statement1_statement1,NULL,(char*)"statement1", NULL},
 	NULL
 };
 
@@ -3163,7 +3366,7 @@ static int PyCAst_init_selection_statement2(PyCAst_object_selection_statement2 *
     printf("initializing PyCAst::selection_statement2\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_selection_statement2(PyObject *_self)
+static PyObject *PyCAst_getter_selection_statement2_ast(PyObject *_self)
 {
 	PyCAst_object_selection_statement2 *self=(PyCAst_object_selection_statement2*)(_self);
 	if(self->_p_cast_object->isList())
@@ -3180,9 +3383,16 @@ static PyObject *PyCAst_ast_getter_selection_statement2(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_selection_statement2_statement(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_selection_statement2[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_selection_statement2,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_selection_statement2_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"expression", (getter)PyCAst_getter_selection_statement2_expression,NULL,(char*)"expression", NULL},{(char*)"statement", (getter)PyCAst_getter_selection_statement2_statement,NULL,(char*)"statement", NULL},
 	NULL
 };
 
@@ -3271,7 +3481,7 @@ static int PyCAst_init_postfix_expression1(PyCAst_object_postfix_expression1 *se
     printf("initializing PyCAst::postfix_expression1\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_postfix_expression1(PyObject *_self)
+static PyObject *PyCAst_getter_postfix_expression1_ast(PyObject *_self)
 {
 	PyCAst_object_postfix_expression1 *self=(PyCAst_object_postfix_expression1*)(_self);
 	if(self->_p_cast_object->isList())
@@ -3288,9 +3498,16 @@ static PyObject *PyCAst_ast_getter_postfix_expression1(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_postfix_expression1_expression(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_postfix_expression1[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_postfix_expression1,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_postfix_expression1_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"postfix_expression", (getter)PyCAst_getter_postfix_expression1_postfix_expression,NULL,(char*)"postfix_expression", NULL},{(char*)"expression", (getter)PyCAst_getter_postfix_expression1_expression,NULL,(char*)"expression", NULL},
 	NULL
 };
 
@@ -3379,7 +3596,7 @@ static int PyCAst_init_postfix_expression2(PyCAst_object_postfix_expression2 *se
     printf("initializing PyCAst::postfix_expression2\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_postfix_expression2(PyObject *_self)
+static PyObject *PyCAst_getter_postfix_expression2_ast(PyObject *_self)
 {
 	PyCAst_object_postfix_expression2 *self=(PyCAst_object_postfix_expression2*)(_self);
 	if(self->_p_cast_object->isList())
@@ -3396,9 +3613,16 @@ static PyObject *PyCAst_ast_getter_postfix_expression2(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_postfix_expression2_argument_expression_list(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_postfix_expression2[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_postfix_expression2,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_postfix_expression2_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"postfix_expression", (getter)PyCAst_getter_postfix_expression2_postfix_expression,NULL,(char*)"postfix_expression", NULL},{(char*)"argument_expression_list", (getter)PyCAst_getter_postfix_expression2_argument_expression_list,NULL,(char*)"argument_expression_list", NULL},
 	NULL
 };
 
@@ -3487,7 +3711,7 @@ static int PyCAst_init_postfix_expression3(PyCAst_object_postfix_expression3 *se
     printf("initializing PyCAst::postfix_expression3\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_postfix_expression3(PyObject *_self)
+static PyObject *PyCAst_getter_postfix_expression3_ast(PyObject *_self)
 {
 	PyCAst_object_postfix_expression3 *self=(PyCAst_object_postfix_expression3*)(_self);
 	if(self->_p_cast_object->isList())
@@ -3504,9 +3728,16 @@ static PyObject *PyCAst_ast_getter_postfix_expression3(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_postfix_expression3_token2(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_postfix_expression3[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_postfix_expression3,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_postfix_expression3_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"postfix_expression", (getter)PyCAst_getter_postfix_expression3_postfix_expression,NULL,(char*)"postfix_expression", NULL},{(char*)"token1", (getter)PyCAst_getter_postfix_expression3_token1,NULL,(char*)"token1", NULL},{(char*)"token2", (getter)PyCAst_getter_postfix_expression3_token2,NULL,(char*)"token2", NULL},
 	NULL
 };
 
@@ -3595,7 +3826,7 @@ static int PyCAst_init_postfix_expression4(PyCAst_object_postfix_expression4 *se
     printf("initializing PyCAst::postfix_expression4\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_postfix_expression4(PyObject *_self)
+static PyObject *PyCAst_getter_postfix_expression4_ast(PyObject *_self)
 {
 	PyCAst_object_postfix_expression4 *self=(PyCAst_object_postfix_expression4*)(_self);
 	if(self->_p_cast_object->isList())
@@ -3612,9 +3843,16 @@ static PyObject *PyCAst_ast_getter_postfix_expression4(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_postfix_expression4_token1(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_postfix_expression4[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_postfix_expression4,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_postfix_expression4_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"postfix_expression", (getter)PyCAst_getter_postfix_expression4_postfix_expression,NULL,(char*)"postfix_expression", NULL},{(char*)"token1", (getter)PyCAst_getter_postfix_expression4_token1,NULL,(char*)"token1", NULL},
 	NULL
 };
 
@@ -3703,7 +3941,7 @@ static int PyCAst_init_postfix_expression5(PyCAst_object_postfix_expression5 *se
     printf("initializing PyCAst::postfix_expression5\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_postfix_expression5(PyObject *_self)
+static PyObject *PyCAst_getter_postfix_expression5_ast(PyObject *_self)
 {
 	PyCAst_object_postfix_expression5 *self=(PyCAst_object_postfix_expression5*)(_self);
 	if(self->_p_cast_object->isList())
@@ -3720,9 +3958,16 @@ static PyObject *PyCAst_ast_getter_postfix_expression5(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_postfix_expression5_primary_expression(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_postfix_expression5[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_postfix_expression5,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_postfix_expression5_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"primary_expression", (getter)PyCAst_getter_postfix_expression5_primary_expression,NULL,(char*)"primary_expression", NULL},
 	NULL
 };
 
@@ -3811,7 +4056,7 @@ static int PyCAst_init_and_expression(PyCAst_object_and_expression *self, PyObje
     printf("initializing PyCAst::and_expression\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_and_expression(PyObject *_self)
+static PyObject *PyCAst_getter_and_expression_ast(PyObject *_self)
 {
 	PyCAst_object_and_expression *self=(PyCAst_object_and_expression*)(_self);
 	if(self->_p_cast_object->isList())
@@ -3828,9 +4073,16 @@ static PyObject *PyCAst_ast_getter_and_expression(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_and_expression_equality_expression(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_and_expression[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_and_expression,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_and_expression_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"equality_expression", (getter)PyCAst_getter_and_expression_equality_expression,NULL,(char*)"equality_expression", NULL},
 	NULL
 };
 
@@ -3919,7 +4171,7 @@ static int PyCAst_init_statement1(PyCAst_object_statement1 *self, PyObject *args
     printf("initializing PyCAst::statement1\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_statement1(PyObject *_self)
+static PyObject *PyCAst_getter_statement1_ast(PyObject *_self)
 {
 	PyCAst_object_statement1 *self=(PyCAst_object_statement1*)(_self);
 	if(self->_p_cast_object->isList())
@@ -3936,9 +4188,16 @@ static PyObject *PyCAst_ast_getter_statement1(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_statement1_labeled_statement(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_statement1[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_statement1,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_statement1_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"labeled_statement", (getter)PyCAst_getter_statement1_labeled_statement,NULL,(char*)"labeled_statement", NULL},
 	NULL
 };
 
@@ -4027,7 +4286,7 @@ static int PyCAst_init_statement2(PyCAst_object_statement2 *self, PyObject *args
     printf("initializing PyCAst::statement2\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_statement2(PyObject *_self)
+static PyObject *PyCAst_getter_statement2_ast(PyObject *_self)
 {
 	PyCAst_object_statement2 *self=(PyCAst_object_statement2*)(_self);
 	if(self->_p_cast_object->isList())
@@ -4044,9 +4303,16 @@ static PyObject *PyCAst_ast_getter_statement2(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_statement2_compound_statement(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_statement2[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_statement2,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_statement2_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"compound_statement", (getter)PyCAst_getter_statement2_compound_statement,NULL,(char*)"compound_statement", NULL},
 	NULL
 };
 
@@ -4135,7 +4401,7 @@ static int PyCAst_init_statement3(PyCAst_object_statement3 *self, PyObject *args
     printf("initializing PyCAst::statement3\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_statement3(PyObject *_self)
+static PyObject *PyCAst_getter_statement3_ast(PyObject *_self)
 {
 	PyCAst_object_statement3 *self=(PyCAst_object_statement3*)(_self);
 	if(self->_p_cast_object->isList())
@@ -4152,9 +4418,16 @@ static PyObject *PyCAst_ast_getter_statement3(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_statement3_expression_statement(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_statement3[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_statement3,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_statement3_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"expression_statement", (getter)PyCAst_getter_statement3_expression_statement,NULL,(char*)"expression_statement", NULL},
 	NULL
 };
 
@@ -4243,7 +4516,7 @@ static int PyCAst_init_statement4(PyCAst_object_statement4 *self, PyObject *args
     printf("initializing PyCAst::statement4\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_statement4(PyObject *_self)
+static PyObject *PyCAst_getter_statement4_ast(PyObject *_self)
 {
 	PyCAst_object_statement4 *self=(PyCAst_object_statement4*)(_self);
 	if(self->_p_cast_object->isList())
@@ -4260,9 +4533,16 @@ static PyObject *PyCAst_ast_getter_statement4(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_statement4_selection_statement(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_statement4[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_statement4,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_statement4_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"selection_statement", (getter)PyCAst_getter_statement4_selection_statement,NULL,(char*)"selection_statement", NULL},
 	NULL
 };
 
@@ -4351,7 +4631,7 @@ static int PyCAst_init_statement5(PyCAst_object_statement5 *self, PyObject *args
     printf("initializing PyCAst::statement5\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_statement5(PyObject *_self)
+static PyObject *PyCAst_getter_statement5_ast(PyObject *_self)
 {
 	PyCAst_object_statement5 *self=(PyCAst_object_statement5*)(_self);
 	if(self->_p_cast_object->isList())
@@ -4368,9 +4648,16 @@ static PyObject *PyCAst_ast_getter_statement5(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_statement5_iteration_statement(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_statement5[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_statement5,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_statement5_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"iteration_statement", (getter)PyCAst_getter_statement5_iteration_statement,NULL,(char*)"iteration_statement", NULL},
 	NULL
 };
 
@@ -4459,7 +4746,7 @@ static int PyCAst_init_statement6(PyCAst_object_statement6 *self, PyObject *args
     printf("initializing PyCAst::statement6\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_statement6(PyObject *_self)
+static PyObject *PyCAst_getter_statement6_ast(PyObject *_self)
 {
 	PyCAst_object_statement6 *self=(PyCAst_object_statement6*)(_self);
 	if(self->_p_cast_object->isList())
@@ -4476,9 +4763,16 @@ static PyObject *PyCAst_ast_getter_statement6(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_statement6_jump_statement(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_statement6[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_statement6,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_statement6_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"jump_statement", (getter)PyCAst_getter_statement6_jump_statement,NULL,(char*)"jump_statement", NULL},
 	NULL
 };
 
@@ -4567,7 +4861,7 @@ static int PyCAst_init_cast_expression1(PyCAst_object_cast_expression1 *self, Py
     printf("initializing PyCAst::cast_expression1\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_cast_expression1(PyObject *_self)
+static PyObject *PyCAst_getter_cast_expression1_ast(PyObject *_self)
 {
 	PyCAst_object_cast_expression1 *self=(PyCAst_object_cast_expression1*)(_self);
 	if(self->_p_cast_object->isList())
@@ -4584,9 +4878,16 @@ static PyObject *PyCAst_ast_getter_cast_expression1(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_cast_expression1_cast_expression(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_cast_expression1[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_cast_expression1,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_cast_expression1_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"type_name", (getter)PyCAst_getter_cast_expression1_type_name,NULL,(char*)"type_name", NULL},{(char*)"cast_expression", (getter)PyCAst_getter_cast_expression1_cast_expression,NULL,(char*)"cast_expression", NULL},
 	NULL
 };
 
@@ -4675,7 +4976,7 @@ static int PyCAst_init_cast_expression2(PyCAst_object_cast_expression2 *self, Py
     printf("initializing PyCAst::cast_expression2\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_cast_expression2(PyObject *_self)
+static PyObject *PyCAst_getter_cast_expression2_ast(PyObject *_self)
 {
 	PyCAst_object_cast_expression2 *self=(PyCAst_object_cast_expression2*)(_self);
 	if(self->_p_cast_object->isList())
@@ -4692,9 +4993,16 @@ static PyObject *PyCAst_ast_getter_cast_expression2(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_cast_expression2_unary_expression(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_cast_expression2[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_cast_expression2,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_cast_expression2_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"unary_expression", (getter)PyCAst_getter_cast_expression2_unary_expression,NULL,(char*)"unary_expression", NULL},
 	NULL
 };
 
@@ -4783,7 +5091,7 @@ static int PyCAst_init_init_declarator(PyCAst_object_init_declarator *self, PyOb
     printf("initializing PyCAst::init_declarator\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_init_declarator(PyObject *_self)
+static PyObject *PyCAst_getter_init_declarator_ast(PyObject *_self)
 {
 	PyCAst_object_init_declarator *self=(PyCAst_object_init_declarator*)(_self);
 	if(self->_p_cast_object->isList())
@@ -4800,9 +5108,16 @@ static PyObject *PyCAst_ast_getter_init_declarator(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_init_declarator_initializer(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_init_declarator[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_init_declarator,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_init_declarator_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"declarator", (getter)PyCAst_getter_init_declarator_declarator,NULL,(char*)"declarator", NULL},{(char*)"token1", (getter)PyCAst_getter_init_declarator_token1,NULL,(char*)"token1", NULL},{(char*)"initializer", (getter)PyCAst_getter_init_declarator_initializer,NULL,(char*)"initializer", NULL},
 	NULL
 };
 
@@ -4891,7 +5206,7 @@ static int PyCAst_init_struct_declarator_list(PyCAst_object_struct_declarator_li
     printf("initializing PyCAst::struct_declarator_list\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_struct_declarator_list(PyObject *_self)
+static PyObject *PyCAst_getter_struct_declarator_list_ast(PyObject *_self)
 {
 	PyCAst_object_struct_declarator_list *self=(PyCAst_object_struct_declarator_list*)(_self);
 	if(self->_p_cast_object->isList())
@@ -4908,9 +5223,16 @@ static PyObject *PyCAst_ast_getter_struct_declarator_list(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_struct_declarator_list_struct_declarator(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_struct_declarator_list[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_struct_declarator_list,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_struct_declarator_list_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"struct_declarator", (getter)PyCAst_getter_struct_declarator_list_struct_declarator,NULL,(char*)"struct_declarator", NULL},
 	NULL
 };
 
@@ -4999,7 +5321,7 @@ static int PyCAst_init_logical_or_expression(PyCAst_object_logical_or_expression
     printf("initializing PyCAst::logical_or_expression\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_logical_or_expression(PyObject *_self)
+static PyObject *PyCAst_getter_logical_or_expression_ast(PyObject *_self)
 {
 	PyCAst_object_logical_or_expression *self=(PyCAst_object_logical_or_expression*)(_self);
 	if(self->_p_cast_object->isList())
@@ -5016,9 +5338,16 @@ static PyObject *PyCAst_ast_getter_logical_or_expression(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_logical_or_expression_logical_and_expression(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_logical_or_expression[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_logical_or_expression,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_logical_or_expression_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"logical_and_expression", (getter)PyCAst_getter_logical_or_expression_logical_and_expression,NULL,(char*)"logical_and_expression", NULL},
 	NULL
 };
 
@@ -5107,7 +5436,7 @@ static int PyCAst_init_unary_operator(PyCAst_object_unary_operator *self, PyObje
     printf("initializing PyCAst::unary_operator\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_unary_operator(PyObject *_self)
+static PyObject *PyCAst_getter_unary_operator_ast(PyObject *_self)
 {
 	PyCAst_object_unary_operator *self=(PyCAst_object_unary_operator*)(_self);
 	if(self->_p_cast_object->isList())
@@ -5124,9 +5453,16 @@ static PyObject *PyCAst_ast_getter_unary_operator(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_unary_operator_token1(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_unary_operator[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_unary_operator,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_unary_operator_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"token1", (getter)PyCAst_getter_unary_operator_token1,NULL,(char*)"token1", NULL},
 	NULL
 };
 
@@ -5215,7 +5551,7 @@ static int PyCAst_init_relational_expression(PyCAst_object_relational_expression
     printf("initializing PyCAst::relational_expression\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_relational_expression(PyObject *_self)
+static PyObject *PyCAst_getter_relational_expression_ast(PyObject *_self)
 {
 	PyCAst_object_relational_expression *self=(PyCAst_object_relational_expression*)(_self);
 	if(self->_p_cast_object->isList())
@@ -5232,9 +5568,16 @@ static PyObject *PyCAst_ast_getter_relational_expression(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_relational_expression_shift_expression(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_relational_expression[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_relational_expression,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_relational_expression_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"token1", (getter)PyCAst_getter_relational_expression_token1,NULL,(char*)"token1", NULL},{(char*)"shift_expression", (getter)PyCAst_getter_relational_expression_shift_expression,NULL,(char*)"shift_expression", NULL},
 	NULL
 };
 
@@ -5323,7 +5666,7 @@ static int PyCAst_init_struct_or_union(PyCAst_object_struct_or_union *self, PyOb
     printf("initializing PyCAst::struct_or_union\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_struct_or_union(PyObject *_self)
+static PyObject *PyCAst_getter_struct_or_union_ast(PyObject *_self)
 {
 	PyCAst_object_struct_or_union *self=(PyCAst_object_struct_or_union*)(_self);
 	if(self->_p_cast_object->isList())
@@ -5340,9 +5683,16 @@ static PyObject *PyCAst_ast_getter_struct_or_union(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_struct_or_union_token1(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_struct_or_union[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_struct_or_union,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_struct_or_union_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"token1", (getter)PyCAst_getter_struct_or_union_token1,NULL,(char*)"token1", NULL},
 	NULL
 };
 
@@ -5431,7 +5781,7 @@ static int PyCAst_init_enumerator(PyCAst_object_enumerator *self, PyObject *args
     printf("initializing PyCAst::enumerator\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_enumerator(PyObject *_self)
+static PyObject *PyCAst_getter_enumerator_ast(PyObject *_self)
 {
 	PyCAst_object_enumerator *self=(PyCAst_object_enumerator*)(_self);
 	if(self->_p_cast_object->isList())
@@ -5448,9 +5798,16 @@ static PyObject *PyCAst_ast_getter_enumerator(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_enumerator_constant_expression(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_enumerator[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_enumerator,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_enumerator_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"token1", (getter)PyCAst_getter_enumerator_token1,NULL,(char*)"token1", NULL},{(char*)"token2", (getter)PyCAst_getter_enumerator_token2,NULL,(char*)"token2", NULL},{(char*)"constant_expression", (getter)PyCAst_getter_enumerator_constant_expression,NULL,(char*)"constant_expression", NULL},
 	NULL
 };
 
@@ -5539,7 +5896,7 @@ static int PyCAst_init_assignment_expression1(PyCAst_object_assignment_expressio
     printf("initializing PyCAst::assignment_expression1\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_assignment_expression1(PyObject *_self)
+static PyObject *PyCAst_getter_assignment_expression1_ast(PyObject *_self)
 {
 	PyCAst_object_assignment_expression1 *self=(PyCAst_object_assignment_expression1*)(_self);
 	if(self->_p_cast_object->isList())
@@ -5556,9 +5913,16 @@ static PyObject *PyCAst_ast_getter_assignment_expression1(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_assignment_expression1_assignment_expression(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_assignment_expression1[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_assignment_expression1,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_assignment_expression1_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"unary_expression", (getter)PyCAst_getter_assignment_expression1_unary_expression,NULL,(char*)"unary_expression", NULL},{(char*)"assignment_operator", (getter)PyCAst_getter_assignment_expression1_assignment_operator,NULL,(char*)"assignment_operator", NULL},{(char*)"assignment_expression", (getter)PyCAst_getter_assignment_expression1_assignment_expression,NULL,(char*)"assignment_expression", NULL},
 	NULL
 };
 
@@ -5647,7 +6011,7 @@ static int PyCAst_init_assignment_expression2(PyCAst_object_assignment_expressio
     printf("initializing PyCAst::assignment_expression2\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_assignment_expression2(PyObject *_self)
+static PyObject *PyCAst_getter_assignment_expression2_ast(PyObject *_self)
 {
 	PyCAst_object_assignment_expression2 *self=(PyCAst_object_assignment_expression2*)(_self);
 	if(self->_p_cast_object->isList())
@@ -5664,9 +6028,16 @@ static PyObject *PyCAst_ast_getter_assignment_expression2(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_assignment_expression2_conditional_expression(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_assignment_expression2[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_assignment_expression2,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_assignment_expression2_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"conditional_expression", (getter)PyCAst_getter_assignment_expression2_conditional_expression,NULL,(char*)"conditional_expression", NULL},
 	NULL
 };
 
@@ -5755,7 +6126,7 @@ static int PyCAst_init_parameter_type_list(PyCAst_object_parameter_type_list *se
     printf("initializing PyCAst::parameter_type_list\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_parameter_type_list(PyObject *_self)
+static PyObject *PyCAst_getter_parameter_type_list_ast(PyObject *_self)
 {
 	PyCAst_object_parameter_type_list *self=(PyCAst_object_parameter_type_list*)(_self);
 	if(self->_p_cast_object->isList())
@@ -5772,9 +6143,16 @@ static PyObject *PyCAst_ast_getter_parameter_type_list(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_parameter_type_list_token2(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_parameter_type_list[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_parameter_type_list,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_parameter_type_list_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"parameter_list", (getter)PyCAst_getter_parameter_type_list_parameter_list,NULL,(char*)"parameter_list", NULL},{(char*)"token1", (getter)PyCAst_getter_parameter_type_list_token1,NULL,(char*)"token1", NULL},{(char*)"token2", (getter)PyCAst_getter_parameter_type_list_token2,NULL,(char*)"token2", NULL},
 	NULL
 };
 
@@ -5863,7 +6241,7 @@ static int PyCAst_init_parameter_declaration1(PyCAst_object_parameter_declaratio
     printf("initializing PyCAst::parameter_declaration1\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_parameter_declaration1(PyObject *_self)
+static PyObject *PyCAst_getter_parameter_declaration1_ast(PyObject *_self)
 {
 	PyCAst_object_parameter_declaration1 *self=(PyCAst_object_parameter_declaration1*)(_self);
 	if(self->_p_cast_object->isList())
@@ -5880,9 +6258,16 @@ static PyObject *PyCAst_ast_getter_parameter_declaration1(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_parameter_declaration1_declarator(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_parameter_declaration1[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_parameter_declaration1,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_parameter_declaration1_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"declaration_specifiers", (getter)PyCAst_getter_parameter_declaration1_declaration_specifiers,NULL,(char*)"declaration_specifiers", NULL},{(char*)"declarator", (getter)PyCAst_getter_parameter_declaration1_declarator,NULL,(char*)"declarator", NULL},
 	NULL
 };
 
@@ -5971,7 +6356,7 @@ static int PyCAst_init_parameter_declaration2(PyCAst_object_parameter_declaratio
     printf("initializing PyCAst::parameter_declaration2\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_parameter_declaration2(PyObject *_self)
+static PyObject *PyCAst_getter_parameter_declaration2_ast(PyObject *_self)
 {
 	PyCAst_object_parameter_declaration2 *self=(PyCAst_object_parameter_declaration2*)(_self);
 	if(self->_p_cast_object->isList())
@@ -5988,9 +6373,16 @@ static PyObject *PyCAst_ast_getter_parameter_declaration2(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_parameter_declaration2_abstract_declarator(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_parameter_declaration2[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_parameter_declaration2,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_parameter_declaration2_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"declaration_specifiers", (getter)PyCAst_getter_parameter_declaration2_declaration_specifiers,NULL,(char*)"declaration_specifiers", NULL},{(char*)"abstract_declarator", (getter)PyCAst_getter_parameter_declaration2_abstract_declarator,NULL,(char*)"abstract_declarator", NULL},
 	NULL
 };
 
@@ -6079,7 +6471,7 @@ static int PyCAst_init_multiplicative_expression(PyCAst_object_multiplicative_ex
     printf("initializing PyCAst::multiplicative_expression\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_multiplicative_expression(PyObject *_self)
+static PyObject *PyCAst_getter_multiplicative_expression_ast(PyObject *_self)
 {
 	PyCAst_object_multiplicative_expression *self=(PyCAst_object_multiplicative_expression*)(_self);
 	if(self->_p_cast_object->isList())
@@ -6096,9 +6488,16 @@ static PyObject *PyCAst_ast_getter_multiplicative_expression(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_multiplicative_expression_cast_expression(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_multiplicative_expression[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_multiplicative_expression,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_multiplicative_expression_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"token1", (getter)PyCAst_getter_multiplicative_expression_token1,NULL,(char*)"token1", NULL},{(char*)"cast_expression", (getter)PyCAst_getter_multiplicative_expression_cast_expression,NULL,(char*)"cast_expression", NULL},
 	NULL
 };
 
@@ -6187,7 +6586,7 @@ static int PyCAst_init_type_qualifier_list(PyCAst_object_type_qualifier_list *se
     printf("initializing PyCAst::type_qualifier_list\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_type_qualifier_list(PyObject *_self)
+static PyObject *PyCAst_getter_type_qualifier_list_ast(PyObject *_self)
 {
 	PyCAst_object_type_qualifier_list *self=(PyCAst_object_type_qualifier_list*)(_self);
 	if(self->_p_cast_object->isList())
@@ -6204,9 +6603,16 @@ static PyObject *PyCAst_ast_getter_type_qualifier_list(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_type_qualifier_list_type_qualifier(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_type_qualifier_list[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_type_qualifier_list,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_type_qualifier_list_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"type_qualifier", (getter)PyCAst_getter_type_qualifier_list_type_qualifier,NULL,(char*)"type_qualifier", NULL},
 	NULL
 };
 
@@ -6295,7 +6701,7 @@ static int PyCAst_init_argument_expression_list(PyCAst_object_argument_expressio
     printf("initializing PyCAst::argument_expression_list\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_argument_expression_list(PyObject *_self)
+static PyObject *PyCAst_getter_argument_expression_list_ast(PyObject *_self)
 {
 	PyCAst_object_argument_expression_list *self=(PyCAst_object_argument_expression_list*)(_self);
 	if(self->_p_cast_object->isList())
@@ -6312,9 +6718,16 @@ static PyObject *PyCAst_ast_getter_argument_expression_list(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_argument_expression_list_assignment_expression(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_argument_expression_list[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_argument_expression_list,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_argument_expression_list_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"assignment_expression", (getter)PyCAst_getter_argument_expression_list_assignment_expression,NULL,(char*)"assignment_expression", NULL},
 	NULL
 };
 
@@ -6403,7 +6816,7 @@ static int PyCAst_init_direct_abstract_declarator1(PyCAst_object_direct_abstract
     printf("initializing PyCAst::direct_abstract_declarator1\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_direct_abstract_declarator1(PyObject *_self)
+static PyObject *PyCAst_getter_direct_abstract_declarator1_ast(PyObject *_self)
 {
 	PyCAst_object_direct_abstract_declarator1 *self=(PyCAst_object_direct_abstract_declarator1*)(_self);
 	if(self->_p_cast_object->isList())
@@ -6420,9 +6833,16 @@ static PyObject *PyCAst_ast_getter_direct_abstract_declarator1(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_direct_abstract_declarator1_constant_expression(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_direct_abstract_declarator1[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_direct_abstract_declarator1,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_direct_abstract_declarator1_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"direct_abstract_declarator", (getter)PyCAst_getter_direct_abstract_declarator1_direct_abstract_declarator,NULL,(char*)"direct_abstract_declarator", NULL},{(char*)"constant_expression", (getter)PyCAst_getter_direct_abstract_declarator1_constant_expression,NULL,(char*)"constant_expression", NULL},
 	NULL
 };
 
@@ -6511,7 +6931,7 @@ static int PyCAst_init_direct_abstract_declarator2(PyCAst_object_direct_abstract
     printf("initializing PyCAst::direct_abstract_declarator2\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_direct_abstract_declarator2(PyObject *_self)
+static PyObject *PyCAst_getter_direct_abstract_declarator2_ast(PyObject *_self)
 {
 	PyCAst_object_direct_abstract_declarator2 *self=(PyCAst_object_direct_abstract_declarator2*)(_self);
 	if(self->_p_cast_object->isList())
@@ -6528,9 +6948,16 @@ static PyObject *PyCAst_ast_getter_direct_abstract_declarator2(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_direct_abstract_declarator2_parameter_type_list(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_direct_abstract_declarator2[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_direct_abstract_declarator2,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_direct_abstract_declarator2_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"direct_abstract_declarator", (getter)PyCAst_getter_direct_abstract_declarator2_direct_abstract_declarator,NULL,(char*)"direct_abstract_declarator", NULL},{(char*)"parameter_type_list", (getter)PyCAst_getter_direct_abstract_declarator2_parameter_type_list,NULL,(char*)"parameter_type_list", NULL},
 	NULL
 };
 
@@ -6619,7 +7046,7 @@ static int PyCAst_init_direct_abstract_declarator3(PyCAst_object_direct_abstract
     printf("initializing PyCAst::direct_abstract_declarator3\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_direct_abstract_declarator3(PyObject *_self)
+static PyObject *PyCAst_getter_direct_abstract_declarator3_ast(PyObject *_self)
 {
 	PyCAst_object_direct_abstract_declarator3 *self=(PyCAst_object_direct_abstract_declarator3*)(_self);
 	if(self->_p_cast_object->isList())
@@ -6636,9 +7063,16 @@ static PyObject *PyCAst_ast_getter_direct_abstract_declarator3(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_direct_abstract_declarator3_abstract_declarator(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_direct_abstract_declarator3[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_direct_abstract_declarator3,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_direct_abstract_declarator3_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"abstract_declarator", (getter)PyCAst_getter_direct_abstract_declarator3_abstract_declarator,NULL,(char*)"abstract_declarator", NULL},
 	NULL
 };
 
@@ -6727,7 +7161,7 @@ static int PyCAst_init_equality_expression(PyCAst_object_equality_expression *se
     printf("initializing PyCAst::equality_expression\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_equality_expression(PyObject *_self)
+static PyObject *PyCAst_getter_equality_expression_ast(PyObject *_self)
 {
 	PyCAst_object_equality_expression *self=(PyCAst_object_equality_expression*)(_self);
 	if(self->_p_cast_object->isList())
@@ -6744,9 +7178,16 @@ static PyObject *PyCAst_ast_getter_equality_expression(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_equality_expression_relational_expression(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_equality_expression[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_equality_expression,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_equality_expression_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"token1", (getter)PyCAst_getter_equality_expression_token1,NULL,(char*)"token1", NULL},{(char*)"relational_expression", (getter)PyCAst_getter_equality_expression_relational_expression,NULL,(char*)"relational_expression", NULL},
 	NULL
 };
 
@@ -6835,7 +7276,7 @@ static int PyCAst_init_primary_expression1(PyCAst_object_primary_expression1 *se
     printf("initializing PyCAst::primary_expression1\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_primary_expression1(PyObject *_self)
+static PyObject *PyCAst_getter_primary_expression1_ast(PyObject *_self)
 {
 	PyCAst_object_primary_expression1 *self=(PyCAst_object_primary_expression1*)(_self);
 	if(self->_p_cast_object->isList())
@@ -6852,9 +7293,16 @@ static PyObject *PyCAst_ast_getter_primary_expression1(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_primary_expression1_expression(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_primary_expression1[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_primary_expression1,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_primary_expression1_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"expression", (getter)PyCAst_getter_primary_expression1_expression,NULL,(char*)"expression", NULL},
 	NULL
 };
 
@@ -6943,7 +7391,7 @@ static int PyCAst_init_primary_expression2(PyCAst_object_primary_expression2 *se
     printf("initializing PyCAst::primary_expression2\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_primary_expression2(PyObject *_self)
+static PyObject *PyCAst_getter_primary_expression2_ast(PyObject *_self)
 {
 	PyCAst_object_primary_expression2 *self=(PyCAst_object_primary_expression2*)(_self);
 	if(self->_p_cast_object->isList())
@@ -6960,9 +7408,16 @@ static PyObject *PyCAst_ast_getter_primary_expression2(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_primary_expression2_token1(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_primary_expression2[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_primary_expression2,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_primary_expression2_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"token1", (getter)PyCAst_getter_primary_expression2_token1,NULL,(char*)"token1", NULL},
 	NULL
 };
 
@@ -7051,7 +7506,7 @@ static int PyCAst_init_declaration_specifiers1(PyCAst_object_declaration_specifi
     printf("initializing PyCAst::declaration_specifiers1\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_declaration_specifiers1(PyObject *_self)
+static PyObject *PyCAst_getter_declaration_specifiers1_ast(PyObject *_self)
 {
 	PyCAst_object_declaration_specifiers1 *self=(PyCAst_object_declaration_specifiers1*)(_self);
 	if(self->_p_cast_object->isList())
@@ -7068,9 +7523,16 @@ static PyObject *PyCAst_ast_getter_declaration_specifiers1(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_declaration_specifiers1_storage_class_specifier(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_declaration_specifiers1[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_declaration_specifiers1,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_declaration_specifiers1_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"storage_class_specifier", (getter)PyCAst_getter_declaration_specifiers1_storage_class_specifier,NULL,(char*)"storage_class_specifier", NULL},
 	NULL
 };
 
@@ -7159,7 +7621,7 @@ static int PyCAst_init_declaration_specifiers2(PyCAst_object_declaration_specifi
     printf("initializing PyCAst::declaration_specifiers2\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_declaration_specifiers2(PyObject *_self)
+static PyObject *PyCAst_getter_declaration_specifiers2_ast(PyObject *_self)
 {
 	PyCAst_object_declaration_specifiers2 *self=(PyCAst_object_declaration_specifiers2*)(_self);
 	if(self->_p_cast_object->isList())
@@ -7176,9 +7638,16 @@ static PyObject *PyCAst_ast_getter_declaration_specifiers2(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_declaration_specifiers2_type_specifier(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_declaration_specifiers2[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_declaration_specifiers2,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_declaration_specifiers2_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"type_specifier", (getter)PyCAst_getter_declaration_specifiers2_type_specifier,NULL,(char*)"type_specifier", NULL},
 	NULL
 };
 
@@ -7267,7 +7736,7 @@ static int PyCAst_init_declaration_specifiers3(PyCAst_object_declaration_specifi
     printf("initializing PyCAst::declaration_specifiers3\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_declaration_specifiers3(PyObject *_self)
+static PyObject *PyCAst_getter_declaration_specifiers3_ast(PyObject *_self)
 {
 	PyCAst_object_declaration_specifiers3 *self=(PyCAst_object_declaration_specifiers3*)(_self);
 	if(self->_p_cast_object->isList())
@@ -7284,9 +7753,16 @@ static PyObject *PyCAst_ast_getter_declaration_specifiers3(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_declaration_specifiers3_type_qualifier(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_declaration_specifiers3[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_declaration_specifiers3,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_declaration_specifiers3_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"type_qualifier", (getter)PyCAst_getter_declaration_specifiers3_type_qualifier,NULL,(char*)"type_qualifier", NULL},
 	NULL
 };
 
@@ -7375,7 +7851,7 @@ static int PyCAst_init_declaration(PyCAst_object_declaration *self, PyObject *ar
     printf("initializing PyCAst::declaration\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_declaration(PyObject *_self)
+static PyObject *PyCAst_getter_declaration_ast(PyObject *_self)
 {
 	PyCAst_object_declaration *self=(PyCAst_object_declaration*)(_self);
 	if(self->_p_cast_object->isList())
@@ -7392,9 +7868,16 @@ static PyObject *PyCAst_ast_getter_declaration(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_declaration_init_declarator_list(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_declaration[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_declaration,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_declaration_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"declaration_specifiers", (getter)PyCAst_getter_declaration_declaration_specifiers,NULL,(char*)"declaration_specifiers", NULL},{(char*)"init_declarator_list", (getter)PyCAst_getter_declaration_init_declarator_list,NULL,(char*)"init_declarator_list", NULL},
 	NULL
 };
 
@@ -7483,7 +7966,7 @@ static int PyCAst_init_direct_declarator1(PyCAst_object_direct_declarator1 *self
     printf("initializing PyCAst::direct_declarator1\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_direct_declarator1(PyObject *_self)
+static PyObject *PyCAst_getter_direct_declarator1_ast(PyObject *_self)
 {
 	PyCAst_object_direct_declarator1 *self=(PyCAst_object_direct_declarator1*)(_self);
 	if(self->_p_cast_object->isList())
@@ -7500,9 +7983,16 @@ static PyObject *PyCAst_ast_getter_direct_declarator1(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_direct_declarator1_constant_expression(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_direct_declarator1[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_direct_declarator1,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_direct_declarator1_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"direct_declarator", (getter)PyCAst_getter_direct_declarator1_direct_declarator,NULL,(char*)"direct_declarator", NULL},{(char*)"constant_expression", (getter)PyCAst_getter_direct_declarator1_constant_expression,NULL,(char*)"constant_expression", NULL},
 	NULL
 };
 
@@ -7591,7 +8081,7 @@ static int PyCAst_init_direct_declarator2(PyCAst_object_direct_declarator2 *self
     printf("initializing PyCAst::direct_declarator2\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_direct_declarator2(PyObject *_self)
+static PyObject *PyCAst_getter_direct_declarator2_ast(PyObject *_self)
 {
 	PyCAst_object_direct_declarator2 *self=(PyCAst_object_direct_declarator2*)(_self);
 	if(self->_p_cast_object->isList())
@@ -7608,9 +8098,16 @@ static PyObject *PyCAst_ast_getter_direct_declarator2(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_direct_declarator2_parameter_type_list(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_direct_declarator2[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_direct_declarator2,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_direct_declarator2_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"direct_declarator", (getter)PyCAst_getter_direct_declarator2_direct_declarator,NULL,(char*)"direct_declarator", NULL},{(char*)"parameter_type_list", (getter)PyCAst_getter_direct_declarator2_parameter_type_list,NULL,(char*)"parameter_type_list", NULL},
 	NULL
 };
 
@@ -7699,7 +8196,7 @@ static int PyCAst_init_direct_declarator3(PyCAst_object_direct_declarator3 *self
     printf("initializing PyCAst::direct_declarator3\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_direct_declarator3(PyObject *_self)
+static PyObject *PyCAst_getter_direct_declarator3_ast(PyObject *_self)
 {
 	PyCAst_object_direct_declarator3 *self=(PyCAst_object_direct_declarator3*)(_self);
 	if(self->_p_cast_object->isList())
@@ -7716,9 +8213,16 @@ static PyObject *PyCAst_ast_getter_direct_declarator3(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_direct_declarator3_identifier_list(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_direct_declarator3[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_direct_declarator3,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_direct_declarator3_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"direct_declarator", (getter)PyCAst_getter_direct_declarator3_direct_declarator,NULL,(char*)"direct_declarator", NULL},{(char*)"identifier_list", (getter)PyCAst_getter_direct_declarator3_identifier_list,NULL,(char*)"identifier_list", NULL},
 	NULL
 };
 
@@ -7807,7 +8311,7 @@ static int PyCAst_init_direct_declarator4(PyCAst_object_direct_declarator4 *self
     printf("initializing PyCAst::direct_declarator4\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_direct_declarator4(PyObject *_self)
+static PyObject *PyCAst_getter_direct_declarator4_ast(PyObject *_self)
 {
 	PyCAst_object_direct_declarator4 *self=(PyCAst_object_direct_declarator4*)(_self);
 	if(self->_p_cast_object->isList())
@@ -7824,9 +8328,16 @@ static PyObject *PyCAst_ast_getter_direct_declarator4(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_direct_declarator4_declarator(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_direct_declarator4[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_direct_declarator4,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_direct_declarator4_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"declarator", (getter)PyCAst_getter_direct_declarator4_declarator,NULL,(char*)"declarator", NULL},
 	NULL
 };
 
@@ -7915,7 +8426,7 @@ static int PyCAst_init_direct_declarator5(PyCAst_object_direct_declarator5 *self
     printf("initializing PyCAst::direct_declarator5\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_direct_declarator5(PyObject *_self)
+static PyObject *PyCAst_getter_direct_declarator5_ast(PyObject *_self)
 {
 	PyCAst_object_direct_declarator5 *self=(PyCAst_object_direct_declarator5*)(_self);
 	if(self->_p_cast_object->isList())
@@ -7932,9 +8443,16 @@ static PyObject *PyCAst_ast_getter_direct_declarator5(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_direct_declarator5_token1(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_direct_declarator5[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_direct_declarator5,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_direct_declarator5_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"token1", (getter)PyCAst_getter_direct_declarator5_token1,NULL,(char*)"token1", NULL},
 	NULL
 };
 
@@ -8023,7 +8541,7 @@ static int PyCAst_init_logical_and_expression(PyCAst_object_logical_and_expressi
     printf("initializing PyCAst::logical_and_expression\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_logical_and_expression(PyObject *_self)
+static PyObject *PyCAst_getter_logical_and_expression_ast(PyObject *_self)
 {
 	PyCAst_object_logical_and_expression *self=(PyCAst_object_logical_and_expression*)(_self);
 	if(self->_p_cast_object->isList())
@@ -8040,9 +8558,16 @@ static PyObject *PyCAst_ast_getter_logical_and_expression(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_logical_and_expression_inclusive_or_expression(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_logical_and_expression[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_logical_and_expression,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_logical_and_expression_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"inclusive_or_expression", (getter)PyCAst_getter_logical_and_expression_inclusive_or_expression,NULL,(char*)"inclusive_or_expression", NULL},
 	NULL
 };
 
@@ -8131,7 +8656,7 @@ static int PyCAst_init_init_declarator_list(PyCAst_object_init_declarator_list *
     printf("initializing PyCAst::init_declarator_list\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_init_declarator_list(PyObject *_self)
+static PyObject *PyCAst_getter_init_declarator_list_ast(PyObject *_self)
 {
 	PyCAst_object_init_declarator_list *self=(PyCAst_object_init_declarator_list*)(_self);
 	if(self->_p_cast_object->isList())
@@ -8148,9 +8673,16 @@ static PyObject *PyCAst_ast_getter_init_declarator_list(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_init_declarator_list_init_declarator(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_init_declarator_list[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_init_declarator_list,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_init_declarator_list_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"init_declarator", (getter)PyCAst_getter_init_declarator_list_init_declarator,NULL,(char*)"init_declarator", NULL},
 	NULL
 };
 
@@ -8239,7 +8771,7 @@ static int PyCAst_init_shift_expression(PyCAst_object_shift_expression *self, Py
     printf("initializing PyCAst::shift_expression\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_shift_expression(PyObject *_self)
+static PyObject *PyCAst_getter_shift_expression_ast(PyObject *_self)
 {
 	PyCAst_object_shift_expression *self=(PyCAst_object_shift_expression*)(_self);
 	if(self->_p_cast_object->isList())
@@ -8256,9 +8788,16 @@ static PyObject *PyCAst_ast_getter_shift_expression(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_shift_expression_additive_expression(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_shift_expression[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_shift_expression,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_shift_expression_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"token1", (getter)PyCAst_getter_shift_expression_token1,NULL,(char*)"token1", NULL},{(char*)"additive_expression", (getter)PyCAst_getter_shift_expression_additive_expression,NULL,(char*)"additive_expression", NULL},
 	NULL
 };
 
@@ -8347,7 +8886,7 @@ static int PyCAst_init_identifier_list(PyCAst_object_identifier_list *self, PyOb
     printf("initializing PyCAst::identifier_list\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_identifier_list(PyObject *_self)
+static PyObject *PyCAst_getter_identifier_list_ast(PyObject *_self)
 {
 	PyCAst_object_identifier_list *self=(PyCAst_object_identifier_list*)(_self);
 	if(self->_p_cast_object->isList())
@@ -8364,9 +8903,16 @@ static PyObject *PyCAst_ast_getter_identifier_list(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_identifier_list_token1(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_identifier_list[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_identifier_list,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_identifier_list_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"token1", (getter)PyCAst_getter_identifier_list_token1,NULL,(char*)"token1", NULL},
 	NULL
 };
 
@@ -8455,7 +9001,7 @@ static int PyCAst_init_jump_statement1(PyCAst_object_jump_statement1 *self, PyOb
     printf("initializing PyCAst::jump_statement1\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_jump_statement1(PyObject *_self)
+static PyObject *PyCAst_getter_jump_statement1_ast(PyObject *_self)
 {
 	PyCAst_object_jump_statement1 *self=(PyCAst_object_jump_statement1*)(_self);
 	if(self->_p_cast_object->isList())
@@ -8472,9 +9018,16 @@ static PyObject *PyCAst_ast_getter_jump_statement1(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_jump_statement1_token1(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_jump_statement1[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_jump_statement1,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_jump_statement1_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"token1", (getter)PyCAst_getter_jump_statement1_token1,NULL,(char*)"token1", NULL},
 	NULL
 };
 
@@ -8563,7 +9116,7 @@ static int PyCAst_init_jump_statement2(PyCAst_object_jump_statement2 *self, PyOb
     printf("initializing PyCAst::jump_statement2\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_jump_statement2(PyObject *_self)
+static PyObject *PyCAst_getter_jump_statement2_ast(PyObject *_self)
 {
 	PyCAst_object_jump_statement2 *self=(PyCAst_object_jump_statement2*)(_self);
 	if(self->_p_cast_object->isList())
@@ -8580,9 +9133,16 @@ static PyObject *PyCAst_ast_getter_jump_statement2(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_jump_statement2_expression(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_jump_statement2[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_jump_statement2,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_jump_statement2_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"expression", (getter)PyCAst_getter_jump_statement2_expression,NULL,(char*)"expression", NULL},
 	NULL
 };
 
@@ -8671,7 +9231,7 @@ static int PyCAst_init_jump_statement3(PyCAst_object_jump_statement3 *self, PyOb
     printf("initializing PyCAst::jump_statement3\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_jump_statement3(PyObject *_self)
+static PyObject *PyCAst_getter_jump_statement3_ast(PyObject *_self)
 {
 	PyCAst_object_jump_statement3 *self=(PyCAst_object_jump_statement3*)(_self);
 	if(self->_p_cast_object->isList())
@@ -8688,9 +9248,16 @@ static PyObject *PyCAst_ast_getter_jump_statement3(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_jump_statement3_token1(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_jump_statement3[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_jump_statement3,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_jump_statement3_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"token1", (getter)PyCAst_getter_jump_statement3_token1,NULL,(char*)"token1", NULL},
 	NULL
 };
 
@@ -8779,7 +9346,7 @@ static int PyCAst_init_struct_declarator(PyCAst_object_struct_declarator *self, 
     printf("initializing PyCAst::struct_declarator\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_struct_declarator(PyObject *_self)
+static PyObject *PyCAst_getter_struct_declarator_ast(PyObject *_self)
 {
 	PyCAst_object_struct_declarator *self=(PyCAst_object_struct_declarator*)(_self);
 	if(self->_p_cast_object->isList())
@@ -8796,9 +9363,16 @@ static PyObject *PyCAst_ast_getter_struct_declarator(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_struct_declarator_constant_expression(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_struct_declarator[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_struct_declarator,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_struct_declarator_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"declarator", (getter)PyCAst_getter_struct_declarator_declarator,NULL,(char*)"declarator", NULL},{(char*)"token1", (getter)PyCAst_getter_struct_declarator_token1,NULL,(char*)"token1", NULL},{(char*)"constant_expression", (getter)PyCAst_getter_struct_declarator_constant_expression,NULL,(char*)"constant_expression", NULL},
 	NULL
 };
 
@@ -8887,7 +9461,7 @@ static int PyCAst_init_function_definition(PyCAst_object_function_definition *se
     printf("initializing PyCAst::function_definition\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_function_definition(PyObject *_self)
+static PyObject *PyCAst_getter_function_definition_ast(PyObject *_self)
 {
 	PyCAst_object_function_definition *self=(PyCAst_object_function_definition*)(_self);
 	if(self->_p_cast_object->isList())
@@ -8904,9 +9478,16 @@ static PyObject *PyCAst_ast_getter_function_definition(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_function_definition_compound_statement(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_function_definition[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_function_definition,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_function_definition_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"declaration_specifiers", (getter)PyCAst_getter_function_definition_declaration_specifiers,NULL,(char*)"declaration_specifiers", NULL},{(char*)"declarator", (getter)PyCAst_getter_function_definition_declarator,NULL,(char*)"declarator", NULL},{(char*)"declaration_list", (getter)PyCAst_getter_function_definition_declaration_list,NULL,(char*)"declaration_list", NULL},{(char*)"compound_statement", (getter)PyCAst_getter_function_definition_compound_statement,NULL,(char*)"compound_statement", NULL},
 	NULL
 };
 
@@ -8995,7 +9576,7 @@ static int PyCAst_init_parameter_list(PyCAst_object_parameter_list *self, PyObje
     printf("initializing PyCAst::parameter_list\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_parameter_list(PyObject *_self)
+static PyObject *PyCAst_getter_parameter_list_ast(PyObject *_self)
 {
 	PyCAst_object_parameter_list *self=(PyCAst_object_parameter_list*)(_self);
 	if(self->_p_cast_object->isList())
@@ -9012,9 +9593,16 @@ static PyObject *PyCAst_ast_getter_parameter_list(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_parameter_list_parameter_declaration(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_parameter_list[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_parameter_list,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_parameter_list_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"parameter_declaration", (getter)PyCAst_getter_parameter_list_parameter_declaration,NULL,(char*)"parameter_declaration", NULL},
 	NULL
 };
 
@@ -9103,7 +9691,7 @@ static int PyCAst_init_enum_specifier(PyCAst_object_enum_specifier *self, PyObje
     printf("initializing PyCAst::enum_specifier\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_enum_specifier(PyObject *_self)
+static PyObject *PyCAst_getter_enum_specifier_ast(PyObject *_self)
 {
 	PyCAst_object_enum_specifier *self=(PyCAst_object_enum_specifier*)(_self);
 	if(self->_p_cast_object->isList())
@@ -9120,9 +9708,16 @@ static PyObject *PyCAst_ast_getter_enum_specifier(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_enum_specifier_token3(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_enum_specifier[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_enum_specifier,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_enum_specifier_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"token1", (getter)PyCAst_getter_enum_specifier_token1,NULL,(char*)"token1", NULL},{(char*)"token2", (getter)PyCAst_getter_enum_specifier_token2,NULL,(char*)"token2", NULL},{(char*)"enumerator_list", (getter)PyCAst_getter_enum_specifier_enumerator_list,NULL,(char*)"enumerator_list", NULL},{(char*)"token3", (getter)PyCAst_getter_enum_specifier_token3,NULL,(char*)"token3", NULL},
 	NULL
 };
 
@@ -9211,7 +9806,7 @@ static int PyCAst_init_type_qualifier(PyCAst_object_type_qualifier *self, PyObje
     printf("initializing PyCAst::type_qualifier\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_type_qualifier(PyObject *_self)
+static PyObject *PyCAst_getter_type_qualifier_ast(PyObject *_self)
 {
 	PyCAst_object_type_qualifier *self=(PyCAst_object_type_qualifier*)(_self);
 	if(self->_p_cast_object->isList())
@@ -9228,9 +9823,16 @@ static PyObject *PyCAst_ast_getter_type_qualifier(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_type_qualifier_token1(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_type_qualifier[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_type_qualifier,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_type_qualifier_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"token1", (getter)PyCAst_getter_type_qualifier_token1,NULL,(char*)"token1", NULL},
 	NULL
 };
 
@@ -9319,7 +9921,7 @@ static int PyCAst_init_enumerator_list(PyCAst_object_enumerator_list *self, PyOb
     printf("initializing PyCAst::enumerator_list\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_enumerator_list(PyObject *_self)
+static PyObject *PyCAst_getter_enumerator_list_ast(PyObject *_self)
 {
 	PyCAst_object_enumerator_list *self=(PyCAst_object_enumerator_list*)(_self);
 	if(self->_p_cast_object->isList())
@@ -9336,9 +9938,16 @@ static PyObject *PyCAst_ast_getter_enumerator_list(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_enumerator_list_enumerator(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_enumerator_list[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_enumerator_list,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_enumerator_list_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"enumerator", (getter)PyCAst_getter_enumerator_list_enumerator,NULL,(char*)"enumerator", NULL},
 	NULL
 };
 
@@ -9427,7 +10036,7 @@ static int PyCAst_init_labeled_statement1(PyCAst_object_labeled_statement1 *self
     printf("initializing PyCAst::labeled_statement1\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_labeled_statement1(PyObject *_self)
+static PyObject *PyCAst_getter_labeled_statement1_ast(PyObject *_self)
 {
 	PyCAst_object_labeled_statement1 *self=(PyCAst_object_labeled_statement1*)(_self);
 	if(self->_p_cast_object->isList())
@@ -9444,9 +10053,16 @@ static PyObject *PyCAst_ast_getter_labeled_statement1(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_labeled_statement1_statement(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_labeled_statement1[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_labeled_statement1,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_labeled_statement1_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"constant_expression", (getter)PyCAst_getter_labeled_statement1_constant_expression,NULL,(char*)"constant_expression", NULL},{(char*)"statement", (getter)PyCAst_getter_labeled_statement1_statement,NULL,(char*)"statement", NULL},
 	NULL
 };
 
@@ -9535,7 +10151,7 @@ static int PyCAst_init_labeled_statement2(PyCAst_object_labeled_statement2 *self
     printf("initializing PyCAst::labeled_statement2\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_labeled_statement2(PyObject *_self)
+static PyObject *PyCAst_getter_labeled_statement2_ast(PyObject *_self)
 {
 	PyCAst_object_labeled_statement2 *self=(PyCAst_object_labeled_statement2*)(_self);
 	if(self->_p_cast_object->isList())
@@ -9552,9 +10168,16 @@ static PyObject *PyCAst_ast_getter_labeled_statement2(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_labeled_statement2_statement(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_labeled_statement2[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_labeled_statement2,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_labeled_statement2_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"token1", (getter)PyCAst_getter_labeled_statement2_token1,NULL,(char*)"token1", NULL},{(char*)"statement", (getter)PyCAst_getter_labeled_statement2_statement,NULL,(char*)"statement", NULL},
 	NULL
 };
 
@@ -9643,7 +10266,7 @@ static int PyCAst_init_declaration_list(PyCAst_object_declaration_list *self, Py
     printf("initializing PyCAst::declaration_list\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_declaration_list(PyObject *_self)
+static PyObject *PyCAst_getter_declaration_list_ast(PyObject *_self)
 {
 	PyCAst_object_declaration_list *self=(PyCAst_object_declaration_list*)(_self);
 	if(self->_p_cast_object->isList())
@@ -9660,9 +10283,16 @@ static PyObject *PyCAst_ast_getter_declaration_list(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_declaration_list_declaration(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_declaration_list[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_declaration_list,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_declaration_list_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"declaration", (getter)PyCAst_getter_declaration_list_declaration,NULL,(char*)"declaration", NULL},
 	NULL
 };
 
@@ -9751,7 +10381,7 @@ static int PyCAst_init_specifier_qualifier_list1(PyCAst_object_specifier_qualifi
     printf("initializing PyCAst::specifier_qualifier_list1\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_specifier_qualifier_list1(PyObject *_self)
+static PyObject *PyCAst_getter_specifier_qualifier_list1_ast(PyObject *_self)
 {
 	PyCAst_object_specifier_qualifier_list1 *self=(PyCAst_object_specifier_qualifier_list1*)(_self);
 	if(self->_p_cast_object->isList())
@@ -9768,9 +10398,16 @@ static PyObject *PyCAst_ast_getter_specifier_qualifier_list1(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_specifier_qualifier_list1_type_specifier(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_specifier_qualifier_list1[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_specifier_qualifier_list1,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_specifier_qualifier_list1_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"type_specifier", (getter)PyCAst_getter_specifier_qualifier_list1_type_specifier,NULL,(char*)"type_specifier", NULL},
 	NULL
 };
 
@@ -9859,7 +10496,7 @@ static int PyCAst_init_specifier_qualifier_list2(PyCAst_object_specifier_qualifi
     printf("initializing PyCAst::specifier_qualifier_list2\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_specifier_qualifier_list2(PyObject *_self)
+static PyObject *PyCAst_getter_specifier_qualifier_list2_ast(PyObject *_self)
 {
 	PyCAst_object_specifier_qualifier_list2 *self=(PyCAst_object_specifier_qualifier_list2*)(_self);
 	if(self->_p_cast_object->isList())
@@ -9876,9 +10513,16 @@ static PyObject *PyCAst_ast_getter_specifier_qualifier_list2(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_specifier_qualifier_list2_type_qualifier(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_specifier_qualifier_list2[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_specifier_qualifier_list2,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_specifier_qualifier_list2_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"type_qualifier", (getter)PyCAst_getter_specifier_qualifier_list2_type_qualifier,NULL,(char*)"type_qualifier", NULL},
 	NULL
 };
 
@@ -9967,7 +10611,7 @@ static int PyCAst_init_translation_unit(PyCAst_object_translation_unit *self, Py
     printf("initializing PyCAst::translation_unit\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_translation_unit(PyObject *_self)
+static PyObject *PyCAst_getter_translation_unit_ast(PyObject *_self)
 {
 	PyCAst_object_translation_unit *self=(PyCAst_object_translation_unit*)(_self);
 	if(self->_p_cast_object->isList())
@@ -9984,9 +10628,16 @@ static PyObject *PyCAst_ast_getter_translation_unit(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_translation_unit_external_declaration(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_translation_unit[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_translation_unit,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_translation_unit_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"external_declaration", (getter)PyCAst_getter_translation_unit_external_declaration,NULL,(char*)"external_declaration", NULL},
 	NULL
 };
 
@@ -10075,7 +10726,7 @@ static int PyCAst_init_constant_expression(PyCAst_object_constant_expression *se
     printf("initializing PyCAst::constant_expression\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_constant_expression(PyObject *_self)
+static PyObject *PyCAst_getter_constant_expression_ast(PyObject *_self)
 {
 	PyCAst_object_constant_expression *self=(PyCAst_object_constant_expression*)(_self);
 	if(self->_p_cast_object->isList())
@@ -10092,9 +10743,16 @@ static PyObject *PyCAst_ast_getter_constant_expression(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_constant_expression_conditional_expression(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_constant_expression[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_constant_expression,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_constant_expression_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"conditional_expression", (getter)PyCAst_getter_constant_expression_conditional_expression,NULL,(char*)"conditional_expression", NULL},
 	NULL
 };
 
@@ -10183,7 +10841,7 @@ static int PyCAst_init_initializer_list(PyCAst_object_initializer_list *self, Py
     printf("initializing PyCAst::initializer_list\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_initializer_list(PyObject *_self)
+static PyObject *PyCAst_getter_initializer_list_ast(PyObject *_self)
 {
 	PyCAst_object_initializer_list *self=(PyCAst_object_initializer_list*)(_self);
 	if(self->_p_cast_object->isList())
@@ -10200,9 +10858,16 @@ static PyObject *PyCAst_ast_getter_initializer_list(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_initializer_list_initializer(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_initializer_list[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_initializer_list,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_initializer_list_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"initializer", (getter)PyCAst_getter_initializer_list_initializer,NULL,(char*)"initializer", NULL},
 	NULL
 };
 
@@ -10291,7 +10956,7 @@ static int PyCAst_init_statement_list(PyCAst_object_statement_list *self, PyObje
     printf("initializing PyCAst::statement_list\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_statement_list(PyObject *_self)
+static PyObject *PyCAst_getter_statement_list_ast(PyObject *_self)
 {
 	PyCAst_object_statement_list *self=(PyCAst_object_statement_list*)(_self);
 	if(self->_p_cast_object->isList())
@@ -10308,9 +10973,16 @@ static PyObject *PyCAst_ast_getter_statement_list(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_statement_list_statement(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_statement_list[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_statement_list,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_statement_list_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"statement", (getter)PyCAst_getter_statement_list_statement,NULL,(char*)"statement", NULL},
 	NULL
 };
 
@@ -10399,7 +11071,7 @@ static int PyCAst_init_expression(PyCAst_object_expression *self, PyObject *args
     printf("initializing PyCAst::expression\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_expression(PyObject *_self)
+static PyObject *PyCAst_getter_expression_ast(PyObject *_self)
 {
 	PyCAst_object_expression *self=(PyCAst_object_expression*)(_self);
 	if(self->_p_cast_object->isList())
@@ -10416,9 +11088,16 @@ static PyObject *PyCAst_ast_getter_expression(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_expression_assignment_expression(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_expression[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_expression,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_expression_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"assignment_expression", (getter)PyCAst_getter_expression_assignment_expression,NULL,(char*)"assignment_expression", NULL},
 	NULL
 };
 
@@ -10507,7 +11186,7 @@ static int PyCAst_init_declarator(PyCAst_object_declarator *self, PyObject *args
     printf("initializing PyCAst::declarator\n\n");
     return 0;
 }
-static PyObject *PyCAst_ast_getter_declarator(PyObject *_self)
+static PyObject *PyCAst_getter_declarator_ast(PyObject *_self)
 {
 	PyCAst_object_declarator *self=(PyCAst_object_declarator*)(_self);
 	if(self->_p_cast_object->isList())
@@ -10524,9 +11203,16 @@ static PyObject *PyCAst_ast_getter_declarator(PyObject *_self)
 
 }
 
+PyObject* PyCAst_getter_declarator_direct_declarator(PyObject* attr)
+{
+	return PyString_FromString("test");
+}
+
+
 static PyGetSetDef PyCAst_getsetter_declarator[] = 
 {
-	{"ast", (getter)PyCAst_ast_getter_declarator,NULL,"Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_declarator_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"pointer", (getter)PyCAst_getter_declarator_pointer,NULL,(char*)"pointer", NULL},{(char*)"direct_declarator", (getter)PyCAst_getter_declarator_direct_declarator,NULL,(char*)"direct_declarator", NULL},
 	NULL
 };
 
