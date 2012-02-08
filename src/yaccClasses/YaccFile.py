@@ -88,49 +88,11 @@ class YaccFile(object):
 
 
 	def _dumpPython(self,fh):
-		fh.write("""
-#include <Python.h>
-#include <structmember.h>
-
-""")
-		classNames=[]
-		for rn in self.ruleMap:
-			rule=self.ruleMap[rn]
-			classNames.extend(rule._dumpPython(fh))
+		self.__writeTemplate("pySource",fh)
+		return
 		
-		fh.write("""
-
-static PyObject* parseFile(PyObject *args,PyObject *kwargs)
-{
-	CAst::translation_unit *tu=CAst::parseFile("test.c");
-	PyCAst_object_translation_unit *pyTu=(PyCAst_object_translation_unit*)PyCAst_type_translation_unit.tp_new(&PyCAst_type_translation_unit,NULL,NULL);
-	pyTu->_p_cast_object=tu;
-	return (PyObject*)pyTu;
-}
-
-static PyMethodDef module_methods[] = {
-	{ "parseFile",(PyCFunction)parseFile,METH_KEYWORDS,"parses a file"},
-	NULL
-};
 
 
-#ifndef PyMODINIT_FUNC
-#define PyMODINIT_FUNC void
-#endif
-PyMODINIT_FUNC
-initPyCAst(void) 
-{
-    PyObject* m;
-""")
-
-		for c in classNames:
-    			fh.write("\tif (PyType_Ready(&PyCAst_type_%(className)s) < 0) {printf(\"Initialization of PyCAst_type_%(className)s FAILED\\n\\n\");return;}\n"%{"className":c})
-
-		fh.write("""
-    m = Py_InitModule3("PyCAst", module_methods,"The PyCAst Module");
-
-    if (m == NULL) return;
-""")
 		for c in classNames:
     			fh.write("""
 	Py_INCREF(&PyCAst_type_%(className)s);

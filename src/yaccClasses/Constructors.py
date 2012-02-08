@@ -73,16 +73,6 @@ class _Constructor_(object):
 		if(not hasattr(self,"classCoder")):self._setClassCoder()
 		if(not hasattr(self,"parameters")):self._setParameters()
 		return self.classCoder._dumpPython(fh)
-	
-	def _dumpCHeader(self,fh):
-		if(not hasattr(self,"classCoder")):self._setClassCoder()
-		if(not hasattr(self,"parameters")):self._setParameters()
-		self.classCoder._dumpCHeader(fh)
-
-	def _dumpCSource(self,fh):
-		if(not hasattr(self,"classCoder")):self._setClassCoder()
-		if(not hasattr(self,"parameters")):self._setParameters()
-		self.classCoder._dumpCSource(fh)
 
 	def _dumpYacc(self,fh,isStart):
 		if(not hasattr(self,"parameters")):self._setParameters()

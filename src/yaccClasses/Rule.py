@@ -60,7 +60,9 @@ class Rule(object):
 		for c in constructors:
 			c.finalize()
 		
-
+	def classList(self):
+		return [ p.constructor.className for p in self.patterns if p.constructor.parent is None ]
+		
 	def _dumpPython(self,fh):
 		constructors=[ p.constructor for p in self.patterns if p.constructor.parent is None ]
 		classList=[]
@@ -78,32 +80,6 @@ class Rule(object):
 			p.constructor._dumpYacc(fh,self.isStart)
 			fh.write("\n")
 		fh.write("\t;\n\n\n")
-
-	def _dumpCHeader(self,fh):
-		fh.write("/*"+"-"*100+"*\\\n")
-		fh.write(" "*20+self.ruleName+"\n")
-		fh.write("\*"+"-"*100+"*/\n")
-		
-		constructors=[ p.constructor for p in self.patterns if p.constructor.parent is None ]
-
-		for c in constructors:
-			c._dumpCHeader(fh)
-			
-		
-		fh.write("\n"*4)
-
-	def _dumpCSource(self,fh):
-		fh.write("/*"+"-"*100+"*\\\n")
-		fh.write(" "*20+self.ruleName+"\n")
-		fh.write("\*"+"-"*100+"*/\n")
-		
-		constructors=[ p.constructor for p in self.patterns if p.constructor.parent is None ]
-
-		for c in constructors:
-			c._dumpCSource(fh)
-			
-		
-		fh.write("\n"*4)
 
 	def _setBaseConstructorCoder(self):
 		self.baseConstructorCoder=ConstructorClassCoder(self.ruleName,["CAst"])
