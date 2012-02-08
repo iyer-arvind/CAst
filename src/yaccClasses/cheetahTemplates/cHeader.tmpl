@@ -1,0 +1,392 @@
+#************************************************************************************************#
+#****                                                                                      ******#
+#****                                                                                      ******#
+#****   BASE CLASS CODER                                                                   ******#
+#****                                                                                      ******#
+#****                                                                                      ******#
+#************************************************************************************************#
+
+
+#def baseClassCoder($cls)
+
+/*=============================================================================================================*\
+                                                                                                                 
+ 	THE $cls.constructor._name BASE CLASS                                                                    
+                                                                                                                 
+\*=============================================================================================================*/  
+
+
+class $cls.constructor._name :public CAst
+{
+public:
+	virtual std::string name()const=0;
+	virtual std::string pattern()const=0;
+	virtual bool isList()const=0;
+	virtual Properties getProperties()const=0;
+	virtual PropertiesList getPropertiesList()const=0;
+	virtual ~$cls.constructor._name (){};
+};
+
+
+#end def
+
+
+#************************************************************************************************#
+#****                                                                                      ******#
+#****                                                                                      ******#
+#****   SIMPLE CLASS CODER                                                                 ******#
+#****                                                                                      ******#
+#****                                                                                      ******#
+#************************************************************************************************#
+
+#def simpleClassCode($cls)
+
+#if  $cls.baseClassFlag
+$baseClassCoder($cls)
+#end if
+
+/*=============================================================================================================*\
+                                                                                                                 
+ 	THE $cls.className CLASS                                                                                 
+ 	FOR PATTERN : $cls.pattern		                                                                 
+                                                                                                                 
+\*=============================================================================================================*/  
+
+
+
+// FORWARD DECLARATION
+#for $t,$n,$p,$v,$i,$v1 in $cls.parameters:
+class $t;
+#end for
+
+
+class $cls.className 
+#if $cls.inheritancePublic
+#for $i in $cls.inheritancePublic: 
+	:public $i 
+#end for
+#end if
+{
+	private:
+		std::string _s_matchedPattern;
+#for $t,$n,$p,$v,$i,$v1 in $cls.parameters:
+#set spc=" "*(60-(len($n+$t)))
+#set rp=repr($p)
+		$t *$n;$spc // $rp
+#end for
+public:
+#set spcc=" "*(60-(len($cls.className)))
+	$cls.className	$spcc// constructor
+		( 
+			std::string _arg_s_matchedPattern,
+#echo ",\n".join([ "\t\t\t\t%s *_arg_%s"%(t,n)  for t,n,p,v,i,v1 in $cls.parameters])
+			
+		);
+	virtual std::string name()const;							//returns the class name, here "$cls.className"
+	virtual std::string pattern()const;							//returns the pattern, here "$cls.pattern"
+	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
+	virtual Properties getProperties()const;						//returns the properties map
+	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	virtual ~$cls.className ();
+
+		
+};
+
+#end def
+
+
+
+#************************************************************************************************#
+#****                                                                                      ******#
+#****                                                                                      ******#
+#****   LIST CLASS CODER                                                                   ******#
+#****                                                                                      ******#
+#****                                                                                      ******#
+#************************************************************************************************#
+
+#def listClassCode($cls)
+#if  $cls.baseClassFlag
+$baseClassCoder($cls)
+#end if
+
+/*=============================================================================================================*\
+                                                                                                                 
+        THE $cls.className CLASS                                                                                 
+        FOR PATTERN : $cls.pattern		                                                                 
+ 														 
+\*=============================================================================================================*/  
+
+
+
+// FORWARD DECLARATION
+#for $t,$n,$p,$v,$i,$v1 in $cls.parameters:
+class $t;
+#end for
+/*------------------------------------------------------------*\
+ 							        
+  item class ${cls.className}_item                              
+                                                                
+\*------------------------------------------------------------*/
+class ${cls.className}_item
+{
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
+	#for $t,$n,$p,$v,$i,$v1 in $cls.parameters:
+		#if(i!=$cls.constructor.selfIndex):
+			#set spc=" "*(60-(len($n+$t)))
+			#set rp=repr($p)
+	$t *$n;$spc // $rp
+		#end if
+	#end for
+public:
+	${cls.className}_item
+		(
+			std::string _arg_s_matchedPattern,
+#echo",\n".join([ "\t\t\t%s *_arg_%s"%(t,n)  for t,n,p,v,i,v1 in $cls.parameters if $i!=$cls.constructor.selfIndex ])
+
+		);
+	${cls.className}_item(const ${cls.className}_item &);
+	virtual Properties getProperties()const;
+	virtual ~${cls.className}_item();
+	
+	
+};
+/*------------------------------------------------------------*\
+ 							        
+  main class ${cls.className}                         
+                                                                
+\*------------------------------------------------------------*/
+
+class $cls.className
+#if $cls.inheritancePublic
+#for $i in $cls.inheritancePublic: 
+	:public $i 
+#end for
+#end if
+{
+private:
+	typedef std::list<${cls.className}_item> ItemsListType;
+	typedef ItemsListType::iterator ItemsListIter;
+	typedef ItemsListType::const_iterator CItemsListIter;
+	std::list<${cls.className}_item> _items;
+public:
+	$cls.className
+		(
+			std::string _arg_s_matchedPattern,
+#echo ",\n".join(["\t\t\t%s *_arg_%s"%(t,n) for t,n,p,v,i,v1 in $cls.parameters if i in $cls.constructor.init_includedParameterIndices])
+
+		);
+
+	void append
+		(
+			std::string _arg_s_matchedPattern,
+#echo		",\n".join(["\t\t\t%s *_arg_%s"%(t,n) for t,n,p,v,i,v1 in $cls.parameters if i != $cls.constructor.selfIndex])
+
+		);
+
+	virtual std::string name()const;							//returns the class name, here "$cls.className"
+	virtual std::string pattern()const;							//returns the pattern, here "$cls.pattern"
+	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
+	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
+	virtual PropertiesList getPropertiesList()const;					//returns a propertirs list		
+	virtual ~$cls.className ();
+
+};
+
+#end def
+
+#************************************************************************************************#
+#****                                                                                      ******#
+#****                                                                                      ******#
+#****   MAIN PROGRAMME                                                                     ******#
+#****                                                                                      ******#
+#****                                                                                      ******#
+#************************************************************************************************#
+\#ifndef CAST_HEADER_INCLUDED
+\#define CAST_HEADER_INCLUDED
+
+\#define RULE_MARKER(txt) std::cerr<<"\033[36m"<<__FILE__<<":"<<__LINE__<<"\033[0m"<<txt;
+\#define CAST_PTR(TYPE,PTR) dynamic_cast<CAst::TYPE*>(PTR)
+\#include <string>
+\#include <cstring>
+\#include <stdio.h>
+\#include <list>
+\#include <iostream>
+\#include <sstream>
+\#include <iomanip>
+\#include <map>
+\#define LOG(txt) std::cerr<<"[\033[33m"<<std::setw(20)<<std::left<<this<<"\033[0m\t]"<<txt<<"\n";
+
+
+extern "C"
+{
+    int yylex(void);
+    int yyerror(const char *s);
+}
+namespace CAst
+{
+
+
+class CAst;
+
+
+
+/*=============================================================================================================*\
+
+	THE PROPERTIES CLASS
+
+\*=============================================================================================================*/  
+
+
+
+class Properties:public std::map<std::string,CAst*> 
+{
+private:
+	std::string __className;
+	std::string __tokValue;
+public:
+	Properties(std::string className):
+		std::map<std::string,CAst*>(),
+		__className(className)
+	{}
+	void setTokValue(std::string v){__tokValue=v;}
+	
+	std::ostream& toStream(std::ostream& stream,int indent=0)const;
+	std::string str()const
+	{
+		std::stringstream stream;
+		toStream(stream);
+		return stream.str();
+	}
+};
+inline std::ostream& operator<<(std::ostream &stream,const Properties &p)
+{
+	return p.toStream(stream);
+}
+
+/*=============================================================================================================*\
+
+	THE PROPERTY LIST CLASS
+
+\*=============================================================================================================*/  
+
+
+
+
+class PropertiesList:public std::list<Properties>
+{
+private:
+	std::string __className;
+public:
+	PropertiesList(std::string className):
+			std::list<Properties>(),
+			__className(className)
+	{}
+			
+	std::ostream& toStream(std::ostream& stream,int indent=0)const;
+	std::string str()const
+	{
+		std::stringstream stream;
+		toStream(stream);
+		return stream.str();
+	}
+};
+
+inline std::ostream& operator<<(std::ostream &stream,const PropertiesList &p){return p.toStream(stream);}
+
+
+
+/*=============================================================================================================*\
+
+	THE CAst CLASS
+
+\*=============================================================================================================*/  
+
+class CAst
+{
+	public:
+		virtual std::string name()const=0;
+		virtual bool isList()const=0;
+		virtual PropertiesList getPropertiesList()const=0;
+		virtual Properties getProperties()const=0;
+};
+
+
+
+/*=============================================================================================================*\
+
+	THE Token CLASS
+
+\*=============================================================================================================*/  
+class Token: public CAst
+{
+	public:
+		virtual std::string name()const=0;
+		virtual bool isList()const			=0;
+		virtual Properties getProperties()const		=0;
+		virtual PropertiesList getPropertiesList()const	=0;
+		Token()
+		{
+			LOG("\033[32mCREATING\033[0m Token")
+		}
+		virtual ~Token()
+		{
+			LOG("\033[31mDELETING\033[0m Token")
+		}
+};
+
+
+/*=============================================================================================================*\
+
+	THE GenericToken CLASS
+
+\*=============================================================================================================*/  
+
+
+class GenericToken:public Token
+{
+	std::string _txt;
+public:
+	
+	virtual std::string name()const{return "token";}
+	GenericToken(std::string txt):
+		Token(),
+		_txt(txt)
+	{
+	}
+	
+	virtual bool isList()const			{return false;}
+	virtual Properties getProperties()const		{Properties p(name());p.setTokValue(_txt);return p;}
+	virtual PropertiesList getPropertiesList()const	{return PropertiesList(name());}
+	virtual ~GenericToken()
+	{
+	}
+};
+inline Token* GetToken(int i,std::string txt)
+{
+	std::cerr<<"\033[34m GENERATING TOKEN \033[0m"<<"i"<<i<<" txt:"<<txt;
+	return new GenericToken(txt);
+}
+
+
+#for $rn in $ruleMap:
+	#set $rule=$ruleMap[$rn]
+	#set $constructors=[ $p.constructor for $p in $rule.patterns if $p.constructor.parent is None ]
+	#for $c in $constructors:
+		#if $c.classCoder.__class__.__name__ == "ConstructorClassCoder"
+			$simpleClassCode($c.classCoder)
+		#else
+			$listClassCode($c.classCoder)
+			
+		#end if
+	#end for
+#end for
+
+$start* parseFile(const char *fileName);
+
+}//namespace CAST		
+
+\#include "cYacc.hpp"
+extern CAst::$start* root;
+\#endif //CAST_HEADER_INCLUDED

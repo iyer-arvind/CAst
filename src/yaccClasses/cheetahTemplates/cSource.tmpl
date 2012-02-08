@@ -1,0 +1,380 @@
+#************************************************************************************************#
+#****                                                                                      ******#
+#****                                                                                      ******#
+#****   SIMPLE CLASS CODER                                                                 ******#
+#****                                                                                      ******#
+#****                                                                                      ******#
+#************************************************************************************************#
+#def simpleClassCode($cls)
+
+/*=============================================================================================================*\
+                                                                                                                 
+ 	THE $cls.className CLASS                                                                                 
+ 	FOR PATTERN : $cls.pattern		                                                                 
+                                                                                                                 
+\*=============================================================================================================*/  
+
+/*$cls.className::name() returns the name of the class*/
+std::string $cls.className::name()const {return "$cls.className";}
+
+/*$cls.className::pattern returns the pattern matched*/
+std::string $cls.className::pattern()const {return "$cls.pattern[1:-1]";}
+
+/*construct from elements*/
+$cls.className::$cls.className
+	(
+		std::string _arg_s_matchedPattern,
+#echo ",\n".join([ "\t\t%s *_arg_%s"%(t,n)  for t,n,p,v,i,v1 in $cls.parameters])
+
+	):
+	_s_matchedPattern(_arg_s_matchedPattern),
+#echo ",\n".join(["\t"+"%s(_arg_%s)"%(n,n) for t,n,p,v,i,v1 in $cls.parameters ])
+
+{
+	LOG("\033[32mCREATING\033[0m $cls.className");
+}
+
+
+/*$cls.className::getProperties returns a map of properties*/
+Properties $cls.className::getProperties()const
+{
+	Properties props(name());
+#for t,n,p,v,i,v1 in $cls.parameters
+	props["$n.replace('_p_','')"]=$n;
+#end for
+	return props;
+}
+
+
+/*the destructor*/
+${cls.className}::~${cls.className}()
+{
+	LOG("\033[31mDELETING\033[0m $cls.className");
+#for t,n,p,v,i,v1 in $cls.parameters
+	if($n)
+	{
+		delete $n;
+		$n=0;
+	}
+#end for
+
+}
+
+#end def
+##
+##
+##
+##
+##
+##
+##
+##
+##
+##
+##
+##
+##
+##
+##
+#************************************************************************************************#
+#****                                                                                      ******#
+#****                                                                                      ******#
+#****   LIST CLASS CODER                                                                   ******#
+#****                                                                                      ******#
+#****                                                                                      ******#
+#************************************************************************************************#
+#def listClassCode($cls)
+
+/*=============================================================================================================*\
+                                                                                                                 
+ 	THE $cls.className CLASS                                                                                 
+ 	FOR PATTERN : $cls.pattern		                                                                 
+                                                                                                                 
+\*=============================================================================================================*/  
+
+/*------------------------------------------------------------*\
+ 							        
+  item class ${cls.className}_item                              
+                                                                
+\*------------------------------------------------------------*/
+/*construct item from elements*/
+${cls.className}_item::${cls.className}_item
+	(
+		std::string _arg_s_matchedPattern,
+#echo ",\n".join([ "\t\t%s *_arg_%s"%(t,n)  for t,n,p,v,i,v1 in $cls.parameters if i != $cls.constructor.selfIndex])
+
+	):
+	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
+#echo ",\n".join(["\t"+"%s(_arg_%s)"%(n,n) for t,n,p,v,i,v1 in $cls.parameters if i != $cls.constructor.selfIndex])
+
+{
+	LOG("\033[32mCREATING\033[0m $cls.className");
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after creation:"<<(*_refCount));//>>>>
+}
+
+
+/*copy constructor*/
+${cls.className}_item::${cls.className}_item(const ${cls.className}_item& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+#echo		",\n".join(["\t\t%s(other.%s)"%(n,n) for t,n,p,v,i,v1 in $cls.parameters if i != $cls.constructor.selfIndex])
+
+{
+	LOG("\033[32mCOPYING\033[0m ${cls.className}_item");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increement:"<<(*_refCount));//>>>>
+
+}
+
+
+/*${cls.className}_item::getProperties returns a map of properties for the item*/
+Properties ${cls.className}_item::getProperties()const
+{
+	Properties props("${cls.className}_items");
+#for t,n,p,v,i,v1 in $cls.parameters
+	#if( i != $cls.constructor.selfIndex):
+	props["$n.replace('_p_','')"]=$n;
+	#end if
+#end for
+	return props;
+}
+
+
+/*the destructor*/
+${cls.className}_item::~${cls.className}_item()
+{
+	LOG("\033[31mDELETING?\033[0m ${cls.className}_item");
+	(*_refCount)--;
+	if((*_refCount)>0)return;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after decrement:"<<(*_refCount));//>>>>
+#for t,n,p,v,i,v1 in $cls.parameters
+	#if( i != $cls.constructor.selfIndex):
+	if($n)
+	{
+		delete $n;
+		$n=0;
+	}
+	#end if
+#end for
+	LOG("\033[31mDELETED\033[0m $cls.className");
+}
+/*------------------------------------------------------------*\
+ 							        
+  main class ${cls.className}                         
+                                                                
+\*------------------------------------------------------------*/
+/*$cls.className::name() returns the name of the class*/
+std::string $cls.className::name()const {return "$cls.className";}
+
+/*$cls.className::pattern returns the pattern matched*/
+std::string $cls.className::pattern()const {return "$cls.pattern[1:-1]";}
+
+/*construct from elements*/
+$cls.className::$cls.className
+	(
+		std::string _arg_s_matchedPattern,
+#echo ",\n".join([ "\t\t%s *_arg_%s"%(t,n)  for t,n,p,v,i,v1 in $cls.parameters if i in $cls.constructor.init_includedParameterIndices])
+
+	 )
+{
+	LOG("\033[32mCREATING\033[0m $cls.className");
+	${cls.className}_item item(_arg_s_matchedPattern#slurp
+	#for $t,$n,$p,$v,$i,$v1 in $cls.parameters:
+		#if $i != $cls.constructor.selfIndex:
+			#if i in $cls.constructor.init_includedParameterIndices:
+,_arg_$n#slurp
+			#else
+,NULL#slurp
+			#end if
+		#end if
+	#end for
+);
+	_items.push_back(item);
+}
+
+/*$cls.className::append() appends an item to the list of items*/
+void $cls.className::append
+	(
+		std::string _arg_s_matchedPattern,
+#echo		",\n".join(["\t\t%s *_arg_%s"%(t,n) for t,n,p,v,i,v1 in $cls.parameters if i != $cls.constructor.selfIndex])
+	)
+{
+	${cls.className}_item item(_arg_s_matchedPattern, #slurp
+#echo 		", ".join(["_arg_%s"%(n) for t,n,p,v,i,v1 in $cls.parameters if i != $cls.constructor.selfIndex])
+);
+	_items.push_back(item);
+		
+}
+
+/*$cls.className::getPropertyList() returns the list of properties*/
+PropertiesList $cls.className::getPropertiesList()const
+{
+	PropertiesList pList("$cls.className");
+	for (CItemsListIter i=_items.begin();i!=_items.end();i++)
+	{
+		pList.push_back(i->getProperties());
+	}
+	return pList;
+	
+}
+
+/*the destructor*/
+$cls.className::~${cls.className}()
+{
+	LOG("\033[32mDESTOYING\033[0m $cls.className");
+	_items.clear();
+}
+
+##
+##
+##
+##
+##
+##
+##
+##
+##
+##
+##
+##
+##
+##
+##
+##
+##
+##
+#end def
+#************************************************************************************************#
+#****                                                                                      ******#
+#****                                                                                      ******#
+#****   MAIN PROGRAMME                                                                     ******#
+#****                                                                                      ******#
+#****                                                                                      ******#
+#************************************************************************************************#
+\#include "${cBaseName}.h"
+
+
+CAst::translation_unit *root;
+extern FILE* yyin;
+extern int yyparse(void);
+
+namespace CAst
+{
+
+
+
+
+translation_unit* parseFile(const char *fileName)
+{
+	yyin=fopen(fileName,"r");
+	yyparse();
+	return root;
+}
+
+std::ostream& Properties::toStream(std::ostream& stream,int indent)const
+{
+	if(__className=="token")
+	{
+		return stream<<"\""<<__tokValue<<"\"";
+	}
+	std::string sp="  ";
+	std::string nl="\n";
+	std::string tab=nl;
+	for(register int i=0;i<indent;i++)tab+=sp;
+	int n=0;
+	for(const_iterator i=begin();(i!=end())&&(n<=1);i++)
+	{
+		if(i->second)n++;
+	}
+	if(n>1)
+	{
+		bool flag=false;
+		stream<<tab<<"{"<<tab<<sp<<"\"type\":\""<<__className<<"\","<<tab<<sp<<"\"value\":"<<tab<<sp<<"{";
+		for(const_iterator i=begin();i!=end();i++)
+		{
+			if(i->second)
+			{
+				if(flag)stream<<",";
+				stream<<tab<<sp<<sp<<"\""<<i->first<<"\":";
+				if(i->second->isList())
+				{
+					i->second->getPropertiesList().toStream(stream,indent+2);
+				}
+				else
+				{
+					i->second->getProperties().toStream(stream,indent+2);
+				}
+				flag=true;
+			}
+		}
+		stream<<tab<<sp<<"}";
+		stream<<tab<<"}";
+	}
+	else if(n==1)
+	{
+		for(const_iterator i=begin();i!=end();i++)
+		{
+			if(i->second)
+			{
+				if(i->second->isList())
+				{
+					i->second->getPropertiesList().toStream(stream,indent);
+				}
+				else
+				{
+					i->second->getProperties().toStream(stream,indent);
+				}
+				break;
+			}
+		}
+		
+	}
+	else
+		stream<<"\"\"";
+	return stream;
+}
+
+std::ostream& PropertiesList::toStream(std::ostream& stream,int indent)const
+{
+	std::string sp="  ";
+	std::string nl="\n";
+	std::string tab=nl;
+	for(register int i=0;i<indent;i++)tab+=sp;
+	if(size()>1)
+	{
+		stream<<tab<<"{"<<tab<<sp<<"\"type\":\""<<__className<<"\","<<tab<<sp<<"\"value\":";
+		stream<<tab<<sp<<"[";
+		for(const_iterator i=begin();i!=end();i++)
+		{
+			if(i!=begin())stream<<","<<tab<<sp;
+			i->toStream(stream,indent+2);
+		}
+		stream<<tab<<sp<<"]";
+		stream<<tab<<"}";
+	}
+	else
+	{
+		begin()->toStream(stream,indent);
+	}
+	return stream;
+}
+
+
+
+#for $rn in $ruleMap:
+	#set $rule=$ruleMap[$rn]
+	#set $constructors=[ $p.constructor for $p in $rule.patterns if $p.constructor.parent is None ]
+	#for $c in $constructors:
+		#if $c.classCoder.__class__.__name__ == "ConstructorClassCoder"
+			$simpleClassCode($c.classCoder)
+		#else
+			$listClassCode($c.classCoder)
+			
+		#end if
+	#end for
+#end for
+
+
+
+}//namespace CAst
