@@ -81,7 +81,6 @@ ${functionText}
 static PyGetSetDef PyCAst_getsetter_$className[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_${className}_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
-	$table
 	NULL
 };
 
