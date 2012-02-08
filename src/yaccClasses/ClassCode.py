@@ -1,7 +1,9 @@
 from Token import Token
 from string import Template
+from Cheetah.Template import Template as CheetahTemplate
+import os
 
-
+cheetahTemplatesDir=os.path.dirname(os.path.abspath(__file__))+"/cheetahTemplates/"
 
 class ConstructorClassCoder(object):
 	def __init__(self,constructor):
@@ -144,8 +146,14 @@ static PyTypeObject  PyCAst_type_$className = {
 		return [self.className]
 
 
-
+	def __writeTemplate(self,template,fh):
+		tmpl=CheetahTemplate(file=cheetahTemplatesDir+"/"+template+".tmpl",searchList=self.__dict__)
+		fh.write(str(tmpl))
+		
+		
 	def _dumpCHeader(self,fh):
+		self.__writeTemplate("cClassHeader",fh)
+		return
 		if(self.baseClassFlag):self._dumpBaseClassCHeader(fh)
 		fh.write("//%s\n\n"%self.pattern)
 
@@ -219,6 +227,7 @@ static PyTypeObject  PyCAst_type_$className = {
 class ListAccumulatorClassCoder(ConstructorClassCoder):
 
 	def _dumpCHeader(self,fh):
+		return
 		#base class if necessary
 		if(self.baseClassFlag):self._dumpBaseClassCHeader(fh)
 
@@ -251,6 +260,9 @@ class ListAccumulatorClassCoder(ConstructorClassCoder):
 
 
 		#main class
+
+
+
 		fh.write("//class declaration --\n")
 		fh.write("class %s"%self.className)
 		if(self.inheritancePublic):

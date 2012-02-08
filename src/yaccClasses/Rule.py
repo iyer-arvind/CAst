@@ -55,6 +55,12 @@ class Rule(object):
 	def __repr__(self):
 		return self.ruleName
 
+	def finalize(self):
+		constructors=[ p.constructor for p in self.patterns if p.constructor.parent is None ]
+		for c in constructors:
+			c.finalize()
+		
+
 	def _dumpPython(self,fh):
 		constructors=[ p.constructor for p in self.patterns if p.constructor.parent is None ]
 		classList=[]
