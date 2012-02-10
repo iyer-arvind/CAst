@@ -20,6 +20,7 @@ class $cls.constructor._name :public CAst
 {
 public:
 	virtual std::string name()const=0;
+	virtual CAstType typeId()const=0;
 	virtual std::string pattern()const=0;
 	virtual bool isList()const=0;
 	virtual Properties getProperties()const=0;
@@ -83,10 +84,14 @@ public:
 			
 		);
 	virtual std::string name()const;							//returns the class name, here "$cls.className"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_$cls.className.upper()
 	virtual std::string pattern()const;							//returns the pattern, here "$cls.pattern"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+#for $t,$n,$p,$v,$i,$v1 in $cls.parameters:
+	const $t* get${n}()const{return $n;}							//returns const pointer to $n
+#end for
 	virtual ~$cls.className ();
 
 		
@@ -147,7 +152,10 @@ public:
 
 		);
 	${cls.className}_item(const ${cls.className}_item &);
+	virtual std::string name()const{return "${cls.className}_item";}			//returns the class name, here "$cls.className"
 	virtual Properties getProperties()const;
+	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
+	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	virtual ~${cls.className}_item();
 	
 	
@@ -186,13 +194,19 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "$cls.className"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_$cls.className.upper()
 	virtual std::string pattern()const;							//returns the pattern, here "$cls.pattern"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
 	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a propertirs list		
+	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
+	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
+	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
 	virtual ~$cls.className ();
 
 };
+
+typedef std::list<${cls.className}_item>::iterator ${cls.className}_iterator;
+typedef std::list<${cls.className}_item>::const_iterator ${cls.className}_const_iterator;
 
 #end def
 
@@ -230,6 +244,15 @@ namespace CAst
 
 class CAst;
 
+enum CAstType { CAST_TYPE_TOKEN#slurp
+#for $rn in $ruleMap:
+	#set $rule=$ruleMap[$rn]
+	#set $constructors=[ $p.constructor for $p in $rule.patterns if $p.constructor.parent is None ]
+	#for $c in $constructors:
+, CAST_TYPE_$c.classCoder.className.upper()#slurp
+	#end for
+#end for
+};
 
 
 /*=============================================================================================================*\

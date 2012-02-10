@@ -1,0 +1,269 @@
+#def classHeader($cls,$*flags,$**blockDict)
+#set className=$cls.className
+
+
+
+
+
+
+/*=====================================================================================================================================*\
+
+        DEFINITION OF ${className}
+
+\*=====================================================================================================================================*/
+
+
+/*---------------------------------------------------------------------------------------------*\
+
+      Class Declaration
+
+\*---------------------------------------------------------------------------------------------*/
+
+typedef struct
+{
+	PyObject_HEAD
+	CAst::${cls.className} *_p_cast_object;
+#if "HaveListMember" in $flags:
+	CAst::${cls.className.replace("_iterator","")} *_p_cast_list_object;
+#end if 
+}PyCAst_object_${cls.className};
+
+
+/*---------------------------------------------------------------------------------------------*\
+
+      Class Methods
+
+\*---------------------------------------------------------------------------------------------*/
+
+
+#set mfBlock=$getattr($self,$blockDict.get("MethodsFunctionBlock","None"),lambda x:"")
+$mfBlock($cls)
+
+static PyMethodDef PyCAst_methods_${className} [] = {{
+#set mtBlock=$getattr($self,$blockDict.get("MethodsTableBlock","None"),lambda x:"")
+$mtBlock($cls)
+NULL
+}};
+
+
+/*---------------------------------------------------------------------------------------------*\
+
+      Class Members
+
+\*---------------------------------------------------------------------------------------------*/
+static PyMemberDef PyCAst_members_${className} [] = {{NULL}};
+
+
+
+/*---------------------------------------------------------------------------------------------*\
+
+      Class New #slurp 
+#if "HaveInit" in flags: and Init
+
+\*---------------------------------------------------------------------------------------------*/
+static PyObject * PyCAst_new_${className}(PyTypeObject *type, PyObject *args, PyObject *kwds);
+#if "HaveInit" in flags: 
+static int PyCAst_init_${className}(PyCAst_object_${className} *self, PyObject *args, PyObject *kwds);
+#end if
+
+
+
+
+
+/*---------------------------------------------------------------------------------------------*\
+
+      Class Attribute getters and setters
+
+\*---------------------------------------------------------------------------------------------*/
+#if "HaveAst" in $flags:
+static PyObject *PyCAst_getter_${className}_ast(PyObject *_self);
+#end if
+
+#set gsfBlock=$getattr($self,$blockDict.get("GetSetterFunctionBlock","None"),lambda x:"")
+$gsfBlock($cls)
+
+
+
+#set gstBlock=$getattr($self,$blockDict.get("GetSetterTableBlock","None"),lambda x:"")
+
+static PyGetSetDef PyCAst_getsetter_${className}[] = 
+{
+#if "HaveAst" in $flags:
+	{(char*)"ast", (getter)PyCAst_getter_${className}_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+#end if
+	$gstBlock($cls)
+	NULL
+};
+
+
+/*---------------------------------------------------------------------------------------------*\
+
+      Other Functions
+
+\*---------------------------------------------------------------------------------------------*/
+
+#if "HaveIter" in $flags:
+PyObject* PyCAst_iter_${cls.className}(PyObject* self);
+#end if
+
+#if "HaveIterNext" in $flags:
+PyObject* PyCAst_iter_next_${cls.className}(PyObject* self);
+#end if
+
+/*---------------------------------------------------------------------------------------------*\
+
+      Class Type Declaration
+
+\*---------------------------------------------------------------------------------------------*/
+
+static PyTypeObject  PyCAst_type_${className} = 
+{
+	                                PyObject_HEAD_INIT(NULL)
+	/* ob_size -------------*/      0,
+	/* tp_name--------------*/      "CAst.${className}",
+	/* tp_basicsize---------*/      sizeof(PyCAst_object_${className}),
+	/* tp_itemsize----------*/      0,
+	/* tp_dealloc-----------*/      0,
+	/* tp_print-------------*/      0,
+	/* tp_getattr-----------*/      0,
+	/* tp_setattr-----------*/      0,
+	/* tp_compare-----------*/      0,
+	/* tp_repr--------------*/      0,
+	/* tp_as_number---------*/      0,
+	/* tp_as_sequence-------*/      0,
+	/* tp_as_mapping--------*/      0,
+	/* tp_hash--------------*/      0,
+	/* tp_call--------------*/      0,
+	/* tp_str---------------*/      0,
+	/* tp_getattro----------*/      0,
+	/* tp_setattro----------*/      0,
+	/* tp_as_buffer---------*/      0,
+	/* tp_flags-------------*/      Py_TPFLAGS_DEFAULT,
+	/* tp_doc---------------*/      "Object representing the ${className}",
+	/* tp_traverse----------*/      0,
+	/* tp_clear-------------*/      0,
+	/* tp_richcompare-------*/      0,
+	/* tp_weaklistoffset----*/      0,
+	/* tp_iter--------------*/      #slurp
+#if "HaveIter" in $flags: 
+(getiterfunc)PyCAst_iter_${cls.className},
+#else: 
+0,
+#end if,
+	/* tp_iternext----------*/      #slurp
+#if "HaveIterNext" in $flags: 
+(iternextfunc)PyCAst_iter_next_${cls.className},
+#else: 
+0,
+#end if,
+	/* tp_methods-----------*/      PyCAst_methods_${className},
+	/* tp_members-----------*/      PyCAst_members_${className},
+	/* tp_getset------------*/      PyCAst_getsetter_${className},
+	/* tp_base--------------*/      0,
+	/* tp_dict--------------*/      0,
+	/* tp_descr_get---------*/      0,
+	/* tp_descr_set---------*/      0,
+	/* tp_dictoffset--------*/      0,
+	/* tp_init--------------*/      #slurp
+#if "HaveInit" in $flags: 
+(initproc)PyCAst_init_${className},
+#else
+0,
+#end if
+	/* tp_alloc-------------*/      0,
+	/* tp_new---------------*/      PyCAst_new_${className},
+	
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#end def
+#************************************************************************************************#
+#****                                                                                      ******#
+#****                                                                                      ******#
+#****   TOKEN CLASS CODER                                                                  ******#
+#****                                                                                      ******#
+#****                                                                                      ******#
+#************************************************************************************************#
+#def tokenClassHeader($cls)
+$classHeader($cls,"HaveAst")
+#end def 
+
+#************************************************************************************************#
+#****                                                                                      ******#
+#****                                                                                      ******#
+#****   SIMPLE CLASS CODER                                                                 ******#
+#****                                                                                      ******#
+#****                                                                                      ******#
+#************************************************************************************************#
+
+#def SimpleGetSetterFunctionBlock($cls)
+	#for $t,$n,$p,$v,$i,$v1 in $cls.parameters:
+static PyObject *PyCAst_getter_${cls.className}_${n.replace("_p_","")}(PyObject *_self);
+	#end for
+#end def
+
+#def SimpleGetSetterTableBlock($cls)
+	#for $t,$n,$p,$v,$i,$v1 in $cls.parameters:
+	
+	{(char*)"$n.replace("_p_","")", (getter)PyCAst_getter_${cls.className}_${n.replace("_p_","")},NULL,(char*)"Parameter ${n.replace("_p_","")}", NULL},
+	#end for
+#end def
+
+
+#def simpleClassHeader($cls)
+$classHeader($cls,"HaveAst","HaveInit",GetSetterFunctionBlock="SimpleGetSetterFunctionBlock",GetSetterTableBlock="SimpleGetSetterTableBlock")
+#end def 
+
+
+
+
+#************************************************************************************************#
+#****                                                                                      ******#
+#****                                                                                      ******#
+#****   LIST CLASS CODER                                                                   ******#
+#****                                                                                      ******#
+#****                                                                                      ******#
+#************************************************************************************************#
+
+#def listClassHeader($cls)
+
+#set itercls={"className":$cls.className+"_iterator"}
+$classHeader($itercls,"HaveIterNext","HaveListMember")
+
+#set itercls={"className":$cls.className+"_item"}
+$classHeader($itercls,"HaveAst")
+
+$classHeader($cls,"HaveAst","HaveIter","HaveInit")
+#end def 
+
+
+
+
+#************************************************************************************************#
+#****                                                                                      ******#
+#****                                                                                      ******#
+#****   MAIN DOCUMENT                                                                      ******#
+#****                                                                                      ******#
+#****                                                                                      ******#
+#************************************************************************************************#
+
+
+
+
+\#include <Python.h>
+\#include <structmember.h>
+#set tok={"className":"Token","pattern":"<token>"}
+$tokenClassHeader($tok)
+
+#for $rn in $ruleMap:
+	#set $rule=$ruleMap[$rn]
+	#set $constructors=[ $p.constructor for $p in $rule.patterns if $p.constructor.parent is None ]
+	#for $c in $constructors:
+		#if $c.classCoder.__class__.__name__ == "ConstructorClassCoder"
+			$simpleClassHeader($c.classCoder)
+		#else
+			$listClassHeader($c.classCoder)
+		#end if
+	#end for
+#end for

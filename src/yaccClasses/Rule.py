@@ -60,16 +60,6 @@ class Rule(object):
 		for c in constructors:
 			c.finalize()
 		
-	def classList(self):
-		return [ p.constructor.className for p in self.patterns if p.constructor.parent is None ]
-		
-	def _dumpPython(self,fh):
-		constructors=[ p.constructor for p in self.patterns if p.constructor.parent is None ]
-		classList=[]
-		for c in constructors:
-			classList.extend(c._dumpPython(fh))
-		return classList
-	
 	def _dumpYacc(self,fh):
 		#fh.write("/*test comment*/\n")
 		fh.write(self.ruleName+"\n")

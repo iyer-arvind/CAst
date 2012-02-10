@@ -17,6 +17,9 @@
 /*$cls.className::name() returns the name of the class*/
 std::string $cls.className::name()const {return "$cls.className";}
 
+/*$cls.className::typeId() returns the type of the class, here, CAST_TYPE_$cls.className.upper()*/
+CAstType $cls.className::typeId()const {return CAST_TYPE_$cls.className.upper();}
+
 /*$cls.className::pattern returns the pattern matched*/
 std::string $cls.className::pattern()const {return "$cls.pattern[1:-1]";}
 
@@ -167,8 +170,12 @@ ${cls.className}_item::~${cls.className}_item()
 /*$cls.className::name() returns the name of the class*/
 std::string $cls.className::name()const {return "$cls.className";}
 
+/*$cls.className::typeId() returns the type of the class, here, CAST_TYPE_$cls.className.upper()*/
+CAstType $cls.className::typeId()const {return CAST_TYPE_$cls.className.upper();}
+
 /*$cls.className::pattern returns the pattern matched*/
 std::string $cls.className::pattern()const {return "$cls.pattern[1:-1]";}
+
 
 /*construct from elements*/
 $cls.className::$cls.className
@@ -252,7 +259,7 @@ $cls.className::~${cls.className}()
 #****                                                                                      ******#
 #****                                                                                      ******#
 #************************************************************************************************#
-\#include "${cBaseName}.h"
+\#include "${fileNameBase}.h"
 
 
 CAst::translation_unit *root;
@@ -359,7 +366,6 @@ std::ostream& PropertiesList::toStream(std::ostream& stream,int indent)const
 	}
 	return stream;
 }
-
 
 
 #for $rn in $ruleMap:

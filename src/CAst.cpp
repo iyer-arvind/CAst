@@ -107,7 +107,6 @@ std::ostream& PropertiesList::toStream(std::ostream& stream,int indent)const
 }
 
 
-
 			
 /*=============================================================================================================*\
                                                                                                                  
@@ -118,6 +117,9 @@ std::ostream& PropertiesList::toStream(std::ostream& stream,int indent)const
 
 /*storage_class_specifier::name() returns the name of the class*/
 std::string storage_class_specifier::name()const {return "storage_class_specifier";}
+
+/*storage_class_specifier::typeId() returns the type of the class, here, CAST_TYPE_STORAGE_CLASS_SPECIFIER*/
+CAstType storage_class_specifier::typeId()const {return CAST_TYPE_STORAGE_CLASS_SPECIFIER;}
 
 /*storage_class_specifier::pattern returns the pattern matched*/
 std::string storage_class_specifier::pattern()const {return "TYPEDEF";}
@@ -168,6 +170,9 @@ storage_class_specifier::~storage_class_specifier()
 /*expression_statement::name() returns the name of the class*/
 std::string expression_statement::name()const {return "expression_statement";}
 
+/*expression_statement::typeId() returns the type of the class, here, CAST_TYPE_EXPRESSION_STATEMENT*/
+CAstType expression_statement::typeId()const {return CAST_TYPE_EXPRESSION_STATEMENT;}
+
 /*expression_statement::pattern returns the pattern matched*/
 std::string expression_statement::pattern()const {return "expression,';'";}
 
@@ -216,6 +221,9 @@ expression_statement::~expression_statement()
 
 /*type_name::name() returns the name of the class*/
 std::string type_name::name()const {return "type_name";}
+
+/*type_name::typeId() returns the type of the class, here, CAST_TYPE_TYPE_NAME*/
+CAstType type_name::typeId()const {return CAST_TYPE_TYPE_NAME;}
 
 /*type_name::pattern returns the pattern matched*/
 std::string type_name::pattern()const {return "specifier_qualifier_list,abstract_declarator";}
@@ -274,6 +282,9 @@ type_name::~type_name()
 /*unary_expression1::name() returns the name of the class*/
 std::string unary_expression1::name()const {return "unary_expression1";}
 
+/*unary_expression1::typeId() returns the type of the class, here, CAST_TYPE_UNARY_EXPRESSION1*/
+CAstType unary_expression1::typeId()const {return CAST_TYPE_UNARY_EXPRESSION1;}
+
 /*unary_expression1::pattern returns the pattern matched*/
 std::string unary_expression1::pattern()const {return "SIZEOF,'(',type_name,')'";}
 
@@ -322,6 +333,9 @@ unary_expression1::~unary_expression1()
 
 /*unary_expression2::name() returns the name of the class*/
 std::string unary_expression2::name()const {return "unary_expression2";}
+
+/*unary_expression2::typeId() returns the type of the class, here, CAST_TYPE_UNARY_EXPRESSION2*/
+CAstType unary_expression2::typeId()const {return CAST_TYPE_UNARY_EXPRESSION2;}
 
 /*unary_expression2::pattern returns the pattern matched*/
 std::string unary_expression2::pattern()const {return "INC_OP,unary_expression";}
@@ -380,6 +394,9 @@ unary_expression2::~unary_expression2()
 /*unary_expression3::name() returns the name of the class*/
 std::string unary_expression3::name()const {return "unary_expression3";}
 
+/*unary_expression3::typeId() returns the type of the class, here, CAST_TYPE_UNARY_EXPRESSION3*/
+CAstType unary_expression3::typeId()const {return CAST_TYPE_UNARY_EXPRESSION3;}
+
 /*unary_expression3::pattern returns the pattern matched*/
 std::string unary_expression3::pattern()const {return "unary_operator,cast_expression";}
 
@@ -436,6 +453,9 @@ unary_expression3::~unary_expression3()
 
 /*unary_expression4::name() returns the name of the class*/
 std::string unary_expression4::name()const {return "unary_expression4";}
+
+/*unary_expression4::typeId() returns the type of the class, here, CAST_TYPE_UNARY_EXPRESSION4*/
+CAstType unary_expression4::typeId()const {return CAST_TYPE_UNARY_EXPRESSION4;}
 
 /*unary_expression4::pattern returns the pattern matched*/
 std::string unary_expression4::pattern()const {return "postfix_expression";}
@@ -556,8 +576,12 @@ conditional_expression_item::~conditional_expression_item()
 /*conditional_expression::name() returns the name of the class*/
 std::string conditional_expression::name()const {return "conditional_expression";}
 
+/*conditional_expression::typeId() returns the type of the class, here, CAST_TYPE_CONDITIONAL_EXPRESSION*/
+CAstType conditional_expression::typeId()const {return CAST_TYPE_CONDITIONAL_EXPRESSION;}
+
 /*conditional_expression::pattern returns the pattern matched*/
 std::string conditional_expression::pattern()const {return "logical_or_expression,'?',expression,':',conditional_expression";}
+
 
 /*construct from elements*/
 conditional_expression::conditional_expression
@@ -614,6 +638,9 @@ conditional_expression::~conditional_expression()
 
 /*struct_or_union_specifier::name() returns the name of the class*/
 std::string struct_or_union_specifier::name()const {return "struct_or_union_specifier";}
+
+/*struct_or_union_specifier::typeId() returns the type of the class, here, CAST_TYPE_STRUCT_OR_UNION_SPECIFIER*/
+CAstType struct_or_union_specifier::typeId()const {return CAST_TYPE_STRUCT_OR_UNION_SPECIFIER;}
 
 /*struct_or_union_specifier::pattern returns the pattern matched*/
 std::string struct_or_union_specifier::pattern()const {return "struct_or_union,IDENTIFIER,'{',struct_declaration_list,'}'";}
@@ -757,8 +784,12 @@ exclusive_or_expression_item::~exclusive_or_expression_item()
 /*exclusive_or_expression::name() returns the name of the class*/
 std::string exclusive_or_expression::name()const {return "exclusive_or_expression";}
 
+/*exclusive_or_expression::typeId() returns the type of the class, here, CAST_TYPE_EXCLUSIVE_OR_EXPRESSION*/
+CAstType exclusive_or_expression::typeId()const {return CAST_TYPE_EXCLUSIVE_OR_EXPRESSION;}
+
 /*exclusive_or_expression::pattern returns the pattern matched*/
 std::string exclusive_or_expression::pattern()const {return "exclusive_or_expression,'^',and_expression";}
+
 
 /*construct from elements*/
 exclusive_or_expression::exclusive_or_expression
@@ -814,6 +845,9 @@ exclusive_or_expression::~exclusive_or_expression()
 
 /*initializer1::name() returns the name of the class*/
 std::string initializer1::name()const {return "initializer1";}
+
+/*initializer1::typeId() returns the type of the class, here, CAST_TYPE_INITIALIZER1*/
+CAstType initializer1::typeId()const {return CAST_TYPE_INITIALIZER1;}
 
 /*initializer1::pattern returns the pattern matched*/
 std::string initializer1::pattern()const {return "'{',initializer_list,',','}'";}
@@ -871,6 +905,9 @@ initializer1::~initializer1()
 
 /*initializer2::name() returns the name of the class*/
 std::string initializer2::name()const {return "initializer2";}
+
+/*initializer2::typeId() returns the type of the class, here, CAST_TYPE_INITIALIZER2*/
+CAstType initializer2::typeId()const {return CAST_TYPE_INITIALIZER2;}
 
 /*initializer2::pattern returns the pattern matched*/
 std::string initializer2::pattern()const {return "assignment_expression";}
@@ -982,8 +1019,12 @@ struct_declaration_list_item::~struct_declaration_list_item()
 /*struct_declaration_list::name() returns the name of the class*/
 std::string struct_declaration_list::name()const {return "struct_declaration_list";}
 
+/*struct_declaration_list::typeId() returns the type of the class, here, CAST_TYPE_STRUCT_DECLARATION_LIST*/
+CAstType struct_declaration_list::typeId()const {return CAST_TYPE_STRUCT_DECLARATION_LIST;}
+
 /*struct_declaration_list::pattern returns the pattern matched*/
 std::string struct_declaration_list::pattern()const {return "struct_declaration_list,struct_declaration";}
+
 
 /*construct from elements*/
 struct_declaration_list::struct_declaration_list
@@ -1040,6 +1081,9 @@ struct_declaration_list::~struct_declaration_list()
 /*assignment_operator::name() returns the name of the class*/
 std::string assignment_operator::name()const {return "assignment_operator";}
 
+/*assignment_operator::typeId() returns the type of the class, here, CAST_TYPE_ASSIGNMENT_OPERATOR*/
+CAstType assignment_operator::typeId()const {return CAST_TYPE_ASSIGNMENT_OPERATOR;}
+
 /*assignment_operator::pattern returns the pattern matched*/
 std::string assignment_operator::pattern()const {return "'='";}
 
@@ -1088,6 +1132,9 @@ assignment_operator::~assignment_operator()
 
 /*struct_declaration::name() returns the name of the class*/
 std::string struct_declaration::name()const {return "struct_declaration";}
+
+/*struct_declaration::typeId() returns the type of the class, here, CAST_TYPE_STRUCT_DECLARATION*/
+CAstType struct_declaration::typeId()const {return CAST_TYPE_STRUCT_DECLARATION;}
 
 /*struct_declaration::pattern returns the pattern matched*/
 std::string struct_declaration::pattern()const {return "specifier_qualifier_list,struct_declarator_list,';'";}
@@ -1146,6 +1193,9 @@ struct_declaration::~struct_declaration()
 /*abstract_declarator::name() returns the name of the class*/
 std::string abstract_declarator::name()const {return "abstract_declarator";}
 
+/*abstract_declarator::typeId() returns the type of the class, here, CAST_TYPE_ABSTRACT_DECLARATOR*/
+CAstType abstract_declarator::typeId()const {return CAST_TYPE_ABSTRACT_DECLARATOR;}
+
 /*abstract_declarator::pattern returns the pattern matched*/
 std::string abstract_declarator::pattern()const {return "pointer,direct_abstract_declarator";}
 
@@ -1203,6 +1253,9 @@ abstract_declarator::~abstract_declarator()
 /*iteration_statement1::name() returns the name of the class*/
 std::string iteration_statement1::name()const {return "iteration_statement1";}
 
+/*iteration_statement1::typeId() returns the type of the class, here, CAST_TYPE_ITERATION_STATEMENT1*/
+CAstType iteration_statement1::typeId()const {return CAST_TYPE_ITERATION_STATEMENT1;}
+
 /*iteration_statement1::pattern returns the pattern matched*/
 std::string iteration_statement1::pattern()const {return "DO,statement,WHILE,'(',expression,')',';'";}
 
@@ -1259,6 +1312,9 @@ iteration_statement1::~iteration_statement1()
 
 /*iteration_statement2::name() returns the name of the class*/
 std::string iteration_statement2::name()const {return "iteration_statement2";}
+
+/*iteration_statement2::typeId() returns the type of the class, here, CAST_TYPE_ITERATION_STATEMENT2*/
+CAstType iteration_statement2::typeId()const {return CAST_TYPE_ITERATION_STATEMENT2;}
 
 /*iteration_statement2::pattern returns the pattern matched*/
 std::string iteration_statement2::pattern()const {return "FOR,'(',expression_statement,expression_statement,expression,')',statement";}
@@ -1332,6 +1388,9 @@ iteration_statement2::~iteration_statement2()
 
 /*iteration_statement3::name() returns the name of the class*/
 std::string iteration_statement3::name()const {return "iteration_statement3";}
+
+/*iteration_statement3::typeId() returns the type of the class, here, CAST_TYPE_ITERATION_STATEMENT3*/
+CAstType iteration_statement3::typeId()const {return CAST_TYPE_ITERATION_STATEMENT3;}
 
 /*iteration_statement3::pattern returns the pattern matched*/
 std::string iteration_statement3::pattern()const {return "WHILE,'(',expression,')',statement";}
@@ -1460,8 +1519,12 @@ additive_expression_item::~additive_expression_item()
 /*additive_expression::name() returns the name of the class*/
 std::string additive_expression::name()const {return "additive_expression";}
 
+/*additive_expression::typeId() returns the type of the class, here, CAST_TYPE_ADDITIVE_EXPRESSION*/
+CAstType additive_expression::typeId()const {return CAST_TYPE_ADDITIVE_EXPRESSION;}
+
 /*additive_expression::pattern returns the pattern matched*/
 std::string additive_expression::pattern()const {return "additive_expression,'+',multiplicative_expression";}
+
 
 /*construct from elements*/
 additive_expression::additive_expression
@@ -1519,6 +1582,9 @@ additive_expression::~additive_expression()
 /*external_declaration1::name() returns the name of the class*/
 std::string external_declaration1::name()const {return "external_declaration1";}
 
+/*external_declaration1::typeId() returns the type of the class, here, CAST_TYPE_EXTERNAL_DECLARATION1*/
+CAstType external_declaration1::typeId()const {return CAST_TYPE_EXTERNAL_DECLARATION1;}
+
 /*external_declaration1::pattern returns the pattern matched*/
 std::string external_declaration1::pattern()const {return "function_definition";}
 
@@ -1567,6 +1633,9 @@ external_declaration1::~external_declaration1()
 
 /*external_declaration2::name() returns the name of the class*/
 std::string external_declaration2::name()const {return "external_declaration2";}
+
+/*external_declaration2::typeId() returns the type of the class, here, CAST_TYPE_EXTERNAL_DECLARATION2*/
+CAstType external_declaration2::typeId()const {return CAST_TYPE_EXTERNAL_DECLARATION2;}
 
 /*external_declaration2::pattern returns the pattern matched*/
 std::string external_declaration2::pattern()const {return "declaration";}
@@ -1617,6 +1686,9 @@ external_declaration2::~external_declaration2()
 /*type_specifier1::name() returns the name of the class*/
 std::string type_specifier1::name()const {return "type_specifier1";}
 
+/*type_specifier1::typeId() returns the type of the class, here, CAST_TYPE_TYPE_SPECIFIER1*/
+CAstType type_specifier1::typeId()const {return CAST_TYPE_TYPE_SPECIFIER1;}
+
 /*type_specifier1::pattern returns the pattern matched*/
 std::string type_specifier1::pattern()const {return "VOID";}
 
@@ -1665,6 +1737,9 @@ type_specifier1::~type_specifier1()
 
 /*type_specifier2::name() returns the name of the class*/
 std::string type_specifier2::name()const {return "type_specifier2";}
+
+/*type_specifier2::typeId() returns the type of the class, here, CAST_TYPE_TYPE_SPECIFIER2*/
+CAstType type_specifier2::typeId()const {return CAST_TYPE_TYPE_SPECIFIER2;}
 
 /*type_specifier2::pattern returns the pattern matched*/
 std::string type_specifier2::pattern()const {return "struct_or_union_specifier";}
@@ -1715,6 +1790,9 @@ type_specifier2::~type_specifier2()
 /*type_specifier3::name() returns the name of the class*/
 std::string type_specifier3::name()const {return "type_specifier3";}
 
+/*type_specifier3::typeId() returns the type of the class, here, CAST_TYPE_TYPE_SPECIFIER3*/
+CAstType type_specifier3::typeId()const {return CAST_TYPE_TYPE_SPECIFIER3;}
+
 /*type_specifier3::pattern returns the pattern matched*/
 std::string type_specifier3::pattern()const {return "enum_specifier";}
 
@@ -1763,6 +1841,9 @@ type_specifier3::~type_specifier3()
 
 /*compound_statement::name() returns the name of the class*/
 std::string compound_statement::name()const {return "compound_statement";}
+
+/*compound_statement::typeId() returns the type of the class, here, CAST_TYPE_COMPOUND_STATEMENT*/
+CAstType compound_statement::typeId()const {return CAST_TYPE_COMPOUND_STATEMENT;}
 
 /*compound_statement::pattern returns the pattern matched*/
 std::string compound_statement::pattern()const {return "'{',declaration_list,statement_list,'}'";}
@@ -1882,8 +1963,12 @@ inclusive_or_expression_item::~inclusive_or_expression_item()
 /*inclusive_or_expression::name() returns the name of the class*/
 std::string inclusive_or_expression::name()const {return "inclusive_or_expression";}
 
+/*inclusive_or_expression::typeId() returns the type of the class, here, CAST_TYPE_INCLUSIVE_OR_EXPRESSION*/
+CAstType inclusive_or_expression::typeId()const {return CAST_TYPE_INCLUSIVE_OR_EXPRESSION;}
+
 /*inclusive_or_expression::pattern returns the pattern matched*/
 std::string inclusive_or_expression::pattern()const {return "inclusive_or_expression,'|',exclusive_or_expression";}
+
 
 /*construct from elements*/
 inclusive_or_expression::inclusive_or_expression
@@ -2001,8 +2086,12 @@ pointer_item::~pointer_item()
 /*pointer::name() returns the name of the class*/
 std::string pointer::name()const {return "pointer";}
 
+/*pointer::typeId() returns the type of the class, here, CAST_TYPE_POINTER*/
+CAstType pointer::typeId()const {return CAST_TYPE_POINTER;}
+
 /*pointer::pattern returns the pattern matched*/
 std::string pointer::pattern()const {return "'*',type_qualifier_list,pointer";}
+
 
 /*construct from elements*/
 pointer::pointer
@@ -2058,6 +2147,9 @@ pointer::~pointer()
 
 /*selection_statement1::name() returns the name of the class*/
 std::string selection_statement1::name()const {return "selection_statement1";}
+
+/*selection_statement1::typeId() returns the type of the class, here, CAST_TYPE_SELECTION_STATEMENT1*/
+CAstType selection_statement1::typeId()const {return CAST_TYPE_SELECTION_STATEMENT1;}
 
 /*selection_statement1::pattern returns the pattern matched*/
 std::string selection_statement1::pattern()const {return "IF,'(',expression,')',statement,ELSE,statement";}
@@ -2132,6 +2224,9 @@ selection_statement1::~selection_statement1()
 /*selection_statement2::name() returns the name of the class*/
 std::string selection_statement2::name()const {return "selection_statement2";}
 
+/*selection_statement2::typeId() returns the type of the class, here, CAST_TYPE_SELECTION_STATEMENT2*/
+CAstType selection_statement2::typeId()const {return CAST_TYPE_SELECTION_STATEMENT2;}
+
 /*selection_statement2::pattern returns the pattern matched*/
 std::string selection_statement2::pattern()const {return "SWITCH,'(',expression,')',statement";}
 
@@ -2188,6 +2283,9 @@ selection_statement2::~selection_statement2()
 
 /*postfix_expression1::name() returns the name of the class*/
 std::string postfix_expression1::name()const {return "postfix_expression1";}
+
+/*postfix_expression1::typeId() returns the type of the class, here, CAST_TYPE_POSTFIX_EXPRESSION1*/
+CAstType postfix_expression1::typeId()const {return CAST_TYPE_POSTFIX_EXPRESSION1;}
 
 /*postfix_expression1::pattern returns the pattern matched*/
 std::string postfix_expression1::pattern()const {return "postfix_expression,'[',expression,']'";}
@@ -2246,6 +2344,9 @@ postfix_expression1::~postfix_expression1()
 /*postfix_expression2::name() returns the name of the class*/
 std::string postfix_expression2::name()const {return "postfix_expression2";}
 
+/*postfix_expression2::typeId() returns the type of the class, here, CAST_TYPE_POSTFIX_EXPRESSION2*/
+CAstType postfix_expression2::typeId()const {return CAST_TYPE_POSTFIX_EXPRESSION2;}
+
 /*postfix_expression2::pattern returns the pattern matched*/
 std::string postfix_expression2::pattern()const {return "postfix_expression,'(',argument_expression_list,')'";}
 
@@ -2302,6 +2403,9 @@ postfix_expression2::~postfix_expression2()
 
 /*postfix_expression3::name() returns the name of the class*/
 std::string postfix_expression3::name()const {return "postfix_expression3";}
+
+/*postfix_expression3::typeId() returns the type of the class, here, CAST_TYPE_POSTFIX_EXPRESSION3*/
+CAstType postfix_expression3::typeId()const {return CAST_TYPE_POSTFIX_EXPRESSION3;}
 
 /*postfix_expression3::pattern returns the pattern matched*/
 std::string postfix_expression3::pattern()const {return "postfix_expression,'.',IDENTIFIER";}
@@ -2368,6 +2472,9 @@ postfix_expression3::~postfix_expression3()
 /*postfix_expression4::name() returns the name of the class*/
 std::string postfix_expression4::name()const {return "postfix_expression4";}
 
+/*postfix_expression4::typeId() returns the type of the class, here, CAST_TYPE_POSTFIX_EXPRESSION4*/
+CAstType postfix_expression4::typeId()const {return CAST_TYPE_POSTFIX_EXPRESSION4;}
+
 /*postfix_expression4::pattern returns the pattern matched*/
 std::string postfix_expression4::pattern()const {return "postfix_expression,INC_OP";}
 
@@ -2424,6 +2531,9 @@ postfix_expression4::~postfix_expression4()
 
 /*postfix_expression5::name() returns the name of the class*/
 std::string postfix_expression5::name()const {return "postfix_expression5";}
+
+/*postfix_expression5::typeId() returns the type of the class, here, CAST_TYPE_POSTFIX_EXPRESSION5*/
+CAstType postfix_expression5::typeId()const {return CAST_TYPE_POSTFIX_EXPRESSION5;}
 
 /*postfix_expression5::pattern returns the pattern matched*/
 std::string postfix_expression5::pattern()const {return "primary_expression";}
@@ -2535,8 +2645,12 @@ and_expression_item::~and_expression_item()
 /*and_expression::name() returns the name of the class*/
 std::string and_expression::name()const {return "and_expression";}
 
+/*and_expression::typeId() returns the type of the class, here, CAST_TYPE_AND_EXPRESSION*/
+CAstType and_expression::typeId()const {return CAST_TYPE_AND_EXPRESSION;}
+
 /*and_expression::pattern returns the pattern matched*/
 std::string and_expression::pattern()const {return "and_expression,'&',equality_expression";}
+
 
 /*construct from elements*/
 and_expression::and_expression
@@ -2593,6 +2707,9 @@ and_expression::~and_expression()
 /*statement1::name() returns the name of the class*/
 std::string statement1::name()const {return "statement1";}
 
+/*statement1::typeId() returns the type of the class, here, CAST_TYPE_STATEMENT1*/
+CAstType statement1::typeId()const {return CAST_TYPE_STATEMENT1;}
+
 /*statement1::pattern returns the pattern matched*/
 std::string statement1::pattern()const {return "labeled_statement";}
 
@@ -2641,6 +2758,9 @@ statement1::~statement1()
 
 /*statement2::name() returns the name of the class*/
 std::string statement2::name()const {return "statement2";}
+
+/*statement2::typeId() returns the type of the class, here, CAST_TYPE_STATEMENT2*/
+CAstType statement2::typeId()const {return CAST_TYPE_STATEMENT2;}
 
 /*statement2::pattern returns the pattern matched*/
 std::string statement2::pattern()const {return "compound_statement";}
@@ -2691,6 +2811,9 @@ statement2::~statement2()
 /*statement3::name() returns the name of the class*/
 std::string statement3::name()const {return "statement3";}
 
+/*statement3::typeId() returns the type of the class, here, CAST_TYPE_STATEMENT3*/
+CAstType statement3::typeId()const {return CAST_TYPE_STATEMENT3;}
+
 /*statement3::pattern returns the pattern matched*/
 std::string statement3::pattern()const {return "expression_statement";}
 
@@ -2739,6 +2862,9 @@ statement3::~statement3()
 
 /*statement4::name() returns the name of the class*/
 std::string statement4::name()const {return "statement4";}
+
+/*statement4::typeId() returns the type of the class, here, CAST_TYPE_STATEMENT4*/
+CAstType statement4::typeId()const {return CAST_TYPE_STATEMENT4;}
 
 /*statement4::pattern returns the pattern matched*/
 std::string statement4::pattern()const {return "selection_statement";}
@@ -2789,6 +2915,9 @@ statement4::~statement4()
 /*statement5::name() returns the name of the class*/
 std::string statement5::name()const {return "statement5";}
 
+/*statement5::typeId() returns the type of the class, here, CAST_TYPE_STATEMENT5*/
+CAstType statement5::typeId()const {return CAST_TYPE_STATEMENT5;}
+
 /*statement5::pattern returns the pattern matched*/
 std::string statement5::pattern()const {return "iteration_statement";}
 
@@ -2838,6 +2967,9 @@ statement5::~statement5()
 /*statement6::name() returns the name of the class*/
 std::string statement6::name()const {return "statement6";}
 
+/*statement6::typeId() returns the type of the class, here, CAST_TYPE_STATEMENT6*/
+CAstType statement6::typeId()const {return CAST_TYPE_STATEMENT6;}
+
 /*statement6::pattern returns the pattern matched*/
 std::string statement6::pattern()const {return "jump_statement";}
 
@@ -2886,6 +3018,9 @@ statement6::~statement6()
 
 /*cast_expression1::name() returns the name of the class*/
 std::string cast_expression1::name()const {return "cast_expression1";}
+
+/*cast_expression1::typeId() returns the type of the class, here, CAST_TYPE_CAST_EXPRESSION1*/
+CAstType cast_expression1::typeId()const {return CAST_TYPE_CAST_EXPRESSION1;}
 
 /*cast_expression1::pattern returns the pattern matched*/
 std::string cast_expression1::pattern()const {return "'(',type_name,')',cast_expression";}
@@ -2944,6 +3079,9 @@ cast_expression1::~cast_expression1()
 /*cast_expression2::name() returns the name of the class*/
 std::string cast_expression2::name()const {return "cast_expression2";}
 
+/*cast_expression2::typeId() returns the type of the class, here, CAST_TYPE_CAST_EXPRESSION2*/
+CAstType cast_expression2::typeId()const {return CAST_TYPE_CAST_EXPRESSION2;}
+
 /*cast_expression2::pattern returns the pattern matched*/
 std::string cast_expression2::pattern()const {return "unary_expression";}
 
@@ -2992,6 +3130,9 @@ cast_expression2::~cast_expression2()
 
 /*init_declarator::name() returns the name of the class*/
 std::string init_declarator::name()const {return "init_declarator";}
+
+/*init_declarator::typeId() returns the type of the class, here, CAST_TYPE_INIT_DECLARATOR*/
+CAstType init_declarator::typeId()const {return CAST_TYPE_INIT_DECLARATOR;}
 
 /*init_declarator::pattern returns the pattern matched*/
 std::string init_declarator::pattern()const {return "declarator,'=',initializer";}
@@ -3119,8 +3260,12 @@ struct_declarator_list_item::~struct_declarator_list_item()
 /*struct_declarator_list::name() returns the name of the class*/
 std::string struct_declarator_list::name()const {return "struct_declarator_list";}
 
+/*struct_declarator_list::typeId() returns the type of the class, here, CAST_TYPE_STRUCT_DECLARATOR_LIST*/
+CAstType struct_declarator_list::typeId()const {return CAST_TYPE_STRUCT_DECLARATOR_LIST;}
+
 /*struct_declarator_list::pattern returns the pattern matched*/
 std::string struct_declarator_list::pattern()const {return "struct_declarator_list,',',struct_declarator";}
+
 
 /*construct from elements*/
 struct_declarator_list::struct_declarator_list
@@ -3238,8 +3383,12 @@ logical_or_expression_item::~logical_or_expression_item()
 /*logical_or_expression::name() returns the name of the class*/
 std::string logical_or_expression::name()const {return "logical_or_expression";}
 
+/*logical_or_expression::typeId() returns the type of the class, here, CAST_TYPE_LOGICAL_OR_EXPRESSION*/
+CAstType logical_or_expression::typeId()const {return CAST_TYPE_LOGICAL_OR_EXPRESSION;}
+
 /*logical_or_expression::pattern returns the pattern matched*/
 std::string logical_or_expression::pattern()const {return "logical_or_expression,OR_OP,logical_and_expression";}
+
 
 /*construct from elements*/
 logical_or_expression::logical_or_expression
@@ -3295,6 +3444,9 @@ logical_or_expression::~logical_or_expression()
 
 /*unary_operator::name() returns the name of the class*/
 std::string unary_operator::name()const {return "unary_operator";}
+
+/*unary_operator::typeId() returns the type of the class, here, CAST_TYPE_UNARY_OPERATOR*/
+CAstType unary_operator::typeId()const {return CAST_TYPE_UNARY_OPERATOR;}
 
 /*unary_operator::pattern returns the pattern matched*/
 std::string unary_operator::pattern()const {return "'&'";}
@@ -3415,8 +3567,12 @@ relational_expression_item::~relational_expression_item()
 /*relational_expression::name() returns the name of the class*/
 std::string relational_expression::name()const {return "relational_expression";}
 
+/*relational_expression::typeId() returns the type of the class, here, CAST_TYPE_RELATIONAL_EXPRESSION*/
+CAstType relational_expression::typeId()const {return CAST_TYPE_RELATIONAL_EXPRESSION;}
+
 /*relational_expression::pattern returns the pattern matched*/
 std::string relational_expression::pattern()const {return "relational_expression,'<',shift_expression";}
+
 
 /*construct from elements*/
 relational_expression::relational_expression
@@ -3474,6 +3630,9 @@ relational_expression::~relational_expression()
 /*struct_or_union::name() returns the name of the class*/
 std::string struct_or_union::name()const {return "struct_or_union";}
 
+/*struct_or_union::typeId() returns the type of the class, here, CAST_TYPE_STRUCT_OR_UNION*/
+CAstType struct_or_union::typeId()const {return CAST_TYPE_STRUCT_OR_UNION;}
+
 /*struct_or_union::pattern returns the pattern matched*/
 std::string struct_or_union::pattern()const {return "STRUCT";}
 
@@ -3522,6 +3681,9 @@ struct_or_union::~struct_or_union()
 
 /*enumerator::name() returns the name of the class*/
 std::string enumerator::name()const {return "enumerator";}
+
+/*enumerator::typeId() returns the type of the class, here, CAST_TYPE_ENUMERATOR*/
+CAstType enumerator::typeId()const {return CAST_TYPE_ENUMERATOR;}
 
 /*enumerator::pattern returns the pattern matched*/
 std::string enumerator::pattern()const {return "IDENTIFIER,'=',constant_expression";}
@@ -3588,6 +3750,9 @@ enumerator::~enumerator()
 /*assignment_expression1::name() returns the name of the class*/
 std::string assignment_expression1::name()const {return "assignment_expression1";}
 
+/*assignment_expression1::typeId() returns the type of the class, here, CAST_TYPE_ASSIGNMENT_EXPRESSION1*/
+CAstType assignment_expression1::typeId()const {return CAST_TYPE_ASSIGNMENT_EXPRESSION1;}
+
 /*assignment_expression1::pattern returns the pattern matched*/
 std::string assignment_expression1::pattern()const {return "unary_expression,assignment_operator,assignment_expression";}
 
@@ -3653,6 +3818,9 @@ assignment_expression1::~assignment_expression1()
 /*assignment_expression2::name() returns the name of the class*/
 std::string assignment_expression2::name()const {return "assignment_expression2";}
 
+/*assignment_expression2::typeId() returns the type of the class, here, CAST_TYPE_ASSIGNMENT_EXPRESSION2*/
+CAstType assignment_expression2::typeId()const {return CAST_TYPE_ASSIGNMENT_EXPRESSION2;}
+
 /*assignment_expression2::pattern returns the pattern matched*/
 std::string assignment_expression2::pattern()const {return "conditional_expression";}
 
@@ -3701,6 +3869,9 @@ assignment_expression2::~assignment_expression2()
 
 /*parameter_type_list::name() returns the name of the class*/
 std::string parameter_type_list::name()const {return "parameter_type_list";}
+
+/*parameter_type_list::typeId() returns the type of the class, here, CAST_TYPE_PARAMETER_TYPE_LIST*/
+CAstType parameter_type_list::typeId()const {return CAST_TYPE_PARAMETER_TYPE_LIST;}
 
 /*parameter_type_list::pattern returns the pattern matched*/
 std::string parameter_type_list::pattern()const {return "parameter_list,',',ELLIPSIS";}
@@ -3767,6 +3938,9 @@ parameter_type_list::~parameter_type_list()
 /*parameter_declaration1::name() returns the name of the class*/
 std::string parameter_declaration1::name()const {return "parameter_declaration1";}
 
+/*parameter_declaration1::typeId() returns the type of the class, here, CAST_TYPE_PARAMETER_DECLARATION1*/
+CAstType parameter_declaration1::typeId()const {return CAST_TYPE_PARAMETER_DECLARATION1;}
+
 /*parameter_declaration1::pattern returns the pattern matched*/
 std::string parameter_declaration1::pattern()const {return "declaration_specifiers,declarator";}
 
@@ -3823,6 +3997,9 @@ parameter_declaration1::~parameter_declaration1()
 
 /*parameter_declaration2::name() returns the name of the class*/
 std::string parameter_declaration2::name()const {return "parameter_declaration2";}
+
+/*parameter_declaration2::typeId() returns the type of the class, here, CAST_TYPE_PARAMETER_DECLARATION2*/
+CAstType parameter_declaration2::typeId()const {return CAST_TYPE_PARAMETER_DECLARATION2;}
 
 /*parameter_declaration2::pattern returns the pattern matched*/
 std::string parameter_declaration2::pattern()const {return "declaration_specifiers,abstract_declarator";}
@@ -3951,8 +4128,12 @@ multiplicative_expression_item::~multiplicative_expression_item()
 /*multiplicative_expression::name() returns the name of the class*/
 std::string multiplicative_expression::name()const {return "multiplicative_expression";}
 
+/*multiplicative_expression::typeId() returns the type of the class, here, CAST_TYPE_MULTIPLICATIVE_EXPRESSION*/
+CAstType multiplicative_expression::typeId()const {return CAST_TYPE_MULTIPLICATIVE_EXPRESSION;}
+
 /*multiplicative_expression::pattern returns the pattern matched*/
 std::string multiplicative_expression::pattern()const {return "multiplicative_expression,'*',cast_expression";}
+
 
 /*construct from elements*/
 multiplicative_expression::multiplicative_expression
@@ -4071,8 +4252,12 @@ type_qualifier_list_item::~type_qualifier_list_item()
 /*type_qualifier_list::name() returns the name of the class*/
 std::string type_qualifier_list::name()const {return "type_qualifier_list";}
 
+/*type_qualifier_list::typeId() returns the type of the class, here, CAST_TYPE_TYPE_QUALIFIER_LIST*/
+CAstType type_qualifier_list::typeId()const {return CAST_TYPE_TYPE_QUALIFIER_LIST;}
+
 /*type_qualifier_list::pattern returns the pattern matched*/
 std::string type_qualifier_list::pattern()const {return "type_qualifier_list,type_qualifier";}
+
 
 /*construct from elements*/
 type_qualifier_list::type_qualifier_list
@@ -4190,8 +4375,12 @@ argument_expression_list_item::~argument_expression_list_item()
 /*argument_expression_list::name() returns the name of the class*/
 std::string argument_expression_list::name()const {return "argument_expression_list";}
 
+/*argument_expression_list::typeId() returns the type of the class, here, CAST_TYPE_ARGUMENT_EXPRESSION_LIST*/
+CAstType argument_expression_list::typeId()const {return CAST_TYPE_ARGUMENT_EXPRESSION_LIST;}
+
 /*argument_expression_list::pattern returns the pattern matched*/
 std::string argument_expression_list::pattern()const {return "argument_expression_list,',',assignment_expression";}
+
 
 /*construct from elements*/
 argument_expression_list::argument_expression_list
@@ -4247,6 +4436,9 @@ argument_expression_list::~argument_expression_list()
 
 /*direct_abstract_declarator1::name() returns the name of the class*/
 std::string direct_abstract_declarator1::name()const {return "direct_abstract_declarator1";}
+
+/*direct_abstract_declarator1::typeId() returns the type of the class, here, CAST_TYPE_DIRECT_ABSTRACT_DECLARATOR1*/
+CAstType direct_abstract_declarator1::typeId()const {return CAST_TYPE_DIRECT_ABSTRACT_DECLARATOR1;}
 
 /*direct_abstract_declarator1::pattern returns the pattern matched*/
 std::string direct_abstract_declarator1::pattern()const {return "direct_abstract_declarator,'[',constant_expression,']'";}
@@ -4305,6 +4497,9 @@ direct_abstract_declarator1::~direct_abstract_declarator1()
 /*direct_abstract_declarator2::name() returns the name of the class*/
 std::string direct_abstract_declarator2::name()const {return "direct_abstract_declarator2";}
 
+/*direct_abstract_declarator2::typeId() returns the type of the class, here, CAST_TYPE_DIRECT_ABSTRACT_DECLARATOR2*/
+CAstType direct_abstract_declarator2::typeId()const {return CAST_TYPE_DIRECT_ABSTRACT_DECLARATOR2;}
+
 /*direct_abstract_declarator2::pattern returns the pattern matched*/
 std::string direct_abstract_declarator2::pattern()const {return "direct_abstract_declarator,'(',parameter_type_list,')'";}
 
@@ -4361,6 +4556,9 @@ direct_abstract_declarator2::~direct_abstract_declarator2()
 
 /*direct_abstract_declarator3::name() returns the name of the class*/
 std::string direct_abstract_declarator3::name()const {return "direct_abstract_declarator3";}
+
+/*direct_abstract_declarator3::typeId() returns the type of the class, here, CAST_TYPE_DIRECT_ABSTRACT_DECLARATOR3*/
+CAstType direct_abstract_declarator3::typeId()const {return CAST_TYPE_DIRECT_ABSTRACT_DECLARATOR3;}
 
 /*direct_abstract_declarator3::pattern returns the pattern matched*/
 std::string direct_abstract_declarator3::pattern()const {return "'(',abstract_declarator,')'";}
@@ -4481,8 +4679,12 @@ equality_expression_item::~equality_expression_item()
 /*equality_expression::name() returns the name of the class*/
 std::string equality_expression::name()const {return "equality_expression";}
 
+/*equality_expression::typeId() returns the type of the class, here, CAST_TYPE_EQUALITY_EXPRESSION*/
+CAstType equality_expression::typeId()const {return CAST_TYPE_EQUALITY_EXPRESSION;}
+
 /*equality_expression::pattern returns the pattern matched*/
 std::string equality_expression::pattern()const {return "equality_expression,EQ_OP,relational_expression";}
+
 
 /*construct from elements*/
 equality_expression::equality_expression
@@ -4540,6 +4742,9 @@ equality_expression::~equality_expression()
 /*primary_expression1::name() returns the name of the class*/
 std::string primary_expression1::name()const {return "primary_expression1";}
 
+/*primary_expression1::typeId() returns the type of the class, here, CAST_TYPE_PRIMARY_EXPRESSION1*/
+CAstType primary_expression1::typeId()const {return CAST_TYPE_PRIMARY_EXPRESSION1;}
+
 /*primary_expression1::pattern returns the pattern matched*/
 std::string primary_expression1::pattern()const {return "'(',expression,')'";}
 
@@ -4588,6 +4793,9 @@ primary_expression1::~primary_expression1()
 
 /*primary_expression2::name() returns the name of the class*/
 std::string primary_expression2::name()const {return "primary_expression2";}
+
+/*primary_expression2::typeId() returns the type of the class, here, CAST_TYPE_PRIMARY_EXPRESSION2*/
+CAstType primary_expression2::typeId()const {return CAST_TYPE_PRIMARY_EXPRESSION2;}
 
 /*primary_expression2::pattern returns the pattern matched*/
 std::string primary_expression2::pattern()const {return "IDENTIFIER";}
@@ -4699,8 +4907,12 @@ declaration_specifiers1_item::~declaration_specifiers1_item()
 /*declaration_specifiers1::name() returns the name of the class*/
 std::string declaration_specifiers1::name()const {return "declaration_specifiers1";}
 
+/*declaration_specifiers1::typeId() returns the type of the class, here, CAST_TYPE_DECLARATION_SPECIFIERS1*/
+CAstType declaration_specifiers1::typeId()const {return CAST_TYPE_DECLARATION_SPECIFIERS1;}
+
 /*declaration_specifiers1::pattern returns the pattern matched*/
 std::string declaration_specifiers1::pattern()const {return "storage_class_specifier,declaration_specifiers";}
+
 
 /*construct from elements*/
 declaration_specifiers1::declaration_specifiers1
@@ -4818,8 +5030,12 @@ declaration_specifiers2_item::~declaration_specifiers2_item()
 /*declaration_specifiers2::name() returns the name of the class*/
 std::string declaration_specifiers2::name()const {return "declaration_specifiers2";}
 
+/*declaration_specifiers2::typeId() returns the type of the class, here, CAST_TYPE_DECLARATION_SPECIFIERS2*/
+CAstType declaration_specifiers2::typeId()const {return CAST_TYPE_DECLARATION_SPECIFIERS2;}
+
 /*declaration_specifiers2::pattern returns the pattern matched*/
 std::string declaration_specifiers2::pattern()const {return "type_specifier,declaration_specifiers";}
+
 
 /*construct from elements*/
 declaration_specifiers2::declaration_specifiers2
@@ -4937,8 +5153,12 @@ declaration_specifiers3_item::~declaration_specifiers3_item()
 /*declaration_specifiers3::name() returns the name of the class*/
 std::string declaration_specifiers3::name()const {return "declaration_specifiers3";}
 
+/*declaration_specifiers3::typeId() returns the type of the class, here, CAST_TYPE_DECLARATION_SPECIFIERS3*/
+CAstType declaration_specifiers3::typeId()const {return CAST_TYPE_DECLARATION_SPECIFIERS3;}
+
 /*declaration_specifiers3::pattern returns the pattern matched*/
 std::string declaration_specifiers3::pattern()const {return "type_qualifier,declaration_specifiers";}
+
 
 /*construct from elements*/
 declaration_specifiers3::declaration_specifiers3
@@ -4994,6 +5214,9 @@ declaration_specifiers3::~declaration_specifiers3()
 
 /*declaration::name() returns the name of the class*/
 std::string declaration::name()const {return "declaration";}
+
+/*declaration::typeId() returns the type of the class, here, CAST_TYPE_DECLARATION*/
+CAstType declaration::typeId()const {return CAST_TYPE_DECLARATION;}
 
 /*declaration::pattern returns the pattern matched*/
 std::string declaration::pattern()const {return "declaration_specifiers,init_declarator_list,';'";}
@@ -5052,6 +5275,9 @@ declaration::~declaration()
 /*direct_declarator1::name() returns the name of the class*/
 std::string direct_declarator1::name()const {return "direct_declarator1";}
 
+/*direct_declarator1::typeId() returns the type of the class, here, CAST_TYPE_DIRECT_DECLARATOR1*/
+CAstType direct_declarator1::typeId()const {return CAST_TYPE_DIRECT_DECLARATOR1;}
+
 /*direct_declarator1::pattern returns the pattern matched*/
 std::string direct_declarator1::pattern()const {return "direct_declarator,'[',constant_expression,']'";}
 
@@ -5108,6 +5334,9 @@ direct_declarator1::~direct_declarator1()
 
 /*direct_declarator2::name() returns the name of the class*/
 std::string direct_declarator2::name()const {return "direct_declarator2";}
+
+/*direct_declarator2::typeId() returns the type of the class, here, CAST_TYPE_DIRECT_DECLARATOR2*/
+CAstType direct_declarator2::typeId()const {return CAST_TYPE_DIRECT_DECLARATOR2;}
 
 /*direct_declarator2::pattern returns the pattern matched*/
 std::string direct_declarator2::pattern()const {return "direct_declarator,'(',parameter_type_list,')'";}
@@ -5166,6 +5395,9 @@ direct_declarator2::~direct_declarator2()
 /*direct_declarator3::name() returns the name of the class*/
 std::string direct_declarator3::name()const {return "direct_declarator3";}
 
+/*direct_declarator3::typeId() returns the type of the class, here, CAST_TYPE_DIRECT_DECLARATOR3*/
+CAstType direct_declarator3::typeId()const {return CAST_TYPE_DIRECT_DECLARATOR3;}
+
 /*direct_declarator3::pattern returns the pattern matched*/
 std::string direct_declarator3::pattern()const {return "direct_declarator,'(',identifier_list,')'";}
 
@@ -5223,6 +5455,9 @@ direct_declarator3::~direct_declarator3()
 /*direct_declarator4::name() returns the name of the class*/
 std::string direct_declarator4::name()const {return "direct_declarator4";}
 
+/*direct_declarator4::typeId() returns the type of the class, here, CAST_TYPE_DIRECT_DECLARATOR4*/
+CAstType direct_declarator4::typeId()const {return CAST_TYPE_DIRECT_DECLARATOR4;}
+
 /*direct_declarator4::pattern returns the pattern matched*/
 std::string direct_declarator4::pattern()const {return "'(',declarator,')'";}
 
@@ -5271,6 +5506,9 @@ direct_declarator4::~direct_declarator4()
 
 /*direct_declarator5::name() returns the name of the class*/
 std::string direct_declarator5::name()const {return "direct_declarator5";}
+
+/*direct_declarator5::typeId() returns the type of the class, here, CAST_TYPE_DIRECT_DECLARATOR5*/
+CAstType direct_declarator5::typeId()const {return CAST_TYPE_DIRECT_DECLARATOR5;}
 
 /*direct_declarator5::pattern returns the pattern matched*/
 std::string direct_declarator5::pattern()const {return "IDENTIFIER";}
@@ -5382,8 +5620,12 @@ logical_and_expression_item::~logical_and_expression_item()
 /*logical_and_expression::name() returns the name of the class*/
 std::string logical_and_expression::name()const {return "logical_and_expression";}
 
+/*logical_and_expression::typeId() returns the type of the class, here, CAST_TYPE_LOGICAL_AND_EXPRESSION*/
+CAstType logical_and_expression::typeId()const {return CAST_TYPE_LOGICAL_AND_EXPRESSION;}
+
 /*logical_and_expression::pattern returns the pattern matched*/
 std::string logical_and_expression::pattern()const {return "logical_and_expression,AND_OP,inclusive_or_expression";}
+
 
 /*construct from elements*/
 logical_and_expression::logical_and_expression
@@ -5501,8 +5743,12 @@ init_declarator_list_item::~init_declarator_list_item()
 /*init_declarator_list::name() returns the name of the class*/
 std::string init_declarator_list::name()const {return "init_declarator_list";}
 
+/*init_declarator_list::typeId() returns the type of the class, here, CAST_TYPE_INIT_DECLARATOR_LIST*/
+CAstType init_declarator_list::typeId()const {return CAST_TYPE_INIT_DECLARATOR_LIST;}
+
 /*init_declarator_list::pattern returns the pattern matched*/
 std::string init_declarator_list::pattern()const {return "init_declarator_list,',',init_declarator";}
+
 
 /*construct from elements*/
 init_declarator_list::init_declarator_list
@@ -5629,8 +5875,12 @@ shift_expression_item::~shift_expression_item()
 /*shift_expression::name() returns the name of the class*/
 std::string shift_expression::name()const {return "shift_expression";}
 
+/*shift_expression::typeId() returns the type of the class, here, CAST_TYPE_SHIFT_EXPRESSION*/
+CAstType shift_expression::typeId()const {return CAST_TYPE_SHIFT_EXPRESSION;}
+
 /*shift_expression::pattern returns the pattern matched*/
 std::string shift_expression::pattern()const {return "shift_expression,LEFT_OP,additive_expression";}
+
 
 /*construct from elements*/
 shift_expression::shift_expression
@@ -5749,8 +5999,12 @@ identifier_list_item::~identifier_list_item()
 /*identifier_list::name() returns the name of the class*/
 std::string identifier_list::name()const {return "identifier_list";}
 
+/*identifier_list::typeId() returns the type of the class, here, CAST_TYPE_IDENTIFIER_LIST*/
+CAstType identifier_list::typeId()const {return CAST_TYPE_IDENTIFIER_LIST;}
+
 /*identifier_list::pattern returns the pattern matched*/
 std::string identifier_list::pattern()const {return "identifier_list,',',IDENTIFIER";}
+
 
 /*construct from elements*/
 identifier_list::identifier_list
@@ -5807,6 +6061,9 @@ identifier_list::~identifier_list()
 /*jump_statement1::name() returns the name of the class*/
 std::string jump_statement1::name()const {return "jump_statement1";}
 
+/*jump_statement1::typeId() returns the type of the class, here, CAST_TYPE_JUMP_STATEMENT1*/
+CAstType jump_statement1::typeId()const {return CAST_TYPE_JUMP_STATEMENT1;}
+
 /*jump_statement1::pattern returns the pattern matched*/
 std::string jump_statement1::pattern()const {return "GOTO,IDENTIFIER,';'";}
 
@@ -5855,6 +6112,9 @@ jump_statement1::~jump_statement1()
 
 /*jump_statement2::name() returns the name of the class*/
 std::string jump_statement2::name()const {return "jump_statement2";}
+
+/*jump_statement2::typeId() returns the type of the class, here, CAST_TYPE_JUMP_STATEMENT2*/
+CAstType jump_statement2::typeId()const {return CAST_TYPE_JUMP_STATEMENT2;}
 
 /*jump_statement2::pattern returns the pattern matched*/
 std::string jump_statement2::pattern()const {return "RETURN,expression,';'";}
@@ -5905,6 +6165,9 @@ jump_statement2::~jump_statement2()
 /*jump_statement3::name() returns the name of the class*/
 std::string jump_statement3::name()const {return "jump_statement3";}
 
+/*jump_statement3::typeId() returns the type of the class, here, CAST_TYPE_JUMP_STATEMENT3*/
+CAstType jump_statement3::typeId()const {return CAST_TYPE_JUMP_STATEMENT3;}
+
 /*jump_statement3::pattern returns the pattern matched*/
 std::string jump_statement3::pattern()const {return "CONTINUE,';'";}
 
@@ -5953,6 +6216,9 @@ jump_statement3::~jump_statement3()
 
 /*struct_declarator::name() returns the name of the class*/
 std::string struct_declarator::name()const {return "struct_declarator";}
+
+/*struct_declarator::typeId() returns the type of the class, here, CAST_TYPE_STRUCT_DECLARATOR*/
+CAstType struct_declarator::typeId()const {return CAST_TYPE_STRUCT_DECLARATOR;}
 
 /*struct_declarator::pattern returns the pattern matched*/
 std::string struct_declarator::pattern()const {return "declarator,':',constant_expression";}
@@ -6018,6 +6284,9 @@ struct_declarator::~struct_declarator()
 
 /*function_definition::name() returns the name of the class*/
 std::string function_definition::name()const {return "function_definition";}
+
+/*function_definition::typeId() returns the type of the class, here, CAST_TYPE_FUNCTION_DEFINITION*/
+CAstType function_definition::typeId()const {return CAST_TYPE_FUNCTION_DEFINITION;}
 
 /*function_definition::pattern returns the pattern matched*/
 std::string function_definition::pattern()const {return "declaration_specifiers,declarator,declaration_list,compound_statement";}
@@ -6153,8 +6422,12 @@ parameter_list_item::~parameter_list_item()
 /*parameter_list::name() returns the name of the class*/
 std::string parameter_list::name()const {return "parameter_list";}
 
+/*parameter_list::typeId() returns the type of the class, here, CAST_TYPE_PARAMETER_LIST*/
+CAstType parameter_list::typeId()const {return CAST_TYPE_PARAMETER_LIST;}
+
 /*parameter_list::pattern returns the pattern matched*/
 std::string parameter_list::pattern()const {return "parameter_list,',',parameter_declaration";}
+
 
 /*construct from elements*/
 parameter_list::parameter_list
@@ -6210,6 +6483,9 @@ parameter_list::~parameter_list()
 
 /*enum_specifier::name() returns the name of the class*/
 std::string enum_specifier::name()const {return "enum_specifier";}
+
+/*enum_specifier::typeId() returns the type of the class, here, CAST_TYPE_ENUM_SPECIFIER*/
+CAstType enum_specifier::typeId()const {return CAST_TYPE_ENUM_SPECIFIER;}
 
 /*enum_specifier::pattern returns the pattern matched*/
 std::string enum_specifier::pattern()const {return "ENUM,IDENTIFIER,'{',enumerator_list,'}'";}
@@ -6283,6 +6559,9 @@ enum_specifier::~enum_specifier()
 
 /*type_qualifier::name() returns the name of the class*/
 std::string type_qualifier::name()const {return "type_qualifier";}
+
+/*type_qualifier::typeId() returns the type of the class, here, CAST_TYPE_TYPE_QUALIFIER*/
+CAstType type_qualifier::typeId()const {return CAST_TYPE_TYPE_QUALIFIER;}
 
 /*type_qualifier::pattern returns the pattern matched*/
 std::string type_qualifier::pattern()const {return "CONST";}
@@ -6394,8 +6673,12 @@ enumerator_list_item::~enumerator_list_item()
 /*enumerator_list::name() returns the name of the class*/
 std::string enumerator_list::name()const {return "enumerator_list";}
 
+/*enumerator_list::typeId() returns the type of the class, here, CAST_TYPE_ENUMERATOR_LIST*/
+CAstType enumerator_list::typeId()const {return CAST_TYPE_ENUMERATOR_LIST;}
+
 /*enumerator_list::pattern returns the pattern matched*/
 std::string enumerator_list::pattern()const {return "enumerator_list,',',enumerator";}
+
 
 /*construct from elements*/
 enumerator_list::enumerator_list
@@ -6451,6 +6734,9 @@ enumerator_list::~enumerator_list()
 
 /*labeled_statement1::name() returns the name of the class*/
 std::string labeled_statement1::name()const {return "labeled_statement1";}
+
+/*labeled_statement1::typeId() returns the type of the class, here, CAST_TYPE_LABELED_STATEMENT1*/
+CAstType labeled_statement1::typeId()const {return CAST_TYPE_LABELED_STATEMENT1;}
 
 /*labeled_statement1::pattern returns the pattern matched*/
 std::string labeled_statement1::pattern()const {return "CASE,constant_expression,':',statement";}
@@ -6508,6 +6794,9 @@ labeled_statement1::~labeled_statement1()
 
 /*labeled_statement2::name() returns the name of the class*/
 std::string labeled_statement2::name()const {return "labeled_statement2";}
+
+/*labeled_statement2::typeId() returns the type of the class, here, CAST_TYPE_LABELED_STATEMENT2*/
+CAstType labeled_statement2::typeId()const {return CAST_TYPE_LABELED_STATEMENT2;}
 
 /*labeled_statement2::pattern returns the pattern matched*/
 std::string labeled_statement2::pattern()const {return "IDENTIFIER,':',statement";}
@@ -6627,8 +6916,12 @@ declaration_list_item::~declaration_list_item()
 /*declaration_list::name() returns the name of the class*/
 std::string declaration_list::name()const {return "declaration_list";}
 
+/*declaration_list::typeId() returns the type of the class, here, CAST_TYPE_DECLARATION_LIST*/
+CAstType declaration_list::typeId()const {return CAST_TYPE_DECLARATION_LIST;}
+
 /*declaration_list::pattern returns the pattern matched*/
 std::string declaration_list::pattern()const {return "declaration_list,declaration";}
+
 
 /*construct from elements*/
 declaration_list::declaration_list
@@ -6746,8 +7039,12 @@ specifier_qualifier_list1_item::~specifier_qualifier_list1_item()
 /*specifier_qualifier_list1::name() returns the name of the class*/
 std::string specifier_qualifier_list1::name()const {return "specifier_qualifier_list1";}
 
+/*specifier_qualifier_list1::typeId() returns the type of the class, here, CAST_TYPE_SPECIFIER_QUALIFIER_LIST1*/
+CAstType specifier_qualifier_list1::typeId()const {return CAST_TYPE_SPECIFIER_QUALIFIER_LIST1;}
+
 /*specifier_qualifier_list1::pattern returns the pattern matched*/
 std::string specifier_qualifier_list1::pattern()const {return "type_specifier,specifier_qualifier_list";}
+
 
 /*construct from elements*/
 specifier_qualifier_list1::specifier_qualifier_list1
@@ -6865,8 +7162,12 @@ specifier_qualifier_list2_item::~specifier_qualifier_list2_item()
 /*specifier_qualifier_list2::name() returns the name of the class*/
 std::string specifier_qualifier_list2::name()const {return "specifier_qualifier_list2";}
 
+/*specifier_qualifier_list2::typeId() returns the type of the class, here, CAST_TYPE_SPECIFIER_QUALIFIER_LIST2*/
+CAstType specifier_qualifier_list2::typeId()const {return CAST_TYPE_SPECIFIER_QUALIFIER_LIST2;}
+
 /*specifier_qualifier_list2::pattern returns the pattern matched*/
 std::string specifier_qualifier_list2::pattern()const {return "type_qualifier,specifier_qualifier_list";}
+
 
 /*construct from elements*/
 specifier_qualifier_list2::specifier_qualifier_list2
@@ -6984,8 +7285,12 @@ translation_unit_item::~translation_unit_item()
 /*translation_unit::name() returns the name of the class*/
 std::string translation_unit::name()const {return "translation_unit";}
 
+/*translation_unit::typeId() returns the type of the class, here, CAST_TYPE_TRANSLATION_UNIT*/
+CAstType translation_unit::typeId()const {return CAST_TYPE_TRANSLATION_UNIT;}
+
 /*translation_unit::pattern returns the pattern matched*/
 std::string translation_unit::pattern()const {return "translation_unit,external_declaration";}
+
 
 /*construct from elements*/
 translation_unit::translation_unit
@@ -7041,6 +7346,9 @@ translation_unit::~translation_unit()
 
 /*constant_expression::name() returns the name of the class*/
 std::string constant_expression::name()const {return "constant_expression";}
+
+/*constant_expression::typeId() returns the type of the class, here, CAST_TYPE_CONSTANT_EXPRESSION*/
+CAstType constant_expression::typeId()const {return CAST_TYPE_CONSTANT_EXPRESSION;}
 
 /*constant_expression::pattern returns the pattern matched*/
 std::string constant_expression::pattern()const {return "conditional_expression";}
@@ -7152,8 +7460,12 @@ initializer_list_item::~initializer_list_item()
 /*initializer_list::name() returns the name of the class*/
 std::string initializer_list::name()const {return "initializer_list";}
 
+/*initializer_list::typeId() returns the type of the class, here, CAST_TYPE_INITIALIZER_LIST*/
+CAstType initializer_list::typeId()const {return CAST_TYPE_INITIALIZER_LIST;}
+
 /*initializer_list::pattern returns the pattern matched*/
 std::string initializer_list::pattern()const {return "initializer_list,',',initializer";}
+
 
 /*construct from elements*/
 initializer_list::initializer_list
@@ -7271,8 +7583,12 @@ statement_list_item::~statement_list_item()
 /*statement_list::name() returns the name of the class*/
 std::string statement_list::name()const {return "statement_list";}
 
+/*statement_list::typeId() returns the type of the class, here, CAST_TYPE_STATEMENT_LIST*/
+CAstType statement_list::typeId()const {return CAST_TYPE_STATEMENT_LIST;}
+
 /*statement_list::pattern returns the pattern matched*/
 std::string statement_list::pattern()const {return "statement_list,statement";}
+
 
 /*construct from elements*/
 statement_list::statement_list
@@ -7390,8 +7706,12 @@ expression_item::~expression_item()
 /*expression::name() returns the name of the class*/
 std::string expression::name()const {return "expression";}
 
+/*expression::typeId() returns the type of the class, here, CAST_TYPE_EXPRESSION*/
+CAstType expression::typeId()const {return CAST_TYPE_EXPRESSION;}
+
 /*expression::pattern returns the pattern matched*/
 std::string expression::pattern()const {return "expression,',',assignment_expression";}
+
 
 /*construct from elements*/
 expression::expression
@@ -7447,6 +7767,9 @@ expression::~expression()
 
 /*declarator::name() returns the name of the class*/
 std::string declarator::name()const {return "declarator";}
+
+/*declarator::typeId() returns the type of the class, here, CAST_TYPE_DECLARATOR*/
+CAstType declarator::typeId()const {return CAST_TYPE_DECLARATOR;}
 
 /*declarator::pattern returns the pattern matched*/
 std::string declarator::pattern()const {return "pointer,direct_declarator";}

@@ -35,6 +35,7 @@ namespace CAst
 
 class CAst;
 
+enum CAstType { CAST_TYPE_TOKEN, CAST_TYPE_STORAGE_CLASS_SPECIFIER, CAST_TYPE_EXPRESSION_STATEMENT, CAST_TYPE_TYPE_NAME, CAST_TYPE_UNARY_EXPRESSION1, CAST_TYPE_UNARY_EXPRESSION2, CAST_TYPE_UNARY_EXPRESSION3, CAST_TYPE_UNARY_EXPRESSION4, CAST_TYPE_CONDITIONAL_EXPRESSION, CAST_TYPE_STRUCT_OR_UNION_SPECIFIER, CAST_TYPE_EXCLUSIVE_OR_EXPRESSION, CAST_TYPE_INITIALIZER1, CAST_TYPE_INITIALIZER2, CAST_TYPE_STRUCT_DECLARATION_LIST, CAST_TYPE_ASSIGNMENT_OPERATOR, CAST_TYPE_STRUCT_DECLARATION, CAST_TYPE_ABSTRACT_DECLARATOR, CAST_TYPE_ITERATION_STATEMENT1, CAST_TYPE_ITERATION_STATEMENT2, CAST_TYPE_ITERATION_STATEMENT3, CAST_TYPE_ADDITIVE_EXPRESSION, CAST_TYPE_EXTERNAL_DECLARATION1, CAST_TYPE_EXTERNAL_DECLARATION2, CAST_TYPE_TYPE_SPECIFIER1, CAST_TYPE_TYPE_SPECIFIER2, CAST_TYPE_TYPE_SPECIFIER3, CAST_TYPE_COMPOUND_STATEMENT, CAST_TYPE_INCLUSIVE_OR_EXPRESSION, CAST_TYPE_POINTER, CAST_TYPE_SELECTION_STATEMENT1, CAST_TYPE_SELECTION_STATEMENT2, CAST_TYPE_POSTFIX_EXPRESSION1, CAST_TYPE_POSTFIX_EXPRESSION2, CAST_TYPE_POSTFIX_EXPRESSION3, CAST_TYPE_POSTFIX_EXPRESSION4, CAST_TYPE_POSTFIX_EXPRESSION5, CAST_TYPE_AND_EXPRESSION, CAST_TYPE_STATEMENT1, CAST_TYPE_STATEMENT2, CAST_TYPE_STATEMENT3, CAST_TYPE_STATEMENT4, CAST_TYPE_STATEMENT5, CAST_TYPE_STATEMENT6, CAST_TYPE_CAST_EXPRESSION1, CAST_TYPE_CAST_EXPRESSION2, CAST_TYPE_INIT_DECLARATOR, CAST_TYPE_STRUCT_DECLARATOR_LIST, CAST_TYPE_LOGICAL_OR_EXPRESSION, CAST_TYPE_UNARY_OPERATOR, CAST_TYPE_RELATIONAL_EXPRESSION, CAST_TYPE_STRUCT_OR_UNION, CAST_TYPE_ENUMERATOR, CAST_TYPE_ASSIGNMENT_EXPRESSION1, CAST_TYPE_ASSIGNMENT_EXPRESSION2, CAST_TYPE_PARAMETER_TYPE_LIST, CAST_TYPE_PARAMETER_DECLARATION1, CAST_TYPE_PARAMETER_DECLARATION2, CAST_TYPE_MULTIPLICATIVE_EXPRESSION, CAST_TYPE_TYPE_QUALIFIER_LIST, CAST_TYPE_ARGUMENT_EXPRESSION_LIST, CAST_TYPE_DIRECT_ABSTRACT_DECLARATOR1, CAST_TYPE_DIRECT_ABSTRACT_DECLARATOR2, CAST_TYPE_DIRECT_ABSTRACT_DECLARATOR3, CAST_TYPE_EQUALITY_EXPRESSION, CAST_TYPE_PRIMARY_EXPRESSION1, CAST_TYPE_PRIMARY_EXPRESSION2, CAST_TYPE_DECLARATION_SPECIFIERS1, CAST_TYPE_DECLARATION_SPECIFIERS2, CAST_TYPE_DECLARATION_SPECIFIERS3, CAST_TYPE_DECLARATION, CAST_TYPE_DIRECT_DECLARATOR1, CAST_TYPE_DIRECT_DECLARATOR2, CAST_TYPE_DIRECT_DECLARATOR3, CAST_TYPE_DIRECT_DECLARATOR4, CAST_TYPE_DIRECT_DECLARATOR5, CAST_TYPE_LOGICAL_AND_EXPRESSION, CAST_TYPE_INIT_DECLARATOR_LIST, CAST_TYPE_SHIFT_EXPRESSION, CAST_TYPE_IDENTIFIER_LIST, CAST_TYPE_JUMP_STATEMENT1, CAST_TYPE_JUMP_STATEMENT2, CAST_TYPE_JUMP_STATEMENT3, CAST_TYPE_STRUCT_DECLARATOR, CAST_TYPE_FUNCTION_DEFINITION, CAST_TYPE_PARAMETER_LIST, CAST_TYPE_ENUM_SPECIFIER, CAST_TYPE_TYPE_QUALIFIER, CAST_TYPE_ENUMERATOR_LIST, CAST_TYPE_LABELED_STATEMENT1, CAST_TYPE_LABELED_STATEMENT2, CAST_TYPE_DECLARATION_LIST, CAST_TYPE_SPECIFIER_QUALIFIER_LIST1, CAST_TYPE_SPECIFIER_QUALIFIER_LIST2, CAST_TYPE_TRANSLATION_UNIT, CAST_TYPE_CONSTANT_EXPRESSION, CAST_TYPE_INITIALIZER_LIST, CAST_TYPE_STATEMENT_LIST, CAST_TYPE_EXPRESSION, CAST_TYPE_DECLARATOR};
 
 
 /*=============================================================================================================*\
@@ -203,10 +204,12 @@ public:
 				Token *_arg__p_token1			
 		);
 	virtual std::string name()const;							//returns the class name, here "storage_class_specifier"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_STORAGE_CLASS_SPECIFIER
 	virtual std::string pattern()const;							//returns the pattern, here "[TYPEDEF]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
 	virtual ~storage_class_specifier ();
 
 		
@@ -241,10 +244,12 @@ public:
 				expression *_arg__p_expression			
 		);
 	virtual std::string name()const;							//returns the class name, here "expression_statement"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_EXPRESSION_STATEMENT
 	virtual std::string pattern()const;							//returns the pattern, here "[expression,';']"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const expression* get_p_expression()const{return _p_expression;}							//returns const pointer to _p_expression
 	virtual ~expression_statement ();
 
 		
@@ -282,10 +287,13 @@ public:
 				abstract_declarator *_arg__p_abstract_declarator			
 		);
 	virtual std::string name()const;							//returns the class name, here "type_name"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_TYPE_NAME
 	virtual std::string pattern()const;							//returns the pattern, here "[specifier_qualifier_list,abstract_declarator]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const specifier_qualifier_list* get_p_specifier_qualifier_list()const{return _p_specifier_qualifier_list;}							//returns const pointer to _p_specifier_qualifier_list
+	const abstract_declarator* get_p_abstract_declarator()const{return _p_abstract_declarator;}							//returns const pointer to _p_abstract_declarator
 	virtual ~type_name ();
 
 		
@@ -305,6 +313,7 @@ class unary_expression :public CAst
 {
 public:
 	virtual std::string name()const=0;
+	virtual CAstType typeId()const=0;
 	virtual std::string pattern()const=0;
 	virtual bool isList()const=0;
 	virtual Properties getProperties()const=0;
@@ -341,10 +350,12 @@ public:
 				type_name *_arg__p_type_name			
 		);
 	virtual std::string name()const;							//returns the class name, here "unary_expression1"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_UNARY_EXPRESSION1
 	virtual std::string pattern()const;							//returns the pattern, here "[SIZEOF,'(',type_name,')']"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const type_name* get_p_type_name()const{return _p_type_name;}							//returns const pointer to _p_type_name
 	virtual ~unary_expression1 ();
 
 		
@@ -382,10 +393,13 @@ public:
 				unary_expression *_arg__p_unary_expression			
 		);
 	virtual std::string name()const;							//returns the class name, here "unary_expression2"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_UNARY_EXPRESSION2
 	virtual std::string pattern()const;							//returns the pattern, here "[INC_OP,unary_expression]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
+	const unary_expression* get_p_unary_expression()const{return _p_unary_expression;}							//returns const pointer to _p_unary_expression
 	virtual ~unary_expression2 ();
 
 		
@@ -423,10 +437,13 @@ public:
 				cast_expression *_arg__p_cast_expression			
 		);
 	virtual std::string name()const;							//returns the class name, here "unary_expression3"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_UNARY_EXPRESSION3
 	virtual std::string pattern()const;							//returns the pattern, here "[unary_operator,cast_expression]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const unary_operator* get_p_unary_operator()const{return _p_unary_operator;}							//returns const pointer to _p_unary_operator
+	const cast_expression* get_p_cast_expression()const{return _p_cast_expression;}							//returns const pointer to _p_cast_expression
 	virtual ~unary_expression3 ();
 
 		
@@ -461,10 +478,12 @@ public:
 				postfix_expression *_arg__p_postfix_expression			
 		);
 	virtual std::string name()const;							//returns the class name, here "unary_expression4"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_UNARY_EXPRESSION4
 	virtual std::string pattern()const;							//returns the pattern, here "[postfix_expression]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const postfix_expression* get_p_postfix_expression()const{return _p_postfix_expression;}							//returns const pointer to _p_postfix_expression
 	virtual ~unary_expression4 ();
 
 		
@@ -504,7 +523,10 @@ public:
 			expression *_arg__p_expression
 		);
 	conditional_expression_item(const conditional_expression_item &);
+	virtual std::string name()const{return "conditional_expression_item";}			//returns the class name, here "conditional_expression"
 	virtual Properties getProperties()const;
+	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
+	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	virtual ~conditional_expression_item();
 	
 	
@@ -538,13 +560,19 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "conditional_expression"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_CONDITIONAL_EXPRESSION
 	virtual std::string pattern()const;							//returns the pattern, here "[logical_or_expression,'?',expression,':',conditional_expression]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
 	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a propertirs list		
+	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
+	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
+	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
 	virtual ~conditional_expression ();
 
 };
+
+typedef std::list<conditional_expression_item>::iterator conditional_expression_iterator;
+typedef std::list<conditional_expression_item>::const_iterator conditional_expression_const_iterator;
 
 
 			
@@ -588,10 +616,16 @@ public:
 				Token *_arg__p_token3			
 		);
 	virtual std::string name()const;							//returns the class name, here "struct_or_union_specifier"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_STRUCT_OR_UNION_SPECIFIER
 	virtual std::string pattern()const;							//returns the pattern, here "[struct_or_union,IDENTIFIER,'{',struct_declaration_list,'}']"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const struct_or_union* get_p_struct_or_union()const{return _p_struct_or_union;}							//returns const pointer to _p_struct_or_union
+	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
+	const Token* get_p_token2()const{return _p_token2;}							//returns const pointer to _p_token2
+	const struct_declaration_list* get_p_struct_declaration_list()const{return _p_struct_declaration_list;}							//returns const pointer to _p_struct_declaration_list
+	const Token* get_p_token3()const{return _p_token3;}							//returns const pointer to _p_token3
 	virtual ~struct_or_union_specifier ();
 
 		
@@ -628,7 +662,10 @@ public:
 			and_expression *_arg__p_and_expression
 		);
 	exclusive_or_expression_item(const exclusive_or_expression_item &);
+	virtual std::string name()const{return "exclusive_or_expression_item";}			//returns the class name, here "exclusive_or_expression"
 	virtual Properties getProperties()const;
+	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
+	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	virtual ~exclusive_or_expression_item();
 	
 	
@@ -661,13 +698,19 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "exclusive_or_expression"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_EXCLUSIVE_OR_EXPRESSION
 	virtual std::string pattern()const;							//returns the pattern, here "[exclusive_or_expression,'^',and_expression]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
 	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a propertirs list		
+	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
+	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
+	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
 	virtual ~exclusive_or_expression ();
 
 };
+
+typedef std::list<exclusive_or_expression_item>::iterator exclusive_or_expression_iterator;
+typedef std::list<exclusive_or_expression_item>::const_iterator exclusive_or_expression_const_iterator;
 
 
 			
@@ -684,6 +727,7 @@ class initializer :public CAst
 {
 public:
 	virtual std::string name()const=0;
+	virtual CAstType typeId()const=0;
 	virtual std::string pattern()const=0;
 	virtual bool isList()const=0;
 	virtual Properties getProperties()const=0;
@@ -723,10 +767,13 @@ public:
 				Token *_arg__p_token1			
 		);
 	virtual std::string name()const;							//returns the class name, here "initializer1"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_INITIALIZER1
 	virtual std::string pattern()const;							//returns the pattern, here "['{',initializer_list,',','}']"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const initializer_list* get_p_initializer_list()const{return _p_initializer_list;}							//returns const pointer to _p_initializer_list
+	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
 	virtual ~initializer1 ();
 
 		
@@ -761,10 +808,12 @@ public:
 				assignment_expression *_arg__p_assignment_expression			
 		);
 	virtual std::string name()const;							//returns the class name, here "initializer2"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_INITIALIZER2
 	virtual std::string pattern()const;							//returns the pattern, here "[assignment_expression]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const assignment_expression* get_p_assignment_expression()const{return _p_assignment_expression;}							//returns const pointer to _p_assignment_expression
 	virtual ~initializer2 ();
 
 		
@@ -801,7 +850,10 @@ public:
 			struct_declaration *_arg__p_struct_declaration
 		);
 	struct_declaration_list_item(const struct_declaration_list_item &);
+	virtual std::string name()const{return "struct_declaration_list_item";}			//returns the class name, here "struct_declaration_list"
 	virtual Properties getProperties()const;
+	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
+	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	virtual ~struct_declaration_list_item();
 	
 	
@@ -834,13 +886,19 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "struct_declaration_list"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_STRUCT_DECLARATION_LIST
 	virtual std::string pattern()const;							//returns the pattern, here "[struct_declaration_list,struct_declaration]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
 	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a propertirs list		
+	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
+	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
+	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
 	virtual ~struct_declaration_list ();
 
 };
+
+typedef std::list<struct_declaration_list_item>::iterator struct_declaration_list_iterator;
+typedef std::list<struct_declaration_list_item>::const_iterator struct_declaration_list_const_iterator;
 
 
 			
@@ -872,10 +930,12 @@ public:
 				Token *_arg__p_token1			
 		);
 	virtual std::string name()const;							//returns the class name, here "assignment_operator"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_ASSIGNMENT_OPERATOR
 	virtual std::string pattern()const;							//returns the pattern, here "['=']"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
 	virtual ~assignment_operator ();
 
 		
@@ -913,10 +973,13 @@ public:
 				struct_declarator_list *_arg__p_struct_declarator_list			
 		);
 	virtual std::string name()const;							//returns the class name, here "struct_declaration"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_STRUCT_DECLARATION
 	virtual std::string pattern()const;							//returns the pattern, here "[specifier_qualifier_list,struct_declarator_list,';']"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const specifier_qualifier_list* get_p_specifier_qualifier_list()const{return _p_specifier_qualifier_list;}							//returns const pointer to _p_specifier_qualifier_list
+	const struct_declarator_list* get_p_struct_declarator_list()const{return _p_struct_declarator_list;}							//returns const pointer to _p_struct_declarator_list
 	virtual ~struct_declaration ();
 
 		
@@ -954,10 +1017,13 @@ public:
 				direct_abstract_declarator *_arg__p_direct_abstract_declarator			
 		);
 	virtual std::string name()const;							//returns the class name, here "abstract_declarator"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_ABSTRACT_DECLARATOR
 	virtual std::string pattern()const;							//returns the pattern, here "[pointer,direct_abstract_declarator]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const pointer* get_p_pointer()const{return _p_pointer;}							//returns const pointer to _p_pointer
+	const direct_abstract_declarator* get_p_direct_abstract_declarator()const{return _p_direct_abstract_declarator;}							//returns const pointer to _p_direct_abstract_declarator
 	virtual ~abstract_declarator ();
 
 		
@@ -977,6 +1043,7 @@ class iteration_statement :public CAst
 {
 public:
 	virtual std::string name()const=0;
+	virtual CAstType typeId()const=0;
 	virtual std::string pattern()const=0;
 	virtual bool isList()const=0;
 	virtual Properties getProperties()const=0;
@@ -1016,10 +1083,13 @@ public:
 				expression *_arg__p_expression			
 		);
 	virtual std::string name()const;							//returns the class name, here "iteration_statement1"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_ITERATION_STATEMENT1
 	virtual std::string pattern()const;							//returns the pattern, here "[DO,statement,WHILE,'(',expression,')',';']"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const statement* get_p_statement()const{return _p_statement;}							//returns const pointer to _p_statement
+	const expression* get_p_expression()const{return _p_expression;}							//returns const pointer to _p_expression
 	virtual ~iteration_statement1 ();
 
 		
@@ -1063,10 +1133,15 @@ public:
 				statement *_arg__p_statement			
 		);
 	virtual std::string name()const;							//returns the class name, here "iteration_statement2"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_ITERATION_STATEMENT2
 	virtual std::string pattern()const;							//returns the pattern, here "[FOR,'(',expression_statement,expression_statement,expression,')',statement]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const expression_statement* get_p_expression_statement()const{return _p_expression_statement;}							//returns const pointer to _p_expression_statement
+	const expression_statement* get_p_expression_statement1()const{return _p_expression_statement1;}							//returns const pointer to _p_expression_statement1
+	const expression* get_p_expression()const{return _p_expression;}							//returns const pointer to _p_expression
+	const statement* get_p_statement()const{return _p_statement;}							//returns const pointer to _p_statement
 	virtual ~iteration_statement2 ();
 
 		
@@ -1104,10 +1179,13 @@ public:
 				statement *_arg__p_statement			
 		);
 	virtual std::string name()const;							//returns the class name, here "iteration_statement3"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_ITERATION_STATEMENT3
 	virtual std::string pattern()const;							//returns the pattern, here "[WHILE,'(',expression,')',statement]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const expression* get_p_expression()const{return _p_expression;}							//returns const pointer to _p_expression
+	const statement* get_p_statement()const{return _p_statement;}							//returns const pointer to _p_statement
 	virtual ~iteration_statement3 ();
 
 		
@@ -1147,7 +1225,10 @@ public:
 			multiplicative_expression *_arg__p_multiplicative_expression
 		);
 	additive_expression_item(const additive_expression_item &);
+	virtual std::string name()const{return "additive_expression_item";}			//returns the class name, here "additive_expression"
 	virtual Properties getProperties()const;
+	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
+	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	virtual ~additive_expression_item();
 	
 	
@@ -1181,13 +1262,19 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "additive_expression"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_ADDITIVE_EXPRESSION
 	virtual std::string pattern()const;							//returns the pattern, here "[additive_expression,'+',multiplicative_expression]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
 	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a propertirs list		
+	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
+	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
+	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
 	virtual ~additive_expression ();
 
 };
+
+typedef std::list<additive_expression_item>::iterator additive_expression_iterator;
+typedef std::list<additive_expression_item>::const_iterator additive_expression_const_iterator;
 
 
 			
@@ -1204,6 +1291,7 @@ class external_declaration :public CAst
 {
 public:
 	virtual std::string name()const=0;
+	virtual CAstType typeId()const=0;
 	virtual std::string pattern()const=0;
 	virtual bool isList()const=0;
 	virtual Properties getProperties()const=0;
@@ -1240,10 +1328,12 @@ public:
 				function_definition *_arg__p_function_definition			
 		);
 	virtual std::string name()const;							//returns the class name, here "external_declaration1"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_EXTERNAL_DECLARATION1
 	virtual std::string pattern()const;							//returns the pattern, here "[function_definition]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const function_definition* get_p_function_definition()const{return _p_function_definition;}							//returns const pointer to _p_function_definition
 	virtual ~external_declaration1 ();
 
 		
@@ -1278,10 +1368,12 @@ public:
 				declaration *_arg__p_declaration			
 		);
 	virtual std::string name()const;							//returns the class name, here "external_declaration2"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_EXTERNAL_DECLARATION2
 	virtual std::string pattern()const;							//returns the pattern, here "[declaration]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const declaration* get_p_declaration()const{return _p_declaration;}							//returns const pointer to _p_declaration
 	virtual ~external_declaration2 ();
 
 		
@@ -1301,6 +1393,7 @@ class type_specifier :public CAst
 {
 public:
 	virtual std::string name()const=0;
+	virtual CAstType typeId()const=0;
 	virtual std::string pattern()const=0;
 	virtual bool isList()const=0;
 	virtual Properties getProperties()const=0;
@@ -1337,10 +1430,12 @@ public:
 				Token *_arg__p_token1			
 		);
 	virtual std::string name()const;							//returns the class name, here "type_specifier1"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_TYPE_SPECIFIER1
 	virtual std::string pattern()const;							//returns the pattern, here "[VOID]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
 	virtual ~type_specifier1 ();
 
 		
@@ -1375,10 +1470,12 @@ public:
 				struct_or_union_specifier *_arg__p_struct_or_union_specifier			
 		);
 	virtual std::string name()const;							//returns the class name, here "type_specifier2"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_TYPE_SPECIFIER2
 	virtual std::string pattern()const;							//returns the pattern, here "[struct_or_union_specifier]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const struct_or_union_specifier* get_p_struct_or_union_specifier()const{return _p_struct_or_union_specifier;}							//returns const pointer to _p_struct_or_union_specifier
 	virtual ~type_specifier2 ();
 
 		
@@ -1413,10 +1510,12 @@ public:
 				enum_specifier *_arg__p_enum_specifier			
 		);
 	virtual std::string name()const;							//returns the class name, here "type_specifier3"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_TYPE_SPECIFIER3
 	virtual std::string pattern()const;							//returns the pattern, here "[enum_specifier]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const enum_specifier* get_p_enum_specifier()const{return _p_enum_specifier;}							//returns const pointer to _p_enum_specifier
 	virtual ~type_specifier3 ();
 
 		
@@ -1454,10 +1553,13 @@ public:
 				statement_list *_arg__p_statement_list			
 		);
 	virtual std::string name()const;							//returns the class name, here "compound_statement"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_COMPOUND_STATEMENT
 	virtual std::string pattern()const;							//returns the pattern, here "['{',declaration_list,statement_list,'}']"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const declaration_list* get_p_declaration_list()const{return _p_declaration_list;}							//returns const pointer to _p_declaration_list
+	const statement_list* get_p_statement_list()const{return _p_statement_list;}							//returns const pointer to _p_statement_list
 	virtual ~compound_statement ();
 
 		
@@ -1494,7 +1596,10 @@ public:
 			exclusive_or_expression *_arg__p_exclusive_or_expression
 		);
 	inclusive_or_expression_item(const inclusive_or_expression_item &);
+	virtual std::string name()const{return "inclusive_or_expression_item";}			//returns the class name, here "inclusive_or_expression"
 	virtual Properties getProperties()const;
+	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
+	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	virtual ~inclusive_or_expression_item();
 	
 	
@@ -1527,13 +1632,19 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "inclusive_or_expression"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_INCLUSIVE_OR_EXPRESSION
 	virtual std::string pattern()const;							//returns the pattern, here "[inclusive_or_expression,'|',exclusive_or_expression]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
 	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a propertirs list		
+	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
+	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
+	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
 	virtual ~inclusive_or_expression ();
 
 };
+
+typedef std::list<inclusive_or_expression_item>::iterator inclusive_or_expression_iterator;
+typedef std::list<inclusive_or_expression_item>::const_iterator inclusive_or_expression_const_iterator;
 
 
 			
@@ -1567,7 +1678,10 @@ public:
 			type_qualifier_list *_arg__p_type_qualifier_list
 		);
 	pointer_item(const pointer_item &);
+	virtual std::string name()const{return "pointer_item";}			//returns the class name, here "pointer"
 	virtual Properties getProperties()const;
+	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
+	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	virtual ~pointer_item();
 	
 	
@@ -1600,13 +1714,19 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "pointer"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_POINTER
 	virtual std::string pattern()const;							//returns the pattern, here "['*',type_qualifier_list,pointer]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
 	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a propertirs list		
+	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
+	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
+	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
 	virtual ~pointer ();
 
 };
+
+typedef std::list<pointer_item>::iterator pointer_iterator;
+typedef std::list<pointer_item>::const_iterator pointer_const_iterator;
 
 
 			
@@ -1623,6 +1743,7 @@ class selection_statement :public CAst
 {
 public:
 	virtual std::string name()const=0;
+	virtual CAstType typeId()const=0;
 	virtual std::string pattern()const=0;
 	virtual bool isList()const=0;
 	virtual Properties getProperties()const=0;
@@ -1668,10 +1789,15 @@ public:
 				statement *_arg__p_statement1			
 		);
 	virtual std::string name()const;							//returns the class name, here "selection_statement1"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_SELECTION_STATEMENT1
 	virtual std::string pattern()const;							//returns the pattern, here "[IF,'(',expression,')',statement,ELSE,statement]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const expression* get_p_expression()const{return _p_expression;}							//returns const pointer to _p_expression
+	const statement* get_p_statement()const{return _p_statement;}							//returns const pointer to _p_statement
+	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
+	const statement* get_p_statement1()const{return _p_statement1;}							//returns const pointer to _p_statement1
 	virtual ~selection_statement1 ();
 
 		
@@ -1709,10 +1835,13 @@ public:
 				statement *_arg__p_statement			
 		);
 	virtual std::string name()const;							//returns the class name, here "selection_statement2"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_SELECTION_STATEMENT2
 	virtual std::string pattern()const;							//returns the pattern, here "[SWITCH,'(',expression,')',statement]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const expression* get_p_expression()const{return _p_expression;}							//returns const pointer to _p_expression
+	const statement* get_p_statement()const{return _p_statement;}							//returns const pointer to _p_statement
 	virtual ~selection_statement2 ();
 
 		
@@ -1732,6 +1861,7 @@ class postfix_expression :public CAst
 {
 public:
 	virtual std::string name()const=0;
+	virtual CAstType typeId()const=0;
 	virtual std::string pattern()const=0;
 	virtual bool isList()const=0;
 	virtual Properties getProperties()const=0;
@@ -1771,10 +1901,13 @@ public:
 				expression *_arg__p_expression			
 		);
 	virtual std::string name()const;							//returns the class name, here "postfix_expression1"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_POSTFIX_EXPRESSION1
 	virtual std::string pattern()const;							//returns the pattern, here "[postfix_expression,'[',expression,']']"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const postfix_expression* get_p_postfix_expression()const{return _p_postfix_expression;}							//returns const pointer to _p_postfix_expression
+	const expression* get_p_expression()const{return _p_expression;}							//returns const pointer to _p_expression
 	virtual ~postfix_expression1 ();
 
 		
@@ -1812,10 +1945,13 @@ public:
 				argument_expression_list *_arg__p_argument_expression_list			
 		);
 	virtual std::string name()const;							//returns the class name, here "postfix_expression2"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_POSTFIX_EXPRESSION2
 	virtual std::string pattern()const;							//returns the pattern, here "[postfix_expression,'(',argument_expression_list,')']"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const postfix_expression* get_p_postfix_expression()const{return _p_postfix_expression;}							//returns const pointer to _p_postfix_expression
+	const argument_expression_list* get_p_argument_expression_list()const{return _p_argument_expression_list;}							//returns const pointer to _p_argument_expression_list
 	virtual ~postfix_expression2 ();
 
 		
@@ -1856,10 +1992,14 @@ public:
 				Token *_arg__p_token2			
 		);
 	virtual std::string name()const;							//returns the class name, here "postfix_expression3"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_POSTFIX_EXPRESSION3
 	virtual std::string pattern()const;							//returns the pattern, here "[postfix_expression,'.',IDENTIFIER]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const postfix_expression* get_p_postfix_expression()const{return _p_postfix_expression;}							//returns const pointer to _p_postfix_expression
+	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
+	const Token* get_p_token2()const{return _p_token2;}							//returns const pointer to _p_token2
 	virtual ~postfix_expression3 ();
 
 		
@@ -1897,10 +2037,13 @@ public:
 				Token *_arg__p_token1			
 		);
 	virtual std::string name()const;							//returns the class name, here "postfix_expression4"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_POSTFIX_EXPRESSION4
 	virtual std::string pattern()const;							//returns the pattern, here "[postfix_expression,INC_OP]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const postfix_expression* get_p_postfix_expression()const{return _p_postfix_expression;}							//returns const pointer to _p_postfix_expression
+	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
 	virtual ~postfix_expression4 ();
 
 		
@@ -1935,10 +2078,12 @@ public:
 				primary_expression *_arg__p_primary_expression			
 		);
 	virtual std::string name()const;							//returns the class name, here "postfix_expression5"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_POSTFIX_EXPRESSION5
 	virtual std::string pattern()const;							//returns the pattern, here "[primary_expression]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const primary_expression* get_p_primary_expression()const{return _p_primary_expression;}							//returns const pointer to _p_primary_expression
 	virtual ~postfix_expression5 ();
 
 		
@@ -1975,7 +2120,10 @@ public:
 			equality_expression *_arg__p_equality_expression
 		);
 	and_expression_item(const and_expression_item &);
+	virtual std::string name()const{return "and_expression_item";}			//returns the class name, here "and_expression"
 	virtual Properties getProperties()const;
+	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
+	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	virtual ~and_expression_item();
 	
 	
@@ -2008,13 +2156,19 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "and_expression"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_AND_EXPRESSION
 	virtual std::string pattern()const;							//returns the pattern, here "[and_expression,'&',equality_expression]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
 	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a propertirs list		
+	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
+	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
+	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
 	virtual ~and_expression ();
 
 };
+
+typedef std::list<and_expression_item>::iterator and_expression_iterator;
+typedef std::list<and_expression_item>::const_iterator and_expression_const_iterator;
 
 
 			
@@ -2031,6 +2185,7 @@ class statement :public CAst
 {
 public:
 	virtual std::string name()const=0;
+	virtual CAstType typeId()const=0;
 	virtual std::string pattern()const=0;
 	virtual bool isList()const=0;
 	virtual Properties getProperties()const=0;
@@ -2067,10 +2222,12 @@ public:
 				labeled_statement *_arg__p_labeled_statement			
 		);
 	virtual std::string name()const;							//returns the class name, here "statement1"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_STATEMENT1
 	virtual std::string pattern()const;							//returns the pattern, here "[labeled_statement]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const labeled_statement* get_p_labeled_statement()const{return _p_labeled_statement;}							//returns const pointer to _p_labeled_statement
 	virtual ~statement1 ();
 
 		
@@ -2105,10 +2262,12 @@ public:
 				compound_statement *_arg__p_compound_statement			
 		);
 	virtual std::string name()const;							//returns the class name, here "statement2"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_STATEMENT2
 	virtual std::string pattern()const;							//returns the pattern, here "[compound_statement]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const compound_statement* get_p_compound_statement()const{return _p_compound_statement;}							//returns const pointer to _p_compound_statement
 	virtual ~statement2 ();
 
 		
@@ -2143,10 +2302,12 @@ public:
 				expression_statement *_arg__p_expression_statement			
 		);
 	virtual std::string name()const;							//returns the class name, here "statement3"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_STATEMENT3
 	virtual std::string pattern()const;							//returns the pattern, here "[expression_statement]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const expression_statement* get_p_expression_statement()const{return _p_expression_statement;}							//returns const pointer to _p_expression_statement
 	virtual ~statement3 ();
 
 		
@@ -2181,10 +2342,12 @@ public:
 				selection_statement *_arg__p_selection_statement			
 		);
 	virtual std::string name()const;							//returns the class name, here "statement4"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_STATEMENT4
 	virtual std::string pattern()const;							//returns the pattern, here "[selection_statement]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const selection_statement* get_p_selection_statement()const{return _p_selection_statement;}							//returns const pointer to _p_selection_statement
 	virtual ~statement4 ();
 
 		
@@ -2219,10 +2382,12 @@ public:
 				iteration_statement *_arg__p_iteration_statement			
 		);
 	virtual std::string name()const;							//returns the class name, here "statement5"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_STATEMENT5
 	virtual std::string pattern()const;							//returns the pattern, here "[iteration_statement]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const iteration_statement* get_p_iteration_statement()const{return _p_iteration_statement;}							//returns const pointer to _p_iteration_statement
 	virtual ~statement5 ();
 
 		
@@ -2257,10 +2422,12 @@ public:
 				jump_statement *_arg__p_jump_statement			
 		);
 	virtual std::string name()const;							//returns the class name, here "statement6"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_STATEMENT6
 	virtual std::string pattern()const;							//returns the pattern, here "[jump_statement]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const jump_statement* get_p_jump_statement()const{return _p_jump_statement;}							//returns const pointer to _p_jump_statement
 	virtual ~statement6 ();
 
 		
@@ -2280,6 +2447,7 @@ class cast_expression :public CAst
 {
 public:
 	virtual std::string name()const=0;
+	virtual CAstType typeId()const=0;
 	virtual std::string pattern()const=0;
 	virtual bool isList()const=0;
 	virtual Properties getProperties()const=0;
@@ -2319,10 +2487,13 @@ public:
 				cast_expression *_arg__p_cast_expression			
 		);
 	virtual std::string name()const;							//returns the class name, here "cast_expression1"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_CAST_EXPRESSION1
 	virtual std::string pattern()const;							//returns the pattern, here "['(',type_name,')',cast_expression]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const type_name* get_p_type_name()const{return _p_type_name;}							//returns const pointer to _p_type_name
+	const cast_expression* get_p_cast_expression()const{return _p_cast_expression;}							//returns const pointer to _p_cast_expression
 	virtual ~cast_expression1 ();
 
 		
@@ -2357,10 +2528,12 @@ public:
 				unary_expression *_arg__p_unary_expression			
 		);
 	virtual std::string name()const;							//returns the class name, here "cast_expression2"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_CAST_EXPRESSION2
 	virtual std::string pattern()const;							//returns the pattern, here "[unary_expression]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const unary_expression* get_p_unary_expression()const{return _p_unary_expression;}							//returns const pointer to _p_unary_expression
 	virtual ~cast_expression2 ();
 
 		
@@ -2401,10 +2574,14 @@ public:
 				initializer *_arg__p_initializer			
 		);
 	virtual std::string name()const;							//returns the class name, here "init_declarator"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_INIT_DECLARATOR
 	virtual std::string pattern()const;							//returns the pattern, here "[declarator,'=',initializer]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const declarator* get_p_declarator()const{return _p_declarator;}							//returns const pointer to _p_declarator
+	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
+	const initializer* get_p_initializer()const{return _p_initializer;}							//returns const pointer to _p_initializer
 	virtual ~init_declarator ();
 
 		
@@ -2441,7 +2618,10 @@ public:
 			struct_declarator *_arg__p_struct_declarator
 		);
 	struct_declarator_list_item(const struct_declarator_list_item &);
+	virtual std::string name()const{return "struct_declarator_list_item";}			//returns the class name, here "struct_declarator_list"
 	virtual Properties getProperties()const;
+	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
+	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	virtual ~struct_declarator_list_item();
 	
 	
@@ -2474,13 +2654,19 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "struct_declarator_list"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_STRUCT_DECLARATOR_LIST
 	virtual std::string pattern()const;							//returns the pattern, here "[struct_declarator_list,',',struct_declarator]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
 	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a propertirs list		
+	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
+	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
+	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
 	virtual ~struct_declarator_list ();
 
 };
+
+typedef std::list<struct_declarator_list_item>::iterator struct_declarator_list_iterator;
+typedef std::list<struct_declarator_list_item>::const_iterator struct_declarator_list_const_iterator;
 
 
 			
@@ -2514,7 +2700,10 @@ public:
 			logical_and_expression *_arg__p_logical_and_expression
 		);
 	logical_or_expression_item(const logical_or_expression_item &);
+	virtual std::string name()const{return "logical_or_expression_item";}			//returns the class name, here "logical_or_expression"
 	virtual Properties getProperties()const;
+	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
+	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	virtual ~logical_or_expression_item();
 	
 	
@@ -2547,13 +2736,19 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "logical_or_expression"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_LOGICAL_OR_EXPRESSION
 	virtual std::string pattern()const;							//returns the pattern, here "[logical_or_expression,OR_OP,logical_and_expression]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
 	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a propertirs list		
+	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
+	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
+	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
 	virtual ~logical_or_expression ();
 
 };
+
+typedef std::list<logical_or_expression_item>::iterator logical_or_expression_iterator;
+typedef std::list<logical_or_expression_item>::const_iterator logical_or_expression_const_iterator;
 
 
 			
@@ -2585,10 +2780,12 @@ public:
 				Token *_arg__p_token1			
 		);
 	virtual std::string name()const;							//returns the class name, here "unary_operator"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_UNARY_OPERATOR
 	virtual std::string pattern()const;							//returns the pattern, here "['&']"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
 	virtual ~unary_operator ();
 
 		
@@ -2628,7 +2825,10 @@ public:
 			shift_expression *_arg__p_shift_expression
 		);
 	relational_expression_item(const relational_expression_item &);
+	virtual std::string name()const{return "relational_expression_item";}			//returns the class name, here "relational_expression"
 	virtual Properties getProperties()const;
+	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
+	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	virtual ~relational_expression_item();
 	
 	
@@ -2662,13 +2862,19 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "relational_expression"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_RELATIONAL_EXPRESSION
 	virtual std::string pattern()const;							//returns the pattern, here "[relational_expression,'<',shift_expression]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
 	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a propertirs list		
+	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
+	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
+	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
 	virtual ~relational_expression ();
 
 };
+
+typedef std::list<relational_expression_item>::iterator relational_expression_iterator;
+typedef std::list<relational_expression_item>::const_iterator relational_expression_const_iterator;
 
 
 			
@@ -2700,10 +2906,12 @@ public:
 				Token *_arg__p_token1			
 		);
 	virtual std::string name()const;							//returns the class name, here "struct_or_union"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_STRUCT_OR_UNION
 	virtual std::string pattern()const;							//returns the pattern, here "[STRUCT]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
 	virtual ~struct_or_union ();
 
 		
@@ -2744,10 +2952,14 @@ public:
 				constant_expression *_arg__p_constant_expression			
 		);
 	virtual std::string name()const;							//returns the class name, here "enumerator"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_ENUMERATOR
 	virtual std::string pattern()const;							//returns the pattern, here "[IDENTIFIER,'=',constant_expression]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
+	const Token* get_p_token2()const{return _p_token2;}							//returns const pointer to _p_token2
+	const constant_expression* get_p_constant_expression()const{return _p_constant_expression;}							//returns const pointer to _p_constant_expression
 	virtual ~enumerator ();
 
 		
@@ -2767,6 +2979,7 @@ class assignment_expression :public CAst
 {
 public:
 	virtual std::string name()const=0;
+	virtual CAstType typeId()const=0;
 	virtual std::string pattern()const=0;
 	virtual bool isList()const=0;
 	virtual Properties getProperties()const=0;
@@ -2809,10 +3022,14 @@ public:
 				assignment_expression *_arg__p_assignment_expression			
 		);
 	virtual std::string name()const;							//returns the class name, here "assignment_expression1"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_ASSIGNMENT_EXPRESSION1
 	virtual std::string pattern()const;							//returns the pattern, here "[unary_expression,assignment_operator,assignment_expression]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const unary_expression* get_p_unary_expression()const{return _p_unary_expression;}							//returns const pointer to _p_unary_expression
+	const assignment_operator* get_p_assignment_operator()const{return _p_assignment_operator;}							//returns const pointer to _p_assignment_operator
+	const assignment_expression* get_p_assignment_expression()const{return _p_assignment_expression;}							//returns const pointer to _p_assignment_expression
 	virtual ~assignment_expression1 ();
 
 		
@@ -2847,10 +3064,12 @@ public:
 				conditional_expression *_arg__p_conditional_expression			
 		);
 	virtual std::string name()const;							//returns the class name, here "assignment_expression2"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_ASSIGNMENT_EXPRESSION2
 	virtual std::string pattern()const;							//returns the pattern, here "[conditional_expression]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const conditional_expression* get_p_conditional_expression()const{return _p_conditional_expression;}							//returns const pointer to _p_conditional_expression
 	virtual ~assignment_expression2 ();
 
 		
@@ -2891,10 +3110,14 @@ public:
 				Token *_arg__p_token2			
 		);
 	virtual std::string name()const;							//returns the class name, here "parameter_type_list"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_PARAMETER_TYPE_LIST
 	virtual std::string pattern()const;							//returns the pattern, here "[parameter_list,',',ELLIPSIS]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const parameter_list* get_p_parameter_list()const{return _p_parameter_list;}							//returns const pointer to _p_parameter_list
+	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
+	const Token* get_p_token2()const{return _p_token2;}							//returns const pointer to _p_token2
 	virtual ~parameter_type_list ();
 
 		
@@ -2914,6 +3137,7 @@ class parameter_declaration :public CAst
 {
 public:
 	virtual std::string name()const=0;
+	virtual CAstType typeId()const=0;
 	virtual std::string pattern()const=0;
 	virtual bool isList()const=0;
 	virtual Properties getProperties()const=0;
@@ -2953,10 +3177,13 @@ public:
 				declarator *_arg__p_declarator			
 		);
 	virtual std::string name()const;							//returns the class name, here "parameter_declaration1"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_PARAMETER_DECLARATION1
 	virtual std::string pattern()const;							//returns the pattern, here "[declaration_specifiers,declarator]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const declaration_specifiers* get_p_declaration_specifiers()const{return _p_declaration_specifiers;}							//returns const pointer to _p_declaration_specifiers
+	const declarator* get_p_declarator()const{return _p_declarator;}							//returns const pointer to _p_declarator
 	virtual ~parameter_declaration1 ();
 
 		
@@ -2994,10 +3221,13 @@ public:
 				abstract_declarator *_arg__p_abstract_declarator			
 		);
 	virtual std::string name()const;							//returns the class name, here "parameter_declaration2"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_PARAMETER_DECLARATION2
 	virtual std::string pattern()const;							//returns the pattern, here "[declaration_specifiers,abstract_declarator]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const declaration_specifiers* get_p_declaration_specifiers()const{return _p_declaration_specifiers;}							//returns const pointer to _p_declaration_specifiers
+	const abstract_declarator* get_p_abstract_declarator()const{return _p_abstract_declarator;}							//returns const pointer to _p_abstract_declarator
 	virtual ~parameter_declaration2 ();
 
 		
@@ -3037,7 +3267,10 @@ public:
 			cast_expression *_arg__p_cast_expression
 		);
 	multiplicative_expression_item(const multiplicative_expression_item &);
+	virtual std::string name()const{return "multiplicative_expression_item";}			//returns the class name, here "multiplicative_expression"
 	virtual Properties getProperties()const;
+	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
+	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	virtual ~multiplicative_expression_item();
 	
 	
@@ -3071,13 +3304,19 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "multiplicative_expression"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_MULTIPLICATIVE_EXPRESSION
 	virtual std::string pattern()const;							//returns the pattern, here "[multiplicative_expression,'*',cast_expression]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
 	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a propertirs list		
+	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
+	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
+	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
 	virtual ~multiplicative_expression ();
 
 };
+
+typedef std::list<multiplicative_expression_item>::iterator multiplicative_expression_iterator;
+typedef std::list<multiplicative_expression_item>::const_iterator multiplicative_expression_const_iterator;
 
 
 			
@@ -3111,7 +3350,10 @@ public:
 			type_qualifier *_arg__p_type_qualifier
 		);
 	type_qualifier_list_item(const type_qualifier_list_item &);
+	virtual std::string name()const{return "type_qualifier_list_item";}			//returns the class name, here "type_qualifier_list"
 	virtual Properties getProperties()const;
+	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
+	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	virtual ~type_qualifier_list_item();
 	
 	
@@ -3144,13 +3386,19 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "type_qualifier_list"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_TYPE_QUALIFIER_LIST
 	virtual std::string pattern()const;							//returns the pattern, here "[type_qualifier_list,type_qualifier]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
 	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a propertirs list		
+	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
+	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
+	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
 	virtual ~type_qualifier_list ();
 
 };
+
+typedef std::list<type_qualifier_list_item>::iterator type_qualifier_list_iterator;
+typedef std::list<type_qualifier_list_item>::const_iterator type_qualifier_list_const_iterator;
 
 
 			
@@ -3184,7 +3432,10 @@ public:
 			assignment_expression *_arg__p_assignment_expression
 		);
 	argument_expression_list_item(const argument_expression_list_item &);
+	virtual std::string name()const{return "argument_expression_list_item";}			//returns the class name, here "argument_expression_list"
 	virtual Properties getProperties()const;
+	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
+	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	virtual ~argument_expression_list_item();
 	
 	
@@ -3217,13 +3468,19 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "argument_expression_list"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_ARGUMENT_EXPRESSION_LIST
 	virtual std::string pattern()const;							//returns the pattern, here "[argument_expression_list,',',assignment_expression]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
 	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a propertirs list		
+	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
+	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
+	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
 	virtual ~argument_expression_list ();
 
 };
+
+typedef std::list<argument_expression_list_item>::iterator argument_expression_list_iterator;
+typedef std::list<argument_expression_list_item>::const_iterator argument_expression_list_const_iterator;
 
 
 			
@@ -3240,6 +3497,7 @@ class direct_abstract_declarator :public CAst
 {
 public:
 	virtual std::string name()const=0;
+	virtual CAstType typeId()const=0;
 	virtual std::string pattern()const=0;
 	virtual bool isList()const=0;
 	virtual Properties getProperties()const=0;
@@ -3279,10 +3537,13 @@ public:
 				constant_expression *_arg__p_constant_expression			
 		);
 	virtual std::string name()const;							//returns the class name, here "direct_abstract_declarator1"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_DIRECT_ABSTRACT_DECLARATOR1
 	virtual std::string pattern()const;							//returns the pattern, here "[direct_abstract_declarator,'[',constant_expression,']']"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const direct_abstract_declarator* get_p_direct_abstract_declarator()const{return _p_direct_abstract_declarator;}							//returns const pointer to _p_direct_abstract_declarator
+	const constant_expression* get_p_constant_expression()const{return _p_constant_expression;}							//returns const pointer to _p_constant_expression
 	virtual ~direct_abstract_declarator1 ();
 
 		
@@ -3320,10 +3581,13 @@ public:
 				parameter_type_list *_arg__p_parameter_type_list			
 		);
 	virtual std::string name()const;							//returns the class name, here "direct_abstract_declarator2"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_DIRECT_ABSTRACT_DECLARATOR2
 	virtual std::string pattern()const;							//returns the pattern, here "[direct_abstract_declarator,'(',parameter_type_list,')']"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const direct_abstract_declarator* get_p_direct_abstract_declarator()const{return _p_direct_abstract_declarator;}							//returns const pointer to _p_direct_abstract_declarator
+	const parameter_type_list* get_p_parameter_type_list()const{return _p_parameter_type_list;}							//returns const pointer to _p_parameter_type_list
 	virtual ~direct_abstract_declarator2 ();
 
 		
@@ -3358,10 +3622,12 @@ public:
 				abstract_declarator *_arg__p_abstract_declarator			
 		);
 	virtual std::string name()const;							//returns the class name, here "direct_abstract_declarator3"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_DIRECT_ABSTRACT_DECLARATOR3
 	virtual std::string pattern()const;							//returns the pattern, here "['(',abstract_declarator,')']"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const abstract_declarator* get_p_abstract_declarator()const{return _p_abstract_declarator;}							//returns const pointer to _p_abstract_declarator
 	virtual ~direct_abstract_declarator3 ();
 
 		
@@ -3401,7 +3667,10 @@ public:
 			relational_expression *_arg__p_relational_expression
 		);
 	equality_expression_item(const equality_expression_item &);
+	virtual std::string name()const{return "equality_expression_item";}			//returns the class name, here "equality_expression"
 	virtual Properties getProperties()const;
+	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
+	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	virtual ~equality_expression_item();
 	
 	
@@ -3435,13 +3704,19 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "equality_expression"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_EQUALITY_EXPRESSION
 	virtual std::string pattern()const;							//returns the pattern, here "[equality_expression,EQ_OP,relational_expression]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
 	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a propertirs list		
+	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
+	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
+	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
 	virtual ~equality_expression ();
 
 };
+
+typedef std::list<equality_expression_item>::iterator equality_expression_iterator;
+typedef std::list<equality_expression_item>::const_iterator equality_expression_const_iterator;
 
 
 			
@@ -3458,6 +3733,7 @@ class primary_expression :public CAst
 {
 public:
 	virtual std::string name()const=0;
+	virtual CAstType typeId()const=0;
 	virtual std::string pattern()const=0;
 	virtual bool isList()const=0;
 	virtual Properties getProperties()const=0;
@@ -3494,10 +3770,12 @@ public:
 				expression *_arg__p_expression			
 		);
 	virtual std::string name()const;							//returns the class name, here "primary_expression1"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_PRIMARY_EXPRESSION1
 	virtual std::string pattern()const;							//returns the pattern, here "['(',expression,')']"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const expression* get_p_expression()const{return _p_expression;}							//returns const pointer to _p_expression
 	virtual ~primary_expression1 ();
 
 		
@@ -3532,10 +3810,12 @@ public:
 				Token *_arg__p_token1			
 		);
 	virtual std::string name()const;							//returns the class name, here "primary_expression2"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_PRIMARY_EXPRESSION2
 	virtual std::string pattern()const;							//returns the pattern, here "[IDENTIFIER]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
 	virtual ~primary_expression2 ();
 
 		
@@ -3554,6 +3834,7 @@ class declaration_specifiers :public CAst
 {
 public:
 	virtual std::string name()const=0;
+	virtual CAstType typeId()const=0;
 	virtual std::string pattern()const=0;
 	virtual bool isList()const=0;
 	virtual Properties getProperties()const=0;
@@ -3593,7 +3874,10 @@ public:
 			storage_class_specifier *_arg__p_storage_class_specifier
 		);
 	declaration_specifiers1_item(const declaration_specifiers1_item &);
+	virtual std::string name()const{return "declaration_specifiers1_item";}			//returns the class name, here "declaration_specifiers1"
 	virtual Properties getProperties()const;
+	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
+	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	virtual ~declaration_specifiers1_item();
 	
 	
@@ -3626,13 +3910,19 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "declaration_specifiers1"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_DECLARATION_SPECIFIERS1
 	virtual std::string pattern()const;							//returns the pattern, here "[storage_class_specifier,declaration_specifiers]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
 	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a propertirs list		
+	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
+	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
+	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
 	virtual ~declaration_specifiers1 ();
 
 };
+
+typedef std::list<declaration_specifiers1_item>::iterator declaration_specifiers1_iterator;
+typedef std::list<declaration_specifiers1_item>::const_iterator declaration_specifiers1_const_iterator;
 
 
 			
@@ -3666,7 +3956,10 @@ public:
 			type_specifier *_arg__p_type_specifier
 		);
 	declaration_specifiers2_item(const declaration_specifiers2_item &);
+	virtual std::string name()const{return "declaration_specifiers2_item";}			//returns the class name, here "declaration_specifiers2"
 	virtual Properties getProperties()const;
+	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
+	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	virtual ~declaration_specifiers2_item();
 	
 	
@@ -3699,13 +3992,19 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "declaration_specifiers2"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_DECLARATION_SPECIFIERS2
 	virtual std::string pattern()const;							//returns the pattern, here "[type_specifier,declaration_specifiers]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
 	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a propertirs list		
+	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
+	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
+	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
 	virtual ~declaration_specifiers2 ();
 
 };
+
+typedef std::list<declaration_specifiers2_item>::iterator declaration_specifiers2_iterator;
+typedef std::list<declaration_specifiers2_item>::const_iterator declaration_specifiers2_const_iterator;
 
 
 			
@@ -3739,7 +4038,10 @@ public:
 			type_qualifier *_arg__p_type_qualifier
 		);
 	declaration_specifiers3_item(const declaration_specifiers3_item &);
+	virtual std::string name()const{return "declaration_specifiers3_item";}			//returns the class name, here "declaration_specifiers3"
 	virtual Properties getProperties()const;
+	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
+	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	virtual ~declaration_specifiers3_item();
 	
 	
@@ -3772,13 +4074,19 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "declaration_specifiers3"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_DECLARATION_SPECIFIERS3
 	virtual std::string pattern()const;							//returns the pattern, here "[type_qualifier,declaration_specifiers]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
 	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a propertirs list		
+	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
+	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
+	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
 	virtual ~declaration_specifiers3 ();
 
 };
+
+typedef std::list<declaration_specifiers3_item>::iterator declaration_specifiers3_iterator;
+typedef std::list<declaration_specifiers3_item>::const_iterator declaration_specifiers3_const_iterator;
 
 
 			
@@ -3813,10 +4121,13 @@ public:
 				init_declarator_list *_arg__p_init_declarator_list			
 		);
 	virtual std::string name()const;							//returns the class name, here "declaration"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_DECLARATION
 	virtual std::string pattern()const;							//returns the pattern, here "[declaration_specifiers,init_declarator_list,';']"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const declaration_specifiers* get_p_declaration_specifiers()const{return _p_declaration_specifiers;}							//returns const pointer to _p_declaration_specifiers
+	const init_declarator_list* get_p_init_declarator_list()const{return _p_init_declarator_list;}							//returns const pointer to _p_init_declarator_list
 	virtual ~declaration ();
 
 		
@@ -3836,6 +4147,7 @@ class direct_declarator :public CAst
 {
 public:
 	virtual std::string name()const=0;
+	virtual CAstType typeId()const=0;
 	virtual std::string pattern()const=0;
 	virtual bool isList()const=0;
 	virtual Properties getProperties()const=0;
@@ -3875,10 +4187,13 @@ public:
 				constant_expression *_arg__p_constant_expression			
 		);
 	virtual std::string name()const;							//returns the class name, here "direct_declarator1"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_DIRECT_DECLARATOR1
 	virtual std::string pattern()const;							//returns the pattern, here "[direct_declarator,'[',constant_expression,']']"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const direct_declarator* get_p_direct_declarator()const{return _p_direct_declarator;}							//returns const pointer to _p_direct_declarator
+	const constant_expression* get_p_constant_expression()const{return _p_constant_expression;}							//returns const pointer to _p_constant_expression
 	virtual ~direct_declarator1 ();
 
 		
@@ -3916,10 +4231,13 @@ public:
 				parameter_type_list *_arg__p_parameter_type_list			
 		);
 	virtual std::string name()const;							//returns the class name, here "direct_declarator2"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_DIRECT_DECLARATOR2
 	virtual std::string pattern()const;							//returns the pattern, here "[direct_declarator,'(',parameter_type_list,')']"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const direct_declarator* get_p_direct_declarator()const{return _p_direct_declarator;}							//returns const pointer to _p_direct_declarator
+	const parameter_type_list* get_p_parameter_type_list()const{return _p_parameter_type_list;}							//returns const pointer to _p_parameter_type_list
 	virtual ~direct_declarator2 ();
 
 		
@@ -3957,10 +4275,13 @@ public:
 				identifier_list *_arg__p_identifier_list			
 		);
 	virtual std::string name()const;							//returns the class name, here "direct_declarator3"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_DIRECT_DECLARATOR3
 	virtual std::string pattern()const;							//returns the pattern, here "[direct_declarator,'(',identifier_list,')']"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const direct_declarator* get_p_direct_declarator()const{return _p_direct_declarator;}							//returns const pointer to _p_direct_declarator
+	const identifier_list* get_p_identifier_list()const{return _p_identifier_list;}							//returns const pointer to _p_identifier_list
 	virtual ~direct_declarator3 ();
 
 		
@@ -3995,10 +4316,12 @@ public:
 				declarator *_arg__p_declarator			
 		);
 	virtual std::string name()const;							//returns the class name, here "direct_declarator4"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_DIRECT_DECLARATOR4
 	virtual std::string pattern()const;							//returns the pattern, here "['(',declarator,')']"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const declarator* get_p_declarator()const{return _p_declarator;}							//returns const pointer to _p_declarator
 	virtual ~direct_declarator4 ();
 
 		
@@ -4033,10 +4356,12 @@ public:
 				Token *_arg__p_token1			
 		);
 	virtual std::string name()const;							//returns the class name, here "direct_declarator5"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_DIRECT_DECLARATOR5
 	virtual std::string pattern()const;							//returns the pattern, here "[IDENTIFIER]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
 	virtual ~direct_declarator5 ();
 
 		
@@ -4073,7 +4398,10 @@ public:
 			inclusive_or_expression *_arg__p_inclusive_or_expression
 		);
 	logical_and_expression_item(const logical_and_expression_item &);
+	virtual std::string name()const{return "logical_and_expression_item";}			//returns the class name, here "logical_and_expression"
 	virtual Properties getProperties()const;
+	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
+	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	virtual ~logical_and_expression_item();
 	
 	
@@ -4106,13 +4434,19 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "logical_and_expression"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_LOGICAL_AND_EXPRESSION
 	virtual std::string pattern()const;							//returns the pattern, here "[logical_and_expression,AND_OP,inclusive_or_expression]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
 	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a propertirs list		
+	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
+	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
+	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
 	virtual ~logical_and_expression ();
 
 };
+
+typedef std::list<logical_and_expression_item>::iterator logical_and_expression_iterator;
+typedef std::list<logical_and_expression_item>::const_iterator logical_and_expression_const_iterator;
 
 
 			
@@ -4146,7 +4480,10 @@ public:
 			init_declarator *_arg__p_init_declarator
 		);
 	init_declarator_list_item(const init_declarator_list_item &);
+	virtual std::string name()const{return "init_declarator_list_item";}			//returns the class name, here "init_declarator_list"
 	virtual Properties getProperties()const;
+	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
+	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	virtual ~init_declarator_list_item();
 	
 	
@@ -4179,13 +4516,19 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "init_declarator_list"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_INIT_DECLARATOR_LIST
 	virtual std::string pattern()const;							//returns the pattern, here "[init_declarator_list,',',init_declarator]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
 	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a propertirs list		
+	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
+	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
+	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
 	virtual ~init_declarator_list ();
 
 };
+
+typedef std::list<init_declarator_list_item>::iterator init_declarator_list_iterator;
+typedef std::list<init_declarator_list_item>::const_iterator init_declarator_list_const_iterator;
 
 
 			
@@ -4222,7 +4565,10 @@ public:
 			additive_expression *_arg__p_additive_expression
 		);
 	shift_expression_item(const shift_expression_item &);
+	virtual std::string name()const{return "shift_expression_item";}			//returns the class name, here "shift_expression"
 	virtual Properties getProperties()const;
+	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
+	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	virtual ~shift_expression_item();
 	
 	
@@ -4256,13 +4602,19 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "shift_expression"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_SHIFT_EXPRESSION
 	virtual std::string pattern()const;							//returns the pattern, here "[shift_expression,LEFT_OP,additive_expression]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
 	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a propertirs list		
+	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
+	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
+	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
 	virtual ~shift_expression ();
 
 };
+
+typedef std::list<shift_expression_item>::iterator shift_expression_iterator;
+typedef std::list<shift_expression_item>::const_iterator shift_expression_const_iterator;
 
 
 			
@@ -4296,7 +4648,10 @@ public:
 			Token *_arg__p_token1
 		);
 	identifier_list_item(const identifier_list_item &);
+	virtual std::string name()const{return "identifier_list_item";}			//returns the class name, here "identifier_list"
 	virtual Properties getProperties()const;
+	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
+	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	virtual ~identifier_list_item();
 	
 	
@@ -4329,13 +4684,19 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "identifier_list"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_IDENTIFIER_LIST
 	virtual std::string pattern()const;							//returns the pattern, here "[identifier_list,',',IDENTIFIER]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
 	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a propertirs list		
+	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
+	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
+	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
 	virtual ~identifier_list ();
 
 };
+
+typedef std::list<identifier_list_item>::iterator identifier_list_iterator;
+typedef std::list<identifier_list_item>::const_iterator identifier_list_const_iterator;
 
 
 			
@@ -4352,6 +4713,7 @@ class jump_statement :public CAst
 {
 public:
 	virtual std::string name()const=0;
+	virtual CAstType typeId()const=0;
 	virtual std::string pattern()const=0;
 	virtual bool isList()const=0;
 	virtual Properties getProperties()const=0;
@@ -4388,10 +4750,12 @@ public:
 				Token *_arg__p_token1			
 		);
 	virtual std::string name()const;							//returns the class name, here "jump_statement1"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_JUMP_STATEMENT1
 	virtual std::string pattern()const;							//returns the pattern, here "[GOTO,IDENTIFIER,';']"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
 	virtual ~jump_statement1 ();
 
 		
@@ -4426,10 +4790,12 @@ public:
 				expression *_arg__p_expression			
 		);
 	virtual std::string name()const;							//returns the class name, here "jump_statement2"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_JUMP_STATEMENT2
 	virtual std::string pattern()const;							//returns the pattern, here "[RETURN,expression,';']"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const expression* get_p_expression()const{return _p_expression;}							//returns const pointer to _p_expression
 	virtual ~jump_statement2 ();
 
 		
@@ -4464,10 +4830,12 @@ public:
 				Token *_arg__p_token1			
 		);
 	virtual std::string name()const;							//returns the class name, here "jump_statement3"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_JUMP_STATEMENT3
 	virtual std::string pattern()const;							//returns the pattern, here "[CONTINUE,';']"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
 	virtual ~jump_statement3 ();
 
 		
@@ -4508,10 +4876,14 @@ public:
 				constant_expression *_arg__p_constant_expression			
 		);
 	virtual std::string name()const;							//returns the class name, here "struct_declarator"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_STRUCT_DECLARATOR
 	virtual std::string pattern()const;							//returns the pattern, here "[declarator,':',constant_expression]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const declarator* get_p_declarator()const{return _p_declarator;}							//returns const pointer to _p_declarator
+	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
+	const constant_expression* get_p_constant_expression()const{return _p_constant_expression;}							//returns const pointer to _p_constant_expression
 	virtual ~struct_declarator ();
 
 		
@@ -4555,10 +4927,15 @@ public:
 				compound_statement *_arg__p_compound_statement			
 		);
 	virtual std::string name()const;							//returns the class name, here "function_definition"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_FUNCTION_DEFINITION
 	virtual std::string pattern()const;							//returns the pattern, here "[declaration_specifiers,declarator,declaration_list,compound_statement]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const declaration_specifiers* get_p_declaration_specifiers()const{return _p_declaration_specifiers;}							//returns const pointer to _p_declaration_specifiers
+	const declarator* get_p_declarator()const{return _p_declarator;}							//returns const pointer to _p_declarator
+	const declaration_list* get_p_declaration_list()const{return _p_declaration_list;}							//returns const pointer to _p_declaration_list
+	const compound_statement* get_p_compound_statement()const{return _p_compound_statement;}							//returns const pointer to _p_compound_statement
 	virtual ~function_definition ();
 
 		
@@ -4595,7 +4972,10 @@ public:
 			parameter_declaration *_arg__p_parameter_declaration
 		);
 	parameter_list_item(const parameter_list_item &);
+	virtual std::string name()const{return "parameter_list_item";}			//returns the class name, here "parameter_list"
 	virtual Properties getProperties()const;
+	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
+	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	virtual ~parameter_list_item();
 	
 	
@@ -4628,13 +5008,19 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "parameter_list"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_PARAMETER_LIST
 	virtual std::string pattern()const;							//returns the pattern, here "[parameter_list,',',parameter_declaration]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
 	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a propertirs list		
+	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
+	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
+	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
 	virtual ~parameter_list ();
 
 };
+
+typedef std::list<parameter_list_item>::iterator parameter_list_iterator;
+typedef std::list<parameter_list_item>::const_iterator parameter_list_const_iterator;
 
 
 			
@@ -4675,10 +5061,15 @@ public:
 				Token *_arg__p_token3			
 		);
 	virtual std::string name()const;							//returns the class name, here "enum_specifier"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_ENUM_SPECIFIER
 	virtual std::string pattern()const;							//returns the pattern, here "[ENUM,IDENTIFIER,'{',enumerator_list,'}']"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
+	const Token* get_p_token2()const{return _p_token2;}							//returns const pointer to _p_token2
+	const enumerator_list* get_p_enumerator_list()const{return _p_enumerator_list;}							//returns const pointer to _p_enumerator_list
+	const Token* get_p_token3()const{return _p_token3;}							//returns const pointer to _p_token3
 	virtual ~enum_specifier ();
 
 		
@@ -4713,10 +5104,12 @@ public:
 				Token *_arg__p_token1			
 		);
 	virtual std::string name()const;							//returns the class name, here "type_qualifier"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_TYPE_QUALIFIER
 	virtual std::string pattern()const;							//returns the pattern, here "[CONST]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
 	virtual ~type_qualifier ();
 
 		
@@ -4753,7 +5146,10 @@ public:
 			enumerator *_arg__p_enumerator
 		);
 	enumerator_list_item(const enumerator_list_item &);
+	virtual std::string name()const{return "enumerator_list_item";}			//returns the class name, here "enumerator_list"
 	virtual Properties getProperties()const;
+	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
+	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	virtual ~enumerator_list_item();
 	
 	
@@ -4786,13 +5182,19 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "enumerator_list"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_ENUMERATOR_LIST
 	virtual std::string pattern()const;							//returns the pattern, here "[enumerator_list,',',enumerator]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
 	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a propertirs list		
+	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
+	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
+	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
 	virtual ~enumerator_list ();
 
 };
+
+typedef std::list<enumerator_list_item>::iterator enumerator_list_iterator;
+typedef std::list<enumerator_list_item>::const_iterator enumerator_list_const_iterator;
 
 
 			
@@ -4809,6 +5211,7 @@ class labeled_statement :public CAst
 {
 public:
 	virtual std::string name()const=0;
+	virtual CAstType typeId()const=0;
 	virtual std::string pattern()const=0;
 	virtual bool isList()const=0;
 	virtual Properties getProperties()const=0;
@@ -4848,10 +5251,13 @@ public:
 				statement *_arg__p_statement			
 		);
 	virtual std::string name()const;							//returns the class name, here "labeled_statement1"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_LABELED_STATEMENT1
 	virtual std::string pattern()const;							//returns the pattern, here "[CASE,constant_expression,':',statement]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const constant_expression* get_p_constant_expression()const{return _p_constant_expression;}							//returns const pointer to _p_constant_expression
+	const statement* get_p_statement()const{return _p_statement;}							//returns const pointer to _p_statement
 	virtual ~labeled_statement1 ();
 
 		
@@ -4889,10 +5295,13 @@ public:
 				statement *_arg__p_statement			
 		);
 	virtual std::string name()const;							//returns the class name, here "labeled_statement2"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_LABELED_STATEMENT2
 	virtual std::string pattern()const;							//returns the pattern, here "[IDENTIFIER,':',statement]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
+	const statement* get_p_statement()const{return _p_statement;}							//returns const pointer to _p_statement
 	virtual ~labeled_statement2 ();
 
 		
@@ -4929,7 +5338,10 @@ public:
 			declaration *_arg__p_declaration
 		);
 	declaration_list_item(const declaration_list_item &);
+	virtual std::string name()const{return "declaration_list_item";}			//returns the class name, here "declaration_list"
 	virtual Properties getProperties()const;
+	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
+	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	virtual ~declaration_list_item();
 	
 	
@@ -4962,13 +5374,19 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "declaration_list"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_DECLARATION_LIST
 	virtual std::string pattern()const;							//returns the pattern, here "[declaration_list,declaration]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
 	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a propertirs list		
+	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
+	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
+	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
 	virtual ~declaration_list ();
 
 };
+
+typedef std::list<declaration_list_item>::iterator declaration_list_iterator;
+typedef std::list<declaration_list_item>::const_iterator declaration_list_const_iterator;
 
 
 			
@@ -4984,6 +5402,7 @@ class specifier_qualifier_list :public CAst
 {
 public:
 	virtual std::string name()const=0;
+	virtual CAstType typeId()const=0;
 	virtual std::string pattern()const=0;
 	virtual bool isList()const=0;
 	virtual Properties getProperties()const=0;
@@ -5023,7 +5442,10 @@ public:
 			type_specifier *_arg__p_type_specifier
 		);
 	specifier_qualifier_list1_item(const specifier_qualifier_list1_item &);
+	virtual std::string name()const{return "specifier_qualifier_list1_item";}			//returns the class name, here "specifier_qualifier_list1"
 	virtual Properties getProperties()const;
+	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
+	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	virtual ~specifier_qualifier_list1_item();
 	
 	
@@ -5056,13 +5478,19 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "specifier_qualifier_list1"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_SPECIFIER_QUALIFIER_LIST1
 	virtual std::string pattern()const;							//returns the pattern, here "[type_specifier,specifier_qualifier_list]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
 	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a propertirs list		
+	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
+	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
+	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
 	virtual ~specifier_qualifier_list1 ();
 
 };
+
+typedef std::list<specifier_qualifier_list1_item>::iterator specifier_qualifier_list1_iterator;
+typedef std::list<specifier_qualifier_list1_item>::const_iterator specifier_qualifier_list1_const_iterator;
 
 
 			
@@ -5096,7 +5524,10 @@ public:
 			type_qualifier *_arg__p_type_qualifier
 		);
 	specifier_qualifier_list2_item(const specifier_qualifier_list2_item &);
+	virtual std::string name()const{return "specifier_qualifier_list2_item";}			//returns the class name, here "specifier_qualifier_list2"
 	virtual Properties getProperties()const;
+	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
+	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	virtual ~specifier_qualifier_list2_item();
 	
 	
@@ -5129,13 +5560,19 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "specifier_qualifier_list2"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_SPECIFIER_QUALIFIER_LIST2
 	virtual std::string pattern()const;							//returns the pattern, here "[type_qualifier,specifier_qualifier_list]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
 	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a propertirs list		
+	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
+	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
+	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
 	virtual ~specifier_qualifier_list2 ();
 
 };
+
+typedef std::list<specifier_qualifier_list2_item>::iterator specifier_qualifier_list2_iterator;
+typedef std::list<specifier_qualifier_list2_item>::const_iterator specifier_qualifier_list2_const_iterator;
 
 
 			
@@ -5169,7 +5606,10 @@ public:
 			external_declaration *_arg__p_external_declaration
 		);
 	translation_unit_item(const translation_unit_item &);
+	virtual std::string name()const{return "translation_unit_item";}			//returns the class name, here "translation_unit"
 	virtual Properties getProperties()const;
+	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
+	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	virtual ~translation_unit_item();
 	
 	
@@ -5202,13 +5642,19 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "translation_unit"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_TRANSLATION_UNIT
 	virtual std::string pattern()const;							//returns the pattern, here "[translation_unit,external_declaration]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
 	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a propertirs list		
+	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
+	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
+	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
 	virtual ~translation_unit ();
 
 };
+
+typedef std::list<translation_unit_item>::iterator translation_unit_iterator;
+typedef std::list<translation_unit_item>::const_iterator translation_unit_const_iterator;
 
 
 			
@@ -5240,10 +5686,12 @@ public:
 				conditional_expression *_arg__p_conditional_expression			
 		);
 	virtual std::string name()const;							//returns the class name, here "constant_expression"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_CONSTANT_EXPRESSION
 	virtual std::string pattern()const;							//returns the pattern, here "[conditional_expression]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const conditional_expression* get_p_conditional_expression()const{return _p_conditional_expression;}							//returns const pointer to _p_conditional_expression
 	virtual ~constant_expression ();
 
 		
@@ -5280,7 +5728,10 @@ public:
 			initializer *_arg__p_initializer
 		);
 	initializer_list_item(const initializer_list_item &);
+	virtual std::string name()const{return "initializer_list_item";}			//returns the class name, here "initializer_list"
 	virtual Properties getProperties()const;
+	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
+	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	virtual ~initializer_list_item();
 	
 	
@@ -5313,13 +5764,19 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "initializer_list"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_INITIALIZER_LIST
 	virtual std::string pattern()const;							//returns the pattern, here "[initializer_list,',',initializer]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
 	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a propertirs list		
+	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
+	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
+	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
 	virtual ~initializer_list ();
 
 };
+
+typedef std::list<initializer_list_item>::iterator initializer_list_iterator;
+typedef std::list<initializer_list_item>::const_iterator initializer_list_const_iterator;
 
 
 			
@@ -5353,7 +5810,10 @@ public:
 			statement *_arg__p_statement
 		);
 	statement_list_item(const statement_list_item &);
+	virtual std::string name()const{return "statement_list_item";}			//returns the class name, here "statement_list"
 	virtual Properties getProperties()const;
+	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
+	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	virtual ~statement_list_item();
 	
 	
@@ -5386,13 +5846,19 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "statement_list"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_STATEMENT_LIST
 	virtual std::string pattern()const;							//returns the pattern, here "[statement_list,statement]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
 	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a propertirs list		
+	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
+	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
+	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
 	virtual ~statement_list ();
 
 };
+
+typedef std::list<statement_list_item>::iterator statement_list_iterator;
+typedef std::list<statement_list_item>::const_iterator statement_list_const_iterator;
 
 
 			
@@ -5426,7 +5892,10 @@ public:
 			assignment_expression *_arg__p_assignment_expression
 		);
 	expression_item(const expression_item &);
+	virtual std::string name()const{return "expression_item";}			//returns the class name, here "expression"
 	virtual Properties getProperties()const;
+	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
+	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	virtual ~expression_item();
 	
 	
@@ -5459,13 +5928,19 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "expression"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_EXPRESSION
 	virtual std::string pattern()const;							//returns the pattern, here "[expression,',',assignment_expression]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
 	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a propertirs list		
+	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
+	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
+	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
 	virtual ~expression ();
 
 };
+
+typedef std::list<expression_item>::iterator expression_iterator;
+typedef std::list<expression_item>::const_iterator expression_const_iterator;
 
 
 			
@@ -5500,10 +5975,13 @@ public:
 				direct_declarator *_arg__p_direct_declarator			
 		);
 	virtual std::string name()const;							//returns the class name, here "declarator"
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_DECLARATOR
 	virtual std::string pattern()const;							//returns the pattern, here "[pointer,direct_declarator]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const pointer* get_p_pointer()const{return _p_pointer;}							//returns const pointer to _p_pointer
+	const direct_declarator* get_p_direct_declarator()const{return _p_direct_declarator;}							//returns const pointer to _p_direct_declarator
 	virtual ~declarator ();
 
 		

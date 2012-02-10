@@ -21,9 +21,6 @@ class ConstructorClassCoder(object):
 			self.inheritancePublic=[self.constructor._name]
 		self.pattern=repr(self.constructor.pattern)
 		self.parameters=self.constructor.parameters
-		
-
-
 
 class ListAccumulatorClassCoder(ConstructorClassCoder):
 	pass

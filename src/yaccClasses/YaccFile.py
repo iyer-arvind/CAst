@@ -80,25 +80,16 @@ class YaccFile(object):
 			rule=self.ruleMap[rn]
 			rule.resolve()
 	
-	def dump(self,yaccFileHandle,cHeaderFileHandle,cSourceFileHandle,pythonFileHandle):
+	def dump(self,yaccFileHandle,cHeaderFileHandle,cSourceFileHandle):
 		self._dumpYacc(yaccFileHandle)
 		self._dumpCHeader(cHeaderFileHandle)
 		self._dumpCSource(cSourceFileHandle)
-		self._dumpPython ( pythonFileHandle)
 
 
 	def _dumpPython(self,fh):
-		self.__writeTemplate("pySource",fh)
+		self.writeTemplate("pySource",fh)
 		return
-		
 
-
-		for c in classNames:
-    			fh.write("""
-	Py_INCREF(&PyCAst_type_%(className)s);
-	PyModule_AddObject(m,"%(className)s", (PyObject *)&PyCAst_type_%(className)s);\n"""%{"className":c})
-		fh.write("}")
-		
 	def _dumpYacc(self,fh):
 		for j,t in enumerate([ i for i in self.tokens.values() if i.typeName=='tok' ]):
 			if(j%5==0):
@@ -120,164 +111,20 @@ class YaccFile(object):
 		for c in self.codeLines:
 			fh.write(c+"\n")
 
-	def __writeTemplate(self,template,fh):
-		tmpl=CheetahTemplate(file=cheetahTemplatesDir+"/"+template+".tmpl",searchList=self.__dict__)
+	def writeTemplate(self,template,fh):
+		d={}
+		d.update(self.__dict__)
+		d["fileNameBase"]=os.path.splitext(os.path.basename(fh.name))[0]
+		tmpl=CheetahTemplate(file=cheetahTemplatesDir+"/"+template+".tmpl",searchList=d)
 		fh.write(str(tmpl))
 		
 	def _dumpCHeader(self,fh):
-		self.__writeTemplate("cHeader",fh)
+		self.writeTemplate("cHeader",fh)
 	
 	def _dumpCSource(self,fh):
-		self.cBaseName=os.path.splitext(os.path.basename(fh.name))[0]
-		self.__writeTemplate("cSource",fh)
+		self.writeTemplate("cSource",fh)
 		return
 		for rn in self.ruleMap:
 			rule=self.ruleMap[rn]
 			rule._dumpCSource(fh)
 		fh.write("}//namespace CAst\n")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-baseClass="""
-class CAst;
-
-
-
-
-class Properties:public std::map<std::string,CAst*> 
-{
-private:
-	std::string __className;
-	std::string __tokValue;
-public:
-	Properties(std::string className):
-		std::map<std::string,CAst*>(),
-		__className(className)
-	{}
-	void setTokValue(std::string v){__tokValue=v;}
-	
-	std::ostream& toStream(std::ostream& stream,int indent=0)const;
-	std::string str()const
-	{
-		std::stringstream stream;
-		toStream(stream);
-		return stream.str();
-	}
-};
-inline std::ostream& operator<<(std::ostream &stream,const Properties &p)
-{
-	return p.toStream(stream);
-}
-
-class PropertiesList:public std::list<Properties>
-{
-private:
-	std::string __className;
-public:
-	PropertiesList(std::string className):
-			std::list<Properties>(),
-			__className(className)
-	{}
-			
-	std::ostream& toStream(std::ostream& stream,int indent=0)const
-	{
-		std::string sp="  ";
-		std::string nl="\\n";
-		std::string tab=nl;
-		for(register int i=0;i<indent;i++)tab+=sp;
-		if(size()>1)
-		{
-			stream<<tab<<"{"<<tab<<sp<<"\\\"type\\\":\\\""<<__className<<"\\\","<<tab<<sp<<"\\\"value\\\":";
-			stream<<tab<<sp<<"[";
-			for(const_iterator i=begin();i!=end();i++)
-			{
-				if(i!=begin())stream<<","<<tab<<sp;
-				i->toStream(stream,indent+2);
-			}
-			stream<<tab<<sp<<"]";
-			stream<<tab<<"}";
-		}
-		else
-		{
-			begin()->toStream(stream,indent);
-		}
-		return stream;
-	}
-	std::string str()const
-	{
-		std::stringstream stream;
-		toStream(stream);
-		return stream.str();
-	}
-};
-
-inline std::ostream& operator<<(std::ostream &stream,const PropertiesList &p){return p.toStream(stream);}
-
-class CAst
-{
-	public:
-		virtual std::string name()const=0;
-		virtual bool isList()const=0;
-		virtual PropertiesList getPropertiesList()const=0;
-		virtual Properties getProperties()const=0;
-};
-class Token: public CAst
-{
-	public:
-		virtual std::string name()const=0;
-		virtual bool isList()const			=0;
-		virtual Properties getProperties()const		=0;
-		virtual PropertiesList getPropertiesList()const	=0;
-		Token()
-		{
-			LOG("\\033[32mCREATING\\033[0m Token")
-		}
-		virtual ~Token()
-		{
-			LOG("\\033[31mDELETING\\033[0m Token")
-		}
-};
-class GenericToken:public Token
-{
-	std::string _txt;
-public:
-	
-	virtual std::string name()const{return "token";}
-	GenericToken(std::string txt):
-		Token(),
-		_txt(txt)
-	{
-	}
-	
-	virtual bool isList()const			{return false;}
-	virtual Properties getProperties()const		{Properties p(name());p.setTokValue(_txt);return p;}
-	virtual PropertiesList getPropertiesList()const	{return PropertiesList(name());}
-	virtual ~GenericToken()
-	{
-	}
-};
-inline Token* GetToken(int i,std::string txt)
-{
-	std::cerr<<"\\033[34m GENERATING TOKEN \\033[0m"<<"i"<<i<<" txt:"<<txt;
-	return new GenericToken(txt);
-}
-"""
