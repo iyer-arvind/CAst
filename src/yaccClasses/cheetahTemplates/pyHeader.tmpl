@@ -205,7 +205,6 @@ static PyObject *PyCAst_getter_${cls.className}_${n.replace("_p_","")}(PyObject 
 
 #def SimpleGetSetterTableBlock($cls)
 	#for $t,$n,$p,$v,$i,$v1 in $cls.parameters:
-	
 	{(char*)"$n.replace("_p_","")", (getter)PyCAst_getter_${cls.className}_${n.replace("_p_","")},NULL,(char*)"Parameter ${n.replace("_p_","")}", NULL},
 	#end for
 #end def
@@ -226,13 +225,30 @@ $classHeader($cls,"HaveAst","HaveInit",GetSetterFunctionBlock="SimpleGetSetterFu
 #****                                                                                      ******#
 #************************************************************************************************#
 
+#def ListItemGetSetterFunctionBlock($cls)
+	#for $t,$n,$p,$v,$i,$v1 in $cls.parameters:
+	#if $i!=$cls.constructor.selfIndex:
+static PyObject *PyCAst_getter_${cls.className}_${n.replace("_p_","")}(PyObject *_self);
+	#end if
+	#end for
+#end def
+
+#def ListItemGetSetterTableBlock($cls)
+	#for $t,$n,$p,$v,$i,$v1 in $cls.parameters:
+	#if $i!=$cls.constructor.selfIndex:
+{(char*)"$n.replace("_p_","")", (getter)PyCAst_getter_${cls.className}_${n.replace("_p_","")},NULL,(char*)"Parameter ${n.replace("_p_","")}", NULL},
+	#end if
+	#end for
+#end def
+
+
 #def listClassHeader($cls)
 
 #set itercls={"className":$cls.className+"_iterator"}
 $classHeader($itercls,"HaveIterNext","HaveListMember")
 
-#set itercls={"className":$cls.className+"_item"}
-$classHeader($itercls,"HaveAst")
+#set itemcls={"className":$cls.className+"_item","parameters":$cls.parameters,"constructor":$cls.constructor}
+$classHeader($itemcls,"HaveAst",GetSetterFunctionBlock="ListItemGetSetterFunctionBlock",GetSetterTableBlock="ListItemGetSetterTableBlock")
 
 $classHeader($cls,"HaveAst","HaveIter","HaveInit")
 #end def 

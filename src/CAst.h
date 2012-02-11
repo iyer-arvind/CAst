@@ -210,6 +210,7 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
+	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
 	virtual ~storage_class_specifier ();
 
 		
@@ -250,6 +251,7 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const expression* get_p_expression()const{return _p_expression;}							//returns const pointer to _p_expression
+	      expression* get_p_expression()     {return _p_expression;}							//returns       pointer to _p_expression
 	virtual ~expression_statement ();
 
 		
@@ -293,7 +295,9 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const specifier_qualifier_list* get_p_specifier_qualifier_list()const{return _p_specifier_qualifier_list;}							//returns const pointer to _p_specifier_qualifier_list
+	      specifier_qualifier_list* get_p_specifier_qualifier_list()     {return _p_specifier_qualifier_list;}							//returns       pointer to _p_specifier_qualifier_list
 	const abstract_declarator* get_p_abstract_declarator()const{return _p_abstract_declarator;}							//returns const pointer to _p_abstract_declarator
+	      abstract_declarator* get_p_abstract_declarator()     {return _p_abstract_declarator;}							//returns       pointer to _p_abstract_declarator
 	virtual ~type_name ();
 
 		
@@ -356,6 +360,7 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const type_name* get_p_type_name()const{return _p_type_name;}							//returns const pointer to _p_type_name
+	      type_name* get_p_type_name()     {return _p_type_name;}							//returns       pointer to _p_type_name
 	virtual ~unary_expression1 ();
 
 		
@@ -399,7 +404,9 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
+	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
 	const unary_expression* get_p_unary_expression()const{return _p_unary_expression;}							//returns const pointer to _p_unary_expression
+	      unary_expression* get_p_unary_expression()     {return _p_unary_expression;}							//returns       pointer to _p_unary_expression
 	virtual ~unary_expression2 ();
 
 		
@@ -443,7 +450,9 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const unary_operator* get_p_unary_operator()const{return _p_unary_operator;}							//returns const pointer to _p_unary_operator
+	      unary_operator* get_p_unary_operator()     {return _p_unary_operator;}							//returns       pointer to _p_unary_operator
 	const cast_expression* get_p_cast_expression()const{return _p_cast_expression;}							//returns const pointer to _p_cast_expression
+	      cast_expression* get_p_cast_expression()     {return _p_cast_expression;}							//returns       pointer to _p_cast_expression
 	virtual ~unary_expression3 ();
 
 		
@@ -484,6 +493,7 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const postfix_expression* get_p_postfix_expression()const{return _p_postfix_expression;}							//returns const pointer to _p_postfix_expression
+	      postfix_expression* get_p_postfix_expression()     {return _p_postfix_expression;}							//returns       pointer to _p_postfix_expression
 	virtual ~unary_expression4 ();
 
 		
@@ -527,6 +537,10 @@ public:
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const logical_or_expression* get_p_logical_or_expression()const{return _p_logical_or_expression;}							//returns const pointer to _p_logical_or_expression
+	      logical_or_expression* get_p_logical_or_expression()     {return _p_logical_or_expression;}							//returns const pointer to _p_logical_or_expression
+	const expression* get_p_expression()const{return _p_expression;}							//returns const pointer to _p_expression
+	      expression* get_p_expression()     {return _p_expression;}							//returns const pointer to _p_expression
 	virtual ~conditional_expression_item();
 	
 	
@@ -622,10 +636,15 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const struct_or_union* get_p_struct_or_union()const{return _p_struct_or_union;}							//returns const pointer to _p_struct_or_union
+	      struct_or_union* get_p_struct_or_union()     {return _p_struct_or_union;}							//returns       pointer to _p_struct_or_union
 	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
+	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
 	const Token* get_p_token2()const{return _p_token2;}							//returns const pointer to _p_token2
+	      Token* get_p_token2()     {return _p_token2;}							//returns       pointer to _p_token2
 	const struct_declaration_list* get_p_struct_declaration_list()const{return _p_struct_declaration_list;}							//returns const pointer to _p_struct_declaration_list
+	      struct_declaration_list* get_p_struct_declaration_list()     {return _p_struct_declaration_list;}							//returns       pointer to _p_struct_declaration_list
 	const Token* get_p_token3()const{return _p_token3;}							//returns const pointer to _p_token3
+	      Token* get_p_token3()     {return _p_token3;}							//returns       pointer to _p_token3
 	virtual ~struct_or_union_specifier ();
 
 		
@@ -666,6 +685,8 @@ public:
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const and_expression* get_p_and_expression()const{return _p_and_expression;}							//returns const pointer to _p_and_expression
+	      and_expression* get_p_and_expression()     {return _p_and_expression;}							//returns const pointer to _p_and_expression
 	virtual ~exclusive_or_expression_item();
 	
 	
@@ -773,7 +794,9 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const initializer_list* get_p_initializer_list()const{return _p_initializer_list;}							//returns const pointer to _p_initializer_list
+	      initializer_list* get_p_initializer_list()     {return _p_initializer_list;}							//returns       pointer to _p_initializer_list
 	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
+	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
 	virtual ~initializer1 ();
 
 		
@@ -814,6 +837,7 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const assignment_expression* get_p_assignment_expression()const{return _p_assignment_expression;}							//returns const pointer to _p_assignment_expression
+	      assignment_expression* get_p_assignment_expression()     {return _p_assignment_expression;}							//returns       pointer to _p_assignment_expression
 	virtual ~initializer2 ();
 
 		
@@ -854,6 +878,8 @@ public:
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const struct_declaration* get_p_struct_declaration()const{return _p_struct_declaration;}							//returns const pointer to _p_struct_declaration
+	      struct_declaration* get_p_struct_declaration()     {return _p_struct_declaration;}							//returns const pointer to _p_struct_declaration
 	virtual ~struct_declaration_list_item();
 	
 	
@@ -936,6 +962,7 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
+	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
 	virtual ~assignment_operator ();
 
 		
@@ -979,7 +1006,9 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const specifier_qualifier_list* get_p_specifier_qualifier_list()const{return _p_specifier_qualifier_list;}							//returns const pointer to _p_specifier_qualifier_list
+	      specifier_qualifier_list* get_p_specifier_qualifier_list()     {return _p_specifier_qualifier_list;}							//returns       pointer to _p_specifier_qualifier_list
 	const struct_declarator_list* get_p_struct_declarator_list()const{return _p_struct_declarator_list;}							//returns const pointer to _p_struct_declarator_list
+	      struct_declarator_list* get_p_struct_declarator_list()     {return _p_struct_declarator_list;}							//returns       pointer to _p_struct_declarator_list
 	virtual ~struct_declaration ();
 
 		
@@ -1023,7 +1052,9 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const pointer* get_p_pointer()const{return _p_pointer;}							//returns const pointer to _p_pointer
+	      pointer* get_p_pointer()     {return _p_pointer;}							//returns       pointer to _p_pointer
 	const direct_abstract_declarator* get_p_direct_abstract_declarator()const{return _p_direct_abstract_declarator;}							//returns const pointer to _p_direct_abstract_declarator
+	      direct_abstract_declarator* get_p_direct_abstract_declarator()     {return _p_direct_abstract_declarator;}							//returns       pointer to _p_direct_abstract_declarator
 	virtual ~abstract_declarator ();
 
 		
@@ -1089,7 +1120,9 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const statement* get_p_statement()const{return _p_statement;}							//returns const pointer to _p_statement
+	      statement* get_p_statement()     {return _p_statement;}							//returns       pointer to _p_statement
 	const expression* get_p_expression()const{return _p_expression;}							//returns const pointer to _p_expression
+	      expression* get_p_expression()     {return _p_expression;}							//returns       pointer to _p_expression
 	virtual ~iteration_statement1 ();
 
 		
@@ -1139,9 +1172,13 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const expression_statement* get_p_expression_statement()const{return _p_expression_statement;}							//returns const pointer to _p_expression_statement
+	      expression_statement* get_p_expression_statement()     {return _p_expression_statement;}							//returns       pointer to _p_expression_statement
 	const expression_statement* get_p_expression_statement1()const{return _p_expression_statement1;}							//returns const pointer to _p_expression_statement1
+	      expression_statement* get_p_expression_statement1()     {return _p_expression_statement1;}							//returns       pointer to _p_expression_statement1
 	const expression* get_p_expression()const{return _p_expression;}							//returns const pointer to _p_expression
+	      expression* get_p_expression()     {return _p_expression;}							//returns       pointer to _p_expression
 	const statement* get_p_statement()const{return _p_statement;}							//returns const pointer to _p_statement
+	      statement* get_p_statement()     {return _p_statement;}							//returns       pointer to _p_statement
 	virtual ~iteration_statement2 ();
 
 		
@@ -1185,7 +1222,9 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const expression* get_p_expression()const{return _p_expression;}							//returns const pointer to _p_expression
+	      expression* get_p_expression()     {return _p_expression;}							//returns       pointer to _p_expression
 	const statement* get_p_statement()const{return _p_statement;}							//returns const pointer to _p_statement
+	      statement* get_p_statement()     {return _p_statement;}							//returns       pointer to _p_statement
 	virtual ~iteration_statement3 ();
 
 		
@@ -1229,6 +1268,10 @@ public:
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
+	      Token* get_p_token1()     {return _p_token1;}							//returns const pointer to _p_token1
+	const multiplicative_expression* get_p_multiplicative_expression()const{return _p_multiplicative_expression;}							//returns const pointer to _p_multiplicative_expression
+	      multiplicative_expression* get_p_multiplicative_expression()     {return _p_multiplicative_expression;}							//returns const pointer to _p_multiplicative_expression
 	virtual ~additive_expression_item();
 	
 	
@@ -1334,6 +1377,7 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const function_definition* get_p_function_definition()const{return _p_function_definition;}							//returns const pointer to _p_function_definition
+	      function_definition* get_p_function_definition()     {return _p_function_definition;}							//returns       pointer to _p_function_definition
 	virtual ~external_declaration1 ();
 
 		
@@ -1374,6 +1418,7 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const declaration* get_p_declaration()const{return _p_declaration;}							//returns const pointer to _p_declaration
+	      declaration* get_p_declaration()     {return _p_declaration;}							//returns       pointer to _p_declaration
 	virtual ~external_declaration2 ();
 
 		
@@ -1436,6 +1481,7 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
+	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
 	virtual ~type_specifier1 ();
 
 		
@@ -1476,6 +1522,7 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const struct_or_union_specifier* get_p_struct_or_union_specifier()const{return _p_struct_or_union_specifier;}							//returns const pointer to _p_struct_or_union_specifier
+	      struct_or_union_specifier* get_p_struct_or_union_specifier()     {return _p_struct_or_union_specifier;}							//returns       pointer to _p_struct_or_union_specifier
 	virtual ~type_specifier2 ();
 
 		
@@ -1516,6 +1563,7 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const enum_specifier* get_p_enum_specifier()const{return _p_enum_specifier;}							//returns const pointer to _p_enum_specifier
+	      enum_specifier* get_p_enum_specifier()     {return _p_enum_specifier;}							//returns       pointer to _p_enum_specifier
 	virtual ~type_specifier3 ();
 
 		
@@ -1559,7 +1607,9 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const declaration_list* get_p_declaration_list()const{return _p_declaration_list;}							//returns const pointer to _p_declaration_list
+	      declaration_list* get_p_declaration_list()     {return _p_declaration_list;}							//returns       pointer to _p_declaration_list
 	const statement_list* get_p_statement_list()const{return _p_statement_list;}							//returns const pointer to _p_statement_list
+	      statement_list* get_p_statement_list()     {return _p_statement_list;}							//returns       pointer to _p_statement_list
 	virtual ~compound_statement ();
 
 		
@@ -1600,6 +1650,8 @@ public:
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const exclusive_or_expression* get_p_exclusive_or_expression()const{return _p_exclusive_or_expression;}							//returns const pointer to _p_exclusive_or_expression
+	      exclusive_or_expression* get_p_exclusive_or_expression()     {return _p_exclusive_or_expression;}							//returns const pointer to _p_exclusive_or_expression
 	virtual ~inclusive_or_expression_item();
 	
 	
@@ -1682,6 +1734,8 @@ public:
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const type_qualifier_list* get_p_type_qualifier_list()const{return _p_type_qualifier_list;}							//returns const pointer to _p_type_qualifier_list
+	      type_qualifier_list* get_p_type_qualifier_list()     {return _p_type_qualifier_list;}							//returns const pointer to _p_type_qualifier_list
 	virtual ~pointer_item();
 	
 	
@@ -1795,9 +1849,13 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const expression* get_p_expression()const{return _p_expression;}							//returns const pointer to _p_expression
+	      expression* get_p_expression()     {return _p_expression;}							//returns       pointer to _p_expression
 	const statement* get_p_statement()const{return _p_statement;}							//returns const pointer to _p_statement
+	      statement* get_p_statement()     {return _p_statement;}							//returns       pointer to _p_statement
 	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
+	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
 	const statement* get_p_statement1()const{return _p_statement1;}							//returns const pointer to _p_statement1
+	      statement* get_p_statement1()     {return _p_statement1;}							//returns       pointer to _p_statement1
 	virtual ~selection_statement1 ();
 
 		
@@ -1841,7 +1899,9 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const expression* get_p_expression()const{return _p_expression;}							//returns const pointer to _p_expression
+	      expression* get_p_expression()     {return _p_expression;}							//returns       pointer to _p_expression
 	const statement* get_p_statement()const{return _p_statement;}							//returns const pointer to _p_statement
+	      statement* get_p_statement()     {return _p_statement;}							//returns       pointer to _p_statement
 	virtual ~selection_statement2 ();
 
 		
@@ -1907,7 +1967,9 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const postfix_expression* get_p_postfix_expression()const{return _p_postfix_expression;}							//returns const pointer to _p_postfix_expression
+	      postfix_expression* get_p_postfix_expression()     {return _p_postfix_expression;}							//returns       pointer to _p_postfix_expression
 	const expression* get_p_expression()const{return _p_expression;}							//returns const pointer to _p_expression
+	      expression* get_p_expression()     {return _p_expression;}							//returns       pointer to _p_expression
 	virtual ~postfix_expression1 ();
 
 		
@@ -1951,7 +2013,9 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const postfix_expression* get_p_postfix_expression()const{return _p_postfix_expression;}							//returns const pointer to _p_postfix_expression
+	      postfix_expression* get_p_postfix_expression()     {return _p_postfix_expression;}							//returns       pointer to _p_postfix_expression
 	const argument_expression_list* get_p_argument_expression_list()const{return _p_argument_expression_list;}							//returns const pointer to _p_argument_expression_list
+	      argument_expression_list* get_p_argument_expression_list()     {return _p_argument_expression_list;}							//returns       pointer to _p_argument_expression_list
 	virtual ~postfix_expression2 ();
 
 		
@@ -1998,8 +2062,11 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const postfix_expression* get_p_postfix_expression()const{return _p_postfix_expression;}							//returns const pointer to _p_postfix_expression
+	      postfix_expression* get_p_postfix_expression()     {return _p_postfix_expression;}							//returns       pointer to _p_postfix_expression
 	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
+	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
 	const Token* get_p_token2()const{return _p_token2;}							//returns const pointer to _p_token2
+	      Token* get_p_token2()     {return _p_token2;}							//returns       pointer to _p_token2
 	virtual ~postfix_expression3 ();
 
 		
@@ -2043,7 +2110,9 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const postfix_expression* get_p_postfix_expression()const{return _p_postfix_expression;}							//returns const pointer to _p_postfix_expression
+	      postfix_expression* get_p_postfix_expression()     {return _p_postfix_expression;}							//returns       pointer to _p_postfix_expression
 	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
+	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
 	virtual ~postfix_expression4 ();
 
 		
@@ -2084,6 +2153,7 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const primary_expression* get_p_primary_expression()const{return _p_primary_expression;}							//returns const pointer to _p_primary_expression
+	      primary_expression* get_p_primary_expression()     {return _p_primary_expression;}							//returns       pointer to _p_primary_expression
 	virtual ~postfix_expression5 ();
 
 		
@@ -2124,6 +2194,8 @@ public:
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const equality_expression* get_p_equality_expression()const{return _p_equality_expression;}							//returns const pointer to _p_equality_expression
+	      equality_expression* get_p_equality_expression()     {return _p_equality_expression;}							//returns const pointer to _p_equality_expression
 	virtual ~and_expression_item();
 	
 	
@@ -2228,6 +2300,7 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const labeled_statement* get_p_labeled_statement()const{return _p_labeled_statement;}							//returns const pointer to _p_labeled_statement
+	      labeled_statement* get_p_labeled_statement()     {return _p_labeled_statement;}							//returns       pointer to _p_labeled_statement
 	virtual ~statement1 ();
 
 		
@@ -2268,6 +2341,7 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const compound_statement* get_p_compound_statement()const{return _p_compound_statement;}							//returns const pointer to _p_compound_statement
+	      compound_statement* get_p_compound_statement()     {return _p_compound_statement;}							//returns       pointer to _p_compound_statement
 	virtual ~statement2 ();
 
 		
@@ -2308,6 +2382,7 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const expression_statement* get_p_expression_statement()const{return _p_expression_statement;}							//returns const pointer to _p_expression_statement
+	      expression_statement* get_p_expression_statement()     {return _p_expression_statement;}							//returns       pointer to _p_expression_statement
 	virtual ~statement3 ();
 
 		
@@ -2348,6 +2423,7 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const selection_statement* get_p_selection_statement()const{return _p_selection_statement;}							//returns const pointer to _p_selection_statement
+	      selection_statement* get_p_selection_statement()     {return _p_selection_statement;}							//returns       pointer to _p_selection_statement
 	virtual ~statement4 ();
 
 		
@@ -2388,6 +2464,7 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const iteration_statement* get_p_iteration_statement()const{return _p_iteration_statement;}							//returns const pointer to _p_iteration_statement
+	      iteration_statement* get_p_iteration_statement()     {return _p_iteration_statement;}							//returns       pointer to _p_iteration_statement
 	virtual ~statement5 ();
 
 		
@@ -2428,6 +2505,7 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const jump_statement* get_p_jump_statement()const{return _p_jump_statement;}							//returns const pointer to _p_jump_statement
+	      jump_statement* get_p_jump_statement()     {return _p_jump_statement;}							//returns       pointer to _p_jump_statement
 	virtual ~statement6 ();
 
 		
@@ -2493,7 +2571,9 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const type_name* get_p_type_name()const{return _p_type_name;}							//returns const pointer to _p_type_name
+	      type_name* get_p_type_name()     {return _p_type_name;}							//returns       pointer to _p_type_name
 	const cast_expression* get_p_cast_expression()const{return _p_cast_expression;}							//returns const pointer to _p_cast_expression
+	      cast_expression* get_p_cast_expression()     {return _p_cast_expression;}							//returns       pointer to _p_cast_expression
 	virtual ~cast_expression1 ();
 
 		
@@ -2534,6 +2614,7 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const unary_expression* get_p_unary_expression()const{return _p_unary_expression;}							//returns const pointer to _p_unary_expression
+	      unary_expression* get_p_unary_expression()     {return _p_unary_expression;}							//returns       pointer to _p_unary_expression
 	virtual ~cast_expression2 ();
 
 		
@@ -2580,8 +2661,11 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const declarator* get_p_declarator()const{return _p_declarator;}							//returns const pointer to _p_declarator
+	      declarator* get_p_declarator()     {return _p_declarator;}							//returns       pointer to _p_declarator
 	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
+	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
 	const initializer* get_p_initializer()const{return _p_initializer;}							//returns const pointer to _p_initializer
+	      initializer* get_p_initializer()     {return _p_initializer;}							//returns       pointer to _p_initializer
 	virtual ~init_declarator ();
 
 		
@@ -2622,6 +2706,8 @@ public:
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const struct_declarator* get_p_struct_declarator()const{return _p_struct_declarator;}							//returns const pointer to _p_struct_declarator
+	      struct_declarator* get_p_struct_declarator()     {return _p_struct_declarator;}							//returns const pointer to _p_struct_declarator
 	virtual ~struct_declarator_list_item();
 	
 	
@@ -2704,6 +2790,8 @@ public:
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const logical_and_expression* get_p_logical_and_expression()const{return _p_logical_and_expression;}							//returns const pointer to _p_logical_and_expression
+	      logical_and_expression* get_p_logical_and_expression()     {return _p_logical_and_expression;}							//returns const pointer to _p_logical_and_expression
 	virtual ~logical_or_expression_item();
 	
 	
@@ -2786,6 +2874,7 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
+	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
 	virtual ~unary_operator ();
 
 		
@@ -2829,6 +2918,10 @@ public:
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
+	      Token* get_p_token1()     {return _p_token1;}							//returns const pointer to _p_token1
+	const shift_expression* get_p_shift_expression()const{return _p_shift_expression;}							//returns const pointer to _p_shift_expression
+	      shift_expression* get_p_shift_expression()     {return _p_shift_expression;}							//returns const pointer to _p_shift_expression
 	virtual ~relational_expression_item();
 	
 	
@@ -2912,6 +3005,7 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
+	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
 	virtual ~struct_or_union ();
 
 		
@@ -2958,8 +3052,11 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
+	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
 	const Token* get_p_token2()const{return _p_token2;}							//returns const pointer to _p_token2
+	      Token* get_p_token2()     {return _p_token2;}							//returns       pointer to _p_token2
 	const constant_expression* get_p_constant_expression()const{return _p_constant_expression;}							//returns const pointer to _p_constant_expression
+	      constant_expression* get_p_constant_expression()     {return _p_constant_expression;}							//returns       pointer to _p_constant_expression
 	virtual ~enumerator ();
 
 		
@@ -3028,8 +3125,11 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const unary_expression* get_p_unary_expression()const{return _p_unary_expression;}							//returns const pointer to _p_unary_expression
+	      unary_expression* get_p_unary_expression()     {return _p_unary_expression;}							//returns       pointer to _p_unary_expression
 	const assignment_operator* get_p_assignment_operator()const{return _p_assignment_operator;}							//returns const pointer to _p_assignment_operator
+	      assignment_operator* get_p_assignment_operator()     {return _p_assignment_operator;}							//returns       pointer to _p_assignment_operator
 	const assignment_expression* get_p_assignment_expression()const{return _p_assignment_expression;}							//returns const pointer to _p_assignment_expression
+	      assignment_expression* get_p_assignment_expression()     {return _p_assignment_expression;}							//returns       pointer to _p_assignment_expression
 	virtual ~assignment_expression1 ();
 
 		
@@ -3070,6 +3170,7 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const conditional_expression* get_p_conditional_expression()const{return _p_conditional_expression;}							//returns const pointer to _p_conditional_expression
+	      conditional_expression* get_p_conditional_expression()     {return _p_conditional_expression;}							//returns       pointer to _p_conditional_expression
 	virtual ~assignment_expression2 ();
 
 		
@@ -3116,8 +3217,11 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const parameter_list* get_p_parameter_list()const{return _p_parameter_list;}							//returns const pointer to _p_parameter_list
+	      parameter_list* get_p_parameter_list()     {return _p_parameter_list;}							//returns       pointer to _p_parameter_list
 	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
+	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
 	const Token* get_p_token2()const{return _p_token2;}							//returns const pointer to _p_token2
+	      Token* get_p_token2()     {return _p_token2;}							//returns       pointer to _p_token2
 	virtual ~parameter_type_list ();
 
 		
@@ -3183,7 +3287,9 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const declaration_specifiers* get_p_declaration_specifiers()const{return _p_declaration_specifiers;}							//returns const pointer to _p_declaration_specifiers
+	      declaration_specifiers* get_p_declaration_specifiers()     {return _p_declaration_specifiers;}							//returns       pointer to _p_declaration_specifiers
 	const declarator* get_p_declarator()const{return _p_declarator;}							//returns const pointer to _p_declarator
+	      declarator* get_p_declarator()     {return _p_declarator;}							//returns       pointer to _p_declarator
 	virtual ~parameter_declaration1 ();
 
 		
@@ -3227,7 +3333,9 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const declaration_specifiers* get_p_declaration_specifiers()const{return _p_declaration_specifiers;}							//returns const pointer to _p_declaration_specifiers
+	      declaration_specifiers* get_p_declaration_specifiers()     {return _p_declaration_specifiers;}							//returns       pointer to _p_declaration_specifiers
 	const abstract_declarator* get_p_abstract_declarator()const{return _p_abstract_declarator;}							//returns const pointer to _p_abstract_declarator
+	      abstract_declarator* get_p_abstract_declarator()     {return _p_abstract_declarator;}							//returns       pointer to _p_abstract_declarator
 	virtual ~parameter_declaration2 ();
 
 		
@@ -3271,6 +3379,10 @@ public:
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
+	      Token* get_p_token1()     {return _p_token1;}							//returns const pointer to _p_token1
+	const cast_expression* get_p_cast_expression()const{return _p_cast_expression;}							//returns const pointer to _p_cast_expression
+	      cast_expression* get_p_cast_expression()     {return _p_cast_expression;}							//returns const pointer to _p_cast_expression
 	virtual ~multiplicative_expression_item();
 	
 	
@@ -3354,6 +3466,8 @@ public:
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const type_qualifier* get_p_type_qualifier()const{return _p_type_qualifier;}							//returns const pointer to _p_type_qualifier
+	      type_qualifier* get_p_type_qualifier()     {return _p_type_qualifier;}							//returns const pointer to _p_type_qualifier
 	virtual ~type_qualifier_list_item();
 	
 	
@@ -3436,6 +3550,8 @@ public:
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const assignment_expression* get_p_assignment_expression()const{return _p_assignment_expression;}							//returns const pointer to _p_assignment_expression
+	      assignment_expression* get_p_assignment_expression()     {return _p_assignment_expression;}							//returns const pointer to _p_assignment_expression
 	virtual ~argument_expression_list_item();
 	
 	
@@ -3543,7 +3659,9 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const direct_abstract_declarator* get_p_direct_abstract_declarator()const{return _p_direct_abstract_declarator;}							//returns const pointer to _p_direct_abstract_declarator
+	      direct_abstract_declarator* get_p_direct_abstract_declarator()     {return _p_direct_abstract_declarator;}							//returns       pointer to _p_direct_abstract_declarator
 	const constant_expression* get_p_constant_expression()const{return _p_constant_expression;}							//returns const pointer to _p_constant_expression
+	      constant_expression* get_p_constant_expression()     {return _p_constant_expression;}							//returns       pointer to _p_constant_expression
 	virtual ~direct_abstract_declarator1 ();
 
 		
@@ -3587,7 +3705,9 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const direct_abstract_declarator* get_p_direct_abstract_declarator()const{return _p_direct_abstract_declarator;}							//returns const pointer to _p_direct_abstract_declarator
+	      direct_abstract_declarator* get_p_direct_abstract_declarator()     {return _p_direct_abstract_declarator;}							//returns       pointer to _p_direct_abstract_declarator
 	const parameter_type_list* get_p_parameter_type_list()const{return _p_parameter_type_list;}							//returns const pointer to _p_parameter_type_list
+	      parameter_type_list* get_p_parameter_type_list()     {return _p_parameter_type_list;}							//returns       pointer to _p_parameter_type_list
 	virtual ~direct_abstract_declarator2 ();
 
 		
@@ -3628,6 +3748,7 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const abstract_declarator* get_p_abstract_declarator()const{return _p_abstract_declarator;}							//returns const pointer to _p_abstract_declarator
+	      abstract_declarator* get_p_abstract_declarator()     {return _p_abstract_declarator;}							//returns       pointer to _p_abstract_declarator
 	virtual ~direct_abstract_declarator3 ();
 
 		
@@ -3671,6 +3792,10 @@ public:
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
+	      Token* get_p_token1()     {return _p_token1;}							//returns const pointer to _p_token1
+	const relational_expression* get_p_relational_expression()const{return _p_relational_expression;}							//returns const pointer to _p_relational_expression
+	      relational_expression* get_p_relational_expression()     {return _p_relational_expression;}							//returns const pointer to _p_relational_expression
 	virtual ~equality_expression_item();
 	
 	
@@ -3776,6 +3901,7 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const expression* get_p_expression()const{return _p_expression;}							//returns const pointer to _p_expression
+	      expression* get_p_expression()     {return _p_expression;}							//returns       pointer to _p_expression
 	virtual ~primary_expression1 ();
 
 		
@@ -3816,6 +3942,7 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
+	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
 	virtual ~primary_expression2 ();
 
 		
@@ -3878,6 +4005,8 @@ public:
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const storage_class_specifier* get_p_storage_class_specifier()const{return _p_storage_class_specifier;}							//returns const pointer to _p_storage_class_specifier
+	      storage_class_specifier* get_p_storage_class_specifier()     {return _p_storage_class_specifier;}							//returns const pointer to _p_storage_class_specifier
 	virtual ~declaration_specifiers1_item();
 	
 	
@@ -3960,6 +4089,8 @@ public:
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const type_specifier* get_p_type_specifier()const{return _p_type_specifier;}							//returns const pointer to _p_type_specifier
+	      type_specifier* get_p_type_specifier()     {return _p_type_specifier;}							//returns const pointer to _p_type_specifier
 	virtual ~declaration_specifiers2_item();
 	
 	
@@ -4042,6 +4173,8 @@ public:
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const type_qualifier* get_p_type_qualifier()const{return _p_type_qualifier;}							//returns const pointer to _p_type_qualifier
+	      type_qualifier* get_p_type_qualifier()     {return _p_type_qualifier;}							//returns const pointer to _p_type_qualifier
 	virtual ~declaration_specifiers3_item();
 	
 	
@@ -4127,7 +4260,9 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const declaration_specifiers* get_p_declaration_specifiers()const{return _p_declaration_specifiers;}							//returns const pointer to _p_declaration_specifiers
+	      declaration_specifiers* get_p_declaration_specifiers()     {return _p_declaration_specifiers;}							//returns       pointer to _p_declaration_specifiers
 	const init_declarator_list* get_p_init_declarator_list()const{return _p_init_declarator_list;}							//returns const pointer to _p_init_declarator_list
+	      init_declarator_list* get_p_init_declarator_list()     {return _p_init_declarator_list;}							//returns       pointer to _p_init_declarator_list
 	virtual ~declaration ();
 
 		
@@ -4193,7 +4328,9 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const direct_declarator* get_p_direct_declarator()const{return _p_direct_declarator;}							//returns const pointer to _p_direct_declarator
+	      direct_declarator* get_p_direct_declarator()     {return _p_direct_declarator;}							//returns       pointer to _p_direct_declarator
 	const constant_expression* get_p_constant_expression()const{return _p_constant_expression;}							//returns const pointer to _p_constant_expression
+	      constant_expression* get_p_constant_expression()     {return _p_constant_expression;}							//returns       pointer to _p_constant_expression
 	virtual ~direct_declarator1 ();
 
 		
@@ -4237,7 +4374,9 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const direct_declarator* get_p_direct_declarator()const{return _p_direct_declarator;}							//returns const pointer to _p_direct_declarator
+	      direct_declarator* get_p_direct_declarator()     {return _p_direct_declarator;}							//returns       pointer to _p_direct_declarator
 	const parameter_type_list* get_p_parameter_type_list()const{return _p_parameter_type_list;}							//returns const pointer to _p_parameter_type_list
+	      parameter_type_list* get_p_parameter_type_list()     {return _p_parameter_type_list;}							//returns       pointer to _p_parameter_type_list
 	virtual ~direct_declarator2 ();
 
 		
@@ -4281,7 +4420,9 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const direct_declarator* get_p_direct_declarator()const{return _p_direct_declarator;}							//returns const pointer to _p_direct_declarator
+	      direct_declarator* get_p_direct_declarator()     {return _p_direct_declarator;}							//returns       pointer to _p_direct_declarator
 	const identifier_list* get_p_identifier_list()const{return _p_identifier_list;}							//returns const pointer to _p_identifier_list
+	      identifier_list* get_p_identifier_list()     {return _p_identifier_list;}							//returns       pointer to _p_identifier_list
 	virtual ~direct_declarator3 ();
 
 		
@@ -4322,6 +4463,7 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const declarator* get_p_declarator()const{return _p_declarator;}							//returns const pointer to _p_declarator
+	      declarator* get_p_declarator()     {return _p_declarator;}							//returns       pointer to _p_declarator
 	virtual ~direct_declarator4 ();
 
 		
@@ -4362,6 +4504,7 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
+	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
 	virtual ~direct_declarator5 ();
 
 		
@@ -4402,6 +4545,8 @@ public:
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const inclusive_or_expression* get_p_inclusive_or_expression()const{return _p_inclusive_or_expression;}							//returns const pointer to _p_inclusive_or_expression
+	      inclusive_or_expression* get_p_inclusive_or_expression()     {return _p_inclusive_or_expression;}							//returns const pointer to _p_inclusive_or_expression
 	virtual ~logical_and_expression_item();
 	
 	
@@ -4484,6 +4629,8 @@ public:
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const init_declarator* get_p_init_declarator()const{return _p_init_declarator;}							//returns const pointer to _p_init_declarator
+	      init_declarator* get_p_init_declarator()     {return _p_init_declarator;}							//returns const pointer to _p_init_declarator
 	virtual ~init_declarator_list_item();
 	
 	
@@ -4569,6 +4716,10 @@ public:
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
+	      Token* get_p_token1()     {return _p_token1;}							//returns const pointer to _p_token1
+	const additive_expression* get_p_additive_expression()const{return _p_additive_expression;}							//returns const pointer to _p_additive_expression
+	      additive_expression* get_p_additive_expression()     {return _p_additive_expression;}							//returns const pointer to _p_additive_expression
 	virtual ~shift_expression_item();
 	
 	
@@ -4652,6 +4803,8 @@ public:
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
+	      Token* get_p_token1()     {return _p_token1;}							//returns const pointer to _p_token1
 	virtual ~identifier_list_item();
 	
 	
@@ -4756,6 +4909,7 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
+	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
 	virtual ~jump_statement1 ();
 
 		
@@ -4796,6 +4950,7 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const expression* get_p_expression()const{return _p_expression;}							//returns const pointer to _p_expression
+	      expression* get_p_expression()     {return _p_expression;}							//returns       pointer to _p_expression
 	virtual ~jump_statement2 ();
 
 		
@@ -4836,6 +4991,7 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
+	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
 	virtual ~jump_statement3 ();
 
 		
@@ -4882,8 +5038,11 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const declarator* get_p_declarator()const{return _p_declarator;}							//returns const pointer to _p_declarator
+	      declarator* get_p_declarator()     {return _p_declarator;}							//returns       pointer to _p_declarator
 	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
+	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
 	const constant_expression* get_p_constant_expression()const{return _p_constant_expression;}							//returns const pointer to _p_constant_expression
+	      constant_expression* get_p_constant_expression()     {return _p_constant_expression;}							//returns       pointer to _p_constant_expression
 	virtual ~struct_declarator ();
 
 		
@@ -4933,9 +5092,13 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const declaration_specifiers* get_p_declaration_specifiers()const{return _p_declaration_specifiers;}							//returns const pointer to _p_declaration_specifiers
+	      declaration_specifiers* get_p_declaration_specifiers()     {return _p_declaration_specifiers;}							//returns       pointer to _p_declaration_specifiers
 	const declarator* get_p_declarator()const{return _p_declarator;}							//returns const pointer to _p_declarator
+	      declarator* get_p_declarator()     {return _p_declarator;}							//returns       pointer to _p_declarator
 	const declaration_list* get_p_declaration_list()const{return _p_declaration_list;}							//returns const pointer to _p_declaration_list
+	      declaration_list* get_p_declaration_list()     {return _p_declaration_list;}							//returns       pointer to _p_declaration_list
 	const compound_statement* get_p_compound_statement()const{return _p_compound_statement;}							//returns const pointer to _p_compound_statement
+	      compound_statement* get_p_compound_statement()     {return _p_compound_statement;}							//returns       pointer to _p_compound_statement
 	virtual ~function_definition ();
 
 		
@@ -4976,6 +5139,8 @@ public:
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const parameter_declaration* get_p_parameter_declaration()const{return _p_parameter_declaration;}							//returns const pointer to _p_parameter_declaration
+	      parameter_declaration* get_p_parameter_declaration()     {return _p_parameter_declaration;}							//returns const pointer to _p_parameter_declaration
 	virtual ~parameter_list_item();
 	
 	
@@ -5067,9 +5232,13 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
+	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
 	const Token* get_p_token2()const{return _p_token2;}							//returns const pointer to _p_token2
+	      Token* get_p_token2()     {return _p_token2;}							//returns       pointer to _p_token2
 	const enumerator_list* get_p_enumerator_list()const{return _p_enumerator_list;}							//returns const pointer to _p_enumerator_list
+	      enumerator_list* get_p_enumerator_list()     {return _p_enumerator_list;}							//returns       pointer to _p_enumerator_list
 	const Token* get_p_token3()const{return _p_token3;}							//returns const pointer to _p_token3
+	      Token* get_p_token3()     {return _p_token3;}							//returns       pointer to _p_token3
 	virtual ~enum_specifier ();
 
 		
@@ -5110,6 +5279,7 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
+	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
 	virtual ~type_qualifier ();
 
 		
@@ -5150,6 +5320,8 @@ public:
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const enumerator* get_p_enumerator()const{return _p_enumerator;}							//returns const pointer to _p_enumerator
+	      enumerator* get_p_enumerator()     {return _p_enumerator;}							//returns const pointer to _p_enumerator
 	virtual ~enumerator_list_item();
 	
 	
@@ -5257,7 +5429,9 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const constant_expression* get_p_constant_expression()const{return _p_constant_expression;}							//returns const pointer to _p_constant_expression
+	      constant_expression* get_p_constant_expression()     {return _p_constant_expression;}							//returns       pointer to _p_constant_expression
 	const statement* get_p_statement()const{return _p_statement;}							//returns const pointer to _p_statement
+	      statement* get_p_statement()     {return _p_statement;}							//returns       pointer to _p_statement
 	virtual ~labeled_statement1 ();
 
 		
@@ -5301,7 +5475,9 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
+	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
 	const statement* get_p_statement()const{return _p_statement;}							//returns const pointer to _p_statement
+	      statement* get_p_statement()     {return _p_statement;}							//returns       pointer to _p_statement
 	virtual ~labeled_statement2 ();
 
 		
@@ -5342,6 +5518,8 @@ public:
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const declaration* get_p_declaration()const{return _p_declaration;}							//returns const pointer to _p_declaration
+	      declaration* get_p_declaration()     {return _p_declaration;}							//returns const pointer to _p_declaration
 	virtual ~declaration_list_item();
 	
 	
@@ -5446,6 +5624,8 @@ public:
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const type_specifier* get_p_type_specifier()const{return _p_type_specifier;}							//returns const pointer to _p_type_specifier
+	      type_specifier* get_p_type_specifier()     {return _p_type_specifier;}							//returns const pointer to _p_type_specifier
 	virtual ~specifier_qualifier_list1_item();
 	
 	
@@ -5528,6 +5708,8 @@ public:
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const type_qualifier* get_p_type_qualifier()const{return _p_type_qualifier;}							//returns const pointer to _p_type_qualifier
+	      type_qualifier* get_p_type_qualifier()     {return _p_type_qualifier;}							//returns const pointer to _p_type_qualifier
 	virtual ~specifier_qualifier_list2_item();
 	
 	
@@ -5610,6 +5792,8 @@ public:
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const external_declaration* get_p_external_declaration()const{return _p_external_declaration;}							//returns const pointer to _p_external_declaration
+	      external_declaration* get_p_external_declaration()     {return _p_external_declaration;}							//returns const pointer to _p_external_declaration
 	virtual ~translation_unit_item();
 	
 	
@@ -5692,6 +5876,7 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const conditional_expression* get_p_conditional_expression()const{return _p_conditional_expression;}							//returns const pointer to _p_conditional_expression
+	      conditional_expression* get_p_conditional_expression()     {return _p_conditional_expression;}							//returns       pointer to _p_conditional_expression
 	virtual ~constant_expression ();
 
 		
@@ -5732,6 +5917,8 @@ public:
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const initializer* get_p_initializer()const{return _p_initializer;}							//returns const pointer to _p_initializer
+	      initializer* get_p_initializer()     {return _p_initializer;}							//returns const pointer to _p_initializer
 	virtual ~initializer_list_item();
 	
 	
@@ -5814,6 +6001,8 @@ public:
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const statement* get_p_statement()const{return _p_statement;}							//returns const pointer to _p_statement
+	      statement* get_p_statement()     {return _p_statement;}							//returns const pointer to _p_statement
 	virtual ~statement_list_item();
 	
 	
@@ -5896,6 +6085,8 @@ public:
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+	const assignment_expression* get_p_assignment_expression()const{return _p_assignment_expression;}							//returns const pointer to _p_assignment_expression
+	      assignment_expression* get_p_assignment_expression()     {return _p_assignment_expression;}							//returns const pointer to _p_assignment_expression
 	virtual ~expression_item();
 	
 	
@@ -5981,7 +6172,9 @@ public:
 	virtual Properties getProperties()const;						//returns the properties map
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 	const pointer* get_p_pointer()const{return _p_pointer;}							//returns const pointer to _p_pointer
+	      pointer* get_p_pointer()     {return _p_pointer;}							//returns       pointer to _p_pointer
 	const direct_declarator* get_p_direct_declarator()const{return _p_direct_declarator;}							//returns const pointer to _p_direct_declarator
+	      direct_declarator* get_p_direct_declarator()     {return _p_direct_declarator;}							//returns       pointer to _p_direct_declarator
 	virtual ~declarator ();
 
 		

@@ -91,6 +91,7 @@ public:
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
 #for $t,$n,$p,$v,$i,$v1 in $cls.parameters:
 	const $t* get${n}()const{return $n;}							//returns const pointer to $n
+	      $t* get${n}()     {return $n;}							//returns       pointer to $n
 #end for
 	virtual ~$cls.className ();
 
@@ -156,6 +157,12 @@ public:
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
+#for $t,$n,$p,$v,$i,$v1 in $cls.parameters:
+	#if i!=$cls.constructor.selfIndex:
+	const $t* get${n}()const{return $n;}							//returns const pointer to $n
+	      $t* get${n}()     {return $n;}							//returns const pointer to $n
+	#end if
+#end for
 	virtual ~${cls.className}_item();
 	
 	

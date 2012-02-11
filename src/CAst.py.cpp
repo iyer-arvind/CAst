@@ -815,9 +815,38 @@ PyObject* PyCAst_iter_next_conditional_expression_iterator(PyObject* _self)
 	(*iter)++;
 	return (PyObject*)ret;
 }
+
 PyObject* PyCAst_iter_conditional_expression_iterator(PyObject* _self)
 {
 	return _self;
+}
+static PyObject *PyCAst_getter_conditional_expression_item_logical_or_expression(PyObject *_self)
+{
+	PyCAst_object_conditional_expression_item *self=(PyCAst_object_conditional_expression_item*)(_self);
+	CAst::conditional_expression_item *_c_obj=self->_p_cast_object;
+	CAst::logical_or_expression *_p_parameter=const_cast<CAst::logical_or_expression*>(_c_obj->get_p_logical_or_expression());
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_LOGICAL_OR_EXPRESSION)
+	{
+		PyCAst_object_logical_or_expression *pyObj=(PyCAst_object_logical_or_expression*)PyCAst_type_logical_or_expression.tp_new(&PyCAst_type_logical_or_expression,NULL,NULL);
+		pyObj->_p_cast_object=dynamic_cast<CAst::logical_or_expression*>(_p_parameter);
+		return (PyObject*)pyObj;
+	}
+	return (PyObject*)(PyString_FromString("NotFound!!! Report bug"));
+
+}
+static PyObject *PyCAst_getter_conditional_expression_item_expression(PyObject *_self)
+{
+	PyCAst_object_conditional_expression_item *self=(PyCAst_object_conditional_expression_item*)(_self);
+	CAst::conditional_expression_item *_c_obj=self->_p_cast_object;
+	CAst::expression *_p_parameter=const_cast<CAst::expression*>(_c_obj->get_p_expression());
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_EXPRESSION)
+	{
+		PyCAst_object_expression *pyObj=(PyCAst_object_expression*)PyCAst_type_expression.tp_new(&PyCAst_type_expression,NULL,NULL);
+		pyObj->_p_cast_object=dynamic_cast<CAst::expression*>(_p_parameter);
+		return (PyObject*)pyObj;
+	}
+	return (PyObject*)(PyString_FromString("NotFound!!! Report bug"));
+
 }
 
 			
@@ -1099,9 +1128,24 @@ PyObject* PyCAst_iter_next_exclusive_or_expression_iterator(PyObject* _self)
 	(*iter)++;
 	return (PyObject*)ret;
 }
+
 PyObject* PyCAst_iter_exclusive_or_expression_iterator(PyObject* _self)
 {
 	return _self;
+}
+static PyObject *PyCAst_getter_exclusive_or_expression_item_and_expression(PyObject *_self)
+{
+	PyCAst_object_exclusive_or_expression_item *self=(PyCAst_object_exclusive_or_expression_item*)(_self);
+	CAst::exclusive_or_expression_item *_c_obj=self->_p_cast_object;
+	CAst::and_expression *_p_parameter=const_cast<CAst::and_expression*>(_c_obj->get_p_and_expression());
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_AND_EXPRESSION)
+	{
+		PyCAst_object_and_expression *pyObj=(PyCAst_object_and_expression*)PyCAst_type_and_expression.tp_new(&PyCAst_type_and_expression,NULL,NULL);
+		pyObj->_p_cast_object=dynamic_cast<CAst::and_expression*>(_p_parameter);
+		return (PyObject*)pyObj;
+	}
+	return (PyObject*)(PyString_FromString("NotFound!!! Report bug"));
+
 }
 
 			
@@ -1425,9 +1469,24 @@ PyObject* PyCAst_iter_next_struct_declaration_list_iterator(PyObject* _self)
 	(*iter)++;
 	return (PyObject*)ret;
 }
+
 PyObject* PyCAst_iter_struct_declaration_list_iterator(PyObject* _self)
 {
 	return _self;
+}
+static PyObject *PyCAst_getter_struct_declaration_list_item_struct_declaration(PyObject *_self)
+{
+	PyCAst_object_struct_declaration_list_item *self=(PyCAst_object_struct_declaration_list_item*)(_self);
+	CAst::struct_declaration_list_item *_c_obj=self->_p_cast_object;
+	CAst::struct_declaration *_p_parameter=const_cast<CAst::struct_declaration*>(_c_obj->get_p_struct_declaration());
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_STRUCT_DECLARATION)
+	{
+		PyCAst_object_struct_declaration *pyObj=(PyCAst_object_struct_declaration*)PyCAst_type_struct_declaration.tp_new(&PyCAst_type_struct_declaration,NULL,NULL);
+		pyObj->_p_cast_object=dynamic_cast<CAst::struct_declaration*>(_p_parameter);
+		return (PyObject*)pyObj;
+	}
+	return (PyObject*)(PyString_FromString("NotFound!!! Report bug"));
+
 }
 
 			
@@ -2217,9 +2276,34 @@ PyObject* PyCAst_iter_next_additive_expression_iterator(PyObject* _self)
 	(*iter)++;
 	return (PyObject*)ret;
 }
+
 PyObject* PyCAst_iter_additive_expression_iterator(PyObject* _self)
 {
 	return _self;
+}
+static PyObject *PyCAst_getter_additive_expression_item_token1(PyObject *_self)
+{
+	PyCAst_object_additive_expression_item *self=(PyCAst_object_additive_expression_item*)(_self);
+	CAst::additive_expression_item *_c_obj=self->_p_cast_object;
+	CAst::Token *_p_parameter=const_cast<CAst::Token*>(_c_obj->get_p_token1());
+	PyCAst_object_Token *pyObj=(PyCAst_object_Token*)PyCAst_type_Token.tp_new(&PyCAst_type_Token,NULL,NULL);
+	pyObj->_p_cast_object=_p_parameter;
+	return (PyObject*)pyObj;
+
+}
+static PyObject *PyCAst_getter_additive_expression_item_multiplicative_expression(PyObject *_self)
+{
+	PyCAst_object_additive_expression_item *self=(PyCAst_object_additive_expression_item*)(_self);
+	CAst::additive_expression_item *_c_obj=self->_p_cast_object;
+	CAst::multiplicative_expression *_p_parameter=const_cast<CAst::multiplicative_expression*>(_c_obj->get_p_multiplicative_expression());
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_MULTIPLICATIVE_EXPRESSION)
+	{
+		PyCAst_object_multiplicative_expression *pyObj=(PyCAst_object_multiplicative_expression*)PyCAst_type_multiplicative_expression.tp_new(&PyCAst_type_multiplicative_expression,NULL,NULL);
+		pyObj->_p_cast_object=dynamic_cast<CAst::multiplicative_expression*>(_p_parameter);
+		return (PyObject*)pyObj;
+	}
+	return (PyObject*)(PyString_FromString("NotFound!!! Report bug"));
+
 }
 
 			
@@ -2817,9 +2901,24 @@ PyObject* PyCAst_iter_next_inclusive_or_expression_iterator(PyObject* _self)
 	(*iter)++;
 	return (PyObject*)ret;
 }
+
 PyObject* PyCAst_iter_inclusive_or_expression_iterator(PyObject* _self)
 {
 	return _self;
+}
+static PyObject *PyCAst_getter_inclusive_or_expression_item_exclusive_or_expression(PyObject *_self)
+{
+	PyCAst_object_inclusive_or_expression_item *self=(PyCAst_object_inclusive_or_expression_item*)(_self);
+	CAst::inclusive_or_expression_item *_c_obj=self->_p_cast_object;
+	CAst::exclusive_or_expression *_p_parameter=const_cast<CAst::exclusive_or_expression*>(_c_obj->get_p_exclusive_or_expression());
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_EXCLUSIVE_OR_EXPRESSION)
+	{
+		PyCAst_object_exclusive_or_expression *pyObj=(PyCAst_object_exclusive_or_expression*)PyCAst_type_exclusive_or_expression.tp_new(&PyCAst_type_exclusive_or_expression,NULL,NULL);
+		pyObj->_p_cast_object=dynamic_cast<CAst::exclusive_or_expression*>(_p_parameter);
+		return (PyObject*)pyObj;
+	}
+	return (PyObject*)(PyString_FromString("NotFound!!! Report bug"));
+
 }
 
 			
@@ -2987,9 +3086,24 @@ PyObject* PyCAst_iter_next_pointer_iterator(PyObject* _self)
 	(*iter)++;
 	return (PyObject*)ret;
 }
+
 PyObject* PyCAst_iter_pointer_iterator(PyObject* _self)
 {
 	return _self;
+}
+static PyObject *PyCAst_getter_pointer_item_type_qualifier_list(PyObject *_self)
+{
+	PyCAst_object_pointer_item *self=(PyCAst_object_pointer_item*)(_self);
+	CAst::pointer_item *_c_obj=self->_p_cast_object;
+	CAst::type_qualifier_list *_p_parameter=const_cast<CAst::type_qualifier_list*>(_c_obj->get_p_type_qualifier_list());
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_TYPE_QUALIFIER_LIST)
+	{
+		PyCAst_object_type_qualifier_list *pyObj=(PyCAst_object_type_qualifier_list*)PyCAst_type_type_qualifier_list.tp_new(&PyCAst_type_type_qualifier_list,NULL,NULL);
+		pyObj->_p_cast_object=dynamic_cast<CAst::type_qualifier_list*>(_p_parameter);
+		return (PyObject*)pyObj;
+	}
+	return (PyObject*)(PyString_FromString("NotFound!!! Report bug"));
+
 }
 
 			
@@ -3949,9 +4063,24 @@ PyObject* PyCAst_iter_next_and_expression_iterator(PyObject* _self)
 	(*iter)++;
 	return (PyObject*)ret;
 }
+
 PyObject* PyCAst_iter_and_expression_iterator(PyObject* _self)
 {
 	return _self;
+}
+static PyObject *PyCAst_getter_and_expression_item_equality_expression(PyObject *_self)
+{
+	PyCAst_object_and_expression_item *self=(PyCAst_object_and_expression_item*)(_self);
+	CAst::and_expression_item *_c_obj=self->_p_cast_object;
+	CAst::equality_expression *_p_parameter=const_cast<CAst::equality_expression*>(_c_obj->get_p_equality_expression());
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_EQUALITY_EXPRESSION)
+	{
+		PyCAst_object_equality_expression *pyObj=(PyCAst_object_equality_expression*)PyCAst_type_equality_expression.tp_new(&PyCAst_type_equality_expression,NULL,NULL);
+		pyObj->_p_cast_object=dynamic_cast<CAst::equality_expression*>(_p_parameter);
+		return (PyObject*)pyObj;
+	}
+	return (PyObject*)(PyString_FromString("NotFound!!! Report bug"));
+
 }
 
 			
@@ -4853,9 +4982,24 @@ PyObject* PyCAst_iter_next_struct_declarator_list_iterator(PyObject* _self)
 	(*iter)++;
 	return (PyObject*)ret;
 }
+
 PyObject* PyCAst_iter_struct_declarator_list_iterator(PyObject* _self)
 {
 	return _self;
+}
+static PyObject *PyCAst_getter_struct_declarator_list_item_struct_declarator(PyObject *_self)
+{
+	PyCAst_object_struct_declarator_list_item *self=(PyCAst_object_struct_declarator_list_item*)(_self);
+	CAst::struct_declarator_list_item *_c_obj=self->_p_cast_object;
+	CAst::struct_declarator *_p_parameter=const_cast<CAst::struct_declarator*>(_c_obj->get_p_struct_declarator());
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_STRUCT_DECLARATOR)
+	{
+		PyCAst_object_struct_declarator *pyObj=(PyCAst_object_struct_declarator*)PyCAst_type_struct_declarator.tp_new(&PyCAst_type_struct_declarator,NULL,NULL);
+		pyObj->_p_cast_object=dynamic_cast<CAst::struct_declarator*>(_p_parameter);
+		return (PyObject*)pyObj;
+	}
+	return (PyObject*)(PyString_FromString("NotFound!!! Report bug"));
+
 }
 
 			
@@ -5023,9 +5167,24 @@ PyObject* PyCAst_iter_next_logical_or_expression_iterator(PyObject* _self)
 	(*iter)++;
 	return (PyObject*)ret;
 }
+
 PyObject* PyCAst_iter_logical_or_expression_iterator(PyObject* _self)
 {
 	return _self;
+}
+static PyObject *PyCAst_getter_logical_or_expression_item_logical_and_expression(PyObject *_self)
+{
+	PyCAst_object_logical_or_expression_item *self=(PyCAst_object_logical_or_expression_item*)(_self);
+	CAst::logical_or_expression_item *_c_obj=self->_p_cast_object;
+	CAst::logical_and_expression *_p_parameter=const_cast<CAst::logical_and_expression*>(_c_obj->get_p_logical_and_expression());
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_LOGICAL_AND_EXPRESSION)
+	{
+		PyCAst_object_logical_and_expression *pyObj=(PyCAst_object_logical_and_expression*)PyCAst_type_logical_and_expression.tp_new(&PyCAst_type_logical_and_expression,NULL,NULL);
+		pyObj->_p_cast_object=dynamic_cast<CAst::logical_and_expression*>(_p_parameter);
+		return (PyObject*)pyObj;
+	}
+	return (PyObject*)(PyString_FromString("NotFound!!! Report bug"));
+
 }
 
 			
@@ -5259,9 +5418,34 @@ PyObject* PyCAst_iter_next_relational_expression_iterator(PyObject* _self)
 	(*iter)++;
 	return (PyObject*)ret;
 }
+
 PyObject* PyCAst_iter_relational_expression_iterator(PyObject* _self)
 {
 	return _self;
+}
+static PyObject *PyCAst_getter_relational_expression_item_token1(PyObject *_self)
+{
+	PyCAst_object_relational_expression_item *self=(PyCAst_object_relational_expression_item*)(_self);
+	CAst::relational_expression_item *_c_obj=self->_p_cast_object;
+	CAst::Token *_p_parameter=const_cast<CAst::Token*>(_c_obj->get_p_token1());
+	PyCAst_object_Token *pyObj=(PyCAst_object_Token*)PyCAst_type_Token.tp_new(&PyCAst_type_Token,NULL,NULL);
+	pyObj->_p_cast_object=_p_parameter;
+	return (PyObject*)pyObj;
+
+}
+static PyObject *PyCAst_getter_relational_expression_item_shift_expression(PyObject *_self)
+{
+	PyCAst_object_relational_expression_item *self=(PyCAst_object_relational_expression_item*)(_self);
+	CAst::relational_expression_item *_c_obj=self->_p_cast_object;
+	CAst::shift_expression *_p_parameter=const_cast<CAst::shift_expression*>(_c_obj->get_p_shift_expression());
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_SHIFT_EXPRESSION)
+	{
+		PyCAst_object_shift_expression *pyObj=(PyCAst_object_shift_expression*)PyCAst_type_shift_expression.tp_new(&PyCAst_type_shift_expression,NULL,NULL);
+		pyObj->_p_cast_object=dynamic_cast<CAst::shift_expression*>(_p_parameter);
+		return (PyObject*)pyObj;
+	}
+	return (PyObject*)(PyString_FromString("NotFound!!! Report bug"));
+
 }
 
 			
@@ -6059,9 +6243,40 @@ PyObject* PyCAst_iter_next_multiplicative_expression_iterator(PyObject* _self)
 	(*iter)++;
 	return (PyObject*)ret;
 }
+
 PyObject* PyCAst_iter_multiplicative_expression_iterator(PyObject* _self)
 {
 	return _self;
+}
+static PyObject *PyCAst_getter_multiplicative_expression_item_token1(PyObject *_self)
+{
+	PyCAst_object_multiplicative_expression_item *self=(PyCAst_object_multiplicative_expression_item*)(_self);
+	CAst::multiplicative_expression_item *_c_obj=self->_p_cast_object;
+	CAst::Token *_p_parameter=const_cast<CAst::Token*>(_c_obj->get_p_token1());
+	PyCAst_object_Token *pyObj=(PyCAst_object_Token*)PyCAst_type_Token.tp_new(&PyCAst_type_Token,NULL,NULL);
+	pyObj->_p_cast_object=_p_parameter;
+	return (PyObject*)pyObj;
+
+}
+static PyObject *PyCAst_getter_multiplicative_expression_item_cast_expression(PyObject *_self)
+{
+	PyCAst_object_multiplicative_expression_item *self=(PyCAst_object_multiplicative_expression_item*)(_self);
+	CAst::multiplicative_expression_item *_c_obj=self->_p_cast_object;
+	CAst::cast_expression *_p_parameter=const_cast<CAst::cast_expression*>(_c_obj->get_p_cast_expression());
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_CAST_EXPRESSION1)
+	{
+		PyCAst_object_cast_expression1 *pyObj=(PyCAst_object_cast_expression1*)PyCAst_type_cast_expression1.tp_new(&PyCAst_type_cast_expression1,NULL,NULL);
+		pyObj->_p_cast_object=dynamic_cast<CAst::cast_expression1*>(_p_parameter);
+		return (PyObject*)pyObj;
+	}
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_CAST_EXPRESSION2)
+	{
+		PyCAst_object_cast_expression2 *pyObj=(PyCAst_object_cast_expression2*)PyCAst_type_cast_expression2.tp_new(&PyCAst_type_cast_expression2,NULL,NULL);
+		pyObj->_p_cast_object=dynamic_cast<CAst::cast_expression2*>(_p_parameter);
+		return (PyObject*)pyObj;
+	}
+	return (PyObject*)(PyString_FromString("NotFound!!! Report bug"));
+
 }
 
 			
@@ -6229,9 +6444,24 @@ PyObject* PyCAst_iter_next_type_qualifier_list_iterator(PyObject* _self)
 	(*iter)++;
 	return (PyObject*)ret;
 }
+
 PyObject* PyCAst_iter_type_qualifier_list_iterator(PyObject* _self)
 {
 	return _self;
+}
+static PyObject *PyCAst_getter_type_qualifier_list_item_type_qualifier(PyObject *_self)
+{
+	PyCAst_object_type_qualifier_list_item *self=(PyCAst_object_type_qualifier_list_item*)(_self);
+	CAst::type_qualifier_list_item *_c_obj=self->_p_cast_object;
+	CAst::type_qualifier *_p_parameter=const_cast<CAst::type_qualifier*>(_c_obj->get_p_type_qualifier());
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_TYPE_QUALIFIER)
+	{
+		PyCAst_object_type_qualifier *pyObj=(PyCAst_object_type_qualifier*)PyCAst_type_type_qualifier.tp_new(&PyCAst_type_type_qualifier,NULL,NULL);
+		pyObj->_p_cast_object=dynamic_cast<CAst::type_qualifier*>(_p_parameter);
+		return (PyObject*)pyObj;
+	}
+	return (PyObject*)(PyString_FromString("NotFound!!! Report bug"));
+
 }
 
 			
@@ -6399,9 +6629,30 @@ PyObject* PyCAst_iter_next_argument_expression_list_iterator(PyObject* _self)
 	(*iter)++;
 	return (PyObject*)ret;
 }
+
 PyObject* PyCAst_iter_argument_expression_list_iterator(PyObject* _self)
 {
 	return _self;
+}
+static PyObject *PyCAst_getter_argument_expression_list_item_assignment_expression(PyObject *_self)
+{
+	PyCAst_object_argument_expression_list_item *self=(PyCAst_object_argument_expression_list_item*)(_self);
+	CAst::argument_expression_list_item *_c_obj=self->_p_cast_object;
+	CAst::assignment_expression *_p_parameter=const_cast<CAst::assignment_expression*>(_c_obj->get_p_assignment_expression());
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_ASSIGNMENT_EXPRESSION1)
+	{
+		PyCAst_object_assignment_expression1 *pyObj=(PyCAst_object_assignment_expression1*)PyCAst_type_assignment_expression1.tp_new(&PyCAst_type_assignment_expression1,NULL,NULL);
+		pyObj->_p_cast_object=dynamic_cast<CAst::assignment_expression1*>(_p_parameter);
+		return (PyObject*)pyObj;
+	}
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_ASSIGNMENT_EXPRESSION2)
+	{
+		PyCAst_object_assignment_expression2 *pyObj=(PyCAst_object_assignment_expression2*)PyCAst_type_assignment_expression2.tp_new(&PyCAst_type_assignment_expression2,NULL,NULL);
+		pyObj->_p_cast_object=dynamic_cast<CAst::assignment_expression2*>(_p_parameter);
+		return (PyObject*)pyObj;
+	}
+	return (PyObject*)(PyString_FromString("NotFound!!! Report bug"));
+
 }
 
 			
@@ -6831,9 +7082,34 @@ PyObject* PyCAst_iter_next_equality_expression_iterator(PyObject* _self)
 	(*iter)++;
 	return (PyObject*)ret;
 }
+
 PyObject* PyCAst_iter_equality_expression_iterator(PyObject* _self)
 {
 	return _self;
+}
+static PyObject *PyCAst_getter_equality_expression_item_token1(PyObject *_self)
+{
+	PyCAst_object_equality_expression_item *self=(PyCAst_object_equality_expression_item*)(_self);
+	CAst::equality_expression_item *_c_obj=self->_p_cast_object;
+	CAst::Token *_p_parameter=const_cast<CAst::Token*>(_c_obj->get_p_token1());
+	PyCAst_object_Token *pyObj=(PyCAst_object_Token*)PyCAst_type_Token.tp_new(&PyCAst_type_Token,NULL,NULL);
+	pyObj->_p_cast_object=_p_parameter;
+	return (PyObject*)pyObj;
+
+}
+static PyObject *PyCAst_getter_equality_expression_item_relational_expression(PyObject *_self)
+{
+	PyCAst_object_equality_expression_item *self=(PyCAst_object_equality_expression_item*)(_self);
+	CAst::equality_expression_item *_c_obj=self->_p_cast_object;
+	CAst::relational_expression *_p_parameter=const_cast<CAst::relational_expression*>(_c_obj->get_p_relational_expression());
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_RELATIONAL_EXPRESSION)
+	{
+		PyCAst_object_relational_expression *pyObj=(PyCAst_object_relational_expression*)PyCAst_type_relational_expression.tp_new(&PyCAst_type_relational_expression,NULL,NULL);
+		pyObj->_p_cast_object=dynamic_cast<CAst::relational_expression*>(_p_parameter);
+		return (PyObject*)pyObj;
+	}
+	return (PyObject*)(PyString_FromString("NotFound!!! Report bug"));
+
 }
 
 			
@@ -7137,9 +7413,24 @@ PyObject* PyCAst_iter_next_declaration_specifiers1_iterator(PyObject* _self)
 	(*iter)++;
 	return (PyObject*)ret;
 }
+
 PyObject* PyCAst_iter_declaration_specifiers1_iterator(PyObject* _self)
 {
 	return _self;
+}
+static PyObject *PyCAst_getter_declaration_specifiers1_item_storage_class_specifier(PyObject *_self)
+{
+	PyCAst_object_declaration_specifiers1_item *self=(PyCAst_object_declaration_specifiers1_item*)(_self);
+	CAst::declaration_specifiers1_item *_c_obj=self->_p_cast_object;
+	CAst::storage_class_specifier *_p_parameter=const_cast<CAst::storage_class_specifier*>(_c_obj->get_p_storage_class_specifier());
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_STORAGE_CLASS_SPECIFIER)
+	{
+		PyCAst_object_storage_class_specifier *pyObj=(PyCAst_object_storage_class_specifier*)PyCAst_type_storage_class_specifier.tp_new(&PyCAst_type_storage_class_specifier,NULL,NULL);
+		pyObj->_p_cast_object=dynamic_cast<CAst::storage_class_specifier*>(_p_parameter);
+		return (PyObject*)pyObj;
+	}
+	return (PyObject*)(PyString_FromString("NotFound!!! Report bug"));
+
 }
 
 			
@@ -7307,9 +7598,36 @@ PyObject* PyCAst_iter_next_declaration_specifiers2_iterator(PyObject* _self)
 	(*iter)++;
 	return (PyObject*)ret;
 }
+
 PyObject* PyCAst_iter_declaration_specifiers2_iterator(PyObject* _self)
 {
 	return _self;
+}
+static PyObject *PyCAst_getter_declaration_specifiers2_item_type_specifier(PyObject *_self)
+{
+	PyCAst_object_declaration_specifiers2_item *self=(PyCAst_object_declaration_specifiers2_item*)(_self);
+	CAst::declaration_specifiers2_item *_c_obj=self->_p_cast_object;
+	CAst::type_specifier *_p_parameter=const_cast<CAst::type_specifier*>(_c_obj->get_p_type_specifier());
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_TYPE_SPECIFIER1)
+	{
+		PyCAst_object_type_specifier1 *pyObj=(PyCAst_object_type_specifier1*)PyCAst_type_type_specifier1.tp_new(&PyCAst_type_type_specifier1,NULL,NULL);
+		pyObj->_p_cast_object=dynamic_cast<CAst::type_specifier1*>(_p_parameter);
+		return (PyObject*)pyObj;
+	}
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_TYPE_SPECIFIER2)
+	{
+		PyCAst_object_type_specifier2 *pyObj=(PyCAst_object_type_specifier2*)PyCAst_type_type_specifier2.tp_new(&PyCAst_type_type_specifier2,NULL,NULL);
+		pyObj->_p_cast_object=dynamic_cast<CAst::type_specifier2*>(_p_parameter);
+		return (PyObject*)pyObj;
+	}
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_TYPE_SPECIFIER3)
+	{
+		PyCAst_object_type_specifier3 *pyObj=(PyCAst_object_type_specifier3*)PyCAst_type_type_specifier3.tp_new(&PyCAst_type_type_specifier3,NULL,NULL);
+		pyObj->_p_cast_object=dynamic_cast<CAst::type_specifier3*>(_p_parameter);
+		return (PyObject*)pyObj;
+	}
+	return (PyObject*)(PyString_FromString("NotFound!!! Report bug"));
+
 }
 
 			
@@ -7477,9 +7795,24 @@ PyObject* PyCAst_iter_next_declaration_specifiers3_iterator(PyObject* _self)
 	(*iter)++;
 	return (PyObject*)ret;
 }
+
 PyObject* PyCAst_iter_declaration_specifiers3_iterator(PyObject* _self)
 {
 	return _self;
+}
+static PyObject *PyCAst_getter_declaration_specifiers3_item_type_qualifier(PyObject *_self)
+{
+	PyCAst_object_declaration_specifiers3_item *self=(PyCAst_object_declaration_specifiers3_item*)(_self);
+	CAst::declaration_specifiers3_item *_c_obj=self->_p_cast_object;
+	CAst::type_qualifier *_p_parameter=const_cast<CAst::type_qualifier*>(_c_obj->get_p_type_qualifier());
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_TYPE_QUALIFIER)
+	{
+		PyCAst_object_type_qualifier *pyObj=(PyCAst_object_type_qualifier*)PyCAst_type_type_qualifier.tp_new(&PyCAst_type_type_qualifier,NULL,NULL);
+		pyObj->_p_cast_object=dynamic_cast<CAst::type_qualifier*>(_p_parameter);
+		return (PyObject*)pyObj;
+	}
+	return (PyObject*)(PyString_FromString("NotFound!!! Report bug"));
+
 }
 
 			
@@ -8203,9 +8536,24 @@ PyObject* PyCAst_iter_next_logical_and_expression_iterator(PyObject* _self)
 	(*iter)++;
 	return (PyObject*)ret;
 }
+
 PyObject* PyCAst_iter_logical_and_expression_iterator(PyObject* _self)
 {
 	return _self;
+}
+static PyObject *PyCAst_getter_logical_and_expression_item_inclusive_or_expression(PyObject *_self)
+{
+	PyCAst_object_logical_and_expression_item *self=(PyCAst_object_logical_and_expression_item*)(_self);
+	CAst::logical_and_expression_item *_c_obj=self->_p_cast_object;
+	CAst::inclusive_or_expression *_p_parameter=const_cast<CAst::inclusive_or_expression*>(_c_obj->get_p_inclusive_or_expression());
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_INCLUSIVE_OR_EXPRESSION)
+	{
+		PyCAst_object_inclusive_or_expression *pyObj=(PyCAst_object_inclusive_or_expression*)PyCAst_type_inclusive_or_expression.tp_new(&PyCAst_type_inclusive_or_expression,NULL,NULL);
+		pyObj->_p_cast_object=dynamic_cast<CAst::inclusive_or_expression*>(_p_parameter);
+		return (PyObject*)pyObj;
+	}
+	return (PyObject*)(PyString_FromString("NotFound!!! Report bug"));
+
 }
 
 			
@@ -8373,9 +8721,24 @@ PyObject* PyCAst_iter_next_init_declarator_list_iterator(PyObject* _self)
 	(*iter)++;
 	return (PyObject*)ret;
 }
+
 PyObject* PyCAst_iter_init_declarator_list_iterator(PyObject* _self)
 {
 	return _self;
+}
+static PyObject *PyCAst_getter_init_declarator_list_item_init_declarator(PyObject *_self)
+{
+	PyCAst_object_init_declarator_list_item *self=(PyCAst_object_init_declarator_list_item*)(_self);
+	CAst::init_declarator_list_item *_c_obj=self->_p_cast_object;
+	CAst::init_declarator *_p_parameter=const_cast<CAst::init_declarator*>(_c_obj->get_p_init_declarator());
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_INIT_DECLARATOR)
+	{
+		PyCAst_object_init_declarator *pyObj=(PyCAst_object_init_declarator*)PyCAst_type_init_declarator.tp_new(&PyCAst_type_init_declarator,NULL,NULL);
+		pyObj->_p_cast_object=dynamic_cast<CAst::init_declarator*>(_p_parameter);
+		return (PyObject*)pyObj;
+	}
+	return (PyObject*)(PyString_FromString("NotFound!!! Report bug"));
+
 }
 
 			
@@ -8543,9 +8906,34 @@ PyObject* PyCAst_iter_next_shift_expression_iterator(PyObject* _self)
 	(*iter)++;
 	return (PyObject*)ret;
 }
+
 PyObject* PyCAst_iter_shift_expression_iterator(PyObject* _self)
 {
 	return _self;
+}
+static PyObject *PyCAst_getter_shift_expression_item_token1(PyObject *_self)
+{
+	PyCAst_object_shift_expression_item *self=(PyCAst_object_shift_expression_item*)(_self);
+	CAst::shift_expression_item *_c_obj=self->_p_cast_object;
+	CAst::Token *_p_parameter=const_cast<CAst::Token*>(_c_obj->get_p_token1());
+	PyCAst_object_Token *pyObj=(PyCAst_object_Token*)PyCAst_type_Token.tp_new(&PyCAst_type_Token,NULL,NULL);
+	pyObj->_p_cast_object=_p_parameter;
+	return (PyObject*)pyObj;
+
+}
+static PyObject *PyCAst_getter_shift_expression_item_additive_expression(PyObject *_self)
+{
+	PyCAst_object_shift_expression_item *self=(PyCAst_object_shift_expression_item*)(_self);
+	CAst::shift_expression_item *_c_obj=self->_p_cast_object;
+	CAst::additive_expression *_p_parameter=const_cast<CAst::additive_expression*>(_c_obj->get_p_additive_expression());
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_ADDITIVE_EXPRESSION)
+	{
+		PyCAst_object_additive_expression *pyObj=(PyCAst_object_additive_expression*)PyCAst_type_additive_expression.tp_new(&PyCAst_type_additive_expression,NULL,NULL);
+		pyObj->_p_cast_object=dynamic_cast<CAst::additive_expression*>(_p_parameter);
+		return (PyObject*)pyObj;
+	}
+	return (PyObject*)(PyString_FromString("NotFound!!! Report bug"));
+
 }
 
 			
@@ -8713,9 +9101,20 @@ PyObject* PyCAst_iter_next_identifier_list_iterator(PyObject* _self)
 	(*iter)++;
 	return (PyObject*)ret;
 }
+
 PyObject* PyCAst_iter_identifier_list_iterator(PyObject* _self)
 {
 	return _self;
+}
+static PyObject *PyCAst_getter_identifier_list_item_token1(PyObject *_self)
+{
+	PyCAst_object_identifier_list_item *self=(PyCAst_object_identifier_list_item*)(_self);
+	CAst::identifier_list_item *_c_obj=self->_p_cast_object;
+	CAst::Token *_p_parameter=const_cast<CAst::Token*>(_c_obj->get_p_token1());
+	PyCAst_object_Token *pyObj=(PyCAst_object_Token*)PyCAst_type_Token.tp_new(&PyCAst_type_Token,NULL,NULL);
+	pyObj->_p_cast_object=_p_parameter;
+	return (PyObject*)pyObj;
+
 }
 
 			
@@ -9303,9 +9702,30 @@ PyObject* PyCAst_iter_next_parameter_list_iterator(PyObject* _self)
 	(*iter)++;
 	return (PyObject*)ret;
 }
+
 PyObject* PyCAst_iter_parameter_list_iterator(PyObject* _self)
 {
 	return _self;
+}
+static PyObject *PyCAst_getter_parameter_list_item_parameter_declaration(PyObject *_self)
+{
+	PyCAst_object_parameter_list_item *self=(PyCAst_object_parameter_list_item*)(_self);
+	CAst::parameter_list_item *_c_obj=self->_p_cast_object;
+	CAst::parameter_declaration *_p_parameter=const_cast<CAst::parameter_declaration*>(_c_obj->get_p_parameter_declaration());
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_PARAMETER_DECLARATION1)
+	{
+		PyCAst_object_parameter_declaration1 *pyObj=(PyCAst_object_parameter_declaration1*)PyCAst_type_parameter_declaration1.tp_new(&PyCAst_type_parameter_declaration1,NULL,NULL);
+		pyObj->_p_cast_object=dynamic_cast<CAst::parameter_declaration1*>(_p_parameter);
+		return (PyObject*)pyObj;
+	}
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_PARAMETER_DECLARATION2)
+	{
+		PyCAst_object_parameter_declaration2 *pyObj=(PyCAst_object_parameter_declaration2*)PyCAst_type_parameter_declaration2.tp_new(&PyCAst_type_parameter_declaration2,NULL,NULL);
+		pyObj->_p_cast_object=dynamic_cast<CAst::parameter_declaration2*>(_p_parameter);
+		return (PyObject*)pyObj;
+	}
+	return (PyObject*)(PyString_FromString("NotFound!!! Report bug"));
+
 }
 
 			
@@ -9639,9 +10059,24 @@ PyObject* PyCAst_iter_next_enumerator_list_iterator(PyObject* _self)
 	(*iter)++;
 	return (PyObject*)ret;
 }
+
 PyObject* PyCAst_iter_enumerator_list_iterator(PyObject* _self)
 {
 	return _self;
+}
+static PyObject *PyCAst_getter_enumerator_list_item_enumerator(PyObject *_self)
+{
+	PyCAst_object_enumerator_list_item *self=(PyCAst_object_enumerator_list_item*)(_self);
+	CAst::enumerator_list_item *_c_obj=self->_p_cast_object;
+	CAst::enumerator *_p_parameter=const_cast<CAst::enumerator*>(_c_obj->get_p_enumerator());
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_ENUMERATOR)
+	{
+		PyCAst_object_enumerator *pyObj=(PyCAst_object_enumerator*)PyCAst_type_enumerator.tp_new(&PyCAst_type_enumerator,NULL,NULL);
+		pyObj->_p_cast_object=dynamic_cast<CAst::enumerator*>(_p_parameter);
+		return (PyObject*)pyObj;
+	}
+	return (PyObject*)(PyString_FromString("NotFound!!! Report bug"));
+
 }
 
 			
@@ -10033,9 +10468,24 @@ PyObject* PyCAst_iter_next_declaration_list_iterator(PyObject* _self)
 	(*iter)++;
 	return (PyObject*)ret;
 }
+
 PyObject* PyCAst_iter_declaration_list_iterator(PyObject* _self)
 {
 	return _self;
+}
+static PyObject *PyCAst_getter_declaration_list_item_declaration(PyObject *_self)
+{
+	PyCAst_object_declaration_list_item *self=(PyCAst_object_declaration_list_item*)(_self);
+	CAst::declaration_list_item *_c_obj=self->_p_cast_object;
+	CAst::declaration *_p_parameter=const_cast<CAst::declaration*>(_c_obj->get_p_declaration());
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_DECLARATION)
+	{
+		PyCAst_object_declaration *pyObj=(PyCAst_object_declaration*)PyCAst_type_declaration.tp_new(&PyCAst_type_declaration,NULL,NULL);
+		pyObj->_p_cast_object=dynamic_cast<CAst::declaration*>(_p_parameter);
+		return (PyObject*)pyObj;
+	}
+	return (PyObject*)(PyString_FromString("NotFound!!! Report bug"));
+
 }
 
 			
@@ -10203,9 +10653,36 @@ PyObject* PyCAst_iter_next_specifier_qualifier_list1_iterator(PyObject* _self)
 	(*iter)++;
 	return (PyObject*)ret;
 }
+
 PyObject* PyCAst_iter_specifier_qualifier_list1_iterator(PyObject* _self)
 {
 	return _self;
+}
+static PyObject *PyCAst_getter_specifier_qualifier_list1_item_type_specifier(PyObject *_self)
+{
+	PyCAst_object_specifier_qualifier_list1_item *self=(PyCAst_object_specifier_qualifier_list1_item*)(_self);
+	CAst::specifier_qualifier_list1_item *_c_obj=self->_p_cast_object;
+	CAst::type_specifier *_p_parameter=const_cast<CAst::type_specifier*>(_c_obj->get_p_type_specifier());
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_TYPE_SPECIFIER1)
+	{
+		PyCAst_object_type_specifier1 *pyObj=(PyCAst_object_type_specifier1*)PyCAst_type_type_specifier1.tp_new(&PyCAst_type_type_specifier1,NULL,NULL);
+		pyObj->_p_cast_object=dynamic_cast<CAst::type_specifier1*>(_p_parameter);
+		return (PyObject*)pyObj;
+	}
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_TYPE_SPECIFIER2)
+	{
+		PyCAst_object_type_specifier2 *pyObj=(PyCAst_object_type_specifier2*)PyCAst_type_type_specifier2.tp_new(&PyCAst_type_type_specifier2,NULL,NULL);
+		pyObj->_p_cast_object=dynamic_cast<CAst::type_specifier2*>(_p_parameter);
+		return (PyObject*)pyObj;
+	}
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_TYPE_SPECIFIER3)
+	{
+		PyCAst_object_type_specifier3 *pyObj=(PyCAst_object_type_specifier3*)PyCAst_type_type_specifier3.tp_new(&PyCAst_type_type_specifier3,NULL,NULL);
+		pyObj->_p_cast_object=dynamic_cast<CAst::type_specifier3*>(_p_parameter);
+		return (PyObject*)pyObj;
+	}
+	return (PyObject*)(PyString_FromString("NotFound!!! Report bug"));
+
 }
 
 			
@@ -10373,9 +10850,24 @@ PyObject* PyCAst_iter_next_specifier_qualifier_list2_iterator(PyObject* _self)
 	(*iter)++;
 	return (PyObject*)ret;
 }
+
 PyObject* PyCAst_iter_specifier_qualifier_list2_iterator(PyObject* _self)
 {
 	return _self;
+}
+static PyObject *PyCAst_getter_specifier_qualifier_list2_item_type_qualifier(PyObject *_self)
+{
+	PyCAst_object_specifier_qualifier_list2_item *self=(PyCAst_object_specifier_qualifier_list2_item*)(_self);
+	CAst::specifier_qualifier_list2_item *_c_obj=self->_p_cast_object;
+	CAst::type_qualifier *_p_parameter=const_cast<CAst::type_qualifier*>(_c_obj->get_p_type_qualifier());
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_TYPE_QUALIFIER)
+	{
+		PyCAst_object_type_qualifier *pyObj=(PyCAst_object_type_qualifier*)PyCAst_type_type_qualifier.tp_new(&PyCAst_type_type_qualifier,NULL,NULL);
+		pyObj->_p_cast_object=dynamic_cast<CAst::type_qualifier*>(_p_parameter);
+		return (PyObject*)pyObj;
+	}
+	return (PyObject*)(PyString_FromString("NotFound!!! Report bug"));
+
 }
 
 			
@@ -10543,9 +11035,30 @@ PyObject* PyCAst_iter_next_translation_unit_iterator(PyObject* _self)
 	(*iter)++;
 	return (PyObject*)ret;
 }
+
 PyObject* PyCAst_iter_translation_unit_iterator(PyObject* _self)
 {
 	return _self;
+}
+static PyObject *PyCAst_getter_translation_unit_item_external_declaration(PyObject *_self)
+{
+	PyCAst_object_translation_unit_item *self=(PyCAst_object_translation_unit_item*)(_self);
+	CAst::translation_unit_item *_c_obj=self->_p_cast_object;
+	CAst::external_declaration *_p_parameter=const_cast<CAst::external_declaration*>(_c_obj->get_p_external_declaration());
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_EXTERNAL_DECLARATION1)
+	{
+		PyCAst_object_external_declaration1 *pyObj=(PyCAst_object_external_declaration1*)PyCAst_type_external_declaration1.tp_new(&PyCAst_type_external_declaration1,NULL,NULL);
+		pyObj->_p_cast_object=dynamic_cast<CAst::external_declaration1*>(_p_parameter);
+		return (PyObject*)pyObj;
+	}
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_EXTERNAL_DECLARATION2)
+	{
+		PyCAst_object_external_declaration2 *pyObj=(PyCAst_object_external_declaration2*)PyCAst_type_external_declaration2.tp_new(&PyCAst_type_external_declaration2,NULL,NULL);
+		pyObj->_p_cast_object=dynamic_cast<CAst::external_declaration2*>(_p_parameter);
+		return (PyObject*)pyObj;
+	}
+	return (PyObject*)(PyString_FromString("NotFound!!! Report bug"));
+
 }
 
 			
@@ -10783,9 +11296,30 @@ PyObject* PyCAst_iter_next_initializer_list_iterator(PyObject* _self)
 	(*iter)++;
 	return (PyObject*)ret;
 }
+
 PyObject* PyCAst_iter_initializer_list_iterator(PyObject* _self)
 {
 	return _self;
+}
+static PyObject *PyCAst_getter_initializer_list_item_initializer(PyObject *_self)
+{
+	PyCAst_object_initializer_list_item *self=(PyCAst_object_initializer_list_item*)(_self);
+	CAst::initializer_list_item *_c_obj=self->_p_cast_object;
+	CAst::initializer *_p_parameter=const_cast<CAst::initializer*>(_c_obj->get_p_initializer());
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_INITIALIZER1)
+	{
+		PyCAst_object_initializer1 *pyObj=(PyCAst_object_initializer1*)PyCAst_type_initializer1.tp_new(&PyCAst_type_initializer1,NULL,NULL);
+		pyObj->_p_cast_object=dynamic_cast<CAst::initializer1*>(_p_parameter);
+		return (PyObject*)pyObj;
+	}
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_INITIALIZER2)
+	{
+		PyCAst_object_initializer2 *pyObj=(PyCAst_object_initializer2*)PyCAst_type_initializer2.tp_new(&PyCAst_type_initializer2,NULL,NULL);
+		pyObj->_p_cast_object=dynamic_cast<CAst::initializer2*>(_p_parameter);
+		return (PyObject*)pyObj;
+	}
+	return (PyObject*)(PyString_FromString("NotFound!!! Report bug"));
+
 }
 
 			
@@ -10953,9 +11487,54 @@ PyObject* PyCAst_iter_next_statement_list_iterator(PyObject* _self)
 	(*iter)++;
 	return (PyObject*)ret;
 }
+
 PyObject* PyCAst_iter_statement_list_iterator(PyObject* _self)
 {
 	return _self;
+}
+static PyObject *PyCAst_getter_statement_list_item_statement(PyObject *_self)
+{
+	PyCAst_object_statement_list_item *self=(PyCAst_object_statement_list_item*)(_self);
+	CAst::statement_list_item *_c_obj=self->_p_cast_object;
+	CAst::statement *_p_parameter=const_cast<CAst::statement*>(_c_obj->get_p_statement());
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_STATEMENT1)
+	{
+		PyCAst_object_statement1 *pyObj=(PyCAst_object_statement1*)PyCAst_type_statement1.tp_new(&PyCAst_type_statement1,NULL,NULL);
+		pyObj->_p_cast_object=dynamic_cast<CAst::statement1*>(_p_parameter);
+		return (PyObject*)pyObj;
+	}
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_STATEMENT2)
+	{
+		PyCAst_object_statement2 *pyObj=(PyCAst_object_statement2*)PyCAst_type_statement2.tp_new(&PyCAst_type_statement2,NULL,NULL);
+		pyObj->_p_cast_object=dynamic_cast<CAst::statement2*>(_p_parameter);
+		return (PyObject*)pyObj;
+	}
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_STATEMENT3)
+	{
+		PyCAst_object_statement3 *pyObj=(PyCAst_object_statement3*)PyCAst_type_statement3.tp_new(&PyCAst_type_statement3,NULL,NULL);
+		pyObj->_p_cast_object=dynamic_cast<CAst::statement3*>(_p_parameter);
+		return (PyObject*)pyObj;
+	}
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_STATEMENT4)
+	{
+		PyCAst_object_statement4 *pyObj=(PyCAst_object_statement4*)PyCAst_type_statement4.tp_new(&PyCAst_type_statement4,NULL,NULL);
+		pyObj->_p_cast_object=dynamic_cast<CAst::statement4*>(_p_parameter);
+		return (PyObject*)pyObj;
+	}
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_STATEMENT5)
+	{
+		PyCAst_object_statement5 *pyObj=(PyCAst_object_statement5*)PyCAst_type_statement5.tp_new(&PyCAst_type_statement5,NULL,NULL);
+		pyObj->_p_cast_object=dynamic_cast<CAst::statement5*>(_p_parameter);
+		return (PyObject*)pyObj;
+	}
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_STATEMENT6)
+	{
+		PyCAst_object_statement6 *pyObj=(PyCAst_object_statement6*)PyCAst_type_statement6.tp_new(&PyCAst_type_statement6,NULL,NULL);
+		pyObj->_p_cast_object=dynamic_cast<CAst::statement6*>(_p_parameter);
+		return (PyObject*)pyObj;
+	}
+	return (PyObject*)(PyString_FromString("NotFound!!! Report bug"));
+
 }
 
 			
@@ -11123,9 +11702,30 @@ PyObject* PyCAst_iter_next_expression_iterator(PyObject* _self)
 	(*iter)++;
 	return (PyObject*)ret;
 }
+
 PyObject* PyCAst_iter_expression_iterator(PyObject* _self)
 {
 	return _self;
+}
+static PyObject *PyCAst_getter_expression_item_assignment_expression(PyObject *_self)
+{
+	PyCAst_object_expression_item *self=(PyCAst_object_expression_item*)(_self);
+	CAst::expression_item *_c_obj=self->_p_cast_object;
+	CAst::assignment_expression *_p_parameter=const_cast<CAst::assignment_expression*>(_c_obj->get_p_assignment_expression());
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_ASSIGNMENT_EXPRESSION1)
+	{
+		PyCAst_object_assignment_expression1 *pyObj=(PyCAst_object_assignment_expression1*)PyCAst_type_assignment_expression1.tp_new(&PyCAst_type_assignment_expression1,NULL,NULL);
+		pyObj->_p_cast_object=dynamic_cast<CAst::assignment_expression1*>(_p_parameter);
+		return (PyObject*)pyObj;
+	}
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_ASSIGNMENT_EXPRESSION2)
+	{
+		PyCAst_object_assignment_expression2 *pyObj=(PyCAst_object_assignment_expression2*)PyCAst_type_assignment_expression2.tp_new(&PyCAst_type_assignment_expression2,NULL,NULL);
+		pyObj->_p_cast_object=dynamic_cast<CAst::assignment_expression2*>(_p_parameter);
+		return (PyObject*)pyObj;
+	}
+	return (PyObject*)(PyString_FromString("NotFound!!! Report bug"));
+
 }
 
 			

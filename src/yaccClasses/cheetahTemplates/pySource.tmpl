@@ -164,10 +164,40 @@ PyObject* PyCAst_iter_next_${cls.className}_iterator(PyObject* _self)
 	(*iter)++;
 	return (PyObject*)ret;
 }
+
 PyObject* PyCAst_iter_${cls.className}_iterator(PyObject* _self)
 {
 	return _self;
 }
+#for $t,$n,$p,$v,$i,$v1 in $cls.parameters:
+	#if $i!=$cls.constructor.selfIndex:
+static PyObject *PyCAst_getter_${cls.className}_item_${n.replace("_p_","")}(PyObject *_self)
+{
+	PyCAst_object_${cls.className}_item *self=(PyCAst_object_${cls.className}_item*)(_self);
+	CAst::${cls.className}_item *_c_obj=self->_p_cast_object;
+	CAst::$t *_p_parameter=const_cast<CAst::$t*>(_c_obj->get${n}());
+	#if ($t=="Token"):
+	PyCAst_object_${t} *pyObj=(PyCAst_object_${t}*)PyCAst_type_${t}.tp_new(&PyCAst_type_${t},NULL,NULL);
+	pyObj->_p_cast_object=_p_parameter;
+	return (PyObject*)pyObj;
+	#else:
+		#set rule=$ruleMap[$t]
+		#set constructors=[ p.constructor for p in $rule.patterns if p.constructor.parent is None ]
+		#for $c in $constructors:
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_$c.className.upper())
+	{
+		#set $tt=$c.className
+		PyCAst_object_${tt} *pyObj=(PyCAst_object_${tt}*)PyCAst_type_${tt}.tp_new(&PyCAst_type_${tt},NULL,NULL);
+		pyObj->_p_cast_object=dynamic_cast<CAst::${tt}*>(_p_parameter);
+		return (PyObject*)pyObj;
+	}
+		#end for
+	return (PyObject*)(PyString_FromString("NotFound!!! Report bug"));
+	#end if
+
+}
+	#end if
+#end for
 #end def 
 
 
