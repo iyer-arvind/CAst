@@ -31,12 +31,25 @@ $cls.className::$cls.className
 
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 #echo ",\n".join(["\t"+"%s(_arg_%s)"%(n,n) for t,n,p,v,i,v1 in $cls.parameters ])
 
 {
 	LOG("\033[32mCREATING\033[0m $cls.className");
 }
 
+/*copy constructor*/
+${cls.className}::${cls.className}(const ${cls.className}& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+#echo		",\n".join(["\t\t%s(other.%s)"%(n,n) for t,n,p,v,i,v1 in $cls.parameters])
+
+{
+	LOG("\033[32mCOPYING\033[0m ${cls.className}");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*$cls.className::getProperties returns a map of properties*/
 Properties $cls.className::getProperties()const
@@ -52,7 +65,10 @@ Properties $cls.className::getProperties()const
 /*the destructor*/
 ${cls.className}::~${cls.className}()
 {
-	LOG("\033[31mDELETING\033[0m $cls.className");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m ${cls.className} refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m $cls.className");
 #for t,n,p,v,i,v1 in $cls.parameters
 	if($n)
 	{
@@ -60,6 +76,7 @@ ${cls.className}::~${cls.className}()
 		$n=0;
 	}
 #end for
+	delete _refCount;_refCount=0;
 
 }
 
@@ -147,8 +164,8 @@ Properties ${cls.className}_item::getProperties()const
 /*the destructor*/
 ${cls.className}_item::~${cls.className}_item()
 {
-	LOG("\033[31mDELETING?\033[0m ${cls.className}_item");
 	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m ${cls.className}_item refCount:"<<(*_refCount));
 	if((*_refCount)>0)return;
 	LOG("[ "<<_refCount<<" ]\t"<<"refCount after decrement:"<<(*_refCount));//>>>>
 #for t,n,p,v,i,v1 in $cls.parameters
@@ -160,7 +177,8 @@ ${cls.className}_item::~${cls.className}_item()
 	}
 	#end if
 #end for
-	LOG("\033[31mDELETED\033[0m $cls.className");
+	delete _refCount;_refCount=0;
+	LOG("\033[31mDELETED\033[0m ${cls.className}_item");
 }
 /*------------------------------------------------------------*\
  							        
@@ -229,8 +247,9 @@ PropertiesList $cls.className::getPropertiesList()const
 /*the destructor*/
 $cls.className::~${cls.className}()
 {
-	LOG("\033[32mDESTOYING\033[0m $cls.className");
+	LOG("\033[33mDELETING?\033[0m $cls.className");
 	_items.clear();
+	LOG("\033[31mDELETED\033[0m $cls.className");
 }
 
 ##

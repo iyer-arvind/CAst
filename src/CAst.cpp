@@ -131,11 +131,23 @@ storage_class_specifier::storage_class_specifier
 		Token *_arg__p_token1
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_token1(_arg__p_token1)
 {
 	LOG("\033[32mCREATING\033[0m storage_class_specifier");
 }
 
+/*copy constructor*/
+storage_class_specifier::storage_class_specifier(const storage_class_specifier& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_token1(other._p_token1)
+{
+	LOG("\033[32mCOPYING\033[0m storage_class_specifier");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*storage_class_specifier::getProperties returns a map of properties*/
 Properties storage_class_specifier::getProperties()const
@@ -149,12 +161,16 @@ Properties storage_class_specifier::getProperties()const
 /*the destructor*/
 storage_class_specifier::~storage_class_specifier()
 {
-	LOG("\033[31mDELETING\033[0m storage_class_specifier");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m storage_class_specifier refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m storage_class_specifier");
 	if(_p_token1)
 	{
 		delete _p_token1;
 		_p_token1=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -183,11 +199,23 @@ expression_statement::expression_statement
 		expression *_arg__p_expression
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_expression(_arg__p_expression)
 {
 	LOG("\033[32mCREATING\033[0m expression_statement");
 }
 
+/*copy constructor*/
+expression_statement::expression_statement(const expression_statement& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_expression(other._p_expression)
+{
+	LOG("\033[32mCOPYING\033[0m expression_statement");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*expression_statement::getProperties returns a map of properties*/
 Properties expression_statement::getProperties()const
@@ -201,12 +229,16 @@ Properties expression_statement::getProperties()const
 /*the destructor*/
 expression_statement::~expression_statement()
 {
-	LOG("\033[31mDELETING\033[0m expression_statement");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m expression_statement refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m expression_statement");
 	if(_p_expression)
 	{
 		delete _p_expression;
 		_p_expression=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -236,12 +268,25 @@ type_name::type_name
 		abstract_declarator *_arg__p_abstract_declarator
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_specifier_qualifier_list(_arg__p_specifier_qualifier_list),
 	_p_abstract_declarator(_arg__p_abstract_declarator)
 {
 	LOG("\033[32mCREATING\033[0m type_name");
 }
 
+/*copy constructor*/
+type_name::type_name(const type_name& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_specifier_qualifier_list(other._p_specifier_qualifier_list),
+		_p_abstract_declarator(other._p_abstract_declarator)
+{
+	LOG("\033[32mCOPYING\033[0m type_name");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*type_name::getProperties returns a map of properties*/
 Properties type_name::getProperties()const
@@ -256,7 +301,10 @@ Properties type_name::getProperties()const
 /*the destructor*/
 type_name::~type_name()
 {
-	LOG("\033[31mDELETING\033[0m type_name");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m type_name refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m type_name");
 	if(_p_specifier_qualifier_list)
 	{
 		delete _p_specifier_qualifier_list;
@@ -267,6 +315,7 @@ type_name::~type_name()
 		delete _p_abstract_declarator;
 		_p_abstract_declarator=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -295,11 +344,23 @@ unary_expression1::unary_expression1
 		type_name *_arg__p_type_name
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_type_name(_arg__p_type_name)
 {
 	LOG("\033[32mCREATING\033[0m unary_expression1");
 }
 
+/*copy constructor*/
+unary_expression1::unary_expression1(const unary_expression1& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_type_name(other._p_type_name)
+{
+	LOG("\033[32mCOPYING\033[0m unary_expression1");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*unary_expression1::getProperties returns a map of properties*/
 Properties unary_expression1::getProperties()const
@@ -313,12 +374,16 @@ Properties unary_expression1::getProperties()const
 /*the destructor*/
 unary_expression1::~unary_expression1()
 {
-	LOG("\033[31mDELETING\033[0m unary_expression1");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m unary_expression1 refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m unary_expression1");
 	if(_p_type_name)
 	{
 		delete _p_type_name;
 		_p_type_name=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -348,12 +413,25 @@ unary_expression2::unary_expression2
 		unary_expression *_arg__p_unary_expression
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_token1(_arg__p_token1),
 	_p_unary_expression(_arg__p_unary_expression)
 {
 	LOG("\033[32mCREATING\033[0m unary_expression2");
 }
 
+/*copy constructor*/
+unary_expression2::unary_expression2(const unary_expression2& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_token1(other._p_token1),
+		_p_unary_expression(other._p_unary_expression)
+{
+	LOG("\033[32mCOPYING\033[0m unary_expression2");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*unary_expression2::getProperties returns a map of properties*/
 Properties unary_expression2::getProperties()const
@@ -368,7 +446,10 @@ Properties unary_expression2::getProperties()const
 /*the destructor*/
 unary_expression2::~unary_expression2()
 {
-	LOG("\033[31mDELETING\033[0m unary_expression2");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m unary_expression2 refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m unary_expression2");
 	if(_p_token1)
 	{
 		delete _p_token1;
@@ -379,6 +460,7 @@ unary_expression2::~unary_expression2()
 		delete _p_unary_expression;
 		_p_unary_expression=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -408,12 +490,25 @@ unary_expression3::unary_expression3
 		cast_expression *_arg__p_cast_expression
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_unary_operator(_arg__p_unary_operator),
 	_p_cast_expression(_arg__p_cast_expression)
 {
 	LOG("\033[32mCREATING\033[0m unary_expression3");
 }
 
+/*copy constructor*/
+unary_expression3::unary_expression3(const unary_expression3& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_unary_operator(other._p_unary_operator),
+		_p_cast_expression(other._p_cast_expression)
+{
+	LOG("\033[32mCOPYING\033[0m unary_expression3");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*unary_expression3::getProperties returns a map of properties*/
 Properties unary_expression3::getProperties()const
@@ -428,7 +523,10 @@ Properties unary_expression3::getProperties()const
 /*the destructor*/
 unary_expression3::~unary_expression3()
 {
-	LOG("\033[31mDELETING\033[0m unary_expression3");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m unary_expression3 refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m unary_expression3");
 	if(_p_unary_operator)
 	{
 		delete _p_unary_operator;
@@ -439,6 +537,7 @@ unary_expression3::~unary_expression3()
 		delete _p_cast_expression;
 		_p_cast_expression=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -467,11 +566,23 @@ unary_expression4::unary_expression4
 		postfix_expression *_arg__p_postfix_expression
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_postfix_expression(_arg__p_postfix_expression)
 {
 	LOG("\033[32mCREATING\033[0m unary_expression4");
 }
 
+/*copy constructor*/
+unary_expression4::unary_expression4(const unary_expression4& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_postfix_expression(other._p_postfix_expression)
+{
+	LOG("\033[32mCOPYING\033[0m unary_expression4");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*unary_expression4::getProperties returns a map of properties*/
 Properties unary_expression4::getProperties()const
@@ -485,12 +596,16 @@ Properties unary_expression4::getProperties()const
 /*the destructor*/
 unary_expression4::~unary_expression4()
 {
-	LOG("\033[31mDELETING\033[0m unary_expression4");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m unary_expression4 refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m unary_expression4");
 	if(_p_postfix_expression)
 	{
 		delete _p_postfix_expression;
 		_p_postfix_expression=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -552,8 +667,8 @@ Properties conditional_expression_item::getProperties()const
 /*the destructor*/
 conditional_expression_item::~conditional_expression_item()
 {
-	LOG("\033[31mDELETING?\033[0m conditional_expression_item");
 	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m conditional_expression_item refCount:"<<(*_refCount));
 	if((*_refCount)>0)return;
 	LOG("[ "<<_refCount<<" ]\t"<<"refCount after decrement:"<<(*_refCount));//>>>>
 	if(_p_logical_or_expression)
@@ -566,7 +681,8 @@ conditional_expression_item::~conditional_expression_item()
 		delete _p_expression;
 		_p_expression=0;
 	}
-	LOG("\033[31mDELETED\033[0m conditional_expression");
+	delete _refCount;_refCount=0;
+	LOG("\033[31mDELETED\033[0m conditional_expression_item");
 }
 /*------------------------------------------------------------*\
  							        
@@ -622,8 +738,9 @@ PropertiesList conditional_expression::getPropertiesList()const
 /*the destructor*/
 conditional_expression::~conditional_expression()
 {
-	LOG("\033[32mDESTOYING\033[0m conditional_expression");
+	LOG("\033[33mDELETING?\033[0m conditional_expression");
 	_items.clear();
+	LOG("\033[31mDELETED\033[0m conditional_expression");
 }
 
 
@@ -656,6 +773,7 @@ struct_or_union_specifier::struct_or_union_specifier
 		Token *_arg__p_token3
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_struct_or_union(_arg__p_struct_or_union),
 	_p_token1(_arg__p_token1),
 	_p_token2(_arg__p_token2),
@@ -665,6 +783,21 @@ struct_or_union_specifier::struct_or_union_specifier
 	LOG("\033[32mCREATING\033[0m struct_or_union_specifier");
 }
 
+/*copy constructor*/
+struct_or_union_specifier::struct_or_union_specifier(const struct_or_union_specifier& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_struct_or_union(other._p_struct_or_union),
+		_p_token1(other._p_token1),
+		_p_token2(other._p_token2),
+		_p_struct_declaration_list(other._p_struct_declaration_list),
+		_p_token3(other._p_token3)
+{
+	LOG("\033[32mCOPYING\033[0m struct_or_union_specifier");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*struct_or_union_specifier::getProperties returns a map of properties*/
 Properties struct_or_union_specifier::getProperties()const
@@ -682,7 +815,10 @@ Properties struct_or_union_specifier::getProperties()const
 /*the destructor*/
 struct_or_union_specifier::~struct_or_union_specifier()
 {
-	LOG("\033[31mDELETING\033[0m struct_or_union_specifier");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m struct_or_union_specifier refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m struct_or_union_specifier");
 	if(_p_struct_or_union)
 	{
 		delete _p_struct_or_union;
@@ -708,6 +844,7 @@ struct_or_union_specifier::~struct_or_union_specifier()
 		delete _p_token3;
 		_p_token3=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -765,8 +902,8 @@ Properties exclusive_or_expression_item::getProperties()const
 /*the destructor*/
 exclusive_or_expression_item::~exclusive_or_expression_item()
 {
-	LOG("\033[31mDELETING?\033[0m exclusive_or_expression_item");
 	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m exclusive_or_expression_item refCount:"<<(*_refCount));
 	if((*_refCount)>0)return;
 	LOG("[ "<<_refCount<<" ]\t"<<"refCount after decrement:"<<(*_refCount));//>>>>
 	if(_p_and_expression)
@@ -774,7 +911,8 @@ exclusive_or_expression_item::~exclusive_or_expression_item()
 		delete _p_and_expression;
 		_p_and_expression=0;
 	}
-	LOG("\033[31mDELETED\033[0m exclusive_or_expression");
+	delete _refCount;_refCount=0;
+	LOG("\033[31mDELETED\033[0m exclusive_or_expression_item");
 }
 /*------------------------------------------------------------*\
  							        
@@ -829,8 +967,9 @@ PropertiesList exclusive_or_expression::getPropertiesList()const
 /*the destructor*/
 exclusive_or_expression::~exclusive_or_expression()
 {
-	LOG("\033[32mDESTOYING\033[0m exclusive_or_expression");
+	LOG("\033[33mDELETING?\033[0m exclusive_or_expression");
 	_items.clear();
+	LOG("\033[31mDELETED\033[0m exclusive_or_expression");
 }
 
 
@@ -860,12 +999,25 @@ initializer1::initializer1
 		Token *_arg__p_token1
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_initializer_list(_arg__p_initializer_list),
 	_p_token1(_arg__p_token1)
 {
 	LOG("\033[32mCREATING\033[0m initializer1");
 }
 
+/*copy constructor*/
+initializer1::initializer1(const initializer1& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_initializer_list(other._p_initializer_list),
+		_p_token1(other._p_token1)
+{
+	LOG("\033[32mCOPYING\033[0m initializer1");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*initializer1::getProperties returns a map of properties*/
 Properties initializer1::getProperties()const
@@ -880,7 +1032,10 @@ Properties initializer1::getProperties()const
 /*the destructor*/
 initializer1::~initializer1()
 {
-	LOG("\033[31mDELETING\033[0m initializer1");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m initializer1 refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m initializer1");
 	if(_p_initializer_list)
 	{
 		delete _p_initializer_list;
@@ -891,6 +1046,7 @@ initializer1::~initializer1()
 		delete _p_token1;
 		_p_token1=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -919,11 +1075,23 @@ initializer2::initializer2
 		assignment_expression *_arg__p_assignment_expression
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_assignment_expression(_arg__p_assignment_expression)
 {
 	LOG("\033[32mCREATING\033[0m initializer2");
 }
 
+/*copy constructor*/
+initializer2::initializer2(const initializer2& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_assignment_expression(other._p_assignment_expression)
+{
+	LOG("\033[32mCOPYING\033[0m initializer2");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*initializer2::getProperties returns a map of properties*/
 Properties initializer2::getProperties()const
@@ -937,12 +1105,16 @@ Properties initializer2::getProperties()const
 /*the destructor*/
 initializer2::~initializer2()
 {
-	LOG("\033[31mDELETING\033[0m initializer2");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m initializer2 refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m initializer2");
 	if(_p_assignment_expression)
 	{
 		delete _p_assignment_expression;
 		_p_assignment_expression=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -1000,8 +1172,8 @@ Properties struct_declaration_list_item::getProperties()const
 /*the destructor*/
 struct_declaration_list_item::~struct_declaration_list_item()
 {
-	LOG("\033[31mDELETING?\033[0m struct_declaration_list_item");
 	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m struct_declaration_list_item refCount:"<<(*_refCount));
 	if((*_refCount)>0)return;
 	LOG("[ "<<_refCount<<" ]\t"<<"refCount after decrement:"<<(*_refCount));//>>>>
 	if(_p_struct_declaration)
@@ -1009,7 +1181,8 @@ struct_declaration_list_item::~struct_declaration_list_item()
 		delete _p_struct_declaration;
 		_p_struct_declaration=0;
 	}
-	LOG("\033[31mDELETED\033[0m struct_declaration_list");
+	delete _refCount;_refCount=0;
+	LOG("\033[31mDELETED\033[0m struct_declaration_list_item");
 }
 /*------------------------------------------------------------*\
  							        
@@ -1064,8 +1237,9 @@ PropertiesList struct_declaration_list::getPropertiesList()const
 /*the destructor*/
 struct_declaration_list::~struct_declaration_list()
 {
-	LOG("\033[32mDESTOYING\033[0m struct_declaration_list");
+	LOG("\033[33mDELETING?\033[0m struct_declaration_list");
 	_items.clear();
+	LOG("\033[31mDELETED\033[0m struct_declaration_list");
 }
 
 
@@ -1094,11 +1268,23 @@ assignment_operator::assignment_operator
 		Token *_arg__p_token1
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_token1(_arg__p_token1)
 {
 	LOG("\033[32mCREATING\033[0m assignment_operator");
 }
 
+/*copy constructor*/
+assignment_operator::assignment_operator(const assignment_operator& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_token1(other._p_token1)
+{
+	LOG("\033[32mCOPYING\033[0m assignment_operator");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*assignment_operator::getProperties returns a map of properties*/
 Properties assignment_operator::getProperties()const
@@ -1112,12 +1298,16 @@ Properties assignment_operator::getProperties()const
 /*the destructor*/
 assignment_operator::~assignment_operator()
 {
-	LOG("\033[31mDELETING\033[0m assignment_operator");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m assignment_operator refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m assignment_operator");
 	if(_p_token1)
 	{
 		delete _p_token1;
 		_p_token1=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -1147,12 +1337,25 @@ struct_declaration::struct_declaration
 		struct_declarator_list *_arg__p_struct_declarator_list
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_specifier_qualifier_list(_arg__p_specifier_qualifier_list),
 	_p_struct_declarator_list(_arg__p_struct_declarator_list)
 {
 	LOG("\033[32mCREATING\033[0m struct_declaration");
 }
 
+/*copy constructor*/
+struct_declaration::struct_declaration(const struct_declaration& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_specifier_qualifier_list(other._p_specifier_qualifier_list),
+		_p_struct_declarator_list(other._p_struct_declarator_list)
+{
+	LOG("\033[32mCOPYING\033[0m struct_declaration");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*struct_declaration::getProperties returns a map of properties*/
 Properties struct_declaration::getProperties()const
@@ -1167,7 +1370,10 @@ Properties struct_declaration::getProperties()const
 /*the destructor*/
 struct_declaration::~struct_declaration()
 {
-	LOG("\033[31mDELETING\033[0m struct_declaration");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m struct_declaration refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m struct_declaration");
 	if(_p_specifier_qualifier_list)
 	{
 		delete _p_specifier_qualifier_list;
@@ -1178,6 +1384,7 @@ struct_declaration::~struct_declaration()
 		delete _p_struct_declarator_list;
 		_p_struct_declarator_list=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -1207,12 +1414,25 @@ abstract_declarator::abstract_declarator
 		direct_abstract_declarator *_arg__p_direct_abstract_declarator
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_pointer(_arg__p_pointer),
 	_p_direct_abstract_declarator(_arg__p_direct_abstract_declarator)
 {
 	LOG("\033[32mCREATING\033[0m abstract_declarator");
 }
 
+/*copy constructor*/
+abstract_declarator::abstract_declarator(const abstract_declarator& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_pointer(other._p_pointer),
+		_p_direct_abstract_declarator(other._p_direct_abstract_declarator)
+{
+	LOG("\033[32mCOPYING\033[0m abstract_declarator");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*abstract_declarator::getProperties returns a map of properties*/
 Properties abstract_declarator::getProperties()const
@@ -1227,7 +1447,10 @@ Properties abstract_declarator::getProperties()const
 /*the destructor*/
 abstract_declarator::~abstract_declarator()
 {
-	LOG("\033[31mDELETING\033[0m abstract_declarator");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m abstract_declarator refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m abstract_declarator");
 	if(_p_pointer)
 	{
 		delete _p_pointer;
@@ -1238,6 +1461,7 @@ abstract_declarator::~abstract_declarator()
 		delete _p_direct_abstract_declarator;
 		_p_direct_abstract_declarator=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -1267,12 +1491,25 @@ iteration_statement1::iteration_statement1
 		expression *_arg__p_expression
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_statement(_arg__p_statement),
 	_p_expression(_arg__p_expression)
 {
 	LOG("\033[32mCREATING\033[0m iteration_statement1");
 }
 
+/*copy constructor*/
+iteration_statement1::iteration_statement1(const iteration_statement1& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_statement(other._p_statement),
+		_p_expression(other._p_expression)
+{
+	LOG("\033[32mCOPYING\033[0m iteration_statement1");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*iteration_statement1::getProperties returns a map of properties*/
 Properties iteration_statement1::getProperties()const
@@ -1287,7 +1524,10 @@ Properties iteration_statement1::getProperties()const
 /*the destructor*/
 iteration_statement1::~iteration_statement1()
 {
-	LOG("\033[31mDELETING\033[0m iteration_statement1");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m iteration_statement1 refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m iteration_statement1");
 	if(_p_statement)
 	{
 		delete _p_statement;
@@ -1298,6 +1538,7 @@ iteration_statement1::~iteration_statement1()
 		delete _p_expression;
 		_p_expression=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -1329,6 +1570,7 @@ iteration_statement2::iteration_statement2
 		statement *_arg__p_statement
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_expression_statement(_arg__p_expression_statement),
 	_p_expression_statement1(_arg__p_expression_statement1),
 	_p_expression(_arg__p_expression),
@@ -1337,6 +1579,20 @@ iteration_statement2::iteration_statement2
 	LOG("\033[32mCREATING\033[0m iteration_statement2");
 }
 
+/*copy constructor*/
+iteration_statement2::iteration_statement2(const iteration_statement2& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_expression_statement(other._p_expression_statement),
+		_p_expression_statement1(other._p_expression_statement1),
+		_p_expression(other._p_expression),
+		_p_statement(other._p_statement)
+{
+	LOG("\033[32mCOPYING\033[0m iteration_statement2");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*iteration_statement2::getProperties returns a map of properties*/
 Properties iteration_statement2::getProperties()const
@@ -1353,7 +1609,10 @@ Properties iteration_statement2::getProperties()const
 /*the destructor*/
 iteration_statement2::~iteration_statement2()
 {
-	LOG("\033[31mDELETING\033[0m iteration_statement2");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m iteration_statement2 refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m iteration_statement2");
 	if(_p_expression_statement)
 	{
 		delete _p_expression_statement;
@@ -1374,6 +1633,7 @@ iteration_statement2::~iteration_statement2()
 		delete _p_statement;
 		_p_statement=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -1403,12 +1663,25 @@ iteration_statement3::iteration_statement3
 		statement *_arg__p_statement
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_expression(_arg__p_expression),
 	_p_statement(_arg__p_statement)
 {
 	LOG("\033[32mCREATING\033[0m iteration_statement3");
 }
 
+/*copy constructor*/
+iteration_statement3::iteration_statement3(const iteration_statement3& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_expression(other._p_expression),
+		_p_statement(other._p_statement)
+{
+	LOG("\033[32mCOPYING\033[0m iteration_statement3");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*iteration_statement3::getProperties returns a map of properties*/
 Properties iteration_statement3::getProperties()const
@@ -1423,7 +1696,10 @@ Properties iteration_statement3::getProperties()const
 /*the destructor*/
 iteration_statement3::~iteration_statement3()
 {
-	LOG("\033[31mDELETING\033[0m iteration_statement3");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m iteration_statement3 refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m iteration_statement3");
 	if(_p_expression)
 	{
 		delete _p_expression;
@@ -1434,6 +1710,7 @@ iteration_statement3::~iteration_statement3()
 		delete _p_statement;
 		_p_statement=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -1495,8 +1772,8 @@ Properties additive_expression_item::getProperties()const
 /*the destructor*/
 additive_expression_item::~additive_expression_item()
 {
-	LOG("\033[31mDELETING?\033[0m additive_expression_item");
 	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m additive_expression_item refCount:"<<(*_refCount));
 	if((*_refCount)>0)return;
 	LOG("[ "<<_refCount<<" ]\t"<<"refCount after decrement:"<<(*_refCount));//>>>>
 	if(_p_token1)
@@ -1509,7 +1786,8 @@ additive_expression_item::~additive_expression_item()
 		delete _p_multiplicative_expression;
 		_p_multiplicative_expression=0;
 	}
-	LOG("\033[31mDELETED\033[0m additive_expression");
+	delete _refCount;_refCount=0;
+	LOG("\033[31mDELETED\033[0m additive_expression_item");
 }
 /*------------------------------------------------------------*\
  							        
@@ -1565,8 +1843,9 @@ PropertiesList additive_expression::getPropertiesList()const
 /*the destructor*/
 additive_expression::~additive_expression()
 {
-	LOG("\033[32mDESTOYING\033[0m additive_expression");
+	LOG("\033[33mDELETING?\033[0m additive_expression");
 	_items.clear();
+	LOG("\033[31mDELETED\033[0m additive_expression");
 }
 
 
@@ -1595,11 +1874,23 @@ external_declaration1::external_declaration1
 		function_definition *_arg__p_function_definition
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_function_definition(_arg__p_function_definition)
 {
 	LOG("\033[32mCREATING\033[0m external_declaration1");
 }
 
+/*copy constructor*/
+external_declaration1::external_declaration1(const external_declaration1& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_function_definition(other._p_function_definition)
+{
+	LOG("\033[32mCOPYING\033[0m external_declaration1");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*external_declaration1::getProperties returns a map of properties*/
 Properties external_declaration1::getProperties()const
@@ -1613,12 +1904,16 @@ Properties external_declaration1::getProperties()const
 /*the destructor*/
 external_declaration1::~external_declaration1()
 {
-	LOG("\033[31mDELETING\033[0m external_declaration1");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m external_declaration1 refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m external_declaration1");
 	if(_p_function_definition)
 	{
 		delete _p_function_definition;
 		_p_function_definition=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -1647,11 +1942,23 @@ external_declaration2::external_declaration2
 		declaration *_arg__p_declaration
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_declaration(_arg__p_declaration)
 {
 	LOG("\033[32mCREATING\033[0m external_declaration2");
 }
 
+/*copy constructor*/
+external_declaration2::external_declaration2(const external_declaration2& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_declaration(other._p_declaration)
+{
+	LOG("\033[32mCOPYING\033[0m external_declaration2");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*external_declaration2::getProperties returns a map of properties*/
 Properties external_declaration2::getProperties()const
@@ -1665,12 +1972,16 @@ Properties external_declaration2::getProperties()const
 /*the destructor*/
 external_declaration2::~external_declaration2()
 {
-	LOG("\033[31mDELETING\033[0m external_declaration2");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m external_declaration2 refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m external_declaration2");
 	if(_p_declaration)
 	{
 		delete _p_declaration;
 		_p_declaration=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -1699,11 +2010,23 @@ type_specifier1::type_specifier1
 		Token *_arg__p_token1
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_token1(_arg__p_token1)
 {
 	LOG("\033[32mCREATING\033[0m type_specifier1");
 }
 
+/*copy constructor*/
+type_specifier1::type_specifier1(const type_specifier1& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_token1(other._p_token1)
+{
+	LOG("\033[32mCOPYING\033[0m type_specifier1");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*type_specifier1::getProperties returns a map of properties*/
 Properties type_specifier1::getProperties()const
@@ -1717,12 +2040,16 @@ Properties type_specifier1::getProperties()const
 /*the destructor*/
 type_specifier1::~type_specifier1()
 {
-	LOG("\033[31mDELETING\033[0m type_specifier1");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m type_specifier1 refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m type_specifier1");
 	if(_p_token1)
 	{
 		delete _p_token1;
 		_p_token1=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -1751,11 +2078,23 @@ type_specifier2::type_specifier2
 		struct_or_union_specifier *_arg__p_struct_or_union_specifier
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_struct_or_union_specifier(_arg__p_struct_or_union_specifier)
 {
 	LOG("\033[32mCREATING\033[0m type_specifier2");
 }
 
+/*copy constructor*/
+type_specifier2::type_specifier2(const type_specifier2& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_struct_or_union_specifier(other._p_struct_or_union_specifier)
+{
+	LOG("\033[32mCOPYING\033[0m type_specifier2");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*type_specifier2::getProperties returns a map of properties*/
 Properties type_specifier2::getProperties()const
@@ -1769,12 +2108,16 @@ Properties type_specifier2::getProperties()const
 /*the destructor*/
 type_specifier2::~type_specifier2()
 {
-	LOG("\033[31mDELETING\033[0m type_specifier2");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m type_specifier2 refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m type_specifier2");
 	if(_p_struct_or_union_specifier)
 	{
 		delete _p_struct_or_union_specifier;
 		_p_struct_or_union_specifier=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -1803,11 +2146,23 @@ type_specifier3::type_specifier3
 		enum_specifier *_arg__p_enum_specifier
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_enum_specifier(_arg__p_enum_specifier)
 {
 	LOG("\033[32mCREATING\033[0m type_specifier3");
 }
 
+/*copy constructor*/
+type_specifier3::type_specifier3(const type_specifier3& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_enum_specifier(other._p_enum_specifier)
+{
+	LOG("\033[32mCOPYING\033[0m type_specifier3");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*type_specifier3::getProperties returns a map of properties*/
 Properties type_specifier3::getProperties()const
@@ -1821,12 +2176,16 @@ Properties type_specifier3::getProperties()const
 /*the destructor*/
 type_specifier3::~type_specifier3()
 {
-	LOG("\033[31mDELETING\033[0m type_specifier3");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m type_specifier3 refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m type_specifier3");
 	if(_p_enum_specifier)
 	{
 		delete _p_enum_specifier;
 		_p_enum_specifier=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -1856,12 +2215,25 @@ compound_statement::compound_statement
 		statement_list *_arg__p_statement_list
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_declaration_list(_arg__p_declaration_list),
 	_p_statement_list(_arg__p_statement_list)
 {
 	LOG("\033[32mCREATING\033[0m compound_statement");
 }
 
+/*copy constructor*/
+compound_statement::compound_statement(const compound_statement& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_declaration_list(other._p_declaration_list),
+		_p_statement_list(other._p_statement_list)
+{
+	LOG("\033[32mCOPYING\033[0m compound_statement");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*compound_statement::getProperties returns a map of properties*/
 Properties compound_statement::getProperties()const
@@ -1876,7 +2248,10 @@ Properties compound_statement::getProperties()const
 /*the destructor*/
 compound_statement::~compound_statement()
 {
-	LOG("\033[31mDELETING\033[0m compound_statement");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m compound_statement refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m compound_statement");
 	if(_p_declaration_list)
 	{
 		delete _p_declaration_list;
@@ -1887,6 +2262,7 @@ compound_statement::~compound_statement()
 		delete _p_statement_list;
 		_p_statement_list=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -1944,8 +2320,8 @@ Properties inclusive_or_expression_item::getProperties()const
 /*the destructor*/
 inclusive_or_expression_item::~inclusive_or_expression_item()
 {
-	LOG("\033[31mDELETING?\033[0m inclusive_or_expression_item");
 	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m inclusive_or_expression_item refCount:"<<(*_refCount));
 	if((*_refCount)>0)return;
 	LOG("[ "<<_refCount<<" ]\t"<<"refCount after decrement:"<<(*_refCount));//>>>>
 	if(_p_exclusive_or_expression)
@@ -1953,7 +2329,8 @@ inclusive_or_expression_item::~inclusive_or_expression_item()
 		delete _p_exclusive_or_expression;
 		_p_exclusive_or_expression=0;
 	}
-	LOG("\033[31mDELETED\033[0m inclusive_or_expression");
+	delete _refCount;_refCount=0;
+	LOG("\033[31mDELETED\033[0m inclusive_or_expression_item");
 }
 /*------------------------------------------------------------*\
  							        
@@ -2008,8 +2385,9 @@ PropertiesList inclusive_or_expression::getPropertiesList()const
 /*the destructor*/
 inclusive_or_expression::~inclusive_or_expression()
 {
-	LOG("\033[32mDESTOYING\033[0m inclusive_or_expression");
+	LOG("\033[33mDELETING?\033[0m inclusive_or_expression");
 	_items.clear();
+	LOG("\033[31mDELETED\033[0m inclusive_or_expression");
 }
 
 
@@ -2067,8 +2445,8 @@ Properties pointer_item::getProperties()const
 /*the destructor*/
 pointer_item::~pointer_item()
 {
-	LOG("\033[31mDELETING?\033[0m pointer_item");
 	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m pointer_item refCount:"<<(*_refCount));
 	if((*_refCount)>0)return;
 	LOG("[ "<<_refCount<<" ]\t"<<"refCount after decrement:"<<(*_refCount));//>>>>
 	if(_p_type_qualifier_list)
@@ -2076,7 +2454,8 @@ pointer_item::~pointer_item()
 		delete _p_type_qualifier_list;
 		_p_type_qualifier_list=0;
 	}
-	LOG("\033[31mDELETED\033[0m pointer");
+	delete _refCount;_refCount=0;
+	LOG("\033[31mDELETED\033[0m pointer_item");
 }
 /*------------------------------------------------------------*\
  							        
@@ -2131,8 +2510,9 @@ PropertiesList pointer::getPropertiesList()const
 /*the destructor*/
 pointer::~pointer()
 {
-	LOG("\033[32mDESTOYING\033[0m pointer");
+	LOG("\033[33mDELETING?\033[0m pointer");
 	_items.clear();
+	LOG("\033[31mDELETED\033[0m pointer");
 }
 
 
@@ -2164,6 +2544,7 @@ selection_statement1::selection_statement1
 		statement *_arg__p_statement1
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_expression(_arg__p_expression),
 	_p_statement(_arg__p_statement),
 	_p_token1(_arg__p_token1),
@@ -2172,6 +2553,20 @@ selection_statement1::selection_statement1
 	LOG("\033[32mCREATING\033[0m selection_statement1");
 }
 
+/*copy constructor*/
+selection_statement1::selection_statement1(const selection_statement1& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_expression(other._p_expression),
+		_p_statement(other._p_statement),
+		_p_token1(other._p_token1),
+		_p_statement1(other._p_statement1)
+{
+	LOG("\033[32mCOPYING\033[0m selection_statement1");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*selection_statement1::getProperties returns a map of properties*/
 Properties selection_statement1::getProperties()const
@@ -2188,7 +2583,10 @@ Properties selection_statement1::getProperties()const
 /*the destructor*/
 selection_statement1::~selection_statement1()
 {
-	LOG("\033[31mDELETING\033[0m selection_statement1");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m selection_statement1 refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m selection_statement1");
 	if(_p_expression)
 	{
 		delete _p_expression;
@@ -2209,6 +2607,7 @@ selection_statement1::~selection_statement1()
 		delete _p_statement1;
 		_p_statement1=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -2238,12 +2637,25 @@ selection_statement2::selection_statement2
 		statement *_arg__p_statement
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_expression(_arg__p_expression),
 	_p_statement(_arg__p_statement)
 {
 	LOG("\033[32mCREATING\033[0m selection_statement2");
 }
 
+/*copy constructor*/
+selection_statement2::selection_statement2(const selection_statement2& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_expression(other._p_expression),
+		_p_statement(other._p_statement)
+{
+	LOG("\033[32mCOPYING\033[0m selection_statement2");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*selection_statement2::getProperties returns a map of properties*/
 Properties selection_statement2::getProperties()const
@@ -2258,7 +2670,10 @@ Properties selection_statement2::getProperties()const
 /*the destructor*/
 selection_statement2::~selection_statement2()
 {
-	LOG("\033[31mDELETING\033[0m selection_statement2");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m selection_statement2 refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m selection_statement2");
 	if(_p_expression)
 	{
 		delete _p_expression;
@@ -2269,6 +2684,7 @@ selection_statement2::~selection_statement2()
 		delete _p_statement;
 		_p_statement=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -2298,12 +2714,25 @@ postfix_expression1::postfix_expression1
 		expression *_arg__p_expression
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_postfix_expression(_arg__p_postfix_expression),
 	_p_expression(_arg__p_expression)
 {
 	LOG("\033[32mCREATING\033[0m postfix_expression1");
 }
 
+/*copy constructor*/
+postfix_expression1::postfix_expression1(const postfix_expression1& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_postfix_expression(other._p_postfix_expression),
+		_p_expression(other._p_expression)
+{
+	LOG("\033[32mCOPYING\033[0m postfix_expression1");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*postfix_expression1::getProperties returns a map of properties*/
 Properties postfix_expression1::getProperties()const
@@ -2318,7 +2747,10 @@ Properties postfix_expression1::getProperties()const
 /*the destructor*/
 postfix_expression1::~postfix_expression1()
 {
-	LOG("\033[31mDELETING\033[0m postfix_expression1");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m postfix_expression1 refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m postfix_expression1");
 	if(_p_postfix_expression)
 	{
 		delete _p_postfix_expression;
@@ -2329,6 +2761,7 @@ postfix_expression1::~postfix_expression1()
 		delete _p_expression;
 		_p_expression=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -2358,12 +2791,25 @@ postfix_expression2::postfix_expression2
 		argument_expression_list *_arg__p_argument_expression_list
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_postfix_expression(_arg__p_postfix_expression),
 	_p_argument_expression_list(_arg__p_argument_expression_list)
 {
 	LOG("\033[32mCREATING\033[0m postfix_expression2");
 }
 
+/*copy constructor*/
+postfix_expression2::postfix_expression2(const postfix_expression2& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_postfix_expression(other._p_postfix_expression),
+		_p_argument_expression_list(other._p_argument_expression_list)
+{
+	LOG("\033[32mCOPYING\033[0m postfix_expression2");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*postfix_expression2::getProperties returns a map of properties*/
 Properties postfix_expression2::getProperties()const
@@ -2378,7 +2824,10 @@ Properties postfix_expression2::getProperties()const
 /*the destructor*/
 postfix_expression2::~postfix_expression2()
 {
-	LOG("\033[31mDELETING\033[0m postfix_expression2");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m postfix_expression2 refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m postfix_expression2");
 	if(_p_postfix_expression)
 	{
 		delete _p_postfix_expression;
@@ -2389,6 +2838,7 @@ postfix_expression2::~postfix_expression2()
 		delete _p_argument_expression_list;
 		_p_argument_expression_list=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -2419,6 +2869,7 @@ postfix_expression3::postfix_expression3
 		Token *_arg__p_token2
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_postfix_expression(_arg__p_postfix_expression),
 	_p_token1(_arg__p_token1),
 	_p_token2(_arg__p_token2)
@@ -2426,6 +2877,19 @@ postfix_expression3::postfix_expression3
 	LOG("\033[32mCREATING\033[0m postfix_expression3");
 }
 
+/*copy constructor*/
+postfix_expression3::postfix_expression3(const postfix_expression3& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_postfix_expression(other._p_postfix_expression),
+		_p_token1(other._p_token1),
+		_p_token2(other._p_token2)
+{
+	LOG("\033[32mCOPYING\033[0m postfix_expression3");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*postfix_expression3::getProperties returns a map of properties*/
 Properties postfix_expression3::getProperties()const
@@ -2441,7 +2905,10 @@ Properties postfix_expression3::getProperties()const
 /*the destructor*/
 postfix_expression3::~postfix_expression3()
 {
-	LOG("\033[31mDELETING\033[0m postfix_expression3");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m postfix_expression3 refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m postfix_expression3");
 	if(_p_postfix_expression)
 	{
 		delete _p_postfix_expression;
@@ -2457,6 +2924,7 @@ postfix_expression3::~postfix_expression3()
 		delete _p_token2;
 		_p_token2=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -2486,12 +2954,25 @@ postfix_expression4::postfix_expression4
 		Token *_arg__p_token1
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_postfix_expression(_arg__p_postfix_expression),
 	_p_token1(_arg__p_token1)
 {
 	LOG("\033[32mCREATING\033[0m postfix_expression4");
 }
 
+/*copy constructor*/
+postfix_expression4::postfix_expression4(const postfix_expression4& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_postfix_expression(other._p_postfix_expression),
+		_p_token1(other._p_token1)
+{
+	LOG("\033[32mCOPYING\033[0m postfix_expression4");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*postfix_expression4::getProperties returns a map of properties*/
 Properties postfix_expression4::getProperties()const
@@ -2506,7 +2987,10 @@ Properties postfix_expression4::getProperties()const
 /*the destructor*/
 postfix_expression4::~postfix_expression4()
 {
-	LOG("\033[31mDELETING\033[0m postfix_expression4");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m postfix_expression4 refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m postfix_expression4");
 	if(_p_postfix_expression)
 	{
 		delete _p_postfix_expression;
@@ -2517,6 +3001,7 @@ postfix_expression4::~postfix_expression4()
 		delete _p_token1;
 		_p_token1=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -2545,11 +3030,23 @@ postfix_expression5::postfix_expression5
 		primary_expression *_arg__p_primary_expression
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_primary_expression(_arg__p_primary_expression)
 {
 	LOG("\033[32mCREATING\033[0m postfix_expression5");
 }
 
+/*copy constructor*/
+postfix_expression5::postfix_expression5(const postfix_expression5& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_primary_expression(other._p_primary_expression)
+{
+	LOG("\033[32mCOPYING\033[0m postfix_expression5");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*postfix_expression5::getProperties returns a map of properties*/
 Properties postfix_expression5::getProperties()const
@@ -2563,12 +3060,16 @@ Properties postfix_expression5::getProperties()const
 /*the destructor*/
 postfix_expression5::~postfix_expression5()
 {
-	LOG("\033[31mDELETING\033[0m postfix_expression5");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m postfix_expression5 refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m postfix_expression5");
 	if(_p_primary_expression)
 	{
 		delete _p_primary_expression;
 		_p_primary_expression=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -2626,8 +3127,8 @@ Properties and_expression_item::getProperties()const
 /*the destructor*/
 and_expression_item::~and_expression_item()
 {
-	LOG("\033[31mDELETING?\033[0m and_expression_item");
 	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m and_expression_item refCount:"<<(*_refCount));
 	if((*_refCount)>0)return;
 	LOG("[ "<<_refCount<<" ]\t"<<"refCount after decrement:"<<(*_refCount));//>>>>
 	if(_p_equality_expression)
@@ -2635,7 +3136,8 @@ and_expression_item::~and_expression_item()
 		delete _p_equality_expression;
 		_p_equality_expression=0;
 	}
-	LOG("\033[31mDELETED\033[0m and_expression");
+	delete _refCount;_refCount=0;
+	LOG("\033[31mDELETED\033[0m and_expression_item");
 }
 /*------------------------------------------------------------*\
  							        
@@ -2690,8 +3192,9 @@ PropertiesList and_expression::getPropertiesList()const
 /*the destructor*/
 and_expression::~and_expression()
 {
-	LOG("\033[32mDESTOYING\033[0m and_expression");
+	LOG("\033[33mDELETING?\033[0m and_expression");
 	_items.clear();
+	LOG("\033[31mDELETED\033[0m and_expression");
 }
 
 
@@ -2720,11 +3223,23 @@ statement1::statement1
 		labeled_statement *_arg__p_labeled_statement
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_labeled_statement(_arg__p_labeled_statement)
 {
 	LOG("\033[32mCREATING\033[0m statement1");
 }
 
+/*copy constructor*/
+statement1::statement1(const statement1& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_labeled_statement(other._p_labeled_statement)
+{
+	LOG("\033[32mCOPYING\033[0m statement1");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*statement1::getProperties returns a map of properties*/
 Properties statement1::getProperties()const
@@ -2738,12 +3253,16 @@ Properties statement1::getProperties()const
 /*the destructor*/
 statement1::~statement1()
 {
-	LOG("\033[31mDELETING\033[0m statement1");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m statement1 refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m statement1");
 	if(_p_labeled_statement)
 	{
 		delete _p_labeled_statement;
 		_p_labeled_statement=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -2772,11 +3291,23 @@ statement2::statement2
 		compound_statement *_arg__p_compound_statement
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_compound_statement(_arg__p_compound_statement)
 {
 	LOG("\033[32mCREATING\033[0m statement2");
 }
 
+/*copy constructor*/
+statement2::statement2(const statement2& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_compound_statement(other._p_compound_statement)
+{
+	LOG("\033[32mCOPYING\033[0m statement2");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*statement2::getProperties returns a map of properties*/
 Properties statement2::getProperties()const
@@ -2790,12 +3321,16 @@ Properties statement2::getProperties()const
 /*the destructor*/
 statement2::~statement2()
 {
-	LOG("\033[31mDELETING\033[0m statement2");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m statement2 refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m statement2");
 	if(_p_compound_statement)
 	{
 		delete _p_compound_statement;
 		_p_compound_statement=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -2824,11 +3359,23 @@ statement3::statement3
 		expression_statement *_arg__p_expression_statement
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_expression_statement(_arg__p_expression_statement)
 {
 	LOG("\033[32mCREATING\033[0m statement3");
 }
 
+/*copy constructor*/
+statement3::statement3(const statement3& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_expression_statement(other._p_expression_statement)
+{
+	LOG("\033[32mCOPYING\033[0m statement3");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*statement3::getProperties returns a map of properties*/
 Properties statement3::getProperties()const
@@ -2842,12 +3389,16 @@ Properties statement3::getProperties()const
 /*the destructor*/
 statement3::~statement3()
 {
-	LOG("\033[31mDELETING\033[0m statement3");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m statement3 refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m statement3");
 	if(_p_expression_statement)
 	{
 		delete _p_expression_statement;
 		_p_expression_statement=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -2876,11 +3427,23 @@ statement4::statement4
 		selection_statement *_arg__p_selection_statement
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_selection_statement(_arg__p_selection_statement)
 {
 	LOG("\033[32mCREATING\033[0m statement4");
 }
 
+/*copy constructor*/
+statement4::statement4(const statement4& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_selection_statement(other._p_selection_statement)
+{
+	LOG("\033[32mCOPYING\033[0m statement4");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*statement4::getProperties returns a map of properties*/
 Properties statement4::getProperties()const
@@ -2894,12 +3457,16 @@ Properties statement4::getProperties()const
 /*the destructor*/
 statement4::~statement4()
 {
-	LOG("\033[31mDELETING\033[0m statement4");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m statement4 refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m statement4");
 	if(_p_selection_statement)
 	{
 		delete _p_selection_statement;
 		_p_selection_statement=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -2928,11 +3495,23 @@ statement5::statement5
 		iteration_statement *_arg__p_iteration_statement
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_iteration_statement(_arg__p_iteration_statement)
 {
 	LOG("\033[32mCREATING\033[0m statement5");
 }
 
+/*copy constructor*/
+statement5::statement5(const statement5& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_iteration_statement(other._p_iteration_statement)
+{
+	LOG("\033[32mCOPYING\033[0m statement5");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*statement5::getProperties returns a map of properties*/
 Properties statement5::getProperties()const
@@ -2946,12 +3525,16 @@ Properties statement5::getProperties()const
 /*the destructor*/
 statement5::~statement5()
 {
-	LOG("\033[31mDELETING\033[0m statement5");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m statement5 refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m statement5");
 	if(_p_iteration_statement)
 	{
 		delete _p_iteration_statement;
 		_p_iteration_statement=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -2980,11 +3563,23 @@ statement6::statement6
 		jump_statement *_arg__p_jump_statement
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_jump_statement(_arg__p_jump_statement)
 {
 	LOG("\033[32mCREATING\033[0m statement6");
 }
 
+/*copy constructor*/
+statement6::statement6(const statement6& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_jump_statement(other._p_jump_statement)
+{
+	LOG("\033[32mCOPYING\033[0m statement6");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*statement6::getProperties returns a map of properties*/
 Properties statement6::getProperties()const
@@ -2998,12 +3593,16 @@ Properties statement6::getProperties()const
 /*the destructor*/
 statement6::~statement6()
 {
-	LOG("\033[31mDELETING\033[0m statement6");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m statement6 refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m statement6");
 	if(_p_jump_statement)
 	{
 		delete _p_jump_statement;
 		_p_jump_statement=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -3033,12 +3632,25 @@ cast_expression1::cast_expression1
 		cast_expression *_arg__p_cast_expression
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_type_name(_arg__p_type_name),
 	_p_cast_expression(_arg__p_cast_expression)
 {
 	LOG("\033[32mCREATING\033[0m cast_expression1");
 }
 
+/*copy constructor*/
+cast_expression1::cast_expression1(const cast_expression1& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_type_name(other._p_type_name),
+		_p_cast_expression(other._p_cast_expression)
+{
+	LOG("\033[32mCOPYING\033[0m cast_expression1");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*cast_expression1::getProperties returns a map of properties*/
 Properties cast_expression1::getProperties()const
@@ -3053,7 +3665,10 @@ Properties cast_expression1::getProperties()const
 /*the destructor*/
 cast_expression1::~cast_expression1()
 {
-	LOG("\033[31mDELETING\033[0m cast_expression1");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m cast_expression1 refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m cast_expression1");
 	if(_p_type_name)
 	{
 		delete _p_type_name;
@@ -3064,6 +3679,7 @@ cast_expression1::~cast_expression1()
 		delete _p_cast_expression;
 		_p_cast_expression=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -3092,11 +3708,23 @@ cast_expression2::cast_expression2
 		unary_expression *_arg__p_unary_expression
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_unary_expression(_arg__p_unary_expression)
 {
 	LOG("\033[32mCREATING\033[0m cast_expression2");
 }
 
+/*copy constructor*/
+cast_expression2::cast_expression2(const cast_expression2& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_unary_expression(other._p_unary_expression)
+{
+	LOG("\033[32mCOPYING\033[0m cast_expression2");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*cast_expression2::getProperties returns a map of properties*/
 Properties cast_expression2::getProperties()const
@@ -3110,12 +3738,16 @@ Properties cast_expression2::getProperties()const
 /*the destructor*/
 cast_expression2::~cast_expression2()
 {
-	LOG("\033[31mDELETING\033[0m cast_expression2");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m cast_expression2 refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m cast_expression2");
 	if(_p_unary_expression)
 	{
 		delete _p_unary_expression;
 		_p_unary_expression=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -3146,6 +3778,7 @@ init_declarator::init_declarator
 		initializer *_arg__p_initializer
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_declarator(_arg__p_declarator),
 	_p_token1(_arg__p_token1),
 	_p_initializer(_arg__p_initializer)
@@ -3153,6 +3786,19 @@ init_declarator::init_declarator
 	LOG("\033[32mCREATING\033[0m init_declarator");
 }
 
+/*copy constructor*/
+init_declarator::init_declarator(const init_declarator& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_declarator(other._p_declarator),
+		_p_token1(other._p_token1),
+		_p_initializer(other._p_initializer)
+{
+	LOG("\033[32mCOPYING\033[0m init_declarator");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*init_declarator::getProperties returns a map of properties*/
 Properties init_declarator::getProperties()const
@@ -3168,7 +3814,10 @@ Properties init_declarator::getProperties()const
 /*the destructor*/
 init_declarator::~init_declarator()
 {
-	LOG("\033[31mDELETING\033[0m init_declarator");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m init_declarator refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m init_declarator");
 	if(_p_declarator)
 	{
 		delete _p_declarator;
@@ -3184,6 +3833,7 @@ init_declarator::~init_declarator()
 		delete _p_initializer;
 		_p_initializer=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -3241,8 +3891,8 @@ Properties struct_declarator_list_item::getProperties()const
 /*the destructor*/
 struct_declarator_list_item::~struct_declarator_list_item()
 {
-	LOG("\033[31mDELETING?\033[0m struct_declarator_list_item");
 	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m struct_declarator_list_item refCount:"<<(*_refCount));
 	if((*_refCount)>0)return;
 	LOG("[ "<<_refCount<<" ]\t"<<"refCount after decrement:"<<(*_refCount));//>>>>
 	if(_p_struct_declarator)
@@ -3250,7 +3900,8 @@ struct_declarator_list_item::~struct_declarator_list_item()
 		delete _p_struct_declarator;
 		_p_struct_declarator=0;
 	}
-	LOG("\033[31mDELETED\033[0m struct_declarator_list");
+	delete _refCount;_refCount=0;
+	LOG("\033[31mDELETED\033[0m struct_declarator_list_item");
 }
 /*------------------------------------------------------------*\
  							        
@@ -3305,8 +3956,9 @@ PropertiesList struct_declarator_list::getPropertiesList()const
 /*the destructor*/
 struct_declarator_list::~struct_declarator_list()
 {
-	LOG("\033[32mDESTOYING\033[0m struct_declarator_list");
+	LOG("\033[33mDELETING?\033[0m struct_declarator_list");
 	_items.clear();
+	LOG("\033[31mDELETED\033[0m struct_declarator_list");
 }
 
 
@@ -3364,8 +4016,8 @@ Properties logical_or_expression_item::getProperties()const
 /*the destructor*/
 logical_or_expression_item::~logical_or_expression_item()
 {
-	LOG("\033[31mDELETING?\033[0m logical_or_expression_item");
 	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m logical_or_expression_item refCount:"<<(*_refCount));
 	if((*_refCount)>0)return;
 	LOG("[ "<<_refCount<<" ]\t"<<"refCount after decrement:"<<(*_refCount));//>>>>
 	if(_p_logical_and_expression)
@@ -3373,7 +4025,8 @@ logical_or_expression_item::~logical_or_expression_item()
 		delete _p_logical_and_expression;
 		_p_logical_and_expression=0;
 	}
-	LOG("\033[31mDELETED\033[0m logical_or_expression");
+	delete _refCount;_refCount=0;
+	LOG("\033[31mDELETED\033[0m logical_or_expression_item");
 }
 /*------------------------------------------------------------*\
  							        
@@ -3428,8 +4081,9 @@ PropertiesList logical_or_expression::getPropertiesList()const
 /*the destructor*/
 logical_or_expression::~logical_or_expression()
 {
-	LOG("\033[32mDESTOYING\033[0m logical_or_expression");
+	LOG("\033[33mDELETING?\033[0m logical_or_expression");
 	_items.clear();
+	LOG("\033[31mDELETED\033[0m logical_or_expression");
 }
 
 
@@ -3458,11 +4112,23 @@ unary_operator::unary_operator
 		Token *_arg__p_token1
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_token1(_arg__p_token1)
 {
 	LOG("\033[32mCREATING\033[0m unary_operator");
 }
 
+/*copy constructor*/
+unary_operator::unary_operator(const unary_operator& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_token1(other._p_token1)
+{
+	LOG("\033[32mCOPYING\033[0m unary_operator");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*unary_operator::getProperties returns a map of properties*/
 Properties unary_operator::getProperties()const
@@ -3476,12 +4142,16 @@ Properties unary_operator::getProperties()const
 /*the destructor*/
 unary_operator::~unary_operator()
 {
-	LOG("\033[31mDELETING\033[0m unary_operator");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m unary_operator refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m unary_operator");
 	if(_p_token1)
 	{
 		delete _p_token1;
 		_p_token1=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -3543,8 +4213,8 @@ Properties relational_expression_item::getProperties()const
 /*the destructor*/
 relational_expression_item::~relational_expression_item()
 {
-	LOG("\033[31mDELETING?\033[0m relational_expression_item");
 	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m relational_expression_item refCount:"<<(*_refCount));
 	if((*_refCount)>0)return;
 	LOG("[ "<<_refCount<<" ]\t"<<"refCount after decrement:"<<(*_refCount));//>>>>
 	if(_p_token1)
@@ -3557,7 +4227,8 @@ relational_expression_item::~relational_expression_item()
 		delete _p_shift_expression;
 		_p_shift_expression=0;
 	}
-	LOG("\033[31mDELETED\033[0m relational_expression");
+	delete _refCount;_refCount=0;
+	LOG("\033[31mDELETED\033[0m relational_expression_item");
 }
 /*------------------------------------------------------------*\
  							        
@@ -3613,8 +4284,9 @@ PropertiesList relational_expression::getPropertiesList()const
 /*the destructor*/
 relational_expression::~relational_expression()
 {
-	LOG("\033[32mDESTOYING\033[0m relational_expression");
+	LOG("\033[33mDELETING?\033[0m relational_expression");
 	_items.clear();
+	LOG("\033[31mDELETED\033[0m relational_expression");
 }
 
 
@@ -3643,11 +4315,23 @@ struct_or_union::struct_or_union
 		Token *_arg__p_token1
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_token1(_arg__p_token1)
 {
 	LOG("\033[32mCREATING\033[0m struct_or_union");
 }
 
+/*copy constructor*/
+struct_or_union::struct_or_union(const struct_or_union& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_token1(other._p_token1)
+{
+	LOG("\033[32mCOPYING\033[0m struct_or_union");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*struct_or_union::getProperties returns a map of properties*/
 Properties struct_or_union::getProperties()const
@@ -3661,12 +4345,16 @@ Properties struct_or_union::getProperties()const
 /*the destructor*/
 struct_or_union::~struct_or_union()
 {
-	LOG("\033[31mDELETING\033[0m struct_or_union");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m struct_or_union refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m struct_or_union");
 	if(_p_token1)
 	{
 		delete _p_token1;
 		_p_token1=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -3697,6 +4385,7 @@ enumerator::enumerator
 		constant_expression *_arg__p_constant_expression
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_token1(_arg__p_token1),
 	_p_token2(_arg__p_token2),
 	_p_constant_expression(_arg__p_constant_expression)
@@ -3704,6 +4393,19 @@ enumerator::enumerator
 	LOG("\033[32mCREATING\033[0m enumerator");
 }
 
+/*copy constructor*/
+enumerator::enumerator(const enumerator& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_token1(other._p_token1),
+		_p_token2(other._p_token2),
+		_p_constant_expression(other._p_constant_expression)
+{
+	LOG("\033[32mCOPYING\033[0m enumerator");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*enumerator::getProperties returns a map of properties*/
 Properties enumerator::getProperties()const
@@ -3719,7 +4421,10 @@ Properties enumerator::getProperties()const
 /*the destructor*/
 enumerator::~enumerator()
 {
-	LOG("\033[31mDELETING\033[0m enumerator");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m enumerator refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m enumerator");
 	if(_p_token1)
 	{
 		delete _p_token1;
@@ -3735,6 +4440,7 @@ enumerator::~enumerator()
 		delete _p_constant_expression;
 		_p_constant_expression=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -3765,6 +4471,7 @@ assignment_expression1::assignment_expression1
 		assignment_expression *_arg__p_assignment_expression
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_unary_expression(_arg__p_unary_expression),
 	_p_assignment_operator(_arg__p_assignment_operator),
 	_p_assignment_expression(_arg__p_assignment_expression)
@@ -3772,6 +4479,19 @@ assignment_expression1::assignment_expression1
 	LOG("\033[32mCREATING\033[0m assignment_expression1");
 }
 
+/*copy constructor*/
+assignment_expression1::assignment_expression1(const assignment_expression1& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_unary_expression(other._p_unary_expression),
+		_p_assignment_operator(other._p_assignment_operator),
+		_p_assignment_expression(other._p_assignment_expression)
+{
+	LOG("\033[32mCOPYING\033[0m assignment_expression1");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*assignment_expression1::getProperties returns a map of properties*/
 Properties assignment_expression1::getProperties()const
@@ -3787,7 +4507,10 @@ Properties assignment_expression1::getProperties()const
 /*the destructor*/
 assignment_expression1::~assignment_expression1()
 {
-	LOG("\033[31mDELETING\033[0m assignment_expression1");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m assignment_expression1 refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m assignment_expression1");
 	if(_p_unary_expression)
 	{
 		delete _p_unary_expression;
@@ -3803,6 +4526,7 @@ assignment_expression1::~assignment_expression1()
 		delete _p_assignment_expression;
 		_p_assignment_expression=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -3831,11 +4555,23 @@ assignment_expression2::assignment_expression2
 		conditional_expression *_arg__p_conditional_expression
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_conditional_expression(_arg__p_conditional_expression)
 {
 	LOG("\033[32mCREATING\033[0m assignment_expression2");
 }
 
+/*copy constructor*/
+assignment_expression2::assignment_expression2(const assignment_expression2& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_conditional_expression(other._p_conditional_expression)
+{
+	LOG("\033[32mCOPYING\033[0m assignment_expression2");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*assignment_expression2::getProperties returns a map of properties*/
 Properties assignment_expression2::getProperties()const
@@ -3849,12 +4585,16 @@ Properties assignment_expression2::getProperties()const
 /*the destructor*/
 assignment_expression2::~assignment_expression2()
 {
-	LOG("\033[31mDELETING\033[0m assignment_expression2");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m assignment_expression2 refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m assignment_expression2");
 	if(_p_conditional_expression)
 	{
 		delete _p_conditional_expression;
 		_p_conditional_expression=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -3885,6 +4625,7 @@ parameter_type_list::parameter_type_list
 		Token *_arg__p_token2
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_parameter_list(_arg__p_parameter_list),
 	_p_token1(_arg__p_token1),
 	_p_token2(_arg__p_token2)
@@ -3892,6 +4633,19 @@ parameter_type_list::parameter_type_list
 	LOG("\033[32mCREATING\033[0m parameter_type_list");
 }
 
+/*copy constructor*/
+parameter_type_list::parameter_type_list(const parameter_type_list& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_parameter_list(other._p_parameter_list),
+		_p_token1(other._p_token1),
+		_p_token2(other._p_token2)
+{
+	LOG("\033[32mCOPYING\033[0m parameter_type_list");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*parameter_type_list::getProperties returns a map of properties*/
 Properties parameter_type_list::getProperties()const
@@ -3907,7 +4661,10 @@ Properties parameter_type_list::getProperties()const
 /*the destructor*/
 parameter_type_list::~parameter_type_list()
 {
-	LOG("\033[31mDELETING\033[0m parameter_type_list");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m parameter_type_list refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m parameter_type_list");
 	if(_p_parameter_list)
 	{
 		delete _p_parameter_list;
@@ -3923,6 +4680,7 @@ parameter_type_list::~parameter_type_list()
 		delete _p_token2;
 		_p_token2=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -3952,12 +4710,25 @@ parameter_declaration1::parameter_declaration1
 		declarator *_arg__p_declarator
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_declaration_specifiers(_arg__p_declaration_specifiers),
 	_p_declarator(_arg__p_declarator)
 {
 	LOG("\033[32mCREATING\033[0m parameter_declaration1");
 }
 
+/*copy constructor*/
+parameter_declaration1::parameter_declaration1(const parameter_declaration1& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_declaration_specifiers(other._p_declaration_specifiers),
+		_p_declarator(other._p_declarator)
+{
+	LOG("\033[32mCOPYING\033[0m parameter_declaration1");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*parameter_declaration1::getProperties returns a map of properties*/
 Properties parameter_declaration1::getProperties()const
@@ -3972,7 +4743,10 @@ Properties parameter_declaration1::getProperties()const
 /*the destructor*/
 parameter_declaration1::~parameter_declaration1()
 {
-	LOG("\033[31mDELETING\033[0m parameter_declaration1");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m parameter_declaration1 refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m parameter_declaration1");
 	if(_p_declaration_specifiers)
 	{
 		delete _p_declaration_specifiers;
@@ -3983,6 +4757,7 @@ parameter_declaration1::~parameter_declaration1()
 		delete _p_declarator;
 		_p_declarator=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -4012,12 +4787,25 @@ parameter_declaration2::parameter_declaration2
 		abstract_declarator *_arg__p_abstract_declarator
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_declaration_specifiers(_arg__p_declaration_specifiers),
 	_p_abstract_declarator(_arg__p_abstract_declarator)
 {
 	LOG("\033[32mCREATING\033[0m parameter_declaration2");
 }
 
+/*copy constructor*/
+parameter_declaration2::parameter_declaration2(const parameter_declaration2& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_declaration_specifiers(other._p_declaration_specifiers),
+		_p_abstract_declarator(other._p_abstract_declarator)
+{
+	LOG("\033[32mCOPYING\033[0m parameter_declaration2");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*parameter_declaration2::getProperties returns a map of properties*/
 Properties parameter_declaration2::getProperties()const
@@ -4032,7 +4820,10 @@ Properties parameter_declaration2::getProperties()const
 /*the destructor*/
 parameter_declaration2::~parameter_declaration2()
 {
-	LOG("\033[31mDELETING\033[0m parameter_declaration2");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m parameter_declaration2 refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m parameter_declaration2");
 	if(_p_declaration_specifiers)
 	{
 		delete _p_declaration_specifiers;
@@ -4043,6 +4834,7 @@ parameter_declaration2::~parameter_declaration2()
 		delete _p_abstract_declarator;
 		_p_abstract_declarator=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -4104,8 +4896,8 @@ Properties multiplicative_expression_item::getProperties()const
 /*the destructor*/
 multiplicative_expression_item::~multiplicative_expression_item()
 {
-	LOG("\033[31mDELETING?\033[0m multiplicative_expression_item");
 	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m multiplicative_expression_item refCount:"<<(*_refCount));
 	if((*_refCount)>0)return;
 	LOG("[ "<<_refCount<<" ]\t"<<"refCount after decrement:"<<(*_refCount));//>>>>
 	if(_p_token1)
@@ -4118,7 +4910,8 @@ multiplicative_expression_item::~multiplicative_expression_item()
 		delete _p_cast_expression;
 		_p_cast_expression=0;
 	}
-	LOG("\033[31mDELETED\033[0m multiplicative_expression");
+	delete _refCount;_refCount=0;
+	LOG("\033[31mDELETED\033[0m multiplicative_expression_item");
 }
 /*------------------------------------------------------------*\
  							        
@@ -4174,8 +4967,9 @@ PropertiesList multiplicative_expression::getPropertiesList()const
 /*the destructor*/
 multiplicative_expression::~multiplicative_expression()
 {
-	LOG("\033[32mDESTOYING\033[0m multiplicative_expression");
+	LOG("\033[33mDELETING?\033[0m multiplicative_expression");
 	_items.clear();
+	LOG("\033[31mDELETED\033[0m multiplicative_expression");
 }
 
 
@@ -4233,8 +5027,8 @@ Properties type_qualifier_list_item::getProperties()const
 /*the destructor*/
 type_qualifier_list_item::~type_qualifier_list_item()
 {
-	LOG("\033[31mDELETING?\033[0m type_qualifier_list_item");
 	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m type_qualifier_list_item refCount:"<<(*_refCount));
 	if((*_refCount)>0)return;
 	LOG("[ "<<_refCount<<" ]\t"<<"refCount after decrement:"<<(*_refCount));//>>>>
 	if(_p_type_qualifier)
@@ -4242,7 +5036,8 @@ type_qualifier_list_item::~type_qualifier_list_item()
 		delete _p_type_qualifier;
 		_p_type_qualifier=0;
 	}
-	LOG("\033[31mDELETED\033[0m type_qualifier_list");
+	delete _refCount;_refCount=0;
+	LOG("\033[31mDELETED\033[0m type_qualifier_list_item");
 }
 /*------------------------------------------------------------*\
  							        
@@ -4297,8 +5092,9 @@ PropertiesList type_qualifier_list::getPropertiesList()const
 /*the destructor*/
 type_qualifier_list::~type_qualifier_list()
 {
-	LOG("\033[32mDESTOYING\033[0m type_qualifier_list");
+	LOG("\033[33mDELETING?\033[0m type_qualifier_list");
 	_items.clear();
+	LOG("\033[31mDELETED\033[0m type_qualifier_list");
 }
 
 
@@ -4356,8 +5152,8 @@ Properties argument_expression_list_item::getProperties()const
 /*the destructor*/
 argument_expression_list_item::~argument_expression_list_item()
 {
-	LOG("\033[31mDELETING?\033[0m argument_expression_list_item");
 	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m argument_expression_list_item refCount:"<<(*_refCount));
 	if((*_refCount)>0)return;
 	LOG("[ "<<_refCount<<" ]\t"<<"refCount after decrement:"<<(*_refCount));//>>>>
 	if(_p_assignment_expression)
@@ -4365,7 +5161,8 @@ argument_expression_list_item::~argument_expression_list_item()
 		delete _p_assignment_expression;
 		_p_assignment_expression=0;
 	}
-	LOG("\033[31mDELETED\033[0m argument_expression_list");
+	delete _refCount;_refCount=0;
+	LOG("\033[31mDELETED\033[0m argument_expression_list_item");
 }
 /*------------------------------------------------------------*\
  							        
@@ -4420,8 +5217,9 @@ PropertiesList argument_expression_list::getPropertiesList()const
 /*the destructor*/
 argument_expression_list::~argument_expression_list()
 {
-	LOG("\033[32mDESTOYING\033[0m argument_expression_list");
+	LOG("\033[33mDELETING?\033[0m argument_expression_list");
 	_items.clear();
+	LOG("\033[31mDELETED\033[0m argument_expression_list");
 }
 
 
@@ -4451,12 +5249,25 @@ direct_abstract_declarator1::direct_abstract_declarator1
 		constant_expression *_arg__p_constant_expression
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_direct_abstract_declarator(_arg__p_direct_abstract_declarator),
 	_p_constant_expression(_arg__p_constant_expression)
 {
 	LOG("\033[32mCREATING\033[0m direct_abstract_declarator1");
 }
 
+/*copy constructor*/
+direct_abstract_declarator1::direct_abstract_declarator1(const direct_abstract_declarator1& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_direct_abstract_declarator(other._p_direct_abstract_declarator),
+		_p_constant_expression(other._p_constant_expression)
+{
+	LOG("\033[32mCOPYING\033[0m direct_abstract_declarator1");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*direct_abstract_declarator1::getProperties returns a map of properties*/
 Properties direct_abstract_declarator1::getProperties()const
@@ -4471,7 +5282,10 @@ Properties direct_abstract_declarator1::getProperties()const
 /*the destructor*/
 direct_abstract_declarator1::~direct_abstract_declarator1()
 {
-	LOG("\033[31mDELETING\033[0m direct_abstract_declarator1");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m direct_abstract_declarator1 refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m direct_abstract_declarator1");
 	if(_p_direct_abstract_declarator)
 	{
 		delete _p_direct_abstract_declarator;
@@ -4482,6 +5296,7 @@ direct_abstract_declarator1::~direct_abstract_declarator1()
 		delete _p_constant_expression;
 		_p_constant_expression=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -4511,12 +5326,25 @@ direct_abstract_declarator2::direct_abstract_declarator2
 		parameter_type_list *_arg__p_parameter_type_list
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_direct_abstract_declarator(_arg__p_direct_abstract_declarator),
 	_p_parameter_type_list(_arg__p_parameter_type_list)
 {
 	LOG("\033[32mCREATING\033[0m direct_abstract_declarator2");
 }
 
+/*copy constructor*/
+direct_abstract_declarator2::direct_abstract_declarator2(const direct_abstract_declarator2& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_direct_abstract_declarator(other._p_direct_abstract_declarator),
+		_p_parameter_type_list(other._p_parameter_type_list)
+{
+	LOG("\033[32mCOPYING\033[0m direct_abstract_declarator2");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*direct_abstract_declarator2::getProperties returns a map of properties*/
 Properties direct_abstract_declarator2::getProperties()const
@@ -4531,7 +5359,10 @@ Properties direct_abstract_declarator2::getProperties()const
 /*the destructor*/
 direct_abstract_declarator2::~direct_abstract_declarator2()
 {
-	LOG("\033[31mDELETING\033[0m direct_abstract_declarator2");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m direct_abstract_declarator2 refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m direct_abstract_declarator2");
 	if(_p_direct_abstract_declarator)
 	{
 		delete _p_direct_abstract_declarator;
@@ -4542,6 +5373,7 @@ direct_abstract_declarator2::~direct_abstract_declarator2()
 		delete _p_parameter_type_list;
 		_p_parameter_type_list=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -4570,11 +5402,23 @@ direct_abstract_declarator3::direct_abstract_declarator3
 		abstract_declarator *_arg__p_abstract_declarator
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_abstract_declarator(_arg__p_abstract_declarator)
 {
 	LOG("\033[32mCREATING\033[0m direct_abstract_declarator3");
 }
 
+/*copy constructor*/
+direct_abstract_declarator3::direct_abstract_declarator3(const direct_abstract_declarator3& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_abstract_declarator(other._p_abstract_declarator)
+{
+	LOG("\033[32mCOPYING\033[0m direct_abstract_declarator3");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*direct_abstract_declarator3::getProperties returns a map of properties*/
 Properties direct_abstract_declarator3::getProperties()const
@@ -4588,12 +5432,16 @@ Properties direct_abstract_declarator3::getProperties()const
 /*the destructor*/
 direct_abstract_declarator3::~direct_abstract_declarator3()
 {
-	LOG("\033[31mDELETING\033[0m direct_abstract_declarator3");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m direct_abstract_declarator3 refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m direct_abstract_declarator3");
 	if(_p_abstract_declarator)
 	{
 		delete _p_abstract_declarator;
 		_p_abstract_declarator=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -4655,8 +5503,8 @@ Properties equality_expression_item::getProperties()const
 /*the destructor*/
 equality_expression_item::~equality_expression_item()
 {
-	LOG("\033[31mDELETING?\033[0m equality_expression_item");
 	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m equality_expression_item refCount:"<<(*_refCount));
 	if((*_refCount)>0)return;
 	LOG("[ "<<_refCount<<" ]\t"<<"refCount after decrement:"<<(*_refCount));//>>>>
 	if(_p_token1)
@@ -4669,7 +5517,8 @@ equality_expression_item::~equality_expression_item()
 		delete _p_relational_expression;
 		_p_relational_expression=0;
 	}
-	LOG("\033[31mDELETED\033[0m equality_expression");
+	delete _refCount;_refCount=0;
+	LOG("\033[31mDELETED\033[0m equality_expression_item");
 }
 /*------------------------------------------------------------*\
  							        
@@ -4725,8 +5574,9 @@ PropertiesList equality_expression::getPropertiesList()const
 /*the destructor*/
 equality_expression::~equality_expression()
 {
-	LOG("\033[32mDESTOYING\033[0m equality_expression");
+	LOG("\033[33mDELETING?\033[0m equality_expression");
 	_items.clear();
+	LOG("\033[31mDELETED\033[0m equality_expression");
 }
 
 
@@ -4755,11 +5605,23 @@ primary_expression1::primary_expression1
 		expression *_arg__p_expression
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_expression(_arg__p_expression)
 {
 	LOG("\033[32mCREATING\033[0m primary_expression1");
 }
 
+/*copy constructor*/
+primary_expression1::primary_expression1(const primary_expression1& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_expression(other._p_expression)
+{
+	LOG("\033[32mCOPYING\033[0m primary_expression1");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*primary_expression1::getProperties returns a map of properties*/
 Properties primary_expression1::getProperties()const
@@ -4773,12 +5635,16 @@ Properties primary_expression1::getProperties()const
 /*the destructor*/
 primary_expression1::~primary_expression1()
 {
-	LOG("\033[31mDELETING\033[0m primary_expression1");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m primary_expression1 refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m primary_expression1");
 	if(_p_expression)
 	{
 		delete _p_expression;
 		_p_expression=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -4807,11 +5673,23 @@ primary_expression2::primary_expression2
 		Token *_arg__p_token1
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_token1(_arg__p_token1)
 {
 	LOG("\033[32mCREATING\033[0m primary_expression2");
 }
 
+/*copy constructor*/
+primary_expression2::primary_expression2(const primary_expression2& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_token1(other._p_token1)
+{
+	LOG("\033[32mCOPYING\033[0m primary_expression2");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*primary_expression2::getProperties returns a map of properties*/
 Properties primary_expression2::getProperties()const
@@ -4825,12 +5703,16 @@ Properties primary_expression2::getProperties()const
 /*the destructor*/
 primary_expression2::~primary_expression2()
 {
-	LOG("\033[31mDELETING\033[0m primary_expression2");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m primary_expression2 refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m primary_expression2");
 	if(_p_token1)
 	{
 		delete _p_token1;
 		_p_token1=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -4888,8 +5770,8 @@ Properties declaration_specifiers1_item::getProperties()const
 /*the destructor*/
 declaration_specifiers1_item::~declaration_specifiers1_item()
 {
-	LOG("\033[31mDELETING?\033[0m declaration_specifiers1_item");
 	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m declaration_specifiers1_item refCount:"<<(*_refCount));
 	if((*_refCount)>0)return;
 	LOG("[ "<<_refCount<<" ]\t"<<"refCount after decrement:"<<(*_refCount));//>>>>
 	if(_p_storage_class_specifier)
@@ -4897,7 +5779,8 @@ declaration_specifiers1_item::~declaration_specifiers1_item()
 		delete _p_storage_class_specifier;
 		_p_storage_class_specifier=0;
 	}
-	LOG("\033[31mDELETED\033[0m declaration_specifiers1");
+	delete _refCount;_refCount=0;
+	LOG("\033[31mDELETED\033[0m declaration_specifiers1_item");
 }
 /*------------------------------------------------------------*\
  							        
@@ -4952,8 +5835,9 @@ PropertiesList declaration_specifiers1::getPropertiesList()const
 /*the destructor*/
 declaration_specifiers1::~declaration_specifiers1()
 {
-	LOG("\033[32mDESTOYING\033[0m declaration_specifiers1");
+	LOG("\033[33mDELETING?\033[0m declaration_specifiers1");
 	_items.clear();
+	LOG("\033[31mDELETED\033[0m declaration_specifiers1");
 }
 
 
@@ -5011,8 +5895,8 @@ Properties declaration_specifiers2_item::getProperties()const
 /*the destructor*/
 declaration_specifiers2_item::~declaration_specifiers2_item()
 {
-	LOG("\033[31mDELETING?\033[0m declaration_specifiers2_item");
 	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m declaration_specifiers2_item refCount:"<<(*_refCount));
 	if((*_refCount)>0)return;
 	LOG("[ "<<_refCount<<" ]\t"<<"refCount after decrement:"<<(*_refCount));//>>>>
 	if(_p_type_specifier)
@@ -5020,7 +5904,8 @@ declaration_specifiers2_item::~declaration_specifiers2_item()
 		delete _p_type_specifier;
 		_p_type_specifier=0;
 	}
-	LOG("\033[31mDELETED\033[0m declaration_specifiers2");
+	delete _refCount;_refCount=0;
+	LOG("\033[31mDELETED\033[0m declaration_specifiers2_item");
 }
 /*------------------------------------------------------------*\
  							        
@@ -5075,8 +5960,9 @@ PropertiesList declaration_specifiers2::getPropertiesList()const
 /*the destructor*/
 declaration_specifiers2::~declaration_specifiers2()
 {
-	LOG("\033[32mDESTOYING\033[0m declaration_specifiers2");
+	LOG("\033[33mDELETING?\033[0m declaration_specifiers2");
 	_items.clear();
+	LOG("\033[31mDELETED\033[0m declaration_specifiers2");
 }
 
 
@@ -5134,8 +6020,8 @@ Properties declaration_specifiers3_item::getProperties()const
 /*the destructor*/
 declaration_specifiers3_item::~declaration_specifiers3_item()
 {
-	LOG("\033[31mDELETING?\033[0m declaration_specifiers3_item");
 	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m declaration_specifiers3_item refCount:"<<(*_refCount));
 	if((*_refCount)>0)return;
 	LOG("[ "<<_refCount<<" ]\t"<<"refCount after decrement:"<<(*_refCount));//>>>>
 	if(_p_type_qualifier)
@@ -5143,7 +6029,8 @@ declaration_specifiers3_item::~declaration_specifiers3_item()
 		delete _p_type_qualifier;
 		_p_type_qualifier=0;
 	}
-	LOG("\033[31mDELETED\033[0m declaration_specifiers3");
+	delete _refCount;_refCount=0;
+	LOG("\033[31mDELETED\033[0m declaration_specifiers3_item");
 }
 /*------------------------------------------------------------*\
  							        
@@ -5198,8 +6085,9 @@ PropertiesList declaration_specifiers3::getPropertiesList()const
 /*the destructor*/
 declaration_specifiers3::~declaration_specifiers3()
 {
-	LOG("\033[32mDESTOYING\033[0m declaration_specifiers3");
+	LOG("\033[33mDELETING?\033[0m declaration_specifiers3");
 	_items.clear();
+	LOG("\033[31mDELETED\033[0m declaration_specifiers3");
 }
 
 
@@ -5229,12 +6117,25 @@ declaration::declaration
 		init_declarator_list *_arg__p_init_declarator_list
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_declaration_specifiers(_arg__p_declaration_specifiers),
 	_p_init_declarator_list(_arg__p_init_declarator_list)
 {
 	LOG("\033[32mCREATING\033[0m declaration");
 }
 
+/*copy constructor*/
+declaration::declaration(const declaration& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_declaration_specifiers(other._p_declaration_specifiers),
+		_p_init_declarator_list(other._p_init_declarator_list)
+{
+	LOG("\033[32mCOPYING\033[0m declaration");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*declaration::getProperties returns a map of properties*/
 Properties declaration::getProperties()const
@@ -5249,7 +6150,10 @@ Properties declaration::getProperties()const
 /*the destructor*/
 declaration::~declaration()
 {
-	LOG("\033[31mDELETING\033[0m declaration");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m declaration refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m declaration");
 	if(_p_declaration_specifiers)
 	{
 		delete _p_declaration_specifiers;
@@ -5260,6 +6164,7 @@ declaration::~declaration()
 		delete _p_init_declarator_list;
 		_p_init_declarator_list=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -5289,12 +6194,25 @@ direct_declarator1::direct_declarator1
 		constant_expression *_arg__p_constant_expression
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_direct_declarator(_arg__p_direct_declarator),
 	_p_constant_expression(_arg__p_constant_expression)
 {
 	LOG("\033[32mCREATING\033[0m direct_declarator1");
 }
 
+/*copy constructor*/
+direct_declarator1::direct_declarator1(const direct_declarator1& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_direct_declarator(other._p_direct_declarator),
+		_p_constant_expression(other._p_constant_expression)
+{
+	LOG("\033[32mCOPYING\033[0m direct_declarator1");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*direct_declarator1::getProperties returns a map of properties*/
 Properties direct_declarator1::getProperties()const
@@ -5309,7 +6227,10 @@ Properties direct_declarator1::getProperties()const
 /*the destructor*/
 direct_declarator1::~direct_declarator1()
 {
-	LOG("\033[31mDELETING\033[0m direct_declarator1");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m direct_declarator1 refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m direct_declarator1");
 	if(_p_direct_declarator)
 	{
 		delete _p_direct_declarator;
@@ -5320,6 +6241,7 @@ direct_declarator1::~direct_declarator1()
 		delete _p_constant_expression;
 		_p_constant_expression=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -5349,12 +6271,25 @@ direct_declarator2::direct_declarator2
 		parameter_type_list *_arg__p_parameter_type_list
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_direct_declarator(_arg__p_direct_declarator),
 	_p_parameter_type_list(_arg__p_parameter_type_list)
 {
 	LOG("\033[32mCREATING\033[0m direct_declarator2");
 }
 
+/*copy constructor*/
+direct_declarator2::direct_declarator2(const direct_declarator2& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_direct_declarator(other._p_direct_declarator),
+		_p_parameter_type_list(other._p_parameter_type_list)
+{
+	LOG("\033[32mCOPYING\033[0m direct_declarator2");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*direct_declarator2::getProperties returns a map of properties*/
 Properties direct_declarator2::getProperties()const
@@ -5369,7 +6304,10 @@ Properties direct_declarator2::getProperties()const
 /*the destructor*/
 direct_declarator2::~direct_declarator2()
 {
-	LOG("\033[31mDELETING\033[0m direct_declarator2");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m direct_declarator2 refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m direct_declarator2");
 	if(_p_direct_declarator)
 	{
 		delete _p_direct_declarator;
@@ -5380,6 +6318,7 @@ direct_declarator2::~direct_declarator2()
 		delete _p_parameter_type_list;
 		_p_parameter_type_list=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -5409,12 +6348,25 @@ direct_declarator3::direct_declarator3
 		identifier_list *_arg__p_identifier_list
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_direct_declarator(_arg__p_direct_declarator),
 	_p_identifier_list(_arg__p_identifier_list)
 {
 	LOG("\033[32mCREATING\033[0m direct_declarator3");
 }
 
+/*copy constructor*/
+direct_declarator3::direct_declarator3(const direct_declarator3& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_direct_declarator(other._p_direct_declarator),
+		_p_identifier_list(other._p_identifier_list)
+{
+	LOG("\033[32mCOPYING\033[0m direct_declarator3");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*direct_declarator3::getProperties returns a map of properties*/
 Properties direct_declarator3::getProperties()const
@@ -5429,7 +6381,10 @@ Properties direct_declarator3::getProperties()const
 /*the destructor*/
 direct_declarator3::~direct_declarator3()
 {
-	LOG("\033[31mDELETING\033[0m direct_declarator3");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m direct_declarator3 refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m direct_declarator3");
 	if(_p_direct_declarator)
 	{
 		delete _p_direct_declarator;
@@ -5440,6 +6395,7 @@ direct_declarator3::~direct_declarator3()
 		delete _p_identifier_list;
 		_p_identifier_list=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -5468,11 +6424,23 @@ direct_declarator4::direct_declarator4
 		declarator *_arg__p_declarator
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_declarator(_arg__p_declarator)
 {
 	LOG("\033[32mCREATING\033[0m direct_declarator4");
 }
 
+/*copy constructor*/
+direct_declarator4::direct_declarator4(const direct_declarator4& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_declarator(other._p_declarator)
+{
+	LOG("\033[32mCOPYING\033[0m direct_declarator4");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*direct_declarator4::getProperties returns a map of properties*/
 Properties direct_declarator4::getProperties()const
@@ -5486,12 +6454,16 @@ Properties direct_declarator4::getProperties()const
 /*the destructor*/
 direct_declarator4::~direct_declarator4()
 {
-	LOG("\033[31mDELETING\033[0m direct_declarator4");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m direct_declarator4 refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m direct_declarator4");
 	if(_p_declarator)
 	{
 		delete _p_declarator;
 		_p_declarator=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -5520,11 +6492,23 @@ direct_declarator5::direct_declarator5
 		Token *_arg__p_token1
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_token1(_arg__p_token1)
 {
 	LOG("\033[32mCREATING\033[0m direct_declarator5");
 }
 
+/*copy constructor*/
+direct_declarator5::direct_declarator5(const direct_declarator5& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_token1(other._p_token1)
+{
+	LOG("\033[32mCOPYING\033[0m direct_declarator5");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*direct_declarator5::getProperties returns a map of properties*/
 Properties direct_declarator5::getProperties()const
@@ -5538,12 +6522,16 @@ Properties direct_declarator5::getProperties()const
 /*the destructor*/
 direct_declarator5::~direct_declarator5()
 {
-	LOG("\033[31mDELETING\033[0m direct_declarator5");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m direct_declarator5 refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m direct_declarator5");
 	if(_p_token1)
 	{
 		delete _p_token1;
 		_p_token1=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -5601,8 +6589,8 @@ Properties logical_and_expression_item::getProperties()const
 /*the destructor*/
 logical_and_expression_item::~logical_and_expression_item()
 {
-	LOG("\033[31mDELETING?\033[0m logical_and_expression_item");
 	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m logical_and_expression_item refCount:"<<(*_refCount));
 	if((*_refCount)>0)return;
 	LOG("[ "<<_refCount<<" ]\t"<<"refCount after decrement:"<<(*_refCount));//>>>>
 	if(_p_inclusive_or_expression)
@@ -5610,7 +6598,8 @@ logical_and_expression_item::~logical_and_expression_item()
 		delete _p_inclusive_or_expression;
 		_p_inclusive_or_expression=0;
 	}
-	LOG("\033[31mDELETED\033[0m logical_and_expression");
+	delete _refCount;_refCount=0;
+	LOG("\033[31mDELETED\033[0m logical_and_expression_item");
 }
 /*------------------------------------------------------------*\
  							        
@@ -5665,8 +6654,9 @@ PropertiesList logical_and_expression::getPropertiesList()const
 /*the destructor*/
 logical_and_expression::~logical_and_expression()
 {
-	LOG("\033[32mDESTOYING\033[0m logical_and_expression");
+	LOG("\033[33mDELETING?\033[0m logical_and_expression");
 	_items.clear();
+	LOG("\033[31mDELETED\033[0m logical_and_expression");
 }
 
 
@@ -5724,8 +6714,8 @@ Properties init_declarator_list_item::getProperties()const
 /*the destructor*/
 init_declarator_list_item::~init_declarator_list_item()
 {
-	LOG("\033[31mDELETING?\033[0m init_declarator_list_item");
 	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m init_declarator_list_item refCount:"<<(*_refCount));
 	if((*_refCount)>0)return;
 	LOG("[ "<<_refCount<<" ]\t"<<"refCount after decrement:"<<(*_refCount));//>>>>
 	if(_p_init_declarator)
@@ -5733,7 +6723,8 @@ init_declarator_list_item::~init_declarator_list_item()
 		delete _p_init_declarator;
 		_p_init_declarator=0;
 	}
-	LOG("\033[31mDELETED\033[0m init_declarator_list");
+	delete _refCount;_refCount=0;
+	LOG("\033[31mDELETED\033[0m init_declarator_list_item");
 }
 /*------------------------------------------------------------*\
  							        
@@ -5788,8 +6779,9 @@ PropertiesList init_declarator_list::getPropertiesList()const
 /*the destructor*/
 init_declarator_list::~init_declarator_list()
 {
-	LOG("\033[32mDESTOYING\033[0m init_declarator_list");
+	LOG("\033[33mDELETING?\033[0m init_declarator_list");
 	_items.clear();
+	LOG("\033[31mDELETED\033[0m init_declarator_list");
 }
 
 
@@ -5851,8 +6843,8 @@ Properties shift_expression_item::getProperties()const
 /*the destructor*/
 shift_expression_item::~shift_expression_item()
 {
-	LOG("\033[31mDELETING?\033[0m shift_expression_item");
 	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m shift_expression_item refCount:"<<(*_refCount));
 	if((*_refCount)>0)return;
 	LOG("[ "<<_refCount<<" ]\t"<<"refCount after decrement:"<<(*_refCount));//>>>>
 	if(_p_token1)
@@ -5865,7 +6857,8 @@ shift_expression_item::~shift_expression_item()
 		delete _p_additive_expression;
 		_p_additive_expression=0;
 	}
-	LOG("\033[31mDELETED\033[0m shift_expression");
+	delete _refCount;_refCount=0;
+	LOG("\033[31mDELETED\033[0m shift_expression_item");
 }
 /*------------------------------------------------------------*\
  							        
@@ -5921,8 +6914,9 @@ PropertiesList shift_expression::getPropertiesList()const
 /*the destructor*/
 shift_expression::~shift_expression()
 {
-	LOG("\033[32mDESTOYING\033[0m shift_expression");
+	LOG("\033[33mDELETING?\033[0m shift_expression");
 	_items.clear();
+	LOG("\033[31mDELETED\033[0m shift_expression");
 }
 
 
@@ -5980,8 +6974,8 @@ Properties identifier_list_item::getProperties()const
 /*the destructor*/
 identifier_list_item::~identifier_list_item()
 {
-	LOG("\033[31mDELETING?\033[0m identifier_list_item");
 	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m identifier_list_item refCount:"<<(*_refCount));
 	if((*_refCount)>0)return;
 	LOG("[ "<<_refCount<<" ]\t"<<"refCount after decrement:"<<(*_refCount));//>>>>
 	if(_p_token1)
@@ -5989,7 +6983,8 @@ identifier_list_item::~identifier_list_item()
 		delete _p_token1;
 		_p_token1=0;
 	}
-	LOG("\033[31mDELETED\033[0m identifier_list");
+	delete _refCount;_refCount=0;
+	LOG("\033[31mDELETED\033[0m identifier_list_item");
 }
 /*------------------------------------------------------------*\
  							        
@@ -6044,8 +7039,9 @@ PropertiesList identifier_list::getPropertiesList()const
 /*the destructor*/
 identifier_list::~identifier_list()
 {
-	LOG("\033[32mDESTOYING\033[0m identifier_list");
+	LOG("\033[33mDELETING?\033[0m identifier_list");
 	_items.clear();
+	LOG("\033[31mDELETED\033[0m identifier_list");
 }
 
 
@@ -6074,11 +7070,23 @@ jump_statement1::jump_statement1
 		Token *_arg__p_token1
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_token1(_arg__p_token1)
 {
 	LOG("\033[32mCREATING\033[0m jump_statement1");
 }
 
+/*copy constructor*/
+jump_statement1::jump_statement1(const jump_statement1& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_token1(other._p_token1)
+{
+	LOG("\033[32mCOPYING\033[0m jump_statement1");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*jump_statement1::getProperties returns a map of properties*/
 Properties jump_statement1::getProperties()const
@@ -6092,12 +7100,16 @@ Properties jump_statement1::getProperties()const
 /*the destructor*/
 jump_statement1::~jump_statement1()
 {
-	LOG("\033[31mDELETING\033[0m jump_statement1");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m jump_statement1 refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m jump_statement1");
 	if(_p_token1)
 	{
 		delete _p_token1;
 		_p_token1=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -6126,11 +7138,23 @@ jump_statement2::jump_statement2
 		expression *_arg__p_expression
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_expression(_arg__p_expression)
 {
 	LOG("\033[32mCREATING\033[0m jump_statement2");
 }
 
+/*copy constructor*/
+jump_statement2::jump_statement2(const jump_statement2& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_expression(other._p_expression)
+{
+	LOG("\033[32mCOPYING\033[0m jump_statement2");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*jump_statement2::getProperties returns a map of properties*/
 Properties jump_statement2::getProperties()const
@@ -6144,12 +7168,16 @@ Properties jump_statement2::getProperties()const
 /*the destructor*/
 jump_statement2::~jump_statement2()
 {
-	LOG("\033[31mDELETING\033[0m jump_statement2");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m jump_statement2 refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m jump_statement2");
 	if(_p_expression)
 	{
 		delete _p_expression;
 		_p_expression=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -6178,11 +7206,23 @@ jump_statement3::jump_statement3
 		Token *_arg__p_token1
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_token1(_arg__p_token1)
 {
 	LOG("\033[32mCREATING\033[0m jump_statement3");
 }
 
+/*copy constructor*/
+jump_statement3::jump_statement3(const jump_statement3& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_token1(other._p_token1)
+{
+	LOG("\033[32mCOPYING\033[0m jump_statement3");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*jump_statement3::getProperties returns a map of properties*/
 Properties jump_statement3::getProperties()const
@@ -6196,12 +7236,16 @@ Properties jump_statement3::getProperties()const
 /*the destructor*/
 jump_statement3::~jump_statement3()
 {
-	LOG("\033[31mDELETING\033[0m jump_statement3");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m jump_statement3 refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m jump_statement3");
 	if(_p_token1)
 	{
 		delete _p_token1;
 		_p_token1=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -6232,6 +7276,7 @@ struct_declarator::struct_declarator
 		constant_expression *_arg__p_constant_expression
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_declarator(_arg__p_declarator),
 	_p_token1(_arg__p_token1),
 	_p_constant_expression(_arg__p_constant_expression)
@@ -6239,6 +7284,19 @@ struct_declarator::struct_declarator
 	LOG("\033[32mCREATING\033[0m struct_declarator");
 }
 
+/*copy constructor*/
+struct_declarator::struct_declarator(const struct_declarator& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_declarator(other._p_declarator),
+		_p_token1(other._p_token1),
+		_p_constant_expression(other._p_constant_expression)
+{
+	LOG("\033[32mCOPYING\033[0m struct_declarator");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*struct_declarator::getProperties returns a map of properties*/
 Properties struct_declarator::getProperties()const
@@ -6254,7 +7312,10 @@ Properties struct_declarator::getProperties()const
 /*the destructor*/
 struct_declarator::~struct_declarator()
 {
-	LOG("\033[31mDELETING\033[0m struct_declarator");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m struct_declarator refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m struct_declarator");
 	if(_p_declarator)
 	{
 		delete _p_declarator;
@@ -6270,6 +7331,7 @@ struct_declarator::~struct_declarator()
 		delete _p_constant_expression;
 		_p_constant_expression=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -6301,6 +7363,7 @@ function_definition::function_definition
 		compound_statement *_arg__p_compound_statement
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_declaration_specifiers(_arg__p_declaration_specifiers),
 	_p_declarator(_arg__p_declarator),
 	_p_declaration_list(_arg__p_declaration_list),
@@ -6309,6 +7372,20 @@ function_definition::function_definition
 	LOG("\033[32mCREATING\033[0m function_definition");
 }
 
+/*copy constructor*/
+function_definition::function_definition(const function_definition& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_declaration_specifiers(other._p_declaration_specifiers),
+		_p_declarator(other._p_declarator),
+		_p_declaration_list(other._p_declaration_list),
+		_p_compound_statement(other._p_compound_statement)
+{
+	LOG("\033[32mCOPYING\033[0m function_definition");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*function_definition::getProperties returns a map of properties*/
 Properties function_definition::getProperties()const
@@ -6325,7 +7402,10 @@ Properties function_definition::getProperties()const
 /*the destructor*/
 function_definition::~function_definition()
 {
-	LOG("\033[31mDELETING\033[0m function_definition");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m function_definition refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m function_definition");
 	if(_p_declaration_specifiers)
 	{
 		delete _p_declaration_specifiers;
@@ -6346,6 +7426,7 @@ function_definition::~function_definition()
 		delete _p_compound_statement;
 		_p_compound_statement=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -6403,8 +7484,8 @@ Properties parameter_list_item::getProperties()const
 /*the destructor*/
 parameter_list_item::~parameter_list_item()
 {
-	LOG("\033[31mDELETING?\033[0m parameter_list_item");
 	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m parameter_list_item refCount:"<<(*_refCount));
 	if((*_refCount)>0)return;
 	LOG("[ "<<_refCount<<" ]\t"<<"refCount after decrement:"<<(*_refCount));//>>>>
 	if(_p_parameter_declaration)
@@ -6412,7 +7493,8 @@ parameter_list_item::~parameter_list_item()
 		delete _p_parameter_declaration;
 		_p_parameter_declaration=0;
 	}
-	LOG("\033[31mDELETED\033[0m parameter_list");
+	delete _refCount;_refCount=0;
+	LOG("\033[31mDELETED\033[0m parameter_list_item");
 }
 /*------------------------------------------------------------*\
  							        
@@ -6467,8 +7549,9 @@ PropertiesList parameter_list::getPropertiesList()const
 /*the destructor*/
 parameter_list::~parameter_list()
 {
-	LOG("\033[32mDESTOYING\033[0m parameter_list");
+	LOG("\033[33mDELETING?\033[0m parameter_list");
 	_items.clear();
+	LOG("\033[31mDELETED\033[0m parameter_list");
 }
 
 
@@ -6500,6 +7583,7 @@ enum_specifier::enum_specifier
 		Token *_arg__p_token3
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_token1(_arg__p_token1),
 	_p_token2(_arg__p_token2),
 	_p_enumerator_list(_arg__p_enumerator_list),
@@ -6508,6 +7592,20 @@ enum_specifier::enum_specifier
 	LOG("\033[32mCREATING\033[0m enum_specifier");
 }
 
+/*copy constructor*/
+enum_specifier::enum_specifier(const enum_specifier& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_token1(other._p_token1),
+		_p_token2(other._p_token2),
+		_p_enumerator_list(other._p_enumerator_list),
+		_p_token3(other._p_token3)
+{
+	LOG("\033[32mCOPYING\033[0m enum_specifier");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*enum_specifier::getProperties returns a map of properties*/
 Properties enum_specifier::getProperties()const
@@ -6524,7 +7622,10 @@ Properties enum_specifier::getProperties()const
 /*the destructor*/
 enum_specifier::~enum_specifier()
 {
-	LOG("\033[31mDELETING\033[0m enum_specifier");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m enum_specifier refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m enum_specifier");
 	if(_p_token1)
 	{
 		delete _p_token1;
@@ -6545,6 +7646,7 @@ enum_specifier::~enum_specifier()
 		delete _p_token3;
 		_p_token3=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -6573,11 +7675,23 @@ type_qualifier::type_qualifier
 		Token *_arg__p_token1
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_token1(_arg__p_token1)
 {
 	LOG("\033[32mCREATING\033[0m type_qualifier");
 }
 
+/*copy constructor*/
+type_qualifier::type_qualifier(const type_qualifier& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_token1(other._p_token1)
+{
+	LOG("\033[32mCOPYING\033[0m type_qualifier");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*type_qualifier::getProperties returns a map of properties*/
 Properties type_qualifier::getProperties()const
@@ -6591,12 +7705,16 @@ Properties type_qualifier::getProperties()const
 /*the destructor*/
 type_qualifier::~type_qualifier()
 {
-	LOG("\033[31mDELETING\033[0m type_qualifier");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m type_qualifier refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m type_qualifier");
 	if(_p_token1)
 	{
 		delete _p_token1;
 		_p_token1=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -6654,8 +7772,8 @@ Properties enumerator_list_item::getProperties()const
 /*the destructor*/
 enumerator_list_item::~enumerator_list_item()
 {
-	LOG("\033[31mDELETING?\033[0m enumerator_list_item");
 	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m enumerator_list_item refCount:"<<(*_refCount));
 	if((*_refCount)>0)return;
 	LOG("[ "<<_refCount<<" ]\t"<<"refCount after decrement:"<<(*_refCount));//>>>>
 	if(_p_enumerator)
@@ -6663,7 +7781,8 @@ enumerator_list_item::~enumerator_list_item()
 		delete _p_enumerator;
 		_p_enumerator=0;
 	}
-	LOG("\033[31mDELETED\033[0m enumerator_list");
+	delete _refCount;_refCount=0;
+	LOG("\033[31mDELETED\033[0m enumerator_list_item");
 }
 /*------------------------------------------------------------*\
  							        
@@ -6718,8 +7837,9 @@ PropertiesList enumerator_list::getPropertiesList()const
 /*the destructor*/
 enumerator_list::~enumerator_list()
 {
-	LOG("\033[32mDESTOYING\033[0m enumerator_list");
+	LOG("\033[33mDELETING?\033[0m enumerator_list");
 	_items.clear();
+	LOG("\033[31mDELETED\033[0m enumerator_list");
 }
 
 
@@ -6749,12 +7869,25 @@ labeled_statement1::labeled_statement1
 		statement *_arg__p_statement
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_constant_expression(_arg__p_constant_expression),
 	_p_statement(_arg__p_statement)
 {
 	LOG("\033[32mCREATING\033[0m labeled_statement1");
 }
 
+/*copy constructor*/
+labeled_statement1::labeled_statement1(const labeled_statement1& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_constant_expression(other._p_constant_expression),
+		_p_statement(other._p_statement)
+{
+	LOG("\033[32mCOPYING\033[0m labeled_statement1");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*labeled_statement1::getProperties returns a map of properties*/
 Properties labeled_statement1::getProperties()const
@@ -6769,7 +7902,10 @@ Properties labeled_statement1::getProperties()const
 /*the destructor*/
 labeled_statement1::~labeled_statement1()
 {
-	LOG("\033[31mDELETING\033[0m labeled_statement1");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m labeled_statement1 refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m labeled_statement1");
 	if(_p_constant_expression)
 	{
 		delete _p_constant_expression;
@@ -6780,6 +7916,7 @@ labeled_statement1::~labeled_statement1()
 		delete _p_statement;
 		_p_statement=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -6809,12 +7946,25 @@ labeled_statement2::labeled_statement2
 		statement *_arg__p_statement
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_token1(_arg__p_token1),
 	_p_statement(_arg__p_statement)
 {
 	LOG("\033[32mCREATING\033[0m labeled_statement2");
 }
 
+/*copy constructor*/
+labeled_statement2::labeled_statement2(const labeled_statement2& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_token1(other._p_token1),
+		_p_statement(other._p_statement)
+{
+	LOG("\033[32mCOPYING\033[0m labeled_statement2");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*labeled_statement2::getProperties returns a map of properties*/
 Properties labeled_statement2::getProperties()const
@@ -6829,7 +7979,10 @@ Properties labeled_statement2::getProperties()const
 /*the destructor*/
 labeled_statement2::~labeled_statement2()
 {
-	LOG("\033[31mDELETING\033[0m labeled_statement2");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m labeled_statement2 refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m labeled_statement2");
 	if(_p_token1)
 	{
 		delete _p_token1;
@@ -6840,6 +7993,7 @@ labeled_statement2::~labeled_statement2()
 		delete _p_statement;
 		_p_statement=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -6897,8 +8051,8 @@ Properties declaration_list_item::getProperties()const
 /*the destructor*/
 declaration_list_item::~declaration_list_item()
 {
-	LOG("\033[31mDELETING?\033[0m declaration_list_item");
 	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m declaration_list_item refCount:"<<(*_refCount));
 	if((*_refCount)>0)return;
 	LOG("[ "<<_refCount<<" ]\t"<<"refCount after decrement:"<<(*_refCount));//>>>>
 	if(_p_declaration)
@@ -6906,7 +8060,8 @@ declaration_list_item::~declaration_list_item()
 		delete _p_declaration;
 		_p_declaration=0;
 	}
-	LOG("\033[31mDELETED\033[0m declaration_list");
+	delete _refCount;_refCount=0;
+	LOG("\033[31mDELETED\033[0m declaration_list_item");
 }
 /*------------------------------------------------------------*\
  							        
@@ -6961,8 +8116,9 @@ PropertiesList declaration_list::getPropertiesList()const
 /*the destructor*/
 declaration_list::~declaration_list()
 {
-	LOG("\033[32mDESTOYING\033[0m declaration_list");
+	LOG("\033[33mDELETING?\033[0m declaration_list");
 	_items.clear();
+	LOG("\033[31mDELETED\033[0m declaration_list");
 }
 
 
@@ -7020,8 +8176,8 @@ Properties specifier_qualifier_list1_item::getProperties()const
 /*the destructor*/
 specifier_qualifier_list1_item::~specifier_qualifier_list1_item()
 {
-	LOG("\033[31mDELETING?\033[0m specifier_qualifier_list1_item");
 	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m specifier_qualifier_list1_item refCount:"<<(*_refCount));
 	if((*_refCount)>0)return;
 	LOG("[ "<<_refCount<<" ]\t"<<"refCount after decrement:"<<(*_refCount));//>>>>
 	if(_p_type_specifier)
@@ -7029,7 +8185,8 @@ specifier_qualifier_list1_item::~specifier_qualifier_list1_item()
 		delete _p_type_specifier;
 		_p_type_specifier=0;
 	}
-	LOG("\033[31mDELETED\033[0m specifier_qualifier_list1");
+	delete _refCount;_refCount=0;
+	LOG("\033[31mDELETED\033[0m specifier_qualifier_list1_item");
 }
 /*------------------------------------------------------------*\
  							        
@@ -7084,8 +8241,9 @@ PropertiesList specifier_qualifier_list1::getPropertiesList()const
 /*the destructor*/
 specifier_qualifier_list1::~specifier_qualifier_list1()
 {
-	LOG("\033[32mDESTOYING\033[0m specifier_qualifier_list1");
+	LOG("\033[33mDELETING?\033[0m specifier_qualifier_list1");
 	_items.clear();
+	LOG("\033[31mDELETED\033[0m specifier_qualifier_list1");
 }
 
 
@@ -7143,8 +8301,8 @@ Properties specifier_qualifier_list2_item::getProperties()const
 /*the destructor*/
 specifier_qualifier_list2_item::~specifier_qualifier_list2_item()
 {
-	LOG("\033[31mDELETING?\033[0m specifier_qualifier_list2_item");
 	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m specifier_qualifier_list2_item refCount:"<<(*_refCount));
 	if((*_refCount)>0)return;
 	LOG("[ "<<_refCount<<" ]\t"<<"refCount after decrement:"<<(*_refCount));//>>>>
 	if(_p_type_qualifier)
@@ -7152,7 +8310,8 @@ specifier_qualifier_list2_item::~specifier_qualifier_list2_item()
 		delete _p_type_qualifier;
 		_p_type_qualifier=0;
 	}
-	LOG("\033[31mDELETED\033[0m specifier_qualifier_list2");
+	delete _refCount;_refCount=0;
+	LOG("\033[31mDELETED\033[0m specifier_qualifier_list2_item");
 }
 /*------------------------------------------------------------*\
  							        
@@ -7207,8 +8366,9 @@ PropertiesList specifier_qualifier_list2::getPropertiesList()const
 /*the destructor*/
 specifier_qualifier_list2::~specifier_qualifier_list2()
 {
-	LOG("\033[32mDESTOYING\033[0m specifier_qualifier_list2");
+	LOG("\033[33mDELETING?\033[0m specifier_qualifier_list2");
 	_items.clear();
+	LOG("\033[31mDELETED\033[0m specifier_qualifier_list2");
 }
 
 
@@ -7266,8 +8426,8 @@ Properties translation_unit_item::getProperties()const
 /*the destructor*/
 translation_unit_item::~translation_unit_item()
 {
-	LOG("\033[31mDELETING?\033[0m translation_unit_item");
 	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m translation_unit_item refCount:"<<(*_refCount));
 	if((*_refCount)>0)return;
 	LOG("[ "<<_refCount<<" ]\t"<<"refCount after decrement:"<<(*_refCount));//>>>>
 	if(_p_external_declaration)
@@ -7275,7 +8435,8 @@ translation_unit_item::~translation_unit_item()
 		delete _p_external_declaration;
 		_p_external_declaration=0;
 	}
-	LOG("\033[31mDELETED\033[0m translation_unit");
+	delete _refCount;_refCount=0;
+	LOG("\033[31mDELETED\033[0m translation_unit_item");
 }
 /*------------------------------------------------------------*\
  							        
@@ -7330,8 +8491,9 @@ PropertiesList translation_unit::getPropertiesList()const
 /*the destructor*/
 translation_unit::~translation_unit()
 {
-	LOG("\033[32mDESTOYING\033[0m translation_unit");
+	LOG("\033[33mDELETING?\033[0m translation_unit");
 	_items.clear();
+	LOG("\033[31mDELETED\033[0m translation_unit");
 }
 
 
@@ -7360,11 +8522,23 @@ constant_expression::constant_expression
 		conditional_expression *_arg__p_conditional_expression
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_conditional_expression(_arg__p_conditional_expression)
 {
 	LOG("\033[32mCREATING\033[0m constant_expression");
 }
 
+/*copy constructor*/
+constant_expression::constant_expression(const constant_expression& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_conditional_expression(other._p_conditional_expression)
+{
+	LOG("\033[32mCOPYING\033[0m constant_expression");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*constant_expression::getProperties returns a map of properties*/
 Properties constant_expression::getProperties()const
@@ -7378,12 +8552,16 @@ Properties constant_expression::getProperties()const
 /*the destructor*/
 constant_expression::~constant_expression()
 {
-	LOG("\033[31mDELETING\033[0m constant_expression");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m constant_expression refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m constant_expression");
 	if(_p_conditional_expression)
 	{
 		delete _p_conditional_expression;
 		_p_conditional_expression=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 
@@ -7441,8 +8619,8 @@ Properties initializer_list_item::getProperties()const
 /*the destructor*/
 initializer_list_item::~initializer_list_item()
 {
-	LOG("\033[31mDELETING?\033[0m initializer_list_item");
 	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m initializer_list_item refCount:"<<(*_refCount));
 	if((*_refCount)>0)return;
 	LOG("[ "<<_refCount<<" ]\t"<<"refCount after decrement:"<<(*_refCount));//>>>>
 	if(_p_initializer)
@@ -7450,7 +8628,8 @@ initializer_list_item::~initializer_list_item()
 		delete _p_initializer;
 		_p_initializer=0;
 	}
-	LOG("\033[31mDELETED\033[0m initializer_list");
+	delete _refCount;_refCount=0;
+	LOG("\033[31mDELETED\033[0m initializer_list_item");
 }
 /*------------------------------------------------------------*\
  							        
@@ -7505,8 +8684,9 @@ PropertiesList initializer_list::getPropertiesList()const
 /*the destructor*/
 initializer_list::~initializer_list()
 {
-	LOG("\033[32mDESTOYING\033[0m initializer_list");
+	LOG("\033[33mDELETING?\033[0m initializer_list");
 	_items.clear();
+	LOG("\033[31mDELETED\033[0m initializer_list");
 }
 
 
@@ -7564,8 +8744,8 @@ Properties statement_list_item::getProperties()const
 /*the destructor*/
 statement_list_item::~statement_list_item()
 {
-	LOG("\033[31mDELETING?\033[0m statement_list_item");
 	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m statement_list_item refCount:"<<(*_refCount));
 	if((*_refCount)>0)return;
 	LOG("[ "<<_refCount<<" ]\t"<<"refCount after decrement:"<<(*_refCount));//>>>>
 	if(_p_statement)
@@ -7573,7 +8753,8 @@ statement_list_item::~statement_list_item()
 		delete _p_statement;
 		_p_statement=0;
 	}
-	LOG("\033[31mDELETED\033[0m statement_list");
+	delete _refCount;_refCount=0;
+	LOG("\033[31mDELETED\033[0m statement_list_item");
 }
 /*------------------------------------------------------------*\
  							        
@@ -7628,8 +8809,9 @@ PropertiesList statement_list::getPropertiesList()const
 /*the destructor*/
 statement_list::~statement_list()
 {
-	LOG("\033[32mDESTOYING\033[0m statement_list");
+	LOG("\033[33mDELETING?\033[0m statement_list");
 	_items.clear();
+	LOG("\033[31mDELETED\033[0m statement_list");
 }
 
 
@@ -7687,8 +8869,8 @@ Properties expression_item::getProperties()const
 /*the destructor*/
 expression_item::~expression_item()
 {
-	LOG("\033[31mDELETING?\033[0m expression_item");
 	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m expression_item refCount:"<<(*_refCount));
 	if((*_refCount)>0)return;
 	LOG("[ "<<_refCount<<" ]\t"<<"refCount after decrement:"<<(*_refCount));//>>>>
 	if(_p_assignment_expression)
@@ -7696,7 +8878,8 @@ expression_item::~expression_item()
 		delete _p_assignment_expression;
 		_p_assignment_expression=0;
 	}
-	LOG("\033[31mDELETED\033[0m expression");
+	delete _refCount;_refCount=0;
+	LOG("\033[31mDELETED\033[0m expression_item");
 }
 /*------------------------------------------------------------*\
  							        
@@ -7751,8 +8934,9 @@ PropertiesList expression::getPropertiesList()const
 /*the destructor*/
 expression::~expression()
 {
-	LOG("\033[32mDESTOYING\033[0m expression");
+	LOG("\033[33mDELETING?\033[0m expression");
 	_items.clear();
+	LOG("\033[31mDELETED\033[0m expression");
 }
 
 
@@ -7782,12 +8966,25 @@ declarator::declarator
 		direct_declarator *_arg__p_direct_declarator
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
 	_p_pointer(_arg__p_pointer),
 	_p_direct_declarator(_arg__p_direct_declarator)
 {
 	LOG("\033[32mCREATING\033[0m declarator");
 }
 
+/*copy constructor*/
+declarator::declarator(const declarator& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_pointer(other._p_pointer),
+		_p_direct_declarator(other._p_direct_declarator)
+{
+	LOG("\033[32mCOPYING\033[0m declarator");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increment:"<<(*_refCount));//>>>>
+
+}
 
 /*declarator::getProperties returns a map of properties*/
 Properties declarator::getProperties()const
@@ -7802,7 +8999,10 @@ Properties declarator::getProperties()const
 /*the destructor*/
 declarator::~declarator()
 {
-	LOG("\033[31mDELETING\033[0m declarator");
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m declarator refcout:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("\033[31mDELETING:\033[0m declarator");
 	if(_p_pointer)
 	{
 		delete _p_pointer;
@@ -7813,6 +9013,7 @@ declarator::~declarator()
 		delete _p_direct_declarator;
 		_p_direct_declarator=0;
 	}
+	delete _refCount;_refCount=0;
 
 }
 

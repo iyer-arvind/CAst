@@ -16,6 +16,7 @@
 #include <string>
 #include <cstring>
 #include <stdio.h>
+#include <deque>
 #include <list>
 #include <iostream>
 #include <sstream>
@@ -161,13 +162,14 @@ public:
 		_txt(txt)
 	{
 	}
-	
+	GenericToken(const GenericToken& other):
+		_txt(other._txt)
+	{}
 	virtual bool isList()const			{return false;}
 	virtual Properties getProperties()const		{Properties p(name());p.setTokValue(_txt);return p;}
 	virtual PropertiesList getPropertiesList()const	{return PropertiesList(name());}
 	virtual ~GenericToken()
-	{
-	}
+	{}
 };
 inline Token* GetToken(int i,std::string txt)
 {
@@ -194,8 +196,9 @@ class Token;
 class storage_class_specifier 
 	:public CAst 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		Token *_p_token1;                                               // TYPEDEF
 public:
 	storage_class_specifier	                                     // constructor
@@ -203,6 +206,7 @@ public:
 			std::string _arg_s_matchedPattern,
 				Token *_arg__p_token1			
 		);
+	storage_class_specifier(const storage_class_specifier& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "storage_class_specifier"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_STORAGE_CLASS_SPECIFIER
 	virtual std::string pattern()const;							//returns the pattern, here "[TYPEDEF]"
@@ -235,8 +239,9 @@ class expression;
 class expression_statement 
 	:public CAst 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		expression *_p_expression;                                      // expression
 public:
 	expression_statement	                                        // constructor
@@ -244,6 +249,7 @@ public:
 			std::string _arg_s_matchedPattern,
 				expression *_arg__p_expression			
 		);
+	expression_statement(const expression_statement& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "expression_statement"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_EXPRESSION_STATEMENT
 	virtual std::string pattern()const;							//returns the pattern, here "[expression,';']"
@@ -277,8 +283,9 @@ class abstract_declarator;
 class type_name 
 	:public CAst 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		specifier_qualifier_list *_p_specifier_qualifier_list;          // specifier_qualifier_list
 		abstract_declarator *_p_abstract_declarator;                    // abstract_declarator
 public:
@@ -288,6 +295,7 @@ public:
 				specifier_qualifier_list *_arg__p_specifier_qualifier_list,
 				abstract_declarator *_arg__p_abstract_declarator			
 		);
+	type_name(const type_name& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "type_name"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_TYPE_NAME
 	virtual std::string pattern()const;							//returns the pattern, here "[specifier_qualifier_list,abstract_declarator]"
@@ -344,8 +352,9 @@ class type_name;
 class unary_expression1 
 	:public unary_expression 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		type_name *_p_type_name;                                        // type_name
 public:
 	unary_expression1	                                           // constructor
@@ -353,6 +362,7 @@ public:
 			std::string _arg_s_matchedPattern,
 				type_name *_arg__p_type_name			
 		);
+	unary_expression1(const unary_expression1& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "unary_expression1"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_UNARY_EXPRESSION1
 	virtual std::string pattern()const;							//returns the pattern, here "[SIZEOF,'(',type_name,')']"
@@ -386,8 +396,9 @@ class unary_expression;
 class unary_expression2 
 	:public unary_expression 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		Token *_p_token1;                                               // INC_OP
 		unary_expression *_p_unary_expression;                          // unary_expression
 public:
@@ -397,6 +408,7 @@ public:
 				Token *_arg__p_token1,
 				unary_expression *_arg__p_unary_expression			
 		);
+	unary_expression2(const unary_expression2& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "unary_expression2"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_UNARY_EXPRESSION2
 	virtual std::string pattern()const;							//returns the pattern, here "[INC_OP,unary_expression]"
@@ -432,8 +444,9 @@ class cast_expression;
 class unary_expression3 
 	:public unary_expression 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		unary_operator *_p_unary_operator;                              // unary_operator
 		cast_expression *_p_cast_expression;                            // cast_expression
 public:
@@ -443,6 +456,7 @@ public:
 				unary_operator *_arg__p_unary_operator,
 				cast_expression *_arg__p_cast_expression			
 		);
+	unary_expression3(const unary_expression3& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "unary_expression3"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_UNARY_EXPRESSION3
 	virtual std::string pattern()const;							//returns the pattern, here "[unary_operator,cast_expression]"
@@ -477,8 +491,9 @@ class postfix_expression;
 class unary_expression4 
 	:public unary_expression 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		postfix_expression *_p_postfix_expression;                      // postfix_expression
 public:
 	unary_expression4	                                           // constructor
@@ -486,6 +501,7 @@ public:
 			std::string _arg_s_matchedPattern,
 				postfix_expression *_arg__p_postfix_expression			
 		);
+	unary_expression4(const unary_expression4& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "unary_expression4"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_UNARY_EXPRESSION4
 	virtual std::string pattern()const;							//returns the pattern, here "[postfix_expression]"
@@ -555,10 +571,10 @@ class conditional_expression
 	:public CAst 
 {
 private:
-	typedef std::list<conditional_expression_item> ItemsListType;
+	typedef std::deque<conditional_expression_item> ItemsListType;
 	typedef ItemsListType::iterator ItemsListIter;
 	typedef ItemsListType::const_iterator CItemsListIter;
-	std::list<conditional_expression_item> _items;
+	ItemsListType _items;
 public:
 	conditional_expression
 		(
@@ -581,12 +597,14 @@ public:
 	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
 	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
 	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
+	virtual int size()const{return _items.size();}						//returns the size of the container
+	virtual conditional_expression_item& operator[](int i){return _items[i];}
 	virtual ~conditional_expression ();
 
 };
 
-typedef std::list<conditional_expression_item>::iterator conditional_expression_iterator;
-typedef std::list<conditional_expression_item>::const_iterator conditional_expression_const_iterator;
+typedef std::deque<conditional_expression_item>::iterator conditional_expression_iterator;
+typedef std::deque<conditional_expression_item>::const_iterator conditional_expression_const_iterator;
 
 
 			
@@ -612,8 +630,9 @@ class Token;
 class struct_or_union_specifier 
 	:public CAst 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		struct_or_union *_p_struct_or_union;                            // struct_or_union
 		Token *_p_token1;                                               // IDENTIFIER
 		Token *_p_token2;                                               // '{'
@@ -629,6 +648,7 @@ public:
 				struct_declaration_list *_arg__p_struct_declaration_list,
 				Token *_arg__p_token3			
 		);
+	struct_or_union_specifier(const struct_or_union_specifier& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "struct_or_union_specifier"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_STRUCT_OR_UNION_SPECIFIER
 	virtual std::string pattern()const;							//returns the pattern, here "[struct_or_union,IDENTIFIER,'{',struct_declaration_list,'}']"
@@ -701,10 +721,10 @@ class exclusive_or_expression
 	:public CAst 
 {
 private:
-	typedef std::list<exclusive_or_expression_item> ItemsListType;
+	typedef std::deque<exclusive_or_expression_item> ItemsListType;
 	typedef ItemsListType::iterator ItemsListIter;
 	typedef ItemsListType::const_iterator CItemsListIter;
-	std::list<exclusive_or_expression_item> _items;
+	ItemsListType _items;
 public:
 	exclusive_or_expression
 		(
@@ -726,12 +746,14 @@ public:
 	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
 	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
 	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
+	virtual int size()const{return _items.size();}						//returns the size of the container
+	virtual exclusive_or_expression_item& operator[](int i){return _items[i];}
 	virtual ~exclusive_or_expression ();
 
 };
 
-typedef std::list<exclusive_or_expression_item>::iterator exclusive_or_expression_iterator;
-typedef std::list<exclusive_or_expression_item>::const_iterator exclusive_or_expression_const_iterator;
+typedef std::deque<exclusive_or_expression_item>::iterator exclusive_or_expression_iterator;
+typedef std::deque<exclusive_or_expression_item>::const_iterator exclusive_or_expression_const_iterator;
 
 
 			
@@ -776,8 +798,9 @@ class Token;
 class initializer1 
 	:public initializer 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		initializer_list *_p_initializer_list;                          // initializer_list
 		Token *_p_token1;                                               // ','
 public:
@@ -787,6 +810,7 @@ public:
 				initializer_list *_arg__p_initializer_list,
 				Token *_arg__p_token1			
 		);
+	initializer1(const initializer1& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "initializer1"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_INITIALIZER1
 	virtual std::string pattern()const;							//returns the pattern, here "['{',initializer_list,',','}']"
@@ -821,8 +845,9 @@ class assignment_expression;
 class initializer2 
 	:public initializer 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		assignment_expression *_p_assignment_expression;                // assignment_expression
 public:
 	initializer2	                                                // constructor
@@ -830,6 +855,7 @@ public:
 			std::string _arg_s_matchedPattern,
 				assignment_expression *_arg__p_assignment_expression			
 		);
+	initializer2(const initializer2& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "initializer2"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_INITIALIZER2
 	virtual std::string pattern()const;							//returns the pattern, here "[assignment_expression]"
@@ -894,10 +920,10 @@ class struct_declaration_list
 	:public CAst 
 {
 private:
-	typedef std::list<struct_declaration_list_item> ItemsListType;
+	typedef std::deque<struct_declaration_list_item> ItemsListType;
 	typedef ItemsListType::iterator ItemsListIter;
 	typedef ItemsListType::const_iterator CItemsListIter;
-	std::list<struct_declaration_list_item> _items;
+	ItemsListType _items;
 public:
 	struct_declaration_list
 		(
@@ -919,12 +945,14 @@ public:
 	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
 	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
 	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
+	virtual int size()const{return _items.size();}						//returns the size of the container
+	virtual struct_declaration_list_item& operator[](int i){return _items[i];}
 	virtual ~struct_declaration_list ();
 
 };
 
-typedef std::list<struct_declaration_list_item>::iterator struct_declaration_list_iterator;
-typedef std::list<struct_declaration_list_item>::const_iterator struct_declaration_list_const_iterator;
+typedef std::deque<struct_declaration_list_item>::iterator struct_declaration_list_iterator;
+typedef std::deque<struct_declaration_list_item>::const_iterator struct_declaration_list_const_iterator;
 
 
 			
@@ -946,8 +974,9 @@ class Token;
 class assignment_operator 
 	:public CAst 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		Token *_p_token1;                                               // '='
 public:
 	assignment_operator	                                         // constructor
@@ -955,6 +984,7 @@ public:
 			std::string _arg_s_matchedPattern,
 				Token *_arg__p_token1			
 		);
+	assignment_operator(const assignment_operator& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "assignment_operator"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_ASSIGNMENT_OPERATOR
 	virtual std::string pattern()const;							//returns the pattern, here "['=']"
@@ -988,8 +1018,9 @@ class struct_declarator_list;
 class struct_declaration 
 	:public CAst 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		specifier_qualifier_list *_p_specifier_qualifier_list;          // specifier_qualifier_list
 		struct_declarator_list *_p_struct_declarator_list;              // struct_declarator_list
 public:
@@ -999,6 +1030,7 @@ public:
 				specifier_qualifier_list *_arg__p_specifier_qualifier_list,
 				struct_declarator_list *_arg__p_struct_declarator_list			
 		);
+	struct_declaration(const struct_declaration& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "struct_declaration"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_STRUCT_DECLARATION
 	virtual std::string pattern()const;							//returns the pattern, here "[specifier_qualifier_list,struct_declarator_list,';']"
@@ -1034,8 +1066,9 @@ class direct_abstract_declarator;
 class abstract_declarator 
 	:public CAst 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		pointer *_p_pointer;                                            // pointer
 		direct_abstract_declarator *_p_direct_abstract_declarator;      // direct_abstract_declarator
 public:
@@ -1045,6 +1078,7 @@ public:
 				pointer *_arg__p_pointer,
 				direct_abstract_declarator *_arg__p_direct_abstract_declarator			
 		);
+	abstract_declarator(const abstract_declarator& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "abstract_declarator"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_ABSTRACT_DECLARATOR
 	virtual std::string pattern()const;							//returns the pattern, here "[pointer,direct_abstract_declarator]"
@@ -1102,8 +1136,9 @@ class expression;
 class iteration_statement1 
 	:public iteration_statement 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		statement *_p_statement;                                        // statement
 		expression *_p_expression;                                      // expression
 public:
@@ -1113,6 +1148,7 @@ public:
 				statement *_arg__p_statement,
 				expression *_arg__p_expression			
 		);
+	iteration_statement1(const iteration_statement1& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "iteration_statement1"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_ITERATION_STATEMENT1
 	virtual std::string pattern()const;							//returns the pattern, here "[DO,statement,WHILE,'(',expression,')',';']"
@@ -1150,8 +1186,9 @@ class statement;
 class iteration_statement2 
 	:public iteration_statement 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		expression_statement *_p_expression_statement;                  // expression_statement
 		expression_statement *_p_expression_statement1;                 // expression_statement
 		expression *_p_expression;                                      // expression
@@ -1165,6 +1202,7 @@ public:
 				expression *_arg__p_expression,
 				statement *_arg__p_statement			
 		);
+	iteration_statement2(const iteration_statement2& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "iteration_statement2"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_ITERATION_STATEMENT2
 	virtual std::string pattern()const;							//returns the pattern, here "[FOR,'(',expression_statement,expression_statement,expression,')',statement]"
@@ -1204,8 +1242,9 @@ class statement;
 class iteration_statement3 
 	:public iteration_statement 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		expression *_p_expression;                                      // expression
 		statement *_p_statement;                                        // statement
 public:
@@ -1215,6 +1254,7 @@ public:
 				expression *_arg__p_expression,
 				statement *_arg__p_statement			
 		);
+	iteration_statement3(const iteration_statement3& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "iteration_statement3"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_ITERATION_STATEMENT3
 	virtual std::string pattern()const;							//returns the pattern, here "[WHILE,'(',expression,')',statement]"
@@ -1286,10 +1326,10 @@ class additive_expression
 	:public CAst 
 {
 private:
-	typedef std::list<additive_expression_item> ItemsListType;
+	typedef std::deque<additive_expression_item> ItemsListType;
 	typedef ItemsListType::iterator ItemsListIter;
 	typedef ItemsListType::const_iterator CItemsListIter;
-	std::list<additive_expression_item> _items;
+	ItemsListType _items;
 public:
 	additive_expression
 		(
@@ -1312,12 +1352,14 @@ public:
 	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
 	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
 	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
+	virtual int size()const{return _items.size();}						//returns the size of the container
+	virtual additive_expression_item& operator[](int i){return _items[i];}
 	virtual ~additive_expression ();
 
 };
 
-typedef std::list<additive_expression_item>::iterator additive_expression_iterator;
-typedef std::list<additive_expression_item>::const_iterator additive_expression_const_iterator;
+typedef std::deque<additive_expression_item>::iterator additive_expression_iterator;
+typedef std::deque<additive_expression_item>::const_iterator additive_expression_const_iterator;
 
 
 			
@@ -1361,8 +1403,9 @@ class function_definition;
 class external_declaration1 
 	:public external_declaration 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		function_definition *_p_function_definition;                    // function_definition
 public:
 	external_declaration1	                                       // constructor
@@ -1370,6 +1413,7 @@ public:
 			std::string _arg_s_matchedPattern,
 				function_definition *_arg__p_function_definition			
 		);
+	external_declaration1(const external_declaration1& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "external_declaration1"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_EXTERNAL_DECLARATION1
 	virtual std::string pattern()const;							//returns the pattern, here "[function_definition]"
@@ -1402,8 +1446,9 @@ class declaration;
 class external_declaration2 
 	:public external_declaration 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		declaration *_p_declaration;                                    // declaration
 public:
 	external_declaration2	                                       // constructor
@@ -1411,6 +1456,7 @@ public:
 			std::string _arg_s_matchedPattern,
 				declaration *_arg__p_declaration			
 		);
+	external_declaration2(const external_declaration2& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "external_declaration2"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_EXTERNAL_DECLARATION2
 	virtual std::string pattern()const;							//returns the pattern, here "[declaration]"
@@ -1465,8 +1511,9 @@ class Token;
 class type_specifier1 
 	:public type_specifier 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		Token *_p_token1;                                               // VOID
 public:
 	type_specifier1	                                             // constructor
@@ -1474,6 +1521,7 @@ public:
 			std::string _arg_s_matchedPattern,
 				Token *_arg__p_token1			
 		);
+	type_specifier1(const type_specifier1& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "type_specifier1"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_TYPE_SPECIFIER1
 	virtual std::string pattern()const;							//returns the pattern, here "[VOID]"
@@ -1506,8 +1554,9 @@ class struct_or_union_specifier;
 class type_specifier2 
 	:public type_specifier 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		struct_or_union_specifier *_p_struct_or_union_specifier;        // struct_or_union_specifier
 public:
 	type_specifier2	                                             // constructor
@@ -1515,6 +1564,7 @@ public:
 			std::string _arg_s_matchedPattern,
 				struct_or_union_specifier *_arg__p_struct_or_union_specifier			
 		);
+	type_specifier2(const type_specifier2& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "type_specifier2"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_TYPE_SPECIFIER2
 	virtual std::string pattern()const;							//returns the pattern, here "[struct_or_union_specifier]"
@@ -1547,8 +1597,9 @@ class enum_specifier;
 class type_specifier3 
 	:public type_specifier 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		enum_specifier *_p_enum_specifier;                              // enum_specifier
 public:
 	type_specifier3	                                             // constructor
@@ -1556,6 +1607,7 @@ public:
 			std::string _arg_s_matchedPattern,
 				enum_specifier *_arg__p_enum_specifier			
 		);
+	type_specifier3(const type_specifier3& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "type_specifier3"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_TYPE_SPECIFIER3
 	virtual std::string pattern()const;							//returns the pattern, here "[enum_specifier]"
@@ -1589,8 +1641,9 @@ class statement_list;
 class compound_statement 
 	:public CAst 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		declaration_list *_p_declaration_list;                          // declaration_list
 		statement_list *_p_statement_list;                              // statement_list
 public:
@@ -1600,6 +1653,7 @@ public:
 				declaration_list *_arg__p_declaration_list,
 				statement_list *_arg__p_statement_list			
 		);
+	compound_statement(const compound_statement& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "compound_statement"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_COMPOUND_STATEMENT
 	virtual std::string pattern()const;							//returns the pattern, here "['{',declaration_list,statement_list,'}']"
@@ -1666,10 +1720,10 @@ class inclusive_or_expression
 	:public CAst 
 {
 private:
-	typedef std::list<inclusive_or_expression_item> ItemsListType;
+	typedef std::deque<inclusive_or_expression_item> ItemsListType;
 	typedef ItemsListType::iterator ItemsListIter;
 	typedef ItemsListType::const_iterator CItemsListIter;
-	std::list<inclusive_or_expression_item> _items;
+	ItemsListType _items;
 public:
 	inclusive_or_expression
 		(
@@ -1691,12 +1745,14 @@ public:
 	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
 	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
 	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
+	virtual int size()const{return _items.size();}						//returns the size of the container
+	virtual inclusive_or_expression_item& operator[](int i){return _items[i];}
 	virtual ~inclusive_or_expression ();
 
 };
 
-typedef std::list<inclusive_or_expression_item>::iterator inclusive_or_expression_iterator;
-typedef std::list<inclusive_or_expression_item>::const_iterator inclusive_or_expression_const_iterator;
+typedef std::deque<inclusive_or_expression_item>::iterator inclusive_or_expression_iterator;
+typedef std::deque<inclusive_or_expression_item>::const_iterator inclusive_or_expression_const_iterator;
 
 
 			
@@ -1750,10 +1806,10 @@ class pointer
 	:public CAst 
 {
 private:
-	typedef std::list<pointer_item> ItemsListType;
+	typedef std::deque<pointer_item> ItemsListType;
 	typedef ItemsListType::iterator ItemsListIter;
 	typedef ItemsListType::const_iterator CItemsListIter;
-	std::list<pointer_item> _items;
+	ItemsListType _items;
 public:
 	pointer
 		(
@@ -1775,12 +1831,14 @@ public:
 	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
 	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
 	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
+	virtual int size()const{return _items.size();}						//returns the size of the container
+	virtual pointer_item& operator[](int i){return _items[i];}
 	virtual ~pointer ();
 
 };
 
-typedef std::list<pointer_item>::iterator pointer_iterator;
-typedef std::list<pointer_item>::const_iterator pointer_const_iterator;
+typedef std::deque<pointer_item>::iterator pointer_iterator;
+typedef std::deque<pointer_item>::const_iterator pointer_const_iterator;
 
 
 			
@@ -1827,8 +1885,9 @@ class statement;
 class selection_statement1 
 	:public selection_statement 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		expression *_p_expression;                                      // expression
 		statement *_p_statement;                                        // statement
 		Token *_p_token1;                                               // ELSE
@@ -1842,6 +1901,7 @@ public:
 				Token *_arg__p_token1,
 				statement *_arg__p_statement1			
 		);
+	selection_statement1(const selection_statement1& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "selection_statement1"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_SELECTION_STATEMENT1
 	virtual std::string pattern()const;							//returns the pattern, here "[IF,'(',expression,')',statement,ELSE,statement]"
@@ -1881,8 +1941,9 @@ class statement;
 class selection_statement2 
 	:public selection_statement 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		expression *_p_expression;                                      // expression
 		statement *_p_statement;                                        // statement
 public:
@@ -1892,6 +1953,7 @@ public:
 				expression *_arg__p_expression,
 				statement *_arg__p_statement			
 		);
+	selection_statement2(const selection_statement2& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "selection_statement2"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_SELECTION_STATEMENT2
 	virtual std::string pattern()const;							//returns the pattern, here "[SWITCH,'(',expression,')',statement]"
@@ -1949,8 +2011,9 @@ class expression;
 class postfix_expression1 
 	:public postfix_expression 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		postfix_expression *_p_postfix_expression;                      // postfix_expression
 		expression *_p_expression;                                      // expression
 public:
@@ -1960,6 +2023,7 @@ public:
 				postfix_expression *_arg__p_postfix_expression,
 				expression *_arg__p_expression			
 		);
+	postfix_expression1(const postfix_expression1& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "postfix_expression1"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_POSTFIX_EXPRESSION1
 	virtual std::string pattern()const;							//returns the pattern, here "[postfix_expression,'[',expression,']']"
@@ -1995,8 +2059,9 @@ class argument_expression_list;
 class postfix_expression2 
 	:public postfix_expression 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		postfix_expression *_p_postfix_expression;                      // postfix_expression
 		argument_expression_list *_p_argument_expression_list;          // argument_expression_list
 public:
@@ -2006,6 +2071,7 @@ public:
 				postfix_expression *_arg__p_postfix_expression,
 				argument_expression_list *_arg__p_argument_expression_list			
 		);
+	postfix_expression2(const postfix_expression2& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "postfix_expression2"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_POSTFIX_EXPRESSION2
 	virtual std::string pattern()const;							//returns the pattern, here "[postfix_expression,'(',argument_expression_list,')']"
@@ -2042,8 +2108,9 @@ class Token;
 class postfix_expression3 
 	:public postfix_expression 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		postfix_expression *_p_postfix_expression;                      // postfix_expression
 		Token *_p_token1;                                               // '.'
 		Token *_p_token2;                                               // IDENTIFIER
@@ -2055,6 +2122,7 @@ public:
 				Token *_arg__p_token1,
 				Token *_arg__p_token2			
 		);
+	postfix_expression3(const postfix_expression3& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "postfix_expression3"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_POSTFIX_EXPRESSION3
 	virtual std::string pattern()const;							//returns the pattern, here "[postfix_expression,'.',IDENTIFIER]"
@@ -2092,8 +2160,9 @@ class Token;
 class postfix_expression4 
 	:public postfix_expression 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		postfix_expression *_p_postfix_expression;                      // postfix_expression
 		Token *_p_token1;                                               // INC_OP
 public:
@@ -2103,6 +2172,7 @@ public:
 				postfix_expression *_arg__p_postfix_expression,
 				Token *_arg__p_token1			
 		);
+	postfix_expression4(const postfix_expression4& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "postfix_expression4"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_POSTFIX_EXPRESSION4
 	virtual std::string pattern()const;							//returns the pattern, here "[postfix_expression,INC_OP]"
@@ -2137,8 +2207,9 @@ class primary_expression;
 class postfix_expression5 
 	:public postfix_expression 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		primary_expression *_p_primary_expression;                      // primary_expression
 public:
 	postfix_expression5	                                         // constructor
@@ -2146,6 +2217,7 @@ public:
 			std::string _arg_s_matchedPattern,
 				primary_expression *_arg__p_primary_expression			
 		);
+	postfix_expression5(const postfix_expression5& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "postfix_expression5"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_POSTFIX_EXPRESSION5
 	virtual std::string pattern()const;							//returns the pattern, here "[primary_expression]"
@@ -2210,10 +2282,10 @@ class and_expression
 	:public CAst 
 {
 private:
-	typedef std::list<and_expression_item> ItemsListType;
+	typedef std::deque<and_expression_item> ItemsListType;
 	typedef ItemsListType::iterator ItemsListIter;
 	typedef ItemsListType::const_iterator CItemsListIter;
-	std::list<and_expression_item> _items;
+	ItemsListType _items;
 public:
 	and_expression
 		(
@@ -2235,12 +2307,14 @@ public:
 	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
 	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
 	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
+	virtual int size()const{return _items.size();}						//returns the size of the container
+	virtual and_expression_item& operator[](int i){return _items[i];}
 	virtual ~and_expression ();
 
 };
 
-typedef std::list<and_expression_item>::iterator and_expression_iterator;
-typedef std::list<and_expression_item>::const_iterator and_expression_const_iterator;
+typedef std::deque<and_expression_item>::iterator and_expression_iterator;
+typedef std::deque<and_expression_item>::const_iterator and_expression_const_iterator;
 
 
 			
@@ -2284,8 +2358,9 @@ class labeled_statement;
 class statement1 
 	:public statement 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		labeled_statement *_p_labeled_statement;                        // labeled_statement
 public:
 	statement1	                                                  // constructor
@@ -2293,6 +2368,7 @@ public:
 			std::string _arg_s_matchedPattern,
 				labeled_statement *_arg__p_labeled_statement			
 		);
+	statement1(const statement1& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "statement1"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_STATEMENT1
 	virtual std::string pattern()const;							//returns the pattern, here "[labeled_statement]"
@@ -2325,8 +2401,9 @@ class compound_statement;
 class statement2 
 	:public statement 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		compound_statement *_p_compound_statement;                      // compound_statement
 public:
 	statement2	                                                  // constructor
@@ -2334,6 +2411,7 @@ public:
 			std::string _arg_s_matchedPattern,
 				compound_statement *_arg__p_compound_statement			
 		);
+	statement2(const statement2& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "statement2"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_STATEMENT2
 	virtual std::string pattern()const;							//returns the pattern, here "[compound_statement]"
@@ -2366,8 +2444,9 @@ class expression_statement;
 class statement3 
 	:public statement 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		expression_statement *_p_expression_statement;                  // expression_statement
 public:
 	statement3	                                                  // constructor
@@ -2375,6 +2454,7 @@ public:
 			std::string _arg_s_matchedPattern,
 				expression_statement *_arg__p_expression_statement			
 		);
+	statement3(const statement3& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "statement3"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_STATEMENT3
 	virtual std::string pattern()const;							//returns the pattern, here "[expression_statement]"
@@ -2407,8 +2487,9 @@ class selection_statement;
 class statement4 
 	:public statement 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		selection_statement *_p_selection_statement;                    // selection_statement
 public:
 	statement4	                                                  // constructor
@@ -2416,6 +2497,7 @@ public:
 			std::string _arg_s_matchedPattern,
 				selection_statement *_arg__p_selection_statement			
 		);
+	statement4(const statement4& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "statement4"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_STATEMENT4
 	virtual std::string pattern()const;							//returns the pattern, here "[selection_statement]"
@@ -2448,8 +2530,9 @@ class iteration_statement;
 class statement5 
 	:public statement 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		iteration_statement *_p_iteration_statement;                    // iteration_statement
 public:
 	statement5	                                                  // constructor
@@ -2457,6 +2540,7 @@ public:
 			std::string _arg_s_matchedPattern,
 				iteration_statement *_arg__p_iteration_statement			
 		);
+	statement5(const statement5& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "statement5"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_STATEMENT5
 	virtual std::string pattern()const;							//returns the pattern, here "[iteration_statement]"
@@ -2489,8 +2573,9 @@ class jump_statement;
 class statement6 
 	:public statement 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		jump_statement *_p_jump_statement;                              // jump_statement
 public:
 	statement6	                                                  // constructor
@@ -2498,6 +2583,7 @@ public:
 			std::string _arg_s_matchedPattern,
 				jump_statement *_arg__p_jump_statement			
 		);
+	statement6(const statement6& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "statement6"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_STATEMENT6
 	virtual std::string pattern()const;							//returns the pattern, here "[jump_statement]"
@@ -2553,8 +2639,9 @@ class cast_expression;
 class cast_expression1 
 	:public cast_expression 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		type_name *_p_type_name;                                        // type_name
 		cast_expression *_p_cast_expression;                            // cast_expression
 public:
@@ -2564,6 +2651,7 @@ public:
 				type_name *_arg__p_type_name,
 				cast_expression *_arg__p_cast_expression			
 		);
+	cast_expression1(const cast_expression1& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "cast_expression1"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_CAST_EXPRESSION1
 	virtual std::string pattern()const;							//returns the pattern, here "['(',type_name,')',cast_expression]"
@@ -2598,8 +2686,9 @@ class unary_expression;
 class cast_expression2 
 	:public cast_expression 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		unary_expression *_p_unary_expression;                          // unary_expression
 public:
 	cast_expression2	                                            // constructor
@@ -2607,6 +2696,7 @@ public:
 			std::string _arg_s_matchedPattern,
 				unary_expression *_arg__p_unary_expression			
 		);
+	cast_expression2(const cast_expression2& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "cast_expression2"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_CAST_EXPRESSION2
 	virtual std::string pattern()const;							//returns the pattern, here "[unary_expression]"
@@ -2641,8 +2731,9 @@ class initializer;
 class init_declarator 
 	:public CAst 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		declarator *_p_declarator;                                      // declarator
 		Token *_p_token1;                                               // '='
 		initializer *_p_initializer;                                    // initializer
@@ -2654,6 +2745,7 @@ public:
 				Token *_arg__p_token1,
 				initializer *_arg__p_initializer			
 		);
+	init_declarator(const init_declarator& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "init_declarator"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_INIT_DECLARATOR
 	virtual std::string pattern()const;							//returns the pattern, here "[declarator,'=',initializer]"
@@ -2722,10 +2814,10 @@ class struct_declarator_list
 	:public CAst 
 {
 private:
-	typedef std::list<struct_declarator_list_item> ItemsListType;
+	typedef std::deque<struct_declarator_list_item> ItemsListType;
 	typedef ItemsListType::iterator ItemsListIter;
 	typedef ItemsListType::const_iterator CItemsListIter;
-	std::list<struct_declarator_list_item> _items;
+	ItemsListType _items;
 public:
 	struct_declarator_list
 		(
@@ -2747,12 +2839,14 @@ public:
 	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
 	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
 	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
+	virtual int size()const{return _items.size();}						//returns the size of the container
+	virtual struct_declarator_list_item& operator[](int i){return _items[i];}
 	virtual ~struct_declarator_list ();
 
 };
 
-typedef std::list<struct_declarator_list_item>::iterator struct_declarator_list_iterator;
-typedef std::list<struct_declarator_list_item>::const_iterator struct_declarator_list_const_iterator;
+typedef std::deque<struct_declarator_list_item>::iterator struct_declarator_list_iterator;
+typedef std::deque<struct_declarator_list_item>::const_iterator struct_declarator_list_const_iterator;
 
 
 			
@@ -2806,10 +2900,10 @@ class logical_or_expression
 	:public CAst 
 {
 private:
-	typedef std::list<logical_or_expression_item> ItemsListType;
+	typedef std::deque<logical_or_expression_item> ItemsListType;
 	typedef ItemsListType::iterator ItemsListIter;
 	typedef ItemsListType::const_iterator CItemsListIter;
-	std::list<logical_or_expression_item> _items;
+	ItemsListType _items;
 public:
 	logical_or_expression
 		(
@@ -2831,12 +2925,14 @@ public:
 	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
 	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
 	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
+	virtual int size()const{return _items.size();}						//returns the size of the container
+	virtual logical_or_expression_item& operator[](int i){return _items[i];}
 	virtual ~logical_or_expression ();
 
 };
 
-typedef std::list<logical_or_expression_item>::iterator logical_or_expression_iterator;
-typedef std::list<logical_or_expression_item>::const_iterator logical_or_expression_const_iterator;
+typedef std::deque<logical_or_expression_item>::iterator logical_or_expression_iterator;
+typedef std::deque<logical_or_expression_item>::const_iterator logical_or_expression_const_iterator;
 
 
 			
@@ -2858,8 +2954,9 @@ class Token;
 class unary_operator 
 	:public CAst 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		Token *_p_token1;                                               // '&'
 public:
 	unary_operator	                                              // constructor
@@ -2867,6 +2964,7 @@ public:
 			std::string _arg_s_matchedPattern,
 				Token *_arg__p_token1			
 		);
+	unary_operator(const unary_operator& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "unary_operator"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_UNARY_OPERATOR
 	virtual std::string pattern()const;							//returns the pattern, here "['&']"
@@ -2936,10 +3034,10 @@ class relational_expression
 	:public CAst 
 {
 private:
-	typedef std::list<relational_expression_item> ItemsListType;
+	typedef std::deque<relational_expression_item> ItemsListType;
 	typedef ItemsListType::iterator ItemsListIter;
 	typedef ItemsListType::const_iterator CItemsListIter;
-	std::list<relational_expression_item> _items;
+	ItemsListType _items;
 public:
 	relational_expression
 		(
@@ -2962,12 +3060,14 @@ public:
 	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
 	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
 	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
+	virtual int size()const{return _items.size();}						//returns the size of the container
+	virtual relational_expression_item& operator[](int i){return _items[i];}
 	virtual ~relational_expression ();
 
 };
 
-typedef std::list<relational_expression_item>::iterator relational_expression_iterator;
-typedef std::list<relational_expression_item>::const_iterator relational_expression_const_iterator;
+typedef std::deque<relational_expression_item>::iterator relational_expression_iterator;
+typedef std::deque<relational_expression_item>::const_iterator relational_expression_const_iterator;
 
 
 			
@@ -2989,8 +3089,9 @@ class Token;
 class struct_or_union 
 	:public CAst 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		Token *_p_token1;                                               // STRUCT
 public:
 	struct_or_union	                                             // constructor
@@ -2998,6 +3099,7 @@ public:
 			std::string _arg_s_matchedPattern,
 				Token *_arg__p_token1			
 		);
+	struct_or_union(const struct_or_union& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "struct_or_union"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_STRUCT_OR_UNION
 	virtual std::string pattern()const;							//returns the pattern, here "[STRUCT]"
@@ -3032,8 +3134,9 @@ class constant_expression;
 class enumerator 
 	:public CAst 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		Token *_p_token1;                                               // IDENTIFIER
 		Token *_p_token2;                                               // '='
 		constant_expression *_p_constant_expression;                    // constant_expression
@@ -3045,6 +3148,7 @@ public:
 				Token *_arg__p_token2,
 				constant_expression *_arg__p_constant_expression			
 		);
+	enumerator(const enumerator& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "enumerator"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_ENUMERATOR
 	virtual std::string pattern()const;							//returns the pattern, here "[IDENTIFIER,'=',constant_expression]"
@@ -3105,8 +3209,9 @@ class assignment_expression;
 class assignment_expression1 
 	:public assignment_expression 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		unary_expression *_p_unary_expression;                          // unary_expression
 		assignment_operator *_p_assignment_operator;                    // assignment_operator
 		assignment_expression *_p_assignment_expression;                // assignment_expression
@@ -3118,6 +3223,7 @@ public:
 				assignment_operator *_arg__p_assignment_operator,
 				assignment_expression *_arg__p_assignment_expression			
 		);
+	assignment_expression1(const assignment_expression1& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "assignment_expression1"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_ASSIGNMENT_EXPRESSION1
 	virtual std::string pattern()const;							//returns the pattern, here "[unary_expression,assignment_operator,assignment_expression]"
@@ -3154,8 +3260,9 @@ class conditional_expression;
 class assignment_expression2 
 	:public assignment_expression 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		conditional_expression *_p_conditional_expression;              // conditional_expression
 public:
 	assignment_expression2	                                      // constructor
@@ -3163,6 +3270,7 @@ public:
 			std::string _arg_s_matchedPattern,
 				conditional_expression *_arg__p_conditional_expression			
 		);
+	assignment_expression2(const assignment_expression2& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "assignment_expression2"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_ASSIGNMENT_EXPRESSION2
 	virtual std::string pattern()const;							//returns the pattern, here "[conditional_expression]"
@@ -3197,8 +3305,9 @@ class Token;
 class parameter_type_list 
 	:public CAst 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		parameter_list *_p_parameter_list;                              // parameter_list
 		Token *_p_token1;                                               // ','
 		Token *_p_token2;                                               // ELLIPSIS
@@ -3210,6 +3319,7 @@ public:
 				Token *_arg__p_token1,
 				Token *_arg__p_token2			
 		);
+	parameter_type_list(const parameter_type_list& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "parameter_type_list"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_PARAMETER_TYPE_LIST
 	virtual std::string pattern()const;							//returns the pattern, here "[parameter_list,',',ELLIPSIS]"
@@ -3269,8 +3379,9 @@ class declarator;
 class parameter_declaration1 
 	:public parameter_declaration 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		declaration_specifiers *_p_declaration_specifiers;              // declaration_specifiers
 		declarator *_p_declarator;                                      // declarator
 public:
@@ -3280,6 +3391,7 @@ public:
 				declaration_specifiers *_arg__p_declaration_specifiers,
 				declarator *_arg__p_declarator			
 		);
+	parameter_declaration1(const parameter_declaration1& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "parameter_declaration1"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_PARAMETER_DECLARATION1
 	virtual std::string pattern()const;							//returns the pattern, here "[declaration_specifiers,declarator]"
@@ -3315,8 +3427,9 @@ class abstract_declarator;
 class parameter_declaration2 
 	:public parameter_declaration 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		declaration_specifiers *_p_declaration_specifiers;              // declaration_specifiers
 		abstract_declarator *_p_abstract_declarator;                    // abstract_declarator
 public:
@@ -3326,6 +3439,7 @@ public:
 				declaration_specifiers *_arg__p_declaration_specifiers,
 				abstract_declarator *_arg__p_abstract_declarator			
 		);
+	parameter_declaration2(const parameter_declaration2& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "parameter_declaration2"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_PARAMETER_DECLARATION2
 	virtual std::string pattern()const;							//returns the pattern, here "[declaration_specifiers,abstract_declarator]"
@@ -3397,10 +3511,10 @@ class multiplicative_expression
 	:public CAst 
 {
 private:
-	typedef std::list<multiplicative_expression_item> ItemsListType;
+	typedef std::deque<multiplicative_expression_item> ItemsListType;
 	typedef ItemsListType::iterator ItemsListIter;
 	typedef ItemsListType::const_iterator CItemsListIter;
-	std::list<multiplicative_expression_item> _items;
+	ItemsListType _items;
 public:
 	multiplicative_expression
 		(
@@ -3423,12 +3537,14 @@ public:
 	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
 	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
 	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
+	virtual int size()const{return _items.size();}						//returns the size of the container
+	virtual multiplicative_expression_item& operator[](int i){return _items[i];}
 	virtual ~multiplicative_expression ();
 
 };
 
-typedef std::list<multiplicative_expression_item>::iterator multiplicative_expression_iterator;
-typedef std::list<multiplicative_expression_item>::const_iterator multiplicative_expression_const_iterator;
+typedef std::deque<multiplicative_expression_item>::iterator multiplicative_expression_iterator;
+typedef std::deque<multiplicative_expression_item>::const_iterator multiplicative_expression_const_iterator;
 
 
 			
@@ -3482,10 +3598,10 @@ class type_qualifier_list
 	:public CAst 
 {
 private:
-	typedef std::list<type_qualifier_list_item> ItemsListType;
+	typedef std::deque<type_qualifier_list_item> ItemsListType;
 	typedef ItemsListType::iterator ItemsListIter;
 	typedef ItemsListType::const_iterator CItemsListIter;
-	std::list<type_qualifier_list_item> _items;
+	ItemsListType _items;
 public:
 	type_qualifier_list
 		(
@@ -3507,12 +3623,14 @@ public:
 	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
 	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
 	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
+	virtual int size()const{return _items.size();}						//returns the size of the container
+	virtual type_qualifier_list_item& operator[](int i){return _items[i];}
 	virtual ~type_qualifier_list ();
 
 };
 
-typedef std::list<type_qualifier_list_item>::iterator type_qualifier_list_iterator;
-typedef std::list<type_qualifier_list_item>::const_iterator type_qualifier_list_const_iterator;
+typedef std::deque<type_qualifier_list_item>::iterator type_qualifier_list_iterator;
+typedef std::deque<type_qualifier_list_item>::const_iterator type_qualifier_list_const_iterator;
 
 
 			
@@ -3566,10 +3684,10 @@ class argument_expression_list
 	:public CAst 
 {
 private:
-	typedef std::list<argument_expression_list_item> ItemsListType;
+	typedef std::deque<argument_expression_list_item> ItemsListType;
 	typedef ItemsListType::iterator ItemsListIter;
 	typedef ItemsListType::const_iterator CItemsListIter;
-	std::list<argument_expression_list_item> _items;
+	ItemsListType _items;
 public:
 	argument_expression_list
 		(
@@ -3591,12 +3709,14 @@ public:
 	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
 	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
 	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
+	virtual int size()const{return _items.size();}						//returns the size of the container
+	virtual argument_expression_list_item& operator[](int i){return _items[i];}
 	virtual ~argument_expression_list ();
 
 };
 
-typedef std::list<argument_expression_list_item>::iterator argument_expression_list_iterator;
-typedef std::list<argument_expression_list_item>::const_iterator argument_expression_list_const_iterator;
+typedef std::deque<argument_expression_list_item>::iterator argument_expression_list_iterator;
+typedef std::deque<argument_expression_list_item>::const_iterator argument_expression_list_const_iterator;
 
 
 			
@@ -3641,8 +3761,9 @@ class constant_expression;
 class direct_abstract_declarator1 
 	:public direct_abstract_declarator 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		direct_abstract_declarator *_p_direct_abstract_declarator;      // direct_abstract_declarator
 		constant_expression *_p_constant_expression;                    // constant_expression
 public:
@@ -3652,6 +3773,7 @@ public:
 				direct_abstract_declarator *_arg__p_direct_abstract_declarator,
 				constant_expression *_arg__p_constant_expression			
 		);
+	direct_abstract_declarator1(const direct_abstract_declarator1& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "direct_abstract_declarator1"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_DIRECT_ABSTRACT_DECLARATOR1
 	virtual std::string pattern()const;							//returns the pattern, here "[direct_abstract_declarator,'[',constant_expression,']']"
@@ -3687,8 +3809,9 @@ class parameter_type_list;
 class direct_abstract_declarator2 
 	:public direct_abstract_declarator 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		direct_abstract_declarator *_p_direct_abstract_declarator;      // direct_abstract_declarator
 		parameter_type_list *_p_parameter_type_list;                    // parameter_type_list
 public:
@@ -3698,6 +3821,7 @@ public:
 				direct_abstract_declarator *_arg__p_direct_abstract_declarator,
 				parameter_type_list *_arg__p_parameter_type_list			
 		);
+	direct_abstract_declarator2(const direct_abstract_declarator2& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "direct_abstract_declarator2"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_DIRECT_ABSTRACT_DECLARATOR2
 	virtual std::string pattern()const;							//returns the pattern, here "[direct_abstract_declarator,'(',parameter_type_list,')']"
@@ -3732,8 +3856,9 @@ class abstract_declarator;
 class direct_abstract_declarator3 
 	:public direct_abstract_declarator 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		abstract_declarator *_p_abstract_declarator;                    // abstract_declarator
 public:
 	direct_abstract_declarator3	                                 // constructor
@@ -3741,6 +3866,7 @@ public:
 			std::string _arg_s_matchedPattern,
 				abstract_declarator *_arg__p_abstract_declarator			
 		);
+	direct_abstract_declarator3(const direct_abstract_declarator3& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "direct_abstract_declarator3"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_DIRECT_ABSTRACT_DECLARATOR3
 	virtual std::string pattern()const;							//returns the pattern, here "['(',abstract_declarator,')']"
@@ -3810,10 +3936,10 @@ class equality_expression
 	:public CAst 
 {
 private:
-	typedef std::list<equality_expression_item> ItemsListType;
+	typedef std::deque<equality_expression_item> ItemsListType;
 	typedef ItemsListType::iterator ItemsListIter;
 	typedef ItemsListType::const_iterator CItemsListIter;
-	std::list<equality_expression_item> _items;
+	ItemsListType _items;
 public:
 	equality_expression
 		(
@@ -3836,12 +3962,14 @@ public:
 	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
 	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
 	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
+	virtual int size()const{return _items.size();}						//returns the size of the container
+	virtual equality_expression_item& operator[](int i){return _items[i];}
 	virtual ~equality_expression ();
 
 };
 
-typedef std::list<equality_expression_item>::iterator equality_expression_iterator;
-typedef std::list<equality_expression_item>::const_iterator equality_expression_const_iterator;
+typedef std::deque<equality_expression_item>::iterator equality_expression_iterator;
+typedef std::deque<equality_expression_item>::const_iterator equality_expression_const_iterator;
 
 
 			
@@ -3885,8 +4013,9 @@ class expression;
 class primary_expression1 
 	:public primary_expression 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		expression *_p_expression;                                      // expression
 public:
 	primary_expression1	                                         // constructor
@@ -3894,6 +4023,7 @@ public:
 			std::string _arg_s_matchedPattern,
 				expression *_arg__p_expression			
 		);
+	primary_expression1(const primary_expression1& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "primary_expression1"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_PRIMARY_EXPRESSION1
 	virtual std::string pattern()const;							//returns the pattern, here "['(',expression,')']"
@@ -3926,8 +4056,9 @@ class Token;
 class primary_expression2 
 	:public primary_expression 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		Token *_p_token1;                                               // IDENTIFIER
 public:
 	primary_expression2	                                         // constructor
@@ -3935,6 +4066,7 @@ public:
 			std::string _arg_s_matchedPattern,
 				Token *_arg__p_token1			
 		);
+	primary_expression2(const primary_expression2& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "primary_expression2"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_PRIMARY_EXPRESSION2
 	virtual std::string pattern()const;							//returns the pattern, here "[IDENTIFIER]"
@@ -4021,10 +4153,10 @@ class declaration_specifiers1
 	:public declaration_specifiers 
 {
 private:
-	typedef std::list<declaration_specifiers1_item> ItemsListType;
+	typedef std::deque<declaration_specifiers1_item> ItemsListType;
 	typedef ItemsListType::iterator ItemsListIter;
 	typedef ItemsListType::const_iterator CItemsListIter;
-	std::list<declaration_specifiers1_item> _items;
+	ItemsListType _items;
 public:
 	declaration_specifiers1
 		(
@@ -4046,12 +4178,14 @@ public:
 	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
 	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
 	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
+	virtual int size()const{return _items.size();}						//returns the size of the container
+	virtual declaration_specifiers1_item& operator[](int i){return _items[i];}
 	virtual ~declaration_specifiers1 ();
 
 };
 
-typedef std::list<declaration_specifiers1_item>::iterator declaration_specifiers1_iterator;
-typedef std::list<declaration_specifiers1_item>::const_iterator declaration_specifiers1_const_iterator;
+typedef std::deque<declaration_specifiers1_item>::iterator declaration_specifiers1_iterator;
+typedef std::deque<declaration_specifiers1_item>::const_iterator declaration_specifiers1_const_iterator;
 
 
 			
@@ -4105,10 +4239,10 @@ class declaration_specifiers2
 	:public declaration_specifiers 
 {
 private:
-	typedef std::list<declaration_specifiers2_item> ItemsListType;
+	typedef std::deque<declaration_specifiers2_item> ItemsListType;
 	typedef ItemsListType::iterator ItemsListIter;
 	typedef ItemsListType::const_iterator CItemsListIter;
-	std::list<declaration_specifiers2_item> _items;
+	ItemsListType _items;
 public:
 	declaration_specifiers2
 		(
@@ -4130,12 +4264,14 @@ public:
 	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
 	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
 	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
+	virtual int size()const{return _items.size();}						//returns the size of the container
+	virtual declaration_specifiers2_item& operator[](int i){return _items[i];}
 	virtual ~declaration_specifiers2 ();
 
 };
 
-typedef std::list<declaration_specifiers2_item>::iterator declaration_specifiers2_iterator;
-typedef std::list<declaration_specifiers2_item>::const_iterator declaration_specifiers2_const_iterator;
+typedef std::deque<declaration_specifiers2_item>::iterator declaration_specifiers2_iterator;
+typedef std::deque<declaration_specifiers2_item>::const_iterator declaration_specifiers2_const_iterator;
 
 
 			
@@ -4189,10 +4325,10 @@ class declaration_specifiers3
 	:public declaration_specifiers 
 {
 private:
-	typedef std::list<declaration_specifiers3_item> ItemsListType;
+	typedef std::deque<declaration_specifiers3_item> ItemsListType;
 	typedef ItemsListType::iterator ItemsListIter;
 	typedef ItemsListType::const_iterator CItemsListIter;
-	std::list<declaration_specifiers3_item> _items;
+	ItemsListType _items;
 public:
 	declaration_specifiers3
 		(
@@ -4214,12 +4350,14 @@ public:
 	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
 	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
 	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
+	virtual int size()const{return _items.size();}						//returns the size of the container
+	virtual declaration_specifiers3_item& operator[](int i){return _items[i];}
 	virtual ~declaration_specifiers3 ();
 
 };
 
-typedef std::list<declaration_specifiers3_item>::iterator declaration_specifiers3_iterator;
-typedef std::list<declaration_specifiers3_item>::const_iterator declaration_specifiers3_const_iterator;
+typedef std::deque<declaration_specifiers3_item>::iterator declaration_specifiers3_iterator;
+typedef std::deque<declaration_specifiers3_item>::const_iterator declaration_specifiers3_const_iterator;
 
 
 			
@@ -4242,8 +4380,9 @@ class init_declarator_list;
 class declaration 
 	:public CAst 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		declaration_specifiers *_p_declaration_specifiers;              // declaration_specifiers
 		init_declarator_list *_p_init_declarator_list;                  // init_declarator_list
 public:
@@ -4253,6 +4392,7 @@ public:
 				declaration_specifiers *_arg__p_declaration_specifiers,
 				init_declarator_list *_arg__p_init_declarator_list			
 		);
+	declaration(const declaration& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "declaration"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_DECLARATION
 	virtual std::string pattern()const;							//returns the pattern, here "[declaration_specifiers,init_declarator_list,';']"
@@ -4310,8 +4450,9 @@ class constant_expression;
 class direct_declarator1 
 	:public direct_declarator 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		direct_declarator *_p_direct_declarator;                        // direct_declarator
 		constant_expression *_p_constant_expression;                    // constant_expression
 public:
@@ -4321,6 +4462,7 @@ public:
 				direct_declarator *_arg__p_direct_declarator,
 				constant_expression *_arg__p_constant_expression			
 		);
+	direct_declarator1(const direct_declarator1& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "direct_declarator1"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_DIRECT_DECLARATOR1
 	virtual std::string pattern()const;							//returns the pattern, here "[direct_declarator,'[',constant_expression,']']"
@@ -4356,8 +4498,9 @@ class parameter_type_list;
 class direct_declarator2 
 	:public direct_declarator 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		direct_declarator *_p_direct_declarator;                        // direct_declarator
 		parameter_type_list *_p_parameter_type_list;                    // parameter_type_list
 public:
@@ -4367,6 +4510,7 @@ public:
 				direct_declarator *_arg__p_direct_declarator,
 				parameter_type_list *_arg__p_parameter_type_list			
 		);
+	direct_declarator2(const direct_declarator2& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "direct_declarator2"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_DIRECT_DECLARATOR2
 	virtual std::string pattern()const;							//returns the pattern, here "[direct_declarator,'(',parameter_type_list,')']"
@@ -4402,8 +4546,9 @@ class identifier_list;
 class direct_declarator3 
 	:public direct_declarator 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		direct_declarator *_p_direct_declarator;                        // direct_declarator
 		identifier_list *_p_identifier_list;                            // identifier_list
 public:
@@ -4413,6 +4558,7 @@ public:
 				direct_declarator *_arg__p_direct_declarator,
 				identifier_list *_arg__p_identifier_list			
 		);
+	direct_declarator3(const direct_declarator3& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "direct_declarator3"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_DIRECT_DECLARATOR3
 	virtual std::string pattern()const;							//returns the pattern, here "[direct_declarator,'(',identifier_list,')']"
@@ -4447,8 +4593,9 @@ class declarator;
 class direct_declarator4 
 	:public direct_declarator 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		declarator *_p_declarator;                                      // declarator
 public:
 	direct_declarator4	                                          // constructor
@@ -4456,6 +4603,7 @@ public:
 			std::string _arg_s_matchedPattern,
 				declarator *_arg__p_declarator			
 		);
+	direct_declarator4(const direct_declarator4& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "direct_declarator4"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_DIRECT_DECLARATOR4
 	virtual std::string pattern()const;							//returns the pattern, here "['(',declarator,')']"
@@ -4488,8 +4636,9 @@ class Token;
 class direct_declarator5 
 	:public direct_declarator 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		Token *_p_token1;                                               // IDENTIFIER
 public:
 	direct_declarator5	                                          // constructor
@@ -4497,6 +4646,7 @@ public:
 			std::string _arg_s_matchedPattern,
 				Token *_arg__p_token1			
 		);
+	direct_declarator5(const direct_declarator5& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "direct_declarator5"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_DIRECT_DECLARATOR5
 	virtual std::string pattern()const;							//returns the pattern, here "[IDENTIFIER]"
@@ -4561,10 +4711,10 @@ class logical_and_expression
 	:public CAst 
 {
 private:
-	typedef std::list<logical_and_expression_item> ItemsListType;
+	typedef std::deque<logical_and_expression_item> ItemsListType;
 	typedef ItemsListType::iterator ItemsListIter;
 	typedef ItemsListType::const_iterator CItemsListIter;
-	std::list<logical_and_expression_item> _items;
+	ItemsListType _items;
 public:
 	logical_and_expression
 		(
@@ -4586,12 +4736,14 @@ public:
 	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
 	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
 	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
+	virtual int size()const{return _items.size();}						//returns the size of the container
+	virtual logical_and_expression_item& operator[](int i){return _items[i];}
 	virtual ~logical_and_expression ();
 
 };
 
-typedef std::list<logical_and_expression_item>::iterator logical_and_expression_iterator;
-typedef std::list<logical_and_expression_item>::const_iterator logical_and_expression_const_iterator;
+typedef std::deque<logical_and_expression_item>::iterator logical_and_expression_iterator;
+typedef std::deque<logical_and_expression_item>::const_iterator logical_and_expression_const_iterator;
 
 
 			
@@ -4645,10 +4797,10 @@ class init_declarator_list
 	:public CAst 
 {
 private:
-	typedef std::list<init_declarator_list_item> ItemsListType;
+	typedef std::deque<init_declarator_list_item> ItemsListType;
 	typedef ItemsListType::iterator ItemsListIter;
 	typedef ItemsListType::const_iterator CItemsListIter;
-	std::list<init_declarator_list_item> _items;
+	ItemsListType _items;
 public:
 	init_declarator_list
 		(
@@ -4670,12 +4822,14 @@ public:
 	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
 	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
 	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
+	virtual int size()const{return _items.size();}						//returns the size of the container
+	virtual init_declarator_list_item& operator[](int i){return _items[i];}
 	virtual ~init_declarator_list ();
 
 };
 
-typedef std::list<init_declarator_list_item>::iterator init_declarator_list_iterator;
-typedef std::list<init_declarator_list_item>::const_iterator init_declarator_list_const_iterator;
+typedef std::deque<init_declarator_list_item>::iterator init_declarator_list_iterator;
+typedef std::deque<init_declarator_list_item>::const_iterator init_declarator_list_const_iterator;
 
 
 			
@@ -4734,10 +4888,10 @@ class shift_expression
 	:public CAst 
 {
 private:
-	typedef std::list<shift_expression_item> ItemsListType;
+	typedef std::deque<shift_expression_item> ItemsListType;
 	typedef ItemsListType::iterator ItemsListIter;
 	typedef ItemsListType::const_iterator CItemsListIter;
-	std::list<shift_expression_item> _items;
+	ItemsListType _items;
 public:
 	shift_expression
 		(
@@ -4760,12 +4914,14 @@ public:
 	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
 	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
 	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
+	virtual int size()const{return _items.size();}						//returns the size of the container
+	virtual shift_expression_item& operator[](int i){return _items[i];}
 	virtual ~shift_expression ();
 
 };
 
-typedef std::list<shift_expression_item>::iterator shift_expression_iterator;
-typedef std::list<shift_expression_item>::const_iterator shift_expression_const_iterator;
+typedef std::deque<shift_expression_item>::iterator shift_expression_iterator;
+typedef std::deque<shift_expression_item>::const_iterator shift_expression_const_iterator;
 
 
 			
@@ -4819,10 +4975,10 @@ class identifier_list
 	:public CAst 
 {
 private:
-	typedef std::list<identifier_list_item> ItemsListType;
+	typedef std::deque<identifier_list_item> ItemsListType;
 	typedef ItemsListType::iterator ItemsListIter;
 	typedef ItemsListType::const_iterator CItemsListIter;
-	std::list<identifier_list_item> _items;
+	ItemsListType _items;
 public:
 	identifier_list
 		(
@@ -4844,12 +5000,14 @@ public:
 	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
 	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
 	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
+	virtual int size()const{return _items.size();}						//returns the size of the container
+	virtual identifier_list_item& operator[](int i){return _items[i];}
 	virtual ~identifier_list ();
 
 };
 
-typedef std::list<identifier_list_item>::iterator identifier_list_iterator;
-typedef std::list<identifier_list_item>::const_iterator identifier_list_const_iterator;
+typedef std::deque<identifier_list_item>::iterator identifier_list_iterator;
+typedef std::deque<identifier_list_item>::const_iterator identifier_list_const_iterator;
 
 
 			
@@ -4893,8 +5051,9 @@ class Token;
 class jump_statement1 
 	:public jump_statement 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		Token *_p_token1;                                               // IDENTIFIER
 public:
 	jump_statement1	                                             // constructor
@@ -4902,6 +5061,7 @@ public:
 			std::string _arg_s_matchedPattern,
 				Token *_arg__p_token1			
 		);
+	jump_statement1(const jump_statement1& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "jump_statement1"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_JUMP_STATEMENT1
 	virtual std::string pattern()const;							//returns the pattern, here "[GOTO,IDENTIFIER,';']"
@@ -4934,8 +5094,9 @@ class expression;
 class jump_statement2 
 	:public jump_statement 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		expression *_p_expression;                                      // expression
 public:
 	jump_statement2	                                             // constructor
@@ -4943,6 +5104,7 @@ public:
 			std::string _arg_s_matchedPattern,
 				expression *_arg__p_expression			
 		);
+	jump_statement2(const jump_statement2& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "jump_statement2"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_JUMP_STATEMENT2
 	virtual std::string pattern()const;							//returns the pattern, here "[RETURN,expression,';']"
@@ -4975,8 +5137,9 @@ class Token;
 class jump_statement3 
 	:public jump_statement 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		Token *_p_token1;                                               // CONTINUE
 public:
 	jump_statement3	                                             // constructor
@@ -4984,6 +5147,7 @@ public:
 			std::string _arg_s_matchedPattern,
 				Token *_arg__p_token1			
 		);
+	jump_statement3(const jump_statement3& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "jump_statement3"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_JUMP_STATEMENT3
 	virtual std::string pattern()const;							//returns the pattern, here "[CONTINUE,';']"
@@ -5018,8 +5182,9 @@ class constant_expression;
 class struct_declarator 
 	:public CAst 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		declarator *_p_declarator;                                      // declarator
 		Token *_p_token1;                                               // ':'
 		constant_expression *_p_constant_expression;                    // constant_expression
@@ -5031,6 +5196,7 @@ public:
 				Token *_arg__p_token1,
 				constant_expression *_arg__p_constant_expression			
 		);
+	struct_declarator(const struct_declarator& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "struct_declarator"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_STRUCT_DECLARATOR
 	virtual std::string pattern()const;							//returns the pattern, here "[declarator,':',constant_expression]"
@@ -5070,8 +5236,9 @@ class compound_statement;
 class function_definition 
 	:public CAst 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		declaration_specifiers *_p_declaration_specifiers;              // declaration_specifiers
 		declarator *_p_declarator;                                      // declarator
 		declaration_list *_p_declaration_list;                          // declaration_list
@@ -5085,6 +5252,7 @@ public:
 				declaration_list *_arg__p_declaration_list,
 				compound_statement *_arg__p_compound_statement			
 		);
+	function_definition(const function_definition& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "function_definition"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_FUNCTION_DEFINITION
 	virtual std::string pattern()const;							//returns the pattern, here "[declaration_specifiers,declarator,declaration_list,compound_statement]"
@@ -5155,10 +5323,10 @@ class parameter_list
 	:public CAst 
 {
 private:
-	typedef std::list<parameter_list_item> ItemsListType;
+	typedef std::deque<parameter_list_item> ItemsListType;
 	typedef ItemsListType::iterator ItemsListIter;
 	typedef ItemsListType::const_iterator CItemsListIter;
-	std::list<parameter_list_item> _items;
+	ItemsListType _items;
 public:
 	parameter_list
 		(
@@ -5180,12 +5348,14 @@ public:
 	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
 	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
 	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
+	virtual int size()const{return _items.size();}						//returns the size of the container
+	virtual parameter_list_item& operator[](int i){return _items[i];}
 	virtual ~parameter_list ();
 
 };
 
-typedef std::list<parameter_list_item>::iterator parameter_list_iterator;
-typedef std::list<parameter_list_item>::const_iterator parameter_list_const_iterator;
+typedef std::deque<parameter_list_item>::iterator parameter_list_iterator;
+typedef std::deque<parameter_list_item>::const_iterator parameter_list_const_iterator;
 
 
 			
@@ -5210,8 +5380,9 @@ class Token;
 class enum_specifier 
 	:public CAst 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		Token *_p_token1;                                               // IDENTIFIER
 		Token *_p_token2;                                               // '{'
 		enumerator_list *_p_enumerator_list;                            // enumerator_list
@@ -5225,6 +5396,7 @@ public:
 				enumerator_list *_arg__p_enumerator_list,
 				Token *_arg__p_token3			
 		);
+	enum_specifier(const enum_specifier& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "enum_specifier"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_ENUM_SPECIFIER
 	virtual std::string pattern()const;							//returns the pattern, here "[ENUM,IDENTIFIER,'{',enumerator_list,'}']"
@@ -5263,8 +5435,9 @@ class Token;
 class type_qualifier 
 	:public CAst 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		Token *_p_token1;                                               // CONST
 public:
 	type_qualifier	                                              // constructor
@@ -5272,6 +5445,7 @@ public:
 			std::string _arg_s_matchedPattern,
 				Token *_arg__p_token1			
 		);
+	type_qualifier(const type_qualifier& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "type_qualifier"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_TYPE_QUALIFIER
 	virtual std::string pattern()const;							//returns the pattern, here "[CONST]"
@@ -5336,10 +5510,10 @@ class enumerator_list
 	:public CAst 
 {
 private:
-	typedef std::list<enumerator_list_item> ItemsListType;
+	typedef std::deque<enumerator_list_item> ItemsListType;
 	typedef ItemsListType::iterator ItemsListIter;
 	typedef ItemsListType::const_iterator CItemsListIter;
-	std::list<enumerator_list_item> _items;
+	ItemsListType _items;
 public:
 	enumerator_list
 		(
@@ -5361,12 +5535,14 @@ public:
 	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
 	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
 	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
+	virtual int size()const{return _items.size();}						//returns the size of the container
+	virtual enumerator_list_item& operator[](int i){return _items[i];}
 	virtual ~enumerator_list ();
 
 };
 
-typedef std::list<enumerator_list_item>::iterator enumerator_list_iterator;
-typedef std::list<enumerator_list_item>::const_iterator enumerator_list_const_iterator;
+typedef std::deque<enumerator_list_item>::iterator enumerator_list_iterator;
+typedef std::deque<enumerator_list_item>::const_iterator enumerator_list_const_iterator;
 
 
 			
@@ -5411,8 +5587,9 @@ class statement;
 class labeled_statement1 
 	:public labeled_statement 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		constant_expression *_p_constant_expression;                    // constant_expression
 		statement *_p_statement;                                        // statement
 public:
@@ -5422,6 +5599,7 @@ public:
 				constant_expression *_arg__p_constant_expression,
 				statement *_arg__p_statement			
 		);
+	labeled_statement1(const labeled_statement1& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "labeled_statement1"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_LABELED_STATEMENT1
 	virtual std::string pattern()const;							//returns the pattern, here "[CASE,constant_expression,':',statement]"
@@ -5457,8 +5635,9 @@ class statement;
 class labeled_statement2 
 	:public labeled_statement 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		Token *_p_token1;                                               // IDENTIFIER
 		statement *_p_statement;                                        // statement
 public:
@@ -5468,6 +5647,7 @@ public:
 				Token *_arg__p_token1,
 				statement *_arg__p_statement			
 		);
+	labeled_statement2(const labeled_statement2& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "labeled_statement2"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_LABELED_STATEMENT2
 	virtual std::string pattern()const;							//returns the pattern, here "[IDENTIFIER,':',statement]"
@@ -5534,10 +5714,10 @@ class declaration_list
 	:public CAst 
 {
 private:
-	typedef std::list<declaration_list_item> ItemsListType;
+	typedef std::deque<declaration_list_item> ItemsListType;
 	typedef ItemsListType::iterator ItemsListIter;
 	typedef ItemsListType::const_iterator CItemsListIter;
-	std::list<declaration_list_item> _items;
+	ItemsListType _items;
 public:
 	declaration_list
 		(
@@ -5559,12 +5739,14 @@ public:
 	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
 	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
 	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
+	virtual int size()const{return _items.size();}						//returns the size of the container
+	virtual declaration_list_item& operator[](int i){return _items[i];}
 	virtual ~declaration_list ();
 
 };
 
-typedef std::list<declaration_list_item>::iterator declaration_list_iterator;
-typedef std::list<declaration_list_item>::const_iterator declaration_list_const_iterator;
+typedef std::deque<declaration_list_item>::iterator declaration_list_iterator;
+typedef std::deque<declaration_list_item>::const_iterator declaration_list_const_iterator;
 
 
 			
@@ -5640,10 +5822,10 @@ class specifier_qualifier_list1
 	:public specifier_qualifier_list 
 {
 private:
-	typedef std::list<specifier_qualifier_list1_item> ItemsListType;
+	typedef std::deque<specifier_qualifier_list1_item> ItemsListType;
 	typedef ItemsListType::iterator ItemsListIter;
 	typedef ItemsListType::const_iterator CItemsListIter;
-	std::list<specifier_qualifier_list1_item> _items;
+	ItemsListType _items;
 public:
 	specifier_qualifier_list1
 		(
@@ -5665,12 +5847,14 @@ public:
 	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
 	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
 	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
+	virtual int size()const{return _items.size();}						//returns the size of the container
+	virtual specifier_qualifier_list1_item& operator[](int i){return _items[i];}
 	virtual ~specifier_qualifier_list1 ();
 
 };
 
-typedef std::list<specifier_qualifier_list1_item>::iterator specifier_qualifier_list1_iterator;
-typedef std::list<specifier_qualifier_list1_item>::const_iterator specifier_qualifier_list1_const_iterator;
+typedef std::deque<specifier_qualifier_list1_item>::iterator specifier_qualifier_list1_iterator;
+typedef std::deque<specifier_qualifier_list1_item>::const_iterator specifier_qualifier_list1_const_iterator;
 
 
 			
@@ -5724,10 +5908,10 @@ class specifier_qualifier_list2
 	:public specifier_qualifier_list 
 {
 private:
-	typedef std::list<specifier_qualifier_list2_item> ItemsListType;
+	typedef std::deque<specifier_qualifier_list2_item> ItemsListType;
 	typedef ItemsListType::iterator ItemsListIter;
 	typedef ItemsListType::const_iterator CItemsListIter;
-	std::list<specifier_qualifier_list2_item> _items;
+	ItemsListType _items;
 public:
 	specifier_qualifier_list2
 		(
@@ -5749,12 +5933,14 @@ public:
 	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
 	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
 	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
+	virtual int size()const{return _items.size();}						//returns the size of the container
+	virtual specifier_qualifier_list2_item& operator[](int i){return _items[i];}
 	virtual ~specifier_qualifier_list2 ();
 
 };
 
-typedef std::list<specifier_qualifier_list2_item>::iterator specifier_qualifier_list2_iterator;
-typedef std::list<specifier_qualifier_list2_item>::const_iterator specifier_qualifier_list2_const_iterator;
+typedef std::deque<specifier_qualifier_list2_item>::iterator specifier_qualifier_list2_iterator;
+typedef std::deque<specifier_qualifier_list2_item>::const_iterator specifier_qualifier_list2_const_iterator;
 
 
 			
@@ -5808,10 +5994,10 @@ class translation_unit
 	:public CAst 
 {
 private:
-	typedef std::list<translation_unit_item> ItemsListType;
+	typedef std::deque<translation_unit_item> ItemsListType;
 	typedef ItemsListType::iterator ItemsListIter;
 	typedef ItemsListType::const_iterator CItemsListIter;
-	std::list<translation_unit_item> _items;
+	ItemsListType _items;
 public:
 	translation_unit
 		(
@@ -5833,12 +6019,14 @@ public:
 	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
 	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
 	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
+	virtual int size()const{return _items.size();}						//returns the size of the container
+	virtual translation_unit_item& operator[](int i){return _items[i];}
 	virtual ~translation_unit ();
 
 };
 
-typedef std::list<translation_unit_item>::iterator translation_unit_iterator;
-typedef std::list<translation_unit_item>::const_iterator translation_unit_const_iterator;
+typedef std::deque<translation_unit_item>::iterator translation_unit_iterator;
+typedef std::deque<translation_unit_item>::const_iterator translation_unit_const_iterator;
 
 
 			
@@ -5860,8 +6048,9 @@ class conditional_expression;
 class constant_expression 
 	:public CAst 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		conditional_expression *_p_conditional_expression;              // conditional_expression
 public:
 	constant_expression	                                         // constructor
@@ -5869,6 +6058,7 @@ public:
 			std::string _arg_s_matchedPattern,
 				conditional_expression *_arg__p_conditional_expression			
 		);
+	constant_expression(const constant_expression& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "constant_expression"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_CONSTANT_EXPRESSION
 	virtual std::string pattern()const;							//returns the pattern, here "[conditional_expression]"
@@ -5933,10 +6123,10 @@ class initializer_list
 	:public CAst 
 {
 private:
-	typedef std::list<initializer_list_item> ItemsListType;
+	typedef std::deque<initializer_list_item> ItemsListType;
 	typedef ItemsListType::iterator ItemsListIter;
 	typedef ItemsListType::const_iterator CItemsListIter;
-	std::list<initializer_list_item> _items;
+	ItemsListType _items;
 public:
 	initializer_list
 		(
@@ -5958,12 +6148,14 @@ public:
 	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
 	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
 	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
+	virtual int size()const{return _items.size();}						//returns the size of the container
+	virtual initializer_list_item& operator[](int i){return _items[i];}
 	virtual ~initializer_list ();
 
 };
 
-typedef std::list<initializer_list_item>::iterator initializer_list_iterator;
-typedef std::list<initializer_list_item>::const_iterator initializer_list_const_iterator;
+typedef std::deque<initializer_list_item>::iterator initializer_list_iterator;
+typedef std::deque<initializer_list_item>::const_iterator initializer_list_const_iterator;
 
 
 			
@@ -6017,10 +6209,10 @@ class statement_list
 	:public CAst 
 {
 private:
-	typedef std::list<statement_list_item> ItemsListType;
+	typedef std::deque<statement_list_item> ItemsListType;
 	typedef ItemsListType::iterator ItemsListIter;
 	typedef ItemsListType::const_iterator CItemsListIter;
-	std::list<statement_list_item> _items;
+	ItemsListType _items;
 public:
 	statement_list
 		(
@@ -6042,12 +6234,14 @@ public:
 	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
 	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
 	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
+	virtual int size()const{return _items.size();}						//returns the size of the container
+	virtual statement_list_item& operator[](int i){return _items[i];}
 	virtual ~statement_list ();
 
 };
 
-typedef std::list<statement_list_item>::iterator statement_list_iterator;
-typedef std::list<statement_list_item>::const_iterator statement_list_const_iterator;
+typedef std::deque<statement_list_item>::iterator statement_list_iterator;
+typedef std::deque<statement_list_item>::const_iterator statement_list_const_iterator;
 
 
 			
@@ -6101,10 +6295,10 @@ class expression
 	:public CAst 
 {
 private:
-	typedef std::list<expression_item> ItemsListType;
+	typedef std::deque<expression_item> ItemsListType;
 	typedef ItemsListType::iterator ItemsListIter;
 	typedef ItemsListType::const_iterator CItemsListIter;
-	std::list<expression_item> _items;
+	ItemsListType _items;
 public:
 	expression
 		(
@@ -6126,12 +6320,14 @@ public:
 	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
 	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
 	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
+	virtual int size()const{return _items.size();}						//returns the size of the container
+	virtual expression_item& operator[](int i){return _items[i];}
 	virtual ~expression ();
 
 };
 
-typedef std::list<expression_item>::iterator expression_iterator;
-typedef std::list<expression_item>::const_iterator expression_const_iterator;
+typedef std::deque<expression_item>::iterator expression_iterator;
+typedef std::deque<expression_item>::const_iterator expression_const_iterator;
 
 
 			
@@ -6154,8 +6350,9 @@ class direct_declarator;
 class declarator 
 	:public CAst 
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 		pointer *_p_pointer;                                            // pointer
 		direct_declarator *_p_direct_declarator;                        // direct_declarator
 public:
@@ -6165,6 +6362,7 @@ public:
 				pointer *_arg__p_pointer,
 				direct_declarator *_arg__p_direct_declarator			
 		);
+	declarator(const declarator& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "declarator"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_DECLARATOR
 	virtual std::string pattern()const;							//returns the pattern, here "[pointer,direct_declarator]"

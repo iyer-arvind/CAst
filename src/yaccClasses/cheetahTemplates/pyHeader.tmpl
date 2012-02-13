@@ -57,11 +57,12 @@ static PyMemberDef PyCAst_members_${className} [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New #slurp 
+      Class New, Delete #slurp 
 #if "HaveInit" in flags: and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_${className}(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_${className}(PyObject *_self);
 #if "HaveInit" in flags: 
 static int PyCAst_init_${className}(PyCAst_object_${className} *self, PyObject *args, PyObject *kwds);
 #end if
@@ -110,6 +111,24 @@ PyObject* PyCAst_iter_${cls.className}(PyObject* self);
 PyObject* PyCAst_iter_next_${cls.className}(PyObject* self);
 #end if
 
+#if "HaveSequence" in $flags:
+Py_ssize_t PyCAst_length_${className}(PyObject *self);
+PyObject* PyCAst_item_${className}(PyObject *self, Py_ssize_t i);
+
+static PySequenceMethods PyCAst_sequence_${className} =
+{
+	/*sq_length		*/	(lenfunc)PyCAst_length_${className},
+	/*sq_concat		*/	0,
+	/*sq_repeat		*/	0,
+	/*sq_item		*/	(ssizeargfunc)PyCAst_item_${className},
+	/*sq_slice		*/	0,
+	/*sq_ass_item		*/	0,
+	/*sq_ass_slice		*/	0,
+	/*sq_contains		*/	0,
+	/*sq_inplace_concat	*/	0,
+	/*sq_inplace_repeat	*/	0
+};
+#end if
 /*---------------------------------------------------------------------------------------------*\
 
       Class Type Declaration
@@ -123,14 +142,19 @@ static PyTypeObject  PyCAst_type_${className} =
 	/* tp_name--------------*/      "CAst.${className}",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_${className}),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_${className},
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+#if "HaveSequence" in $flags: 
+&PyCAst_sequence_${cls.className},
+#else: 
+0,
+#end if
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -149,13 +173,13 @@ static PyTypeObject  PyCAst_type_${className} =
 (getiterfunc)PyCAst_iter_${cls.className},
 #else: 
 0,
-#end if,
+#end if
 	/* tp_iternext----------*/      #slurp
 #if "HaveIterNext" in $flags: 
 (iternextfunc)PyCAst_iter_next_${cls.className},
 #else: 
 0,
-#end if,
+#end if
 	/* tp_methods-----------*/      PyCAst_methods_${className},
 	/* tp_members-----------*/      PyCAst_members_${className},
 	/* tp_getset------------*/      PyCAst_getsetter_${className},
@@ -250,7 +274,7 @@ $classHeader($itercls,"HaveIterNext","HaveListMember")
 #set itemcls={"className":$cls.className+"_item","parameters":$cls.parameters,"constructor":$cls.constructor}
 $classHeader($itemcls,"HaveAst",GetSetterFunctionBlock="ListItemGetSetterFunctionBlock",GetSetterTableBlock="ListItemGetSetterTableBlock")
 
-$classHeader($cls,"HaveAst","HaveIter","HaveInit")
+$classHeader($cls,"HaveAst","HaveIter","HaveInit","HaveSequence")
 #end def 
 
 

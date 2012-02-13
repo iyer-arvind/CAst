@@ -73,9 +73,10 @@ static PyMemberDef PyCAst_members_Token [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_Token(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_Token(PyObject *_self);
 
 
 
@@ -122,14 +123,15 @@ static PyTypeObject  PyCAst_type_Token =
 	/* tp_name--------------*/      "CAst.Token",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_Token),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_Token,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -216,10 +218,11 @@ static PyMemberDef PyCAst_members_storage_class_specifier [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_storage_class_specifier(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_storage_class_specifier(PyObject *_self);
 static int PyCAst_init_storage_class_specifier(PyCAst_object_storage_class_specifier *self, PyObject *args, PyObject *kwds);
 
 
@@ -269,14 +272,15 @@ static PyTypeObject  PyCAst_type_storage_class_specifier =
 	/* tp_name--------------*/      "CAst.storage_class_specifier",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_storage_class_specifier),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_storage_class_specifier,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -362,10 +366,11 @@ static PyMemberDef PyCAst_members_expression_statement [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_expression_statement(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_expression_statement(PyObject *_self);
 static int PyCAst_init_expression_statement(PyCAst_object_expression_statement *self, PyObject *args, PyObject *kwds);
 
 
@@ -415,14 +420,15 @@ static PyTypeObject  PyCAst_type_expression_statement =
 	/* tp_name--------------*/      "CAst.expression_statement",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_expression_statement),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_expression_statement,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -508,10 +514,11 @@ static PyMemberDef PyCAst_members_type_name [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_type_name(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_type_name(PyObject *_self);
 static int PyCAst_init_type_name(PyCAst_object_type_name *self, PyObject *args, PyObject *kwds);
 
 
@@ -563,14 +570,15 @@ static PyTypeObject  PyCAst_type_type_name =
 	/* tp_name--------------*/      "CAst.type_name",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_type_name),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_type_name,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -656,10 +664,11 @@ static PyMemberDef PyCAst_members_unary_expression1 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_unary_expression1(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_unary_expression1(PyObject *_self);
 static int PyCAst_init_unary_expression1(PyCAst_object_unary_expression1 *self, PyObject *args, PyObject *kwds);
 
 
@@ -709,14 +718,15 @@ static PyTypeObject  PyCAst_type_unary_expression1 =
 	/* tp_name--------------*/      "CAst.unary_expression1",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_unary_expression1),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_unary_expression1,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -802,10 +812,11 @@ static PyMemberDef PyCAst_members_unary_expression2 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_unary_expression2(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_unary_expression2(PyObject *_self);
 static int PyCAst_init_unary_expression2(PyCAst_object_unary_expression2 *self, PyObject *args, PyObject *kwds);
 
 
@@ -857,14 +868,15 @@ static PyTypeObject  PyCAst_type_unary_expression2 =
 	/* tp_name--------------*/      "CAst.unary_expression2",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_unary_expression2),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_unary_expression2,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -950,10 +962,11 @@ static PyMemberDef PyCAst_members_unary_expression3 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_unary_expression3(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_unary_expression3(PyObject *_self);
 static int PyCAst_init_unary_expression3(PyCAst_object_unary_expression3 *self, PyObject *args, PyObject *kwds);
 
 
@@ -1005,14 +1018,15 @@ static PyTypeObject  PyCAst_type_unary_expression3 =
 	/* tp_name--------------*/      "CAst.unary_expression3",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_unary_expression3),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_unary_expression3,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -1098,10 +1112,11 @@ static PyMemberDef PyCAst_members_unary_expression4 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_unary_expression4(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_unary_expression4(PyObject *_self);
 static int PyCAst_init_unary_expression4(PyCAst_object_unary_expression4 *self, PyObject *args, PyObject *kwds);
 
 
@@ -1151,14 +1166,15 @@ static PyTypeObject  PyCAst_type_unary_expression4 =
 	/* tp_name--------------*/      "CAst.unary_expression4",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_unary_expression4),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_unary_expression4,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -1246,9 +1262,10 @@ static PyMemberDef PyCAst_members_conditional_expression_iterator [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_conditional_expression_iterator(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_conditional_expression_iterator(PyObject *_self);
 
 
 
@@ -1294,14 +1311,15 @@ static PyTypeObject  PyCAst_type_conditional_expression_iterator =
 	/* tp_name--------------*/      "CAst.conditional_expression_iterator",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_conditional_expression_iterator),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_conditional_expression_iterator,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -1387,9 +1405,10 @@ static PyMemberDef PyCAst_members_conditional_expression_item [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_conditional_expression_item(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_conditional_expression_item(PyObject *_self);
 
 
 
@@ -1440,14 +1459,15 @@ static PyTypeObject  PyCAst_type_conditional_expression_item =
 	/* tp_name--------------*/      "CAst.conditional_expression_item",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_conditional_expression_item),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_conditional_expression_item,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -1533,10 +1553,11 @@ static PyMemberDef PyCAst_members_conditional_expression [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_conditional_expression(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_conditional_expression(PyObject *_self);
 static int PyCAst_init_conditional_expression(PyCAst_object_conditional_expression *self, PyObject *args, PyObject *kwds);
 
 
@@ -1572,6 +1593,22 @@ static PyGetSetDef PyCAst_getsetter_conditional_expression[] =
 PyObject* PyCAst_iter_conditional_expression(PyObject* self);
 
 
+Py_ssize_t PyCAst_length_conditional_expression(PyObject *self);
+PyObject* PyCAst_item_conditional_expression(PyObject *self, Py_ssize_t i);
+
+static PySequenceMethods PyCAst_sequence_conditional_expression =
+{
+	/*sq_length		*/	(lenfunc)PyCAst_length_conditional_expression,
+	/*sq_concat		*/	0,
+	/*sq_repeat		*/	0,
+	/*sq_item		*/	(ssizeargfunc)PyCAst_item_conditional_expression,
+	/*sq_slice		*/	0,
+	/*sq_ass_item		*/	0,
+	/*sq_ass_slice		*/	0,
+	/*sq_contains		*/	0,
+	/*sq_inplace_concat	*/	0,
+	/*sq_inplace_repeat	*/	0
+};
 /*---------------------------------------------------------------------------------------------*\
 
       Class Type Declaration
@@ -1585,14 +1622,15 @@ static PyTypeObject  PyCAst_type_conditional_expression =
 	/* tp_name--------------*/      "CAst.conditional_expression",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_conditional_expression),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_conditional_expression,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+&PyCAst_sequence_conditional_expression,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -1678,10 +1716,11 @@ static PyMemberDef PyCAst_members_struct_or_union_specifier [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_struct_or_union_specifier(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_struct_or_union_specifier(PyObject *_self);
 static int PyCAst_init_struct_or_union_specifier(PyCAst_object_struct_or_union_specifier *self, PyObject *args, PyObject *kwds);
 
 
@@ -1739,14 +1778,15 @@ static PyTypeObject  PyCAst_type_struct_or_union_specifier =
 	/* tp_name--------------*/      "CAst.struct_or_union_specifier",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_struct_or_union_specifier),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_struct_or_union_specifier,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -1834,9 +1874,10 @@ static PyMemberDef PyCAst_members_exclusive_or_expression_iterator [] = {{NULL}}
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_exclusive_or_expression_iterator(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_exclusive_or_expression_iterator(PyObject *_self);
 
 
 
@@ -1882,14 +1923,15 @@ static PyTypeObject  PyCAst_type_exclusive_or_expression_iterator =
 	/* tp_name--------------*/      "CAst.exclusive_or_expression_iterator",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_exclusive_or_expression_iterator),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_exclusive_or_expression_iterator,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -1975,9 +2017,10 @@ static PyMemberDef PyCAst_members_exclusive_or_expression_item [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_exclusive_or_expression_item(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_exclusive_or_expression_item(PyObject *_self);
 
 
 
@@ -2026,14 +2069,15 @@ static PyTypeObject  PyCAst_type_exclusive_or_expression_item =
 	/* tp_name--------------*/      "CAst.exclusive_or_expression_item",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_exclusive_or_expression_item),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_exclusive_or_expression_item,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -2119,10 +2163,11 @@ static PyMemberDef PyCAst_members_exclusive_or_expression [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_exclusive_or_expression(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_exclusive_or_expression(PyObject *_self);
 static int PyCAst_init_exclusive_or_expression(PyCAst_object_exclusive_or_expression *self, PyObject *args, PyObject *kwds);
 
 
@@ -2158,6 +2203,22 @@ static PyGetSetDef PyCAst_getsetter_exclusive_or_expression[] =
 PyObject* PyCAst_iter_exclusive_or_expression(PyObject* self);
 
 
+Py_ssize_t PyCAst_length_exclusive_or_expression(PyObject *self);
+PyObject* PyCAst_item_exclusive_or_expression(PyObject *self, Py_ssize_t i);
+
+static PySequenceMethods PyCAst_sequence_exclusive_or_expression =
+{
+	/*sq_length		*/	(lenfunc)PyCAst_length_exclusive_or_expression,
+	/*sq_concat		*/	0,
+	/*sq_repeat		*/	0,
+	/*sq_item		*/	(ssizeargfunc)PyCAst_item_exclusive_or_expression,
+	/*sq_slice		*/	0,
+	/*sq_ass_item		*/	0,
+	/*sq_ass_slice		*/	0,
+	/*sq_contains		*/	0,
+	/*sq_inplace_concat	*/	0,
+	/*sq_inplace_repeat	*/	0
+};
 /*---------------------------------------------------------------------------------------------*\
 
       Class Type Declaration
@@ -2171,14 +2232,15 @@ static PyTypeObject  PyCAst_type_exclusive_or_expression =
 	/* tp_name--------------*/      "CAst.exclusive_or_expression",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_exclusive_or_expression),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_exclusive_or_expression,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+&PyCAst_sequence_exclusive_or_expression,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -2264,10 +2326,11 @@ static PyMemberDef PyCAst_members_initializer1 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_initializer1(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_initializer1(PyObject *_self);
 static int PyCAst_init_initializer1(PyCAst_object_initializer1 *self, PyObject *args, PyObject *kwds);
 
 
@@ -2319,14 +2382,15 @@ static PyTypeObject  PyCAst_type_initializer1 =
 	/* tp_name--------------*/      "CAst.initializer1",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_initializer1),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_initializer1,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -2412,10 +2476,11 @@ static PyMemberDef PyCAst_members_initializer2 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_initializer2(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_initializer2(PyObject *_self);
 static int PyCAst_init_initializer2(PyCAst_object_initializer2 *self, PyObject *args, PyObject *kwds);
 
 
@@ -2465,14 +2530,15 @@ static PyTypeObject  PyCAst_type_initializer2 =
 	/* tp_name--------------*/      "CAst.initializer2",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_initializer2),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_initializer2,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -2560,9 +2626,10 @@ static PyMemberDef PyCAst_members_struct_declaration_list_iterator [] = {{NULL}}
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_struct_declaration_list_iterator(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_struct_declaration_list_iterator(PyObject *_self);
 
 
 
@@ -2608,14 +2675,15 @@ static PyTypeObject  PyCAst_type_struct_declaration_list_iterator =
 	/* tp_name--------------*/      "CAst.struct_declaration_list_iterator",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_struct_declaration_list_iterator),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_struct_declaration_list_iterator,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -2701,9 +2769,10 @@ static PyMemberDef PyCAst_members_struct_declaration_list_item [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_struct_declaration_list_item(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_struct_declaration_list_item(PyObject *_self);
 
 
 
@@ -2752,14 +2821,15 @@ static PyTypeObject  PyCAst_type_struct_declaration_list_item =
 	/* tp_name--------------*/      "CAst.struct_declaration_list_item",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_struct_declaration_list_item),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_struct_declaration_list_item,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -2845,10 +2915,11 @@ static PyMemberDef PyCAst_members_struct_declaration_list [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_struct_declaration_list(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_struct_declaration_list(PyObject *_self);
 static int PyCAst_init_struct_declaration_list(PyCAst_object_struct_declaration_list *self, PyObject *args, PyObject *kwds);
 
 
@@ -2884,6 +2955,22 @@ static PyGetSetDef PyCAst_getsetter_struct_declaration_list[] =
 PyObject* PyCAst_iter_struct_declaration_list(PyObject* self);
 
 
+Py_ssize_t PyCAst_length_struct_declaration_list(PyObject *self);
+PyObject* PyCAst_item_struct_declaration_list(PyObject *self, Py_ssize_t i);
+
+static PySequenceMethods PyCAst_sequence_struct_declaration_list =
+{
+	/*sq_length		*/	(lenfunc)PyCAst_length_struct_declaration_list,
+	/*sq_concat		*/	0,
+	/*sq_repeat		*/	0,
+	/*sq_item		*/	(ssizeargfunc)PyCAst_item_struct_declaration_list,
+	/*sq_slice		*/	0,
+	/*sq_ass_item		*/	0,
+	/*sq_ass_slice		*/	0,
+	/*sq_contains		*/	0,
+	/*sq_inplace_concat	*/	0,
+	/*sq_inplace_repeat	*/	0
+};
 /*---------------------------------------------------------------------------------------------*\
 
       Class Type Declaration
@@ -2897,14 +2984,15 @@ static PyTypeObject  PyCAst_type_struct_declaration_list =
 	/* tp_name--------------*/      "CAst.struct_declaration_list",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_struct_declaration_list),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_struct_declaration_list,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+&PyCAst_sequence_struct_declaration_list,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -2990,10 +3078,11 @@ static PyMemberDef PyCAst_members_assignment_operator [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_assignment_operator(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_assignment_operator(PyObject *_self);
 static int PyCAst_init_assignment_operator(PyCAst_object_assignment_operator *self, PyObject *args, PyObject *kwds);
 
 
@@ -3043,14 +3132,15 @@ static PyTypeObject  PyCAst_type_assignment_operator =
 	/* tp_name--------------*/      "CAst.assignment_operator",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_assignment_operator),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_assignment_operator,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -3136,10 +3226,11 @@ static PyMemberDef PyCAst_members_struct_declaration [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_struct_declaration(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_struct_declaration(PyObject *_self);
 static int PyCAst_init_struct_declaration(PyCAst_object_struct_declaration *self, PyObject *args, PyObject *kwds);
 
 
@@ -3191,14 +3282,15 @@ static PyTypeObject  PyCAst_type_struct_declaration =
 	/* tp_name--------------*/      "CAst.struct_declaration",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_struct_declaration),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_struct_declaration,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -3284,10 +3376,11 @@ static PyMemberDef PyCAst_members_abstract_declarator [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_abstract_declarator(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_abstract_declarator(PyObject *_self);
 static int PyCAst_init_abstract_declarator(PyCAst_object_abstract_declarator *self, PyObject *args, PyObject *kwds);
 
 
@@ -3339,14 +3432,15 @@ static PyTypeObject  PyCAst_type_abstract_declarator =
 	/* tp_name--------------*/      "CAst.abstract_declarator",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_abstract_declarator),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_abstract_declarator,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -3432,10 +3526,11 @@ static PyMemberDef PyCAst_members_iteration_statement1 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_iteration_statement1(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_iteration_statement1(PyObject *_self);
 static int PyCAst_init_iteration_statement1(PyCAst_object_iteration_statement1 *self, PyObject *args, PyObject *kwds);
 
 
@@ -3487,14 +3582,15 @@ static PyTypeObject  PyCAst_type_iteration_statement1 =
 	/* tp_name--------------*/      "CAst.iteration_statement1",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_iteration_statement1),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_iteration_statement1,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -3580,10 +3676,11 @@ static PyMemberDef PyCAst_members_iteration_statement2 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_iteration_statement2(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_iteration_statement2(PyObject *_self);
 static int PyCAst_init_iteration_statement2(PyCAst_object_iteration_statement2 *self, PyObject *args, PyObject *kwds);
 
 
@@ -3639,14 +3736,15 @@ static PyTypeObject  PyCAst_type_iteration_statement2 =
 	/* tp_name--------------*/      "CAst.iteration_statement2",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_iteration_statement2),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_iteration_statement2,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -3732,10 +3830,11 @@ static PyMemberDef PyCAst_members_iteration_statement3 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_iteration_statement3(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_iteration_statement3(PyObject *_self);
 static int PyCAst_init_iteration_statement3(PyCAst_object_iteration_statement3 *self, PyObject *args, PyObject *kwds);
 
 
@@ -3787,14 +3886,15 @@ static PyTypeObject  PyCAst_type_iteration_statement3 =
 	/* tp_name--------------*/      "CAst.iteration_statement3",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_iteration_statement3),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_iteration_statement3,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -3882,9 +3982,10 @@ static PyMemberDef PyCAst_members_additive_expression_iterator [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_additive_expression_iterator(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_additive_expression_iterator(PyObject *_self);
 
 
 
@@ -3930,14 +4031,15 @@ static PyTypeObject  PyCAst_type_additive_expression_iterator =
 	/* tp_name--------------*/      "CAst.additive_expression_iterator",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_additive_expression_iterator),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_additive_expression_iterator,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -4023,9 +4125,10 @@ static PyMemberDef PyCAst_members_additive_expression_item [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_additive_expression_item(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_additive_expression_item(PyObject *_self);
 
 
 
@@ -4076,14 +4179,15 @@ static PyTypeObject  PyCAst_type_additive_expression_item =
 	/* tp_name--------------*/      "CAst.additive_expression_item",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_additive_expression_item),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_additive_expression_item,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -4169,10 +4273,11 @@ static PyMemberDef PyCAst_members_additive_expression [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_additive_expression(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_additive_expression(PyObject *_self);
 static int PyCAst_init_additive_expression(PyCAst_object_additive_expression *self, PyObject *args, PyObject *kwds);
 
 
@@ -4208,6 +4313,22 @@ static PyGetSetDef PyCAst_getsetter_additive_expression[] =
 PyObject* PyCAst_iter_additive_expression(PyObject* self);
 
 
+Py_ssize_t PyCAst_length_additive_expression(PyObject *self);
+PyObject* PyCAst_item_additive_expression(PyObject *self, Py_ssize_t i);
+
+static PySequenceMethods PyCAst_sequence_additive_expression =
+{
+	/*sq_length		*/	(lenfunc)PyCAst_length_additive_expression,
+	/*sq_concat		*/	0,
+	/*sq_repeat		*/	0,
+	/*sq_item		*/	(ssizeargfunc)PyCAst_item_additive_expression,
+	/*sq_slice		*/	0,
+	/*sq_ass_item		*/	0,
+	/*sq_ass_slice		*/	0,
+	/*sq_contains		*/	0,
+	/*sq_inplace_concat	*/	0,
+	/*sq_inplace_repeat	*/	0
+};
 /*---------------------------------------------------------------------------------------------*\
 
       Class Type Declaration
@@ -4221,14 +4342,15 @@ static PyTypeObject  PyCAst_type_additive_expression =
 	/* tp_name--------------*/      "CAst.additive_expression",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_additive_expression),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_additive_expression,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+&PyCAst_sequence_additive_expression,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -4314,10 +4436,11 @@ static PyMemberDef PyCAst_members_external_declaration1 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_external_declaration1(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_external_declaration1(PyObject *_self);
 static int PyCAst_init_external_declaration1(PyCAst_object_external_declaration1 *self, PyObject *args, PyObject *kwds);
 
 
@@ -4367,14 +4490,15 @@ static PyTypeObject  PyCAst_type_external_declaration1 =
 	/* tp_name--------------*/      "CAst.external_declaration1",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_external_declaration1),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_external_declaration1,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -4460,10 +4584,11 @@ static PyMemberDef PyCAst_members_external_declaration2 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_external_declaration2(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_external_declaration2(PyObject *_self);
 static int PyCAst_init_external_declaration2(PyCAst_object_external_declaration2 *self, PyObject *args, PyObject *kwds);
 
 
@@ -4513,14 +4638,15 @@ static PyTypeObject  PyCAst_type_external_declaration2 =
 	/* tp_name--------------*/      "CAst.external_declaration2",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_external_declaration2),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_external_declaration2,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -4606,10 +4732,11 @@ static PyMemberDef PyCAst_members_type_specifier1 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_type_specifier1(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_type_specifier1(PyObject *_self);
 static int PyCAst_init_type_specifier1(PyCAst_object_type_specifier1 *self, PyObject *args, PyObject *kwds);
 
 
@@ -4659,14 +4786,15 @@ static PyTypeObject  PyCAst_type_type_specifier1 =
 	/* tp_name--------------*/      "CAst.type_specifier1",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_type_specifier1),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_type_specifier1,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -4752,10 +4880,11 @@ static PyMemberDef PyCAst_members_type_specifier2 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_type_specifier2(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_type_specifier2(PyObject *_self);
 static int PyCAst_init_type_specifier2(PyCAst_object_type_specifier2 *self, PyObject *args, PyObject *kwds);
 
 
@@ -4805,14 +4934,15 @@ static PyTypeObject  PyCAst_type_type_specifier2 =
 	/* tp_name--------------*/      "CAst.type_specifier2",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_type_specifier2),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_type_specifier2,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -4898,10 +5028,11 @@ static PyMemberDef PyCAst_members_type_specifier3 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_type_specifier3(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_type_specifier3(PyObject *_self);
 static int PyCAst_init_type_specifier3(PyCAst_object_type_specifier3 *self, PyObject *args, PyObject *kwds);
 
 
@@ -4951,14 +5082,15 @@ static PyTypeObject  PyCAst_type_type_specifier3 =
 	/* tp_name--------------*/      "CAst.type_specifier3",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_type_specifier3),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_type_specifier3,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -5044,10 +5176,11 @@ static PyMemberDef PyCAst_members_compound_statement [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_compound_statement(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_compound_statement(PyObject *_self);
 static int PyCAst_init_compound_statement(PyCAst_object_compound_statement *self, PyObject *args, PyObject *kwds);
 
 
@@ -5099,14 +5232,15 @@ static PyTypeObject  PyCAst_type_compound_statement =
 	/* tp_name--------------*/      "CAst.compound_statement",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_compound_statement),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_compound_statement,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -5194,9 +5328,10 @@ static PyMemberDef PyCAst_members_inclusive_or_expression_iterator [] = {{NULL}}
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_inclusive_or_expression_iterator(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_inclusive_or_expression_iterator(PyObject *_self);
 
 
 
@@ -5242,14 +5377,15 @@ static PyTypeObject  PyCAst_type_inclusive_or_expression_iterator =
 	/* tp_name--------------*/      "CAst.inclusive_or_expression_iterator",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_inclusive_or_expression_iterator),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_inclusive_or_expression_iterator,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -5335,9 +5471,10 @@ static PyMemberDef PyCAst_members_inclusive_or_expression_item [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_inclusive_or_expression_item(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_inclusive_or_expression_item(PyObject *_self);
 
 
 
@@ -5386,14 +5523,15 @@ static PyTypeObject  PyCAst_type_inclusive_or_expression_item =
 	/* tp_name--------------*/      "CAst.inclusive_or_expression_item",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_inclusive_or_expression_item),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_inclusive_or_expression_item,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -5479,10 +5617,11 @@ static PyMemberDef PyCAst_members_inclusive_or_expression [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_inclusive_or_expression(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_inclusive_or_expression(PyObject *_self);
 static int PyCAst_init_inclusive_or_expression(PyCAst_object_inclusive_or_expression *self, PyObject *args, PyObject *kwds);
 
 
@@ -5518,6 +5657,22 @@ static PyGetSetDef PyCAst_getsetter_inclusive_or_expression[] =
 PyObject* PyCAst_iter_inclusive_or_expression(PyObject* self);
 
 
+Py_ssize_t PyCAst_length_inclusive_or_expression(PyObject *self);
+PyObject* PyCAst_item_inclusive_or_expression(PyObject *self, Py_ssize_t i);
+
+static PySequenceMethods PyCAst_sequence_inclusive_or_expression =
+{
+	/*sq_length		*/	(lenfunc)PyCAst_length_inclusive_or_expression,
+	/*sq_concat		*/	0,
+	/*sq_repeat		*/	0,
+	/*sq_item		*/	(ssizeargfunc)PyCAst_item_inclusive_or_expression,
+	/*sq_slice		*/	0,
+	/*sq_ass_item		*/	0,
+	/*sq_ass_slice		*/	0,
+	/*sq_contains		*/	0,
+	/*sq_inplace_concat	*/	0,
+	/*sq_inplace_repeat	*/	0
+};
 /*---------------------------------------------------------------------------------------------*\
 
       Class Type Declaration
@@ -5531,14 +5686,15 @@ static PyTypeObject  PyCAst_type_inclusive_or_expression =
 	/* tp_name--------------*/      "CAst.inclusive_or_expression",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_inclusive_or_expression),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_inclusive_or_expression,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+&PyCAst_sequence_inclusive_or_expression,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -5626,9 +5782,10 @@ static PyMemberDef PyCAst_members_pointer_iterator [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_pointer_iterator(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_pointer_iterator(PyObject *_self);
 
 
 
@@ -5674,14 +5831,15 @@ static PyTypeObject  PyCAst_type_pointer_iterator =
 	/* tp_name--------------*/      "CAst.pointer_iterator",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_pointer_iterator),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_pointer_iterator,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -5767,9 +5925,10 @@ static PyMemberDef PyCAst_members_pointer_item [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_pointer_item(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_pointer_item(PyObject *_self);
 
 
 
@@ -5818,14 +5977,15 @@ static PyTypeObject  PyCAst_type_pointer_item =
 	/* tp_name--------------*/      "CAst.pointer_item",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_pointer_item),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_pointer_item,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -5911,10 +6071,11 @@ static PyMemberDef PyCAst_members_pointer [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_pointer(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_pointer(PyObject *_self);
 static int PyCAst_init_pointer(PyCAst_object_pointer *self, PyObject *args, PyObject *kwds);
 
 
@@ -5950,6 +6111,22 @@ static PyGetSetDef PyCAst_getsetter_pointer[] =
 PyObject* PyCAst_iter_pointer(PyObject* self);
 
 
+Py_ssize_t PyCAst_length_pointer(PyObject *self);
+PyObject* PyCAst_item_pointer(PyObject *self, Py_ssize_t i);
+
+static PySequenceMethods PyCAst_sequence_pointer =
+{
+	/*sq_length		*/	(lenfunc)PyCAst_length_pointer,
+	/*sq_concat		*/	0,
+	/*sq_repeat		*/	0,
+	/*sq_item		*/	(ssizeargfunc)PyCAst_item_pointer,
+	/*sq_slice		*/	0,
+	/*sq_ass_item		*/	0,
+	/*sq_ass_slice		*/	0,
+	/*sq_contains		*/	0,
+	/*sq_inplace_concat	*/	0,
+	/*sq_inplace_repeat	*/	0
+};
 /*---------------------------------------------------------------------------------------------*\
 
       Class Type Declaration
@@ -5963,14 +6140,15 @@ static PyTypeObject  PyCAst_type_pointer =
 	/* tp_name--------------*/      "CAst.pointer",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_pointer),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_pointer,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+&PyCAst_sequence_pointer,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -6056,10 +6234,11 @@ static PyMemberDef PyCAst_members_selection_statement1 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_selection_statement1(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_selection_statement1(PyObject *_self);
 static int PyCAst_init_selection_statement1(PyCAst_object_selection_statement1 *self, PyObject *args, PyObject *kwds);
 
 
@@ -6115,14 +6294,15 @@ static PyTypeObject  PyCAst_type_selection_statement1 =
 	/* tp_name--------------*/      "CAst.selection_statement1",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_selection_statement1),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_selection_statement1,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -6208,10 +6388,11 @@ static PyMemberDef PyCAst_members_selection_statement2 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_selection_statement2(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_selection_statement2(PyObject *_self);
 static int PyCAst_init_selection_statement2(PyCAst_object_selection_statement2 *self, PyObject *args, PyObject *kwds);
 
 
@@ -6263,14 +6444,15 @@ static PyTypeObject  PyCAst_type_selection_statement2 =
 	/* tp_name--------------*/      "CAst.selection_statement2",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_selection_statement2),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_selection_statement2,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -6356,10 +6538,11 @@ static PyMemberDef PyCAst_members_postfix_expression1 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_postfix_expression1(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_postfix_expression1(PyObject *_self);
 static int PyCAst_init_postfix_expression1(PyCAst_object_postfix_expression1 *self, PyObject *args, PyObject *kwds);
 
 
@@ -6411,14 +6594,15 @@ static PyTypeObject  PyCAst_type_postfix_expression1 =
 	/* tp_name--------------*/      "CAst.postfix_expression1",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_postfix_expression1),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_postfix_expression1,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -6504,10 +6688,11 @@ static PyMemberDef PyCAst_members_postfix_expression2 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_postfix_expression2(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_postfix_expression2(PyObject *_self);
 static int PyCAst_init_postfix_expression2(PyCAst_object_postfix_expression2 *self, PyObject *args, PyObject *kwds);
 
 
@@ -6559,14 +6744,15 @@ static PyTypeObject  PyCAst_type_postfix_expression2 =
 	/* tp_name--------------*/      "CAst.postfix_expression2",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_postfix_expression2),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_postfix_expression2,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -6652,10 +6838,11 @@ static PyMemberDef PyCAst_members_postfix_expression3 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_postfix_expression3(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_postfix_expression3(PyObject *_self);
 static int PyCAst_init_postfix_expression3(PyCAst_object_postfix_expression3 *self, PyObject *args, PyObject *kwds);
 
 
@@ -6709,14 +6896,15 @@ static PyTypeObject  PyCAst_type_postfix_expression3 =
 	/* tp_name--------------*/      "CAst.postfix_expression3",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_postfix_expression3),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_postfix_expression3,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -6802,10 +6990,11 @@ static PyMemberDef PyCAst_members_postfix_expression4 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_postfix_expression4(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_postfix_expression4(PyObject *_self);
 static int PyCAst_init_postfix_expression4(PyCAst_object_postfix_expression4 *self, PyObject *args, PyObject *kwds);
 
 
@@ -6857,14 +7046,15 @@ static PyTypeObject  PyCAst_type_postfix_expression4 =
 	/* tp_name--------------*/      "CAst.postfix_expression4",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_postfix_expression4),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_postfix_expression4,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -6950,10 +7140,11 @@ static PyMemberDef PyCAst_members_postfix_expression5 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_postfix_expression5(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_postfix_expression5(PyObject *_self);
 static int PyCAst_init_postfix_expression5(PyCAst_object_postfix_expression5 *self, PyObject *args, PyObject *kwds);
 
 
@@ -7003,14 +7194,15 @@ static PyTypeObject  PyCAst_type_postfix_expression5 =
 	/* tp_name--------------*/      "CAst.postfix_expression5",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_postfix_expression5),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_postfix_expression5,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -7098,9 +7290,10 @@ static PyMemberDef PyCAst_members_and_expression_iterator [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_and_expression_iterator(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_and_expression_iterator(PyObject *_self);
 
 
 
@@ -7146,14 +7339,15 @@ static PyTypeObject  PyCAst_type_and_expression_iterator =
 	/* tp_name--------------*/      "CAst.and_expression_iterator",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_and_expression_iterator),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_and_expression_iterator,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -7239,9 +7433,10 @@ static PyMemberDef PyCAst_members_and_expression_item [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_and_expression_item(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_and_expression_item(PyObject *_self);
 
 
 
@@ -7290,14 +7485,15 @@ static PyTypeObject  PyCAst_type_and_expression_item =
 	/* tp_name--------------*/      "CAst.and_expression_item",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_and_expression_item),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_and_expression_item,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -7383,10 +7579,11 @@ static PyMemberDef PyCAst_members_and_expression [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_and_expression(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_and_expression(PyObject *_self);
 static int PyCAst_init_and_expression(PyCAst_object_and_expression *self, PyObject *args, PyObject *kwds);
 
 
@@ -7422,6 +7619,22 @@ static PyGetSetDef PyCAst_getsetter_and_expression[] =
 PyObject* PyCAst_iter_and_expression(PyObject* self);
 
 
+Py_ssize_t PyCAst_length_and_expression(PyObject *self);
+PyObject* PyCAst_item_and_expression(PyObject *self, Py_ssize_t i);
+
+static PySequenceMethods PyCAst_sequence_and_expression =
+{
+	/*sq_length		*/	(lenfunc)PyCAst_length_and_expression,
+	/*sq_concat		*/	0,
+	/*sq_repeat		*/	0,
+	/*sq_item		*/	(ssizeargfunc)PyCAst_item_and_expression,
+	/*sq_slice		*/	0,
+	/*sq_ass_item		*/	0,
+	/*sq_ass_slice		*/	0,
+	/*sq_contains		*/	0,
+	/*sq_inplace_concat	*/	0,
+	/*sq_inplace_repeat	*/	0
+};
 /*---------------------------------------------------------------------------------------------*\
 
       Class Type Declaration
@@ -7435,14 +7648,15 @@ static PyTypeObject  PyCAst_type_and_expression =
 	/* tp_name--------------*/      "CAst.and_expression",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_and_expression),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_and_expression,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+&PyCAst_sequence_and_expression,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -7528,10 +7742,11 @@ static PyMemberDef PyCAst_members_statement1 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_statement1(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_statement1(PyObject *_self);
 static int PyCAst_init_statement1(PyCAst_object_statement1 *self, PyObject *args, PyObject *kwds);
 
 
@@ -7581,14 +7796,15 @@ static PyTypeObject  PyCAst_type_statement1 =
 	/* tp_name--------------*/      "CAst.statement1",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_statement1),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_statement1,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -7674,10 +7890,11 @@ static PyMemberDef PyCAst_members_statement2 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_statement2(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_statement2(PyObject *_self);
 static int PyCAst_init_statement2(PyCAst_object_statement2 *self, PyObject *args, PyObject *kwds);
 
 
@@ -7727,14 +7944,15 @@ static PyTypeObject  PyCAst_type_statement2 =
 	/* tp_name--------------*/      "CAst.statement2",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_statement2),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_statement2,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -7820,10 +8038,11 @@ static PyMemberDef PyCAst_members_statement3 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_statement3(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_statement3(PyObject *_self);
 static int PyCAst_init_statement3(PyCAst_object_statement3 *self, PyObject *args, PyObject *kwds);
 
 
@@ -7873,14 +8092,15 @@ static PyTypeObject  PyCAst_type_statement3 =
 	/* tp_name--------------*/      "CAst.statement3",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_statement3),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_statement3,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -7966,10 +8186,11 @@ static PyMemberDef PyCAst_members_statement4 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_statement4(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_statement4(PyObject *_self);
 static int PyCAst_init_statement4(PyCAst_object_statement4 *self, PyObject *args, PyObject *kwds);
 
 
@@ -8019,14 +8240,15 @@ static PyTypeObject  PyCAst_type_statement4 =
 	/* tp_name--------------*/      "CAst.statement4",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_statement4),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_statement4,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -8112,10 +8334,11 @@ static PyMemberDef PyCAst_members_statement5 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_statement5(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_statement5(PyObject *_self);
 static int PyCAst_init_statement5(PyCAst_object_statement5 *self, PyObject *args, PyObject *kwds);
 
 
@@ -8165,14 +8388,15 @@ static PyTypeObject  PyCAst_type_statement5 =
 	/* tp_name--------------*/      "CAst.statement5",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_statement5),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_statement5,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -8258,10 +8482,11 @@ static PyMemberDef PyCAst_members_statement6 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_statement6(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_statement6(PyObject *_self);
 static int PyCAst_init_statement6(PyCAst_object_statement6 *self, PyObject *args, PyObject *kwds);
 
 
@@ -8311,14 +8536,15 @@ static PyTypeObject  PyCAst_type_statement6 =
 	/* tp_name--------------*/      "CAst.statement6",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_statement6),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_statement6,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -8404,10 +8630,11 @@ static PyMemberDef PyCAst_members_cast_expression1 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_cast_expression1(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_cast_expression1(PyObject *_self);
 static int PyCAst_init_cast_expression1(PyCAst_object_cast_expression1 *self, PyObject *args, PyObject *kwds);
 
 
@@ -8459,14 +8686,15 @@ static PyTypeObject  PyCAst_type_cast_expression1 =
 	/* tp_name--------------*/      "CAst.cast_expression1",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_cast_expression1),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_cast_expression1,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -8552,10 +8780,11 @@ static PyMemberDef PyCAst_members_cast_expression2 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_cast_expression2(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_cast_expression2(PyObject *_self);
 static int PyCAst_init_cast_expression2(PyCAst_object_cast_expression2 *self, PyObject *args, PyObject *kwds);
 
 
@@ -8605,14 +8834,15 @@ static PyTypeObject  PyCAst_type_cast_expression2 =
 	/* tp_name--------------*/      "CAst.cast_expression2",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_cast_expression2),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_cast_expression2,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -8698,10 +8928,11 @@ static PyMemberDef PyCAst_members_init_declarator [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_init_declarator(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_init_declarator(PyObject *_self);
 static int PyCAst_init_init_declarator(PyCAst_object_init_declarator *self, PyObject *args, PyObject *kwds);
 
 
@@ -8755,14 +8986,15 @@ static PyTypeObject  PyCAst_type_init_declarator =
 	/* tp_name--------------*/      "CAst.init_declarator",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_init_declarator),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_init_declarator,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -8850,9 +9082,10 @@ static PyMemberDef PyCAst_members_struct_declarator_list_iterator [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_struct_declarator_list_iterator(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_struct_declarator_list_iterator(PyObject *_self);
 
 
 
@@ -8898,14 +9131,15 @@ static PyTypeObject  PyCAst_type_struct_declarator_list_iterator =
 	/* tp_name--------------*/      "CAst.struct_declarator_list_iterator",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_struct_declarator_list_iterator),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_struct_declarator_list_iterator,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -8991,9 +9225,10 @@ static PyMemberDef PyCAst_members_struct_declarator_list_item [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_struct_declarator_list_item(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_struct_declarator_list_item(PyObject *_self);
 
 
 
@@ -9042,14 +9277,15 @@ static PyTypeObject  PyCAst_type_struct_declarator_list_item =
 	/* tp_name--------------*/      "CAst.struct_declarator_list_item",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_struct_declarator_list_item),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_struct_declarator_list_item,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -9135,10 +9371,11 @@ static PyMemberDef PyCAst_members_struct_declarator_list [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_struct_declarator_list(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_struct_declarator_list(PyObject *_self);
 static int PyCAst_init_struct_declarator_list(PyCAst_object_struct_declarator_list *self, PyObject *args, PyObject *kwds);
 
 
@@ -9174,6 +9411,22 @@ static PyGetSetDef PyCAst_getsetter_struct_declarator_list[] =
 PyObject* PyCAst_iter_struct_declarator_list(PyObject* self);
 
 
+Py_ssize_t PyCAst_length_struct_declarator_list(PyObject *self);
+PyObject* PyCAst_item_struct_declarator_list(PyObject *self, Py_ssize_t i);
+
+static PySequenceMethods PyCAst_sequence_struct_declarator_list =
+{
+	/*sq_length		*/	(lenfunc)PyCAst_length_struct_declarator_list,
+	/*sq_concat		*/	0,
+	/*sq_repeat		*/	0,
+	/*sq_item		*/	(ssizeargfunc)PyCAst_item_struct_declarator_list,
+	/*sq_slice		*/	0,
+	/*sq_ass_item		*/	0,
+	/*sq_ass_slice		*/	0,
+	/*sq_contains		*/	0,
+	/*sq_inplace_concat	*/	0,
+	/*sq_inplace_repeat	*/	0
+};
 /*---------------------------------------------------------------------------------------------*\
 
       Class Type Declaration
@@ -9187,14 +9440,15 @@ static PyTypeObject  PyCAst_type_struct_declarator_list =
 	/* tp_name--------------*/      "CAst.struct_declarator_list",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_struct_declarator_list),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_struct_declarator_list,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+&PyCAst_sequence_struct_declarator_list,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -9282,9 +9536,10 @@ static PyMemberDef PyCAst_members_logical_or_expression_iterator [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_logical_or_expression_iterator(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_logical_or_expression_iterator(PyObject *_self);
 
 
 
@@ -9330,14 +9585,15 @@ static PyTypeObject  PyCAst_type_logical_or_expression_iterator =
 	/* tp_name--------------*/      "CAst.logical_or_expression_iterator",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_logical_or_expression_iterator),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_logical_or_expression_iterator,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -9423,9 +9679,10 @@ static PyMemberDef PyCAst_members_logical_or_expression_item [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_logical_or_expression_item(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_logical_or_expression_item(PyObject *_self);
 
 
 
@@ -9474,14 +9731,15 @@ static PyTypeObject  PyCAst_type_logical_or_expression_item =
 	/* tp_name--------------*/      "CAst.logical_or_expression_item",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_logical_or_expression_item),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_logical_or_expression_item,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -9567,10 +9825,11 @@ static PyMemberDef PyCAst_members_logical_or_expression [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_logical_or_expression(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_logical_or_expression(PyObject *_self);
 static int PyCAst_init_logical_or_expression(PyCAst_object_logical_or_expression *self, PyObject *args, PyObject *kwds);
 
 
@@ -9606,6 +9865,22 @@ static PyGetSetDef PyCAst_getsetter_logical_or_expression[] =
 PyObject* PyCAst_iter_logical_or_expression(PyObject* self);
 
 
+Py_ssize_t PyCAst_length_logical_or_expression(PyObject *self);
+PyObject* PyCAst_item_logical_or_expression(PyObject *self, Py_ssize_t i);
+
+static PySequenceMethods PyCAst_sequence_logical_or_expression =
+{
+	/*sq_length		*/	(lenfunc)PyCAst_length_logical_or_expression,
+	/*sq_concat		*/	0,
+	/*sq_repeat		*/	0,
+	/*sq_item		*/	(ssizeargfunc)PyCAst_item_logical_or_expression,
+	/*sq_slice		*/	0,
+	/*sq_ass_item		*/	0,
+	/*sq_ass_slice		*/	0,
+	/*sq_contains		*/	0,
+	/*sq_inplace_concat	*/	0,
+	/*sq_inplace_repeat	*/	0
+};
 /*---------------------------------------------------------------------------------------------*\
 
       Class Type Declaration
@@ -9619,14 +9894,15 @@ static PyTypeObject  PyCAst_type_logical_or_expression =
 	/* tp_name--------------*/      "CAst.logical_or_expression",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_logical_or_expression),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_logical_or_expression,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+&PyCAst_sequence_logical_or_expression,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -9712,10 +9988,11 @@ static PyMemberDef PyCAst_members_unary_operator [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_unary_operator(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_unary_operator(PyObject *_self);
 static int PyCAst_init_unary_operator(PyCAst_object_unary_operator *self, PyObject *args, PyObject *kwds);
 
 
@@ -9765,14 +10042,15 @@ static PyTypeObject  PyCAst_type_unary_operator =
 	/* tp_name--------------*/      "CAst.unary_operator",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_unary_operator),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_unary_operator,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -9860,9 +10138,10 @@ static PyMemberDef PyCAst_members_relational_expression_iterator [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_relational_expression_iterator(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_relational_expression_iterator(PyObject *_self);
 
 
 
@@ -9908,14 +10187,15 @@ static PyTypeObject  PyCAst_type_relational_expression_iterator =
 	/* tp_name--------------*/      "CAst.relational_expression_iterator",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_relational_expression_iterator),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_relational_expression_iterator,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -10001,9 +10281,10 @@ static PyMemberDef PyCAst_members_relational_expression_item [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_relational_expression_item(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_relational_expression_item(PyObject *_self);
 
 
 
@@ -10054,14 +10335,15 @@ static PyTypeObject  PyCAst_type_relational_expression_item =
 	/* tp_name--------------*/      "CAst.relational_expression_item",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_relational_expression_item),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_relational_expression_item,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -10147,10 +10429,11 @@ static PyMemberDef PyCAst_members_relational_expression [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_relational_expression(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_relational_expression(PyObject *_self);
 static int PyCAst_init_relational_expression(PyCAst_object_relational_expression *self, PyObject *args, PyObject *kwds);
 
 
@@ -10186,6 +10469,22 @@ static PyGetSetDef PyCAst_getsetter_relational_expression[] =
 PyObject* PyCAst_iter_relational_expression(PyObject* self);
 
 
+Py_ssize_t PyCAst_length_relational_expression(PyObject *self);
+PyObject* PyCAst_item_relational_expression(PyObject *self, Py_ssize_t i);
+
+static PySequenceMethods PyCAst_sequence_relational_expression =
+{
+	/*sq_length		*/	(lenfunc)PyCAst_length_relational_expression,
+	/*sq_concat		*/	0,
+	/*sq_repeat		*/	0,
+	/*sq_item		*/	(ssizeargfunc)PyCAst_item_relational_expression,
+	/*sq_slice		*/	0,
+	/*sq_ass_item		*/	0,
+	/*sq_ass_slice		*/	0,
+	/*sq_contains		*/	0,
+	/*sq_inplace_concat	*/	0,
+	/*sq_inplace_repeat	*/	0
+};
 /*---------------------------------------------------------------------------------------------*\
 
       Class Type Declaration
@@ -10199,14 +10498,15 @@ static PyTypeObject  PyCAst_type_relational_expression =
 	/* tp_name--------------*/      "CAst.relational_expression",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_relational_expression),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_relational_expression,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+&PyCAst_sequence_relational_expression,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -10292,10 +10592,11 @@ static PyMemberDef PyCAst_members_struct_or_union [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_struct_or_union(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_struct_or_union(PyObject *_self);
 static int PyCAst_init_struct_or_union(PyCAst_object_struct_or_union *self, PyObject *args, PyObject *kwds);
 
 
@@ -10345,14 +10646,15 @@ static PyTypeObject  PyCAst_type_struct_or_union =
 	/* tp_name--------------*/      "CAst.struct_or_union",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_struct_or_union),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_struct_or_union,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -10438,10 +10740,11 @@ static PyMemberDef PyCAst_members_enumerator [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_enumerator(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_enumerator(PyObject *_self);
 static int PyCAst_init_enumerator(PyCAst_object_enumerator *self, PyObject *args, PyObject *kwds);
 
 
@@ -10495,14 +10798,15 @@ static PyTypeObject  PyCAst_type_enumerator =
 	/* tp_name--------------*/      "CAst.enumerator",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_enumerator),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_enumerator,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -10588,10 +10892,11 @@ static PyMemberDef PyCAst_members_assignment_expression1 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_assignment_expression1(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_assignment_expression1(PyObject *_self);
 static int PyCAst_init_assignment_expression1(PyCAst_object_assignment_expression1 *self, PyObject *args, PyObject *kwds);
 
 
@@ -10645,14 +10950,15 @@ static PyTypeObject  PyCAst_type_assignment_expression1 =
 	/* tp_name--------------*/      "CAst.assignment_expression1",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_assignment_expression1),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_assignment_expression1,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -10738,10 +11044,11 @@ static PyMemberDef PyCAst_members_assignment_expression2 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_assignment_expression2(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_assignment_expression2(PyObject *_self);
 static int PyCAst_init_assignment_expression2(PyCAst_object_assignment_expression2 *self, PyObject *args, PyObject *kwds);
 
 
@@ -10791,14 +11098,15 @@ static PyTypeObject  PyCAst_type_assignment_expression2 =
 	/* tp_name--------------*/      "CAst.assignment_expression2",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_assignment_expression2),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_assignment_expression2,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -10884,10 +11192,11 @@ static PyMemberDef PyCAst_members_parameter_type_list [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_parameter_type_list(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_parameter_type_list(PyObject *_self);
 static int PyCAst_init_parameter_type_list(PyCAst_object_parameter_type_list *self, PyObject *args, PyObject *kwds);
 
 
@@ -10941,14 +11250,15 @@ static PyTypeObject  PyCAst_type_parameter_type_list =
 	/* tp_name--------------*/      "CAst.parameter_type_list",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_parameter_type_list),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_parameter_type_list,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -11034,10 +11344,11 @@ static PyMemberDef PyCAst_members_parameter_declaration1 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_parameter_declaration1(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_parameter_declaration1(PyObject *_self);
 static int PyCAst_init_parameter_declaration1(PyCAst_object_parameter_declaration1 *self, PyObject *args, PyObject *kwds);
 
 
@@ -11089,14 +11400,15 @@ static PyTypeObject  PyCAst_type_parameter_declaration1 =
 	/* tp_name--------------*/      "CAst.parameter_declaration1",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_parameter_declaration1),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_parameter_declaration1,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -11182,10 +11494,11 @@ static PyMemberDef PyCAst_members_parameter_declaration2 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_parameter_declaration2(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_parameter_declaration2(PyObject *_self);
 static int PyCAst_init_parameter_declaration2(PyCAst_object_parameter_declaration2 *self, PyObject *args, PyObject *kwds);
 
 
@@ -11237,14 +11550,15 @@ static PyTypeObject  PyCAst_type_parameter_declaration2 =
 	/* tp_name--------------*/      "CAst.parameter_declaration2",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_parameter_declaration2),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_parameter_declaration2,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -11332,9 +11646,10 @@ static PyMemberDef PyCAst_members_multiplicative_expression_iterator [] = {{NULL
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_multiplicative_expression_iterator(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_multiplicative_expression_iterator(PyObject *_self);
 
 
 
@@ -11380,14 +11695,15 @@ static PyTypeObject  PyCAst_type_multiplicative_expression_iterator =
 	/* tp_name--------------*/      "CAst.multiplicative_expression_iterator",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_multiplicative_expression_iterator),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_multiplicative_expression_iterator,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -11473,9 +11789,10 @@ static PyMemberDef PyCAst_members_multiplicative_expression_item [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_multiplicative_expression_item(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_multiplicative_expression_item(PyObject *_self);
 
 
 
@@ -11526,14 +11843,15 @@ static PyTypeObject  PyCAst_type_multiplicative_expression_item =
 	/* tp_name--------------*/      "CAst.multiplicative_expression_item",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_multiplicative_expression_item),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_multiplicative_expression_item,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -11619,10 +11937,11 @@ static PyMemberDef PyCAst_members_multiplicative_expression [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_multiplicative_expression(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_multiplicative_expression(PyObject *_self);
 static int PyCAst_init_multiplicative_expression(PyCAst_object_multiplicative_expression *self, PyObject *args, PyObject *kwds);
 
 
@@ -11658,6 +11977,22 @@ static PyGetSetDef PyCAst_getsetter_multiplicative_expression[] =
 PyObject* PyCAst_iter_multiplicative_expression(PyObject* self);
 
 
+Py_ssize_t PyCAst_length_multiplicative_expression(PyObject *self);
+PyObject* PyCAst_item_multiplicative_expression(PyObject *self, Py_ssize_t i);
+
+static PySequenceMethods PyCAst_sequence_multiplicative_expression =
+{
+	/*sq_length		*/	(lenfunc)PyCAst_length_multiplicative_expression,
+	/*sq_concat		*/	0,
+	/*sq_repeat		*/	0,
+	/*sq_item		*/	(ssizeargfunc)PyCAst_item_multiplicative_expression,
+	/*sq_slice		*/	0,
+	/*sq_ass_item		*/	0,
+	/*sq_ass_slice		*/	0,
+	/*sq_contains		*/	0,
+	/*sq_inplace_concat	*/	0,
+	/*sq_inplace_repeat	*/	0
+};
 /*---------------------------------------------------------------------------------------------*\
 
       Class Type Declaration
@@ -11671,14 +12006,15 @@ static PyTypeObject  PyCAst_type_multiplicative_expression =
 	/* tp_name--------------*/      "CAst.multiplicative_expression",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_multiplicative_expression),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_multiplicative_expression,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+&PyCAst_sequence_multiplicative_expression,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -11766,9 +12102,10 @@ static PyMemberDef PyCAst_members_type_qualifier_list_iterator [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_type_qualifier_list_iterator(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_type_qualifier_list_iterator(PyObject *_self);
 
 
 
@@ -11814,14 +12151,15 @@ static PyTypeObject  PyCAst_type_type_qualifier_list_iterator =
 	/* tp_name--------------*/      "CAst.type_qualifier_list_iterator",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_type_qualifier_list_iterator),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_type_qualifier_list_iterator,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -11907,9 +12245,10 @@ static PyMemberDef PyCAst_members_type_qualifier_list_item [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_type_qualifier_list_item(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_type_qualifier_list_item(PyObject *_self);
 
 
 
@@ -11958,14 +12297,15 @@ static PyTypeObject  PyCAst_type_type_qualifier_list_item =
 	/* tp_name--------------*/      "CAst.type_qualifier_list_item",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_type_qualifier_list_item),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_type_qualifier_list_item,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -12051,10 +12391,11 @@ static PyMemberDef PyCAst_members_type_qualifier_list [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_type_qualifier_list(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_type_qualifier_list(PyObject *_self);
 static int PyCAst_init_type_qualifier_list(PyCAst_object_type_qualifier_list *self, PyObject *args, PyObject *kwds);
 
 
@@ -12090,6 +12431,22 @@ static PyGetSetDef PyCAst_getsetter_type_qualifier_list[] =
 PyObject* PyCAst_iter_type_qualifier_list(PyObject* self);
 
 
+Py_ssize_t PyCAst_length_type_qualifier_list(PyObject *self);
+PyObject* PyCAst_item_type_qualifier_list(PyObject *self, Py_ssize_t i);
+
+static PySequenceMethods PyCAst_sequence_type_qualifier_list =
+{
+	/*sq_length		*/	(lenfunc)PyCAst_length_type_qualifier_list,
+	/*sq_concat		*/	0,
+	/*sq_repeat		*/	0,
+	/*sq_item		*/	(ssizeargfunc)PyCAst_item_type_qualifier_list,
+	/*sq_slice		*/	0,
+	/*sq_ass_item		*/	0,
+	/*sq_ass_slice		*/	0,
+	/*sq_contains		*/	0,
+	/*sq_inplace_concat	*/	0,
+	/*sq_inplace_repeat	*/	0
+};
 /*---------------------------------------------------------------------------------------------*\
 
       Class Type Declaration
@@ -12103,14 +12460,15 @@ static PyTypeObject  PyCAst_type_type_qualifier_list =
 	/* tp_name--------------*/      "CAst.type_qualifier_list",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_type_qualifier_list),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_type_qualifier_list,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+&PyCAst_sequence_type_qualifier_list,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -12198,9 +12556,10 @@ static PyMemberDef PyCAst_members_argument_expression_list_iterator [] = {{NULL}
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_argument_expression_list_iterator(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_argument_expression_list_iterator(PyObject *_self);
 
 
 
@@ -12246,14 +12605,15 @@ static PyTypeObject  PyCAst_type_argument_expression_list_iterator =
 	/* tp_name--------------*/      "CAst.argument_expression_list_iterator",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_argument_expression_list_iterator),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_argument_expression_list_iterator,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -12339,9 +12699,10 @@ static PyMemberDef PyCAst_members_argument_expression_list_item [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_argument_expression_list_item(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_argument_expression_list_item(PyObject *_self);
 
 
 
@@ -12390,14 +12751,15 @@ static PyTypeObject  PyCAst_type_argument_expression_list_item =
 	/* tp_name--------------*/      "CAst.argument_expression_list_item",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_argument_expression_list_item),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_argument_expression_list_item,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -12483,10 +12845,11 @@ static PyMemberDef PyCAst_members_argument_expression_list [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_argument_expression_list(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_argument_expression_list(PyObject *_self);
 static int PyCAst_init_argument_expression_list(PyCAst_object_argument_expression_list *self, PyObject *args, PyObject *kwds);
 
 
@@ -12522,6 +12885,22 @@ static PyGetSetDef PyCAst_getsetter_argument_expression_list[] =
 PyObject* PyCAst_iter_argument_expression_list(PyObject* self);
 
 
+Py_ssize_t PyCAst_length_argument_expression_list(PyObject *self);
+PyObject* PyCAst_item_argument_expression_list(PyObject *self, Py_ssize_t i);
+
+static PySequenceMethods PyCAst_sequence_argument_expression_list =
+{
+	/*sq_length		*/	(lenfunc)PyCAst_length_argument_expression_list,
+	/*sq_concat		*/	0,
+	/*sq_repeat		*/	0,
+	/*sq_item		*/	(ssizeargfunc)PyCAst_item_argument_expression_list,
+	/*sq_slice		*/	0,
+	/*sq_ass_item		*/	0,
+	/*sq_ass_slice		*/	0,
+	/*sq_contains		*/	0,
+	/*sq_inplace_concat	*/	0,
+	/*sq_inplace_repeat	*/	0
+};
 /*---------------------------------------------------------------------------------------------*\
 
       Class Type Declaration
@@ -12535,14 +12914,15 @@ static PyTypeObject  PyCAst_type_argument_expression_list =
 	/* tp_name--------------*/      "CAst.argument_expression_list",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_argument_expression_list),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_argument_expression_list,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+&PyCAst_sequence_argument_expression_list,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -12628,10 +13008,11 @@ static PyMemberDef PyCAst_members_direct_abstract_declarator1 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_direct_abstract_declarator1(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_direct_abstract_declarator1(PyObject *_self);
 static int PyCAst_init_direct_abstract_declarator1(PyCAst_object_direct_abstract_declarator1 *self, PyObject *args, PyObject *kwds);
 
 
@@ -12683,14 +13064,15 @@ static PyTypeObject  PyCAst_type_direct_abstract_declarator1 =
 	/* tp_name--------------*/      "CAst.direct_abstract_declarator1",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_direct_abstract_declarator1),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_direct_abstract_declarator1,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -12776,10 +13158,11 @@ static PyMemberDef PyCAst_members_direct_abstract_declarator2 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_direct_abstract_declarator2(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_direct_abstract_declarator2(PyObject *_self);
 static int PyCAst_init_direct_abstract_declarator2(PyCAst_object_direct_abstract_declarator2 *self, PyObject *args, PyObject *kwds);
 
 
@@ -12831,14 +13214,15 @@ static PyTypeObject  PyCAst_type_direct_abstract_declarator2 =
 	/* tp_name--------------*/      "CAst.direct_abstract_declarator2",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_direct_abstract_declarator2),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_direct_abstract_declarator2,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -12924,10 +13308,11 @@ static PyMemberDef PyCAst_members_direct_abstract_declarator3 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_direct_abstract_declarator3(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_direct_abstract_declarator3(PyObject *_self);
 static int PyCAst_init_direct_abstract_declarator3(PyCAst_object_direct_abstract_declarator3 *self, PyObject *args, PyObject *kwds);
 
 
@@ -12977,14 +13362,15 @@ static PyTypeObject  PyCAst_type_direct_abstract_declarator3 =
 	/* tp_name--------------*/      "CAst.direct_abstract_declarator3",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_direct_abstract_declarator3),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_direct_abstract_declarator3,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -13072,9 +13458,10 @@ static PyMemberDef PyCAst_members_equality_expression_iterator [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_equality_expression_iterator(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_equality_expression_iterator(PyObject *_self);
 
 
 
@@ -13120,14 +13507,15 @@ static PyTypeObject  PyCAst_type_equality_expression_iterator =
 	/* tp_name--------------*/      "CAst.equality_expression_iterator",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_equality_expression_iterator),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_equality_expression_iterator,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -13213,9 +13601,10 @@ static PyMemberDef PyCAst_members_equality_expression_item [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_equality_expression_item(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_equality_expression_item(PyObject *_self);
 
 
 
@@ -13266,14 +13655,15 @@ static PyTypeObject  PyCAst_type_equality_expression_item =
 	/* tp_name--------------*/      "CAst.equality_expression_item",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_equality_expression_item),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_equality_expression_item,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -13359,10 +13749,11 @@ static PyMemberDef PyCAst_members_equality_expression [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_equality_expression(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_equality_expression(PyObject *_self);
 static int PyCAst_init_equality_expression(PyCAst_object_equality_expression *self, PyObject *args, PyObject *kwds);
 
 
@@ -13398,6 +13789,22 @@ static PyGetSetDef PyCAst_getsetter_equality_expression[] =
 PyObject* PyCAst_iter_equality_expression(PyObject* self);
 
 
+Py_ssize_t PyCAst_length_equality_expression(PyObject *self);
+PyObject* PyCAst_item_equality_expression(PyObject *self, Py_ssize_t i);
+
+static PySequenceMethods PyCAst_sequence_equality_expression =
+{
+	/*sq_length		*/	(lenfunc)PyCAst_length_equality_expression,
+	/*sq_concat		*/	0,
+	/*sq_repeat		*/	0,
+	/*sq_item		*/	(ssizeargfunc)PyCAst_item_equality_expression,
+	/*sq_slice		*/	0,
+	/*sq_ass_item		*/	0,
+	/*sq_ass_slice		*/	0,
+	/*sq_contains		*/	0,
+	/*sq_inplace_concat	*/	0,
+	/*sq_inplace_repeat	*/	0
+};
 /*---------------------------------------------------------------------------------------------*\
 
       Class Type Declaration
@@ -13411,14 +13818,15 @@ static PyTypeObject  PyCAst_type_equality_expression =
 	/* tp_name--------------*/      "CAst.equality_expression",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_equality_expression),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_equality_expression,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+&PyCAst_sequence_equality_expression,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -13504,10 +13912,11 @@ static PyMemberDef PyCAst_members_primary_expression1 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_primary_expression1(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_primary_expression1(PyObject *_self);
 static int PyCAst_init_primary_expression1(PyCAst_object_primary_expression1 *self, PyObject *args, PyObject *kwds);
 
 
@@ -13557,14 +13966,15 @@ static PyTypeObject  PyCAst_type_primary_expression1 =
 	/* tp_name--------------*/      "CAst.primary_expression1",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_primary_expression1),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_primary_expression1,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -13650,10 +14060,11 @@ static PyMemberDef PyCAst_members_primary_expression2 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_primary_expression2(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_primary_expression2(PyObject *_self);
 static int PyCAst_init_primary_expression2(PyCAst_object_primary_expression2 *self, PyObject *args, PyObject *kwds);
 
 
@@ -13703,14 +14114,15 @@ static PyTypeObject  PyCAst_type_primary_expression2 =
 	/* tp_name--------------*/      "CAst.primary_expression2",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_primary_expression2),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_primary_expression2,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -13798,9 +14210,10 @@ static PyMemberDef PyCAst_members_declaration_specifiers1_iterator [] = {{NULL}}
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_declaration_specifiers1_iterator(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_declaration_specifiers1_iterator(PyObject *_self);
 
 
 
@@ -13846,14 +14259,15 @@ static PyTypeObject  PyCAst_type_declaration_specifiers1_iterator =
 	/* tp_name--------------*/      "CAst.declaration_specifiers1_iterator",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_declaration_specifiers1_iterator),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_declaration_specifiers1_iterator,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -13939,9 +14353,10 @@ static PyMemberDef PyCAst_members_declaration_specifiers1_item [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_declaration_specifiers1_item(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_declaration_specifiers1_item(PyObject *_self);
 
 
 
@@ -13990,14 +14405,15 @@ static PyTypeObject  PyCAst_type_declaration_specifiers1_item =
 	/* tp_name--------------*/      "CAst.declaration_specifiers1_item",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_declaration_specifiers1_item),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_declaration_specifiers1_item,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -14083,10 +14499,11 @@ static PyMemberDef PyCAst_members_declaration_specifiers1 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_declaration_specifiers1(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_declaration_specifiers1(PyObject *_self);
 static int PyCAst_init_declaration_specifiers1(PyCAst_object_declaration_specifiers1 *self, PyObject *args, PyObject *kwds);
 
 
@@ -14122,6 +14539,22 @@ static PyGetSetDef PyCAst_getsetter_declaration_specifiers1[] =
 PyObject* PyCAst_iter_declaration_specifiers1(PyObject* self);
 
 
+Py_ssize_t PyCAst_length_declaration_specifiers1(PyObject *self);
+PyObject* PyCAst_item_declaration_specifiers1(PyObject *self, Py_ssize_t i);
+
+static PySequenceMethods PyCAst_sequence_declaration_specifiers1 =
+{
+	/*sq_length		*/	(lenfunc)PyCAst_length_declaration_specifiers1,
+	/*sq_concat		*/	0,
+	/*sq_repeat		*/	0,
+	/*sq_item		*/	(ssizeargfunc)PyCAst_item_declaration_specifiers1,
+	/*sq_slice		*/	0,
+	/*sq_ass_item		*/	0,
+	/*sq_ass_slice		*/	0,
+	/*sq_contains		*/	0,
+	/*sq_inplace_concat	*/	0,
+	/*sq_inplace_repeat	*/	0
+};
 /*---------------------------------------------------------------------------------------------*\
 
       Class Type Declaration
@@ -14135,14 +14568,15 @@ static PyTypeObject  PyCAst_type_declaration_specifiers1 =
 	/* tp_name--------------*/      "CAst.declaration_specifiers1",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_declaration_specifiers1),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_declaration_specifiers1,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+&PyCAst_sequence_declaration_specifiers1,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -14230,9 +14664,10 @@ static PyMemberDef PyCAst_members_declaration_specifiers2_iterator [] = {{NULL}}
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_declaration_specifiers2_iterator(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_declaration_specifiers2_iterator(PyObject *_self);
 
 
 
@@ -14278,14 +14713,15 @@ static PyTypeObject  PyCAst_type_declaration_specifiers2_iterator =
 	/* tp_name--------------*/      "CAst.declaration_specifiers2_iterator",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_declaration_specifiers2_iterator),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_declaration_specifiers2_iterator,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -14371,9 +14807,10 @@ static PyMemberDef PyCAst_members_declaration_specifiers2_item [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_declaration_specifiers2_item(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_declaration_specifiers2_item(PyObject *_self);
 
 
 
@@ -14422,14 +14859,15 @@ static PyTypeObject  PyCAst_type_declaration_specifiers2_item =
 	/* tp_name--------------*/      "CAst.declaration_specifiers2_item",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_declaration_specifiers2_item),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_declaration_specifiers2_item,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -14515,10 +14953,11 @@ static PyMemberDef PyCAst_members_declaration_specifiers2 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_declaration_specifiers2(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_declaration_specifiers2(PyObject *_self);
 static int PyCAst_init_declaration_specifiers2(PyCAst_object_declaration_specifiers2 *self, PyObject *args, PyObject *kwds);
 
 
@@ -14554,6 +14993,22 @@ static PyGetSetDef PyCAst_getsetter_declaration_specifiers2[] =
 PyObject* PyCAst_iter_declaration_specifiers2(PyObject* self);
 
 
+Py_ssize_t PyCAst_length_declaration_specifiers2(PyObject *self);
+PyObject* PyCAst_item_declaration_specifiers2(PyObject *self, Py_ssize_t i);
+
+static PySequenceMethods PyCAst_sequence_declaration_specifiers2 =
+{
+	/*sq_length		*/	(lenfunc)PyCAst_length_declaration_specifiers2,
+	/*sq_concat		*/	0,
+	/*sq_repeat		*/	0,
+	/*sq_item		*/	(ssizeargfunc)PyCAst_item_declaration_specifiers2,
+	/*sq_slice		*/	0,
+	/*sq_ass_item		*/	0,
+	/*sq_ass_slice		*/	0,
+	/*sq_contains		*/	0,
+	/*sq_inplace_concat	*/	0,
+	/*sq_inplace_repeat	*/	0
+};
 /*---------------------------------------------------------------------------------------------*\
 
       Class Type Declaration
@@ -14567,14 +15022,15 @@ static PyTypeObject  PyCAst_type_declaration_specifiers2 =
 	/* tp_name--------------*/      "CAst.declaration_specifiers2",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_declaration_specifiers2),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_declaration_specifiers2,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+&PyCAst_sequence_declaration_specifiers2,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -14662,9 +15118,10 @@ static PyMemberDef PyCAst_members_declaration_specifiers3_iterator [] = {{NULL}}
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_declaration_specifiers3_iterator(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_declaration_specifiers3_iterator(PyObject *_self);
 
 
 
@@ -14710,14 +15167,15 @@ static PyTypeObject  PyCAst_type_declaration_specifiers3_iterator =
 	/* tp_name--------------*/      "CAst.declaration_specifiers3_iterator",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_declaration_specifiers3_iterator),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_declaration_specifiers3_iterator,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -14803,9 +15261,10 @@ static PyMemberDef PyCAst_members_declaration_specifiers3_item [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_declaration_specifiers3_item(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_declaration_specifiers3_item(PyObject *_self);
 
 
 
@@ -14854,14 +15313,15 @@ static PyTypeObject  PyCAst_type_declaration_specifiers3_item =
 	/* tp_name--------------*/      "CAst.declaration_specifiers3_item",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_declaration_specifiers3_item),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_declaration_specifiers3_item,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -14947,10 +15407,11 @@ static PyMemberDef PyCAst_members_declaration_specifiers3 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_declaration_specifiers3(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_declaration_specifiers3(PyObject *_self);
 static int PyCAst_init_declaration_specifiers3(PyCAst_object_declaration_specifiers3 *self, PyObject *args, PyObject *kwds);
 
 
@@ -14986,6 +15447,22 @@ static PyGetSetDef PyCAst_getsetter_declaration_specifiers3[] =
 PyObject* PyCAst_iter_declaration_specifiers3(PyObject* self);
 
 
+Py_ssize_t PyCAst_length_declaration_specifiers3(PyObject *self);
+PyObject* PyCAst_item_declaration_specifiers3(PyObject *self, Py_ssize_t i);
+
+static PySequenceMethods PyCAst_sequence_declaration_specifiers3 =
+{
+	/*sq_length		*/	(lenfunc)PyCAst_length_declaration_specifiers3,
+	/*sq_concat		*/	0,
+	/*sq_repeat		*/	0,
+	/*sq_item		*/	(ssizeargfunc)PyCAst_item_declaration_specifiers3,
+	/*sq_slice		*/	0,
+	/*sq_ass_item		*/	0,
+	/*sq_ass_slice		*/	0,
+	/*sq_contains		*/	0,
+	/*sq_inplace_concat	*/	0,
+	/*sq_inplace_repeat	*/	0
+};
 /*---------------------------------------------------------------------------------------------*\
 
       Class Type Declaration
@@ -14999,14 +15476,15 @@ static PyTypeObject  PyCAst_type_declaration_specifiers3 =
 	/* tp_name--------------*/      "CAst.declaration_specifiers3",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_declaration_specifiers3),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_declaration_specifiers3,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+&PyCAst_sequence_declaration_specifiers3,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -15092,10 +15570,11 @@ static PyMemberDef PyCAst_members_declaration [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_declaration(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_declaration(PyObject *_self);
 static int PyCAst_init_declaration(PyCAst_object_declaration *self, PyObject *args, PyObject *kwds);
 
 
@@ -15147,14 +15626,15 @@ static PyTypeObject  PyCAst_type_declaration =
 	/* tp_name--------------*/      "CAst.declaration",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_declaration),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_declaration,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -15240,10 +15720,11 @@ static PyMemberDef PyCAst_members_direct_declarator1 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_direct_declarator1(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_direct_declarator1(PyObject *_self);
 static int PyCAst_init_direct_declarator1(PyCAst_object_direct_declarator1 *self, PyObject *args, PyObject *kwds);
 
 
@@ -15295,14 +15776,15 @@ static PyTypeObject  PyCAst_type_direct_declarator1 =
 	/* tp_name--------------*/      "CAst.direct_declarator1",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_direct_declarator1),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_direct_declarator1,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -15388,10 +15870,11 @@ static PyMemberDef PyCAst_members_direct_declarator2 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_direct_declarator2(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_direct_declarator2(PyObject *_self);
 static int PyCAst_init_direct_declarator2(PyCAst_object_direct_declarator2 *self, PyObject *args, PyObject *kwds);
 
 
@@ -15443,14 +15926,15 @@ static PyTypeObject  PyCAst_type_direct_declarator2 =
 	/* tp_name--------------*/      "CAst.direct_declarator2",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_direct_declarator2),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_direct_declarator2,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -15536,10 +16020,11 @@ static PyMemberDef PyCAst_members_direct_declarator3 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_direct_declarator3(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_direct_declarator3(PyObject *_self);
 static int PyCAst_init_direct_declarator3(PyCAst_object_direct_declarator3 *self, PyObject *args, PyObject *kwds);
 
 
@@ -15591,14 +16076,15 @@ static PyTypeObject  PyCAst_type_direct_declarator3 =
 	/* tp_name--------------*/      "CAst.direct_declarator3",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_direct_declarator3),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_direct_declarator3,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -15684,10 +16170,11 @@ static PyMemberDef PyCAst_members_direct_declarator4 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_direct_declarator4(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_direct_declarator4(PyObject *_self);
 static int PyCAst_init_direct_declarator4(PyCAst_object_direct_declarator4 *self, PyObject *args, PyObject *kwds);
 
 
@@ -15737,14 +16224,15 @@ static PyTypeObject  PyCAst_type_direct_declarator4 =
 	/* tp_name--------------*/      "CAst.direct_declarator4",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_direct_declarator4),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_direct_declarator4,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -15830,10 +16318,11 @@ static PyMemberDef PyCAst_members_direct_declarator5 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_direct_declarator5(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_direct_declarator5(PyObject *_self);
 static int PyCAst_init_direct_declarator5(PyCAst_object_direct_declarator5 *self, PyObject *args, PyObject *kwds);
 
 
@@ -15883,14 +16372,15 @@ static PyTypeObject  PyCAst_type_direct_declarator5 =
 	/* tp_name--------------*/      "CAst.direct_declarator5",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_direct_declarator5),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_direct_declarator5,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -15978,9 +16468,10 @@ static PyMemberDef PyCAst_members_logical_and_expression_iterator [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_logical_and_expression_iterator(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_logical_and_expression_iterator(PyObject *_self);
 
 
 
@@ -16026,14 +16517,15 @@ static PyTypeObject  PyCAst_type_logical_and_expression_iterator =
 	/* tp_name--------------*/      "CAst.logical_and_expression_iterator",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_logical_and_expression_iterator),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_logical_and_expression_iterator,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -16119,9 +16611,10 @@ static PyMemberDef PyCAst_members_logical_and_expression_item [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_logical_and_expression_item(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_logical_and_expression_item(PyObject *_self);
 
 
 
@@ -16170,14 +16663,15 @@ static PyTypeObject  PyCAst_type_logical_and_expression_item =
 	/* tp_name--------------*/      "CAst.logical_and_expression_item",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_logical_and_expression_item),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_logical_and_expression_item,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -16263,10 +16757,11 @@ static PyMemberDef PyCAst_members_logical_and_expression [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_logical_and_expression(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_logical_and_expression(PyObject *_self);
 static int PyCAst_init_logical_and_expression(PyCAst_object_logical_and_expression *self, PyObject *args, PyObject *kwds);
 
 
@@ -16302,6 +16797,22 @@ static PyGetSetDef PyCAst_getsetter_logical_and_expression[] =
 PyObject* PyCAst_iter_logical_and_expression(PyObject* self);
 
 
+Py_ssize_t PyCAst_length_logical_and_expression(PyObject *self);
+PyObject* PyCAst_item_logical_and_expression(PyObject *self, Py_ssize_t i);
+
+static PySequenceMethods PyCAst_sequence_logical_and_expression =
+{
+	/*sq_length		*/	(lenfunc)PyCAst_length_logical_and_expression,
+	/*sq_concat		*/	0,
+	/*sq_repeat		*/	0,
+	/*sq_item		*/	(ssizeargfunc)PyCAst_item_logical_and_expression,
+	/*sq_slice		*/	0,
+	/*sq_ass_item		*/	0,
+	/*sq_ass_slice		*/	0,
+	/*sq_contains		*/	0,
+	/*sq_inplace_concat	*/	0,
+	/*sq_inplace_repeat	*/	0
+};
 /*---------------------------------------------------------------------------------------------*\
 
       Class Type Declaration
@@ -16315,14 +16826,15 @@ static PyTypeObject  PyCAst_type_logical_and_expression =
 	/* tp_name--------------*/      "CAst.logical_and_expression",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_logical_and_expression),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_logical_and_expression,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+&PyCAst_sequence_logical_and_expression,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -16410,9 +16922,10 @@ static PyMemberDef PyCAst_members_init_declarator_list_iterator [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_init_declarator_list_iterator(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_init_declarator_list_iterator(PyObject *_self);
 
 
 
@@ -16458,14 +16971,15 @@ static PyTypeObject  PyCAst_type_init_declarator_list_iterator =
 	/* tp_name--------------*/      "CAst.init_declarator_list_iterator",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_init_declarator_list_iterator),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_init_declarator_list_iterator,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -16551,9 +17065,10 @@ static PyMemberDef PyCAst_members_init_declarator_list_item [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_init_declarator_list_item(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_init_declarator_list_item(PyObject *_self);
 
 
 
@@ -16602,14 +17117,15 @@ static PyTypeObject  PyCAst_type_init_declarator_list_item =
 	/* tp_name--------------*/      "CAst.init_declarator_list_item",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_init_declarator_list_item),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_init_declarator_list_item,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -16695,10 +17211,11 @@ static PyMemberDef PyCAst_members_init_declarator_list [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_init_declarator_list(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_init_declarator_list(PyObject *_self);
 static int PyCAst_init_init_declarator_list(PyCAst_object_init_declarator_list *self, PyObject *args, PyObject *kwds);
 
 
@@ -16734,6 +17251,22 @@ static PyGetSetDef PyCAst_getsetter_init_declarator_list[] =
 PyObject* PyCAst_iter_init_declarator_list(PyObject* self);
 
 
+Py_ssize_t PyCAst_length_init_declarator_list(PyObject *self);
+PyObject* PyCAst_item_init_declarator_list(PyObject *self, Py_ssize_t i);
+
+static PySequenceMethods PyCAst_sequence_init_declarator_list =
+{
+	/*sq_length		*/	(lenfunc)PyCAst_length_init_declarator_list,
+	/*sq_concat		*/	0,
+	/*sq_repeat		*/	0,
+	/*sq_item		*/	(ssizeargfunc)PyCAst_item_init_declarator_list,
+	/*sq_slice		*/	0,
+	/*sq_ass_item		*/	0,
+	/*sq_ass_slice		*/	0,
+	/*sq_contains		*/	0,
+	/*sq_inplace_concat	*/	0,
+	/*sq_inplace_repeat	*/	0
+};
 /*---------------------------------------------------------------------------------------------*\
 
       Class Type Declaration
@@ -16747,14 +17280,15 @@ static PyTypeObject  PyCAst_type_init_declarator_list =
 	/* tp_name--------------*/      "CAst.init_declarator_list",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_init_declarator_list),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_init_declarator_list,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+&PyCAst_sequence_init_declarator_list,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -16842,9 +17376,10 @@ static PyMemberDef PyCAst_members_shift_expression_iterator [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_shift_expression_iterator(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_shift_expression_iterator(PyObject *_self);
 
 
 
@@ -16890,14 +17425,15 @@ static PyTypeObject  PyCAst_type_shift_expression_iterator =
 	/* tp_name--------------*/      "CAst.shift_expression_iterator",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_shift_expression_iterator),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_shift_expression_iterator,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -16983,9 +17519,10 @@ static PyMemberDef PyCAst_members_shift_expression_item [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_shift_expression_item(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_shift_expression_item(PyObject *_self);
 
 
 
@@ -17036,14 +17573,15 @@ static PyTypeObject  PyCAst_type_shift_expression_item =
 	/* tp_name--------------*/      "CAst.shift_expression_item",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_shift_expression_item),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_shift_expression_item,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -17129,10 +17667,11 @@ static PyMemberDef PyCAst_members_shift_expression [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_shift_expression(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_shift_expression(PyObject *_self);
 static int PyCAst_init_shift_expression(PyCAst_object_shift_expression *self, PyObject *args, PyObject *kwds);
 
 
@@ -17168,6 +17707,22 @@ static PyGetSetDef PyCAst_getsetter_shift_expression[] =
 PyObject* PyCAst_iter_shift_expression(PyObject* self);
 
 
+Py_ssize_t PyCAst_length_shift_expression(PyObject *self);
+PyObject* PyCAst_item_shift_expression(PyObject *self, Py_ssize_t i);
+
+static PySequenceMethods PyCAst_sequence_shift_expression =
+{
+	/*sq_length		*/	(lenfunc)PyCAst_length_shift_expression,
+	/*sq_concat		*/	0,
+	/*sq_repeat		*/	0,
+	/*sq_item		*/	(ssizeargfunc)PyCAst_item_shift_expression,
+	/*sq_slice		*/	0,
+	/*sq_ass_item		*/	0,
+	/*sq_ass_slice		*/	0,
+	/*sq_contains		*/	0,
+	/*sq_inplace_concat	*/	0,
+	/*sq_inplace_repeat	*/	0
+};
 /*---------------------------------------------------------------------------------------------*\
 
       Class Type Declaration
@@ -17181,14 +17736,15 @@ static PyTypeObject  PyCAst_type_shift_expression =
 	/* tp_name--------------*/      "CAst.shift_expression",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_shift_expression),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_shift_expression,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+&PyCAst_sequence_shift_expression,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -17276,9 +17832,10 @@ static PyMemberDef PyCAst_members_identifier_list_iterator [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_identifier_list_iterator(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_identifier_list_iterator(PyObject *_self);
 
 
 
@@ -17324,14 +17881,15 @@ static PyTypeObject  PyCAst_type_identifier_list_iterator =
 	/* tp_name--------------*/      "CAst.identifier_list_iterator",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_identifier_list_iterator),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_identifier_list_iterator,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -17417,9 +17975,10 @@ static PyMemberDef PyCAst_members_identifier_list_item [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_identifier_list_item(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_identifier_list_item(PyObject *_self);
 
 
 
@@ -17468,14 +18027,15 @@ static PyTypeObject  PyCAst_type_identifier_list_item =
 	/* tp_name--------------*/      "CAst.identifier_list_item",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_identifier_list_item),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_identifier_list_item,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -17561,10 +18121,11 @@ static PyMemberDef PyCAst_members_identifier_list [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_identifier_list(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_identifier_list(PyObject *_self);
 static int PyCAst_init_identifier_list(PyCAst_object_identifier_list *self, PyObject *args, PyObject *kwds);
 
 
@@ -17600,6 +18161,22 @@ static PyGetSetDef PyCAst_getsetter_identifier_list[] =
 PyObject* PyCAst_iter_identifier_list(PyObject* self);
 
 
+Py_ssize_t PyCAst_length_identifier_list(PyObject *self);
+PyObject* PyCAst_item_identifier_list(PyObject *self, Py_ssize_t i);
+
+static PySequenceMethods PyCAst_sequence_identifier_list =
+{
+	/*sq_length		*/	(lenfunc)PyCAst_length_identifier_list,
+	/*sq_concat		*/	0,
+	/*sq_repeat		*/	0,
+	/*sq_item		*/	(ssizeargfunc)PyCAst_item_identifier_list,
+	/*sq_slice		*/	0,
+	/*sq_ass_item		*/	0,
+	/*sq_ass_slice		*/	0,
+	/*sq_contains		*/	0,
+	/*sq_inplace_concat	*/	0,
+	/*sq_inplace_repeat	*/	0
+};
 /*---------------------------------------------------------------------------------------------*\
 
       Class Type Declaration
@@ -17613,14 +18190,15 @@ static PyTypeObject  PyCAst_type_identifier_list =
 	/* tp_name--------------*/      "CAst.identifier_list",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_identifier_list),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_identifier_list,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+&PyCAst_sequence_identifier_list,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -17706,10 +18284,11 @@ static PyMemberDef PyCAst_members_jump_statement1 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_jump_statement1(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_jump_statement1(PyObject *_self);
 static int PyCAst_init_jump_statement1(PyCAst_object_jump_statement1 *self, PyObject *args, PyObject *kwds);
 
 
@@ -17759,14 +18338,15 @@ static PyTypeObject  PyCAst_type_jump_statement1 =
 	/* tp_name--------------*/      "CAst.jump_statement1",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_jump_statement1),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_jump_statement1,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -17852,10 +18432,11 @@ static PyMemberDef PyCAst_members_jump_statement2 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_jump_statement2(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_jump_statement2(PyObject *_self);
 static int PyCAst_init_jump_statement2(PyCAst_object_jump_statement2 *self, PyObject *args, PyObject *kwds);
 
 
@@ -17905,14 +18486,15 @@ static PyTypeObject  PyCAst_type_jump_statement2 =
 	/* tp_name--------------*/      "CAst.jump_statement2",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_jump_statement2),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_jump_statement2,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -17998,10 +18580,11 @@ static PyMemberDef PyCAst_members_jump_statement3 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_jump_statement3(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_jump_statement3(PyObject *_self);
 static int PyCAst_init_jump_statement3(PyCAst_object_jump_statement3 *self, PyObject *args, PyObject *kwds);
 
 
@@ -18051,14 +18634,15 @@ static PyTypeObject  PyCAst_type_jump_statement3 =
 	/* tp_name--------------*/      "CAst.jump_statement3",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_jump_statement3),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_jump_statement3,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -18144,10 +18728,11 @@ static PyMemberDef PyCAst_members_struct_declarator [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_struct_declarator(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_struct_declarator(PyObject *_self);
 static int PyCAst_init_struct_declarator(PyCAst_object_struct_declarator *self, PyObject *args, PyObject *kwds);
 
 
@@ -18201,14 +18786,15 @@ static PyTypeObject  PyCAst_type_struct_declarator =
 	/* tp_name--------------*/      "CAst.struct_declarator",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_struct_declarator),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_struct_declarator,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -18294,10 +18880,11 @@ static PyMemberDef PyCAst_members_function_definition [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_function_definition(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_function_definition(PyObject *_self);
 static int PyCAst_init_function_definition(PyCAst_object_function_definition *self, PyObject *args, PyObject *kwds);
 
 
@@ -18353,14 +18940,15 @@ static PyTypeObject  PyCAst_type_function_definition =
 	/* tp_name--------------*/      "CAst.function_definition",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_function_definition),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_function_definition,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -18448,9 +19036,10 @@ static PyMemberDef PyCAst_members_parameter_list_iterator [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_parameter_list_iterator(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_parameter_list_iterator(PyObject *_self);
 
 
 
@@ -18496,14 +19085,15 @@ static PyTypeObject  PyCAst_type_parameter_list_iterator =
 	/* tp_name--------------*/      "CAst.parameter_list_iterator",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_parameter_list_iterator),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_parameter_list_iterator,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -18589,9 +19179,10 @@ static PyMemberDef PyCAst_members_parameter_list_item [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_parameter_list_item(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_parameter_list_item(PyObject *_self);
 
 
 
@@ -18640,14 +19231,15 @@ static PyTypeObject  PyCAst_type_parameter_list_item =
 	/* tp_name--------------*/      "CAst.parameter_list_item",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_parameter_list_item),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_parameter_list_item,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -18733,10 +19325,11 @@ static PyMemberDef PyCAst_members_parameter_list [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_parameter_list(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_parameter_list(PyObject *_self);
 static int PyCAst_init_parameter_list(PyCAst_object_parameter_list *self, PyObject *args, PyObject *kwds);
 
 
@@ -18772,6 +19365,22 @@ static PyGetSetDef PyCAst_getsetter_parameter_list[] =
 PyObject* PyCAst_iter_parameter_list(PyObject* self);
 
 
+Py_ssize_t PyCAst_length_parameter_list(PyObject *self);
+PyObject* PyCAst_item_parameter_list(PyObject *self, Py_ssize_t i);
+
+static PySequenceMethods PyCAst_sequence_parameter_list =
+{
+	/*sq_length		*/	(lenfunc)PyCAst_length_parameter_list,
+	/*sq_concat		*/	0,
+	/*sq_repeat		*/	0,
+	/*sq_item		*/	(ssizeargfunc)PyCAst_item_parameter_list,
+	/*sq_slice		*/	0,
+	/*sq_ass_item		*/	0,
+	/*sq_ass_slice		*/	0,
+	/*sq_contains		*/	0,
+	/*sq_inplace_concat	*/	0,
+	/*sq_inplace_repeat	*/	0
+};
 /*---------------------------------------------------------------------------------------------*\
 
       Class Type Declaration
@@ -18785,14 +19394,15 @@ static PyTypeObject  PyCAst_type_parameter_list =
 	/* tp_name--------------*/      "CAst.parameter_list",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_parameter_list),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_parameter_list,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+&PyCAst_sequence_parameter_list,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -18878,10 +19488,11 @@ static PyMemberDef PyCAst_members_enum_specifier [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_enum_specifier(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_enum_specifier(PyObject *_self);
 static int PyCAst_init_enum_specifier(PyCAst_object_enum_specifier *self, PyObject *args, PyObject *kwds);
 
 
@@ -18937,14 +19548,15 @@ static PyTypeObject  PyCAst_type_enum_specifier =
 	/* tp_name--------------*/      "CAst.enum_specifier",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_enum_specifier),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_enum_specifier,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -19030,10 +19642,11 @@ static PyMemberDef PyCAst_members_type_qualifier [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_type_qualifier(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_type_qualifier(PyObject *_self);
 static int PyCAst_init_type_qualifier(PyCAst_object_type_qualifier *self, PyObject *args, PyObject *kwds);
 
 
@@ -19083,14 +19696,15 @@ static PyTypeObject  PyCAst_type_type_qualifier =
 	/* tp_name--------------*/      "CAst.type_qualifier",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_type_qualifier),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_type_qualifier,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -19178,9 +19792,10 @@ static PyMemberDef PyCAst_members_enumerator_list_iterator [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_enumerator_list_iterator(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_enumerator_list_iterator(PyObject *_self);
 
 
 
@@ -19226,14 +19841,15 @@ static PyTypeObject  PyCAst_type_enumerator_list_iterator =
 	/* tp_name--------------*/      "CAst.enumerator_list_iterator",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_enumerator_list_iterator),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_enumerator_list_iterator,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -19319,9 +19935,10 @@ static PyMemberDef PyCAst_members_enumerator_list_item [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_enumerator_list_item(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_enumerator_list_item(PyObject *_self);
 
 
 
@@ -19370,14 +19987,15 @@ static PyTypeObject  PyCAst_type_enumerator_list_item =
 	/* tp_name--------------*/      "CAst.enumerator_list_item",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_enumerator_list_item),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_enumerator_list_item,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -19463,10 +20081,11 @@ static PyMemberDef PyCAst_members_enumerator_list [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_enumerator_list(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_enumerator_list(PyObject *_self);
 static int PyCAst_init_enumerator_list(PyCAst_object_enumerator_list *self, PyObject *args, PyObject *kwds);
 
 
@@ -19502,6 +20121,22 @@ static PyGetSetDef PyCAst_getsetter_enumerator_list[] =
 PyObject* PyCAst_iter_enumerator_list(PyObject* self);
 
 
+Py_ssize_t PyCAst_length_enumerator_list(PyObject *self);
+PyObject* PyCAst_item_enumerator_list(PyObject *self, Py_ssize_t i);
+
+static PySequenceMethods PyCAst_sequence_enumerator_list =
+{
+	/*sq_length		*/	(lenfunc)PyCAst_length_enumerator_list,
+	/*sq_concat		*/	0,
+	/*sq_repeat		*/	0,
+	/*sq_item		*/	(ssizeargfunc)PyCAst_item_enumerator_list,
+	/*sq_slice		*/	0,
+	/*sq_ass_item		*/	0,
+	/*sq_ass_slice		*/	0,
+	/*sq_contains		*/	0,
+	/*sq_inplace_concat	*/	0,
+	/*sq_inplace_repeat	*/	0
+};
 /*---------------------------------------------------------------------------------------------*\
 
       Class Type Declaration
@@ -19515,14 +20150,15 @@ static PyTypeObject  PyCAst_type_enumerator_list =
 	/* tp_name--------------*/      "CAst.enumerator_list",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_enumerator_list),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_enumerator_list,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+&PyCAst_sequence_enumerator_list,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -19608,10 +20244,11 @@ static PyMemberDef PyCAst_members_labeled_statement1 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_labeled_statement1(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_labeled_statement1(PyObject *_self);
 static int PyCAst_init_labeled_statement1(PyCAst_object_labeled_statement1 *self, PyObject *args, PyObject *kwds);
 
 
@@ -19663,14 +20300,15 @@ static PyTypeObject  PyCAst_type_labeled_statement1 =
 	/* tp_name--------------*/      "CAst.labeled_statement1",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_labeled_statement1),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_labeled_statement1,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -19756,10 +20394,11 @@ static PyMemberDef PyCAst_members_labeled_statement2 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_labeled_statement2(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_labeled_statement2(PyObject *_self);
 static int PyCAst_init_labeled_statement2(PyCAst_object_labeled_statement2 *self, PyObject *args, PyObject *kwds);
 
 
@@ -19811,14 +20450,15 @@ static PyTypeObject  PyCAst_type_labeled_statement2 =
 	/* tp_name--------------*/      "CAst.labeled_statement2",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_labeled_statement2),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_labeled_statement2,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -19906,9 +20546,10 @@ static PyMemberDef PyCAst_members_declaration_list_iterator [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_declaration_list_iterator(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_declaration_list_iterator(PyObject *_self);
 
 
 
@@ -19954,14 +20595,15 @@ static PyTypeObject  PyCAst_type_declaration_list_iterator =
 	/* tp_name--------------*/      "CAst.declaration_list_iterator",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_declaration_list_iterator),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_declaration_list_iterator,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -20047,9 +20689,10 @@ static PyMemberDef PyCAst_members_declaration_list_item [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_declaration_list_item(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_declaration_list_item(PyObject *_self);
 
 
 
@@ -20098,14 +20741,15 @@ static PyTypeObject  PyCAst_type_declaration_list_item =
 	/* tp_name--------------*/      "CAst.declaration_list_item",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_declaration_list_item),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_declaration_list_item,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -20191,10 +20835,11 @@ static PyMemberDef PyCAst_members_declaration_list [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_declaration_list(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_declaration_list(PyObject *_self);
 static int PyCAst_init_declaration_list(PyCAst_object_declaration_list *self, PyObject *args, PyObject *kwds);
 
 
@@ -20230,6 +20875,22 @@ static PyGetSetDef PyCAst_getsetter_declaration_list[] =
 PyObject* PyCAst_iter_declaration_list(PyObject* self);
 
 
+Py_ssize_t PyCAst_length_declaration_list(PyObject *self);
+PyObject* PyCAst_item_declaration_list(PyObject *self, Py_ssize_t i);
+
+static PySequenceMethods PyCAst_sequence_declaration_list =
+{
+	/*sq_length		*/	(lenfunc)PyCAst_length_declaration_list,
+	/*sq_concat		*/	0,
+	/*sq_repeat		*/	0,
+	/*sq_item		*/	(ssizeargfunc)PyCAst_item_declaration_list,
+	/*sq_slice		*/	0,
+	/*sq_ass_item		*/	0,
+	/*sq_ass_slice		*/	0,
+	/*sq_contains		*/	0,
+	/*sq_inplace_concat	*/	0,
+	/*sq_inplace_repeat	*/	0
+};
 /*---------------------------------------------------------------------------------------------*\
 
       Class Type Declaration
@@ -20243,14 +20904,15 @@ static PyTypeObject  PyCAst_type_declaration_list =
 	/* tp_name--------------*/      "CAst.declaration_list",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_declaration_list),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_declaration_list,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+&PyCAst_sequence_declaration_list,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -20338,9 +21000,10 @@ static PyMemberDef PyCAst_members_specifier_qualifier_list1_iterator [] = {{NULL
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_specifier_qualifier_list1_iterator(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_specifier_qualifier_list1_iterator(PyObject *_self);
 
 
 
@@ -20386,14 +21049,15 @@ static PyTypeObject  PyCAst_type_specifier_qualifier_list1_iterator =
 	/* tp_name--------------*/      "CAst.specifier_qualifier_list1_iterator",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_specifier_qualifier_list1_iterator),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_specifier_qualifier_list1_iterator,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -20479,9 +21143,10 @@ static PyMemberDef PyCAst_members_specifier_qualifier_list1_item [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_specifier_qualifier_list1_item(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_specifier_qualifier_list1_item(PyObject *_self);
 
 
 
@@ -20530,14 +21195,15 @@ static PyTypeObject  PyCAst_type_specifier_qualifier_list1_item =
 	/* tp_name--------------*/      "CAst.specifier_qualifier_list1_item",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_specifier_qualifier_list1_item),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_specifier_qualifier_list1_item,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -20623,10 +21289,11 @@ static PyMemberDef PyCAst_members_specifier_qualifier_list1 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_specifier_qualifier_list1(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_specifier_qualifier_list1(PyObject *_self);
 static int PyCAst_init_specifier_qualifier_list1(PyCAst_object_specifier_qualifier_list1 *self, PyObject *args, PyObject *kwds);
 
 
@@ -20662,6 +21329,22 @@ static PyGetSetDef PyCAst_getsetter_specifier_qualifier_list1[] =
 PyObject* PyCAst_iter_specifier_qualifier_list1(PyObject* self);
 
 
+Py_ssize_t PyCAst_length_specifier_qualifier_list1(PyObject *self);
+PyObject* PyCAst_item_specifier_qualifier_list1(PyObject *self, Py_ssize_t i);
+
+static PySequenceMethods PyCAst_sequence_specifier_qualifier_list1 =
+{
+	/*sq_length		*/	(lenfunc)PyCAst_length_specifier_qualifier_list1,
+	/*sq_concat		*/	0,
+	/*sq_repeat		*/	0,
+	/*sq_item		*/	(ssizeargfunc)PyCAst_item_specifier_qualifier_list1,
+	/*sq_slice		*/	0,
+	/*sq_ass_item		*/	0,
+	/*sq_ass_slice		*/	0,
+	/*sq_contains		*/	0,
+	/*sq_inplace_concat	*/	0,
+	/*sq_inplace_repeat	*/	0
+};
 /*---------------------------------------------------------------------------------------------*\
 
       Class Type Declaration
@@ -20675,14 +21358,15 @@ static PyTypeObject  PyCAst_type_specifier_qualifier_list1 =
 	/* tp_name--------------*/      "CAst.specifier_qualifier_list1",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_specifier_qualifier_list1),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_specifier_qualifier_list1,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+&PyCAst_sequence_specifier_qualifier_list1,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -20770,9 +21454,10 @@ static PyMemberDef PyCAst_members_specifier_qualifier_list2_iterator [] = {{NULL
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_specifier_qualifier_list2_iterator(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_specifier_qualifier_list2_iterator(PyObject *_self);
 
 
 
@@ -20818,14 +21503,15 @@ static PyTypeObject  PyCAst_type_specifier_qualifier_list2_iterator =
 	/* tp_name--------------*/      "CAst.specifier_qualifier_list2_iterator",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_specifier_qualifier_list2_iterator),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_specifier_qualifier_list2_iterator,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -20911,9 +21597,10 @@ static PyMemberDef PyCAst_members_specifier_qualifier_list2_item [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_specifier_qualifier_list2_item(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_specifier_qualifier_list2_item(PyObject *_self);
 
 
 
@@ -20962,14 +21649,15 @@ static PyTypeObject  PyCAst_type_specifier_qualifier_list2_item =
 	/* tp_name--------------*/      "CAst.specifier_qualifier_list2_item",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_specifier_qualifier_list2_item),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_specifier_qualifier_list2_item,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -21055,10 +21743,11 @@ static PyMemberDef PyCAst_members_specifier_qualifier_list2 [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_specifier_qualifier_list2(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_specifier_qualifier_list2(PyObject *_self);
 static int PyCAst_init_specifier_qualifier_list2(PyCAst_object_specifier_qualifier_list2 *self, PyObject *args, PyObject *kwds);
 
 
@@ -21094,6 +21783,22 @@ static PyGetSetDef PyCAst_getsetter_specifier_qualifier_list2[] =
 PyObject* PyCAst_iter_specifier_qualifier_list2(PyObject* self);
 
 
+Py_ssize_t PyCAst_length_specifier_qualifier_list2(PyObject *self);
+PyObject* PyCAst_item_specifier_qualifier_list2(PyObject *self, Py_ssize_t i);
+
+static PySequenceMethods PyCAst_sequence_specifier_qualifier_list2 =
+{
+	/*sq_length		*/	(lenfunc)PyCAst_length_specifier_qualifier_list2,
+	/*sq_concat		*/	0,
+	/*sq_repeat		*/	0,
+	/*sq_item		*/	(ssizeargfunc)PyCAst_item_specifier_qualifier_list2,
+	/*sq_slice		*/	0,
+	/*sq_ass_item		*/	0,
+	/*sq_ass_slice		*/	0,
+	/*sq_contains		*/	0,
+	/*sq_inplace_concat	*/	0,
+	/*sq_inplace_repeat	*/	0
+};
 /*---------------------------------------------------------------------------------------------*\
 
       Class Type Declaration
@@ -21107,14 +21812,15 @@ static PyTypeObject  PyCAst_type_specifier_qualifier_list2 =
 	/* tp_name--------------*/      "CAst.specifier_qualifier_list2",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_specifier_qualifier_list2),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_specifier_qualifier_list2,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+&PyCAst_sequence_specifier_qualifier_list2,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -21202,9 +21908,10 @@ static PyMemberDef PyCAst_members_translation_unit_iterator [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_translation_unit_iterator(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_translation_unit_iterator(PyObject *_self);
 
 
 
@@ -21250,14 +21957,15 @@ static PyTypeObject  PyCAst_type_translation_unit_iterator =
 	/* tp_name--------------*/      "CAst.translation_unit_iterator",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_translation_unit_iterator),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_translation_unit_iterator,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -21343,9 +22051,10 @@ static PyMemberDef PyCAst_members_translation_unit_item [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_translation_unit_item(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_translation_unit_item(PyObject *_self);
 
 
 
@@ -21394,14 +22103,15 @@ static PyTypeObject  PyCAst_type_translation_unit_item =
 	/* tp_name--------------*/      "CAst.translation_unit_item",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_translation_unit_item),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_translation_unit_item,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -21487,10 +22197,11 @@ static PyMemberDef PyCAst_members_translation_unit [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_translation_unit(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_translation_unit(PyObject *_self);
 static int PyCAst_init_translation_unit(PyCAst_object_translation_unit *self, PyObject *args, PyObject *kwds);
 
 
@@ -21526,6 +22237,22 @@ static PyGetSetDef PyCAst_getsetter_translation_unit[] =
 PyObject* PyCAst_iter_translation_unit(PyObject* self);
 
 
+Py_ssize_t PyCAst_length_translation_unit(PyObject *self);
+PyObject* PyCAst_item_translation_unit(PyObject *self, Py_ssize_t i);
+
+static PySequenceMethods PyCAst_sequence_translation_unit =
+{
+	/*sq_length		*/	(lenfunc)PyCAst_length_translation_unit,
+	/*sq_concat		*/	0,
+	/*sq_repeat		*/	0,
+	/*sq_item		*/	(ssizeargfunc)PyCAst_item_translation_unit,
+	/*sq_slice		*/	0,
+	/*sq_ass_item		*/	0,
+	/*sq_ass_slice		*/	0,
+	/*sq_contains		*/	0,
+	/*sq_inplace_concat	*/	0,
+	/*sq_inplace_repeat	*/	0
+};
 /*---------------------------------------------------------------------------------------------*\
 
       Class Type Declaration
@@ -21539,14 +22266,15 @@ static PyTypeObject  PyCAst_type_translation_unit =
 	/* tp_name--------------*/      "CAst.translation_unit",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_translation_unit),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_translation_unit,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+&PyCAst_sequence_translation_unit,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -21632,10 +22360,11 @@ static PyMemberDef PyCAst_members_constant_expression [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_constant_expression(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_constant_expression(PyObject *_self);
 static int PyCAst_init_constant_expression(PyCAst_object_constant_expression *self, PyObject *args, PyObject *kwds);
 
 
@@ -21685,14 +22414,15 @@ static PyTypeObject  PyCAst_type_constant_expression =
 	/* tp_name--------------*/      "CAst.constant_expression",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_constant_expression),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_constant_expression,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -21780,9 +22510,10 @@ static PyMemberDef PyCAst_members_initializer_list_iterator [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_initializer_list_iterator(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_initializer_list_iterator(PyObject *_self);
 
 
 
@@ -21828,14 +22559,15 @@ static PyTypeObject  PyCAst_type_initializer_list_iterator =
 	/* tp_name--------------*/      "CAst.initializer_list_iterator",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_initializer_list_iterator),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_initializer_list_iterator,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -21921,9 +22653,10 @@ static PyMemberDef PyCAst_members_initializer_list_item [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_initializer_list_item(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_initializer_list_item(PyObject *_self);
 
 
 
@@ -21972,14 +22705,15 @@ static PyTypeObject  PyCAst_type_initializer_list_item =
 	/* tp_name--------------*/      "CAst.initializer_list_item",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_initializer_list_item),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_initializer_list_item,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -22065,10 +22799,11 @@ static PyMemberDef PyCAst_members_initializer_list [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_initializer_list(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_initializer_list(PyObject *_self);
 static int PyCAst_init_initializer_list(PyCAst_object_initializer_list *self, PyObject *args, PyObject *kwds);
 
 
@@ -22104,6 +22839,22 @@ static PyGetSetDef PyCAst_getsetter_initializer_list[] =
 PyObject* PyCAst_iter_initializer_list(PyObject* self);
 
 
+Py_ssize_t PyCAst_length_initializer_list(PyObject *self);
+PyObject* PyCAst_item_initializer_list(PyObject *self, Py_ssize_t i);
+
+static PySequenceMethods PyCAst_sequence_initializer_list =
+{
+	/*sq_length		*/	(lenfunc)PyCAst_length_initializer_list,
+	/*sq_concat		*/	0,
+	/*sq_repeat		*/	0,
+	/*sq_item		*/	(ssizeargfunc)PyCAst_item_initializer_list,
+	/*sq_slice		*/	0,
+	/*sq_ass_item		*/	0,
+	/*sq_ass_slice		*/	0,
+	/*sq_contains		*/	0,
+	/*sq_inplace_concat	*/	0,
+	/*sq_inplace_repeat	*/	0
+};
 /*---------------------------------------------------------------------------------------------*\
 
       Class Type Declaration
@@ -22117,14 +22868,15 @@ static PyTypeObject  PyCAst_type_initializer_list =
 	/* tp_name--------------*/      "CAst.initializer_list",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_initializer_list),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_initializer_list,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+&PyCAst_sequence_initializer_list,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -22212,9 +22964,10 @@ static PyMemberDef PyCAst_members_statement_list_iterator [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_statement_list_iterator(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_statement_list_iterator(PyObject *_self);
 
 
 
@@ -22260,14 +23013,15 @@ static PyTypeObject  PyCAst_type_statement_list_iterator =
 	/* tp_name--------------*/      "CAst.statement_list_iterator",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_statement_list_iterator),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_statement_list_iterator,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -22353,9 +23107,10 @@ static PyMemberDef PyCAst_members_statement_list_item [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_statement_list_item(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_statement_list_item(PyObject *_self);
 
 
 
@@ -22404,14 +23159,15 @@ static PyTypeObject  PyCAst_type_statement_list_item =
 	/* tp_name--------------*/      "CAst.statement_list_item",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_statement_list_item),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_statement_list_item,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -22497,10 +23253,11 @@ static PyMemberDef PyCAst_members_statement_list [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_statement_list(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_statement_list(PyObject *_self);
 static int PyCAst_init_statement_list(PyCAst_object_statement_list *self, PyObject *args, PyObject *kwds);
 
 
@@ -22536,6 +23293,22 @@ static PyGetSetDef PyCAst_getsetter_statement_list[] =
 PyObject* PyCAst_iter_statement_list(PyObject* self);
 
 
+Py_ssize_t PyCAst_length_statement_list(PyObject *self);
+PyObject* PyCAst_item_statement_list(PyObject *self, Py_ssize_t i);
+
+static PySequenceMethods PyCAst_sequence_statement_list =
+{
+	/*sq_length		*/	(lenfunc)PyCAst_length_statement_list,
+	/*sq_concat		*/	0,
+	/*sq_repeat		*/	0,
+	/*sq_item		*/	(ssizeargfunc)PyCAst_item_statement_list,
+	/*sq_slice		*/	0,
+	/*sq_ass_item		*/	0,
+	/*sq_ass_slice		*/	0,
+	/*sq_contains		*/	0,
+	/*sq_inplace_concat	*/	0,
+	/*sq_inplace_repeat	*/	0
+};
 /*---------------------------------------------------------------------------------------------*\
 
       Class Type Declaration
@@ -22549,14 +23322,15 @@ static PyTypeObject  PyCAst_type_statement_list =
 	/* tp_name--------------*/      "CAst.statement_list",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_statement_list),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_statement_list,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+&PyCAst_sequence_statement_list,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -22644,9 +23418,10 @@ static PyMemberDef PyCAst_members_expression_iterator [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_expression_iterator(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_expression_iterator(PyObject *_self);
 
 
 
@@ -22692,14 +23467,15 @@ static PyTypeObject  PyCAst_type_expression_iterator =
 	/* tp_name--------------*/      "CAst.expression_iterator",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_expression_iterator),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_expression_iterator,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -22785,9 +23561,10 @@ static PyMemberDef PyCAst_members_expression_item [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New 
+      Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_expression_item(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_expression_item(PyObject *_self);
 
 
 
@@ -22836,14 +23613,15 @@ static PyTypeObject  PyCAst_type_expression_item =
 	/* tp_name--------------*/      "CAst.expression_item",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_expression_item),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_expression_item,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -22929,10 +23707,11 @@ static PyMemberDef PyCAst_members_expression [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_expression(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_expression(PyObject *_self);
 static int PyCAst_init_expression(PyCAst_object_expression *self, PyObject *args, PyObject *kwds);
 
 
@@ -22968,6 +23747,22 @@ static PyGetSetDef PyCAst_getsetter_expression[] =
 PyObject* PyCAst_iter_expression(PyObject* self);
 
 
+Py_ssize_t PyCAst_length_expression(PyObject *self);
+PyObject* PyCAst_item_expression(PyObject *self, Py_ssize_t i);
+
+static PySequenceMethods PyCAst_sequence_expression =
+{
+	/*sq_length		*/	(lenfunc)PyCAst_length_expression,
+	/*sq_concat		*/	0,
+	/*sq_repeat		*/	0,
+	/*sq_item		*/	(ssizeargfunc)PyCAst_item_expression,
+	/*sq_slice		*/	0,
+	/*sq_ass_item		*/	0,
+	/*sq_ass_slice		*/	0,
+	/*sq_contains		*/	0,
+	/*sq_inplace_concat	*/	0,
+	/*sq_inplace_repeat	*/	0
+};
 /*---------------------------------------------------------------------------------------------*\
 
       Class Type Declaration
@@ -22981,14 +23776,15 @@ static PyTypeObject  PyCAst_type_expression =
 	/* tp_name--------------*/      "CAst.expression",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_expression),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_expression,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+&PyCAst_sequence_expression,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -23074,10 +23870,11 @@ static PyMemberDef PyCAst_members_declarator [] = {{NULL}};
 
 /*---------------------------------------------------------------------------------------------*\
 
-      Class New and Init
+      Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject * PyCAst_new_declarator(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_declarator(PyObject *_self);
 static int PyCAst_init_declarator(PyCAst_object_declarator *self, PyObject *args, PyObject *kwds);
 
 
@@ -23129,14 +23926,15 @@ static PyTypeObject  PyCAst_type_declarator =
 	/* tp_name--------------*/      "CAst.declarator",
 	/* tp_basicsize---------*/      sizeof(PyCAst_object_declarator),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_declarator,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      
+0,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,

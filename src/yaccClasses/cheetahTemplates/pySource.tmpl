@@ -18,10 +18,18 @@
 
 static PyObject * PyCAst_new_${className}(PyTypeObject *type, PyObject *args, PyObject *kwds)
 {
-    printf("\033[41mnew PyCAst::${className}\033[0m\n");
+    printf("\033[32mnew PyCAst::${className}\033[0m\n");
     PyCAst_object_${className} *self;
     self = (PyCAst_object_${className}*)type->tp_alloc(type, 0);
     return (PyObject *)self;
+}
+
+static void PyCAst_delete_${className}(PyObject *_self)
+{
+    printf("\033[31mDeleting PyCAst::${className}\033[0m\n");
+    PyCAst_object_${className} *self=(PyCAst_object_${className}*)_self;
+    delete self->_p_cast_object;
+    self->_p_cast_object=0;
 }
 #if "HaveInit" in $flags:
 static int PyCAst_init_${className}(PyCAst_object_${className} *self, PyObject *args, PyObject *kwds)
@@ -30,6 +38,7 @@ static int PyCAst_init_${className}(PyCAst_object_${className} *self, PyObject *
     return 0;
 }
 #end if
+
 
 
 
@@ -93,10 +102,14 @@ static PyObject *PyCAst_getter_${cls.className}_${n.replace("_p_","")}(PyObject 
 {
 	PyCAst_object_${cls.className} *self=(PyCAst_object_${cls.className}*)(_self);
 	CAst::${cls.className} *_c_obj=self->_p_cast_object;
-	CAst::$t *_p_parameter=const_cast<CAst::$t*>(_c_obj->get${n}());
+	CAst::$t *_p_parameter=_c_obj->get${n}();
+	if(!_p_parameter)
+	{
+		Py_RETURN_NONE;
+	}
 	#if ($t=="Token"):
 	PyCAst_object_${t} *pyObj=(PyCAst_object_${t}*)PyCAst_type_${t}.tp_new(&PyCAst_type_${t},NULL,NULL);
-	pyObj->_p_cast_object=_p_parameter;
+	pyObj->_p_cast_object=new CAst::GenericToken(*(CAst::GenericToken*)(_p_parameter));
 	return (PyObject*)pyObj;
 	#else:
 		#set rule=$ruleMap[$t]
@@ -106,7 +119,7 @@ static PyObject *PyCAst_getter_${cls.className}_${n.replace("_p_","")}(PyObject 
 	{
 		#set $tt=$c.className
 		PyCAst_object_${tt} *pyObj=(PyCAst_object_${tt}*)PyCAst_type_${tt}.tp_new(&PyCAst_type_${tt},NULL,NULL);
-		pyObj->_p_cast_object=dynamic_cast<CAst::${tt}*>(_p_parameter);
+		pyObj->_p_cast_object=new CAst::${tt}(*dynamic_cast<CAst::${tt}*>(_p_parameter));
 		return (PyObject*)pyObj;
 	}
 		#end for
@@ -138,6 +151,25 @@ $classCode($itercls)
 $classCode($itemcls,"HaveAst")
 $classCode($cls,"HaveInit","HaveAst","HaveIter")
 
+Py_ssize_t PyCAst_length_${cls.className}(PyObject *_self)
+{
+	PyCAst_object_${cls.className} *self=(PyCAst_object_${cls.className}*)_self;
+	CAst::${cls.className} *obj=self->_p_cast_object;
+	return obj->size();
+}
+PyObject* PyCAst_item_${cls.className}(PyObject *_self, Py_ssize_t i)
+{
+	PyCAst_object_${cls.className} *self=(PyCAst_object_${cls.className}*)_self;
+	CAst::${cls.className} *obj=self->_p_cast_object;
+	if(i<0 || i>obj->size())
+	{
+		Py_RETURN_NONE;
+	}
+	PyCAst_object_${cls.className}_item *ret=(PyCAst_object_${cls.className}_item*)PyCAst_type_${cls.className}_item.tp_new(&PyCAst_type_${cls.className}_item,NULL,NULL);
+	ret->_p_cast_object=new CAst::${cls.className}_item((*obj)[i]);
+	return (PyObject*)ret;
+}
+
 
 PyObject* PyCAst_iter_${cls.className}(PyObject* _self)
 {
@@ -160,7 +192,7 @@ PyObject* PyCAst_iter_next_${cls.className}_iterator(PyObject* _self)
 	}
 	PyCAst_object_${cls.className}_item *ret=(PyCAst_object_${cls.className}_item*)PyCAst_type_${cls.className}_item.tp_new(&PyCAst_type_${cls.className}_item,NULL,NULL);
 	
-	ret->_p_cast_object=&(*(*iter));
+	ret->_p_cast_object=new CAst::${cls.className}_item(*(*iter));
 	(*iter)++;
 	return (PyObject*)ret;
 }
@@ -178,7 +210,7 @@ static PyObject *PyCAst_getter_${cls.className}_item_${n.replace("_p_","")}(PyOb
 	CAst::$t *_p_parameter=const_cast<CAst::$t*>(_c_obj->get${n}());
 	#if ($t=="Token"):
 	PyCAst_object_${t} *pyObj=(PyCAst_object_${t}*)PyCAst_type_${t}.tp_new(&PyCAst_type_${t},NULL,NULL);
-	pyObj->_p_cast_object=_p_parameter;
+	pyObj->_p_cast_object=new CAst::GenericToken(*(CAst::GenericToken*)(_p_parameter));
 	return (PyObject*)pyObj;
 	#else:
 		#set rule=$ruleMap[$t]
@@ -188,7 +220,7 @@ static PyObject *PyCAst_getter_${cls.className}_item_${n.replace("_p_","")}(PyOb
 	{
 		#set $tt=$c.className
 		PyCAst_object_${tt} *pyObj=(PyCAst_object_${tt}*)PyCAst_type_${tt}.tp_new(&PyCAst_type_${tt},NULL,NULL);
-		pyObj->_p_cast_object=dynamic_cast<CAst::${tt}*>(_p_parameter);
+		pyObj->_p_cast_object=new CAst::${tt}(*dynamic_cast<CAst::${tt}*>(_p_parameter));
 		return (PyObject*)pyObj;
 	}
 		#end for
@@ -256,28 +288,6 @@ PyMODINIT_FUNC
 initPyCAst(void) 
 {
 	PyObject* m;
-###for $rn in $ruleMap:
-##	#set $rule=$ruleMap[$rn]
-##	#set $constructors=[ $p.constructor for $p in $rule.patterns if $p.constructor.parent is None ]
-##	#for $c in $constructors:
-##	#set $className=$c.classCoder.className
-##	if (PyType_Ready(&PyCAst_type_${className}) < 0) {printf("Initialization of PyCAst_type_${className}s FAILED");return;}
-##	#end for
-###end for
-##
-##
-##	m = Py_InitModule3("PyCAst", module_methods,"The PyCAst Module");
-##	if (m == NULL) return;
-##
-###for $rn in $ruleMap:
-##	#set $rule=$ruleMap[$rn]
-##	#set $constructors=[ $p.constructor for $p in $rule.patterns if $p.constructor.parent is None ]
-##	#for $c in $constructors:
-##	#set $className=$c.classCoder.className
-##	Py_INCREF(&PyCAst_type_${className});
-##	PyModule_AddObject(m,"${className}", (PyObject *)&PyCAst_type_${className});
-##	#end for
-###end for
 
 #for $className in $typeNames:
 	if (PyType_Ready(&PyCAst_type_${className}) < 0) {printf("Initialization of PyCAst_type_${className}s FAILED");return;}

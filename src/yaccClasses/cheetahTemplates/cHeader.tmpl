@@ -68,8 +68,9 @@ class $cls.className
 #end for
 #end if
 {
-	private:
-		std::string _s_matchedPattern;
+private:
+	int *_refCount; 
+	std::string _s_matchedPattern;
 #for $t,$n,$p,$v,$i,$v1 in $cls.parameters:
 #set spc=" "*(60-(len($n+$t)))
 #set rp=repr($p)
@@ -83,6 +84,7 @@ public:
 #echo ",\n".join([ "\t\t\t\t%s *_arg_%s"%(t,n)  for t,n,p,v,i,v1 in $cls.parameters])
 			
 		);
+	${cls.className}(const $cls.className& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "$cls.className"
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_$cls.className.upper()
 	virtual std::string pattern()const;							//returns the pattern, here "$cls.pattern"
@@ -181,10 +183,10 @@ class $cls.className
 #end if
 {
 private:
-	typedef std::list<${cls.className}_item> ItemsListType;
+	typedef std::deque<${cls.className}_item> ItemsListType;
 	typedef ItemsListType::iterator ItemsListIter;
 	typedef ItemsListType::const_iterator CItemsListIter;
-	std::list<${cls.className}_item> _items;
+	ItemsListType _items;
 public:
 	$cls.className
 		(
@@ -208,12 +210,14 @@ public:
 	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
 	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
 	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
+	virtual int size()const{return _items.size();}						//returns the size of the container
+	virtual ${cls.className}_item& operator[](int i){return _items[i];}
 	virtual ~$cls.className ();
 
 };
 
-typedef std::list<${cls.className}_item>::iterator ${cls.className}_iterator;
-typedef std::list<${cls.className}_item>::const_iterator ${cls.className}_const_iterator;
+typedef std::deque<${cls.className}_item>::iterator ${cls.className}_iterator;
+typedef std::deque<${cls.className}_item>::const_iterator ${cls.className}_const_iterator;
 
 #end def
 
@@ -232,6 +236,7 @@ typedef std::list<${cls.className}_item>::const_iterator ${cls.className}_const_
 \#include <string>
 \#include <cstring>
 \#include <stdio.h>
+\#include <deque>
 \#include <list>
 \#include <iostream>
 \#include <sstream>
@@ -385,13 +390,14 @@ public:
 		_txt(txt)
 	{
 	}
-	
+	GenericToken(const GenericToken& other):
+		_txt(other._txt)
+	{}
 	virtual bool isList()const			{return false;}
 	virtual Properties getProperties()const		{Properties p(name());p.setTokValue(_txt);return p;}
 	virtual PropertiesList getPropertiesList()const	{return PropertiesList(name());}
 	virtual ~GenericToken()
-	{
-	}
+	{}
 };
 inline Token* GetToken(int i,std::string txt)
 {
