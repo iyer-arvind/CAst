@@ -66,7 +66,22 @@ static PyObject *PyCAst_getter_${className}_ast(PyObject *_self)
 
 
 }
+#end if
 
+#if "HaveCode" in $flags:
+static PyObject *PyCAst_getter_${className}_code(PyObject *_self)
+{
+	PyCAst_object_${className} *self=(PyCAst_object_${className}*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 #end if
 #end def
 
@@ -81,7 +96,7 @@ static PyObject *PyCAst_getter_${className}_ast(PyObject *_self)
 #************************************************************************************************#
 
 #def tokenClassCode($cls)
-$classCode($cls,"HaveInit","HaveAst")
+$classCode($cls,"HaveInit","HaveAst","HaveCode")
 #end def 
 
 #************************************************************************************************#
@@ -95,7 +110,7 @@ $classCode($cls,"HaveInit","HaveAst")
 
 
 #def simpleClassCode($cls)
-$classCode($cls,"HaveInit","HaveAst")
+$classCode($cls,"HaveInit","HaveAst","HaveCode")
 
 #for $t,$n,$p,$v,$i,$v1 in $cls.parameters:
 static PyObject *PyCAst_getter_${cls.className}_${n.replace("_p_","")}(PyObject *_self)
@@ -148,8 +163,8 @@ static PyObject *PyCAst_getter_${cls.className}_${n.replace("_p_","")}(PyObject 
 $classCode($itercls)
 
 #set itemcls={"className":$cls.className+"_item"}
-$classCode($itemcls,"HaveAst")
-$classCode($cls,"HaveInit","HaveAst","HaveIter")
+$classCode($itemcls,"HaveAst","HaveCode")
+$classCode($cls,"HaveInit","HaveAst","HaveCode","HaveIter")
 
 Py_ssize_t PyCAst_length_${cls.className}(PyObject *_self)
 {

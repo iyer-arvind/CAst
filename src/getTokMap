@@ -1,0 +1,45 @@
+#!/usr/bin/python
+
+import re
+import sys
+
+
+fileName=sys.argv[1]
+
+def getToken(st):
+	ret=re.compile(".*return\(?(.*)\s*\);\s*}")
+	match=ret.match(st)
+	if(match):
+		return match.groups()[0]
+	else:
+		return None
+c=re.compile("\"([^\"]*)\".*")
+flag=True
+tokMap={}
+with open(fileName) as fh:
+	for l in fh:
+		l=l.strip()
+		if(l=="%%"):
+			flag= not flag
+			continue
+		if flag : continue;
+		if(not len(l)):
+			continue
+		tok=getToken(l)
+		if(not tok):continue
+		txt=l.split('{ count')[0].strip()
+		if(txt.startswith("\"")):
+			txt=txt[1:-1]
+			typ="txt"
+		else:
+			typ="pat"
+		if(tok in tokMap):
+			if(type(tokMap[tok]) is list):
+				tokMap[tok].append((typ,txt))
+			else:
+				t=[tokMap[tok],(typ,txt)]
+				tokMap[tok]=t
+		else:
+			tokMap[tok]=(typ,txt)
+print tokMap
+

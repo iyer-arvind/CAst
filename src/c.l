@@ -56,7 +56,7 @@ std::list<std::string> toks;
 "volatile"		{ count(); return(VOLATILE); }
 "while"			{ count(); return(WHILE); }
 
-{L}({L}|{D})*		{ count(); return(check_type()); }
+{L}({L}|{D})*		{ count(); return(IDENTIFIER); }
 
 0[xX]{H}+{IS}?		{ count(); return(CONSTANT); }
 0{D}+{IS}?		{ count(); return(CONSTANT); }
@@ -177,7 +177,7 @@ void count()
 		for(register int i=0;i<strlen(yytext);i++)
 		{
 			if(yytext[i]=='\"')
-				s+=std::string("\\\"");
+				s+=std::string("\"");
 			else
 				s=s+yytext[i];
 		}

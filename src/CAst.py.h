@@ -89,6 +89,8 @@ static void       PyCAst_delete_Token(PyObject *_self);
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_Token_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_Token_code(PyObject *_self);
+
 
 
 
@@ -97,6 +99,7 @@ static PyObject *PyCAst_getter_Token_ast(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_Token[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_Token_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_Token_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	
 	NULL
 };
@@ -236,6 +239,8 @@ static int PyCAst_init_storage_class_specifier(PyCAst_object_storage_class_speci
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_storage_class_specifier_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_storage_class_specifier_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_storage_class_specifier_token1(PyObject *_self);
 
 
@@ -245,6 +250,7 @@ static PyObject *PyCAst_getter_storage_class_specifier_token1(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_storage_class_specifier[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_storage_class_specifier_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_storage_class_specifier_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"token1", (getter)PyCAst_getter_storage_class_specifier_token1,NULL,(char*)"Parameter token1", NULL},
 
 	NULL
@@ -384,6 +390,8 @@ static int PyCAst_init_expression_statement(PyCAst_object_expression_statement *
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_expression_statement_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_expression_statement_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_expression_statement_expression(PyObject *_self);
 
 
@@ -393,6 +401,7 @@ static PyObject *PyCAst_getter_expression_statement_expression(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_expression_statement[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_expression_statement_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_expression_statement_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"expression", (getter)PyCAst_getter_expression_statement_expression,NULL,(char*)"Parameter expression", NULL},
 
 	NULL
@@ -532,6 +541,8 @@ static int PyCAst_init_type_name(PyCAst_object_type_name *self, PyObject *args, 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_type_name_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_type_name_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_type_name_specifier_qualifier_list(PyObject *_self);
 static PyObject *PyCAst_getter_type_name_abstract_declarator(PyObject *_self);
 
@@ -542,6 +553,7 @@ static PyObject *PyCAst_getter_type_name_abstract_declarator(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_type_name[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_type_name_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_type_name_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"specifier_qualifier_list", (getter)PyCAst_getter_type_name_specifier_qualifier_list,NULL,(char*)"Parameter specifier_qualifier_list", NULL},
 	{(char*)"abstract_declarator", (getter)PyCAst_getter_type_name_abstract_declarator,NULL,(char*)"Parameter abstract_declarator", NULL},
 
@@ -682,6 +694,8 @@ static int PyCAst_init_unary_expression1(PyCAst_object_unary_expression1 *self, 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_unary_expression1_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_unary_expression1_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_unary_expression1_type_name(PyObject *_self);
 
 
@@ -691,6 +705,7 @@ static PyObject *PyCAst_getter_unary_expression1_type_name(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_unary_expression1[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_unary_expression1_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_unary_expression1_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"type_name", (getter)PyCAst_getter_unary_expression1_type_name,NULL,(char*)"Parameter type_name", NULL},
 
 	NULL
@@ -830,6 +845,8 @@ static int PyCAst_init_unary_expression2(PyCAst_object_unary_expression2 *self, 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_unary_expression2_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_unary_expression2_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_unary_expression2_token1(PyObject *_self);
 static PyObject *PyCAst_getter_unary_expression2_unary_expression(PyObject *_self);
 
@@ -840,6 +857,7 @@ static PyObject *PyCAst_getter_unary_expression2_unary_expression(PyObject *_sel
 static PyGetSetDef PyCAst_getsetter_unary_expression2[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_unary_expression2_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_unary_expression2_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"token1", (getter)PyCAst_getter_unary_expression2_token1,NULL,(char*)"Parameter token1", NULL},
 	{(char*)"unary_expression", (getter)PyCAst_getter_unary_expression2_unary_expression,NULL,(char*)"Parameter unary_expression", NULL},
 
@@ -980,6 +998,8 @@ static int PyCAst_init_unary_expression3(PyCAst_object_unary_expression3 *self, 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_unary_expression3_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_unary_expression3_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_unary_expression3_unary_operator(PyObject *_self);
 static PyObject *PyCAst_getter_unary_expression3_cast_expression(PyObject *_self);
 
@@ -990,6 +1010,7 @@ static PyObject *PyCAst_getter_unary_expression3_cast_expression(PyObject *_self
 static PyGetSetDef PyCAst_getsetter_unary_expression3[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_unary_expression3_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_unary_expression3_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"unary_operator", (getter)PyCAst_getter_unary_expression3_unary_operator,NULL,(char*)"Parameter unary_operator", NULL},
 	{(char*)"cast_expression", (getter)PyCAst_getter_unary_expression3_cast_expression,NULL,(char*)"Parameter cast_expression", NULL},
 
@@ -1130,6 +1151,8 @@ static int PyCAst_init_unary_expression4(PyCAst_object_unary_expression4 *self, 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_unary_expression4_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_unary_expression4_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_unary_expression4_postfix_expression(PyObject *_self);
 
 
@@ -1139,6 +1162,7 @@ static PyObject *PyCAst_getter_unary_expression4_postfix_expression(PyObject *_s
 static PyGetSetDef PyCAst_getsetter_unary_expression4[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_unary_expression4_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_unary_expression4_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"postfix_expression", (getter)PyCAst_getter_unary_expression4_postfix_expression,NULL,(char*)"Parameter postfix_expression", NULL},
 
 	NULL
@@ -1276,6 +1300,7 @@ static void       PyCAst_delete_conditional_expression_iterator(PyObject *_self)
       Class Attribute getters and setters
 
 \*---------------------------------------------------------------------------------------------*/
+
 
 
 
@@ -1421,6 +1446,8 @@ static void       PyCAst_delete_conditional_expression_item(PyObject *_self);
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_conditional_expression_item_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_conditional_expression_item_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_conditional_expression_item_logical_or_expression(PyObject *_self);
 static PyObject *PyCAst_getter_conditional_expression_item_expression(PyObject *_self);
 
@@ -1431,6 +1458,7 @@ static PyObject *PyCAst_getter_conditional_expression_item_expression(PyObject *
 static PyGetSetDef PyCAst_getsetter_conditional_expression_item[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_conditional_expression_item_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_conditional_expression_item_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	{(char*)"logical_or_expression", (getter)PyCAst_getter_conditional_expression_item_logical_or_expression,NULL,(char*)"Parameter logical_or_expression", NULL},
 {(char*)"expression", (getter)PyCAst_getter_conditional_expression_item_expression,NULL,(char*)"Parameter expression", NULL},
 
@@ -1571,6 +1599,8 @@ static int PyCAst_init_conditional_expression(PyCAst_object_conditional_expressi
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_conditional_expression_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_conditional_expression_code(PyObject *_self);
+
 
 
 
@@ -1579,6 +1609,7 @@ static PyObject *PyCAst_getter_conditional_expression_ast(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_conditional_expression[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_conditional_expression_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_conditional_expression_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	
 	NULL
 };
@@ -1734,6 +1765,8 @@ static int PyCAst_init_struct_or_union_specifier(PyCAst_object_struct_or_union_s
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_struct_or_union_specifier_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_struct_or_union_specifier_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_struct_or_union_specifier_struct_or_union(PyObject *_self);
 static PyObject *PyCAst_getter_struct_or_union_specifier_token1(PyObject *_self);
 static PyObject *PyCAst_getter_struct_or_union_specifier_token2(PyObject *_self);
@@ -1747,6 +1780,7 @@ static PyObject *PyCAst_getter_struct_or_union_specifier_token3(PyObject *_self)
 static PyGetSetDef PyCAst_getsetter_struct_or_union_specifier[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_struct_or_union_specifier_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_struct_or_union_specifier_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"struct_or_union", (getter)PyCAst_getter_struct_or_union_specifier_struct_or_union,NULL,(char*)"Parameter struct_or_union", NULL},
 	{(char*)"token1", (getter)PyCAst_getter_struct_or_union_specifier_token1,NULL,(char*)"Parameter token1", NULL},
 	{(char*)"token2", (getter)PyCAst_getter_struct_or_union_specifier_token2,NULL,(char*)"Parameter token2", NULL},
@@ -1894,6 +1928,7 @@ static void       PyCAst_delete_exclusive_or_expression_iterator(PyObject *_self
 
 
 
+
 static PyGetSetDef PyCAst_getsetter_exclusive_or_expression_iterator[] = 
 {
 	
@@ -2033,6 +2068,8 @@ static void       PyCAst_delete_exclusive_or_expression_item(PyObject *_self);
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_exclusive_or_expression_item_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_exclusive_or_expression_item_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_exclusive_or_expression_item_and_expression(PyObject *_self);
 
 
@@ -2042,6 +2079,7 @@ static PyObject *PyCAst_getter_exclusive_or_expression_item_and_expression(PyObj
 static PyGetSetDef PyCAst_getsetter_exclusive_or_expression_item[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_exclusive_or_expression_item_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_exclusive_or_expression_item_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	{(char*)"and_expression", (getter)PyCAst_getter_exclusive_or_expression_item_and_expression,NULL,(char*)"Parameter and_expression", NULL},
 
 	NULL
@@ -2181,6 +2219,8 @@ static int PyCAst_init_exclusive_or_expression(PyCAst_object_exclusive_or_expres
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_exclusive_or_expression_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_exclusive_or_expression_code(PyObject *_self);
+
 
 
 
@@ -2189,6 +2229,7 @@ static PyObject *PyCAst_getter_exclusive_or_expression_ast(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_exclusive_or_expression[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_exclusive_or_expression_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_exclusive_or_expression_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	
 	NULL
 };
@@ -2344,6 +2385,8 @@ static int PyCAst_init_initializer1(PyCAst_object_initializer1 *self, PyObject *
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_initializer1_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_initializer1_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_initializer1_initializer_list(PyObject *_self);
 static PyObject *PyCAst_getter_initializer1_token1(PyObject *_self);
 
@@ -2354,6 +2397,7 @@ static PyObject *PyCAst_getter_initializer1_token1(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_initializer1[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_initializer1_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_initializer1_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"initializer_list", (getter)PyCAst_getter_initializer1_initializer_list,NULL,(char*)"Parameter initializer_list", NULL},
 	{(char*)"token1", (getter)PyCAst_getter_initializer1_token1,NULL,(char*)"Parameter token1", NULL},
 
@@ -2494,6 +2538,8 @@ static int PyCAst_init_initializer2(PyCAst_object_initializer2 *self, PyObject *
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_initializer2_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_initializer2_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_initializer2_assignment_expression(PyObject *_self);
 
 
@@ -2503,6 +2549,7 @@ static PyObject *PyCAst_getter_initializer2_assignment_expression(PyObject *_sel
 static PyGetSetDef PyCAst_getsetter_initializer2[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_initializer2_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_initializer2_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"assignment_expression", (getter)PyCAst_getter_initializer2_assignment_expression,NULL,(char*)"Parameter assignment_expression", NULL},
 
 	NULL
@@ -2640,6 +2687,7 @@ static void       PyCAst_delete_struct_declaration_list_iterator(PyObject *_self
       Class Attribute getters and setters
 
 \*---------------------------------------------------------------------------------------------*/
+
 
 
 
@@ -2785,6 +2833,8 @@ static void       PyCAst_delete_struct_declaration_list_item(PyObject *_self);
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_struct_declaration_list_item_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_struct_declaration_list_item_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_struct_declaration_list_item_struct_declaration(PyObject *_self);
 
 
@@ -2794,6 +2844,7 @@ static PyObject *PyCAst_getter_struct_declaration_list_item_struct_declaration(P
 static PyGetSetDef PyCAst_getsetter_struct_declaration_list_item[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_struct_declaration_list_item_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_struct_declaration_list_item_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	{(char*)"struct_declaration", (getter)PyCAst_getter_struct_declaration_list_item_struct_declaration,NULL,(char*)"Parameter struct_declaration", NULL},
 
 	NULL
@@ -2933,6 +2984,8 @@ static int PyCAst_init_struct_declaration_list(PyCAst_object_struct_declaration_
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_struct_declaration_list_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_struct_declaration_list_code(PyObject *_self);
+
 
 
 
@@ -2941,6 +2994,7 @@ static PyObject *PyCAst_getter_struct_declaration_list_ast(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_struct_declaration_list[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_struct_declaration_list_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_struct_declaration_list_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	
 	NULL
 };
@@ -3096,6 +3150,8 @@ static int PyCAst_init_assignment_operator(PyCAst_object_assignment_operator *se
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_assignment_operator_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_assignment_operator_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_assignment_operator_token1(PyObject *_self);
 
 
@@ -3105,6 +3161,7 @@ static PyObject *PyCAst_getter_assignment_operator_token1(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_assignment_operator[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_assignment_operator_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_assignment_operator_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"token1", (getter)PyCAst_getter_assignment_operator_token1,NULL,(char*)"Parameter token1", NULL},
 
 	NULL
@@ -3244,6 +3301,8 @@ static int PyCAst_init_struct_declaration(PyCAst_object_struct_declaration *self
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_struct_declaration_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_struct_declaration_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_struct_declaration_specifier_qualifier_list(PyObject *_self);
 static PyObject *PyCAst_getter_struct_declaration_struct_declarator_list(PyObject *_self);
 
@@ -3254,6 +3313,7 @@ static PyObject *PyCAst_getter_struct_declaration_struct_declarator_list(PyObjec
 static PyGetSetDef PyCAst_getsetter_struct_declaration[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_struct_declaration_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_struct_declaration_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"specifier_qualifier_list", (getter)PyCAst_getter_struct_declaration_specifier_qualifier_list,NULL,(char*)"Parameter specifier_qualifier_list", NULL},
 	{(char*)"struct_declarator_list", (getter)PyCAst_getter_struct_declaration_struct_declarator_list,NULL,(char*)"Parameter struct_declarator_list", NULL},
 
@@ -3394,6 +3454,8 @@ static int PyCAst_init_abstract_declarator(PyCAst_object_abstract_declarator *se
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_abstract_declarator_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_abstract_declarator_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_abstract_declarator_pointer(PyObject *_self);
 static PyObject *PyCAst_getter_abstract_declarator_direct_abstract_declarator(PyObject *_self);
 
@@ -3404,6 +3466,7 @@ static PyObject *PyCAst_getter_abstract_declarator_direct_abstract_declarator(Py
 static PyGetSetDef PyCAst_getsetter_abstract_declarator[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_abstract_declarator_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_abstract_declarator_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"pointer", (getter)PyCAst_getter_abstract_declarator_pointer,NULL,(char*)"Parameter pointer", NULL},
 	{(char*)"direct_abstract_declarator", (getter)PyCAst_getter_abstract_declarator_direct_abstract_declarator,NULL,(char*)"Parameter direct_abstract_declarator", NULL},
 
@@ -3544,6 +3607,8 @@ static int PyCAst_init_iteration_statement1(PyCAst_object_iteration_statement1 *
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_iteration_statement1_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_iteration_statement1_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_iteration_statement1_statement(PyObject *_self);
 static PyObject *PyCAst_getter_iteration_statement1_expression(PyObject *_self);
 
@@ -3554,6 +3619,7 @@ static PyObject *PyCAst_getter_iteration_statement1_expression(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_iteration_statement1[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_iteration_statement1_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_iteration_statement1_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"statement", (getter)PyCAst_getter_iteration_statement1_statement,NULL,(char*)"Parameter statement", NULL},
 	{(char*)"expression", (getter)PyCAst_getter_iteration_statement1_expression,NULL,(char*)"Parameter expression", NULL},
 
@@ -3694,6 +3760,8 @@ static int PyCAst_init_iteration_statement2(PyCAst_object_iteration_statement2 *
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_iteration_statement2_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_iteration_statement2_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_iteration_statement2_expression_statement(PyObject *_self);
 static PyObject *PyCAst_getter_iteration_statement2_expression_statement1(PyObject *_self);
 static PyObject *PyCAst_getter_iteration_statement2_expression(PyObject *_self);
@@ -3706,6 +3774,7 @@ static PyObject *PyCAst_getter_iteration_statement2_statement(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_iteration_statement2[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_iteration_statement2_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_iteration_statement2_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"expression_statement", (getter)PyCAst_getter_iteration_statement2_expression_statement,NULL,(char*)"Parameter expression_statement", NULL},
 	{(char*)"expression_statement1", (getter)PyCAst_getter_iteration_statement2_expression_statement1,NULL,(char*)"Parameter expression_statement1", NULL},
 	{(char*)"expression", (getter)PyCAst_getter_iteration_statement2_expression,NULL,(char*)"Parameter expression", NULL},
@@ -3848,6 +3917,8 @@ static int PyCAst_init_iteration_statement3(PyCAst_object_iteration_statement3 *
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_iteration_statement3_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_iteration_statement3_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_iteration_statement3_expression(PyObject *_self);
 static PyObject *PyCAst_getter_iteration_statement3_statement(PyObject *_self);
 
@@ -3858,6 +3929,7 @@ static PyObject *PyCAst_getter_iteration_statement3_statement(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_iteration_statement3[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_iteration_statement3_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_iteration_statement3_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"expression", (getter)PyCAst_getter_iteration_statement3_expression,NULL,(char*)"Parameter expression", NULL},
 	{(char*)"statement", (getter)PyCAst_getter_iteration_statement3_statement,NULL,(char*)"Parameter statement", NULL},
 
@@ -3996,6 +4068,7 @@ static void       PyCAst_delete_additive_expression_iterator(PyObject *_self);
       Class Attribute getters and setters
 
 \*---------------------------------------------------------------------------------------------*/
+
 
 
 
@@ -4141,6 +4214,8 @@ static void       PyCAst_delete_additive_expression_item(PyObject *_self);
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_additive_expression_item_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_additive_expression_item_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_additive_expression_item_token1(PyObject *_self);
 static PyObject *PyCAst_getter_additive_expression_item_multiplicative_expression(PyObject *_self);
 
@@ -4151,6 +4226,7 @@ static PyObject *PyCAst_getter_additive_expression_item_multiplicative_expressio
 static PyGetSetDef PyCAst_getsetter_additive_expression_item[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_additive_expression_item_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_additive_expression_item_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	{(char*)"token1", (getter)PyCAst_getter_additive_expression_item_token1,NULL,(char*)"Parameter token1", NULL},
 {(char*)"multiplicative_expression", (getter)PyCAst_getter_additive_expression_item_multiplicative_expression,NULL,(char*)"Parameter multiplicative_expression", NULL},
 
@@ -4291,6 +4367,8 @@ static int PyCAst_init_additive_expression(PyCAst_object_additive_expression *se
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_additive_expression_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_additive_expression_code(PyObject *_self);
+
 
 
 
@@ -4299,6 +4377,7 @@ static PyObject *PyCAst_getter_additive_expression_ast(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_additive_expression[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_additive_expression_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_additive_expression_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	
 	NULL
 };
@@ -4454,6 +4533,8 @@ static int PyCAst_init_external_declaration1(PyCAst_object_external_declaration1
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_external_declaration1_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_external_declaration1_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_external_declaration1_function_definition(PyObject *_self);
 
 
@@ -4463,6 +4544,7 @@ static PyObject *PyCAst_getter_external_declaration1_function_definition(PyObjec
 static PyGetSetDef PyCAst_getsetter_external_declaration1[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_external_declaration1_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_external_declaration1_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"function_definition", (getter)PyCAst_getter_external_declaration1_function_definition,NULL,(char*)"Parameter function_definition", NULL},
 
 	NULL
@@ -4602,6 +4684,8 @@ static int PyCAst_init_external_declaration2(PyCAst_object_external_declaration2
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_external_declaration2_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_external_declaration2_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_external_declaration2_declaration(PyObject *_self);
 
 
@@ -4611,6 +4695,7 @@ static PyObject *PyCAst_getter_external_declaration2_declaration(PyObject *_self
 static PyGetSetDef PyCAst_getsetter_external_declaration2[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_external_declaration2_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_external_declaration2_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"declaration", (getter)PyCAst_getter_external_declaration2_declaration,NULL,(char*)"Parameter declaration", NULL},
 
 	NULL
@@ -4750,6 +4835,8 @@ static int PyCAst_init_type_specifier1(PyCAst_object_type_specifier1 *self, PyOb
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_type_specifier1_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_type_specifier1_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_type_specifier1_token1(PyObject *_self);
 
 
@@ -4759,6 +4846,7 @@ static PyObject *PyCAst_getter_type_specifier1_token1(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_type_specifier1[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_type_specifier1_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_type_specifier1_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"token1", (getter)PyCAst_getter_type_specifier1_token1,NULL,(char*)"Parameter token1", NULL},
 
 	NULL
@@ -4898,6 +4986,8 @@ static int PyCAst_init_type_specifier2(PyCAst_object_type_specifier2 *self, PyOb
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_type_specifier2_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_type_specifier2_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_type_specifier2_struct_or_union_specifier(PyObject *_self);
 
 
@@ -4907,6 +4997,7 @@ static PyObject *PyCAst_getter_type_specifier2_struct_or_union_specifier(PyObjec
 static PyGetSetDef PyCAst_getsetter_type_specifier2[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_type_specifier2_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_type_specifier2_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"struct_or_union_specifier", (getter)PyCAst_getter_type_specifier2_struct_or_union_specifier,NULL,(char*)"Parameter struct_or_union_specifier", NULL},
 
 	NULL
@@ -5046,6 +5137,8 @@ static int PyCAst_init_type_specifier3(PyCAst_object_type_specifier3 *self, PyOb
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_type_specifier3_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_type_specifier3_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_type_specifier3_enum_specifier(PyObject *_self);
 
 
@@ -5055,6 +5148,7 @@ static PyObject *PyCAst_getter_type_specifier3_enum_specifier(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_type_specifier3[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_type_specifier3_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_type_specifier3_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"enum_specifier", (getter)PyCAst_getter_type_specifier3_enum_specifier,NULL,(char*)"Parameter enum_specifier", NULL},
 
 	NULL
@@ -5194,6 +5288,8 @@ static int PyCAst_init_compound_statement(PyCAst_object_compound_statement *self
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_compound_statement_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_compound_statement_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_compound_statement_declaration_list(PyObject *_self);
 static PyObject *PyCAst_getter_compound_statement_statement_list(PyObject *_self);
 
@@ -5204,6 +5300,7 @@ static PyObject *PyCAst_getter_compound_statement_statement_list(PyObject *_self
 static PyGetSetDef PyCAst_getsetter_compound_statement[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_compound_statement_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_compound_statement_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"declaration_list", (getter)PyCAst_getter_compound_statement_declaration_list,NULL,(char*)"Parameter declaration_list", NULL},
 	{(char*)"statement_list", (getter)PyCAst_getter_compound_statement_statement_list,NULL,(char*)"Parameter statement_list", NULL},
 
@@ -5342,6 +5439,7 @@ static void       PyCAst_delete_inclusive_or_expression_iterator(PyObject *_self
       Class Attribute getters and setters
 
 \*---------------------------------------------------------------------------------------------*/
+
 
 
 
@@ -5487,6 +5585,8 @@ static void       PyCAst_delete_inclusive_or_expression_item(PyObject *_self);
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_inclusive_or_expression_item_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_inclusive_or_expression_item_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_inclusive_or_expression_item_exclusive_or_expression(PyObject *_self);
 
 
@@ -5496,6 +5596,7 @@ static PyObject *PyCAst_getter_inclusive_or_expression_item_exclusive_or_express
 static PyGetSetDef PyCAst_getsetter_inclusive_or_expression_item[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_inclusive_or_expression_item_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_inclusive_or_expression_item_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	{(char*)"exclusive_or_expression", (getter)PyCAst_getter_inclusive_or_expression_item_exclusive_or_expression,NULL,(char*)"Parameter exclusive_or_expression", NULL},
 
 	NULL
@@ -5635,6 +5736,8 @@ static int PyCAst_init_inclusive_or_expression(PyCAst_object_inclusive_or_expres
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_inclusive_or_expression_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_inclusive_or_expression_code(PyObject *_self);
+
 
 
 
@@ -5643,6 +5746,7 @@ static PyObject *PyCAst_getter_inclusive_or_expression_ast(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_inclusive_or_expression[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_inclusive_or_expression_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_inclusive_or_expression_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	
 	NULL
 };
@@ -5802,6 +5906,7 @@ static void       PyCAst_delete_pointer_iterator(PyObject *_self);
 
 
 
+
 static PyGetSetDef PyCAst_getsetter_pointer_iterator[] = 
 {
 	
@@ -5941,6 +6046,8 @@ static void       PyCAst_delete_pointer_item(PyObject *_self);
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_pointer_item_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_pointer_item_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_pointer_item_type_qualifier_list(PyObject *_self);
 
 
@@ -5950,6 +6057,7 @@ static PyObject *PyCAst_getter_pointer_item_type_qualifier_list(PyObject *_self)
 static PyGetSetDef PyCAst_getsetter_pointer_item[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_pointer_item_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_pointer_item_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	{(char*)"type_qualifier_list", (getter)PyCAst_getter_pointer_item_type_qualifier_list,NULL,(char*)"Parameter type_qualifier_list", NULL},
 
 	NULL
@@ -6089,6 +6197,8 @@ static int PyCAst_init_pointer(PyCAst_object_pointer *self, PyObject *args, PyOb
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_pointer_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_pointer_code(PyObject *_self);
+
 
 
 
@@ -6097,6 +6207,7 @@ static PyObject *PyCAst_getter_pointer_ast(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_pointer[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_pointer_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_pointer_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	
 	NULL
 };
@@ -6252,6 +6363,8 @@ static int PyCAst_init_selection_statement1(PyCAst_object_selection_statement1 *
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_selection_statement1_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_selection_statement1_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_selection_statement1_expression(PyObject *_self);
 static PyObject *PyCAst_getter_selection_statement1_statement(PyObject *_self);
 static PyObject *PyCAst_getter_selection_statement1_token1(PyObject *_self);
@@ -6264,6 +6377,7 @@ static PyObject *PyCAst_getter_selection_statement1_statement1(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_selection_statement1[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_selection_statement1_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_selection_statement1_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"expression", (getter)PyCAst_getter_selection_statement1_expression,NULL,(char*)"Parameter expression", NULL},
 	{(char*)"statement", (getter)PyCAst_getter_selection_statement1_statement,NULL,(char*)"Parameter statement", NULL},
 	{(char*)"token1", (getter)PyCAst_getter_selection_statement1_token1,NULL,(char*)"Parameter token1", NULL},
@@ -6406,6 +6520,8 @@ static int PyCAst_init_selection_statement2(PyCAst_object_selection_statement2 *
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_selection_statement2_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_selection_statement2_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_selection_statement2_expression(PyObject *_self);
 static PyObject *PyCAst_getter_selection_statement2_statement(PyObject *_self);
 
@@ -6416,6 +6532,7 @@ static PyObject *PyCAst_getter_selection_statement2_statement(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_selection_statement2[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_selection_statement2_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_selection_statement2_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"expression", (getter)PyCAst_getter_selection_statement2_expression,NULL,(char*)"Parameter expression", NULL},
 	{(char*)"statement", (getter)PyCAst_getter_selection_statement2_statement,NULL,(char*)"Parameter statement", NULL},
 
@@ -6556,6 +6673,8 @@ static int PyCAst_init_postfix_expression1(PyCAst_object_postfix_expression1 *se
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_postfix_expression1_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_postfix_expression1_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_postfix_expression1_postfix_expression(PyObject *_self);
 static PyObject *PyCAst_getter_postfix_expression1_expression(PyObject *_self);
 
@@ -6566,6 +6685,7 @@ static PyObject *PyCAst_getter_postfix_expression1_expression(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_postfix_expression1[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_postfix_expression1_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_postfix_expression1_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"postfix_expression", (getter)PyCAst_getter_postfix_expression1_postfix_expression,NULL,(char*)"Parameter postfix_expression", NULL},
 	{(char*)"expression", (getter)PyCAst_getter_postfix_expression1_expression,NULL,(char*)"Parameter expression", NULL},
 
@@ -6706,6 +6826,8 @@ static int PyCAst_init_postfix_expression2(PyCAst_object_postfix_expression2 *se
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_postfix_expression2_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_postfix_expression2_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_postfix_expression2_postfix_expression(PyObject *_self);
 static PyObject *PyCAst_getter_postfix_expression2_argument_expression_list(PyObject *_self);
 
@@ -6716,6 +6838,7 @@ static PyObject *PyCAst_getter_postfix_expression2_argument_expression_list(PyOb
 static PyGetSetDef PyCAst_getsetter_postfix_expression2[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_postfix_expression2_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_postfix_expression2_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"postfix_expression", (getter)PyCAst_getter_postfix_expression2_postfix_expression,NULL,(char*)"Parameter postfix_expression", NULL},
 	{(char*)"argument_expression_list", (getter)PyCAst_getter_postfix_expression2_argument_expression_list,NULL,(char*)"Parameter argument_expression_list", NULL},
 
@@ -6856,6 +6979,8 @@ static int PyCAst_init_postfix_expression3(PyCAst_object_postfix_expression3 *se
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_postfix_expression3_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_postfix_expression3_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_postfix_expression3_postfix_expression(PyObject *_self);
 static PyObject *PyCAst_getter_postfix_expression3_token1(PyObject *_self);
 static PyObject *PyCAst_getter_postfix_expression3_token2(PyObject *_self);
@@ -6867,6 +6992,7 @@ static PyObject *PyCAst_getter_postfix_expression3_token2(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_postfix_expression3[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_postfix_expression3_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_postfix_expression3_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"postfix_expression", (getter)PyCAst_getter_postfix_expression3_postfix_expression,NULL,(char*)"Parameter postfix_expression", NULL},
 	{(char*)"token1", (getter)PyCAst_getter_postfix_expression3_token1,NULL,(char*)"Parameter token1", NULL},
 	{(char*)"token2", (getter)PyCAst_getter_postfix_expression3_token2,NULL,(char*)"Parameter token2", NULL},
@@ -7008,6 +7134,8 @@ static int PyCAst_init_postfix_expression4(PyCAst_object_postfix_expression4 *se
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_postfix_expression4_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_postfix_expression4_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_postfix_expression4_postfix_expression(PyObject *_self);
 static PyObject *PyCAst_getter_postfix_expression4_token1(PyObject *_self);
 
@@ -7018,6 +7146,7 @@ static PyObject *PyCAst_getter_postfix_expression4_token1(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_postfix_expression4[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_postfix_expression4_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_postfix_expression4_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"postfix_expression", (getter)PyCAst_getter_postfix_expression4_postfix_expression,NULL,(char*)"Parameter postfix_expression", NULL},
 	{(char*)"token1", (getter)PyCAst_getter_postfix_expression4_token1,NULL,(char*)"Parameter token1", NULL},
 
@@ -7158,6 +7287,8 @@ static int PyCAst_init_postfix_expression5(PyCAst_object_postfix_expression5 *se
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_postfix_expression5_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_postfix_expression5_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_postfix_expression5_primary_expression(PyObject *_self);
 
 
@@ -7167,6 +7298,7 @@ static PyObject *PyCAst_getter_postfix_expression5_primary_expression(PyObject *
 static PyGetSetDef PyCAst_getsetter_postfix_expression5[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_postfix_expression5_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_postfix_expression5_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"primary_expression", (getter)PyCAst_getter_postfix_expression5_primary_expression,NULL,(char*)"Parameter primary_expression", NULL},
 
 	NULL
@@ -7304,6 +7436,7 @@ static void       PyCAst_delete_and_expression_iterator(PyObject *_self);
       Class Attribute getters and setters
 
 \*---------------------------------------------------------------------------------------------*/
+
 
 
 
@@ -7449,6 +7582,8 @@ static void       PyCAst_delete_and_expression_item(PyObject *_self);
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_and_expression_item_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_and_expression_item_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_and_expression_item_equality_expression(PyObject *_self);
 
 
@@ -7458,6 +7593,7 @@ static PyObject *PyCAst_getter_and_expression_item_equality_expression(PyObject 
 static PyGetSetDef PyCAst_getsetter_and_expression_item[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_and_expression_item_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_and_expression_item_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	{(char*)"equality_expression", (getter)PyCAst_getter_and_expression_item_equality_expression,NULL,(char*)"Parameter equality_expression", NULL},
 
 	NULL
@@ -7597,6 +7733,8 @@ static int PyCAst_init_and_expression(PyCAst_object_and_expression *self, PyObje
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_and_expression_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_and_expression_code(PyObject *_self);
+
 
 
 
@@ -7605,6 +7743,7 @@ static PyObject *PyCAst_getter_and_expression_ast(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_and_expression[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_and_expression_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_and_expression_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	
 	NULL
 };
@@ -7760,6 +7899,8 @@ static int PyCAst_init_statement1(PyCAst_object_statement1 *self, PyObject *args
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_statement1_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_statement1_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_statement1_labeled_statement(PyObject *_self);
 
 
@@ -7769,6 +7910,7 @@ static PyObject *PyCAst_getter_statement1_labeled_statement(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_statement1[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_statement1_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_statement1_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"labeled_statement", (getter)PyCAst_getter_statement1_labeled_statement,NULL,(char*)"Parameter labeled_statement", NULL},
 
 	NULL
@@ -7908,6 +8050,8 @@ static int PyCAst_init_statement2(PyCAst_object_statement2 *self, PyObject *args
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_statement2_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_statement2_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_statement2_compound_statement(PyObject *_self);
 
 
@@ -7917,6 +8061,7 @@ static PyObject *PyCAst_getter_statement2_compound_statement(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_statement2[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_statement2_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_statement2_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"compound_statement", (getter)PyCAst_getter_statement2_compound_statement,NULL,(char*)"Parameter compound_statement", NULL},
 
 	NULL
@@ -8056,6 +8201,8 @@ static int PyCAst_init_statement3(PyCAst_object_statement3 *self, PyObject *args
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_statement3_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_statement3_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_statement3_expression_statement(PyObject *_self);
 
 
@@ -8065,6 +8212,7 @@ static PyObject *PyCAst_getter_statement3_expression_statement(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_statement3[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_statement3_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_statement3_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"expression_statement", (getter)PyCAst_getter_statement3_expression_statement,NULL,(char*)"Parameter expression_statement", NULL},
 
 	NULL
@@ -8204,6 +8352,8 @@ static int PyCAst_init_statement4(PyCAst_object_statement4 *self, PyObject *args
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_statement4_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_statement4_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_statement4_selection_statement(PyObject *_self);
 
 
@@ -8213,6 +8363,7 @@ static PyObject *PyCAst_getter_statement4_selection_statement(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_statement4[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_statement4_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_statement4_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"selection_statement", (getter)PyCAst_getter_statement4_selection_statement,NULL,(char*)"Parameter selection_statement", NULL},
 
 	NULL
@@ -8352,6 +8503,8 @@ static int PyCAst_init_statement5(PyCAst_object_statement5 *self, PyObject *args
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_statement5_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_statement5_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_statement5_iteration_statement(PyObject *_self);
 
 
@@ -8361,6 +8514,7 @@ static PyObject *PyCAst_getter_statement5_iteration_statement(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_statement5[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_statement5_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_statement5_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"iteration_statement", (getter)PyCAst_getter_statement5_iteration_statement,NULL,(char*)"Parameter iteration_statement", NULL},
 
 	NULL
@@ -8500,6 +8654,8 @@ static int PyCAst_init_statement6(PyCAst_object_statement6 *self, PyObject *args
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_statement6_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_statement6_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_statement6_jump_statement(PyObject *_self);
 
 
@@ -8509,6 +8665,7 @@ static PyObject *PyCAst_getter_statement6_jump_statement(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_statement6[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_statement6_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_statement6_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"jump_statement", (getter)PyCAst_getter_statement6_jump_statement,NULL,(char*)"Parameter jump_statement", NULL},
 
 	NULL
@@ -8648,6 +8805,8 @@ static int PyCAst_init_cast_expression1(PyCAst_object_cast_expression1 *self, Py
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_cast_expression1_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_cast_expression1_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_cast_expression1_type_name(PyObject *_self);
 static PyObject *PyCAst_getter_cast_expression1_cast_expression(PyObject *_self);
 
@@ -8658,6 +8817,7 @@ static PyObject *PyCAst_getter_cast_expression1_cast_expression(PyObject *_self)
 static PyGetSetDef PyCAst_getsetter_cast_expression1[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_cast_expression1_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_cast_expression1_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"type_name", (getter)PyCAst_getter_cast_expression1_type_name,NULL,(char*)"Parameter type_name", NULL},
 	{(char*)"cast_expression", (getter)PyCAst_getter_cast_expression1_cast_expression,NULL,(char*)"Parameter cast_expression", NULL},
 
@@ -8798,6 +8958,8 @@ static int PyCAst_init_cast_expression2(PyCAst_object_cast_expression2 *self, Py
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_cast_expression2_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_cast_expression2_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_cast_expression2_unary_expression(PyObject *_self);
 
 
@@ -8807,6 +8969,7 @@ static PyObject *PyCAst_getter_cast_expression2_unary_expression(PyObject *_self
 static PyGetSetDef PyCAst_getsetter_cast_expression2[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_cast_expression2_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_cast_expression2_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"unary_expression", (getter)PyCAst_getter_cast_expression2_unary_expression,NULL,(char*)"Parameter unary_expression", NULL},
 
 	NULL
@@ -8946,6 +9109,8 @@ static int PyCAst_init_init_declarator(PyCAst_object_init_declarator *self, PyOb
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_init_declarator_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_init_declarator_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_init_declarator_declarator(PyObject *_self);
 static PyObject *PyCAst_getter_init_declarator_token1(PyObject *_self);
 static PyObject *PyCAst_getter_init_declarator_initializer(PyObject *_self);
@@ -8957,6 +9122,7 @@ static PyObject *PyCAst_getter_init_declarator_initializer(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_init_declarator[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_init_declarator_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_init_declarator_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"declarator", (getter)PyCAst_getter_init_declarator_declarator,NULL,(char*)"Parameter declarator", NULL},
 	{(char*)"token1", (getter)PyCAst_getter_init_declarator_token1,NULL,(char*)"Parameter token1", NULL},
 	{(char*)"initializer", (getter)PyCAst_getter_init_declarator_initializer,NULL,(char*)"Parameter initializer", NULL},
@@ -9102,6 +9268,7 @@ static void       PyCAst_delete_struct_declarator_list_iterator(PyObject *_self)
 
 
 
+
 static PyGetSetDef PyCAst_getsetter_struct_declarator_list_iterator[] = 
 {
 	
@@ -9241,6 +9408,8 @@ static void       PyCAst_delete_struct_declarator_list_item(PyObject *_self);
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_struct_declarator_list_item_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_struct_declarator_list_item_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_struct_declarator_list_item_struct_declarator(PyObject *_self);
 
 
@@ -9250,6 +9419,7 @@ static PyObject *PyCAst_getter_struct_declarator_list_item_struct_declarator(PyO
 static PyGetSetDef PyCAst_getsetter_struct_declarator_list_item[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_struct_declarator_list_item_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_struct_declarator_list_item_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	{(char*)"struct_declarator", (getter)PyCAst_getter_struct_declarator_list_item_struct_declarator,NULL,(char*)"Parameter struct_declarator", NULL},
 
 	NULL
@@ -9389,6 +9559,8 @@ static int PyCAst_init_struct_declarator_list(PyCAst_object_struct_declarator_li
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_struct_declarator_list_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_struct_declarator_list_code(PyObject *_self);
+
 
 
 
@@ -9397,6 +9569,7 @@ static PyObject *PyCAst_getter_struct_declarator_list_ast(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_struct_declarator_list[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_struct_declarator_list_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_struct_declarator_list_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	
 	NULL
 };
@@ -9556,6 +9729,7 @@ static void       PyCAst_delete_logical_or_expression_iterator(PyObject *_self);
 
 
 
+
 static PyGetSetDef PyCAst_getsetter_logical_or_expression_iterator[] = 
 {
 	
@@ -9695,6 +9869,8 @@ static void       PyCAst_delete_logical_or_expression_item(PyObject *_self);
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_logical_or_expression_item_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_logical_or_expression_item_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_logical_or_expression_item_logical_and_expression(PyObject *_self);
 
 
@@ -9704,6 +9880,7 @@ static PyObject *PyCAst_getter_logical_or_expression_item_logical_and_expression
 static PyGetSetDef PyCAst_getsetter_logical_or_expression_item[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_logical_or_expression_item_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_logical_or_expression_item_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	{(char*)"logical_and_expression", (getter)PyCAst_getter_logical_or_expression_item_logical_and_expression,NULL,(char*)"Parameter logical_and_expression", NULL},
 
 	NULL
@@ -9843,6 +10020,8 @@ static int PyCAst_init_logical_or_expression(PyCAst_object_logical_or_expression
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_logical_or_expression_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_logical_or_expression_code(PyObject *_self);
+
 
 
 
@@ -9851,6 +10030,7 @@ static PyObject *PyCAst_getter_logical_or_expression_ast(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_logical_or_expression[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_logical_or_expression_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_logical_or_expression_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	
 	NULL
 };
@@ -10006,6 +10186,8 @@ static int PyCAst_init_unary_operator(PyCAst_object_unary_operator *self, PyObje
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_unary_operator_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_unary_operator_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_unary_operator_token1(PyObject *_self);
 
 
@@ -10015,6 +10197,7 @@ static PyObject *PyCAst_getter_unary_operator_token1(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_unary_operator[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_unary_operator_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_unary_operator_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"token1", (getter)PyCAst_getter_unary_operator_token1,NULL,(char*)"Parameter token1", NULL},
 
 	NULL
@@ -10152,6 +10335,7 @@ static void       PyCAst_delete_relational_expression_iterator(PyObject *_self);
       Class Attribute getters and setters
 
 \*---------------------------------------------------------------------------------------------*/
+
 
 
 
@@ -10297,6 +10481,8 @@ static void       PyCAst_delete_relational_expression_item(PyObject *_self);
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_relational_expression_item_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_relational_expression_item_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_relational_expression_item_token1(PyObject *_self);
 static PyObject *PyCAst_getter_relational_expression_item_shift_expression(PyObject *_self);
 
@@ -10307,6 +10493,7 @@ static PyObject *PyCAst_getter_relational_expression_item_shift_expression(PyObj
 static PyGetSetDef PyCAst_getsetter_relational_expression_item[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_relational_expression_item_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_relational_expression_item_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	{(char*)"token1", (getter)PyCAst_getter_relational_expression_item_token1,NULL,(char*)"Parameter token1", NULL},
 {(char*)"shift_expression", (getter)PyCAst_getter_relational_expression_item_shift_expression,NULL,(char*)"Parameter shift_expression", NULL},
 
@@ -10447,6 +10634,8 @@ static int PyCAst_init_relational_expression(PyCAst_object_relational_expression
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_relational_expression_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_relational_expression_code(PyObject *_self);
+
 
 
 
@@ -10455,6 +10644,7 @@ static PyObject *PyCAst_getter_relational_expression_ast(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_relational_expression[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_relational_expression_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_relational_expression_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	
 	NULL
 };
@@ -10610,6 +10800,8 @@ static int PyCAst_init_struct_or_union(PyCAst_object_struct_or_union *self, PyOb
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_struct_or_union_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_struct_or_union_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_struct_or_union_token1(PyObject *_self);
 
 
@@ -10619,6 +10811,7 @@ static PyObject *PyCAst_getter_struct_or_union_token1(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_struct_or_union[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_struct_or_union_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_struct_or_union_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"token1", (getter)PyCAst_getter_struct_or_union_token1,NULL,(char*)"Parameter token1", NULL},
 
 	NULL
@@ -10758,6 +10951,8 @@ static int PyCAst_init_enumerator(PyCAst_object_enumerator *self, PyObject *args
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_enumerator_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_enumerator_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_enumerator_token1(PyObject *_self);
 static PyObject *PyCAst_getter_enumerator_token2(PyObject *_self);
 static PyObject *PyCAst_getter_enumerator_constant_expression(PyObject *_self);
@@ -10769,6 +10964,7 @@ static PyObject *PyCAst_getter_enumerator_constant_expression(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_enumerator[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_enumerator_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_enumerator_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"token1", (getter)PyCAst_getter_enumerator_token1,NULL,(char*)"Parameter token1", NULL},
 	{(char*)"token2", (getter)PyCAst_getter_enumerator_token2,NULL,(char*)"Parameter token2", NULL},
 	{(char*)"constant_expression", (getter)PyCAst_getter_enumerator_constant_expression,NULL,(char*)"Parameter constant_expression", NULL},
@@ -10910,6 +11106,8 @@ static int PyCAst_init_assignment_expression1(PyCAst_object_assignment_expressio
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_assignment_expression1_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_assignment_expression1_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_assignment_expression1_unary_expression(PyObject *_self);
 static PyObject *PyCAst_getter_assignment_expression1_assignment_operator(PyObject *_self);
 static PyObject *PyCAst_getter_assignment_expression1_assignment_expression(PyObject *_self);
@@ -10921,6 +11119,7 @@ static PyObject *PyCAst_getter_assignment_expression1_assignment_expression(PyOb
 static PyGetSetDef PyCAst_getsetter_assignment_expression1[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_assignment_expression1_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_assignment_expression1_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"unary_expression", (getter)PyCAst_getter_assignment_expression1_unary_expression,NULL,(char*)"Parameter unary_expression", NULL},
 	{(char*)"assignment_operator", (getter)PyCAst_getter_assignment_expression1_assignment_operator,NULL,(char*)"Parameter assignment_operator", NULL},
 	{(char*)"assignment_expression", (getter)PyCAst_getter_assignment_expression1_assignment_expression,NULL,(char*)"Parameter assignment_expression", NULL},
@@ -11062,6 +11261,8 @@ static int PyCAst_init_assignment_expression2(PyCAst_object_assignment_expressio
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_assignment_expression2_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_assignment_expression2_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_assignment_expression2_conditional_expression(PyObject *_self);
 
 
@@ -11071,6 +11272,7 @@ static PyObject *PyCAst_getter_assignment_expression2_conditional_expression(PyO
 static PyGetSetDef PyCAst_getsetter_assignment_expression2[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_assignment_expression2_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_assignment_expression2_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"conditional_expression", (getter)PyCAst_getter_assignment_expression2_conditional_expression,NULL,(char*)"Parameter conditional_expression", NULL},
 
 	NULL
@@ -11210,6 +11412,8 @@ static int PyCAst_init_parameter_type_list(PyCAst_object_parameter_type_list *se
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_parameter_type_list_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_parameter_type_list_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_parameter_type_list_parameter_list(PyObject *_self);
 static PyObject *PyCAst_getter_parameter_type_list_token1(PyObject *_self);
 static PyObject *PyCAst_getter_parameter_type_list_token2(PyObject *_self);
@@ -11221,6 +11425,7 @@ static PyObject *PyCAst_getter_parameter_type_list_token2(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_parameter_type_list[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_parameter_type_list_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_parameter_type_list_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"parameter_list", (getter)PyCAst_getter_parameter_type_list_parameter_list,NULL,(char*)"Parameter parameter_list", NULL},
 	{(char*)"token1", (getter)PyCAst_getter_parameter_type_list_token1,NULL,(char*)"Parameter token1", NULL},
 	{(char*)"token2", (getter)PyCAst_getter_parameter_type_list_token2,NULL,(char*)"Parameter token2", NULL},
@@ -11362,6 +11567,8 @@ static int PyCAst_init_parameter_declaration1(PyCAst_object_parameter_declaratio
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_parameter_declaration1_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_parameter_declaration1_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_parameter_declaration1_declaration_specifiers(PyObject *_self);
 static PyObject *PyCAst_getter_parameter_declaration1_declarator(PyObject *_self);
 
@@ -11372,6 +11579,7 @@ static PyObject *PyCAst_getter_parameter_declaration1_declarator(PyObject *_self
 static PyGetSetDef PyCAst_getsetter_parameter_declaration1[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_parameter_declaration1_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_parameter_declaration1_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"declaration_specifiers", (getter)PyCAst_getter_parameter_declaration1_declaration_specifiers,NULL,(char*)"Parameter declaration_specifiers", NULL},
 	{(char*)"declarator", (getter)PyCAst_getter_parameter_declaration1_declarator,NULL,(char*)"Parameter declarator", NULL},
 
@@ -11512,6 +11720,8 @@ static int PyCAst_init_parameter_declaration2(PyCAst_object_parameter_declaratio
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_parameter_declaration2_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_parameter_declaration2_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_parameter_declaration2_declaration_specifiers(PyObject *_self);
 static PyObject *PyCAst_getter_parameter_declaration2_abstract_declarator(PyObject *_self);
 
@@ -11522,6 +11732,7 @@ static PyObject *PyCAst_getter_parameter_declaration2_abstract_declarator(PyObje
 static PyGetSetDef PyCAst_getsetter_parameter_declaration2[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_parameter_declaration2_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_parameter_declaration2_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"declaration_specifiers", (getter)PyCAst_getter_parameter_declaration2_declaration_specifiers,NULL,(char*)"Parameter declaration_specifiers", NULL},
 	{(char*)"abstract_declarator", (getter)PyCAst_getter_parameter_declaration2_abstract_declarator,NULL,(char*)"Parameter abstract_declarator", NULL},
 
@@ -11660,6 +11871,7 @@ static void       PyCAst_delete_multiplicative_expression_iterator(PyObject *_se
       Class Attribute getters and setters
 
 \*---------------------------------------------------------------------------------------------*/
+
 
 
 
@@ -11805,6 +12017,8 @@ static void       PyCAst_delete_multiplicative_expression_item(PyObject *_self);
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_multiplicative_expression_item_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_multiplicative_expression_item_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_multiplicative_expression_item_token1(PyObject *_self);
 static PyObject *PyCAst_getter_multiplicative_expression_item_cast_expression(PyObject *_self);
 
@@ -11815,6 +12029,7 @@ static PyObject *PyCAst_getter_multiplicative_expression_item_cast_expression(Py
 static PyGetSetDef PyCAst_getsetter_multiplicative_expression_item[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_multiplicative_expression_item_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_multiplicative_expression_item_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	{(char*)"token1", (getter)PyCAst_getter_multiplicative_expression_item_token1,NULL,(char*)"Parameter token1", NULL},
 {(char*)"cast_expression", (getter)PyCAst_getter_multiplicative_expression_item_cast_expression,NULL,(char*)"Parameter cast_expression", NULL},
 
@@ -11955,6 +12170,8 @@ static int PyCAst_init_multiplicative_expression(PyCAst_object_multiplicative_ex
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_multiplicative_expression_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_multiplicative_expression_code(PyObject *_self);
+
 
 
 
@@ -11963,6 +12180,7 @@ static PyObject *PyCAst_getter_multiplicative_expression_ast(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_multiplicative_expression[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_multiplicative_expression_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_multiplicative_expression_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	
 	NULL
 };
@@ -12122,6 +12340,7 @@ static void       PyCAst_delete_type_qualifier_list_iterator(PyObject *_self);
 
 
 
+
 static PyGetSetDef PyCAst_getsetter_type_qualifier_list_iterator[] = 
 {
 	
@@ -12261,6 +12480,8 @@ static void       PyCAst_delete_type_qualifier_list_item(PyObject *_self);
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_type_qualifier_list_item_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_type_qualifier_list_item_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_type_qualifier_list_item_type_qualifier(PyObject *_self);
 
 
@@ -12270,6 +12491,7 @@ static PyObject *PyCAst_getter_type_qualifier_list_item_type_qualifier(PyObject 
 static PyGetSetDef PyCAst_getsetter_type_qualifier_list_item[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_type_qualifier_list_item_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_type_qualifier_list_item_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	{(char*)"type_qualifier", (getter)PyCAst_getter_type_qualifier_list_item_type_qualifier,NULL,(char*)"Parameter type_qualifier", NULL},
 
 	NULL
@@ -12409,6 +12631,8 @@ static int PyCAst_init_type_qualifier_list(PyCAst_object_type_qualifier_list *se
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_type_qualifier_list_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_type_qualifier_list_code(PyObject *_self);
+
 
 
 
@@ -12417,6 +12641,7 @@ static PyObject *PyCAst_getter_type_qualifier_list_ast(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_type_qualifier_list[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_type_qualifier_list_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_type_qualifier_list_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	
 	NULL
 };
@@ -12576,6 +12801,7 @@ static void       PyCAst_delete_argument_expression_list_iterator(PyObject *_sel
 
 
 
+
 static PyGetSetDef PyCAst_getsetter_argument_expression_list_iterator[] = 
 {
 	
@@ -12715,6 +12941,8 @@ static void       PyCAst_delete_argument_expression_list_item(PyObject *_self);
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_argument_expression_list_item_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_argument_expression_list_item_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_argument_expression_list_item_assignment_expression(PyObject *_self);
 
 
@@ -12724,6 +12952,7 @@ static PyObject *PyCAst_getter_argument_expression_list_item_assignment_expressi
 static PyGetSetDef PyCAst_getsetter_argument_expression_list_item[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_argument_expression_list_item_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_argument_expression_list_item_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	{(char*)"assignment_expression", (getter)PyCAst_getter_argument_expression_list_item_assignment_expression,NULL,(char*)"Parameter assignment_expression", NULL},
 
 	NULL
@@ -12863,6 +13092,8 @@ static int PyCAst_init_argument_expression_list(PyCAst_object_argument_expressio
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_argument_expression_list_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_argument_expression_list_code(PyObject *_self);
+
 
 
 
@@ -12871,6 +13102,7 @@ static PyObject *PyCAst_getter_argument_expression_list_ast(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_argument_expression_list[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_argument_expression_list_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_argument_expression_list_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	
 	NULL
 };
@@ -13026,6 +13258,8 @@ static int PyCAst_init_direct_abstract_declarator1(PyCAst_object_direct_abstract
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_direct_abstract_declarator1_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_direct_abstract_declarator1_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_direct_abstract_declarator1_direct_abstract_declarator(PyObject *_self);
 static PyObject *PyCAst_getter_direct_abstract_declarator1_constant_expression(PyObject *_self);
 
@@ -13036,6 +13270,7 @@ static PyObject *PyCAst_getter_direct_abstract_declarator1_constant_expression(P
 static PyGetSetDef PyCAst_getsetter_direct_abstract_declarator1[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_direct_abstract_declarator1_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_direct_abstract_declarator1_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"direct_abstract_declarator", (getter)PyCAst_getter_direct_abstract_declarator1_direct_abstract_declarator,NULL,(char*)"Parameter direct_abstract_declarator", NULL},
 	{(char*)"constant_expression", (getter)PyCAst_getter_direct_abstract_declarator1_constant_expression,NULL,(char*)"Parameter constant_expression", NULL},
 
@@ -13176,6 +13411,8 @@ static int PyCAst_init_direct_abstract_declarator2(PyCAst_object_direct_abstract
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_direct_abstract_declarator2_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_direct_abstract_declarator2_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_direct_abstract_declarator2_direct_abstract_declarator(PyObject *_self);
 static PyObject *PyCAst_getter_direct_abstract_declarator2_parameter_type_list(PyObject *_self);
 
@@ -13186,6 +13423,7 @@ static PyObject *PyCAst_getter_direct_abstract_declarator2_parameter_type_list(P
 static PyGetSetDef PyCAst_getsetter_direct_abstract_declarator2[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_direct_abstract_declarator2_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_direct_abstract_declarator2_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"direct_abstract_declarator", (getter)PyCAst_getter_direct_abstract_declarator2_direct_abstract_declarator,NULL,(char*)"Parameter direct_abstract_declarator", NULL},
 	{(char*)"parameter_type_list", (getter)PyCAst_getter_direct_abstract_declarator2_parameter_type_list,NULL,(char*)"Parameter parameter_type_list", NULL},
 
@@ -13326,6 +13564,8 @@ static int PyCAst_init_direct_abstract_declarator3(PyCAst_object_direct_abstract
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_direct_abstract_declarator3_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_direct_abstract_declarator3_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_direct_abstract_declarator3_abstract_declarator(PyObject *_self);
 
 
@@ -13335,6 +13575,7 @@ static PyObject *PyCAst_getter_direct_abstract_declarator3_abstract_declarator(P
 static PyGetSetDef PyCAst_getsetter_direct_abstract_declarator3[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_direct_abstract_declarator3_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_direct_abstract_declarator3_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"abstract_declarator", (getter)PyCAst_getter_direct_abstract_declarator3_abstract_declarator,NULL,(char*)"Parameter abstract_declarator", NULL},
 
 	NULL
@@ -13472,6 +13713,7 @@ static void       PyCAst_delete_equality_expression_iterator(PyObject *_self);
       Class Attribute getters and setters
 
 \*---------------------------------------------------------------------------------------------*/
+
 
 
 
@@ -13617,6 +13859,8 @@ static void       PyCAst_delete_equality_expression_item(PyObject *_self);
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_equality_expression_item_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_equality_expression_item_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_equality_expression_item_token1(PyObject *_self);
 static PyObject *PyCAst_getter_equality_expression_item_relational_expression(PyObject *_self);
 
@@ -13627,6 +13871,7 @@ static PyObject *PyCAst_getter_equality_expression_item_relational_expression(Py
 static PyGetSetDef PyCAst_getsetter_equality_expression_item[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_equality_expression_item_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_equality_expression_item_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	{(char*)"token1", (getter)PyCAst_getter_equality_expression_item_token1,NULL,(char*)"Parameter token1", NULL},
 {(char*)"relational_expression", (getter)PyCAst_getter_equality_expression_item_relational_expression,NULL,(char*)"Parameter relational_expression", NULL},
 
@@ -13767,6 +14012,8 @@ static int PyCAst_init_equality_expression(PyCAst_object_equality_expression *se
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_equality_expression_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_equality_expression_code(PyObject *_self);
+
 
 
 
@@ -13775,6 +14022,7 @@ static PyObject *PyCAst_getter_equality_expression_ast(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_equality_expression[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_equality_expression_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_equality_expression_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	
 	NULL
 };
@@ -13930,6 +14178,8 @@ static int PyCAst_init_primary_expression1(PyCAst_object_primary_expression1 *se
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_primary_expression1_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_primary_expression1_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_primary_expression1_expression(PyObject *_self);
 
 
@@ -13939,6 +14189,7 @@ static PyObject *PyCAst_getter_primary_expression1_expression(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_primary_expression1[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_primary_expression1_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_primary_expression1_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"expression", (getter)PyCAst_getter_primary_expression1_expression,NULL,(char*)"Parameter expression", NULL},
 
 	NULL
@@ -14078,6 +14329,8 @@ static int PyCAst_init_primary_expression2(PyCAst_object_primary_expression2 *se
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_primary_expression2_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_primary_expression2_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_primary_expression2_token1(PyObject *_self);
 
 
@@ -14087,6 +14340,7 @@ static PyObject *PyCAst_getter_primary_expression2_token1(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_primary_expression2[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_primary_expression2_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_primary_expression2_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"token1", (getter)PyCAst_getter_primary_expression2_token1,NULL,(char*)"Parameter token1", NULL},
 
 	NULL
@@ -14224,6 +14478,7 @@ static void       PyCAst_delete_declaration_specifiers1_iterator(PyObject *_self
       Class Attribute getters and setters
 
 \*---------------------------------------------------------------------------------------------*/
+
 
 
 
@@ -14369,6 +14624,8 @@ static void       PyCAst_delete_declaration_specifiers1_item(PyObject *_self);
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_declaration_specifiers1_item_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_declaration_specifiers1_item_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_declaration_specifiers1_item_storage_class_specifier(PyObject *_self);
 
 
@@ -14378,6 +14635,7 @@ static PyObject *PyCAst_getter_declaration_specifiers1_item_storage_class_specif
 static PyGetSetDef PyCAst_getsetter_declaration_specifiers1_item[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_declaration_specifiers1_item_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_declaration_specifiers1_item_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	{(char*)"storage_class_specifier", (getter)PyCAst_getter_declaration_specifiers1_item_storage_class_specifier,NULL,(char*)"Parameter storage_class_specifier", NULL},
 
 	NULL
@@ -14517,6 +14775,8 @@ static int PyCAst_init_declaration_specifiers1(PyCAst_object_declaration_specifi
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_declaration_specifiers1_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_declaration_specifiers1_code(PyObject *_self);
+
 
 
 
@@ -14525,6 +14785,7 @@ static PyObject *PyCAst_getter_declaration_specifiers1_ast(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_declaration_specifiers1[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_declaration_specifiers1_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_declaration_specifiers1_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	
 	NULL
 };
@@ -14684,6 +14945,7 @@ static void       PyCAst_delete_declaration_specifiers2_iterator(PyObject *_self
 
 
 
+
 static PyGetSetDef PyCAst_getsetter_declaration_specifiers2_iterator[] = 
 {
 	
@@ -14823,6 +15085,8 @@ static void       PyCAst_delete_declaration_specifiers2_item(PyObject *_self);
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_declaration_specifiers2_item_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_declaration_specifiers2_item_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_declaration_specifiers2_item_type_specifier(PyObject *_self);
 
 
@@ -14832,6 +15096,7 @@ static PyObject *PyCAst_getter_declaration_specifiers2_item_type_specifier(PyObj
 static PyGetSetDef PyCAst_getsetter_declaration_specifiers2_item[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_declaration_specifiers2_item_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_declaration_specifiers2_item_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	{(char*)"type_specifier", (getter)PyCAst_getter_declaration_specifiers2_item_type_specifier,NULL,(char*)"Parameter type_specifier", NULL},
 
 	NULL
@@ -14971,6 +15236,8 @@ static int PyCAst_init_declaration_specifiers2(PyCAst_object_declaration_specifi
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_declaration_specifiers2_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_declaration_specifiers2_code(PyObject *_self);
+
 
 
 
@@ -14979,6 +15246,7 @@ static PyObject *PyCAst_getter_declaration_specifiers2_ast(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_declaration_specifiers2[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_declaration_specifiers2_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_declaration_specifiers2_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	
 	NULL
 };
@@ -15138,6 +15406,7 @@ static void       PyCAst_delete_declaration_specifiers3_iterator(PyObject *_self
 
 
 
+
 static PyGetSetDef PyCAst_getsetter_declaration_specifiers3_iterator[] = 
 {
 	
@@ -15277,6 +15546,8 @@ static void       PyCAst_delete_declaration_specifiers3_item(PyObject *_self);
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_declaration_specifiers3_item_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_declaration_specifiers3_item_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_declaration_specifiers3_item_type_qualifier(PyObject *_self);
 
 
@@ -15286,6 +15557,7 @@ static PyObject *PyCAst_getter_declaration_specifiers3_item_type_qualifier(PyObj
 static PyGetSetDef PyCAst_getsetter_declaration_specifiers3_item[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_declaration_specifiers3_item_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_declaration_specifiers3_item_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	{(char*)"type_qualifier", (getter)PyCAst_getter_declaration_specifiers3_item_type_qualifier,NULL,(char*)"Parameter type_qualifier", NULL},
 
 	NULL
@@ -15425,6 +15697,8 @@ static int PyCAst_init_declaration_specifiers3(PyCAst_object_declaration_specifi
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_declaration_specifiers3_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_declaration_specifiers3_code(PyObject *_self);
+
 
 
 
@@ -15433,6 +15707,7 @@ static PyObject *PyCAst_getter_declaration_specifiers3_ast(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_declaration_specifiers3[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_declaration_specifiers3_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_declaration_specifiers3_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	
 	NULL
 };
@@ -15588,6 +15863,8 @@ static int PyCAst_init_declaration(PyCAst_object_declaration *self, PyObject *ar
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_declaration_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_declaration_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_declaration_declaration_specifiers(PyObject *_self);
 static PyObject *PyCAst_getter_declaration_init_declarator_list(PyObject *_self);
 
@@ -15598,6 +15875,7 @@ static PyObject *PyCAst_getter_declaration_init_declarator_list(PyObject *_self)
 static PyGetSetDef PyCAst_getsetter_declaration[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_declaration_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_declaration_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"declaration_specifiers", (getter)PyCAst_getter_declaration_declaration_specifiers,NULL,(char*)"Parameter declaration_specifiers", NULL},
 	{(char*)"init_declarator_list", (getter)PyCAst_getter_declaration_init_declarator_list,NULL,(char*)"Parameter init_declarator_list", NULL},
 
@@ -15738,6 +16016,8 @@ static int PyCAst_init_direct_declarator1(PyCAst_object_direct_declarator1 *self
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_direct_declarator1_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_direct_declarator1_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_direct_declarator1_direct_declarator(PyObject *_self);
 static PyObject *PyCAst_getter_direct_declarator1_constant_expression(PyObject *_self);
 
@@ -15748,6 +16028,7 @@ static PyObject *PyCAst_getter_direct_declarator1_constant_expression(PyObject *
 static PyGetSetDef PyCAst_getsetter_direct_declarator1[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_direct_declarator1_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_direct_declarator1_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"direct_declarator", (getter)PyCAst_getter_direct_declarator1_direct_declarator,NULL,(char*)"Parameter direct_declarator", NULL},
 	{(char*)"constant_expression", (getter)PyCAst_getter_direct_declarator1_constant_expression,NULL,(char*)"Parameter constant_expression", NULL},
 
@@ -15888,6 +16169,8 @@ static int PyCAst_init_direct_declarator2(PyCAst_object_direct_declarator2 *self
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_direct_declarator2_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_direct_declarator2_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_direct_declarator2_direct_declarator(PyObject *_self);
 static PyObject *PyCAst_getter_direct_declarator2_parameter_type_list(PyObject *_self);
 
@@ -15898,6 +16181,7 @@ static PyObject *PyCAst_getter_direct_declarator2_parameter_type_list(PyObject *
 static PyGetSetDef PyCAst_getsetter_direct_declarator2[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_direct_declarator2_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_direct_declarator2_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"direct_declarator", (getter)PyCAst_getter_direct_declarator2_direct_declarator,NULL,(char*)"Parameter direct_declarator", NULL},
 	{(char*)"parameter_type_list", (getter)PyCAst_getter_direct_declarator2_parameter_type_list,NULL,(char*)"Parameter parameter_type_list", NULL},
 
@@ -16038,6 +16322,8 @@ static int PyCAst_init_direct_declarator3(PyCAst_object_direct_declarator3 *self
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_direct_declarator3_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_direct_declarator3_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_direct_declarator3_direct_declarator(PyObject *_self);
 static PyObject *PyCAst_getter_direct_declarator3_identifier_list(PyObject *_self);
 
@@ -16048,6 +16334,7 @@ static PyObject *PyCAst_getter_direct_declarator3_identifier_list(PyObject *_sel
 static PyGetSetDef PyCAst_getsetter_direct_declarator3[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_direct_declarator3_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_direct_declarator3_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"direct_declarator", (getter)PyCAst_getter_direct_declarator3_direct_declarator,NULL,(char*)"Parameter direct_declarator", NULL},
 	{(char*)"identifier_list", (getter)PyCAst_getter_direct_declarator3_identifier_list,NULL,(char*)"Parameter identifier_list", NULL},
 
@@ -16188,6 +16475,8 @@ static int PyCAst_init_direct_declarator4(PyCAst_object_direct_declarator4 *self
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_direct_declarator4_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_direct_declarator4_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_direct_declarator4_declarator(PyObject *_self);
 
 
@@ -16197,6 +16486,7 @@ static PyObject *PyCAst_getter_direct_declarator4_declarator(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_direct_declarator4[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_direct_declarator4_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_direct_declarator4_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"declarator", (getter)PyCAst_getter_direct_declarator4_declarator,NULL,(char*)"Parameter declarator", NULL},
 
 	NULL
@@ -16336,6 +16626,8 @@ static int PyCAst_init_direct_declarator5(PyCAst_object_direct_declarator5 *self
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_direct_declarator5_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_direct_declarator5_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_direct_declarator5_token1(PyObject *_self);
 
 
@@ -16345,6 +16637,7 @@ static PyObject *PyCAst_getter_direct_declarator5_token1(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_direct_declarator5[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_direct_declarator5_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_direct_declarator5_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"token1", (getter)PyCAst_getter_direct_declarator5_token1,NULL,(char*)"Parameter token1", NULL},
 
 	NULL
@@ -16482,6 +16775,7 @@ static void       PyCAst_delete_logical_and_expression_iterator(PyObject *_self)
       Class Attribute getters and setters
 
 \*---------------------------------------------------------------------------------------------*/
+
 
 
 
@@ -16627,6 +16921,8 @@ static void       PyCAst_delete_logical_and_expression_item(PyObject *_self);
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_logical_and_expression_item_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_logical_and_expression_item_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_logical_and_expression_item_inclusive_or_expression(PyObject *_self);
 
 
@@ -16636,6 +16932,7 @@ static PyObject *PyCAst_getter_logical_and_expression_item_inclusive_or_expressi
 static PyGetSetDef PyCAst_getsetter_logical_and_expression_item[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_logical_and_expression_item_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_logical_and_expression_item_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	{(char*)"inclusive_or_expression", (getter)PyCAst_getter_logical_and_expression_item_inclusive_or_expression,NULL,(char*)"Parameter inclusive_or_expression", NULL},
 
 	NULL
@@ -16775,6 +17072,8 @@ static int PyCAst_init_logical_and_expression(PyCAst_object_logical_and_expressi
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_logical_and_expression_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_logical_and_expression_code(PyObject *_self);
+
 
 
 
@@ -16783,6 +17082,7 @@ static PyObject *PyCAst_getter_logical_and_expression_ast(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_logical_and_expression[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_logical_and_expression_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_logical_and_expression_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	
 	NULL
 };
@@ -16942,6 +17242,7 @@ static void       PyCAst_delete_init_declarator_list_iterator(PyObject *_self);
 
 
 
+
 static PyGetSetDef PyCAst_getsetter_init_declarator_list_iterator[] = 
 {
 	
@@ -17081,6 +17382,8 @@ static void       PyCAst_delete_init_declarator_list_item(PyObject *_self);
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_init_declarator_list_item_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_init_declarator_list_item_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_init_declarator_list_item_init_declarator(PyObject *_self);
 
 
@@ -17090,6 +17393,7 @@ static PyObject *PyCAst_getter_init_declarator_list_item_init_declarator(PyObjec
 static PyGetSetDef PyCAst_getsetter_init_declarator_list_item[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_init_declarator_list_item_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_init_declarator_list_item_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	{(char*)"init_declarator", (getter)PyCAst_getter_init_declarator_list_item_init_declarator,NULL,(char*)"Parameter init_declarator", NULL},
 
 	NULL
@@ -17229,6 +17533,8 @@ static int PyCAst_init_init_declarator_list(PyCAst_object_init_declarator_list *
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_init_declarator_list_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_init_declarator_list_code(PyObject *_self);
+
 
 
 
@@ -17237,6 +17543,7 @@ static PyObject *PyCAst_getter_init_declarator_list_ast(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_init_declarator_list[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_init_declarator_list_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_init_declarator_list_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	
 	NULL
 };
@@ -17396,6 +17703,7 @@ static void       PyCAst_delete_shift_expression_iterator(PyObject *_self);
 
 
 
+
 static PyGetSetDef PyCAst_getsetter_shift_expression_iterator[] = 
 {
 	
@@ -17535,6 +17843,8 @@ static void       PyCAst_delete_shift_expression_item(PyObject *_self);
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_shift_expression_item_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_shift_expression_item_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_shift_expression_item_token1(PyObject *_self);
 static PyObject *PyCAst_getter_shift_expression_item_additive_expression(PyObject *_self);
 
@@ -17545,6 +17855,7 @@ static PyObject *PyCAst_getter_shift_expression_item_additive_expression(PyObjec
 static PyGetSetDef PyCAst_getsetter_shift_expression_item[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_shift_expression_item_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_shift_expression_item_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	{(char*)"token1", (getter)PyCAst_getter_shift_expression_item_token1,NULL,(char*)"Parameter token1", NULL},
 {(char*)"additive_expression", (getter)PyCAst_getter_shift_expression_item_additive_expression,NULL,(char*)"Parameter additive_expression", NULL},
 
@@ -17685,6 +17996,8 @@ static int PyCAst_init_shift_expression(PyCAst_object_shift_expression *self, Py
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_shift_expression_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_shift_expression_code(PyObject *_self);
+
 
 
 
@@ -17693,6 +18006,7 @@ static PyObject *PyCAst_getter_shift_expression_ast(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_shift_expression[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_shift_expression_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_shift_expression_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	
 	NULL
 };
@@ -17852,6 +18166,7 @@ static void       PyCAst_delete_identifier_list_iterator(PyObject *_self);
 
 
 
+
 static PyGetSetDef PyCAst_getsetter_identifier_list_iterator[] = 
 {
 	
@@ -17991,6 +18306,8 @@ static void       PyCAst_delete_identifier_list_item(PyObject *_self);
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_identifier_list_item_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_identifier_list_item_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_identifier_list_item_token1(PyObject *_self);
 
 
@@ -18000,6 +18317,7 @@ static PyObject *PyCAst_getter_identifier_list_item_token1(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_identifier_list_item[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_identifier_list_item_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_identifier_list_item_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	{(char*)"token1", (getter)PyCAst_getter_identifier_list_item_token1,NULL,(char*)"Parameter token1", NULL},
 
 	NULL
@@ -18139,6 +18457,8 @@ static int PyCAst_init_identifier_list(PyCAst_object_identifier_list *self, PyOb
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_identifier_list_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_identifier_list_code(PyObject *_self);
+
 
 
 
@@ -18147,6 +18467,7 @@ static PyObject *PyCAst_getter_identifier_list_ast(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_identifier_list[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_identifier_list_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_identifier_list_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	
 	NULL
 };
@@ -18302,6 +18623,8 @@ static int PyCAst_init_jump_statement1(PyCAst_object_jump_statement1 *self, PyOb
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_jump_statement1_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_jump_statement1_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_jump_statement1_token1(PyObject *_self);
 
 
@@ -18311,6 +18634,7 @@ static PyObject *PyCAst_getter_jump_statement1_token1(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_jump_statement1[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_jump_statement1_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_jump_statement1_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"token1", (getter)PyCAst_getter_jump_statement1_token1,NULL,(char*)"Parameter token1", NULL},
 
 	NULL
@@ -18450,6 +18774,8 @@ static int PyCAst_init_jump_statement2(PyCAst_object_jump_statement2 *self, PyOb
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_jump_statement2_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_jump_statement2_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_jump_statement2_expression(PyObject *_self);
 
 
@@ -18459,6 +18785,7 @@ static PyObject *PyCAst_getter_jump_statement2_expression(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_jump_statement2[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_jump_statement2_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_jump_statement2_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"expression", (getter)PyCAst_getter_jump_statement2_expression,NULL,(char*)"Parameter expression", NULL},
 
 	NULL
@@ -18598,6 +18925,8 @@ static int PyCAst_init_jump_statement3(PyCAst_object_jump_statement3 *self, PyOb
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_jump_statement3_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_jump_statement3_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_jump_statement3_token1(PyObject *_self);
 
 
@@ -18607,6 +18936,7 @@ static PyObject *PyCAst_getter_jump_statement3_token1(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_jump_statement3[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_jump_statement3_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_jump_statement3_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"token1", (getter)PyCAst_getter_jump_statement3_token1,NULL,(char*)"Parameter token1", NULL},
 
 	NULL
@@ -18746,6 +19076,8 @@ static int PyCAst_init_struct_declarator(PyCAst_object_struct_declarator *self, 
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_struct_declarator_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_struct_declarator_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_struct_declarator_declarator(PyObject *_self);
 static PyObject *PyCAst_getter_struct_declarator_token1(PyObject *_self);
 static PyObject *PyCAst_getter_struct_declarator_constant_expression(PyObject *_self);
@@ -18757,6 +19089,7 @@ static PyObject *PyCAst_getter_struct_declarator_constant_expression(PyObject *_
 static PyGetSetDef PyCAst_getsetter_struct_declarator[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_struct_declarator_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_struct_declarator_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"declarator", (getter)PyCAst_getter_struct_declarator_declarator,NULL,(char*)"Parameter declarator", NULL},
 	{(char*)"token1", (getter)PyCAst_getter_struct_declarator_token1,NULL,(char*)"Parameter token1", NULL},
 	{(char*)"constant_expression", (getter)PyCAst_getter_struct_declarator_constant_expression,NULL,(char*)"Parameter constant_expression", NULL},
@@ -18898,6 +19231,8 @@ static int PyCAst_init_function_definition(PyCAst_object_function_definition *se
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_function_definition_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_function_definition_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_function_definition_declaration_specifiers(PyObject *_self);
 static PyObject *PyCAst_getter_function_definition_declarator(PyObject *_self);
 static PyObject *PyCAst_getter_function_definition_declaration_list(PyObject *_self);
@@ -18910,6 +19245,7 @@ static PyObject *PyCAst_getter_function_definition_compound_statement(PyObject *
 static PyGetSetDef PyCAst_getsetter_function_definition[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_function_definition_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_function_definition_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"declaration_specifiers", (getter)PyCAst_getter_function_definition_declaration_specifiers,NULL,(char*)"Parameter declaration_specifiers", NULL},
 	{(char*)"declarator", (getter)PyCAst_getter_function_definition_declarator,NULL,(char*)"Parameter declarator", NULL},
 	{(char*)"declaration_list", (getter)PyCAst_getter_function_definition_declaration_list,NULL,(char*)"Parameter declaration_list", NULL},
@@ -19056,6 +19392,7 @@ static void       PyCAst_delete_parameter_list_iterator(PyObject *_self);
 
 
 
+
 static PyGetSetDef PyCAst_getsetter_parameter_list_iterator[] = 
 {
 	
@@ -19195,6 +19532,8 @@ static void       PyCAst_delete_parameter_list_item(PyObject *_self);
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_parameter_list_item_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_parameter_list_item_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_parameter_list_item_parameter_declaration(PyObject *_self);
 
 
@@ -19204,6 +19543,7 @@ static PyObject *PyCAst_getter_parameter_list_item_parameter_declaration(PyObjec
 static PyGetSetDef PyCAst_getsetter_parameter_list_item[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_parameter_list_item_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_parameter_list_item_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	{(char*)"parameter_declaration", (getter)PyCAst_getter_parameter_list_item_parameter_declaration,NULL,(char*)"Parameter parameter_declaration", NULL},
 
 	NULL
@@ -19343,6 +19683,8 @@ static int PyCAst_init_parameter_list(PyCAst_object_parameter_list *self, PyObje
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_parameter_list_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_parameter_list_code(PyObject *_self);
+
 
 
 
@@ -19351,6 +19693,7 @@ static PyObject *PyCAst_getter_parameter_list_ast(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_parameter_list[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_parameter_list_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_parameter_list_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	
 	NULL
 };
@@ -19506,6 +19849,8 @@ static int PyCAst_init_enum_specifier(PyCAst_object_enum_specifier *self, PyObje
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_enum_specifier_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_enum_specifier_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_enum_specifier_token1(PyObject *_self);
 static PyObject *PyCAst_getter_enum_specifier_token2(PyObject *_self);
 static PyObject *PyCAst_getter_enum_specifier_enumerator_list(PyObject *_self);
@@ -19518,6 +19863,7 @@ static PyObject *PyCAst_getter_enum_specifier_token3(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_enum_specifier[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_enum_specifier_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_enum_specifier_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"token1", (getter)PyCAst_getter_enum_specifier_token1,NULL,(char*)"Parameter token1", NULL},
 	{(char*)"token2", (getter)PyCAst_getter_enum_specifier_token2,NULL,(char*)"Parameter token2", NULL},
 	{(char*)"enumerator_list", (getter)PyCAst_getter_enum_specifier_enumerator_list,NULL,(char*)"Parameter enumerator_list", NULL},
@@ -19660,6 +20006,8 @@ static int PyCAst_init_type_qualifier(PyCAst_object_type_qualifier *self, PyObje
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_type_qualifier_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_type_qualifier_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_type_qualifier_token1(PyObject *_self);
 
 
@@ -19669,6 +20017,7 @@ static PyObject *PyCAst_getter_type_qualifier_token1(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_type_qualifier[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_type_qualifier_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_type_qualifier_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"token1", (getter)PyCAst_getter_type_qualifier_token1,NULL,(char*)"Parameter token1", NULL},
 
 	NULL
@@ -19806,6 +20155,7 @@ static void       PyCAst_delete_enumerator_list_iterator(PyObject *_self);
       Class Attribute getters and setters
 
 \*---------------------------------------------------------------------------------------------*/
+
 
 
 
@@ -19951,6 +20301,8 @@ static void       PyCAst_delete_enumerator_list_item(PyObject *_self);
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_enumerator_list_item_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_enumerator_list_item_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_enumerator_list_item_enumerator(PyObject *_self);
 
 
@@ -19960,6 +20312,7 @@ static PyObject *PyCAst_getter_enumerator_list_item_enumerator(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_enumerator_list_item[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_enumerator_list_item_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_enumerator_list_item_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	{(char*)"enumerator", (getter)PyCAst_getter_enumerator_list_item_enumerator,NULL,(char*)"Parameter enumerator", NULL},
 
 	NULL
@@ -20099,6 +20452,8 @@ static int PyCAst_init_enumerator_list(PyCAst_object_enumerator_list *self, PyOb
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_enumerator_list_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_enumerator_list_code(PyObject *_self);
+
 
 
 
@@ -20107,6 +20462,7 @@ static PyObject *PyCAst_getter_enumerator_list_ast(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_enumerator_list[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_enumerator_list_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_enumerator_list_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	
 	NULL
 };
@@ -20262,6 +20618,8 @@ static int PyCAst_init_labeled_statement1(PyCAst_object_labeled_statement1 *self
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_labeled_statement1_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_labeled_statement1_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_labeled_statement1_constant_expression(PyObject *_self);
 static PyObject *PyCAst_getter_labeled_statement1_statement(PyObject *_self);
 
@@ -20272,6 +20630,7 @@ static PyObject *PyCAst_getter_labeled_statement1_statement(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_labeled_statement1[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_labeled_statement1_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_labeled_statement1_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"constant_expression", (getter)PyCAst_getter_labeled_statement1_constant_expression,NULL,(char*)"Parameter constant_expression", NULL},
 	{(char*)"statement", (getter)PyCAst_getter_labeled_statement1_statement,NULL,(char*)"Parameter statement", NULL},
 
@@ -20412,6 +20771,8 @@ static int PyCAst_init_labeled_statement2(PyCAst_object_labeled_statement2 *self
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_labeled_statement2_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_labeled_statement2_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_labeled_statement2_token1(PyObject *_self);
 static PyObject *PyCAst_getter_labeled_statement2_statement(PyObject *_self);
 
@@ -20422,6 +20783,7 @@ static PyObject *PyCAst_getter_labeled_statement2_statement(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_labeled_statement2[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_labeled_statement2_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_labeled_statement2_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"token1", (getter)PyCAst_getter_labeled_statement2_token1,NULL,(char*)"Parameter token1", NULL},
 	{(char*)"statement", (getter)PyCAst_getter_labeled_statement2_statement,NULL,(char*)"Parameter statement", NULL},
 
@@ -20560,6 +20922,7 @@ static void       PyCAst_delete_declaration_list_iterator(PyObject *_self);
       Class Attribute getters and setters
 
 \*---------------------------------------------------------------------------------------------*/
+
 
 
 
@@ -20705,6 +21068,8 @@ static void       PyCAst_delete_declaration_list_item(PyObject *_self);
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_declaration_list_item_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_declaration_list_item_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_declaration_list_item_declaration(PyObject *_self);
 
 
@@ -20714,6 +21079,7 @@ static PyObject *PyCAst_getter_declaration_list_item_declaration(PyObject *_self
 static PyGetSetDef PyCAst_getsetter_declaration_list_item[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_declaration_list_item_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_declaration_list_item_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	{(char*)"declaration", (getter)PyCAst_getter_declaration_list_item_declaration,NULL,(char*)"Parameter declaration", NULL},
 
 	NULL
@@ -20853,6 +21219,8 @@ static int PyCAst_init_declaration_list(PyCAst_object_declaration_list *self, Py
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_declaration_list_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_declaration_list_code(PyObject *_self);
+
 
 
 
@@ -20861,6 +21229,7 @@ static PyObject *PyCAst_getter_declaration_list_ast(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_declaration_list[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_declaration_list_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_declaration_list_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	
 	NULL
 };
@@ -21020,6 +21389,7 @@ static void       PyCAst_delete_specifier_qualifier_list1_iterator(PyObject *_se
 
 
 
+
 static PyGetSetDef PyCAst_getsetter_specifier_qualifier_list1_iterator[] = 
 {
 	
@@ -21159,6 +21529,8 @@ static void       PyCAst_delete_specifier_qualifier_list1_item(PyObject *_self);
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_specifier_qualifier_list1_item_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_specifier_qualifier_list1_item_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_specifier_qualifier_list1_item_type_specifier(PyObject *_self);
 
 
@@ -21168,6 +21540,7 @@ static PyObject *PyCAst_getter_specifier_qualifier_list1_item_type_specifier(PyO
 static PyGetSetDef PyCAst_getsetter_specifier_qualifier_list1_item[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_specifier_qualifier_list1_item_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_specifier_qualifier_list1_item_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	{(char*)"type_specifier", (getter)PyCAst_getter_specifier_qualifier_list1_item_type_specifier,NULL,(char*)"Parameter type_specifier", NULL},
 
 	NULL
@@ -21307,6 +21680,8 @@ static int PyCAst_init_specifier_qualifier_list1(PyCAst_object_specifier_qualifi
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_specifier_qualifier_list1_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_specifier_qualifier_list1_code(PyObject *_self);
+
 
 
 
@@ -21315,6 +21690,7 @@ static PyObject *PyCAst_getter_specifier_qualifier_list1_ast(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_specifier_qualifier_list1[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_specifier_qualifier_list1_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_specifier_qualifier_list1_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	
 	NULL
 };
@@ -21474,6 +21850,7 @@ static void       PyCAst_delete_specifier_qualifier_list2_iterator(PyObject *_se
 
 
 
+
 static PyGetSetDef PyCAst_getsetter_specifier_qualifier_list2_iterator[] = 
 {
 	
@@ -21613,6 +21990,8 @@ static void       PyCAst_delete_specifier_qualifier_list2_item(PyObject *_self);
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_specifier_qualifier_list2_item_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_specifier_qualifier_list2_item_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_specifier_qualifier_list2_item_type_qualifier(PyObject *_self);
 
 
@@ -21622,6 +22001,7 @@ static PyObject *PyCAst_getter_specifier_qualifier_list2_item_type_qualifier(PyO
 static PyGetSetDef PyCAst_getsetter_specifier_qualifier_list2_item[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_specifier_qualifier_list2_item_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_specifier_qualifier_list2_item_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	{(char*)"type_qualifier", (getter)PyCAst_getter_specifier_qualifier_list2_item_type_qualifier,NULL,(char*)"Parameter type_qualifier", NULL},
 
 	NULL
@@ -21761,6 +22141,8 @@ static int PyCAst_init_specifier_qualifier_list2(PyCAst_object_specifier_qualifi
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_specifier_qualifier_list2_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_specifier_qualifier_list2_code(PyObject *_self);
+
 
 
 
@@ -21769,6 +22151,7 @@ static PyObject *PyCAst_getter_specifier_qualifier_list2_ast(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_specifier_qualifier_list2[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_specifier_qualifier_list2_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_specifier_qualifier_list2_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	
 	NULL
 };
@@ -21928,6 +22311,7 @@ static void       PyCAst_delete_translation_unit_iterator(PyObject *_self);
 
 
 
+
 static PyGetSetDef PyCAst_getsetter_translation_unit_iterator[] = 
 {
 	
@@ -22067,6 +22451,8 @@ static void       PyCAst_delete_translation_unit_item(PyObject *_self);
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_translation_unit_item_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_translation_unit_item_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_translation_unit_item_external_declaration(PyObject *_self);
 
 
@@ -22076,6 +22462,7 @@ static PyObject *PyCAst_getter_translation_unit_item_external_declaration(PyObje
 static PyGetSetDef PyCAst_getsetter_translation_unit_item[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_translation_unit_item_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_translation_unit_item_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	{(char*)"external_declaration", (getter)PyCAst_getter_translation_unit_item_external_declaration,NULL,(char*)"Parameter external_declaration", NULL},
 
 	NULL
@@ -22215,6 +22602,8 @@ static int PyCAst_init_translation_unit(PyCAst_object_translation_unit *self, Py
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_translation_unit_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_translation_unit_code(PyObject *_self);
+
 
 
 
@@ -22223,6 +22612,7 @@ static PyObject *PyCAst_getter_translation_unit_ast(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_translation_unit[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_translation_unit_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_translation_unit_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	
 	NULL
 };
@@ -22378,6 +22768,8 @@ static int PyCAst_init_constant_expression(PyCAst_object_constant_expression *se
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_constant_expression_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_constant_expression_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_constant_expression_conditional_expression(PyObject *_self);
 
 
@@ -22387,6 +22779,7 @@ static PyObject *PyCAst_getter_constant_expression_conditional_expression(PyObje
 static PyGetSetDef PyCAst_getsetter_constant_expression[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_constant_expression_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_constant_expression_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"conditional_expression", (getter)PyCAst_getter_constant_expression_conditional_expression,NULL,(char*)"Parameter conditional_expression", NULL},
 
 	NULL
@@ -22524,6 +22917,7 @@ static void       PyCAst_delete_initializer_list_iterator(PyObject *_self);
       Class Attribute getters and setters
 
 \*---------------------------------------------------------------------------------------------*/
+
 
 
 
@@ -22669,6 +23063,8 @@ static void       PyCAst_delete_initializer_list_item(PyObject *_self);
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_initializer_list_item_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_initializer_list_item_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_initializer_list_item_initializer(PyObject *_self);
 
 
@@ -22678,6 +23074,7 @@ static PyObject *PyCAst_getter_initializer_list_item_initializer(PyObject *_self
 static PyGetSetDef PyCAst_getsetter_initializer_list_item[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_initializer_list_item_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_initializer_list_item_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	{(char*)"initializer", (getter)PyCAst_getter_initializer_list_item_initializer,NULL,(char*)"Parameter initializer", NULL},
 
 	NULL
@@ -22817,6 +23214,8 @@ static int PyCAst_init_initializer_list(PyCAst_object_initializer_list *self, Py
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_initializer_list_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_initializer_list_code(PyObject *_self);
+
 
 
 
@@ -22825,6 +23224,7 @@ static PyObject *PyCAst_getter_initializer_list_ast(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_initializer_list[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_initializer_list_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_initializer_list_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	
 	NULL
 };
@@ -22984,6 +23384,7 @@ static void       PyCAst_delete_statement_list_iterator(PyObject *_self);
 
 
 
+
 static PyGetSetDef PyCAst_getsetter_statement_list_iterator[] = 
 {
 	
@@ -23123,6 +23524,8 @@ static void       PyCAst_delete_statement_list_item(PyObject *_self);
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_statement_list_item_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_statement_list_item_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_statement_list_item_statement(PyObject *_self);
 
 
@@ -23132,6 +23535,7 @@ static PyObject *PyCAst_getter_statement_list_item_statement(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_statement_list_item[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_statement_list_item_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_statement_list_item_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	{(char*)"statement", (getter)PyCAst_getter_statement_list_item_statement,NULL,(char*)"Parameter statement", NULL},
 
 	NULL
@@ -23271,6 +23675,8 @@ static int PyCAst_init_statement_list(PyCAst_object_statement_list *self, PyObje
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_statement_list_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_statement_list_code(PyObject *_self);
+
 
 
 
@@ -23279,6 +23685,7 @@ static PyObject *PyCAst_getter_statement_list_ast(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_statement_list[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_statement_list_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_statement_list_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	
 	NULL
 };
@@ -23438,6 +23845,7 @@ static void       PyCAst_delete_expression_iterator(PyObject *_self);
 
 
 
+
 static PyGetSetDef PyCAst_getsetter_expression_iterator[] = 
 {
 	
@@ -23577,6 +23985,8 @@ static void       PyCAst_delete_expression_item(PyObject *_self);
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_expression_item_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_expression_item_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_expression_item_assignment_expression(PyObject *_self);
 
 
@@ -23586,6 +23996,7 @@ static PyObject *PyCAst_getter_expression_item_assignment_expression(PyObject *_
 static PyGetSetDef PyCAst_getsetter_expression_item[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_expression_item_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_expression_item_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	{(char*)"assignment_expression", (getter)PyCAst_getter_expression_item_assignment_expression,NULL,(char*)"Parameter assignment_expression", NULL},
 
 	NULL
@@ -23725,6 +24136,8 @@ static int PyCAst_init_expression(PyCAst_object_expression *self, PyObject *args
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_expression_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_expression_code(PyObject *_self);
+
 
 
 
@@ -23733,6 +24146,7 @@ static PyObject *PyCAst_getter_expression_ast(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_expression[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_expression_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_expression_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	
 	NULL
 };
@@ -23888,6 +24302,8 @@ static int PyCAst_init_declarator(PyCAst_object_declarator *self, PyObject *args
 \*---------------------------------------------------------------------------------------------*/
 static PyObject *PyCAst_getter_declarator_ast(PyObject *_self);
 
+static PyObject *PyCAst_getter_declarator_code(PyObject *_self);
+
 static PyObject *PyCAst_getter_declarator_pointer(PyObject *_self);
 static PyObject *PyCAst_getter_declarator_direct_declarator(PyObject *_self);
 
@@ -23898,6 +24314,7 @@ static PyObject *PyCAst_getter_declarator_direct_declarator(PyObject *_self);
 static PyGetSetDef PyCAst_getsetter_declarator[] = 
 {
 	{(char*)"ast", (getter)PyCAst_getter_declarator_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_declarator_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 		{(char*)"pointer", (getter)PyCAst_getter_declarator_pointer,NULL,(char*)"Parameter pointer", NULL},
 	{(char*)"direct_declarator", (getter)PyCAst_getter_declarator_direct_declarator,NULL,(char*)"Parameter direct_declarator", NULL},
 

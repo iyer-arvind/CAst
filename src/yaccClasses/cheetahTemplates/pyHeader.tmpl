@@ -80,6 +80,10 @@ static int PyCAst_init_${className}(PyCAst_object_${className} *self, PyObject *
 static PyObject *PyCAst_getter_${className}_ast(PyObject *_self);
 #end if
 
+#if "HaveCode" in $flags:
+static PyObject *PyCAst_getter_${className}_code(PyObject *_self);
+#end if
+
 #set gsfBlock=$getattr($self,$blockDict.get("GetSetterFunctionBlock","None"),lambda x:"")
 $gsfBlock($cls)
 
@@ -91,6 +95,9 @@ static PyGetSetDef PyCAst_getsetter_${className}[] =
 {
 #if "HaveAst" in $flags:
 	{(char*)"ast", (getter)PyCAst_getter_${className}_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+#end if
+#if "HaveCode" in $flags:
+	{(char*)"code", (getter)PyCAst_getter_${className}_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 #end if
 	$gstBlock($cls)
 	NULL
@@ -210,7 +217,7 @@ static PyTypeObject  PyCAst_type_${className} =
 #****                                                                                      ******#
 #************************************************************************************************#
 #def tokenClassHeader($cls)
-$classHeader($cls,"HaveAst")
+$classHeader($cls,"HaveAst","HaveCode")
 #end def 
 
 #************************************************************************************************#
@@ -235,7 +242,7 @@ static PyObject *PyCAst_getter_${cls.className}_${n.replace("_p_","")}(PyObject 
 
 
 #def simpleClassHeader($cls)
-$classHeader($cls,"HaveAst","HaveInit",GetSetterFunctionBlock="SimpleGetSetterFunctionBlock",GetSetterTableBlock="SimpleGetSetterTableBlock")
+$classHeader($cls,"HaveAst","HaveCode","HaveInit",GetSetterFunctionBlock="SimpleGetSetterFunctionBlock",GetSetterTableBlock="SimpleGetSetterTableBlock")
 #end def 
 
 
@@ -272,9 +279,9 @@ static PyObject *PyCAst_getter_${cls.className}_${n.replace("_p_","")}(PyObject 
 $classHeader($itercls,"HaveIterNext","HaveListMember")
 
 #set itemcls={"className":$cls.className+"_item","parameters":$cls.parameters,"constructor":$cls.constructor}
-$classHeader($itemcls,"HaveAst",GetSetterFunctionBlock="ListItemGetSetterFunctionBlock",GetSetterTableBlock="ListItemGetSetterTableBlock")
+$classHeader($itemcls,"HaveAst","HaveCode",GetSetterFunctionBlock="ListItemGetSetterFunctionBlock",GetSetterTableBlock="ListItemGetSetterTableBlock")
 
-$classHeader($cls,"HaveAst","HaveIter","HaveInit","HaveSequence")
+$classHeader($cls,"HaveAst","HaveCode","HaveIter","HaveInit","HaveSequence")
 #end def 
 
 

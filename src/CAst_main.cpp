@@ -14,7 +14,10 @@ int main(int argc,char **argv)
 	
 //	yyin=fopen(argv[1],"r");
 //	yyparse();
-	std::cout<<root->getPropertiesList()<<"\n";
+	std::cerr<<root->getPropertiesList()<<"\n";
+
+
+	std::cout<<root->code();
 	delete root;
 	root=0;
 ////	std::cout<<"deleted\n\n";

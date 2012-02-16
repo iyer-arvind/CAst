@@ -20,6 +20,7 @@ class $cls.constructor._name :public CAst
 {
 public:
 	virtual std::string name()const=0;
+	virtual std::ostream& codeStream(std::ostream&)const=0;
 	virtual CAstType typeId()const=0;
 	virtual std::string pattern()const=0;
 	virtual bool isList()const=0;
@@ -86,6 +87,8 @@ public:
 		);
 	${cls.className}(const $cls.className& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "$cls.className"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_$cls.className.upper()
 	virtual std::string pattern()const;							//returns the pattern, here "$cls.pattern"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -97,6 +100,7 @@ public:
 #end for
 	virtual ~$cls.className ();
 
+	
 		
 };
 
@@ -156,6 +160,8 @@ public:
 		);
 	${cls.className}_item(const ${cls.className}_item &);
 	virtual std::string name()const{return "${cls.className}_item";}			//returns the class name, here "$cls.className"
+	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
@@ -203,6 +209,8 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "$cls.className"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_$cls.className.upper()
 	virtual std::string pattern()const;							//returns the pattern, here "$cls.pattern"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
@@ -342,6 +350,7 @@ class CAst
 {
 	public:
 		virtual std::string name()const=0;
+		virtual std::ostream& codeStream(std::ostream&)const=0;
 		virtual bool isList()const=0;
 		virtual PropertiesList getPropertiesList()const=0;
 		virtual Properties getProperties()const=0;
@@ -357,7 +366,9 @@ class CAst
 class Token: public CAst
 {
 	public:
-		virtual std::string name()const=0;
+		virtual std::string name()const			=0;
+		virtual std::ostream& codeStream(std::ostream&)const			=0;
+	virtual std::string code()const				=0;
 		virtual bool isList()const			=0;
 		virtual Properties getProperties()const		=0;
 		virtual PropertiesList getPropertiesList()const	=0;
@@ -393,9 +404,11 @@ public:
 	GenericToken(const GenericToken& other):
 		_txt(other._txt)
 	{}
-	virtual bool isList()const			{return false;}
-	virtual Properties getProperties()const		{Properties p(name());p.setTokValue(_txt);return p;}
-	virtual PropertiesList getPropertiesList()const	{return PropertiesList(name());}
+	virtual std::ostream& codeStream(std::ostream& stream)const			{return stream<<_txt<<" ";}
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
+	virtual bool isList()const							{return false;}
+	virtual Properties getProperties()const						{Properties p(name());p.setTokValue(_txt);return p;}
+	virtual PropertiesList getPropertiesList()const					{return PropertiesList(name());}
 	virtual ~GenericToken()
 	{}
 };

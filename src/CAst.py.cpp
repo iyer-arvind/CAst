@@ -82,6 +82,19 @@ static PyObject *PyCAst_getter_Token_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_Token_code(PyObject *_self)
+{
+	PyCAst_object_Token *self=(PyCAst_object_Token*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 
@@ -146,6 +159,19 @@ static PyObject *PyCAst_getter_storage_class_specifier_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_storage_class_specifier_code(PyObject *_self)
+{
+	PyCAst_object_storage_class_specifier *self=(PyCAst_object_storage_class_specifier*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_storage_class_specifier_token1(PyObject *_self)
@@ -225,6 +251,19 @@ static PyObject *PyCAst_getter_expression_statement_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_expression_statement_code(PyObject *_self)
+{
+	PyCAst_object_expression_statement *self=(PyCAst_object_expression_statement*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_expression_statement_expression(PyObject *_self)
@@ -308,6 +347,19 @@ static PyObject *PyCAst_getter_type_name_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_type_name_code(PyObject *_self)
+{
+	PyCAst_object_type_name *self=(PyCAst_object_type_name*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_type_name_specifier_qualifier_list(PyObject *_self)
@@ -415,6 +467,19 @@ static PyObject *PyCAst_getter_unary_expression1_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_unary_expression1_code(PyObject *_self)
+{
+	PyCAst_object_unary_expression1 *self=(PyCAst_object_unary_expression1*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_unary_expression1_type_name(PyObject *_self)
@@ -498,6 +563,19 @@ static PyObject *PyCAst_getter_unary_expression2_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_unary_expression2_code(PyObject *_self)
+{
+	PyCAst_object_unary_expression2 *self=(PyCAst_object_unary_expression2*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_unary_expression2_token1(PyObject *_self)
@@ -613,6 +691,19 @@ static PyObject *PyCAst_getter_unary_expression3_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_unary_expression3_code(PyObject *_self)
+{
+	PyCAst_object_unary_expression3 *self=(PyCAst_object_unary_expression3*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_unary_expression3_unary_operator(PyObject *_self)
@@ -720,6 +811,19 @@ static PyObject *PyCAst_getter_unary_expression4_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_unary_expression4_code(PyObject *_self)
+{
+	PyCAst_object_unary_expression4 *self=(PyCAst_object_unary_expression4*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_unary_expression4_postfix_expression(PyObject *_self)
@@ -809,6 +913,7 @@ static void PyCAst_delete_conditional_expression_iterator(PyObject *_self)
 
 
 
+
 /*=====================================================================================================================================*\
 
         DEFINITION OF conditional_expression_item
@@ -864,6 +969,19 @@ static PyObject *PyCAst_getter_conditional_expression_item_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_conditional_expression_item_code(PyObject *_self)
+{
+	PyCAst_object_conditional_expression_item *self=(PyCAst_object_conditional_expression_item*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 /*=====================================================================================================================================*\
@@ -926,6 +1044,19 @@ static PyObject *PyCAst_getter_conditional_expression_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_conditional_expression_code(PyObject *_self)
+{
+	PyCAst_object_conditional_expression *self=(PyCAst_object_conditional_expression*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 Py_ssize_t PyCAst_length_conditional_expression(PyObject *_self)
@@ -1072,6 +1203,19 @@ static PyObject *PyCAst_getter_struct_or_union_specifier_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_struct_or_union_specifier_code(PyObject *_self)
+{
+	PyCAst_object_struct_or_union_specifier *self=(PyCAst_object_struct_or_union_specifier*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_struct_or_union_specifier_struct_or_union(PyObject *_self)
@@ -1197,6 +1341,7 @@ static void PyCAst_delete_exclusive_or_expression_iterator(PyObject *_self)
 
 
 
+
 /*=====================================================================================================================================*\
 
         DEFINITION OF exclusive_or_expression_item
@@ -1252,6 +1397,19 @@ static PyObject *PyCAst_getter_exclusive_or_expression_item_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_exclusive_or_expression_item_code(PyObject *_self)
+{
+	PyCAst_object_exclusive_or_expression_item *self=(PyCAst_object_exclusive_or_expression_item*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 /*=====================================================================================================================================*\
@@ -1314,6 +1472,19 @@ static PyObject *PyCAst_getter_exclusive_or_expression_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_exclusive_or_expression_code(PyObject *_self)
+{
+	PyCAst_object_exclusive_or_expression *self=(PyCAst_object_exclusive_or_expression*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 Py_ssize_t PyCAst_length_exclusive_or_expression(PyObject *_self)
@@ -1446,6 +1617,19 @@ static PyObject *PyCAst_getter_initializer1_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_initializer1_code(PyObject *_self)
+{
+	PyCAst_object_initializer1 *self=(PyCAst_object_initializer1*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_initializer1_initializer_list(PyObject *_self)
@@ -1543,6 +1727,19 @@ static PyObject *PyCAst_getter_initializer2_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_initializer2_code(PyObject *_self)
+{
+	PyCAst_object_initializer2 *self=(PyCAst_object_initializer2*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_initializer2_assignment_expression(PyObject *_self)
@@ -1614,6 +1811,7 @@ static void PyCAst_delete_struct_declaration_list_iterator(PyObject *_self)
 
 
 
+
 /*=====================================================================================================================================*\
 
         DEFINITION OF struct_declaration_list_item
@@ -1669,6 +1867,19 @@ static PyObject *PyCAst_getter_struct_declaration_list_item_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_struct_declaration_list_item_code(PyObject *_self)
+{
+	PyCAst_object_struct_declaration_list_item *self=(PyCAst_object_struct_declaration_list_item*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 /*=====================================================================================================================================*\
@@ -1731,6 +1942,19 @@ static PyObject *PyCAst_getter_struct_declaration_list_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_struct_declaration_list_code(PyObject *_self)
+{
+	PyCAst_object_struct_declaration_list *self=(PyCAst_object_struct_declaration_list*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 Py_ssize_t PyCAst_length_struct_declaration_list(PyObject *_self)
@@ -1863,6 +2087,19 @@ static PyObject *PyCAst_getter_assignment_operator_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_assignment_operator_code(PyObject *_self)
+{
+	PyCAst_object_assignment_operator *self=(PyCAst_object_assignment_operator*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_assignment_operator_token1(PyObject *_self)
@@ -1942,6 +2179,19 @@ static PyObject *PyCAst_getter_struct_declaration_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_struct_declaration_code(PyObject *_self)
+{
+	PyCAst_object_struct_declaration *self=(PyCAst_object_struct_declaration*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_struct_declaration_specifier_qualifier_list(PyObject *_self)
@@ -2049,6 +2299,19 @@ static PyObject *PyCAst_getter_abstract_declarator_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_abstract_declarator_code(PyObject *_self)
+{
+	PyCAst_object_abstract_declarator *self=(PyCAst_object_abstract_declarator*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_abstract_declarator_pointer(PyObject *_self)
@@ -2162,6 +2425,19 @@ static PyObject *PyCAst_getter_iteration_statement1_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_iteration_statement1_code(PyObject *_self)
+{
+	PyCAst_object_iteration_statement1 *self=(PyCAst_object_iteration_statement1*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_iteration_statement1_statement(PyObject *_self)
@@ -2293,6 +2569,19 @@ static PyObject *PyCAst_getter_iteration_statement2_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_iteration_statement2_code(PyObject *_self)
+{
+	PyCAst_object_iteration_statement2 *self=(PyCAst_object_iteration_statement2*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_iteration_statement2_expression_statement(PyObject *_self)
@@ -2460,6 +2749,19 @@ static PyObject *PyCAst_getter_iteration_statement3_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_iteration_statement3_code(PyObject *_self)
+{
+	PyCAst_object_iteration_statement3 *self=(PyCAst_object_iteration_statement3*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_iteration_statement3_expression(PyObject *_self)
@@ -2573,6 +2875,7 @@ static void PyCAst_delete_additive_expression_iterator(PyObject *_self)
 
 
 
+
 /*=====================================================================================================================================*\
 
         DEFINITION OF additive_expression_item
@@ -2628,6 +2931,19 @@ static PyObject *PyCAst_getter_additive_expression_item_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_additive_expression_item_code(PyObject *_self)
+{
+	PyCAst_object_additive_expression_item *self=(PyCAst_object_additive_expression_item*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 /*=====================================================================================================================================*\
@@ -2690,6 +3006,19 @@ static PyObject *PyCAst_getter_additive_expression_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_additive_expression_code(PyObject *_self)
+{
+	PyCAst_object_additive_expression *self=(PyCAst_object_additive_expression*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 Py_ssize_t PyCAst_length_additive_expression(PyObject *_self)
@@ -2832,6 +3161,19 @@ static PyObject *PyCAst_getter_external_declaration1_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_external_declaration1_code(PyObject *_self)
+{
+	PyCAst_object_external_declaration1 *self=(PyCAst_object_external_declaration1*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_external_declaration1_function_definition(PyObject *_self)
@@ -2915,6 +3257,19 @@ static PyObject *PyCAst_getter_external_declaration2_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_external_declaration2_code(PyObject *_self)
+{
+	PyCAst_object_external_declaration2 *self=(PyCAst_object_external_declaration2*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_external_declaration2_declaration(PyObject *_self)
@@ -2998,6 +3353,19 @@ static PyObject *PyCAst_getter_type_specifier1_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_type_specifier1_code(PyObject *_self)
+{
+	PyCAst_object_type_specifier1 *self=(PyCAst_object_type_specifier1*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_type_specifier1_token1(PyObject *_self)
@@ -3077,6 +3445,19 @@ static PyObject *PyCAst_getter_type_specifier2_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_type_specifier2_code(PyObject *_self)
+{
+	PyCAst_object_type_specifier2 *self=(PyCAst_object_type_specifier2*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_type_specifier2_struct_or_union_specifier(PyObject *_self)
@@ -3160,6 +3541,19 @@ static PyObject *PyCAst_getter_type_specifier3_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_type_specifier3_code(PyObject *_self)
+{
+	PyCAst_object_type_specifier3 *self=(PyCAst_object_type_specifier3*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_type_specifier3_enum_specifier(PyObject *_self)
@@ -3243,6 +3637,19 @@ static PyObject *PyCAst_getter_compound_statement_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_compound_statement_code(PyObject *_self)
+{
+	PyCAst_object_compound_statement *self=(PyCAst_object_compound_statement*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_compound_statement_declaration_list(PyObject *_self)
@@ -3326,6 +3733,7 @@ static void PyCAst_delete_inclusive_or_expression_iterator(PyObject *_self)
 
 
 
+
 /*=====================================================================================================================================*\
 
         DEFINITION OF inclusive_or_expression_item
@@ -3381,6 +3789,19 @@ static PyObject *PyCAst_getter_inclusive_or_expression_item_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_inclusive_or_expression_item_code(PyObject *_self)
+{
+	PyCAst_object_inclusive_or_expression_item *self=(PyCAst_object_inclusive_or_expression_item*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 /*=====================================================================================================================================*\
@@ -3443,6 +3864,19 @@ static PyObject *PyCAst_getter_inclusive_or_expression_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_inclusive_or_expression_code(PyObject *_self)
+{
+	PyCAst_object_inclusive_or_expression *self=(PyCAst_object_inclusive_or_expression*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 Py_ssize_t PyCAst_length_inclusive_or_expression(PyObject *_self)
@@ -3557,6 +3991,7 @@ static void PyCAst_delete_pointer_iterator(PyObject *_self)
 
 
 
+
 /*=====================================================================================================================================*\
 
         DEFINITION OF pointer_item
@@ -3612,6 +4047,19 @@ static PyObject *PyCAst_getter_pointer_item_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_pointer_item_code(PyObject *_self)
+{
+	PyCAst_object_pointer_item *self=(PyCAst_object_pointer_item*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 /*=====================================================================================================================================*\
@@ -3674,6 +4122,19 @@ static PyObject *PyCAst_getter_pointer_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_pointer_code(PyObject *_self)
+{
+	PyCAst_object_pointer *self=(PyCAst_object_pointer*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 Py_ssize_t PyCAst_length_pointer(PyObject *_self)
@@ -3806,6 +4267,19 @@ static PyObject *PyCAst_getter_selection_statement1_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_selection_statement1_code(PyObject *_self)
+{
+	PyCAst_object_selection_statement1 *self=(PyCAst_object_selection_statement1*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_selection_statement1_expression(PyObject *_self)
@@ -3999,6 +4473,19 @@ static PyObject *PyCAst_getter_selection_statement2_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_selection_statement2_code(PyObject *_self)
+{
+	PyCAst_object_selection_statement2 *self=(PyCAst_object_selection_statement2*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_selection_statement2_expression(PyObject *_self)
@@ -4130,6 +4617,19 @@ static PyObject *PyCAst_getter_postfix_expression1_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_postfix_expression1_code(PyObject *_self)
+{
+	PyCAst_object_postfix_expression1 *self=(PyCAst_object_postfix_expression1*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_postfix_expression1_postfix_expression(PyObject *_self)
@@ -4255,6 +4755,19 @@ static PyObject *PyCAst_getter_postfix_expression2_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_postfix_expression2_code(PyObject *_self)
+{
+	PyCAst_object_postfix_expression2 *self=(PyCAst_object_postfix_expression2*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_postfix_expression2_postfix_expression(PyObject *_self)
@@ -4380,6 +4893,19 @@ static PyObject *PyCAst_getter_postfix_expression3_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_postfix_expression3_code(PyObject *_self)
+{
+	PyCAst_object_postfix_expression3 *self=(PyCAst_object_postfix_expression3*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_postfix_expression3_postfix_expression(PyObject *_self)
@@ -4515,6 +5041,19 @@ static PyObject *PyCAst_getter_postfix_expression4_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_postfix_expression4_code(PyObject *_self)
+{
+	PyCAst_object_postfix_expression4 *self=(PyCAst_object_postfix_expression4*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_postfix_expression4_postfix_expression(PyObject *_self)
@@ -4636,6 +5175,19 @@ static PyObject *PyCAst_getter_postfix_expression5_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_postfix_expression5_code(PyObject *_self)
+{
+	PyCAst_object_postfix_expression5 *self=(PyCAst_object_postfix_expression5*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_postfix_expression5_primary_expression(PyObject *_self)
@@ -4707,6 +5259,7 @@ static void PyCAst_delete_and_expression_iterator(PyObject *_self)
 
 
 
+
 /*=====================================================================================================================================*\
 
         DEFINITION OF and_expression_item
@@ -4762,6 +5315,19 @@ static PyObject *PyCAst_getter_and_expression_item_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_and_expression_item_code(PyObject *_self)
+{
+	PyCAst_object_and_expression_item *self=(PyCAst_object_and_expression_item*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 /*=====================================================================================================================================*\
@@ -4824,6 +5390,19 @@ static PyObject *PyCAst_getter_and_expression_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_and_expression_code(PyObject *_self)
+{
+	PyCAst_object_and_expression *self=(PyCAst_object_and_expression*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 Py_ssize_t PyCAst_length_and_expression(PyObject *_self)
@@ -4956,6 +5535,19 @@ static PyObject *PyCAst_getter_statement1_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_statement1_code(PyObject *_self)
+{
+	PyCAst_object_statement1 *self=(PyCAst_object_statement1*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_statement1_labeled_statement(PyObject *_self)
@@ -5045,6 +5637,19 @@ static PyObject *PyCAst_getter_statement2_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_statement2_code(PyObject *_self)
+{
+	PyCAst_object_statement2 *self=(PyCAst_object_statement2*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_statement2_compound_statement(PyObject *_self)
@@ -5128,6 +5733,19 @@ static PyObject *PyCAst_getter_statement3_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_statement3_code(PyObject *_self)
+{
+	PyCAst_object_statement3 *self=(PyCAst_object_statement3*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_statement3_expression_statement(PyObject *_self)
@@ -5211,6 +5829,19 @@ static PyObject *PyCAst_getter_statement4_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_statement4_code(PyObject *_self)
+{
+	PyCAst_object_statement4 *self=(PyCAst_object_statement4*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_statement4_selection_statement(PyObject *_self)
@@ -5300,6 +5931,19 @@ static PyObject *PyCAst_getter_statement5_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_statement5_code(PyObject *_self)
+{
+	PyCAst_object_statement5 *self=(PyCAst_object_statement5*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_statement5_iteration_statement(PyObject *_self)
@@ -5395,6 +6039,19 @@ static PyObject *PyCAst_getter_statement6_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_statement6_code(PyObject *_self)
+{
+	PyCAst_object_statement6 *self=(PyCAst_object_statement6*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_statement6_jump_statement(PyObject *_self)
@@ -5490,6 +6147,19 @@ static PyObject *PyCAst_getter_cast_expression1_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_cast_expression1_code(PyObject *_self)
+{
+	PyCAst_object_cast_expression1 *self=(PyCAst_object_cast_expression1*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_cast_expression1_type_name(PyObject *_self)
@@ -5597,6 +6267,19 @@ static PyObject *PyCAst_getter_cast_expression2_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_cast_expression2_code(PyObject *_self)
+{
+	PyCAst_object_cast_expression2 *self=(PyCAst_object_cast_expression2*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_cast_expression2_unary_expression(PyObject *_self)
@@ -5698,6 +6381,19 @@ static PyObject *PyCAst_getter_init_declarator_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_init_declarator_code(PyObject *_self)
+{
+	PyCAst_object_init_declarator *self=(PyCAst_object_init_declarator*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_init_declarator_declarator(PyObject *_self)
@@ -5801,6 +6497,7 @@ static void PyCAst_delete_struct_declarator_list_iterator(PyObject *_self)
 
 
 
+
 /*=====================================================================================================================================*\
 
         DEFINITION OF struct_declarator_list_item
@@ -5856,6 +6553,19 @@ static PyObject *PyCAst_getter_struct_declarator_list_item_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_struct_declarator_list_item_code(PyObject *_self)
+{
+	PyCAst_object_struct_declarator_list_item *self=(PyCAst_object_struct_declarator_list_item*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 /*=====================================================================================================================================*\
@@ -5918,6 +6628,19 @@ static PyObject *PyCAst_getter_struct_declarator_list_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_struct_declarator_list_code(PyObject *_self)
+{
+	PyCAst_object_struct_declarator_list *self=(PyCAst_object_struct_declarator_list*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 Py_ssize_t PyCAst_length_struct_declarator_list(PyObject *_self)
@@ -6032,6 +6755,7 @@ static void PyCAst_delete_logical_or_expression_iterator(PyObject *_self)
 
 
 
+
 /*=====================================================================================================================================*\
 
         DEFINITION OF logical_or_expression_item
@@ -6087,6 +6811,19 @@ static PyObject *PyCAst_getter_logical_or_expression_item_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_logical_or_expression_item_code(PyObject *_self)
+{
+	PyCAst_object_logical_or_expression_item *self=(PyCAst_object_logical_or_expression_item*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 /*=====================================================================================================================================*\
@@ -6149,6 +6886,19 @@ static PyObject *PyCAst_getter_logical_or_expression_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_logical_or_expression_code(PyObject *_self)
+{
+	PyCAst_object_logical_or_expression *self=(PyCAst_object_logical_or_expression*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 Py_ssize_t PyCAst_length_logical_or_expression(PyObject *_self)
@@ -6281,6 +7031,19 @@ static PyObject *PyCAst_getter_unary_operator_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_unary_operator_code(PyObject *_self)
+{
+	PyCAst_object_unary_operator *self=(PyCAst_object_unary_operator*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_unary_operator_token1(PyObject *_self)
@@ -6342,6 +7105,7 @@ static void PyCAst_delete_relational_expression_iterator(PyObject *_self)
 
 
 
+
 /*=====================================================================================================================================*\
 
         DEFINITION OF relational_expression_item
@@ -6397,6 +7161,19 @@ static PyObject *PyCAst_getter_relational_expression_item_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_relational_expression_item_code(PyObject *_self)
+{
+	PyCAst_object_relational_expression_item *self=(PyCAst_object_relational_expression_item*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 /*=====================================================================================================================================*\
@@ -6459,6 +7236,19 @@ static PyObject *PyCAst_getter_relational_expression_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_relational_expression_code(PyObject *_self)
+{
+	PyCAst_object_relational_expression *self=(PyCAst_object_relational_expression*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 Py_ssize_t PyCAst_length_relational_expression(PyObject *_self)
@@ -6601,6 +7391,19 @@ static PyObject *PyCAst_getter_struct_or_union_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_struct_or_union_code(PyObject *_self)
+{
+	PyCAst_object_struct_or_union *self=(PyCAst_object_struct_or_union*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_struct_or_union_token1(PyObject *_self)
@@ -6680,6 +7483,19 @@ static PyObject *PyCAst_getter_enumerator_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_enumerator_code(PyObject *_self)
+{
+	PyCAst_object_enumerator *self=(PyCAst_object_enumerator*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_enumerator_token1(PyObject *_self)
@@ -6791,6 +7607,19 @@ static PyObject *PyCAst_getter_assignment_expression1_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_assignment_expression1_code(PyObject *_self)
+{
+	PyCAst_object_assignment_expression1 *self=(PyCAst_object_assignment_expression1*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_assignment_expression1_unary_expression(PyObject *_self)
@@ -6934,6 +7763,19 @@ static PyObject *PyCAst_getter_assignment_expression2_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_assignment_expression2_code(PyObject *_self)
+{
+	PyCAst_object_assignment_expression2 *self=(PyCAst_object_assignment_expression2*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_assignment_expression2_conditional_expression(PyObject *_self)
@@ -7017,6 +7859,19 @@ static PyObject *PyCAst_getter_parameter_type_list_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_parameter_type_list_code(PyObject *_self)
+{
+	PyCAst_object_parameter_type_list *self=(PyCAst_object_parameter_type_list*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_parameter_type_list_parameter_list(PyObject *_self)
@@ -7128,6 +7983,19 @@ static PyObject *PyCAst_getter_parameter_declaration1_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_parameter_declaration1_code(PyObject *_self)
+{
+	PyCAst_object_parameter_declaration1 *self=(PyCAst_object_parameter_declaration1*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_parameter_declaration1_declaration_specifiers(PyObject *_self)
@@ -7241,6 +8109,19 @@ static PyObject *PyCAst_getter_parameter_declaration2_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_parameter_declaration2_code(PyObject *_self)
+{
+	PyCAst_object_parameter_declaration2 *self=(PyCAst_object_parameter_declaration2*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_parameter_declaration2_declaration_specifiers(PyObject *_self)
@@ -7336,6 +8217,7 @@ static void PyCAst_delete_multiplicative_expression_iterator(PyObject *_self)
 
 
 
+
 /*=====================================================================================================================================*\
 
         DEFINITION OF multiplicative_expression_item
@@ -7391,6 +8273,19 @@ static PyObject *PyCAst_getter_multiplicative_expression_item_ast(PyObject *_sel
 
 }
 
+static PyObject *PyCAst_getter_multiplicative_expression_item_code(PyObject *_self)
+{
+	PyCAst_object_multiplicative_expression_item *self=(PyCAst_object_multiplicative_expression_item*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 /*=====================================================================================================================================*\
@@ -7453,6 +8348,19 @@ static PyObject *PyCAst_getter_multiplicative_expression_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_multiplicative_expression_code(PyObject *_self)
+{
+	PyCAst_object_multiplicative_expression *self=(PyCAst_object_multiplicative_expression*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 Py_ssize_t PyCAst_length_multiplicative_expression(PyObject *_self)
@@ -7583,6 +8491,7 @@ static void PyCAst_delete_type_qualifier_list_iterator(PyObject *_self)
 
 
 
+
 /*=====================================================================================================================================*\
 
         DEFINITION OF type_qualifier_list_item
@@ -7638,6 +8547,19 @@ static PyObject *PyCAst_getter_type_qualifier_list_item_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_type_qualifier_list_item_code(PyObject *_self)
+{
+	PyCAst_object_type_qualifier_list_item *self=(PyCAst_object_type_qualifier_list_item*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 /*=====================================================================================================================================*\
@@ -7700,6 +8622,19 @@ static PyObject *PyCAst_getter_type_qualifier_list_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_type_qualifier_list_code(PyObject *_self)
+{
+	PyCAst_object_type_qualifier_list *self=(PyCAst_object_type_qualifier_list*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 Py_ssize_t PyCAst_length_type_qualifier_list(PyObject *_self)
@@ -7814,6 +8749,7 @@ static void PyCAst_delete_argument_expression_list_iterator(PyObject *_self)
 
 
 
+
 /*=====================================================================================================================================*\
 
         DEFINITION OF argument_expression_list_item
@@ -7869,6 +8805,19 @@ static PyObject *PyCAst_getter_argument_expression_list_item_ast(PyObject *_self
 
 }
 
+static PyObject *PyCAst_getter_argument_expression_list_item_code(PyObject *_self)
+{
+	PyCAst_object_argument_expression_list_item *self=(PyCAst_object_argument_expression_list_item*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 /*=====================================================================================================================================*\
@@ -7931,6 +8880,19 @@ static PyObject *PyCAst_getter_argument_expression_list_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_argument_expression_list_code(PyObject *_self)
+{
+	PyCAst_object_argument_expression_list *self=(PyCAst_object_argument_expression_list*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 Py_ssize_t PyCAst_length_argument_expression_list(PyObject *_self)
@@ -8069,6 +9031,19 @@ static PyObject *PyCAst_getter_direct_abstract_declarator1_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_direct_abstract_declarator1_code(PyObject *_self)
+{
+	PyCAst_object_direct_abstract_declarator1 *self=(PyCAst_object_direct_abstract_declarator1*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_direct_abstract_declarator1_direct_abstract_declarator(PyObject *_self)
@@ -8182,6 +9157,19 @@ static PyObject *PyCAst_getter_direct_abstract_declarator2_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_direct_abstract_declarator2_code(PyObject *_self)
+{
+	PyCAst_object_direct_abstract_declarator2 *self=(PyCAst_object_direct_abstract_declarator2*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_direct_abstract_declarator2_direct_abstract_declarator(PyObject *_self)
@@ -8295,6 +9283,19 @@ static PyObject *PyCAst_getter_direct_abstract_declarator3_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_direct_abstract_declarator3_code(PyObject *_self)
+{
+	PyCAst_object_direct_abstract_declarator3 *self=(PyCAst_object_direct_abstract_declarator3*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_direct_abstract_declarator3_abstract_declarator(PyObject *_self)
@@ -8360,6 +9361,7 @@ static void PyCAst_delete_equality_expression_iterator(PyObject *_self)
 
 
 
+
 /*=====================================================================================================================================*\
 
         DEFINITION OF equality_expression_item
@@ -8415,6 +9417,19 @@ static PyObject *PyCAst_getter_equality_expression_item_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_equality_expression_item_code(PyObject *_self)
+{
+	PyCAst_object_equality_expression_item *self=(PyCAst_object_equality_expression_item*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 /*=====================================================================================================================================*\
@@ -8477,6 +9492,19 @@ static PyObject *PyCAst_getter_equality_expression_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_equality_expression_code(PyObject *_self)
+{
+	PyCAst_object_equality_expression *self=(PyCAst_object_equality_expression*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 Py_ssize_t PyCAst_length_equality_expression(PyObject *_self)
@@ -8619,6 +9647,19 @@ static PyObject *PyCAst_getter_primary_expression1_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_primary_expression1_code(PyObject *_self)
+{
+	PyCAst_object_primary_expression1 *self=(PyCAst_object_primary_expression1*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_primary_expression1_expression(PyObject *_self)
@@ -8702,6 +9743,19 @@ static PyObject *PyCAst_getter_primary_expression2_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_primary_expression2_code(PyObject *_self)
+{
+	PyCAst_object_primary_expression2 *self=(PyCAst_object_primary_expression2*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_primary_expression2_token1(PyObject *_self)
@@ -8763,6 +9817,7 @@ static void PyCAst_delete_declaration_specifiers1_iterator(PyObject *_self)
 
 
 
+
 /*=====================================================================================================================================*\
 
         DEFINITION OF declaration_specifiers1_item
@@ -8818,6 +9873,19 @@ static PyObject *PyCAst_getter_declaration_specifiers1_item_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_declaration_specifiers1_item_code(PyObject *_self)
+{
+	PyCAst_object_declaration_specifiers1_item *self=(PyCAst_object_declaration_specifiers1_item*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 /*=====================================================================================================================================*\
@@ -8880,6 +9948,19 @@ static PyObject *PyCAst_getter_declaration_specifiers1_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_declaration_specifiers1_code(PyObject *_self)
+{
+	PyCAst_object_declaration_specifiers1 *self=(PyCAst_object_declaration_specifiers1*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 Py_ssize_t PyCAst_length_declaration_specifiers1(PyObject *_self)
@@ -8994,6 +10075,7 @@ static void PyCAst_delete_declaration_specifiers2_iterator(PyObject *_self)
 
 
 
+
 /*=====================================================================================================================================*\
 
         DEFINITION OF declaration_specifiers2_item
@@ -9049,6 +10131,19 @@ static PyObject *PyCAst_getter_declaration_specifiers2_item_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_declaration_specifiers2_item_code(PyObject *_self)
+{
+	PyCAst_object_declaration_specifiers2_item *self=(PyCAst_object_declaration_specifiers2_item*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 /*=====================================================================================================================================*\
@@ -9111,6 +10206,19 @@ static PyObject *PyCAst_getter_declaration_specifiers2_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_declaration_specifiers2_code(PyObject *_self)
+{
+	PyCAst_object_declaration_specifiers2 *self=(PyCAst_object_declaration_specifiers2*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 Py_ssize_t PyCAst_length_declaration_specifiers2(PyObject *_self)
@@ -9237,6 +10345,7 @@ static void PyCAst_delete_declaration_specifiers3_iterator(PyObject *_self)
 
 
 
+
 /*=====================================================================================================================================*\
 
         DEFINITION OF declaration_specifiers3_item
@@ -9292,6 +10401,19 @@ static PyObject *PyCAst_getter_declaration_specifiers3_item_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_declaration_specifiers3_item_code(PyObject *_self)
+{
+	PyCAst_object_declaration_specifiers3_item *self=(PyCAst_object_declaration_specifiers3_item*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 /*=====================================================================================================================================*\
@@ -9354,6 +10476,19 @@ static PyObject *PyCAst_getter_declaration_specifiers3_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_declaration_specifiers3_code(PyObject *_self)
+{
+	PyCAst_object_declaration_specifiers3 *self=(PyCAst_object_declaration_specifiers3*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 Py_ssize_t PyCAst_length_declaration_specifiers3(PyObject *_self)
@@ -9486,6 +10621,19 @@ static PyObject *PyCAst_getter_declaration_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_declaration_code(PyObject *_self)
+{
+	PyCAst_object_declaration *self=(PyCAst_object_declaration*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_declaration_declaration_specifiers(PyObject *_self)
@@ -9599,6 +10747,19 @@ static PyObject *PyCAst_getter_direct_declarator1_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_direct_declarator1_code(PyObject *_self)
+{
+	PyCAst_object_direct_declarator1 *self=(PyCAst_object_direct_declarator1*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_direct_declarator1_direct_declarator(PyObject *_self)
@@ -9724,6 +10885,19 @@ static PyObject *PyCAst_getter_direct_declarator2_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_direct_declarator2_code(PyObject *_self)
+{
+	PyCAst_object_direct_declarator2 *self=(PyCAst_object_direct_declarator2*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_direct_declarator2_direct_declarator(PyObject *_self)
@@ -9849,6 +11023,19 @@ static PyObject *PyCAst_getter_direct_declarator3_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_direct_declarator3_code(PyObject *_self)
+{
+	PyCAst_object_direct_declarator3 *self=(PyCAst_object_direct_declarator3*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_direct_declarator3_direct_declarator(PyObject *_self)
@@ -9974,6 +11161,19 @@ static PyObject *PyCAst_getter_direct_declarator4_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_direct_declarator4_code(PyObject *_self)
+{
+	PyCAst_object_direct_declarator4 *self=(PyCAst_object_direct_declarator4*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_direct_declarator4_declarator(PyObject *_self)
@@ -10057,6 +11257,19 @@ static PyObject *PyCAst_getter_direct_declarator5_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_direct_declarator5_code(PyObject *_self)
+{
+	PyCAst_object_direct_declarator5 *self=(PyCAst_object_direct_declarator5*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_direct_declarator5_token1(PyObject *_self)
@@ -10118,6 +11331,7 @@ static void PyCAst_delete_logical_and_expression_iterator(PyObject *_self)
 
 
 
+
 /*=====================================================================================================================================*\
 
         DEFINITION OF logical_and_expression_item
@@ -10173,6 +11387,19 @@ static PyObject *PyCAst_getter_logical_and_expression_item_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_logical_and_expression_item_code(PyObject *_self)
+{
+	PyCAst_object_logical_and_expression_item *self=(PyCAst_object_logical_and_expression_item*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 /*=====================================================================================================================================*\
@@ -10235,6 +11462,19 @@ static PyObject *PyCAst_getter_logical_and_expression_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_logical_and_expression_code(PyObject *_self)
+{
+	PyCAst_object_logical_and_expression *self=(PyCAst_object_logical_and_expression*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 Py_ssize_t PyCAst_length_logical_and_expression(PyObject *_self)
@@ -10349,6 +11589,7 @@ static void PyCAst_delete_init_declarator_list_iterator(PyObject *_self)
 
 
 
+
 /*=====================================================================================================================================*\
 
         DEFINITION OF init_declarator_list_item
@@ -10404,6 +11645,19 @@ static PyObject *PyCAst_getter_init_declarator_list_item_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_init_declarator_list_item_code(PyObject *_self)
+{
+	PyCAst_object_init_declarator_list_item *self=(PyCAst_object_init_declarator_list_item*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 /*=====================================================================================================================================*\
@@ -10466,6 +11720,19 @@ static PyObject *PyCAst_getter_init_declarator_list_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_init_declarator_list_code(PyObject *_self)
+{
+	PyCAst_object_init_declarator_list *self=(PyCAst_object_init_declarator_list*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 Py_ssize_t PyCAst_length_init_declarator_list(PyObject *_self)
@@ -10580,6 +11847,7 @@ static void PyCAst_delete_shift_expression_iterator(PyObject *_self)
 
 
 
+
 /*=====================================================================================================================================*\
 
         DEFINITION OF shift_expression_item
@@ -10635,6 +11903,19 @@ static PyObject *PyCAst_getter_shift_expression_item_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_shift_expression_item_code(PyObject *_self)
+{
+	PyCAst_object_shift_expression_item *self=(PyCAst_object_shift_expression_item*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 /*=====================================================================================================================================*\
@@ -10697,6 +11978,19 @@ static PyObject *PyCAst_getter_shift_expression_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_shift_expression_code(PyObject *_self)
+{
+	PyCAst_object_shift_expression *self=(PyCAst_object_shift_expression*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 Py_ssize_t PyCAst_length_shift_expression(PyObject *_self)
@@ -10821,6 +12115,7 @@ static void PyCAst_delete_identifier_list_iterator(PyObject *_self)
 
 
 
+
 /*=====================================================================================================================================*\
 
         DEFINITION OF identifier_list_item
@@ -10876,6 +12171,19 @@ static PyObject *PyCAst_getter_identifier_list_item_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_identifier_list_item_code(PyObject *_self)
+{
+	PyCAst_object_identifier_list_item *self=(PyCAst_object_identifier_list_item*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 /*=====================================================================================================================================*\
@@ -10938,6 +12246,19 @@ static PyObject *PyCAst_getter_identifier_list_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_identifier_list_code(PyObject *_self)
+{
+	PyCAst_object_identifier_list *self=(PyCAst_object_identifier_list*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 Py_ssize_t PyCAst_length_identifier_list(PyObject *_self)
@@ -11066,6 +12387,19 @@ static PyObject *PyCAst_getter_jump_statement1_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_jump_statement1_code(PyObject *_self)
+{
+	PyCAst_object_jump_statement1 *self=(PyCAst_object_jump_statement1*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_jump_statement1_token1(PyObject *_self)
@@ -11145,6 +12479,19 @@ static PyObject *PyCAst_getter_jump_statement2_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_jump_statement2_code(PyObject *_self)
+{
+	PyCAst_object_jump_statement2 *self=(PyCAst_object_jump_statement2*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_jump_statement2_expression(PyObject *_self)
@@ -11228,6 +12575,19 @@ static PyObject *PyCAst_getter_jump_statement3_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_jump_statement3_code(PyObject *_self)
+{
+	PyCAst_object_jump_statement3 *self=(PyCAst_object_jump_statement3*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_jump_statement3_token1(PyObject *_self)
@@ -11307,6 +12667,19 @@ static PyObject *PyCAst_getter_struct_declarator_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_struct_declarator_code(PyObject *_self)
+{
+	PyCAst_object_struct_declarator *self=(PyCAst_object_struct_declarator*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_struct_declarator_declarator(PyObject *_self)
@@ -11422,6 +12795,19 @@ static PyObject *PyCAst_getter_function_definition_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_function_definition_code(PyObject *_self)
+{
+	PyCAst_object_function_definition *self=(PyCAst_object_function_definition*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_function_definition_declaration_specifiers(PyObject *_self)
@@ -11553,6 +12939,7 @@ static void PyCAst_delete_parameter_list_iterator(PyObject *_self)
 
 
 
+
 /*=====================================================================================================================================*\
 
         DEFINITION OF parameter_list_item
@@ -11608,6 +12995,19 @@ static PyObject *PyCAst_getter_parameter_list_item_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_parameter_list_item_code(PyObject *_self)
+{
+	PyCAst_object_parameter_list_item *self=(PyCAst_object_parameter_list_item*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 /*=====================================================================================================================================*\
@@ -11670,6 +13070,19 @@ static PyObject *PyCAst_getter_parameter_list_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_parameter_list_code(PyObject *_self)
+{
+	PyCAst_object_parameter_list *self=(PyCAst_object_parameter_list*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 Py_ssize_t PyCAst_length_parameter_list(PyObject *_self)
@@ -11808,6 +13221,19 @@ static PyObject *PyCAst_getter_enum_specifier_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_enum_specifier_code(PyObject *_self)
+{
+	PyCAst_object_enum_specifier *self=(PyCAst_object_enum_specifier*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_enum_specifier_token1(PyObject *_self)
@@ -11933,6 +13359,19 @@ static PyObject *PyCAst_getter_type_qualifier_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_type_qualifier_code(PyObject *_self)
+{
+	PyCAst_object_type_qualifier *self=(PyCAst_object_type_qualifier*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_type_qualifier_token1(PyObject *_self)
@@ -11994,6 +13433,7 @@ static void PyCAst_delete_enumerator_list_iterator(PyObject *_self)
 
 
 
+
 /*=====================================================================================================================================*\
 
         DEFINITION OF enumerator_list_item
@@ -12049,6 +13489,19 @@ static PyObject *PyCAst_getter_enumerator_list_item_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_enumerator_list_item_code(PyObject *_self)
+{
+	PyCAst_object_enumerator_list_item *self=(PyCAst_object_enumerator_list_item*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 /*=====================================================================================================================================*\
@@ -12111,6 +13564,19 @@ static PyObject *PyCAst_getter_enumerator_list_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_enumerator_list_code(PyObject *_self)
+{
+	PyCAst_object_enumerator_list *self=(PyCAst_object_enumerator_list*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 Py_ssize_t PyCAst_length_enumerator_list(PyObject *_self)
@@ -12243,6 +13709,19 @@ static PyObject *PyCAst_getter_labeled_statement1_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_labeled_statement1_code(PyObject *_self)
+{
+	PyCAst_object_labeled_statement1 *self=(PyCAst_object_labeled_statement1*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_labeled_statement1_constant_expression(PyObject *_self)
@@ -12374,6 +13853,19 @@ static PyObject *PyCAst_getter_labeled_statement2_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_labeled_statement2_code(PyObject *_self)
+{
+	PyCAst_object_labeled_statement2 *self=(PyCAst_object_labeled_statement2*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_labeled_statement2_token1(PyObject *_self)
@@ -12483,6 +13975,7 @@ static void PyCAst_delete_declaration_list_iterator(PyObject *_self)
 
 
 
+
 /*=====================================================================================================================================*\
 
         DEFINITION OF declaration_list_item
@@ -12538,6 +14031,19 @@ static PyObject *PyCAst_getter_declaration_list_item_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_declaration_list_item_code(PyObject *_self)
+{
+	PyCAst_object_declaration_list_item *self=(PyCAst_object_declaration_list_item*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 /*=====================================================================================================================================*\
@@ -12600,6 +14106,19 @@ static PyObject *PyCAst_getter_declaration_list_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_declaration_list_code(PyObject *_self)
+{
+	PyCAst_object_declaration_list *self=(PyCAst_object_declaration_list*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 Py_ssize_t PyCAst_length_declaration_list(PyObject *_self)
@@ -12714,6 +14233,7 @@ static void PyCAst_delete_specifier_qualifier_list1_iterator(PyObject *_self)
 
 
 
+
 /*=====================================================================================================================================*\
 
         DEFINITION OF specifier_qualifier_list1_item
@@ -12769,6 +14289,19 @@ static PyObject *PyCAst_getter_specifier_qualifier_list1_item_ast(PyObject *_sel
 
 }
 
+static PyObject *PyCAst_getter_specifier_qualifier_list1_item_code(PyObject *_self)
+{
+	PyCAst_object_specifier_qualifier_list1_item *self=(PyCAst_object_specifier_qualifier_list1_item*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 /*=====================================================================================================================================*\
@@ -12831,6 +14364,19 @@ static PyObject *PyCAst_getter_specifier_qualifier_list1_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_specifier_qualifier_list1_code(PyObject *_self)
+{
+	PyCAst_object_specifier_qualifier_list1 *self=(PyCAst_object_specifier_qualifier_list1*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 Py_ssize_t PyCAst_length_specifier_qualifier_list1(PyObject *_self)
@@ -12957,6 +14503,7 @@ static void PyCAst_delete_specifier_qualifier_list2_iterator(PyObject *_self)
 
 
 
+
 /*=====================================================================================================================================*\
 
         DEFINITION OF specifier_qualifier_list2_item
@@ -13012,6 +14559,19 @@ static PyObject *PyCAst_getter_specifier_qualifier_list2_item_ast(PyObject *_sel
 
 }
 
+static PyObject *PyCAst_getter_specifier_qualifier_list2_item_code(PyObject *_self)
+{
+	PyCAst_object_specifier_qualifier_list2_item *self=(PyCAst_object_specifier_qualifier_list2_item*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 /*=====================================================================================================================================*\
@@ -13074,6 +14634,19 @@ static PyObject *PyCAst_getter_specifier_qualifier_list2_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_specifier_qualifier_list2_code(PyObject *_self)
+{
+	PyCAst_object_specifier_qualifier_list2 *self=(PyCAst_object_specifier_qualifier_list2*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 Py_ssize_t PyCAst_length_specifier_qualifier_list2(PyObject *_self)
@@ -13188,6 +14761,7 @@ static void PyCAst_delete_translation_unit_iterator(PyObject *_self)
 
 
 
+
 /*=====================================================================================================================================*\
 
         DEFINITION OF translation_unit_item
@@ -13243,6 +14817,19 @@ static PyObject *PyCAst_getter_translation_unit_item_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_translation_unit_item_code(PyObject *_self)
+{
+	PyCAst_object_translation_unit_item *self=(PyCAst_object_translation_unit_item*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 /*=====================================================================================================================================*\
@@ -13305,6 +14892,19 @@ static PyObject *PyCAst_getter_translation_unit_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_translation_unit_code(PyObject *_self)
+{
+	PyCAst_object_translation_unit *self=(PyCAst_object_translation_unit*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 Py_ssize_t PyCAst_length_translation_unit(PyObject *_self)
@@ -13443,6 +15043,19 @@ static PyObject *PyCAst_getter_constant_expression_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_constant_expression_code(PyObject *_self)
+{
+	PyCAst_object_constant_expression *self=(PyCAst_object_constant_expression*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_constant_expression_conditional_expression(PyObject *_self)
@@ -13508,6 +15121,7 @@ static void PyCAst_delete_initializer_list_iterator(PyObject *_self)
 
 
 
+
 /*=====================================================================================================================================*\
 
         DEFINITION OF initializer_list_item
@@ -13563,6 +15177,19 @@ static PyObject *PyCAst_getter_initializer_list_item_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_initializer_list_item_code(PyObject *_self)
+{
+	PyCAst_object_initializer_list_item *self=(PyCAst_object_initializer_list_item*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 /*=====================================================================================================================================*\
@@ -13625,6 +15252,19 @@ static PyObject *PyCAst_getter_initializer_list_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_initializer_list_code(PyObject *_self)
+{
+	PyCAst_object_initializer_list *self=(PyCAst_object_initializer_list*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 Py_ssize_t PyCAst_length_initializer_list(PyObject *_self)
@@ -13745,6 +15385,7 @@ static void PyCAst_delete_statement_list_iterator(PyObject *_self)
 
 
 
+
 /*=====================================================================================================================================*\
 
         DEFINITION OF statement_list_item
@@ -13800,6 +15441,19 @@ static PyObject *PyCAst_getter_statement_list_item_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_statement_list_item_code(PyObject *_self)
+{
+	PyCAst_object_statement_list_item *self=(PyCAst_object_statement_list_item*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 /*=====================================================================================================================================*\
@@ -13862,6 +15516,19 @@ static PyObject *PyCAst_getter_statement_list_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_statement_list_code(PyObject *_self)
+{
+	PyCAst_object_statement_list *self=(PyCAst_object_statement_list*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 Py_ssize_t PyCAst_length_statement_list(PyObject *_self)
@@ -14006,6 +15673,7 @@ static void PyCAst_delete_expression_iterator(PyObject *_self)
 
 
 
+
 /*=====================================================================================================================================*\
 
         DEFINITION OF expression_item
@@ -14061,6 +15729,19 @@ static PyObject *PyCAst_getter_expression_item_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_expression_item_code(PyObject *_self)
+{
+	PyCAst_object_expression_item *self=(PyCAst_object_expression_item*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 /*=====================================================================================================================================*\
@@ -14123,6 +15804,19 @@ static PyObject *PyCAst_getter_expression_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_expression_code(PyObject *_self)
+{
+	PyCAst_object_expression *self=(PyCAst_object_expression*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 Py_ssize_t PyCAst_length_expression(PyObject *_self)
@@ -14261,6 +15955,19 @@ static PyObject *PyCAst_getter_declarator_ast(PyObject *_self)
 
 }
 
+static PyObject *PyCAst_getter_declarator_code(PyObject *_self)
+{
+	PyCAst_object_declarator *self=(PyCAst_object_declarator*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
 
 
 static PyObject *PyCAst_getter_declarator_pointer(PyObject *_self)

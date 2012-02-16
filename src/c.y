@@ -1,15 +1,15 @@
-%token RIGHT_OP DO RETURN SHORT CONSTANT 
-%token RIGHT_ASSIGN DEFAULT VOLATILE VOID CHAR 
-%token WHILE STATIC EQ_OP EXTERN CONST 
-%token SIZEOF CASE STRUCT LE_OP REGISTER 
-%token UNSIGNED OR_OP DEC_OP SWITCH AND_ASSIGN 
-%token PTR_OP ELLIPSIS IDENTIFIER ADD_ASSIGN TYPEDEF 
-%token GOTO FOR UNION AUTO ENUM 
+%token RIGHT_OP DO SHORT CONSTANT RIGHT_ASSIGN 
+%token DEFAULT VOID STRING_LITERAL CHAR WHILE 
+%token STATIC EQ_OP EXTERN CONST SIZEOF 
+%token CASE LE_OP MUL_ASSIGN REGISTER UNSIGNED 
+%token OR_OP DEC_OP SWITCH AND_ASSIGN PTR_OP 
+%token ELLIPSIS IDENTIFIER ADD_ASSIGN TYPEDEF GOTO 
+%token FOR UNION AUTO ENUM MOD_ASSIGN 
 %token ELSE AND_OP GE_OP LEFT_OP IF 
-%token SUB_ASSIGN MOD_ASSIGN STRING_LITERAL XOR_ASSIGN INT 
-%token DOUBLE TYPE_NAME OR_ASSIGN SIGNED FLOAT 
-%token BREAK CONTINUE MUL_ASSIGN LEFT_ASSIGN LONG 
-%token INC_OP NE_OP DIV_ASSIGN 
+%token SUB_ASSIGN RETURN STRUCT XOR_ASSIGN INT 
+%token DOUBLE FLOAT OR_ASSIGN SIGNED BREAK 
+%token CONTINUE VOLATILE LEFT_ASSIGN LONG INC_OP 
+%token NE_OP DIV_ASSIGN 
 
 %union {
 	const char*                           _t_str;
@@ -204,7 +204,6 @@ type_specifier
 	|UNSIGNED                                                                           {RULE_MARKER(             "type_specifier1");$<_t_type_specifier>$=new CAst::type_specifier1("[UNSIGNED]",CAst::GetToken(VOID,$<_t_str>1));}
 	|struct_or_union_specifier                                                          {RULE_MARKER(             "type_specifier2");$<_t_type_specifier>$=new CAst::type_specifier2("[struct_or_union_specifier]",$<_t_struct_or_union_specifier>1);}
 	|enum_specifier                                                                     {RULE_MARKER(             "type_specifier3");$<_t_type_specifier>$=new CAst::type_specifier3("[enum_specifier]",$<_t_enum_specifier>1);}
-	|TYPE_NAME                                                                          {RULE_MARKER(             "type_specifier1");$<_t_type_specifier>$=new CAst::type_specifier1("[TYPE_NAME]",CAst::GetToken(VOID,$<_t_str>1));}
 	;
 
 

@@ -114,6 +114,7 @@ class CAst
 {
 	public:
 		virtual std::string name()const=0;
+		virtual std::ostream& codeStream(std::ostream&)const=0;
 		virtual bool isList()const=0;
 		virtual PropertiesList getPropertiesList()const=0;
 		virtual Properties getProperties()const=0;
@@ -129,7 +130,9 @@ class CAst
 class Token: public CAst
 {
 	public:
-		virtual std::string name()const=0;
+		virtual std::string name()const			=0;
+		virtual std::ostream& codeStream(std::ostream&)const			=0;
+	virtual std::string code()const				=0;
 		virtual bool isList()const			=0;
 		virtual Properties getProperties()const		=0;
 		virtual PropertiesList getPropertiesList()const	=0;
@@ -165,9 +168,11 @@ public:
 	GenericToken(const GenericToken& other):
 		_txt(other._txt)
 	{}
-	virtual bool isList()const			{return false;}
-	virtual Properties getProperties()const		{Properties p(name());p.setTokValue(_txt);return p;}
-	virtual PropertiesList getPropertiesList()const	{return PropertiesList(name());}
+	virtual std::ostream& codeStream(std::ostream& stream)const			{return stream<<_txt<<" ";}
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
+	virtual bool isList()const							{return false;}
+	virtual Properties getProperties()const						{Properties p(name());p.setTokValue(_txt);return p;}
+	virtual PropertiesList getPropertiesList()const					{return PropertiesList(name());}
 	virtual ~GenericToken()
 	{}
 };
@@ -208,6 +213,8 @@ public:
 		);
 	storage_class_specifier(const storage_class_specifier& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "storage_class_specifier"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_STORAGE_CLASS_SPECIFIER
 	virtual std::string pattern()const;							//returns the pattern, here "[TYPEDEF]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -217,6 +224,7 @@ public:
 	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
 	virtual ~storage_class_specifier ();
 
+	
 		
 };
 
@@ -251,6 +259,8 @@ public:
 		);
 	expression_statement(const expression_statement& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "expression_statement"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_EXPRESSION_STATEMENT
 	virtual std::string pattern()const;							//returns the pattern, here "[expression,';']"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -260,6 +270,7 @@ public:
 	      expression* get_p_expression()     {return _p_expression;}							//returns       pointer to _p_expression
 	virtual ~expression_statement ();
 
+	
 		
 };
 
@@ -297,6 +308,8 @@ public:
 		);
 	type_name(const type_name& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "type_name"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_TYPE_NAME
 	virtual std::string pattern()const;							//returns the pattern, here "[specifier_qualifier_list,abstract_declarator]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -308,6 +321,7 @@ public:
 	      abstract_declarator* get_p_abstract_declarator()     {return _p_abstract_declarator;}							//returns       pointer to _p_abstract_declarator
 	virtual ~type_name ();
 
+	
 		
 };
 
@@ -325,6 +339,7 @@ class unary_expression :public CAst
 {
 public:
 	virtual std::string name()const=0;
+	virtual std::ostream& codeStream(std::ostream&)const=0;
 	virtual CAstType typeId()const=0;
 	virtual std::string pattern()const=0;
 	virtual bool isList()const=0;
@@ -364,6 +379,8 @@ public:
 		);
 	unary_expression1(const unary_expression1& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "unary_expression1"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_UNARY_EXPRESSION1
 	virtual std::string pattern()const;							//returns the pattern, here "[SIZEOF,'(',type_name,')']"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -373,6 +390,7 @@ public:
 	      type_name* get_p_type_name()     {return _p_type_name;}							//returns       pointer to _p_type_name
 	virtual ~unary_expression1 ();
 
+	
 		
 };
 
@@ -410,6 +428,8 @@ public:
 		);
 	unary_expression2(const unary_expression2& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "unary_expression2"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_UNARY_EXPRESSION2
 	virtual std::string pattern()const;							//returns the pattern, here "[INC_OP,unary_expression]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -421,6 +441,7 @@ public:
 	      unary_expression* get_p_unary_expression()     {return _p_unary_expression;}							//returns       pointer to _p_unary_expression
 	virtual ~unary_expression2 ();
 
+	
 		
 };
 
@@ -458,6 +479,8 @@ public:
 		);
 	unary_expression3(const unary_expression3& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "unary_expression3"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_UNARY_EXPRESSION3
 	virtual std::string pattern()const;							//returns the pattern, here "[unary_operator,cast_expression]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -469,6 +492,7 @@ public:
 	      cast_expression* get_p_cast_expression()     {return _p_cast_expression;}							//returns       pointer to _p_cast_expression
 	virtual ~unary_expression3 ();
 
+	
 		
 };
 
@@ -503,6 +527,8 @@ public:
 		);
 	unary_expression4(const unary_expression4& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "unary_expression4"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_UNARY_EXPRESSION4
 	virtual std::string pattern()const;							//returns the pattern, here "[postfix_expression]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -512,6 +538,7 @@ public:
 	      postfix_expression* get_p_postfix_expression()     {return _p_postfix_expression;}							//returns       pointer to _p_postfix_expression
 	virtual ~unary_expression4 ();
 
+	
 		
 };
 
@@ -550,6 +577,8 @@ public:
 		);
 	conditional_expression_item(const conditional_expression_item &);
 	virtual std::string name()const{return "conditional_expression_item";}			//returns the class name, here "conditional_expression"
+	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
@@ -590,6 +619,8 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "conditional_expression"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_CONDITIONAL_EXPRESSION
 	virtual std::string pattern()const;							//returns the pattern, here "[logical_or_expression,'?',expression,':',conditional_expression]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
@@ -650,6 +681,8 @@ public:
 		);
 	struct_or_union_specifier(const struct_or_union_specifier& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "struct_or_union_specifier"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_STRUCT_OR_UNION_SPECIFIER
 	virtual std::string pattern()const;							//returns the pattern, here "[struct_or_union,IDENTIFIER,'{',struct_declaration_list,'}']"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -667,6 +700,7 @@ public:
 	      Token* get_p_token3()     {return _p_token3;}							//returns       pointer to _p_token3
 	virtual ~struct_or_union_specifier ();
 
+	
 		
 };
 
@@ -702,6 +736,8 @@ public:
 		);
 	exclusive_or_expression_item(const exclusive_or_expression_item &);
 	virtual std::string name()const{return "exclusive_or_expression_item";}			//returns the class name, here "exclusive_or_expression"
+	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
@@ -739,6 +775,8 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "exclusive_or_expression"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_EXCLUSIVE_OR_EXPRESSION
 	virtual std::string pattern()const;							//returns the pattern, here "[exclusive_or_expression,'^',and_expression]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
@@ -770,6 +808,7 @@ class initializer :public CAst
 {
 public:
 	virtual std::string name()const=0;
+	virtual std::ostream& codeStream(std::ostream&)const=0;
 	virtual CAstType typeId()const=0;
 	virtual std::string pattern()const=0;
 	virtual bool isList()const=0;
@@ -812,6 +851,8 @@ public:
 		);
 	initializer1(const initializer1& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "initializer1"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_INITIALIZER1
 	virtual std::string pattern()const;							//returns the pattern, here "['{',initializer_list,',','}']"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -823,6 +864,7 @@ public:
 	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
 	virtual ~initializer1 ();
 
+	
 		
 };
 
@@ -857,6 +899,8 @@ public:
 		);
 	initializer2(const initializer2& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "initializer2"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_INITIALIZER2
 	virtual std::string pattern()const;							//returns the pattern, here "[assignment_expression]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -866,6 +910,7 @@ public:
 	      assignment_expression* get_p_assignment_expression()     {return _p_assignment_expression;}							//returns       pointer to _p_assignment_expression
 	virtual ~initializer2 ();
 
+	
 		
 };
 
@@ -901,6 +946,8 @@ public:
 		);
 	struct_declaration_list_item(const struct_declaration_list_item &);
 	virtual std::string name()const{return "struct_declaration_list_item";}			//returns the class name, here "struct_declaration_list"
+	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
@@ -938,6 +985,8 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "struct_declaration_list"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_STRUCT_DECLARATION_LIST
 	virtual std::string pattern()const;							//returns the pattern, here "[struct_declaration_list,struct_declaration]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
@@ -986,6 +1035,8 @@ public:
 		);
 	assignment_operator(const assignment_operator& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "assignment_operator"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_ASSIGNMENT_OPERATOR
 	virtual std::string pattern()const;							//returns the pattern, here "['=']"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -995,6 +1046,7 @@ public:
 	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
 	virtual ~assignment_operator ();
 
+	
 		
 };
 
@@ -1032,6 +1084,8 @@ public:
 		);
 	struct_declaration(const struct_declaration& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "struct_declaration"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_STRUCT_DECLARATION
 	virtual std::string pattern()const;							//returns the pattern, here "[specifier_qualifier_list,struct_declarator_list,';']"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -1043,6 +1097,7 @@ public:
 	      struct_declarator_list* get_p_struct_declarator_list()     {return _p_struct_declarator_list;}							//returns       pointer to _p_struct_declarator_list
 	virtual ~struct_declaration ();
 
+	
 		
 };
 
@@ -1080,6 +1135,8 @@ public:
 		);
 	abstract_declarator(const abstract_declarator& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "abstract_declarator"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_ABSTRACT_DECLARATOR
 	virtual std::string pattern()const;							//returns the pattern, here "[pointer,direct_abstract_declarator]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -1091,6 +1148,7 @@ public:
 	      direct_abstract_declarator* get_p_direct_abstract_declarator()     {return _p_direct_abstract_declarator;}							//returns       pointer to _p_direct_abstract_declarator
 	virtual ~abstract_declarator ();
 
+	
 		
 };
 
@@ -1108,6 +1166,7 @@ class iteration_statement :public CAst
 {
 public:
 	virtual std::string name()const=0;
+	virtual std::ostream& codeStream(std::ostream&)const=0;
 	virtual CAstType typeId()const=0;
 	virtual std::string pattern()const=0;
 	virtual bool isList()const=0;
@@ -1150,6 +1209,8 @@ public:
 		);
 	iteration_statement1(const iteration_statement1& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "iteration_statement1"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_ITERATION_STATEMENT1
 	virtual std::string pattern()const;							//returns the pattern, here "[DO,statement,WHILE,'(',expression,')',';']"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -1161,6 +1222,7 @@ public:
 	      expression* get_p_expression()     {return _p_expression;}							//returns       pointer to _p_expression
 	virtual ~iteration_statement1 ();
 
+	
 		
 };
 
@@ -1204,6 +1266,8 @@ public:
 		);
 	iteration_statement2(const iteration_statement2& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "iteration_statement2"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_ITERATION_STATEMENT2
 	virtual std::string pattern()const;							//returns the pattern, here "[FOR,'(',expression_statement,expression_statement,expression,')',statement]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -1219,6 +1283,7 @@ public:
 	      statement* get_p_statement()     {return _p_statement;}							//returns       pointer to _p_statement
 	virtual ~iteration_statement2 ();
 
+	
 		
 };
 
@@ -1256,6 +1321,8 @@ public:
 		);
 	iteration_statement3(const iteration_statement3& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "iteration_statement3"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_ITERATION_STATEMENT3
 	virtual std::string pattern()const;							//returns the pattern, here "[WHILE,'(',expression,')',statement]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -1267,6 +1334,7 @@ public:
 	      statement* get_p_statement()     {return _p_statement;}							//returns       pointer to _p_statement
 	virtual ~iteration_statement3 ();
 
+	
 		
 };
 
@@ -1305,6 +1373,8 @@ public:
 		);
 	additive_expression_item(const additive_expression_item &);
 	virtual std::string name()const{return "additive_expression_item";}			//returns the class name, here "additive_expression"
+	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
@@ -1345,6 +1415,8 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "additive_expression"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_ADDITIVE_EXPRESSION
 	virtual std::string pattern()const;							//returns the pattern, here "[additive_expression,'+',multiplicative_expression]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
@@ -1376,6 +1448,7 @@ class external_declaration :public CAst
 {
 public:
 	virtual std::string name()const=0;
+	virtual std::ostream& codeStream(std::ostream&)const=0;
 	virtual CAstType typeId()const=0;
 	virtual std::string pattern()const=0;
 	virtual bool isList()const=0;
@@ -1415,6 +1488,8 @@ public:
 		);
 	external_declaration1(const external_declaration1& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "external_declaration1"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_EXTERNAL_DECLARATION1
 	virtual std::string pattern()const;							//returns the pattern, here "[function_definition]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -1424,6 +1499,7 @@ public:
 	      function_definition* get_p_function_definition()     {return _p_function_definition;}							//returns       pointer to _p_function_definition
 	virtual ~external_declaration1 ();
 
+	
 		
 };
 
@@ -1458,6 +1534,8 @@ public:
 		);
 	external_declaration2(const external_declaration2& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "external_declaration2"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_EXTERNAL_DECLARATION2
 	virtual std::string pattern()const;							//returns the pattern, here "[declaration]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -1467,6 +1545,7 @@ public:
 	      declaration* get_p_declaration()     {return _p_declaration;}							//returns       pointer to _p_declaration
 	virtual ~external_declaration2 ();
 
+	
 		
 };
 
@@ -1484,6 +1563,7 @@ class type_specifier :public CAst
 {
 public:
 	virtual std::string name()const=0;
+	virtual std::ostream& codeStream(std::ostream&)const=0;
 	virtual CAstType typeId()const=0;
 	virtual std::string pattern()const=0;
 	virtual bool isList()const=0;
@@ -1523,6 +1603,8 @@ public:
 		);
 	type_specifier1(const type_specifier1& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "type_specifier1"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_TYPE_SPECIFIER1
 	virtual std::string pattern()const;							//returns the pattern, here "[VOID]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -1532,6 +1614,7 @@ public:
 	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
 	virtual ~type_specifier1 ();
 
+	
 		
 };
 
@@ -1566,6 +1649,8 @@ public:
 		);
 	type_specifier2(const type_specifier2& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "type_specifier2"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_TYPE_SPECIFIER2
 	virtual std::string pattern()const;							//returns the pattern, here "[struct_or_union_specifier]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -1575,6 +1660,7 @@ public:
 	      struct_or_union_specifier* get_p_struct_or_union_specifier()     {return _p_struct_or_union_specifier;}							//returns       pointer to _p_struct_or_union_specifier
 	virtual ~type_specifier2 ();
 
+	
 		
 };
 
@@ -1609,6 +1695,8 @@ public:
 		);
 	type_specifier3(const type_specifier3& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "type_specifier3"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_TYPE_SPECIFIER3
 	virtual std::string pattern()const;							//returns the pattern, here "[enum_specifier]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -1618,6 +1706,7 @@ public:
 	      enum_specifier* get_p_enum_specifier()     {return _p_enum_specifier;}							//returns       pointer to _p_enum_specifier
 	virtual ~type_specifier3 ();
 
+	
 		
 };
 
@@ -1655,6 +1744,8 @@ public:
 		);
 	compound_statement(const compound_statement& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "compound_statement"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_COMPOUND_STATEMENT
 	virtual std::string pattern()const;							//returns the pattern, here "['{',declaration_list,statement_list,'}']"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -1666,6 +1757,7 @@ public:
 	      statement_list* get_p_statement_list()     {return _p_statement_list;}							//returns       pointer to _p_statement_list
 	virtual ~compound_statement ();
 
+	
 		
 };
 
@@ -1701,6 +1793,8 @@ public:
 		);
 	inclusive_or_expression_item(const inclusive_or_expression_item &);
 	virtual std::string name()const{return "inclusive_or_expression_item";}			//returns the class name, here "inclusive_or_expression"
+	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
@@ -1738,6 +1832,8 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "inclusive_or_expression"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_INCLUSIVE_OR_EXPRESSION
 	virtual std::string pattern()const;							//returns the pattern, here "[inclusive_or_expression,'|',exclusive_or_expression]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
@@ -1787,6 +1883,8 @@ public:
 		);
 	pointer_item(const pointer_item &);
 	virtual std::string name()const{return "pointer_item";}			//returns the class name, here "pointer"
+	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
@@ -1824,6 +1922,8 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "pointer"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_POINTER
 	virtual std::string pattern()const;							//returns the pattern, here "['*',type_qualifier_list,pointer]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
@@ -1855,6 +1955,7 @@ class selection_statement :public CAst
 {
 public:
 	virtual std::string name()const=0;
+	virtual std::ostream& codeStream(std::ostream&)const=0;
 	virtual CAstType typeId()const=0;
 	virtual std::string pattern()const=0;
 	virtual bool isList()const=0;
@@ -1903,6 +2004,8 @@ public:
 		);
 	selection_statement1(const selection_statement1& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "selection_statement1"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_SELECTION_STATEMENT1
 	virtual std::string pattern()const;							//returns the pattern, here "[IF,'(',expression,')',statement,ELSE,statement]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -1918,6 +2021,7 @@ public:
 	      statement* get_p_statement1()     {return _p_statement1;}							//returns       pointer to _p_statement1
 	virtual ~selection_statement1 ();
 
+	
 		
 };
 
@@ -1955,6 +2059,8 @@ public:
 		);
 	selection_statement2(const selection_statement2& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "selection_statement2"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_SELECTION_STATEMENT2
 	virtual std::string pattern()const;							//returns the pattern, here "[SWITCH,'(',expression,')',statement]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -1966,6 +2072,7 @@ public:
 	      statement* get_p_statement()     {return _p_statement;}							//returns       pointer to _p_statement
 	virtual ~selection_statement2 ();
 
+	
 		
 };
 
@@ -1983,6 +2090,7 @@ class postfix_expression :public CAst
 {
 public:
 	virtual std::string name()const=0;
+	virtual std::ostream& codeStream(std::ostream&)const=0;
 	virtual CAstType typeId()const=0;
 	virtual std::string pattern()const=0;
 	virtual bool isList()const=0;
@@ -2025,6 +2133,8 @@ public:
 		);
 	postfix_expression1(const postfix_expression1& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "postfix_expression1"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_POSTFIX_EXPRESSION1
 	virtual std::string pattern()const;							//returns the pattern, here "[postfix_expression,'[',expression,']']"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -2036,6 +2146,7 @@ public:
 	      expression* get_p_expression()     {return _p_expression;}							//returns       pointer to _p_expression
 	virtual ~postfix_expression1 ();
 
+	
 		
 };
 
@@ -2073,6 +2184,8 @@ public:
 		);
 	postfix_expression2(const postfix_expression2& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "postfix_expression2"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_POSTFIX_EXPRESSION2
 	virtual std::string pattern()const;							//returns the pattern, here "[postfix_expression,'(',argument_expression_list,')']"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -2084,6 +2197,7 @@ public:
 	      argument_expression_list* get_p_argument_expression_list()     {return _p_argument_expression_list;}							//returns       pointer to _p_argument_expression_list
 	virtual ~postfix_expression2 ();
 
+	
 		
 };
 
@@ -2124,6 +2238,8 @@ public:
 		);
 	postfix_expression3(const postfix_expression3& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "postfix_expression3"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_POSTFIX_EXPRESSION3
 	virtual std::string pattern()const;							//returns the pattern, here "[postfix_expression,'.',IDENTIFIER]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -2137,6 +2253,7 @@ public:
 	      Token* get_p_token2()     {return _p_token2;}							//returns       pointer to _p_token2
 	virtual ~postfix_expression3 ();
 
+	
 		
 };
 
@@ -2174,6 +2291,8 @@ public:
 		);
 	postfix_expression4(const postfix_expression4& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "postfix_expression4"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_POSTFIX_EXPRESSION4
 	virtual std::string pattern()const;							//returns the pattern, here "[postfix_expression,INC_OP]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -2185,6 +2304,7 @@ public:
 	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
 	virtual ~postfix_expression4 ();
 
+	
 		
 };
 
@@ -2219,6 +2339,8 @@ public:
 		);
 	postfix_expression5(const postfix_expression5& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "postfix_expression5"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_POSTFIX_EXPRESSION5
 	virtual std::string pattern()const;							//returns the pattern, here "[primary_expression]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -2228,6 +2350,7 @@ public:
 	      primary_expression* get_p_primary_expression()     {return _p_primary_expression;}							//returns       pointer to _p_primary_expression
 	virtual ~postfix_expression5 ();
 
+	
 		
 };
 
@@ -2263,6 +2386,8 @@ public:
 		);
 	and_expression_item(const and_expression_item &);
 	virtual std::string name()const{return "and_expression_item";}			//returns the class name, here "and_expression"
+	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
@@ -2300,6 +2425,8 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "and_expression"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_AND_EXPRESSION
 	virtual std::string pattern()const;							//returns the pattern, here "[and_expression,'&',equality_expression]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
@@ -2331,6 +2458,7 @@ class statement :public CAst
 {
 public:
 	virtual std::string name()const=0;
+	virtual std::ostream& codeStream(std::ostream&)const=0;
 	virtual CAstType typeId()const=0;
 	virtual std::string pattern()const=0;
 	virtual bool isList()const=0;
@@ -2370,6 +2498,8 @@ public:
 		);
 	statement1(const statement1& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "statement1"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_STATEMENT1
 	virtual std::string pattern()const;							//returns the pattern, here "[labeled_statement]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -2379,6 +2509,7 @@ public:
 	      labeled_statement* get_p_labeled_statement()     {return _p_labeled_statement;}							//returns       pointer to _p_labeled_statement
 	virtual ~statement1 ();
 
+	
 		
 };
 
@@ -2413,6 +2544,8 @@ public:
 		);
 	statement2(const statement2& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "statement2"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_STATEMENT2
 	virtual std::string pattern()const;							//returns the pattern, here "[compound_statement]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -2422,6 +2555,7 @@ public:
 	      compound_statement* get_p_compound_statement()     {return _p_compound_statement;}							//returns       pointer to _p_compound_statement
 	virtual ~statement2 ();
 
+	
 		
 };
 
@@ -2456,6 +2590,8 @@ public:
 		);
 	statement3(const statement3& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "statement3"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_STATEMENT3
 	virtual std::string pattern()const;							//returns the pattern, here "[expression_statement]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -2465,6 +2601,7 @@ public:
 	      expression_statement* get_p_expression_statement()     {return _p_expression_statement;}							//returns       pointer to _p_expression_statement
 	virtual ~statement3 ();
 
+	
 		
 };
 
@@ -2499,6 +2636,8 @@ public:
 		);
 	statement4(const statement4& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "statement4"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_STATEMENT4
 	virtual std::string pattern()const;							//returns the pattern, here "[selection_statement]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -2508,6 +2647,7 @@ public:
 	      selection_statement* get_p_selection_statement()     {return _p_selection_statement;}							//returns       pointer to _p_selection_statement
 	virtual ~statement4 ();
 
+	
 		
 };
 
@@ -2542,6 +2682,8 @@ public:
 		);
 	statement5(const statement5& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "statement5"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_STATEMENT5
 	virtual std::string pattern()const;							//returns the pattern, here "[iteration_statement]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -2551,6 +2693,7 @@ public:
 	      iteration_statement* get_p_iteration_statement()     {return _p_iteration_statement;}							//returns       pointer to _p_iteration_statement
 	virtual ~statement5 ();
 
+	
 		
 };
 
@@ -2585,6 +2728,8 @@ public:
 		);
 	statement6(const statement6& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "statement6"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_STATEMENT6
 	virtual std::string pattern()const;							//returns the pattern, here "[jump_statement]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -2594,6 +2739,7 @@ public:
 	      jump_statement* get_p_jump_statement()     {return _p_jump_statement;}							//returns       pointer to _p_jump_statement
 	virtual ~statement6 ();
 
+	
 		
 };
 
@@ -2611,6 +2757,7 @@ class cast_expression :public CAst
 {
 public:
 	virtual std::string name()const=0;
+	virtual std::ostream& codeStream(std::ostream&)const=0;
 	virtual CAstType typeId()const=0;
 	virtual std::string pattern()const=0;
 	virtual bool isList()const=0;
@@ -2653,6 +2800,8 @@ public:
 		);
 	cast_expression1(const cast_expression1& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "cast_expression1"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_CAST_EXPRESSION1
 	virtual std::string pattern()const;							//returns the pattern, here "['(',type_name,')',cast_expression]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -2664,6 +2813,7 @@ public:
 	      cast_expression* get_p_cast_expression()     {return _p_cast_expression;}							//returns       pointer to _p_cast_expression
 	virtual ~cast_expression1 ();
 
+	
 		
 };
 
@@ -2698,6 +2848,8 @@ public:
 		);
 	cast_expression2(const cast_expression2& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "cast_expression2"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_CAST_EXPRESSION2
 	virtual std::string pattern()const;							//returns the pattern, here "[unary_expression]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -2707,6 +2859,7 @@ public:
 	      unary_expression* get_p_unary_expression()     {return _p_unary_expression;}							//returns       pointer to _p_unary_expression
 	virtual ~cast_expression2 ();
 
+	
 		
 };
 
@@ -2747,6 +2900,8 @@ public:
 		);
 	init_declarator(const init_declarator& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "init_declarator"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_INIT_DECLARATOR
 	virtual std::string pattern()const;							//returns the pattern, here "[declarator,'=',initializer]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -2760,6 +2915,7 @@ public:
 	      initializer* get_p_initializer()     {return _p_initializer;}							//returns       pointer to _p_initializer
 	virtual ~init_declarator ();
 
+	
 		
 };
 
@@ -2795,6 +2951,8 @@ public:
 		);
 	struct_declarator_list_item(const struct_declarator_list_item &);
 	virtual std::string name()const{return "struct_declarator_list_item";}			//returns the class name, here "struct_declarator_list"
+	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
@@ -2832,6 +2990,8 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "struct_declarator_list"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_STRUCT_DECLARATOR_LIST
 	virtual std::string pattern()const;							//returns the pattern, here "[struct_declarator_list,',',struct_declarator]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
@@ -2881,6 +3041,8 @@ public:
 		);
 	logical_or_expression_item(const logical_or_expression_item &);
 	virtual std::string name()const{return "logical_or_expression_item";}			//returns the class name, here "logical_or_expression"
+	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
@@ -2918,6 +3080,8 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "logical_or_expression"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_LOGICAL_OR_EXPRESSION
 	virtual std::string pattern()const;							//returns the pattern, here "[logical_or_expression,OR_OP,logical_and_expression]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
@@ -2966,6 +3130,8 @@ public:
 		);
 	unary_operator(const unary_operator& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "unary_operator"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_UNARY_OPERATOR
 	virtual std::string pattern()const;							//returns the pattern, here "['&']"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -2975,6 +3141,7 @@ public:
 	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
 	virtual ~unary_operator ();
 
+	
 		
 };
 
@@ -3013,6 +3180,8 @@ public:
 		);
 	relational_expression_item(const relational_expression_item &);
 	virtual std::string name()const{return "relational_expression_item";}			//returns the class name, here "relational_expression"
+	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
@@ -3053,6 +3222,8 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "relational_expression"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_RELATIONAL_EXPRESSION
 	virtual std::string pattern()const;							//returns the pattern, here "[relational_expression,'<',shift_expression]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
@@ -3101,6 +3272,8 @@ public:
 		);
 	struct_or_union(const struct_or_union& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "struct_or_union"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_STRUCT_OR_UNION
 	virtual std::string pattern()const;							//returns the pattern, here "[STRUCT]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -3110,6 +3283,7 @@ public:
 	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
 	virtual ~struct_or_union ();
 
+	
 		
 };
 
@@ -3150,6 +3324,8 @@ public:
 		);
 	enumerator(const enumerator& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "enumerator"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_ENUMERATOR
 	virtual std::string pattern()const;							//returns the pattern, here "[IDENTIFIER,'=',constant_expression]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -3163,6 +3339,7 @@ public:
 	      constant_expression* get_p_constant_expression()     {return _p_constant_expression;}							//returns       pointer to _p_constant_expression
 	virtual ~enumerator ();
 
+	
 		
 };
 
@@ -3180,6 +3357,7 @@ class assignment_expression :public CAst
 {
 public:
 	virtual std::string name()const=0;
+	virtual std::ostream& codeStream(std::ostream&)const=0;
 	virtual CAstType typeId()const=0;
 	virtual std::string pattern()const=0;
 	virtual bool isList()const=0;
@@ -3225,6 +3403,8 @@ public:
 		);
 	assignment_expression1(const assignment_expression1& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "assignment_expression1"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_ASSIGNMENT_EXPRESSION1
 	virtual std::string pattern()const;							//returns the pattern, here "[unary_expression,assignment_operator,assignment_expression]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -3238,6 +3418,7 @@ public:
 	      assignment_expression* get_p_assignment_expression()     {return _p_assignment_expression;}							//returns       pointer to _p_assignment_expression
 	virtual ~assignment_expression1 ();
 
+	
 		
 };
 
@@ -3272,6 +3453,8 @@ public:
 		);
 	assignment_expression2(const assignment_expression2& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "assignment_expression2"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_ASSIGNMENT_EXPRESSION2
 	virtual std::string pattern()const;							//returns the pattern, here "[conditional_expression]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -3281,6 +3464,7 @@ public:
 	      conditional_expression* get_p_conditional_expression()     {return _p_conditional_expression;}							//returns       pointer to _p_conditional_expression
 	virtual ~assignment_expression2 ();
 
+	
 		
 };
 
@@ -3321,6 +3505,8 @@ public:
 		);
 	parameter_type_list(const parameter_type_list& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "parameter_type_list"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_PARAMETER_TYPE_LIST
 	virtual std::string pattern()const;							//returns the pattern, here "[parameter_list,',',ELLIPSIS]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -3334,6 +3520,7 @@ public:
 	      Token* get_p_token2()     {return _p_token2;}							//returns       pointer to _p_token2
 	virtual ~parameter_type_list ();
 
+	
 		
 };
 
@@ -3351,6 +3538,7 @@ class parameter_declaration :public CAst
 {
 public:
 	virtual std::string name()const=0;
+	virtual std::ostream& codeStream(std::ostream&)const=0;
 	virtual CAstType typeId()const=0;
 	virtual std::string pattern()const=0;
 	virtual bool isList()const=0;
@@ -3393,6 +3581,8 @@ public:
 		);
 	parameter_declaration1(const parameter_declaration1& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "parameter_declaration1"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_PARAMETER_DECLARATION1
 	virtual std::string pattern()const;							//returns the pattern, here "[declaration_specifiers,declarator]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -3404,6 +3594,7 @@ public:
 	      declarator* get_p_declarator()     {return _p_declarator;}							//returns       pointer to _p_declarator
 	virtual ~parameter_declaration1 ();
 
+	
 		
 };
 
@@ -3441,6 +3632,8 @@ public:
 		);
 	parameter_declaration2(const parameter_declaration2& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "parameter_declaration2"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_PARAMETER_DECLARATION2
 	virtual std::string pattern()const;							//returns the pattern, here "[declaration_specifiers,abstract_declarator]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -3452,6 +3645,7 @@ public:
 	      abstract_declarator* get_p_abstract_declarator()     {return _p_abstract_declarator;}							//returns       pointer to _p_abstract_declarator
 	virtual ~parameter_declaration2 ();
 
+	
 		
 };
 
@@ -3490,6 +3684,8 @@ public:
 		);
 	multiplicative_expression_item(const multiplicative_expression_item &);
 	virtual std::string name()const{return "multiplicative_expression_item";}			//returns the class name, here "multiplicative_expression"
+	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
@@ -3530,6 +3726,8 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "multiplicative_expression"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_MULTIPLICATIVE_EXPRESSION
 	virtual std::string pattern()const;							//returns the pattern, here "[multiplicative_expression,'*',cast_expression]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
@@ -3579,6 +3777,8 @@ public:
 		);
 	type_qualifier_list_item(const type_qualifier_list_item &);
 	virtual std::string name()const{return "type_qualifier_list_item";}			//returns the class name, here "type_qualifier_list"
+	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
@@ -3616,6 +3816,8 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "type_qualifier_list"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_TYPE_QUALIFIER_LIST
 	virtual std::string pattern()const;							//returns the pattern, here "[type_qualifier_list,type_qualifier]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
@@ -3665,6 +3867,8 @@ public:
 		);
 	argument_expression_list_item(const argument_expression_list_item &);
 	virtual std::string name()const{return "argument_expression_list_item";}			//returns the class name, here "argument_expression_list"
+	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
@@ -3702,6 +3906,8 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "argument_expression_list"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_ARGUMENT_EXPRESSION_LIST
 	virtual std::string pattern()const;							//returns the pattern, here "[argument_expression_list,',',assignment_expression]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
@@ -3733,6 +3939,7 @@ class direct_abstract_declarator :public CAst
 {
 public:
 	virtual std::string name()const=0;
+	virtual std::ostream& codeStream(std::ostream&)const=0;
 	virtual CAstType typeId()const=0;
 	virtual std::string pattern()const=0;
 	virtual bool isList()const=0;
@@ -3775,6 +3982,8 @@ public:
 		);
 	direct_abstract_declarator1(const direct_abstract_declarator1& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "direct_abstract_declarator1"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_DIRECT_ABSTRACT_DECLARATOR1
 	virtual std::string pattern()const;							//returns the pattern, here "[direct_abstract_declarator,'[',constant_expression,']']"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -3786,6 +3995,7 @@ public:
 	      constant_expression* get_p_constant_expression()     {return _p_constant_expression;}							//returns       pointer to _p_constant_expression
 	virtual ~direct_abstract_declarator1 ();
 
+	
 		
 };
 
@@ -3823,6 +4033,8 @@ public:
 		);
 	direct_abstract_declarator2(const direct_abstract_declarator2& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "direct_abstract_declarator2"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_DIRECT_ABSTRACT_DECLARATOR2
 	virtual std::string pattern()const;							//returns the pattern, here "[direct_abstract_declarator,'(',parameter_type_list,')']"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -3834,6 +4046,7 @@ public:
 	      parameter_type_list* get_p_parameter_type_list()     {return _p_parameter_type_list;}							//returns       pointer to _p_parameter_type_list
 	virtual ~direct_abstract_declarator2 ();
 
+	
 		
 };
 
@@ -3868,6 +4081,8 @@ public:
 		);
 	direct_abstract_declarator3(const direct_abstract_declarator3& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "direct_abstract_declarator3"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_DIRECT_ABSTRACT_DECLARATOR3
 	virtual std::string pattern()const;							//returns the pattern, here "['(',abstract_declarator,')']"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -3877,6 +4092,7 @@ public:
 	      abstract_declarator* get_p_abstract_declarator()     {return _p_abstract_declarator;}							//returns       pointer to _p_abstract_declarator
 	virtual ~direct_abstract_declarator3 ();
 
+	
 		
 };
 
@@ -3915,6 +4131,8 @@ public:
 		);
 	equality_expression_item(const equality_expression_item &);
 	virtual std::string name()const{return "equality_expression_item";}			//returns the class name, here "equality_expression"
+	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
@@ -3955,6 +4173,8 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "equality_expression"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_EQUALITY_EXPRESSION
 	virtual std::string pattern()const;							//returns the pattern, here "[equality_expression,EQ_OP,relational_expression]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
@@ -3986,6 +4206,7 @@ class primary_expression :public CAst
 {
 public:
 	virtual std::string name()const=0;
+	virtual std::ostream& codeStream(std::ostream&)const=0;
 	virtual CAstType typeId()const=0;
 	virtual std::string pattern()const=0;
 	virtual bool isList()const=0;
@@ -4025,6 +4246,8 @@ public:
 		);
 	primary_expression1(const primary_expression1& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "primary_expression1"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_PRIMARY_EXPRESSION1
 	virtual std::string pattern()const;							//returns the pattern, here "['(',expression,')']"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -4034,6 +4257,7 @@ public:
 	      expression* get_p_expression()     {return _p_expression;}							//returns       pointer to _p_expression
 	virtual ~primary_expression1 ();
 
+	
 		
 };
 
@@ -4068,6 +4292,8 @@ public:
 		);
 	primary_expression2(const primary_expression2& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "primary_expression2"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_PRIMARY_EXPRESSION2
 	virtual std::string pattern()const;							//returns the pattern, here "[IDENTIFIER]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -4077,6 +4303,7 @@ public:
 	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
 	virtual ~primary_expression2 ();
 
+	
 		
 };
 
@@ -4093,6 +4320,7 @@ class declaration_specifiers :public CAst
 {
 public:
 	virtual std::string name()const=0;
+	virtual std::ostream& codeStream(std::ostream&)const=0;
 	virtual CAstType typeId()const=0;
 	virtual std::string pattern()const=0;
 	virtual bool isList()const=0;
@@ -4134,6 +4362,8 @@ public:
 		);
 	declaration_specifiers1_item(const declaration_specifiers1_item &);
 	virtual std::string name()const{return "declaration_specifiers1_item";}			//returns the class name, here "declaration_specifiers1"
+	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
@@ -4171,6 +4401,8 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "declaration_specifiers1"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_DECLARATION_SPECIFIERS1
 	virtual std::string pattern()const;							//returns the pattern, here "[storage_class_specifier,declaration_specifiers]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
@@ -4220,6 +4452,8 @@ public:
 		);
 	declaration_specifiers2_item(const declaration_specifiers2_item &);
 	virtual std::string name()const{return "declaration_specifiers2_item";}			//returns the class name, here "declaration_specifiers2"
+	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
@@ -4257,6 +4491,8 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "declaration_specifiers2"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_DECLARATION_SPECIFIERS2
 	virtual std::string pattern()const;							//returns the pattern, here "[type_specifier,declaration_specifiers]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
@@ -4306,6 +4542,8 @@ public:
 		);
 	declaration_specifiers3_item(const declaration_specifiers3_item &);
 	virtual std::string name()const{return "declaration_specifiers3_item";}			//returns the class name, here "declaration_specifiers3"
+	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
@@ -4343,6 +4581,8 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "declaration_specifiers3"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_DECLARATION_SPECIFIERS3
 	virtual std::string pattern()const;							//returns the pattern, here "[type_qualifier,declaration_specifiers]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
@@ -4394,6 +4634,8 @@ public:
 		);
 	declaration(const declaration& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "declaration"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_DECLARATION
 	virtual std::string pattern()const;							//returns the pattern, here "[declaration_specifiers,init_declarator_list,';']"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -4405,6 +4647,7 @@ public:
 	      init_declarator_list* get_p_init_declarator_list()     {return _p_init_declarator_list;}							//returns       pointer to _p_init_declarator_list
 	virtual ~declaration ();
 
+	
 		
 };
 
@@ -4422,6 +4665,7 @@ class direct_declarator :public CAst
 {
 public:
 	virtual std::string name()const=0;
+	virtual std::ostream& codeStream(std::ostream&)const=0;
 	virtual CAstType typeId()const=0;
 	virtual std::string pattern()const=0;
 	virtual bool isList()const=0;
@@ -4464,6 +4708,8 @@ public:
 		);
 	direct_declarator1(const direct_declarator1& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "direct_declarator1"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_DIRECT_DECLARATOR1
 	virtual std::string pattern()const;							//returns the pattern, here "[direct_declarator,'[',constant_expression,']']"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -4475,6 +4721,7 @@ public:
 	      constant_expression* get_p_constant_expression()     {return _p_constant_expression;}							//returns       pointer to _p_constant_expression
 	virtual ~direct_declarator1 ();
 
+	
 		
 };
 
@@ -4512,6 +4759,8 @@ public:
 		);
 	direct_declarator2(const direct_declarator2& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "direct_declarator2"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_DIRECT_DECLARATOR2
 	virtual std::string pattern()const;							//returns the pattern, here "[direct_declarator,'(',parameter_type_list,')']"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -4523,6 +4772,7 @@ public:
 	      parameter_type_list* get_p_parameter_type_list()     {return _p_parameter_type_list;}							//returns       pointer to _p_parameter_type_list
 	virtual ~direct_declarator2 ();
 
+	
 		
 };
 
@@ -4560,6 +4810,8 @@ public:
 		);
 	direct_declarator3(const direct_declarator3& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "direct_declarator3"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_DIRECT_DECLARATOR3
 	virtual std::string pattern()const;							//returns the pattern, here "[direct_declarator,'(',identifier_list,')']"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -4571,6 +4823,7 @@ public:
 	      identifier_list* get_p_identifier_list()     {return _p_identifier_list;}							//returns       pointer to _p_identifier_list
 	virtual ~direct_declarator3 ();
 
+	
 		
 };
 
@@ -4605,6 +4858,8 @@ public:
 		);
 	direct_declarator4(const direct_declarator4& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "direct_declarator4"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_DIRECT_DECLARATOR4
 	virtual std::string pattern()const;							//returns the pattern, here "['(',declarator,')']"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -4614,6 +4869,7 @@ public:
 	      declarator* get_p_declarator()     {return _p_declarator;}							//returns       pointer to _p_declarator
 	virtual ~direct_declarator4 ();
 
+	
 		
 };
 
@@ -4648,6 +4904,8 @@ public:
 		);
 	direct_declarator5(const direct_declarator5& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "direct_declarator5"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_DIRECT_DECLARATOR5
 	virtual std::string pattern()const;							//returns the pattern, here "[IDENTIFIER]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -4657,6 +4915,7 @@ public:
 	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
 	virtual ~direct_declarator5 ();
 
+	
 		
 };
 
@@ -4692,6 +4951,8 @@ public:
 		);
 	logical_and_expression_item(const logical_and_expression_item &);
 	virtual std::string name()const{return "logical_and_expression_item";}			//returns the class name, here "logical_and_expression"
+	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
@@ -4729,6 +4990,8 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "logical_and_expression"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_LOGICAL_AND_EXPRESSION
 	virtual std::string pattern()const;							//returns the pattern, here "[logical_and_expression,AND_OP,inclusive_or_expression]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
@@ -4778,6 +5041,8 @@ public:
 		);
 	init_declarator_list_item(const init_declarator_list_item &);
 	virtual std::string name()const{return "init_declarator_list_item";}			//returns the class name, here "init_declarator_list"
+	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
@@ -4815,6 +5080,8 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "init_declarator_list"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_INIT_DECLARATOR_LIST
 	virtual std::string pattern()const;							//returns the pattern, here "[init_declarator_list,',',init_declarator]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
@@ -4867,6 +5134,8 @@ public:
 		);
 	shift_expression_item(const shift_expression_item &);
 	virtual std::string name()const{return "shift_expression_item";}			//returns the class name, here "shift_expression"
+	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
@@ -4907,6 +5176,8 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "shift_expression"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_SHIFT_EXPRESSION
 	virtual std::string pattern()const;							//returns the pattern, here "[shift_expression,LEFT_OP,additive_expression]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
@@ -4956,6 +5227,8 @@ public:
 		);
 	identifier_list_item(const identifier_list_item &);
 	virtual std::string name()const{return "identifier_list_item";}			//returns the class name, here "identifier_list"
+	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
@@ -4993,6 +5266,8 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "identifier_list"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_IDENTIFIER_LIST
 	virtual std::string pattern()const;							//returns the pattern, here "[identifier_list,',',IDENTIFIER]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
@@ -5024,6 +5299,7 @@ class jump_statement :public CAst
 {
 public:
 	virtual std::string name()const=0;
+	virtual std::ostream& codeStream(std::ostream&)const=0;
 	virtual CAstType typeId()const=0;
 	virtual std::string pattern()const=0;
 	virtual bool isList()const=0;
@@ -5063,6 +5339,8 @@ public:
 		);
 	jump_statement1(const jump_statement1& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "jump_statement1"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_JUMP_STATEMENT1
 	virtual std::string pattern()const;							//returns the pattern, here "[GOTO,IDENTIFIER,';']"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -5072,6 +5350,7 @@ public:
 	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
 	virtual ~jump_statement1 ();
 
+	
 		
 };
 
@@ -5106,6 +5385,8 @@ public:
 		);
 	jump_statement2(const jump_statement2& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "jump_statement2"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_JUMP_STATEMENT2
 	virtual std::string pattern()const;							//returns the pattern, here "[RETURN,expression,';']"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -5115,6 +5396,7 @@ public:
 	      expression* get_p_expression()     {return _p_expression;}							//returns       pointer to _p_expression
 	virtual ~jump_statement2 ();
 
+	
 		
 };
 
@@ -5149,6 +5431,8 @@ public:
 		);
 	jump_statement3(const jump_statement3& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "jump_statement3"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_JUMP_STATEMENT3
 	virtual std::string pattern()const;							//returns the pattern, here "[CONTINUE,';']"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -5158,6 +5442,7 @@ public:
 	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
 	virtual ~jump_statement3 ();
 
+	
 		
 };
 
@@ -5198,6 +5483,8 @@ public:
 		);
 	struct_declarator(const struct_declarator& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "struct_declarator"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_STRUCT_DECLARATOR
 	virtual std::string pattern()const;							//returns the pattern, here "[declarator,':',constant_expression]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -5211,6 +5498,7 @@ public:
 	      constant_expression* get_p_constant_expression()     {return _p_constant_expression;}							//returns       pointer to _p_constant_expression
 	virtual ~struct_declarator ();
 
+	
 		
 };
 
@@ -5254,6 +5542,8 @@ public:
 		);
 	function_definition(const function_definition& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "function_definition"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_FUNCTION_DEFINITION
 	virtual std::string pattern()const;							//returns the pattern, here "[declaration_specifiers,declarator,declaration_list,compound_statement]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -5269,6 +5559,7 @@ public:
 	      compound_statement* get_p_compound_statement()     {return _p_compound_statement;}							//returns       pointer to _p_compound_statement
 	virtual ~function_definition ();
 
+	
 		
 };
 
@@ -5304,6 +5595,8 @@ public:
 		);
 	parameter_list_item(const parameter_list_item &);
 	virtual std::string name()const{return "parameter_list_item";}			//returns the class name, here "parameter_list"
+	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
@@ -5341,6 +5634,8 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "parameter_list"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_PARAMETER_LIST
 	virtual std::string pattern()const;							//returns the pattern, here "[parameter_list,',',parameter_declaration]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
@@ -5398,6 +5693,8 @@ public:
 		);
 	enum_specifier(const enum_specifier& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "enum_specifier"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_ENUM_SPECIFIER
 	virtual std::string pattern()const;							//returns the pattern, here "[ENUM,IDENTIFIER,'{',enumerator_list,'}']"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -5413,6 +5710,7 @@ public:
 	      Token* get_p_token3()     {return _p_token3;}							//returns       pointer to _p_token3
 	virtual ~enum_specifier ();
 
+	
 		
 };
 
@@ -5447,6 +5745,8 @@ public:
 		);
 	type_qualifier(const type_qualifier& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "type_qualifier"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_TYPE_QUALIFIER
 	virtual std::string pattern()const;							//returns the pattern, here "[CONST]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -5456,6 +5756,7 @@ public:
 	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
 	virtual ~type_qualifier ();
 
+	
 		
 };
 
@@ -5491,6 +5792,8 @@ public:
 		);
 	enumerator_list_item(const enumerator_list_item &);
 	virtual std::string name()const{return "enumerator_list_item";}			//returns the class name, here "enumerator_list"
+	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
@@ -5528,6 +5831,8 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "enumerator_list"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_ENUMERATOR_LIST
 	virtual std::string pattern()const;							//returns the pattern, here "[enumerator_list,',',enumerator]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
@@ -5559,6 +5864,7 @@ class labeled_statement :public CAst
 {
 public:
 	virtual std::string name()const=0;
+	virtual std::ostream& codeStream(std::ostream&)const=0;
 	virtual CAstType typeId()const=0;
 	virtual std::string pattern()const=0;
 	virtual bool isList()const=0;
@@ -5601,6 +5907,8 @@ public:
 		);
 	labeled_statement1(const labeled_statement1& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "labeled_statement1"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_LABELED_STATEMENT1
 	virtual std::string pattern()const;							//returns the pattern, here "[CASE,constant_expression,':',statement]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -5612,6 +5920,7 @@ public:
 	      statement* get_p_statement()     {return _p_statement;}							//returns       pointer to _p_statement
 	virtual ~labeled_statement1 ();
 
+	
 		
 };
 
@@ -5649,6 +5958,8 @@ public:
 		);
 	labeled_statement2(const labeled_statement2& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "labeled_statement2"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_LABELED_STATEMENT2
 	virtual std::string pattern()const;							//returns the pattern, here "[IDENTIFIER,':',statement]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -5660,6 +5971,7 @@ public:
 	      statement* get_p_statement()     {return _p_statement;}							//returns       pointer to _p_statement
 	virtual ~labeled_statement2 ();
 
+	
 		
 };
 
@@ -5695,6 +6007,8 @@ public:
 		);
 	declaration_list_item(const declaration_list_item &);
 	virtual std::string name()const{return "declaration_list_item";}			//returns the class name, here "declaration_list"
+	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
@@ -5732,6 +6046,8 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "declaration_list"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_DECLARATION_LIST
 	virtual std::string pattern()const;							//returns the pattern, here "[declaration_list,declaration]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
@@ -5762,6 +6078,7 @@ class specifier_qualifier_list :public CAst
 {
 public:
 	virtual std::string name()const=0;
+	virtual std::ostream& codeStream(std::ostream&)const=0;
 	virtual CAstType typeId()const=0;
 	virtual std::string pattern()const=0;
 	virtual bool isList()const=0;
@@ -5803,6 +6120,8 @@ public:
 		);
 	specifier_qualifier_list1_item(const specifier_qualifier_list1_item &);
 	virtual std::string name()const{return "specifier_qualifier_list1_item";}			//returns the class name, here "specifier_qualifier_list1"
+	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
@@ -5840,6 +6159,8 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "specifier_qualifier_list1"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_SPECIFIER_QUALIFIER_LIST1
 	virtual std::string pattern()const;							//returns the pattern, here "[type_specifier,specifier_qualifier_list]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
@@ -5889,6 +6210,8 @@ public:
 		);
 	specifier_qualifier_list2_item(const specifier_qualifier_list2_item &);
 	virtual std::string name()const{return "specifier_qualifier_list2_item";}			//returns the class name, here "specifier_qualifier_list2"
+	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
@@ -5926,6 +6249,8 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "specifier_qualifier_list2"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_SPECIFIER_QUALIFIER_LIST2
 	virtual std::string pattern()const;							//returns the pattern, here "[type_qualifier,specifier_qualifier_list]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
@@ -5975,6 +6300,8 @@ public:
 		);
 	translation_unit_item(const translation_unit_item &);
 	virtual std::string name()const{return "translation_unit_item";}			//returns the class name, here "translation_unit"
+	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
@@ -6012,6 +6339,8 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "translation_unit"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_TRANSLATION_UNIT
 	virtual std::string pattern()const;							//returns the pattern, here "[translation_unit,external_declaration]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
@@ -6060,6 +6389,8 @@ public:
 		);
 	constant_expression(const constant_expression& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "constant_expression"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_CONSTANT_EXPRESSION
 	virtual std::string pattern()const;							//returns the pattern, here "[conditional_expression]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -6069,6 +6400,7 @@ public:
 	      conditional_expression* get_p_conditional_expression()     {return _p_conditional_expression;}							//returns       pointer to _p_conditional_expression
 	virtual ~constant_expression ();
 
+	
 		
 };
 
@@ -6104,6 +6436,8 @@ public:
 		);
 	initializer_list_item(const initializer_list_item &);
 	virtual std::string name()const{return "initializer_list_item";}			//returns the class name, here "initializer_list"
+	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
@@ -6141,6 +6475,8 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "initializer_list"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_INITIALIZER_LIST
 	virtual std::string pattern()const;							//returns the pattern, here "[initializer_list,',',initializer]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
@@ -6190,6 +6526,8 @@ public:
 		);
 	statement_list_item(const statement_list_item &);
 	virtual std::string name()const{return "statement_list_item";}			//returns the class name, here "statement_list"
+	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
@@ -6227,6 +6565,8 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "statement_list"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_STATEMENT_LIST
 	virtual std::string pattern()const;							//returns the pattern, here "[statement_list,statement]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
@@ -6276,6 +6616,8 @@ public:
 		);
 	expression_item(const expression_item &);
 	virtual std::string name()const{return "expression_item";}			//returns the class name, here "expression"
+	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual Properties getProperties()const;
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
 	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
@@ -6313,6 +6655,8 @@ public:
 		);
 
 	virtual std::string name()const;							//returns the class name, here "expression"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_EXPRESSION
 	virtual std::string pattern()const;							//returns the pattern, here "[expression,',',assignment_expression]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
@@ -6364,6 +6708,8 @@ public:
 		);
 	declarator(const declarator& other);						//copy constructor
 	virtual std::string name()const;							//returns the class name, here "declarator"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_DECLARATOR
 	virtual std::string pattern()const;							//returns the pattern, here "[pointer,direct_declarator]"
 	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
@@ -6375,6 +6721,7 @@ public:
 	      direct_declarator* get_p_direct_declarator()     {return _p_direct_declarator;}							//returns       pointer to _p_direct_declarator
 	virtual ~declarator ();
 
+	
 		
 };
 

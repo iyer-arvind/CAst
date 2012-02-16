@@ -17,6 +17,24 @@
 /*$cls.className::name() returns the name of the class*/
 std::string $cls.className::name()const {return "$cls.className";}
 
+
+/*$cls.className::codeStream() returns the code for the node of AST*/
+std::ostream& $cls.className::codeStream(std::ostream& stream)const 
+{
+	#for $i,$r in enumerate($cls.constructor.pattern):
+		#if (isinstance($r,Token) and not $r.isValued):
+			#if $i in $cls.constructor.parameterMap
+	if($cls.constructor.parameterMap[$i][1])$cls.constructor.parameterMap[$i][1]->codeStream(stream);
+			#else
+	stream<<$r.code<<" ";//
+			#end if
+		#else:
+	if($cls.constructor.parameterMap[$i][1])$cls.constructor.parameterMap[$i][1]->codeStream(stream);
+		#end if
+	#end for
+	return  stream;
+}
+
 /*$cls.className::typeId() returns the type of the class, here, CAST_TYPE_$cls.className.upper()*/
 CAstType $cls.className::typeId()const {return CAST_TYPE_$cls.className.upper();}
 
@@ -134,6 +152,41 @@ ${cls.className}_item::${cls.className}_item
 }
 
 
+/*${cls.className}_item::codeStream() returns the code for the node of AST*/
+std::ostream& ${cls.className}_item::codeStream(std::ostream& stream,bool initFlag)const 
+{
+	if(initFlag)
+	{
+	#for $i,$r in enumerate($cls.constructor.pattern):
+		#if $i not in $cls.constructor.init_includedParameterIndices:
+			#continue
+		#end if
+		#if $i==$cls.constructor.selfIndex:
+			#continue
+		#end if
+		#if (isinstance($r,Token) and not $r.isValued):
+	stream<<$r.code<<" ";
+		#else:
+	if($cls.constructor.parameterMap[$i][1])$cls.constructor.parameterMap[$i][1]->codeStream(stream);
+		#end if
+	#end for
+	}
+	else
+	{
+	#for $i,$r in enumerate($cls.constructor.pattern):
+		#if $i==$cls.constructor.selfIndex:
+			#continue
+		#end if
+		#if (isinstance($r,Token) and not $r.isValued):
+	stream<<$r.code;
+		#else:
+	if($cls.constructor.parameterMap[$i][1])$cls.constructor.parameterMap[$i][1]->codeStream(stream);
+		#end if
+	#end for
+	}
+	return  stream;
+}
+
 /*copy constructor*/
 ${cls.className}_item::${cls.className}_item(const ${cls.className}_item& other):
 		_s_matchedPattern(other._s_matchedPattern),
@@ -180,6 +233,7 @@ ${cls.className}_item::~${cls.className}_item()
 	delete _refCount;_refCount=0;
 	LOG("\033[31mDELETED\033[0m ${cls.className}_item");
 }
+#from yaccClasses.Token import Token
 /*------------------------------------------------------------*\
  							        
   main class ${cls.className}                         
@@ -187,6 +241,16 @@ ${cls.className}_item::~${cls.className}_item()
 \*------------------------------------------------------------*/
 /*$cls.className::name() returns the name of the class*/
 std::string $cls.className::name()const {return "$cls.className";}
+
+/*$cls.className::codeStream() returns the code for the node of AST*/
+std::ostream& $cls.className::codeStream(std::ostream& stream )const 
+{
+	for(CItemsListIter item=_items.begin();item!=_items.end();item++)
+	{
+		item->codeStream(stream,item==_items.begin());
+	}
+	return  stream;
+}
 
 /*$cls.className::typeId() returns the type of the class, here, CAST_TYPE_$cls.className.upper()*/
 CAstType $cls.className::typeId()const {return CAST_TYPE_$cls.className.upper();}

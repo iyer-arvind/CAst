@@ -9,9 +9,12 @@ from Cheetah.Template import Template as CheetahTemplate
 
 cheetahTemplatesDir=os.path.dirname(os.path.abspath(__file__))+"/cheetahTemplates/"
 
+		
+
 class YaccFile(object):
-	def __init__(self,fileName):
+	def __init__(self,fileName,tokMap):
 		self.fileName=fileName
+		self.tokMap=tokMap
 		self.__parse()
 		self.__resolve()
 		for rn in self.ruleMap:
@@ -52,7 +55,15 @@ class YaccFile(object):
 						rules[currentRule].append(tuple(l.split()[1:]))
 				if(mode>1):
 					codeLines.append(l)
-		
+
+		for t in tokens:
+			assert t in self.tokMap,"'"+t+"' not present in tokMap"
+			tok=self.tokMap[t]
+			if(tok[0]=='txt'):
+				tokens[t].code="\""+tok[1]+"\""
+			else:
+				tokens[t].isValued=True
+				
 		
 		
 		ruleMap=dict([(i,Rule(i)) for i in rules.keys()])
@@ -128,3 +139,7 @@ class YaccFile(object):
 			rule=self.ruleMap[rn]
 			rule._dumpCSource(fh)
 		fh.write("}//namespace CAst\n")
+
+if(__name__=="__main__"):
+	import sys
+	LexFile(sys.argv[1])

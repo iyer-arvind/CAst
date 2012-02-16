@@ -118,6 +118,14 @@ std::ostream& PropertiesList::toStream(std::ostream& stream,int indent)const
 /*storage_class_specifier::name() returns the name of the class*/
 std::string storage_class_specifier::name()const {return "storage_class_specifier";}
 
+
+/*storage_class_specifier::codeStream() returns the code for the node of AST*/
+std::ostream& storage_class_specifier::codeStream(std::ostream& stream)const 
+{
+	if(_p_token1)_p_token1->codeStream(stream);
+	return  stream;
+}
+
 /*storage_class_specifier::typeId() returns the type of the class, here, CAST_TYPE_STORAGE_CLASS_SPECIFIER*/
 CAstType storage_class_specifier::typeId()const {return CAST_TYPE_STORAGE_CLASS_SPECIFIER;}
 
@@ -186,6 +194,15 @@ storage_class_specifier::~storage_class_specifier()
 /*expression_statement::name() returns the name of the class*/
 std::string expression_statement::name()const {return "expression_statement";}
 
+
+/*expression_statement::codeStream() returns the code for the node of AST*/
+std::ostream& expression_statement::codeStream(std::ostream& stream)const 
+{
+	if(_p_expression)_p_expression->codeStream(stream);
+	stream<<';'<<" ";//
+	return  stream;
+}
+
 /*expression_statement::typeId() returns the type of the class, here, CAST_TYPE_EXPRESSION_STATEMENT*/
 CAstType expression_statement::typeId()const {return CAST_TYPE_EXPRESSION_STATEMENT;}
 
@@ -253,6 +270,15 @@ expression_statement::~expression_statement()
 
 /*type_name::name() returns the name of the class*/
 std::string type_name::name()const {return "type_name";}
+
+
+/*type_name::codeStream() returns the code for the node of AST*/
+std::ostream& type_name::codeStream(std::ostream& stream)const 
+{
+	if(_p_specifier_qualifier_list)_p_specifier_qualifier_list->codeStream(stream);
+	if(_p_abstract_declarator)_p_abstract_declarator->codeStream(stream);
+	return  stream;
+}
 
 /*type_name::typeId() returns the type of the class, here, CAST_TYPE_TYPE_NAME*/
 CAstType type_name::typeId()const {return CAST_TYPE_TYPE_NAME;}
@@ -331,6 +357,17 @@ type_name::~type_name()
 /*unary_expression1::name() returns the name of the class*/
 std::string unary_expression1::name()const {return "unary_expression1";}
 
+
+/*unary_expression1::codeStream() returns the code for the node of AST*/
+std::ostream& unary_expression1::codeStream(std::ostream& stream)const 
+{
+	stream<<"sizeof"<<" ";//
+	stream<<'('<<" ";//
+	if(_p_type_name)_p_type_name->codeStream(stream);
+	stream<<')'<<" ";//
+	return  stream;
+}
+
 /*unary_expression1::typeId() returns the type of the class, here, CAST_TYPE_UNARY_EXPRESSION1*/
 CAstType unary_expression1::typeId()const {return CAST_TYPE_UNARY_EXPRESSION1;}
 
@@ -398,6 +435,15 @@ unary_expression1::~unary_expression1()
 
 /*unary_expression2::name() returns the name of the class*/
 std::string unary_expression2::name()const {return "unary_expression2";}
+
+
+/*unary_expression2::codeStream() returns the code for the node of AST*/
+std::ostream& unary_expression2::codeStream(std::ostream& stream)const 
+{
+	if(_p_token1)_p_token1->codeStream(stream);
+	if(_p_unary_expression)_p_unary_expression->codeStream(stream);
+	return  stream;
+}
 
 /*unary_expression2::typeId() returns the type of the class, here, CAST_TYPE_UNARY_EXPRESSION2*/
 CAstType unary_expression2::typeId()const {return CAST_TYPE_UNARY_EXPRESSION2;}
@@ -476,6 +522,15 @@ unary_expression2::~unary_expression2()
 /*unary_expression3::name() returns the name of the class*/
 std::string unary_expression3::name()const {return "unary_expression3";}
 
+
+/*unary_expression3::codeStream() returns the code for the node of AST*/
+std::ostream& unary_expression3::codeStream(std::ostream& stream)const 
+{
+	if(_p_unary_operator)_p_unary_operator->codeStream(stream);
+	if(_p_cast_expression)_p_cast_expression->codeStream(stream);
+	return  stream;
+}
+
 /*unary_expression3::typeId() returns the type of the class, here, CAST_TYPE_UNARY_EXPRESSION3*/
 CAstType unary_expression3::typeId()const {return CAST_TYPE_UNARY_EXPRESSION3;}
 
@@ -552,6 +607,14 @@ unary_expression3::~unary_expression3()
 
 /*unary_expression4::name() returns the name of the class*/
 std::string unary_expression4::name()const {return "unary_expression4";}
+
+
+/*unary_expression4::codeStream() returns the code for the node of AST*/
+std::ostream& unary_expression4::codeStream(std::ostream& stream)const 
+{
+	if(_p_postfix_expression)_p_postfix_expression->codeStream(stream);
+	return  stream;
+}
 
 /*unary_expression4::typeId() returns the type of the class, here, CAST_TYPE_UNARY_EXPRESSION4*/
 CAstType unary_expression4::typeId()const {return CAST_TYPE_UNARY_EXPRESSION4;}
@@ -640,6 +703,23 @@ conditional_expression_item::conditional_expression_item
 }
 
 
+/*conditional_expression_item::codeStream() returns the code for the node of AST*/
+std::ostream& conditional_expression_item::codeStream(std::ostream& stream,bool initFlag)const 
+{
+	if(initFlag)
+	{
+	if(_p_logical_or_expression)_p_logical_or_expression->codeStream(stream);
+	}
+	else
+	{
+	if(_p_logical_or_expression)_p_logical_or_expression->codeStream(stream);
+	stream<<'?';
+	if(_p_expression)_p_expression->codeStream(stream);
+	stream<<':';
+	}
+	return  stream;
+}
+
 /*copy constructor*/
 conditional_expression_item::conditional_expression_item(const conditional_expression_item& other):
 		_s_matchedPattern(other._s_matchedPattern),
@@ -691,6 +771,16 @@ conditional_expression_item::~conditional_expression_item()
 \*------------------------------------------------------------*/
 /*conditional_expression::name() returns the name of the class*/
 std::string conditional_expression::name()const {return "conditional_expression";}
+
+/*conditional_expression::codeStream() returns the code for the node of AST*/
+std::ostream& conditional_expression::codeStream(std::ostream& stream )const 
+{
+	for(CItemsListIter item=_items.begin();item!=_items.end();item++)
+	{
+		item->codeStream(stream,item==_items.begin());
+	}
+	return  stream;
+}
 
 /*conditional_expression::typeId() returns the type of the class, here, CAST_TYPE_CONDITIONAL_EXPRESSION*/
 CAstType conditional_expression::typeId()const {return CAST_TYPE_CONDITIONAL_EXPRESSION;}
@@ -755,6 +845,18 @@ conditional_expression::~conditional_expression()
 
 /*struct_or_union_specifier::name() returns the name of the class*/
 std::string struct_or_union_specifier::name()const {return "struct_or_union_specifier";}
+
+
+/*struct_or_union_specifier::codeStream() returns the code for the node of AST*/
+std::ostream& struct_or_union_specifier::codeStream(std::ostream& stream)const 
+{
+	if(_p_struct_or_union)_p_struct_or_union->codeStream(stream);
+	if(_p_token1)_p_token1->codeStream(stream);
+	if(_p_token2)_p_token2->codeStream(stream);
+	if(_p_struct_declaration_list)_p_struct_declaration_list->codeStream(stream);
+	if(_p_token3)_p_token3->codeStream(stream);
+	return  stream;
+}
 
 /*struct_or_union_specifier::typeId() returns the type of the class, here, CAST_TYPE_STRUCT_OR_UNION_SPECIFIER*/
 CAstType struct_or_union_specifier::typeId()const {return CAST_TYPE_STRUCT_OR_UNION_SPECIFIER;}
@@ -877,6 +979,21 @@ exclusive_or_expression_item::exclusive_or_expression_item
 }
 
 
+/*exclusive_or_expression_item::codeStream() returns the code for the node of AST*/
+std::ostream& exclusive_or_expression_item::codeStream(std::ostream& stream,bool initFlag)const 
+{
+	if(initFlag)
+	{
+	if(_p_and_expression)_p_and_expression->codeStream(stream);
+	}
+	else
+	{
+	stream<<'^';
+	if(_p_and_expression)_p_and_expression->codeStream(stream);
+	}
+	return  stream;
+}
+
 /*copy constructor*/
 exclusive_or_expression_item::exclusive_or_expression_item(const exclusive_or_expression_item& other):
 		_s_matchedPattern(other._s_matchedPattern),
@@ -921,6 +1038,16 @@ exclusive_or_expression_item::~exclusive_or_expression_item()
 \*------------------------------------------------------------*/
 /*exclusive_or_expression::name() returns the name of the class*/
 std::string exclusive_or_expression::name()const {return "exclusive_or_expression";}
+
+/*exclusive_or_expression::codeStream() returns the code for the node of AST*/
+std::ostream& exclusive_or_expression::codeStream(std::ostream& stream )const 
+{
+	for(CItemsListIter item=_items.begin();item!=_items.end();item++)
+	{
+		item->codeStream(stream,item==_items.begin());
+	}
+	return  stream;
+}
 
 /*exclusive_or_expression::typeId() returns the type of the class, here, CAST_TYPE_EXCLUSIVE_OR_EXPRESSION*/
 CAstType exclusive_or_expression::typeId()const {return CAST_TYPE_EXCLUSIVE_OR_EXPRESSION;}
@@ -984,6 +1111,17 @@ exclusive_or_expression::~exclusive_or_expression()
 
 /*initializer1::name() returns the name of the class*/
 std::string initializer1::name()const {return "initializer1";}
+
+
+/*initializer1::codeStream() returns the code for the node of AST*/
+std::ostream& initializer1::codeStream(std::ostream& stream)const 
+{
+	stream<<'{'<<" ";//
+	if(_p_initializer_list)_p_initializer_list->codeStream(stream);
+	if(_p_token1)_p_token1->codeStream(stream);
+	stream<<'}'<<" ";//
+	return  stream;
+}
 
 /*initializer1::typeId() returns the type of the class, here, CAST_TYPE_INITIALIZER1*/
 CAstType initializer1::typeId()const {return CAST_TYPE_INITIALIZER1;}
@@ -1061,6 +1199,14 @@ initializer1::~initializer1()
 
 /*initializer2::name() returns the name of the class*/
 std::string initializer2::name()const {return "initializer2";}
+
+
+/*initializer2::codeStream() returns the code for the node of AST*/
+std::ostream& initializer2::codeStream(std::ostream& stream)const 
+{
+	if(_p_assignment_expression)_p_assignment_expression->codeStream(stream);
+	return  stream;
+}
 
 /*initializer2::typeId() returns the type of the class, here, CAST_TYPE_INITIALIZER2*/
 CAstType initializer2::typeId()const {return CAST_TYPE_INITIALIZER2;}
@@ -1147,6 +1293,20 @@ struct_declaration_list_item::struct_declaration_list_item
 }
 
 
+/*struct_declaration_list_item::codeStream() returns the code for the node of AST*/
+std::ostream& struct_declaration_list_item::codeStream(std::ostream& stream,bool initFlag)const 
+{
+	if(initFlag)
+	{
+	if(_p_struct_declaration)_p_struct_declaration->codeStream(stream);
+	}
+	else
+	{
+	if(_p_struct_declaration)_p_struct_declaration->codeStream(stream);
+	}
+	return  stream;
+}
+
 /*copy constructor*/
 struct_declaration_list_item::struct_declaration_list_item(const struct_declaration_list_item& other):
 		_s_matchedPattern(other._s_matchedPattern),
@@ -1191,6 +1351,16 @@ struct_declaration_list_item::~struct_declaration_list_item()
 \*------------------------------------------------------------*/
 /*struct_declaration_list::name() returns the name of the class*/
 std::string struct_declaration_list::name()const {return "struct_declaration_list";}
+
+/*struct_declaration_list::codeStream() returns the code for the node of AST*/
+std::ostream& struct_declaration_list::codeStream(std::ostream& stream )const 
+{
+	for(CItemsListIter item=_items.begin();item!=_items.end();item++)
+	{
+		item->codeStream(stream,item==_items.begin());
+	}
+	return  stream;
+}
 
 /*struct_declaration_list::typeId() returns the type of the class, here, CAST_TYPE_STRUCT_DECLARATION_LIST*/
 CAstType struct_declaration_list::typeId()const {return CAST_TYPE_STRUCT_DECLARATION_LIST;}
@@ -1254,6 +1424,14 @@ struct_declaration_list::~struct_declaration_list()
 
 /*assignment_operator::name() returns the name of the class*/
 std::string assignment_operator::name()const {return "assignment_operator";}
+
+
+/*assignment_operator::codeStream() returns the code for the node of AST*/
+std::ostream& assignment_operator::codeStream(std::ostream& stream)const 
+{
+	if(_p_token1)_p_token1->codeStream(stream);
+	return  stream;
+}
 
 /*assignment_operator::typeId() returns the type of the class, here, CAST_TYPE_ASSIGNMENT_OPERATOR*/
 CAstType assignment_operator::typeId()const {return CAST_TYPE_ASSIGNMENT_OPERATOR;}
@@ -1322,6 +1500,16 @@ assignment_operator::~assignment_operator()
 
 /*struct_declaration::name() returns the name of the class*/
 std::string struct_declaration::name()const {return "struct_declaration";}
+
+
+/*struct_declaration::codeStream() returns the code for the node of AST*/
+std::ostream& struct_declaration::codeStream(std::ostream& stream)const 
+{
+	if(_p_specifier_qualifier_list)_p_specifier_qualifier_list->codeStream(stream);
+	if(_p_struct_declarator_list)_p_struct_declarator_list->codeStream(stream);
+	stream<<';'<<" ";//
+	return  stream;
+}
 
 /*struct_declaration::typeId() returns the type of the class, here, CAST_TYPE_STRUCT_DECLARATION*/
 CAstType struct_declaration::typeId()const {return CAST_TYPE_STRUCT_DECLARATION;}
@@ -1400,6 +1588,15 @@ struct_declaration::~struct_declaration()
 /*abstract_declarator::name() returns the name of the class*/
 std::string abstract_declarator::name()const {return "abstract_declarator";}
 
+
+/*abstract_declarator::codeStream() returns the code for the node of AST*/
+std::ostream& abstract_declarator::codeStream(std::ostream& stream)const 
+{
+	if(_p_pointer)_p_pointer->codeStream(stream);
+	if(_p_direct_abstract_declarator)_p_direct_abstract_declarator->codeStream(stream);
+	return  stream;
+}
+
 /*abstract_declarator::typeId() returns the type of the class, here, CAST_TYPE_ABSTRACT_DECLARATOR*/
 CAstType abstract_declarator::typeId()const {return CAST_TYPE_ABSTRACT_DECLARATOR;}
 
@@ -1477,6 +1674,20 @@ abstract_declarator::~abstract_declarator()
 /*iteration_statement1::name() returns the name of the class*/
 std::string iteration_statement1::name()const {return "iteration_statement1";}
 
+
+/*iteration_statement1::codeStream() returns the code for the node of AST*/
+std::ostream& iteration_statement1::codeStream(std::ostream& stream)const 
+{
+	stream<<"do"<<" ";//
+	if(_p_statement)_p_statement->codeStream(stream);
+	stream<<"while"<<" ";//
+	stream<<'('<<" ";//
+	if(_p_expression)_p_expression->codeStream(stream);
+	stream<<')'<<" ";//
+	stream<<';'<<" ";//
+	return  stream;
+}
+
 /*iteration_statement1::typeId() returns the type of the class, here, CAST_TYPE_ITERATION_STATEMENT1*/
 CAstType iteration_statement1::typeId()const {return CAST_TYPE_ITERATION_STATEMENT1;}
 
@@ -1553,6 +1764,20 @@ iteration_statement1::~iteration_statement1()
 
 /*iteration_statement2::name() returns the name of the class*/
 std::string iteration_statement2::name()const {return "iteration_statement2";}
+
+
+/*iteration_statement2::codeStream() returns the code for the node of AST*/
+std::ostream& iteration_statement2::codeStream(std::ostream& stream)const 
+{
+	stream<<"for"<<" ";//
+	stream<<'('<<" ";//
+	if(_p_expression_statement)_p_expression_statement->codeStream(stream);
+	if(_p_expression_statement1)_p_expression_statement1->codeStream(stream);
+	if(_p_expression)_p_expression->codeStream(stream);
+	stream<<')'<<" ";//
+	if(_p_statement)_p_statement->codeStream(stream);
+	return  stream;
+}
 
 /*iteration_statement2::typeId() returns the type of the class, here, CAST_TYPE_ITERATION_STATEMENT2*/
 CAstType iteration_statement2::typeId()const {return CAST_TYPE_ITERATION_STATEMENT2;}
@@ -1648,6 +1873,18 @@ iteration_statement2::~iteration_statement2()
 
 /*iteration_statement3::name() returns the name of the class*/
 std::string iteration_statement3::name()const {return "iteration_statement3";}
+
+
+/*iteration_statement3::codeStream() returns the code for the node of AST*/
+std::ostream& iteration_statement3::codeStream(std::ostream& stream)const 
+{
+	stream<<"while"<<" ";//
+	stream<<'('<<" ";//
+	if(_p_expression)_p_expression->codeStream(stream);
+	stream<<')'<<" ";//
+	if(_p_statement)_p_statement->codeStream(stream);
+	return  stream;
+}
 
 /*iteration_statement3::typeId() returns the type of the class, here, CAST_TYPE_ITERATION_STATEMENT3*/
 CAstType iteration_statement3::typeId()const {return CAST_TYPE_ITERATION_STATEMENT3;}
@@ -1745,6 +1982,21 @@ additive_expression_item::additive_expression_item
 }
 
 
+/*additive_expression_item::codeStream() returns the code for the node of AST*/
+std::ostream& additive_expression_item::codeStream(std::ostream& stream,bool initFlag)const 
+{
+	if(initFlag)
+	{
+	if(_p_multiplicative_expression)_p_multiplicative_expression->codeStream(stream);
+	}
+	else
+	{
+	stream<<'+';
+	if(_p_multiplicative_expression)_p_multiplicative_expression->codeStream(stream);
+	}
+	return  stream;
+}
+
 /*copy constructor*/
 additive_expression_item::additive_expression_item(const additive_expression_item& other):
 		_s_matchedPattern(other._s_matchedPattern),
@@ -1796,6 +2048,16 @@ additive_expression_item::~additive_expression_item()
 \*------------------------------------------------------------*/
 /*additive_expression::name() returns the name of the class*/
 std::string additive_expression::name()const {return "additive_expression";}
+
+/*additive_expression::codeStream() returns the code for the node of AST*/
+std::ostream& additive_expression::codeStream(std::ostream& stream )const 
+{
+	for(CItemsListIter item=_items.begin();item!=_items.end();item++)
+	{
+		item->codeStream(stream,item==_items.begin());
+	}
+	return  stream;
+}
 
 /*additive_expression::typeId() returns the type of the class, here, CAST_TYPE_ADDITIVE_EXPRESSION*/
 CAstType additive_expression::typeId()const {return CAST_TYPE_ADDITIVE_EXPRESSION;}
@@ -1860,6 +2122,14 @@ additive_expression::~additive_expression()
 
 /*external_declaration1::name() returns the name of the class*/
 std::string external_declaration1::name()const {return "external_declaration1";}
+
+
+/*external_declaration1::codeStream() returns the code for the node of AST*/
+std::ostream& external_declaration1::codeStream(std::ostream& stream)const 
+{
+	if(_p_function_definition)_p_function_definition->codeStream(stream);
+	return  stream;
+}
 
 /*external_declaration1::typeId() returns the type of the class, here, CAST_TYPE_EXTERNAL_DECLARATION1*/
 CAstType external_declaration1::typeId()const {return CAST_TYPE_EXTERNAL_DECLARATION1;}
@@ -1929,6 +2199,14 @@ external_declaration1::~external_declaration1()
 /*external_declaration2::name() returns the name of the class*/
 std::string external_declaration2::name()const {return "external_declaration2";}
 
+
+/*external_declaration2::codeStream() returns the code for the node of AST*/
+std::ostream& external_declaration2::codeStream(std::ostream& stream)const 
+{
+	if(_p_declaration)_p_declaration->codeStream(stream);
+	return  stream;
+}
+
 /*external_declaration2::typeId() returns the type of the class, here, CAST_TYPE_EXTERNAL_DECLARATION2*/
 CAstType external_declaration2::typeId()const {return CAST_TYPE_EXTERNAL_DECLARATION2;}
 
@@ -1996,6 +2274,14 @@ external_declaration2::~external_declaration2()
 
 /*type_specifier1::name() returns the name of the class*/
 std::string type_specifier1::name()const {return "type_specifier1";}
+
+
+/*type_specifier1::codeStream() returns the code for the node of AST*/
+std::ostream& type_specifier1::codeStream(std::ostream& stream)const 
+{
+	if(_p_token1)_p_token1->codeStream(stream);
+	return  stream;
+}
 
 /*type_specifier1::typeId() returns the type of the class, here, CAST_TYPE_TYPE_SPECIFIER1*/
 CAstType type_specifier1::typeId()const {return CAST_TYPE_TYPE_SPECIFIER1;}
@@ -2065,6 +2351,14 @@ type_specifier1::~type_specifier1()
 /*type_specifier2::name() returns the name of the class*/
 std::string type_specifier2::name()const {return "type_specifier2";}
 
+
+/*type_specifier2::codeStream() returns the code for the node of AST*/
+std::ostream& type_specifier2::codeStream(std::ostream& stream)const 
+{
+	if(_p_struct_or_union_specifier)_p_struct_or_union_specifier->codeStream(stream);
+	return  stream;
+}
+
 /*type_specifier2::typeId() returns the type of the class, here, CAST_TYPE_TYPE_SPECIFIER2*/
 CAstType type_specifier2::typeId()const {return CAST_TYPE_TYPE_SPECIFIER2;}
 
@@ -2133,6 +2427,14 @@ type_specifier2::~type_specifier2()
 /*type_specifier3::name() returns the name of the class*/
 std::string type_specifier3::name()const {return "type_specifier3";}
 
+
+/*type_specifier3::codeStream() returns the code for the node of AST*/
+std::ostream& type_specifier3::codeStream(std::ostream& stream)const 
+{
+	if(_p_enum_specifier)_p_enum_specifier->codeStream(stream);
+	return  stream;
+}
+
 /*type_specifier3::typeId() returns the type of the class, here, CAST_TYPE_TYPE_SPECIFIER3*/
 CAstType type_specifier3::typeId()const {return CAST_TYPE_TYPE_SPECIFIER3;}
 
@@ -2200,6 +2502,17 @@ type_specifier3::~type_specifier3()
 
 /*compound_statement::name() returns the name of the class*/
 std::string compound_statement::name()const {return "compound_statement";}
+
+
+/*compound_statement::codeStream() returns the code for the node of AST*/
+std::ostream& compound_statement::codeStream(std::ostream& stream)const 
+{
+	stream<<'{'<<" ";//
+	if(_p_declaration_list)_p_declaration_list->codeStream(stream);
+	if(_p_statement_list)_p_statement_list->codeStream(stream);
+	stream<<'}'<<" ";//
+	return  stream;
+}
 
 /*compound_statement::typeId() returns the type of the class, here, CAST_TYPE_COMPOUND_STATEMENT*/
 CAstType compound_statement::typeId()const {return CAST_TYPE_COMPOUND_STATEMENT;}
@@ -2295,6 +2608,21 @@ inclusive_or_expression_item::inclusive_or_expression_item
 }
 
 
+/*inclusive_or_expression_item::codeStream() returns the code for the node of AST*/
+std::ostream& inclusive_or_expression_item::codeStream(std::ostream& stream,bool initFlag)const 
+{
+	if(initFlag)
+	{
+	if(_p_exclusive_or_expression)_p_exclusive_or_expression->codeStream(stream);
+	}
+	else
+	{
+	stream<<'|';
+	if(_p_exclusive_or_expression)_p_exclusive_or_expression->codeStream(stream);
+	}
+	return  stream;
+}
+
 /*copy constructor*/
 inclusive_or_expression_item::inclusive_or_expression_item(const inclusive_or_expression_item& other):
 		_s_matchedPattern(other._s_matchedPattern),
@@ -2339,6 +2667,16 @@ inclusive_or_expression_item::~inclusive_or_expression_item()
 \*------------------------------------------------------------*/
 /*inclusive_or_expression::name() returns the name of the class*/
 std::string inclusive_or_expression::name()const {return "inclusive_or_expression";}
+
+/*inclusive_or_expression::codeStream() returns the code for the node of AST*/
+std::ostream& inclusive_or_expression::codeStream(std::ostream& stream )const 
+{
+	for(CItemsListIter item=_items.begin();item!=_items.end();item++)
+	{
+		item->codeStream(stream,item==_items.begin());
+	}
+	return  stream;
+}
 
 /*inclusive_or_expression::typeId() returns the type of the class, here, CAST_TYPE_INCLUSIVE_OR_EXPRESSION*/
 CAstType inclusive_or_expression::typeId()const {return CAST_TYPE_INCLUSIVE_OR_EXPRESSION;}
@@ -2420,6 +2758,21 @@ pointer_item::pointer_item
 }
 
 
+/*pointer_item::codeStream() returns the code for the node of AST*/
+std::ostream& pointer_item::codeStream(std::ostream& stream,bool initFlag)const 
+{
+	if(initFlag)
+	{
+	if(_p_type_qualifier_list)_p_type_qualifier_list->codeStream(stream);
+	}
+	else
+	{
+	stream<<'*';
+	if(_p_type_qualifier_list)_p_type_qualifier_list->codeStream(stream);
+	}
+	return  stream;
+}
+
 /*copy constructor*/
 pointer_item::pointer_item(const pointer_item& other):
 		_s_matchedPattern(other._s_matchedPattern),
@@ -2464,6 +2817,16 @@ pointer_item::~pointer_item()
 \*------------------------------------------------------------*/
 /*pointer::name() returns the name of the class*/
 std::string pointer::name()const {return "pointer";}
+
+/*pointer::codeStream() returns the code for the node of AST*/
+std::ostream& pointer::codeStream(std::ostream& stream )const 
+{
+	for(CItemsListIter item=_items.begin();item!=_items.end();item++)
+	{
+		item->codeStream(stream,item==_items.begin());
+	}
+	return  stream;
+}
 
 /*pointer::typeId() returns the type of the class, here, CAST_TYPE_POINTER*/
 CAstType pointer::typeId()const {return CAST_TYPE_POINTER;}
@@ -2527,6 +2890,20 @@ pointer::~pointer()
 
 /*selection_statement1::name() returns the name of the class*/
 std::string selection_statement1::name()const {return "selection_statement1";}
+
+
+/*selection_statement1::codeStream() returns the code for the node of AST*/
+std::ostream& selection_statement1::codeStream(std::ostream& stream)const 
+{
+	stream<<"if"<<" ";//
+	stream<<'('<<" ";//
+	if(_p_expression)_p_expression->codeStream(stream);
+	stream<<')'<<" ";//
+	if(_p_statement)_p_statement->codeStream(stream);
+	if(_p_token1)_p_token1->codeStream(stream);
+	if(_p_statement1)_p_statement1->codeStream(stream);
+	return  stream;
+}
 
 /*selection_statement1::typeId() returns the type of the class, here, CAST_TYPE_SELECTION_STATEMENT1*/
 CAstType selection_statement1::typeId()const {return CAST_TYPE_SELECTION_STATEMENT1;}
@@ -2623,6 +3000,18 @@ selection_statement1::~selection_statement1()
 /*selection_statement2::name() returns the name of the class*/
 std::string selection_statement2::name()const {return "selection_statement2";}
 
+
+/*selection_statement2::codeStream() returns the code for the node of AST*/
+std::ostream& selection_statement2::codeStream(std::ostream& stream)const 
+{
+	stream<<"switch"<<" ";//
+	stream<<'('<<" ";//
+	if(_p_expression)_p_expression->codeStream(stream);
+	stream<<')'<<" ";//
+	if(_p_statement)_p_statement->codeStream(stream);
+	return  stream;
+}
+
 /*selection_statement2::typeId() returns the type of the class, here, CAST_TYPE_SELECTION_STATEMENT2*/
 CAstType selection_statement2::typeId()const {return CAST_TYPE_SELECTION_STATEMENT2;}
 
@@ -2699,6 +3088,17 @@ selection_statement2::~selection_statement2()
 
 /*postfix_expression1::name() returns the name of the class*/
 std::string postfix_expression1::name()const {return "postfix_expression1";}
+
+
+/*postfix_expression1::codeStream() returns the code for the node of AST*/
+std::ostream& postfix_expression1::codeStream(std::ostream& stream)const 
+{
+	if(_p_postfix_expression)_p_postfix_expression->codeStream(stream);
+	stream<<'['<<" ";//
+	if(_p_expression)_p_expression->codeStream(stream);
+	stream<<']'<<" ";//
+	return  stream;
+}
 
 /*postfix_expression1::typeId() returns the type of the class, here, CAST_TYPE_POSTFIX_EXPRESSION1*/
 CAstType postfix_expression1::typeId()const {return CAST_TYPE_POSTFIX_EXPRESSION1;}
@@ -2777,6 +3177,17 @@ postfix_expression1::~postfix_expression1()
 /*postfix_expression2::name() returns the name of the class*/
 std::string postfix_expression2::name()const {return "postfix_expression2";}
 
+
+/*postfix_expression2::codeStream() returns the code for the node of AST*/
+std::ostream& postfix_expression2::codeStream(std::ostream& stream)const 
+{
+	if(_p_postfix_expression)_p_postfix_expression->codeStream(stream);
+	stream<<'('<<" ";//
+	if(_p_argument_expression_list)_p_argument_expression_list->codeStream(stream);
+	stream<<')'<<" ";//
+	return  stream;
+}
+
 /*postfix_expression2::typeId() returns the type of the class, here, CAST_TYPE_POSTFIX_EXPRESSION2*/
 CAstType postfix_expression2::typeId()const {return CAST_TYPE_POSTFIX_EXPRESSION2;}
 
@@ -2853,6 +3264,16 @@ postfix_expression2::~postfix_expression2()
 
 /*postfix_expression3::name() returns the name of the class*/
 std::string postfix_expression3::name()const {return "postfix_expression3";}
+
+
+/*postfix_expression3::codeStream() returns the code for the node of AST*/
+std::ostream& postfix_expression3::codeStream(std::ostream& stream)const 
+{
+	if(_p_postfix_expression)_p_postfix_expression->codeStream(stream);
+	if(_p_token1)_p_token1->codeStream(stream);
+	if(_p_token2)_p_token2->codeStream(stream);
+	return  stream;
+}
 
 /*postfix_expression3::typeId() returns the type of the class, here, CAST_TYPE_POSTFIX_EXPRESSION3*/
 CAstType postfix_expression3::typeId()const {return CAST_TYPE_POSTFIX_EXPRESSION3;}
@@ -2940,6 +3361,15 @@ postfix_expression3::~postfix_expression3()
 /*postfix_expression4::name() returns the name of the class*/
 std::string postfix_expression4::name()const {return "postfix_expression4";}
 
+
+/*postfix_expression4::codeStream() returns the code for the node of AST*/
+std::ostream& postfix_expression4::codeStream(std::ostream& stream)const 
+{
+	if(_p_postfix_expression)_p_postfix_expression->codeStream(stream);
+	if(_p_token1)_p_token1->codeStream(stream);
+	return  stream;
+}
+
 /*postfix_expression4::typeId() returns the type of the class, here, CAST_TYPE_POSTFIX_EXPRESSION4*/
 CAstType postfix_expression4::typeId()const {return CAST_TYPE_POSTFIX_EXPRESSION4;}
 
@@ -3016,6 +3446,14 @@ postfix_expression4::~postfix_expression4()
 
 /*postfix_expression5::name() returns the name of the class*/
 std::string postfix_expression5::name()const {return "postfix_expression5";}
+
+
+/*postfix_expression5::codeStream() returns the code for the node of AST*/
+std::ostream& postfix_expression5::codeStream(std::ostream& stream)const 
+{
+	if(_p_primary_expression)_p_primary_expression->codeStream(stream);
+	return  stream;
+}
 
 /*postfix_expression5::typeId() returns the type of the class, here, CAST_TYPE_POSTFIX_EXPRESSION5*/
 CAstType postfix_expression5::typeId()const {return CAST_TYPE_POSTFIX_EXPRESSION5;}
@@ -3102,6 +3540,21 @@ and_expression_item::and_expression_item
 }
 
 
+/*and_expression_item::codeStream() returns the code for the node of AST*/
+std::ostream& and_expression_item::codeStream(std::ostream& stream,bool initFlag)const 
+{
+	if(initFlag)
+	{
+	if(_p_equality_expression)_p_equality_expression->codeStream(stream);
+	}
+	else
+	{
+	stream<<'&';
+	if(_p_equality_expression)_p_equality_expression->codeStream(stream);
+	}
+	return  stream;
+}
+
 /*copy constructor*/
 and_expression_item::and_expression_item(const and_expression_item& other):
 		_s_matchedPattern(other._s_matchedPattern),
@@ -3146,6 +3599,16 @@ and_expression_item::~and_expression_item()
 \*------------------------------------------------------------*/
 /*and_expression::name() returns the name of the class*/
 std::string and_expression::name()const {return "and_expression";}
+
+/*and_expression::codeStream() returns the code for the node of AST*/
+std::ostream& and_expression::codeStream(std::ostream& stream )const 
+{
+	for(CItemsListIter item=_items.begin();item!=_items.end();item++)
+	{
+		item->codeStream(stream,item==_items.begin());
+	}
+	return  stream;
+}
 
 /*and_expression::typeId() returns the type of the class, here, CAST_TYPE_AND_EXPRESSION*/
 CAstType and_expression::typeId()const {return CAST_TYPE_AND_EXPRESSION;}
@@ -3209,6 +3672,14 @@ and_expression::~and_expression()
 
 /*statement1::name() returns the name of the class*/
 std::string statement1::name()const {return "statement1";}
+
+
+/*statement1::codeStream() returns the code for the node of AST*/
+std::ostream& statement1::codeStream(std::ostream& stream)const 
+{
+	if(_p_labeled_statement)_p_labeled_statement->codeStream(stream);
+	return  stream;
+}
 
 /*statement1::typeId() returns the type of the class, here, CAST_TYPE_STATEMENT1*/
 CAstType statement1::typeId()const {return CAST_TYPE_STATEMENT1;}
@@ -3278,6 +3749,14 @@ statement1::~statement1()
 /*statement2::name() returns the name of the class*/
 std::string statement2::name()const {return "statement2";}
 
+
+/*statement2::codeStream() returns the code for the node of AST*/
+std::ostream& statement2::codeStream(std::ostream& stream)const 
+{
+	if(_p_compound_statement)_p_compound_statement->codeStream(stream);
+	return  stream;
+}
+
 /*statement2::typeId() returns the type of the class, here, CAST_TYPE_STATEMENT2*/
 CAstType statement2::typeId()const {return CAST_TYPE_STATEMENT2;}
 
@@ -3345,6 +3824,14 @@ statement2::~statement2()
 
 /*statement3::name() returns the name of the class*/
 std::string statement3::name()const {return "statement3";}
+
+
+/*statement3::codeStream() returns the code for the node of AST*/
+std::ostream& statement3::codeStream(std::ostream& stream)const 
+{
+	if(_p_expression_statement)_p_expression_statement->codeStream(stream);
+	return  stream;
+}
 
 /*statement3::typeId() returns the type of the class, here, CAST_TYPE_STATEMENT3*/
 CAstType statement3::typeId()const {return CAST_TYPE_STATEMENT3;}
@@ -3414,6 +3901,14 @@ statement3::~statement3()
 /*statement4::name() returns the name of the class*/
 std::string statement4::name()const {return "statement4";}
 
+
+/*statement4::codeStream() returns the code for the node of AST*/
+std::ostream& statement4::codeStream(std::ostream& stream)const 
+{
+	if(_p_selection_statement)_p_selection_statement->codeStream(stream);
+	return  stream;
+}
+
 /*statement4::typeId() returns the type of the class, here, CAST_TYPE_STATEMENT4*/
 CAstType statement4::typeId()const {return CAST_TYPE_STATEMENT4;}
 
@@ -3481,6 +3976,14 @@ statement4::~statement4()
 
 /*statement5::name() returns the name of the class*/
 std::string statement5::name()const {return "statement5";}
+
+
+/*statement5::codeStream() returns the code for the node of AST*/
+std::ostream& statement5::codeStream(std::ostream& stream)const 
+{
+	if(_p_iteration_statement)_p_iteration_statement->codeStream(stream);
+	return  stream;
+}
 
 /*statement5::typeId() returns the type of the class, here, CAST_TYPE_STATEMENT5*/
 CAstType statement5::typeId()const {return CAST_TYPE_STATEMENT5;}
@@ -3550,6 +4053,14 @@ statement5::~statement5()
 /*statement6::name() returns the name of the class*/
 std::string statement6::name()const {return "statement6";}
 
+
+/*statement6::codeStream() returns the code for the node of AST*/
+std::ostream& statement6::codeStream(std::ostream& stream)const 
+{
+	if(_p_jump_statement)_p_jump_statement->codeStream(stream);
+	return  stream;
+}
+
 /*statement6::typeId() returns the type of the class, here, CAST_TYPE_STATEMENT6*/
 CAstType statement6::typeId()const {return CAST_TYPE_STATEMENT6;}
 
@@ -3617,6 +4128,17 @@ statement6::~statement6()
 
 /*cast_expression1::name() returns the name of the class*/
 std::string cast_expression1::name()const {return "cast_expression1";}
+
+
+/*cast_expression1::codeStream() returns the code for the node of AST*/
+std::ostream& cast_expression1::codeStream(std::ostream& stream)const 
+{
+	stream<<'('<<" ";//
+	if(_p_type_name)_p_type_name->codeStream(stream);
+	stream<<')'<<" ";//
+	if(_p_cast_expression)_p_cast_expression->codeStream(stream);
+	return  stream;
+}
 
 /*cast_expression1::typeId() returns the type of the class, here, CAST_TYPE_CAST_EXPRESSION1*/
 CAstType cast_expression1::typeId()const {return CAST_TYPE_CAST_EXPRESSION1;}
@@ -3695,6 +4217,14 @@ cast_expression1::~cast_expression1()
 /*cast_expression2::name() returns the name of the class*/
 std::string cast_expression2::name()const {return "cast_expression2";}
 
+
+/*cast_expression2::codeStream() returns the code for the node of AST*/
+std::ostream& cast_expression2::codeStream(std::ostream& stream)const 
+{
+	if(_p_unary_expression)_p_unary_expression->codeStream(stream);
+	return  stream;
+}
+
 /*cast_expression2::typeId() returns the type of the class, here, CAST_TYPE_CAST_EXPRESSION2*/
 CAstType cast_expression2::typeId()const {return CAST_TYPE_CAST_EXPRESSION2;}
 
@@ -3762,6 +4292,16 @@ cast_expression2::~cast_expression2()
 
 /*init_declarator::name() returns the name of the class*/
 std::string init_declarator::name()const {return "init_declarator";}
+
+
+/*init_declarator::codeStream() returns the code for the node of AST*/
+std::ostream& init_declarator::codeStream(std::ostream& stream)const 
+{
+	if(_p_declarator)_p_declarator->codeStream(stream);
+	if(_p_token1)_p_token1->codeStream(stream);
+	if(_p_initializer)_p_initializer->codeStream(stream);
+	return  stream;
+}
 
 /*init_declarator::typeId() returns the type of the class, here, CAST_TYPE_INIT_DECLARATOR*/
 CAstType init_declarator::typeId()const {return CAST_TYPE_INIT_DECLARATOR;}
@@ -3866,6 +4406,21 @@ struct_declarator_list_item::struct_declarator_list_item
 }
 
 
+/*struct_declarator_list_item::codeStream() returns the code for the node of AST*/
+std::ostream& struct_declarator_list_item::codeStream(std::ostream& stream,bool initFlag)const 
+{
+	if(initFlag)
+	{
+	if(_p_struct_declarator)_p_struct_declarator->codeStream(stream);
+	}
+	else
+	{
+	stream<<',';
+	if(_p_struct_declarator)_p_struct_declarator->codeStream(stream);
+	}
+	return  stream;
+}
+
 /*copy constructor*/
 struct_declarator_list_item::struct_declarator_list_item(const struct_declarator_list_item& other):
 		_s_matchedPattern(other._s_matchedPattern),
@@ -3910,6 +4465,16 @@ struct_declarator_list_item::~struct_declarator_list_item()
 \*------------------------------------------------------------*/
 /*struct_declarator_list::name() returns the name of the class*/
 std::string struct_declarator_list::name()const {return "struct_declarator_list";}
+
+/*struct_declarator_list::codeStream() returns the code for the node of AST*/
+std::ostream& struct_declarator_list::codeStream(std::ostream& stream )const 
+{
+	for(CItemsListIter item=_items.begin();item!=_items.end();item++)
+	{
+		item->codeStream(stream,item==_items.begin());
+	}
+	return  stream;
+}
 
 /*struct_declarator_list::typeId() returns the type of the class, here, CAST_TYPE_STRUCT_DECLARATOR_LIST*/
 CAstType struct_declarator_list::typeId()const {return CAST_TYPE_STRUCT_DECLARATOR_LIST;}
@@ -3991,6 +4556,21 @@ logical_or_expression_item::logical_or_expression_item
 }
 
 
+/*logical_or_expression_item::codeStream() returns the code for the node of AST*/
+std::ostream& logical_or_expression_item::codeStream(std::ostream& stream,bool initFlag)const 
+{
+	if(initFlag)
+	{
+	if(_p_logical_and_expression)_p_logical_and_expression->codeStream(stream);
+	}
+	else
+	{
+	stream<<"||";
+	if(_p_logical_and_expression)_p_logical_and_expression->codeStream(stream);
+	}
+	return  stream;
+}
+
 /*copy constructor*/
 logical_or_expression_item::logical_or_expression_item(const logical_or_expression_item& other):
 		_s_matchedPattern(other._s_matchedPattern),
@@ -4035,6 +4615,16 @@ logical_or_expression_item::~logical_or_expression_item()
 \*------------------------------------------------------------*/
 /*logical_or_expression::name() returns the name of the class*/
 std::string logical_or_expression::name()const {return "logical_or_expression";}
+
+/*logical_or_expression::codeStream() returns the code for the node of AST*/
+std::ostream& logical_or_expression::codeStream(std::ostream& stream )const 
+{
+	for(CItemsListIter item=_items.begin();item!=_items.end();item++)
+	{
+		item->codeStream(stream,item==_items.begin());
+	}
+	return  stream;
+}
 
 /*logical_or_expression::typeId() returns the type of the class, here, CAST_TYPE_LOGICAL_OR_EXPRESSION*/
 CAstType logical_or_expression::typeId()const {return CAST_TYPE_LOGICAL_OR_EXPRESSION;}
@@ -4098,6 +4688,14 @@ logical_or_expression::~logical_or_expression()
 
 /*unary_operator::name() returns the name of the class*/
 std::string unary_operator::name()const {return "unary_operator";}
+
+
+/*unary_operator::codeStream() returns the code for the node of AST*/
+std::ostream& unary_operator::codeStream(std::ostream& stream)const 
+{
+	if(_p_token1)_p_token1->codeStream(stream);
+	return  stream;
+}
 
 /*unary_operator::typeId() returns the type of the class, here, CAST_TYPE_UNARY_OPERATOR*/
 CAstType unary_operator::typeId()const {return CAST_TYPE_UNARY_OPERATOR;}
@@ -4186,6 +4784,21 @@ relational_expression_item::relational_expression_item
 }
 
 
+/*relational_expression_item::codeStream() returns the code for the node of AST*/
+std::ostream& relational_expression_item::codeStream(std::ostream& stream,bool initFlag)const 
+{
+	if(initFlag)
+	{
+	if(_p_shift_expression)_p_shift_expression->codeStream(stream);
+	}
+	else
+	{
+	stream<<'<';
+	if(_p_shift_expression)_p_shift_expression->codeStream(stream);
+	}
+	return  stream;
+}
+
 /*copy constructor*/
 relational_expression_item::relational_expression_item(const relational_expression_item& other):
 		_s_matchedPattern(other._s_matchedPattern),
@@ -4237,6 +4850,16 @@ relational_expression_item::~relational_expression_item()
 \*------------------------------------------------------------*/
 /*relational_expression::name() returns the name of the class*/
 std::string relational_expression::name()const {return "relational_expression";}
+
+/*relational_expression::codeStream() returns the code for the node of AST*/
+std::ostream& relational_expression::codeStream(std::ostream& stream )const 
+{
+	for(CItemsListIter item=_items.begin();item!=_items.end();item++)
+	{
+		item->codeStream(stream,item==_items.begin());
+	}
+	return  stream;
+}
 
 /*relational_expression::typeId() returns the type of the class, here, CAST_TYPE_RELATIONAL_EXPRESSION*/
 CAstType relational_expression::typeId()const {return CAST_TYPE_RELATIONAL_EXPRESSION;}
@@ -4301,6 +4924,14 @@ relational_expression::~relational_expression()
 
 /*struct_or_union::name() returns the name of the class*/
 std::string struct_or_union::name()const {return "struct_or_union";}
+
+
+/*struct_or_union::codeStream() returns the code for the node of AST*/
+std::ostream& struct_or_union::codeStream(std::ostream& stream)const 
+{
+	if(_p_token1)_p_token1->codeStream(stream);
+	return  stream;
+}
 
 /*struct_or_union::typeId() returns the type of the class, here, CAST_TYPE_STRUCT_OR_UNION*/
 CAstType struct_or_union::typeId()const {return CAST_TYPE_STRUCT_OR_UNION;}
@@ -4369,6 +5000,16 @@ struct_or_union::~struct_or_union()
 
 /*enumerator::name() returns the name of the class*/
 std::string enumerator::name()const {return "enumerator";}
+
+
+/*enumerator::codeStream() returns the code for the node of AST*/
+std::ostream& enumerator::codeStream(std::ostream& stream)const 
+{
+	if(_p_token1)_p_token1->codeStream(stream);
+	if(_p_token2)_p_token2->codeStream(stream);
+	if(_p_constant_expression)_p_constant_expression->codeStream(stream);
+	return  stream;
+}
 
 /*enumerator::typeId() returns the type of the class, here, CAST_TYPE_ENUMERATOR*/
 CAstType enumerator::typeId()const {return CAST_TYPE_ENUMERATOR;}
@@ -4456,6 +5097,16 @@ enumerator::~enumerator()
 /*assignment_expression1::name() returns the name of the class*/
 std::string assignment_expression1::name()const {return "assignment_expression1";}
 
+
+/*assignment_expression1::codeStream() returns the code for the node of AST*/
+std::ostream& assignment_expression1::codeStream(std::ostream& stream)const 
+{
+	if(_p_unary_expression)_p_unary_expression->codeStream(stream);
+	if(_p_assignment_operator)_p_assignment_operator->codeStream(stream);
+	if(_p_assignment_expression)_p_assignment_expression->codeStream(stream);
+	return  stream;
+}
+
 /*assignment_expression1::typeId() returns the type of the class, here, CAST_TYPE_ASSIGNMENT_EXPRESSION1*/
 CAstType assignment_expression1::typeId()const {return CAST_TYPE_ASSIGNMENT_EXPRESSION1;}
 
@@ -4542,6 +5193,14 @@ assignment_expression1::~assignment_expression1()
 /*assignment_expression2::name() returns the name of the class*/
 std::string assignment_expression2::name()const {return "assignment_expression2";}
 
+
+/*assignment_expression2::codeStream() returns the code for the node of AST*/
+std::ostream& assignment_expression2::codeStream(std::ostream& stream)const 
+{
+	if(_p_conditional_expression)_p_conditional_expression->codeStream(stream);
+	return  stream;
+}
+
 /*assignment_expression2::typeId() returns the type of the class, here, CAST_TYPE_ASSIGNMENT_EXPRESSION2*/
 CAstType assignment_expression2::typeId()const {return CAST_TYPE_ASSIGNMENT_EXPRESSION2;}
 
@@ -4609,6 +5268,16 @@ assignment_expression2::~assignment_expression2()
 
 /*parameter_type_list::name() returns the name of the class*/
 std::string parameter_type_list::name()const {return "parameter_type_list";}
+
+
+/*parameter_type_list::codeStream() returns the code for the node of AST*/
+std::ostream& parameter_type_list::codeStream(std::ostream& stream)const 
+{
+	if(_p_parameter_list)_p_parameter_list->codeStream(stream);
+	if(_p_token1)_p_token1->codeStream(stream);
+	if(_p_token2)_p_token2->codeStream(stream);
+	return  stream;
+}
 
 /*parameter_type_list::typeId() returns the type of the class, here, CAST_TYPE_PARAMETER_TYPE_LIST*/
 CAstType parameter_type_list::typeId()const {return CAST_TYPE_PARAMETER_TYPE_LIST;}
@@ -4696,6 +5365,15 @@ parameter_type_list::~parameter_type_list()
 /*parameter_declaration1::name() returns the name of the class*/
 std::string parameter_declaration1::name()const {return "parameter_declaration1";}
 
+
+/*parameter_declaration1::codeStream() returns the code for the node of AST*/
+std::ostream& parameter_declaration1::codeStream(std::ostream& stream)const 
+{
+	if(_p_declaration_specifiers)_p_declaration_specifiers->codeStream(stream);
+	if(_p_declarator)_p_declarator->codeStream(stream);
+	return  stream;
+}
+
 /*parameter_declaration1::typeId() returns the type of the class, here, CAST_TYPE_PARAMETER_DECLARATION1*/
 CAstType parameter_declaration1::typeId()const {return CAST_TYPE_PARAMETER_DECLARATION1;}
 
@@ -4772,6 +5450,15 @@ parameter_declaration1::~parameter_declaration1()
 
 /*parameter_declaration2::name() returns the name of the class*/
 std::string parameter_declaration2::name()const {return "parameter_declaration2";}
+
+
+/*parameter_declaration2::codeStream() returns the code for the node of AST*/
+std::ostream& parameter_declaration2::codeStream(std::ostream& stream)const 
+{
+	if(_p_declaration_specifiers)_p_declaration_specifiers->codeStream(stream);
+	if(_p_abstract_declarator)_p_abstract_declarator->codeStream(stream);
+	return  stream;
+}
 
 /*parameter_declaration2::typeId() returns the type of the class, here, CAST_TYPE_PARAMETER_DECLARATION2*/
 CAstType parameter_declaration2::typeId()const {return CAST_TYPE_PARAMETER_DECLARATION2;}
@@ -4869,6 +5556,21 @@ multiplicative_expression_item::multiplicative_expression_item
 }
 
 
+/*multiplicative_expression_item::codeStream() returns the code for the node of AST*/
+std::ostream& multiplicative_expression_item::codeStream(std::ostream& stream,bool initFlag)const 
+{
+	if(initFlag)
+	{
+	if(_p_cast_expression)_p_cast_expression->codeStream(stream);
+	}
+	else
+	{
+	stream<<'*';
+	if(_p_cast_expression)_p_cast_expression->codeStream(stream);
+	}
+	return  stream;
+}
+
 /*copy constructor*/
 multiplicative_expression_item::multiplicative_expression_item(const multiplicative_expression_item& other):
 		_s_matchedPattern(other._s_matchedPattern),
@@ -4920,6 +5622,16 @@ multiplicative_expression_item::~multiplicative_expression_item()
 \*------------------------------------------------------------*/
 /*multiplicative_expression::name() returns the name of the class*/
 std::string multiplicative_expression::name()const {return "multiplicative_expression";}
+
+/*multiplicative_expression::codeStream() returns the code for the node of AST*/
+std::ostream& multiplicative_expression::codeStream(std::ostream& stream )const 
+{
+	for(CItemsListIter item=_items.begin();item!=_items.end();item++)
+	{
+		item->codeStream(stream,item==_items.begin());
+	}
+	return  stream;
+}
 
 /*multiplicative_expression::typeId() returns the type of the class, here, CAST_TYPE_MULTIPLICATIVE_EXPRESSION*/
 CAstType multiplicative_expression::typeId()const {return CAST_TYPE_MULTIPLICATIVE_EXPRESSION;}
@@ -5002,6 +5714,20 @@ type_qualifier_list_item::type_qualifier_list_item
 }
 
 
+/*type_qualifier_list_item::codeStream() returns the code for the node of AST*/
+std::ostream& type_qualifier_list_item::codeStream(std::ostream& stream,bool initFlag)const 
+{
+	if(initFlag)
+	{
+	if(_p_type_qualifier)_p_type_qualifier->codeStream(stream);
+	}
+	else
+	{
+	if(_p_type_qualifier)_p_type_qualifier->codeStream(stream);
+	}
+	return  stream;
+}
+
 /*copy constructor*/
 type_qualifier_list_item::type_qualifier_list_item(const type_qualifier_list_item& other):
 		_s_matchedPattern(other._s_matchedPattern),
@@ -5046,6 +5772,16 @@ type_qualifier_list_item::~type_qualifier_list_item()
 \*------------------------------------------------------------*/
 /*type_qualifier_list::name() returns the name of the class*/
 std::string type_qualifier_list::name()const {return "type_qualifier_list";}
+
+/*type_qualifier_list::codeStream() returns the code for the node of AST*/
+std::ostream& type_qualifier_list::codeStream(std::ostream& stream )const 
+{
+	for(CItemsListIter item=_items.begin();item!=_items.end();item++)
+	{
+		item->codeStream(stream,item==_items.begin());
+	}
+	return  stream;
+}
 
 /*type_qualifier_list::typeId() returns the type of the class, here, CAST_TYPE_TYPE_QUALIFIER_LIST*/
 CAstType type_qualifier_list::typeId()const {return CAST_TYPE_TYPE_QUALIFIER_LIST;}
@@ -5127,6 +5863,21 @@ argument_expression_list_item::argument_expression_list_item
 }
 
 
+/*argument_expression_list_item::codeStream() returns the code for the node of AST*/
+std::ostream& argument_expression_list_item::codeStream(std::ostream& stream,bool initFlag)const 
+{
+	if(initFlag)
+	{
+	if(_p_assignment_expression)_p_assignment_expression->codeStream(stream);
+	}
+	else
+	{
+	stream<<',';
+	if(_p_assignment_expression)_p_assignment_expression->codeStream(stream);
+	}
+	return  stream;
+}
+
 /*copy constructor*/
 argument_expression_list_item::argument_expression_list_item(const argument_expression_list_item& other):
 		_s_matchedPattern(other._s_matchedPattern),
@@ -5171,6 +5922,16 @@ argument_expression_list_item::~argument_expression_list_item()
 \*------------------------------------------------------------*/
 /*argument_expression_list::name() returns the name of the class*/
 std::string argument_expression_list::name()const {return "argument_expression_list";}
+
+/*argument_expression_list::codeStream() returns the code for the node of AST*/
+std::ostream& argument_expression_list::codeStream(std::ostream& stream )const 
+{
+	for(CItemsListIter item=_items.begin();item!=_items.end();item++)
+	{
+		item->codeStream(stream,item==_items.begin());
+	}
+	return  stream;
+}
 
 /*argument_expression_list::typeId() returns the type of the class, here, CAST_TYPE_ARGUMENT_EXPRESSION_LIST*/
 CAstType argument_expression_list::typeId()const {return CAST_TYPE_ARGUMENT_EXPRESSION_LIST;}
@@ -5234,6 +5995,17 @@ argument_expression_list::~argument_expression_list()
 
 /*direct_abstract_declarator1::name() returns the name of the class*/
 std::string direct_abstract_declarator1::name()const {return "direct_abstract_declarator1";}
+
+
+/*direct_abstract_declarator1::codeStream() returns the code for the node of AST*/
+std::ostream& direct_abstract_declarator1::codeStream(std::ostream& stream)const 
+{
+	if(_p_direct_abstract_declarator)_p_direct_abstract_declarator->codeStream(stream);
+	stream<<'['<<" ";//
+	if(_p_constant_expression)_p_constant_expression->codeStream(stream);
+	stream<<']'<<" ";//
+	return  stream;
+}
 
 /*direct_abstract_declarator1::typeId() returns the type of the class, here, CAST_TYPE_DIRECT_ABSTRACT_DECLARATOR1*/
 CAstType direct_abstract_declarator1::typeId()const {return CAST_TYPE_DIRECT_ABSTRACT_DECLARATOR1;}
@@ -5312,6 +6084,17 @@ direct_abstract_declarator1::~direct_abstract_declarator1()
 /*direct_abstract_declarator2::name() returns the name of the class*/
 std::string direct_abstract_declarator2::name()const {return "direct_abstract_declarator2";}
 
+
+/*direct_abstract_declarator2::codeStream() returns the code for the node of AST*/
+std::ostream& direct_abstract_declarator2::codeStream(std::ostream& stream)const 
+{
+	if(_p_direct_abstract_declarator)_p_direct_abstract_declarator->codeStream(stream);
+	stream<<'('<<" ";//
+	if(_p_parameter_type_list)_p_parameter_type_list->codeStream(stream);
+	stream<<')'<<" ";//
+	return  stream;
+}
+
 /*direct_abstract_declarator2::typeId() returns the type of the class, here, CAST_TYPE_DIRECT_ABSTRACT_DECLARATOR2*/
 CAstType direct_abstract_declarator2::typeId()const {return CAST_TYPE_DIRECT_ABSTRACT_DECLARATOR2;}
 
@@ -5388,6 +6171,16 @@ direct_abstract_declarator2::~direct_abstract_declarator2()
 
 /*direct_abstract_declarator3::name() returns the name of the class*/
 std::string direct_abstract_declarator3::name()const {return "direct_abstract_declarator3";}
+
+
+/*direct_abstract_declarator3::codeStream() returns the code for the node of AST*/
+std::ostream& direct_abstract_declarator3::codeStream(std::ostream& stream)const 
+{
+	stream<<'('<<" ";//
+	if(_p_abstract_declarator)_p_abstract_declarator->codeStream(stream);
+	stream<<')'<<" ";//
+	return  stream;
+}
 
 /*direct_abstract_declarator3::typeId() returns the type of the class, here, CAST_TYPE_DIRECT_ABSTRACT_DECLARATOR3*/
 CAstType direct_abstract_declarator3::typeId()const {return CAST_TYPE_DIRECT_ABSTRACT_DECLARATOR3;}
@@ -5476,6 +6269,21 @@ equality_expression_item::equality_expression_item
 }
 
 
+/*equality_expression_item::codeStream() returns the code for the node of AST*/
+std::ostream& equality_expression_item::codeStream(std::ostream& stream,bool initFlag)const 
+{
+	if(initFlag)
+	{
+	if(_p_relational_expression)_p_relational_expression->codeStream(stream);
+	}
+	else
+	{
+	stream<<"==";
+	if(_p_relational_expression)_p_relational_expression->codeStream(stream);
+	}
+	return  stream;
+}
+
 /*copy constructor*/
 equality_expression_item::equality_expression_item(const equality_expression_item& other):
 		_s_matchedPattern(other._s_matchedPattern),
@@ -5527,6 +6335,16 @@ equality_expression_item::~equality_expression_item()
 \*------------------------------------------------------------*/
 /*equality_expression::name() returns the name of the class*/
 std::string equality_expression::name()const {return "equality_expression";}
+
+/*equality_expression::codeStream() returns the code for the node of AST*/
+std::ostream& equality_expression::codeStream(std::ostream& stream )const 
+{
+	for(CItemsListIter item=_items.begin();item!=_items.end();item++)
+	{
+		item->codeStream(stream,item==_items.begin());
+	}
+	return  stream;
+}
 
 /*equality_expression::typeId() returns the type of the class, here, CAST_TYPE_EQUALITY_EXPRESSION*/
 CAstType equality_expression::typeId()const {return CAST_TYPE_EQUALITY_EXPRESSION;}
@@ -5591,6 +6409,16 @@ equality_expression::~equality_expression()
 
 /*primary_expression1::name() returns the name of the class*/
 std::string primary_expression1::name()const {return "primary_expression1";}
+
+
+/*primary_expression1::codeStream() returns the code for the node of AST*/
+std::ostream& primary_expression1::codeStream(std::ostream& stream)const 
+{
+	stream<<'('<<" ";//
+	if(_p_expression)_p_expression->codeStream(stream);
+	stream<<')'<<" ";//
+	return  stream;
+}
 
 /*primary_expression1::typeId() returns the type of the class, here, CAST_TYPE_PRIMARY_EXPRESSION1*/
 CAstType primary_expression1::typeId()const {return CAST_TYPE_PRIMARY_EXPRESSION1;}
@@ -5659,6 +6487,14 @@ primary_expression1::~primary_expression1()
 
 /*primary_expression2::name() returns the name of the class*/
 std::string primary_expression2::name()const {return "primary_expression2";}
+
+
+/*primary_expression2::codeStream() returns the code for the node of AST*/
+std::ostream& primary_expression2::codeStream(std::ostream& stream)const 
+{
+	if(_p_token1)_p_token1->codeStream(stream);
+	return  stream;
+}
 
 /*primary_expression2::typeId() returns the type of the class, here, CAST_TYPE_PRIMARY_EXPRESSION2*/
 CAstType primary_expression2::typeId()const {return CAST_TYPE_PRIMARY_EXPRESSION2;}
@@ -5745,6 +6581,20 @@ declaration_specifiers1_item::declaration_specifiers1_item
 }
 
 
+/*declaration_specifiers1_item::codeStream() returns the code for the node of AST*/
+std::ostream& declaration_specifiers1_item::codeStream(std::ostream& stream,bool initFlag)const 
+{
+	if(initFlag)
+	{
+	if(_p_storage_class_specifier)_p_storage_class_specifier->codeStream(stream);
+	}
+	else
+	{
+	if(_p_storage_class_specifier)_p_storage_class_specifier->codeStream(stream);
+	}
+	return  stream;
+}
+
 /*copy constructor*/
 declaration_specifiers1_item::declaration_specifiers1_item(const declaration_specifiers1_item& other):
 		_s_matchedPattern(other._s_matchedPattern),
@@ -5789,6 +6639,16 @@ declaration_specifiers1_item::~declaration_specifiers1_item()
 \*------------------------------------------------------------*/
 /*declaration_specifiers1::name() returns the name of the class*/
 std::string declaration_specifiers1::name()const {return "declaration_specifiers1";}
+
+/*declaration_specifiers1::codeStream() returns the code for the node of AST*/
+std::ostream& declaration_specifiers1::codeStream(std::ostream& stream )const 
+{
+	for(CItemsListIter item=_items.begin();item!=_items.end();item++)
+	{
+		item->codeStream(stream,item==_items.begin());
+	}
+	return  stream;
+}
 
 /*declaration_specifiers1::typeId() returns the type of the class, here, CAST_TYPE_DECLARATION_SPECIFIERS1*/
 CAstType declaration_specifiers1::typeId()const {return CAST_TYPE_DECLARATION_SPECIFIERS1;}
@@ -5870,6 +6730,20 @@ declaration_specifiers2_item::declaration_specifiers2_item
 }
 
 
+/*declaration_specifiers2_item::codeStream() returns the code for the node of AST*/
+std::ostream& declaration_specifiers2_item::codeStream(std::ostream& stream,bool initFlag)const 
+{
+	if(initFlag)
+	{
+	if(_p_type_specifier)_p_type_specifier->codeStream(stream);
+	}
+	else
+	{
+	if(_p_type_specifier)_p_type_specifier->codeStream(stream);
+	}
+	return  stream;
+}
+
 /*copy constructor*/
 declaration_specifiers2_item::declaration_specifiers2_item(const declaration_specifiers2_item& other):
 		_s_matchedPattern(other._s_matchedPattern),
@@ -5914,6 +6788,16 @@ declaration_specifiers2_item::~declaration_specifiers2_item()
 \*------------------------------------------------------------*/
 /*declaration_specifiers2::name() returns the name of the class*/
 std::string declaration_specifiers2::name()const {return "declaration_specifiers2";}
+
+/*declaration_specifiers2::codeStream() returns the code for the node of AST*/
+std::ostream& declaration_specifiers2::codeStream(std::ostream& stream )const 
+{
+	for(CItemsListIter item=_items.begin();item!=_items.end();item++)
+	{
+		item->codeStream(stream,item==_items.begin());
+	}
+	return  stream;
+}
 
 /*declaration_specifiers2::typeId() returns the type of the class, here, CAST_TYPE_DECLARATION_SPECIFIERS2*/
 CAstType declaration_specifiers2::typeId()const {return CAST_TYPE_DECLARATION_SPECIFIERS2;}
@@ -5995,6 +6879,20 @@ declaration_specifiers3_item::declaration_specifiers3_item
 }
 
 
+/*declaration_specifiers3_item::codeStream() returns the code for the node of AST*/
+std::ostream& declaration_specifiers3_item::codeStream(std::ostream& stream,bool initFlag)const 
+{
+	if(initFlag)
+	{
+	if(_p_type_qualifier)_p_type_qualifier->codeStream(stream);
+	}
+	else
+	{
+	if(_p_type_qualifier)_p_type_qualifier->codeStream(stream);
+	}
+	return  stream;
+}
+
 /*copy constructor*/
 declaration_specifiers3_item::declaration_specifiers3_item(const declaration_specifiers3_item& other):
 		_s_matchedPattern(other._s_matchedPattern),
@@ -6039,6 +6937,16 @@ declaration_specifiers3_item::~declaration_specifiers3_item()
 \*------------------------------------------------------------*/
 /*declaration_specifiers3::name() returns the name of the class*/
 std::string declaration_specifiers3::name()const {return "declaration_specifiers3";}
+
+/*declaration_specifiers3::codeStream() returns the code for the node of AST*/
+std::ostream& declaration_specifiers3::codeStream(std::ostream& stream )const 
+{
+	for(CItemsListIter item=_items.begin();item!=_items.end();item++)
+	{
+		item->codeStream(stream,item==_items.begin());
+	}
+	return  stream;
+}
 
 /*declaration_specifiers3::typeId() returns the type of the class, here, CAST_TYPE_DECLARATION_SPECIFIERS3*/
 CAstType declaration_specifiers3::typeId()const {return CAST_TYPE_DECLARATION_SPECIFIERS3;}
@@ -6102,6 +7010,16 @@ declaration_specifiers3::~declaration_specifiers3()
 
 /*declaration::name() returns the name of the class*/
 std::string declaration::name()const {return "declaration";}
+
+
+/*declaration::codeStream() returns the code for the node of AST*/
+std::ostream& declaration::codeStream(std::ostream& stream)const 
+{
+	if(_p_declaration_specifiers)_p_declaration_specifiers->codeStream(stream);
+	if(_p_init_declarator_list)_p_init_declarator_list->codeStream(stream);
+	stream<<';'<<" ";//
+	return  stream;
+}
 
 /*declaration::typeId() returns the type of the class, here, CAST_TYPE_DECLARATION*/
 CAstType declaration::typeId()const {return CAST_TYPE_DECLARATION;}
@@ -6180,6 +7098,17 @@ declaration::~declaration()
 /*direct_declarator1::name() returns the name of the class*/
 std::string direct_declarator1::name()const {return "direct_declarator1";}
 
+
+/*direct_declarator1::codeStream() returns the code for the node of AST*/
+std::ostream& direct_declarator1::codeStream(std::ostream& stream)const 
+{
+	if(_p_direct_declarator)_p_direct_declarator->codeStream(stream);
+	stream<<'['<<" ";//
+	if(_p_constant_expression)_p_constant_expression->codeStream(stream);
+	stream<<']'<<" ";//
+	return  stream;
+}
+
 /*direct_declarator1::typeId() returns the type of the class, here, CAST_TYPE_DIRECT_DECLARATOR1*/
 CAstType direct_declarator1::typeId()const {return CAST_TYPE_DIRECT_DECLARATOR1;}
 
@@ -6256,6 +7185,17 @@ direct_declarator1::~direct_declarator1()
 
 /*direct_declarator2::name() returns the name of the class*/
 std::string direct_declarator2::name()const {return "direct_declarator2";}
+
+
+/*direct_declarator2::codeStream() returns the code for the node of AST*/
+std::ostream& direct_declarator2::codeStream(std::ostream& stream)const 
+{
+	if(_p_direct_declarator)_p_direct_declarator->codeStream(stream);
+	stream<<'('<<" ";//
+	if(_p_parameter_type_list)_p_parameter_type_list->codeStream(stream);
+	stream<<')'<<" ";//
+	return  stream;
+}
 
 /*direct_declarator2::typeId() returns the type of the class, here, CAST_TYPE_DIRECT_DECLARATOR2*/
 CAstType direct_declarator2::typeId()const {return CAST_TYPE_DIRECT_DECLARATOR2;}
@@ -6334,6 +7274,17 @@ direct_declarator2::~direct_declarator2()
 /*direct_declarator3::name() returns the name of the class*/
 std::string direct_declarator3::name()const {return "direct_declarator3";}
 
+
+/*direct_declarator3::codeStream() returns the code for the node of AST*/
+std::ostream& direct_declarator3::codeStream(std::ostream& stream)const 
+{
+	if(_p_direct_declarator)_p_direct_declarator->codeStream(stream);
+	stream<<'('<<" ";//
+	if(_p_identifier_list)_p_identifier_list->codeStream(stream);
+	stream<<')'<<" ";//
+	return  stream;
+}
+
 /*direct_declarator3::typeId() returns the type of the class, here, CAST_TYPE_DIRECT_DECLARATOR3*/
 CAstType direct_declarator3::typeId()const {return CAST_TYPE_DIRECT_DECLARATOR3;}
 
@@ -6411,6 +7362,16 @@ direct_declarator3::~direct_declarator3()
 /*direct_declarator4::name() returns the name of the class*/
 std::string direct_declarator4::name()const {return "direct_declarator4";}
 
+
+/*direct_declarator4::codeStream() returns the code for the node of AST*/
+std::ostream& direct_declarator4::codeStream(std::ostream& stream)const 
+{
+	stream<<'('<<" ";//
+	if(_p_declarator)_p_declarator->codeStream(stream);
+	stream<<')'<<" ";//
+	return  stream;
+}
+
 /*direct_declarator4::typeId() returns the type of the class, here, CAST_TYPE_DIRECT_DECLARATOR4*/
 CAstType direct_declarator4::typeId()const {return CAST_TYPE_DIRECT_DECLARATOR4;}
 
@@ -6478,6 +7439,14 @@ direct_declarator4::~direct_declarator4()
 
 /*direct_declarator5::name() returns the name of the class*/
 std::string direct_declarator5::name()const {return "direct_declarator5";}
+
+
+/*direct_declarator5::codeStream() returns the code for the node of AST*/
+std::ostream& direct_declarator5::codeStream(std::ostream& stream)const 
+{
+	if(_p_token1)_p_token1->codeStream(stream);
+	return  stream;
+}
 
 /*direct_declarator5::typeId() returns the type of the class, here, CAST_TYPE_DIRECT_DECLARATOR5*/
 CAstType direct_declarator5::typeId()const {return CAST_TYPE_DIRECT_DECLARATOR5;}
@@ -6564,6 +7533,21 @@ logical_and_expression_item::logical_and_expression_item
 }
 
 
+/*logical_and_expression_item::codeStream() returns the code for the node of AST*/
+std::ostream& logical_and_expression_item::codeStream(std::ostream& stream,bool initFlag)const 
+{
+	if(initFlag)
+	{
+	if(_p_inclusive_or_expression)_p_inclusive_or_expression->codeStream(stream);
+	}
+	else
+	{
+	stream<<"&&";
+	if(_p_inclusive_or_expression)_p_inclusive_or_expression->codeStream(stream);
+	}
+	return  stream;
+}
+
 /*copy constructor*/
 logical_and_expression_item::logical_and_expression_item(const logical_and_expression_item& other):
 		_s_matchedPattern(other._s_matchedPattern),
@@ -6608,6 +7592,16 @@ logical_and_expression_item::~logical_and_expression_item()
 \*------------------------------------------------------------*/
 /*logical_and_expression::name() returns the name of the class*/
 std::string logical_and_expression::name()const {return "logical_and_expression";}
+
+/*logical_and_expression::codeStream() returns the code for the node of AST*/
+std::ostream& logical_and_expression::codeStream(std::ostream& stream )const 
+{
+	for(CItemsListIter item=_items.begin();item!=_items.end();item++)
+	{
+		item->codeStream(stream,item==_items.begin());
+	}
+	return  stream;
+}
 
 /*logical_and_expression::typeId() returns the type of the class, here, CAST_TYPE_LOGICAL_AND_EXPRESSION*/
 CAstType logical_and_expression::typeId()const {return CAST_TYPE_LOGICAL_AND_EXPRESSION;}
@@ -6689,6 +7683,21 @@ init_declarator_list_item::init_declarator_list_item
 }
 
 
+/*init_declarator_list_item::codeStream() returns the code for the node of AST*/
+std::ostream& init_declarator_list_item::codeStream(std::ostream& stream,bool initFlag)const 
+{
+	if(initFlag)
+	{
+	if(_p_init_declarator)_p_init_declarator->codeStream(stream);
+	}
+	else
+	{
+	stream<<',';
+	if(_p_init_declarator)_p_init_declarator->codeStream(stream);
+	}
+	return  stream;
+}
+
 /*copy constructor*/
 init_declarator_list_item::init_declarator_list_item(const init_declarator_list_item& other):
 		_s_matchedPattern(other._s_matchedPattern),
@@ -6733,6 +7742,16 @@ init_declarator_list_item::~init_declarator_list_item()
 \*------------------------------------------------------------*/
 /*init_declarator_list::name() returns the name of the class*/
 std::string init_declarator_list::name()const {return "init_declarator_list";}
+
+/*init_declarator_list::codeStream() returns the code for the node of AST*/
+std::ostream& init_declarator_list::codeStream(std::ostream& stream )const 
+{
+	for(CItemsListIter item=_items.begin();item!=_items.end();item++)
+	{
+		item->codeStream(stream,item==_items.begin());
+	}
+	return  stream;
+}
 
 /*init_declarator_list::typeId() returns the type of the class, here, CAST_TYPE_INIT_DECLARATOR_LIST*/
 CAstType init_declarator_list::typeId()const {return CAST_TYPE_INIT_DECLARATOR_LIST;}
@@ -6816,6 +7835,21 @@ shift_expression_item::shift_expression_item
 }
 
 
+/*shift_expression_item::codeStream() returns the code for the node of AST*/
+std::ostream& shift_expression_item::codeStream(std::ostream& stream,bool initFlag)const 
+{
+	if(initFlag)
+	{
+	if(_p_additive_expression)_p_additive_expression->codeStream(stream);
+	}
+	else
+	{
+	stream<<"<<";
+	if(_p_additive_expression)_p_additive_expression->codeStream(stream);
+	}
+	return  stream;
+}
+
 /*copy constructor*/
 shift_expression_item::shift_expression_item(const shift_expression_item& other):
 		_s_matchedPattern(other._s_matchedPattern),
@@ -6867,6 +7901,16 @@ shift_expression_item::~shift_expression_item()
 \*------------------------------------------------------------*/
 /*shift_expression::name() returns the name of the class*/
 std::string shift_expression::name()const {return "shift_expression";}
+
+/*shift_expression::codeStream() returns the code for the node of AST*/
+std::ostream& shift_expression::codeStream(std::ostream& stream )const 
+{
+	for(CItemsListIter item=_items.begin();item!=_items.end();item++)
+	{
+		item->codeStream(stream,item==_items.begin());
+	}
+	return  stream;
+}
 
 /*shift_expression::typeId() returns the type of the class, here, CAST_TYPE_SHIFT_EXPRESSION*/
 CAstType shift_expression::typeId()const {return CAST_TYPE_SHIFT_EXPRESSION;}
@@ -6949,6 +7993,21 @@ identifier_list_item::identifier_list_item
 }
 
 
+/*identifier_list_item::codeStream() returns the code for the node of AST*/
+std::ostream& identifier_list_item::codeStream(std::ostream& stream,bool initFlag)const 
+{
+	if(initFlag)
+	{
+	if(_p_token1)_p_token1->codeStream(stream);
+	}
+	else
+	{
+	stream<<',';
+	if(_p_token1)_p_token1->codeStream(stream);
+	}
+	return  stream;
+}
+
 /*copy constructor*/
 identifier_list_item::identifier_list_item(const identifier_list_item& other):
 		_s_matchedPattern(other._s_matchedPattern),
@@ -6993,6 +8052,16 @@ identifier_list_item::~identifier_list_item()
 \*------------------------------------------------------------*/
 /*identifier_list::name() returns the name of the class*/
 std::string identifier_list::name()const {return "identifier_list";}
+
+/*identifier_list::codeStream() returns the code for the node of AST*/
+std::ostream& identifier_list::codeStream(std::ostream& stream )const 
+{
+	for(CItemsListIter item=_items.begin();item!=_items.end();item++)
+	{
+		item->codeStream(stream,item==_items.begin());
+	}
+	return  stream;
+}
 
 /*identifier_list::typeId() returns the type of the class, here, CAST_TYPE_IDENTIFIER_LIST*/
 CAstType identifier_list::typeId()const {return CAST_TYPE_IDENTIFIER_LIST;}
@@ -7056,6 +8125,16 @@ identifier_list::~identifier_list()
 
 /*jump_statement1::name() returns the name of the class*/
 std::string jump_statement1::name()const {return "jump_statement1";}
+
+
+/*jump_statement1::codeStream() returns the code for the node of AST*/
+std::ostream& jump_statement1::codeStream(std::ostream& stream)const 
+{
+	stream<<"goto"<<" ";//
+	if(_p_token1)_p_token1->codeStream(stream);
+	stream<<';'<<" ";//
+	return  stream;
+}
 
 /*jump_statement1::typeId() returns the type of the class, here, CAST_TYPE_JUMP_STATEMENT1*/
 CAstType jump_statement1::typeId()const {return CAST_TYPE_JUMP_STATEMENT1;}
@@ -7125,6 +8204,16 @@ jump_statement1::~jump_statement1()
 /*jump_statement2::name() returns the name of the class*/
 std::string jump_statement2::name()const {return "jump_statement2";}
 
+
+/*jump_statement2::codeStream() returns the code for the node of AST*/
+std::ostream& jump_statement2::codeStream(std::ostream& stream)const 
+{
+	stream<<"return"<<" ";//
+	if(_p_expression)_p_expression->codeStream(stream);
+	stream<<';'<<" ";//
+	return  stream;
+}
+
 /*jump_statement2::typeId() returns the type of the class, here, CAST_TYPE_JUMP_STATEMENT2*/
 CAstType jump_statement2::typeId()const {return CAST_TYPE_JUMP_STATEMENT2;}
 
@@ -7193,6 +8282,15 @@ jump_statement2::~jump_statement2()
 /*jump_statement3::name() returns the name of the class*/
 std::string jump_statement3::name()const {return "jump_statement3";}
 
+
+/*jump_statement3::codeStream() returns the code for the node of AST*/
+std::ostream& jump_statement3::codeStream(std::ostream& stream)const 
+{
+	if(_p_token1)_p_token1->codeStream(stream);
+	stream<<';'<<" ";//
+	return  stream;
+}
+
 /*jump_statement3::typeId() returns the type of the class, here, CAST_TYPE_JUMP_STATEMENT3*/
 CAstType jump_statement3::typeId()const {return CAST_TYPE_JUMP_STATEMENT3;}
 
@@ -7260,6 +8358,16 @@ jump_statement3::~jump_statement3()
 
 /*struct_declarator::name() returns the name of the class*/
 std::string struct_declarator::name()const {return "struct_declarator";}
+
+
+/*struct_declarator::codeStream() returns the code for the node of AST*/
+std::ostream& struct_declarator::codeStream(std::ostream& stream)const 
+{
+	if(_p_declarator)_p_declarator->codeStream(stream);
+	if(_p_token1)_p_token1->codeStream(stream);
+	if(_p_constant_expression)_p_constant_expression->codeStream(stream);
+	return  stream;
+}
 
 /*struct_declarator::typeId() returns the type of the class, here, CAST_TYPE_STRUCT_DECLARATOR*/
 CAstType struct_declarator::typeId()const {return CAST_TYPE_STRUCT_DECLARATOR;}
@@ -7346,6 +8454,17 @@ struct_declarator::~struct_declarator()
 
 /*function_definition::name() returns the name of the class*/
 std::string function_definition::name()const {return "function_definition";}
+
+
+/*function_definition::codeStream() returns the code for the node of AST*/
+std::ostream& function_definition::codeStream(std::ostream& stream)const 
+{
+	if(_p_declaration_specifiers)_p_declaration_specifiers->codeStream(stream);
+	if(_p_declarator)_p_declarator->codeStream(stream);
+	if(_p_declaration_list)_p_declaration_list->codeStream(stream);
+	if(_p_compound_statement)_p_compound_statement->codeStream(stream);
+	return  stream;
+}
 
 /*function_definition::typeId() returns the type of the class, here, CAST_TYPE_FUNCTION_DEFINITION*/
 CAstType function_definition::typeId()const {return CAST_TYPE_FUNCTION_DEFINITION;}
@@ -7459,6 +8578,21 @@ parameter_list_item::parameter_list_item
 }
 
 
+/*parameter_list_item::codeStream() returns the code for the node of AST*/
+std::ostream& parameter_list_item::codeStream(std::ostream& stream,bool initFlag)const 
+{
+	if(initFlag)
+	{
+	if(_p_parameter_declaration)_p_parameter_declaration->codeStream(stream);
+	}
+	else
+	{
+	stream<<',';
+	if(_p_parameter_declaration)_p_parameter_declaration->codeStream(stream);
+	}
+	return  stream;
+}
+
 /*copy constructor*/
 parameter_list_item::parameter_list_item(const parameter_list_item& other):
 		_s_matchedPattern(other._s_matchedPattern),
@@ -7503,6 +8637,16 @@ parameter_list_item::~parameter_list_item()
 \*------------------------------------------------------------*/
 /*parameter_list::name() returns the name of the class*/
 std::string parameter_list::name()const {return "parameter_list";}
+
+/*parameter_list::codeStream() returns the code for the node of AST*/
+std::ostream& parameter_list::codeStream(std::ostream& stream )const 
+{
+	for(CItemsListIter item=_items.begin();item!=_items.end();item++)
+	{
+		item->codeStream(stream,item==_items.begin());
+	}
+	return  stream;
+}
 
 /*parameter_list::typeId() returns the type of the class, here, CAST_TYPE_PARAMETER_LIST*/
 CAstType parameter_list::typeId()const {return CAST_TYPE_PARAMETER_LIST;}
@@ -7566,6 +8710,18 @@ parameter_list::~parameter_list()
 
 /*enum_specifier::name() returns the name of the class*/
 std::string enum_specifier::name()const {return "enum_specifier";}
+
+
+/*enum_specifier::codeStream() returns the code for the node of AST*/
+std::ostream& enum_specifier::codeStream(std::ostream& stream)const 
+{
+	stream<<"enum"<<" ";//
+	if(_p_token1)_p_token1->codeStream(stream);
+	if(_p_token2)_p_token2->codeStream(stream);
+	if(_p_enumerator_list)_p_enumerator_list->codeStream(stream);
+	if(_p_token3)_p_token3->codeStream(stream);
+	return  stream;
+}
 
 /*enum_specifier::typeId() returns the type of the class, here, CAST_TYPE_ENUM_SPECIFIER*/
 CAstType enum_specifier::typeId()const {return CAST_TYPE_ENUM_SPECIFIER;}
@@ -7662,6 +8818,14 @@ enum_specifier::~enum_specifier()
 /*type_qualifier::name() returns the name of the class*/
 std::string type_qualifier::name()const {return "type_qualifier";}
 
+
+/*type_qualifier::codeStream() returns the code for the node of AST*/
+std::ostream& type_qualifier::codeStream(std::ostream& stream)const 
+{
+	if(_p_token1)_p_token1->codeStream(stream);
+	return  stream;
+}
+
 /*type_qualifier::typeId() returns the type of the class, here, CAST_TYPE_TYPE_QUALIFIER*/
 CAstType type_qualifier::typeId()const {return CAST_TYPE_TYPE_QUALIFIER;}
 
@@ -7747,6 +8911,21 @@ enumerator_list_item::enumerator_list_item
 }
 
 
+/*enumerator_list_item::codeStream() returns the code for the node of AST*/
+std::ostream& enumerator_list_item::codeStream(std::ostream& stream,bool initFlag)const 
+{
+	if(initFlag)
+	{
+	if(_p_enumerator)_p_enumerator->codeStream(stream);
+	}
+	else
+	{
+	stream<<',';
+	if(_p_enumerator)_p_enumerator->codeStream(stream);
+	}
+	return  stream;
+}
+
 /*copy constructor*/
 enumerator_list_item::enumerator_list_item(const enumerator_list_item& other):
 		_s_matchedPattern(other._s_matchedPattern),
@@ -7791,6 +8970,16 @@ enumerator_list_item::~enumerator_list_item()
 \*------------------------------------------------------------*/
 /*enumerator_list::name() returns the name of the class*/
 std::string enumerator_list::name()const {return "enumerator_list";}
+
+/*enumerator_list::codeStream() returns the code for the node of AST*/
+std::ostream& enumerator_list::codeStream(std::ostream& stream )const 
+{
+	for(CItemsListIter item=_items.begin();item!=_items.end();item++)
+	{
+		item->codeStream(stream,item==_items.begin());
+	}
+	return  stream;
+}
 
 /*enumerator_list::typeId() returns the type of the class, here, CAST_TYPE_ENUMERATOR_LIST*/
 CAstType enumerator_list::typeId()const {return CAST_TYPE_ENUMERATOR_LIST;}
@@ -7854,6 +9043,17 @@ enumerator_list::~enumerator_list()
 
 /*labeled_statement1::name() returns the name of the class*/
 std::string labeled_statement1::name()const {return "labeled_statement1";}
+
+
+/*labeled_statement1::codeStream() returns the code for the node of AST*/
+std::ostream& labeled_statement1::codeStream(std::ostream& stream)const 
+{
+	stream<<"case"<<" ";//
+	if(_p_constant_expression)_p_constant_expression->codeStream(stream);
+	stream<<':'<<" ";//
+	if(_p_statement)_p_statement->codeStream(stream);
+	return  stream;
+}
 
 /*labeled_statement1::typeId() returns the type of the class, here, CAST_TYPE_LABELED_STATEMENT1*/
 CAstType labeled_statement1::typeId()const {return CAST_TYPE_LABELED_STATEMENT1;}
@@ -7931,6 +9131,16 @@ labeled_statement1::~labeled_statement1()
 
 /*labeled_statement2::name() returns the name of the class*/
 std::string labeled_statement2::name()const {return "labeled_statement2";}
+
+
+/*labeled_statement2::codeStream() returns the code for the node of AST*/
+std::ostream& labeled_statement2::codeStream(std::ostream& stream)const 
+{
+	if(_p_token1)_p_token1->codeStream(stream);
+	stream<<':'<<" ";//
+	if(_p_statement)_p_statement->codeStream(stream);
+	return  stream;
+}
 
 /*labeled_statement2::typeId() returns the type of the class, here, CAST_TYPE_LABELED_STATEMENT2*/
 CAstType labeled_statement2::typeId()const {return CAST_TYPE_LABELED_STATEMENT2;}
@@ -8026,6 +9236,20 @@ declaration_list_item::declaration_list_item
 }
 
 
+/*declaration_list_item::codeStream() returns the code for the node of AST*/
+std::ostream& declaration_list_item::codeStream(std::ostream& stream,bool initFlag)const 
+{
+	if(initFlag)
+	{
+	if(_p_declaration)_p_declaration->codeStream(stream);
+	}
+	else
+	{
+	if(_p_declaration)_p_declaration->codeStream(stream);
+	}
+	return  stream;
+}
+
 /*copy constructor*/
 declaration_list_item::declaration_list_item(const declaration_list_item& other):
 		_s_matchedPattern(other._s_matchedPattern),
@@ -8070,6 +9294,16 @@ declaration_list_item::~declaration_list_item()
 \*------------------------------------------------------------*/
 /*declaration_list::name() returns the name of the class*/
 std::string declaration_list::name()const {return "declaration_list";}
+
+/*declaration_list::codeStream() returns the code for the node of AST*/
+std::ostream& declaration_list::codeStream(std::ostream& stream )const 
+{
+	for(CItemsListIter item=_items.begin();item!=_items.end();item++)
+	{
+		item->codeStream(stream,item==_items.begin());
+	}
+	return  stream;
+}
 
 /*declaration_list::typeId() returns the type of the class, here, CAST_TYPE_DECLARATION_LIST*/
 CAstType declaration_list::typeId()const {return CAST_TYPE_DECLARATION_LIST;}
@@ -8151,6 +9385,20 @@ specifier_qualifier_list1_item::specifier_qualifier_list1_item
 }
 
 
+/*specifier_qualifier_list1_item::codeStream() returns the code for the node of AST*/
+std::ostream& specifier_qualifier_list1_item::codeStream(std::ostream& stream,bool initFlag)const 
+{
+	if(initFlag)
+	{
+	if(_p_type_specifier)_p_type_specifier->codeStream(stream);
+	}
+	else
+	{
+	if(_p_type_specifier)_p_type_specifier->codeStream(stream);
+	}
+	return  stream;
+}
+
 /*copy constructor*/
 specifier_qualifier_list1_item::specifier_qualifier_list1_item(const specifier_qualifier_list1_item& other):
 		_s_matchedPattern(other._s_matchedPattern),
@@ -8195,6 +9443,16 @@ specifier_qualifier_list1_item::~specifier_qualifier_list1_item()
 \*------------------------------------------------------------*/
 /*specifier_qualifier_list1::name() returns the name of the class*/
 std::string specifier_qualifier_list1::name()const {return "specifier_qualifier_list1";}
+
+/*specifier_qualifier_list1::codeStream() returns the code for the node of AST*/
+std::ostream& specifier_qualifier_list1::codeStream(std::ostream& stream )const 
+{
+	for(CItemsListIter item=_items.begin();item!=_items.end();item++)
+	{
+		item->codeStream(stream,item==_items.begin());
+	}
+	return  stream;
+}
 
 /*specifier_qualifier_list1::typeId() returns the type of the class, here, CAST_TYPE_SPECIFIER_QUALIFIER_LIST1*/
 CAstType specifier_qualifier_list1::typeId()const {return CAST_TYPE_SPECIFIER_QUALIFIER_LIST1;}
@@ -8276,6 +9534,20 @@ specifier_qualifier_list2_item::specifier_qualifier_list2_item
 }
 
 
+/*specifier_qualifier_list2_item::codeStream() returns the code for the node of AST*/
+std::ostream& specifier_qualifier_list2_item::codeStream(std::ostream& stream,bool initFlag)const 
+{
+	if(initFlag)
+	{
+	if(_p_type_qualifier)_p_type_qualifier->codeStream(stream);
+	}
+	else
+	{
+	if(_p_type_qualifier)_p_type_qualifier->codeStream(stream);
+	}
+	return  stream;
+}
+
 /*copy constructor*/
 specifier_qualifier_list2_item::specifier_qualifier_list2_item(const specifier_qualifier_list2_item& other):
 		_s_matchedPattern(other._s_matchedPattern),
@@ -8320,6 +9592,16 @@ specifier_qualifier_list2_item::~specifier_qualifier_list2_item()
 \*------------------------------------------------------------*/
 /*specifier_qualifier_list2::name() returns the name of the class*/
 std::string specifier_qualifier_list2::name()const {return "specifier_qualifier_list2";}
+
+/*specifier_qualifier_list2::codeStream() returns the code for the node of AST*/
+std::ostream& specifier_qualifier_list2::codeStream(std::ostream& stream )const 
+{
+	for(CItemsListIter item=_items.begin();item!=_items.end();item++)
+	{
+		item->codeStream(stream,item==_items.begin());
+	}
+	return  stream;
+}
 
 /*specifier_qualifier_list2::typeId() returns the type of the class, here, CAST_TYPE_SPECIFIER_QUALIFIER_LIST2*/
 CAstType specifier_qualifier_list2::typeId()const {return CAST_TYPE_SPECIFIER_QUALIFIER_LIST2;}
@@ -8401,6 +9683,20 @@ translation_unit_item::translation_unit_item
 }
 
 
+/*translation_unit_item::codeStream() returns the code for the node of AST*/
+std::ostream& translation_unit_item::codeStream(std::ostream& stream,bool initFlag)const 
+{
+	if(initFlag)
+	{
+	if(_p_external_declaration)_p_external_declaration->codeStream(stream);
+	}
+	else
+	{
+	if(_p_external_declaration)_p_external_declaration->codeStream(stream);
+	}
+	return  stream;
+}
+
 /*copy constructor*/
 translation_unit_item::translation_unit_item(const translation_unit_item& other):
 		_s_matchedPattern(other._s_matchedPattern),
@@ -8445,6 +9741,16 @@ translation_unit_item::~translation_unit_item()
 \*------------------------------------------------------------*/
 /*translation_unit::name() returns the name of the class*/
 std::string translation_unit::name()const {return "translation_unit";}
+
+/*translation_unit::codeStream() returns the code for the node of AST*/
+std::ostream& translation_unit::codeStream(std::ostream& stream )const 
+{
+	for(CItemsListIter item=_items.begin();item!=_items.end();item++)
+	{
+		item->codeStream(stream,item==_items.begin());
+	}
+	return  stream;
+}
 
 /*translation_unit::typeId() returns the type of the class, here, CAST_TYPE_TRANSLATION_UNIT*/
 CAstType translation_unit::typeId()const {return CAST_TYPE_TRANSLATION_UNIT;}
@@ -8508,6 +9814,14 @@ translation_unit::~translation_unit()
 
 /*constant_expression::name() returns the name of the class*/
 std::string constant_expression::name()const {return "constant_expression";}
+
+
+/*constant_expression::codeStream() returns the code for the node of AST*/
+std::ostream& constant_expression::codeStream(std::ostream& stream)const 
+{
+	if(_p_conditional_expression)_p_conditional_expression->codeStream(stream);
+	return  stream;
+}
 
 /*constant_expression::typeId() returns the type of the class, here, CAST_TYPE_CONSTANT_EXPRESSION*/
 CAstType constant_expression::typeId()const {return CAST_TYPE_CONSTANT_EXPRESSION;}
@@ -8594,6 +9908,21 @@ initializer_list_item::initializer_list_item
 }
 
 
+/*initializer_list_item::codeStream() returns the code for the node of AST*/
+std::ostream& initializer_list_item::codeStream(std::ostream& stream,bool initFlag)const 
+{
+	if(initFlag)
+	{
+	if(_p_initializer)_p_initializer->codeStream(stream);
+	}
+	else
+	{
+	stream<<',';
+	if(_p_initializer)_p_initializer->codeStream(stream);
+	}
+	return  stream;
+}
+
 /*copy constructor*/
 initializer_list_item::initializer_list_item(const initializer_list_item& other):
 		_s_matchedPattern(other._s_matchedPattern),
@@ -8638,6 +9967,16 @@ initializer_list_item::~initializer_list_item()
 \*------------------------------------------------------------*/
 /*initializer_list::name() returns the name of the class*/
 std::string initializer_list::name()const {return "initializer_list";}
+
+/*initializer_list::codeStream() returns the code for the node of AST*/
+std::ostream& initializer_list::codeStream(std::ostream& stream )const 
+{
+	for(CItemsListIter item=_items.begin();item!=_items.end();item++)
+	{
+		item->codeStream(stream,item==_items.begin());
+	}
+	return  stream;
+}
 
 /*initializer_list::typeId() returns the type of the class, here, CAST_TYPE_INITIALIZER_LIST*/
 CAstType initializer_list::typeId()const {return CAST_TYPE_INITIALIZER_LIST;}
@@ -8719,6 +10058,20 @@ statement_list_item::statement_list_item
 }
 
 
+/*statement_list_item::codeStream() returns the code for the node of AST*/
+std::ostream& statement_list_item::codeStream(std::ostream& stream,bool initFlag)const 
+{
+	if(initFlag)
+	{
+	if(_p_statement)_p_statement->codeStream(stream);
+	}
+	else
+	{
+	if(_p_statement)_p_statement->codeStream(stream);
+	}
+	return  stream;
+}
+
 /*copy constructor*/
 statement_list_item::statement_list_item(const statement_list_item& other):
 		_s_matchedPattern(other._s_matchedPattern),
@@ -8763,6 +10116,16 @@ statement_list_item::~statement_list_item()
 \*------------------------------------------------------------*/
 /*statement_list::name() returns the name of the class*/
 std::string statement_list::name()const {return "statement_list";}
+
+/*statement_list::codeStream() returns the code for the node of AST*/
+std::ostream& statement_list::codeStream(std::ostream& stream )const 
+{
+	for(CItemsListIter item=_items.begin();item!=_items.end();item++)
+	{
+		item->codeStream(stream,item==_items.begin());
+	}
+	return  stream;
+}
 
 /*statement_list::typeId() returns the type of the class, here, CAST_TYPE_STATEMENT_LIST*/
 CAstType statement_list::typeId()const {return CAST_TYPE_STATEMENT_LIST;}
@@ -8844,6 +10207,21 @@ expression_item::expression_item
 }
 
 
+/*expression_item::codeStream() returns the code for the node of AST*/
+std::ostream& expression_item::codeStream(std::ostream& stream,bool initFlag)const 
+{
+	if(initFlag)
+	{
+	if(_p_assignment_expression)_p_assignment_expression->codeStream(stream);
+	}
+	else
+	{
+	stream<<',';
+	if(_p_assignment_expression)_p_assignment_expression->codeStream(stream);
+	}
+	return  stream;
+}
+
 /*copy constructor*/
 expression_item::expression_item(const expression_item& other):
 		_s_matchedPattern(other._s_matchedPattern),
@@ -8888,6 +10266,16 @@ expression_item::~expression_item()
 \*------------------------------------------------------------*/
 /*expression::name() returns the name of the class*/
 std::string expression::name()const {return "expression";}
+
+/*expression::codeStream() returns the code for the node of AST*/
+std::ostream& expression::codeStream(std::ostream& stream )const 
+{
+	for(CItemsListIter item=_items.begin();item!=_items.end();item++)
+	{
+		item->codeStream(stream,item==_items.begin());
+	}
+	return  stream;
+}
 
 /*expression::typeId() returns the type of the class, here, CAST_TYPE_EXPRESSION*/
 CAstType expression::typeId()const {return CAST_TYPE_EXPRESSION;}
@@ -8951,6 +10339,15 @@ expression::~expression()
 
 /*declarator::name() returns the name of the class*/
 std::string declarator::name()const {return "declarator";}
+
+
+/*declarator::codeStream() returns the code for the node of AST*/
+std::ostream& declarator::codeStream(std::ostream& stream)const 
+{
+	if(_p_pointer)_p_pointer->codeStream(stream);
+	if(_p_direct_declarator)_p_direct_declarator->codeStream(stream);
+	return  stream;
+}
 
 /*declarator::typeId() returns the type of the class, here, CAST_TYPE_DECLARATOR*/
 CAstType declarator::typeId()const {return CAST_TYPE_DECLARATOR;}

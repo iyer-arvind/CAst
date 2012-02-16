@@ -7,7 +7,7 @@ class _Constructor_(object):
 		from Rule import Rule
 		from Token import Token
 		self.pattern=pattern
-		self.includedParameterIndices=set([ i for i,r in enumerate(self.pattern) if isinstance(r,Rule) or (isinstance(r,Token) and r.tokName=="IDENTIFIER")])
+		self.includedParameterIndices=set([ i for i,r in enumerate(self.pattern) if isinstance(r,Rule) or (isinstance(r,Token) and r.isValued ) ])
 		#this differs amongs objects of same pattern
 		self.nullParameterIndices=set([])
 		self.copies=[]
@@ -93,6 +93,7 @@ class _Constructor_(object):
 		from Rule import Rule
 		from Token import Token
 		self.parameters=[]
+		self.parameterMap={}
 		counts={}
 		n=1
 		for i,p in enumerate(self.pattern):
@@ -114,7 +115,9 @@ class _Constructor_(object):
 					val="CAst::GetToken(%s,$<_t_str>%d)"%((p.tokName if p.typeName=='tok' else "\'%s\'"%p.tokName),n) if typName=="Token" else "$<_t_%s>%d"%(typName,n) 
 					val1="$<_t_str>%d"%n
 					n+=1
-				self.parameters.append((typName,varName,p,val,i,val1))
+				p=(typName,varName,p,val,i,val1)
+				self.parameters.append(p)
+				self.parameterMap[i]=p
 			else:
 				if(i not in self.nullParameterIndices):
 					n+=1
