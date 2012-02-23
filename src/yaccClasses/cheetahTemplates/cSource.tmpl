@@ -53,6 +53,59 @@ $cls.className::$cls.className
 #echo ",\n".join(["\t"+"%s(_arg_%s)"%(n,n) for t,n,p,v,i,v1 in $cls.parameters ])
 
 {
+#def tokenTextCheck($opMap,$pMap)
+	##$opMap,$pMap
+	#set $txt=""
+	#set $flag=False
+	#for $ii in $pMap:
+		#set $t,$n,$p,$v,$i,$v1=$pMap[$ii]
+		#if $ii in $opMap:
+			#if($t=="Token"):
+				#if not $p.isValued:
+					#if $flag:
+						#set $txt=$txt+"&&"
+					#end if
+						#set $txt=$txt+"("+$n+"&&("+$n+"->txt()==\""+$opMap[$ii].code[1:-1]+"\"))"
+				#set $flag=True
+				#end if
+			#end if
+		#else
+			#if($t=="Token"):
+				#if $flag:
+					#set $txt=$txt+"&&"
+				#end if
+				#set $txt=$txt+$n+"==NULL"
+				#set $flag=True
+			#end if
+		#end if
+	#end for
+	#return $txt
+#end def
+
+	#set $txt={}
+	#set $txt_=$tokenTextCheck($cls.constructor.originalParameterMap,$cls.constructor.parameterMap)
+	#if $len($txt_)
+		#set $txt[repr($cls.constructor.pattern)]=$txt_
+	#end if
+	#for $c in $cls.constructor.copies
+		#set $txt_=$tokenTextCheck($c.originalParameterMap,$c.parameterMap)
+		#if $len($txt_)
+			#set $txt[repr($c.originalPattern)]=$txt_
+		#end if
+	#end for
+	
+	#if $len($txt)
+		bool checkTokenText=false;
+		#for $p in $txt:
+		if($txt[$p])
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m $p");
+			checkTokenText=true;
+		}
+		#end for
+		assert(checkTokenText);
+		if(!checkTokenText)LOG("\033[37;41;1;mCREATING\033[0m $cls.className");
+	#end if
 	LOG("\033[32mCREATING\033[0m $cls.className");
 }
 

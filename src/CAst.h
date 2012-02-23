@@ -11,8 +11,8 @@
 #ifndef CAST_HEADER_INCLUDED
 #define CAST_HEADER_INCLUDED
 
-#define RULE_MARKER(txt) std::cerr<<"\033[36m"<<__FILE__<<":"<<__LINE__<<"\033[0m"<<txt;
-#define CAST_PTR(TYPE,PTR) dynamic_cast<CAst::TYPE*>(PTR)
+#define RULE_MARKER(txt) std::cerr<<"\033[36m"<<__FILE__<<":"<<__LINE__<<"\033[0m\t"<<txt<<"\n";
+#define CAST_PTR(TYPE,PTR) assert(PTR);CAst::TYPE* __p__;__p__=dynamic_cast<CAst::TYPE*>(PTR);assert(__p__);__p__
 #include <string>
 #include <cstring>
 #include <stdio.h>
@@ -22,6 +22,7 @@
 #include <sstream>
 #include <iomanip>
 #include <map>
+#include <assert.h>
 #define LOG(txt) std::cerr<<"[\033[33m"<<std::setw(20)<<std::left<<this<<"\033[0m\t]"<<txt<<"\n";
 
 
@@ -135,6 +136,7 @@ class Token: public CAst
 	virtual std::string code()const				=0;
 		virtual bool isList()const			=0;
 		virtual Properties getProperties()const		=0;
+		virtual std::string txt()const 			=0;
 		virtual PropertiesList getPropertiesList()const	=0;
 		Token()
 		{
@@ -170,6 +172,7 @@ public:
 	{}
 	virtual std::ostream& codeStream(std::ostream& stream)const			{return stream<<_txt<<" ";}
 	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
+	virtual std::string txt()const {return _txt;}
 	virtual bool isList()const							{return false;}
 	virtual Properties getProperties()const						{Properties p(name());p.setTokValue(_txt);return p;}
 	virtual PropertiesList getPropertiesList()const					{return PropertiesList(name());}

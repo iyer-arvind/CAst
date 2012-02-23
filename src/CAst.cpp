@@ -142,6 +142,36 @@ storage_class_specifier::storage_class_specifier
 	_refCount(new int(1)),
 	_p_token1(_arg__p_token1)
 {
+
+	
+		bool checkTokenText=false;
+		if((_p_token1&&(_p_token1->txt()=="auto")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [AUTO]");
+			checkTokenText=true;
+		}
+		if((_p_token1&&(_p_token1->txt()=="static")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [STATIC]");
+			checkTokenText=true;
+		}
+		if((_p_token1&&(_p_token1->txt()=="register")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [REGISTER]");
+			checkTokenText=true;
+		}
+		if((_p_token1&&(_p_token1->txt()=="typedef")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [TYPEDEF]");
+			checkTokenText=true;
+		}
+		if((_p_token1&&(_p_token1->txt()=="extern")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [EXTERN]");
+			checkTokenText=true;
+		}
+		assert(checkTokenText);
+		if(!checkTokenText)LOG("\033[37;41;1;mCREATING\033[0m storage_class_specifier");
 	LOG("\033[32mCREATING\033[0m storage_class_specifier");
 }
 
@@ -219,6 +249,8 @@ expression_statement::expression_statement
 	_refCount(new int(1)),
 	_p_expression(_arg__p_expression)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m expression_statement");
 }
 
@@ -298,6 +330,8 @@ type_name::type_name
 	_p_specifier_qualifier_list(_arg__p_specifier_qualifier_list),
 	_p_abstract_declarator(_arg__p_abstract_declarator)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m type_name");
 }
 
@@ -384,6 +418,8 @@ unary_expression1::unary_expression1
 	_refCount(new int(1)),
 	_p_type_name(_arg__p_type_name)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m unary_expression1");
 }
 
@@ -463,6 +499,26 @@ unary_expression2::unary_expression2
 	_p_token1(_arg__p_token1),
 	_p_unary_expression(_arg__p_unary_expression)
 {
+
+	
+		bool checkTokenText=false;
+		if((_p_token1&&(_p_token1->txt()=="sizeof")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [SIZEOF,unary_expression]");
+			checkTokenText=true;
+		}
+		if((_p_token1&&(_p_token1->txt()=="--")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [DEC_OP,unary_expression]");
+			checkTokenText=true;
+		}
+		if((_p_token1&&(_p_token1->txt()=="++")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [INC_OP,unary_expression]");
+			checkTokenText=true;
+		}
+		assert(checkTokenText);
+		if(!checkTokenText)LOG("\033[37;41;1;mCREATING\033[0m unary_expression2");
 	LOG("\033[32mCREATING\033[0m unary_expression2");
 }
 
@@ -549,6 +605,8 @@ unary_expression3::unary_expression3
 	_p_unary_operator(_arg__p_unary_operator),
 	_p_cast_expression(_arg__p_cast_expression)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m unary_expression3");
 }
 
@@ -632,6 +690,8 @@ unary_expression4::unary_expression4
 	_refCount(new int(1)),
 	_p_postfix_expression(_arg__p_postfix_expression)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m unary_expression4");
 }
 
@@ -882,6 +942,26 @@ struct_or_union_specifier::struct_or_union_specifier
 	_p_struct_declaration_list(_arg__p_struct_declaration_list),
 	_p_token3(_arg__p_token3)
 {
+
+	
+		bool checkTokenText=false;
+		if(_p_token2==NULL&&_p_token3==NULL)
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [struct_or_union,IDENTIFIER]");
+			checkTokenText=true;
+		}
+		if((_p_token2&&(_p_token2->txt()=="{"))&&(_p_token3&&(_p_token3->txt()=="}")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [struct_or_union,IDENTIFIER,'{',struct_declaration_list,'}']");
+			checkTokenText=true;
+		}
+		if(_p_token1==NULL&&(_p_token2&&(_p_token2->txt()=="{"))&&(_p_token3&&(_p_token3->txt()=="}")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [struct_or_union,'{',struct_declaration_list,'}']");
+			checkTokenText=true;
+		}
+		assert(checkTokenText);
+		if(!checkTokenText)LOG("\033[37;41;1;mCREATING\033[0m struct_or_union_specifier");
 	LOG("\033[32mCREATING\033[0m struct_or_union_specifier");
 }
 
@@ -1141,6 +1221,21 @@ initializer1::initializer1
 	_p_initializer_list(_arg__p_initializer_list),
 	_p_token1(_arg__p_token1)
 {
+
+	
+		bool checkTokenText=false;
+		if(_p_token1==NULL)
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m ['{',initializer_list,'}']");
+			checkTokenText=true;
+		}
+		if((_p_token1&&(_p_token1->txt()==",")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m ['{',initializer_list,',','}']");
+			checkTokenText=true;
+		}
+		assert(checkTokenText);
+		if(!checkTokenText)LOG("\033[37;41;1;mCREATING\033[0m initializer1");
 	LOG("\033[32mCREATING\033[0m initializer1");
 }
 
@@ -1224,6 +1319,8 @@ initializer2::initializer2
 	_refCount(new int(1)),
 	_p_assignment_expression(_arg__p_assignment_expression)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m initializer2");
 }
 
@@ -1449,6 +1546,66 @@ assignment_operator::assignment_operator
 	_refCount(new int(1)),
 	_p_token1(_arg__p_token1)
 {
+
+	
+		bool checkTokenText=false;
+		if((_p_token1&&(_p_token1->txt()=="%=")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [MOD_ASSIGN]");
+			checkTokenText=true;
+		}
+		if((_p_token1&&(_p_token1->txt()=="<<=")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [LEFT_ASSIGN]");
+			checkTokenText=true;
+		}
+		if((_p_token1&&(_p_token1->txt()=="-=")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [SUB_ASSIGN]");
+			checkTokenText=true;
+		}
+		if((_p_token1&&(_p_token1->txt()=="^=")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [XOR_ASSIGN]");
+			checkTokenText=true;
+		}
+		if((_p_token1&&(_p_token1->txt()=="|=")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [OR_ASSIGN]");
+			checkTokenText=true;
+		}
+		if((_p_token1&&(_p_token1->txt()=="*=")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [MUL_ASSIGN]");
+			checkTokenText=true;
+		}
+		if((_p_token1&&(_p_token1->txt()=="/=")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [DIV_ASSIGN]");
+			checkTokenText=true;
+		}
+		if((_p_token1&&(_p_token1->txt()=="=")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m ['=']");
+			checkTokenText=true;
+		}
+		if((_p_token1&&(_p_token1->txt()=="&=")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [AND_ASSIGN]");
+			checkTokenText=true;
+		}
+		if((_p_token1&&(_p_token1->txt()==">>=")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [RIGHT_ASSIGN]");
+			checkTokenText=true;
+		}
+		if((_p_token1&&(_p_token1->txt()=="+=")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [ADD_ASSIGN]");
+			checkTokenText=true;
+		}
+		assert(checkTokenText);
+		if(!checkTokenText)LOG("\033[37;41;1;mCREATING\033[0m assignment_operator");
 	LOG("\033[32mCREATING\033[0m assignment_operator");
 }
 
@@ -1529,6 +1686,8 @@ struct_declaration::struct_declaration
 	_p_specifier_qualifier_list(_arg__p_specifier_qualifier_list),
 	_p_struct_declarator_list(_arg__p_struct_declarator_list)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m struct_declaration");
 }
 
@@ -1615,6 +1774,8 @@ abstract_declarator::abstract_declarator
 	_p_pointer(_arg__p_pointer),
 	_p_direct_abstract_declarator(_arg__p_direct_abstract_declarator)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m abstract_declarator");
 }
 
@@ -1706,6 +1867,8 @@ iteration_statement1::iteration_statement1
 	_p_statement(_arg__p_statement),
 	_p_expression(_arg__p_expression)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m iteration_statement1");
 }
 
@@ -1801,6 +1964,8 @@ iteration_statement2::iteration_statement2
 	_p_expression(_arg__p_expression),
 	_p_statement(_arg__p_statement)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m iteration_statement2");
 }
 
@@ -1904,6 +2069,8 @@ iteration_statement3::iteration_statement3
 	_p_expression(_arg__p_expression),
 	_p_statement(_arg__p_statement)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m iteration_statement3");
 }
 
@@ -2147,6 +2314,8 @@ external_declaration1::external_declaration1
 	_refCount(new int(1)),
 	_p_function_definition(_arg__p_function_definition)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m external_declaration1");
 }
 
@@ -2223,6 +2392,8 @@ external_declaration2::external_declaration2
 	_refCount(new int(1)),
 	_p_declaration(_arg__p_declaration)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m external_declaration2");
 }
 
@@ -2299,6 +2470,56 @@ type_specifier1::type_specifier1
 	_refCount(new int(1)),
 	_p_token1(_arg__p_token1)
 {
+
+	
+		bool checkTokenText=false;
+		if((_p_token1&&(_p_token1->txt()=="signed")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [SIGNED]");
+			checkTokenText=true;
+		}
+		if((_p_token1&&(_p_token1->txt()=="long")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [LONG]");
+			checkTokenText=true;
+		}
+		if((_p_token1&&(_p_token1->txt()=="void")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [VOID]");
+			checkTokenText=true;
+		}
+		if((_p_token1&&(_p_token1->txt()=="int")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [INT]");
+			checkTokenText=true;
+		}
+		if((_p_token1&&(_p_token1->txt()=="float")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [FLOAT]");
+			checkTokenText=true;
+		}
+		if((_p_token1&&(_p_token1->txt()=="char")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [CHAR]");
+			checkTokenText=true;
+		}
+		if((_p_token1&&(_p_token1->txt()=="short")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [SHORT]");
+			checkTokenText=true;
+		}
+		if((_p_token1&&(_p_token1->txt()=="unsigned")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [UNSIGNED]");
+			checkTokenText=true;
+		}
+		if((_p_token1&&(_p_token1->txt()=="double")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [DOUBLE]");
+			checkTokenText=true;
+		}
+		assert(checkTokenText);
+		if(!checkTokenText)LOG("\033[37;41;1;mCREATING\033[0m type_specifier1");
 	LOG("\033[32mCREATING\033[0m type_specifier1");
 }
 
@@ -2375,6 +2596,8 @@ type_specifier2::type_specifier2
 	_refCount(new int(1)),
 	_p_struct_or_union_specifier(_arg__p_struct_or_union_specifier)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m type_specifier2");
 }
 
@@ -2451,6 +2674,8 @@ type_specifier3::type_specifier3
 	_refCount(new int(1)),
 	_p_enum_specifier(_arg__p_enum_specifier)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m type_specifier3");
 }
 
@@ -2532,6 +2757,8 @@ compound_statement::compound_statement
 	_p_declaration_list(_arg__p_declaration_list),
 	_p_statement_list(_arg__p_statement_list)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m compound_statement");
 }
 
@@ -2927,6 +3154,21 @@ selection_statement1::selection_statement1
 	_p_token1(_arg__p_token1),
 	_p_statement1(_arg__p_statement1)
 {
+
+	
+		bool checkTokenText=false;
+		if(_p_token1==NULL)
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [IF,'(',expression,')',statement]");
+			checkTokenText=true;
+		}
+		if((_p_token1&&(_p_token1->txt()=="else")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [IF,'(',expression,')',statement,ELSE,statement]");
+			checkTokenText=true;
+		}
+		assert(checkTokenText);
+		if(!checkTokenText)LOG("\033[37;41;1;mCREATING\033[0m selection_statement1");
 	LOG("\033[32mCREATING\033[0m selection_statement1");
 }
 
@@ -3030,6 +3272,8 @@ selection_statement2::selection_statement2
 	_p_expression(_arg__p_expression),
 	_p_statement(_arg__p_statement)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m selection_statement2");
 }
 
@@ -3118,6 +3362,8 @@ postfix_expression1::postfix_expression1
 	_p_postfix_expression(_arg__p_postfix_expression),
 	_p_expression(_arg__p_expression)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m postfix_expression1");
 }
 
@@ -3206,6 +3452,8 @@ postfix_expression2::postfix_expression2
 	_p_postfix_expression(_arg__p_postfix_expression),
 	_p_argument_expression_list(_arg__p_argument_expression_list)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m postfix_expression2");
 }
 
@@ -3295,6 +3543,21 @@ postfix_expression3::postfix_expression3
 	_p_token1(_arg__p_token1),
 	_p_token2(_arg__p_token2)
 {
+
+	
+		bool checkTokenText=false;
+		if((_p_token1&&(_p_token1->txt()==".")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [postfix_expression,'.',IDENTIFIER]");
+			checkTokenText=true;
+		}
+		if((_p_token1&&(_p_token1->txt()=="->")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [postfix_expression,PTR_OP,IDENTIFIER]");
+			checkTokenText=true;
+		}
+		assert(checkTokenText);
+		if(!checkTokenText)LOG("\033[37;41;1;mCREATING\033[0m postfix_expression3");
 	LOG("\033[32mCREATING\033[0m postfix_expression3");
 }
 
@@ -3388,6 +3651,21 @@ postfix_expression4::postfix_expression4
 	_p_postfix_expression(_arg__p_postfix_expression),
 	_p_token1(_arg__p_token1)
 {
+
+	
+		bool checkTokenText=false;
+		if((_p_token1&&(_p_token1->txt()=="++")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [postfix_expression,INC_OP]");
+			checkTokenText=true;
+		}
+		if((_p_token1&&(_p_token1->txt()=="--")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [postfix_expression,DEC_OP]");
+			checkTokenText=true;
+		}
+		assert(checkTokenText);
+		if(!checkTokenText)LOG("\033[37;41;1;mCREATING\033[0m postfix_expression4");
 	LOG("\033[32mCREATING\033[0m postfix_expression4");
 }
 
@@ -3471,6 +3749,8 @@ postfix_expression5::postfix_expression5
 	_refCount(new int(1)),
 	_p_primary_expression(_arg__p_primary_expression)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m postfix_expression5");
 }
 
@@ -3697,6 +3977,8 @@ statement1::statement1
 	_refCount(new int(1)),
 	_p_labeled_statement(_arg__p_labeled_statement)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m statement1");
 }
 
@@ -3773,6 +4055,8 @@ statement2::statement2
 	_refCount(new int(1)),
 	_p_compound_statement(_arg__p_compound_statement)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m statement2");
 }
 
@@ -3849,6 +4133,8 @@ statement3::statement3
 	_refCount(new int(1)),
 	_p_expression_statement(_arg__p_expression_statement)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m statement3");
 }
 
@@ -3925,6 +4211,8 @@ statement4::statement4
 	_refCount(new int(1)),
 	_p_selection_statement(_arg__p_selection_statement)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m statement4");
 }
 
@@ -4001,6 +4289,8 @@ statement5::statement5
 	_refCount(new int(1)),
 	_p_iteration_statement(_arg__p_iteration_statement)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m statement5");
 }
 
@@ -4077,6 +4367,8 @@ statement6::statement6
 	_refCount(new int(1)),
 	_p_jump_statement(_arg__p_jump_statement)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m statement6");
 }
 
@@ -4158,6 +4450,8 @@ cast_expression1::cast_expression1
 	_p_type_name(_arg__p_type_name),
 	_p_cast_expression(_arg__p_cast_expression)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m cast_expression1");
 }
 
@@ -4241,6 +4535,8 @@ cast_expression2::cast_expression2
 	_refCount(new int(1)),
 	_p_unary_expression(_arg__p_unary_expression)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m cast_expression2");
 }
 
@@ -4323,6 +4619,21 @@ init_declarator::init_declarator
 	_p_token1(_arg__p_token1),
 	_p_initializer(_arg__p_initializer)
 {
+
+	
+		bool checkTokenText=false;
+		if((_p_token1&&(_p_token1->txt()=="=")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [declarator,'=',initializer]");
+			checkTokenText=true;
+		}
+		if(_p_token1==NULL)
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [declarator]");
+			checkTokenText=true;
+		}
+		assert(checkTokenText);
+		if(!checkTokenText)LOG("\033[37;41;1;mCREATING\033[0m init_declarator");
 	LOG("\033[32mCREATING\033[0m init_declarator");
 }
 
@@ -4713,6 +5024,41 @@ unary_operator::unary_operator
 	_refCount(new int(1)),
 	_p_token1(_arg__p_token1)
 {
+
+	
+		bool checkTokenText=false;
+		if((_p_token1&&(_p_token1->txt()=="~")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m ['~']");
+			checkTokenText=true;
+		}
+		if((_p_token1&&(_p_token1->txt()=="*")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m ['*']");
+			checkTokenText=true;
+		}
+		if((_p_token1&&(_p_token1->txt()=="-")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m ['-']");
+			checkTokenText=true;
+		}
+		if((_p_token1&&(_p_token1->txt()=="+")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m ['+']");
+			checkTokenText=true;
+		}
+		if((_p_token1&&(_p_token1->txt()=="!")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m ['!']");
+			checkTokenText=true;
+		}
+		if((_p_token1&&(_p_token1->txt()=="&")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m ['&']");
+			checkTokenText=true;
+		}
+		assert(checkTokenText);
+		if(!checkTokenText)LOG("\033[37;41;1;mCREATING\033[0m unary_operator");
 	LOG("\033[32mCREATING\033[0m unary_operator");
 }
 
@@ -4949,6 +5295,21 @@ struct_or_union::struct_or_union
 	_refCount(new int(1)),
 	_p_token1(_arg__p_token1)
 {
+
+	
+		bool checkTokenText=false;
+		if((_p_token1&&(_p_token1->txt()=="struct")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [STRUCT]");
+			checkTokenText=true;
+		}
+		if((_p_token1&&(_p_token1->txt()=="union")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [UNION]");
+			checkTokenText=true;
+		}
+		assert(checkTokenText);
+		if(!checkTokenText)LOG("\033[37;41;1;mCREATING\033[0m struct_or_union");
 	LOG("\033[32mCREATING\033[0m struct_or_union");
 }
 
@@ -5031,6 +5392,21 @@ enumerator::enumerator
 	_p_token2(_arg__p_token2),
 	_p_constant_expression(_arg__p_constant_expression)
 {
+
+	
+		bool checkTokenText=false;
+		if(_p_token2==NULL)
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [IDENTIFIER]");
+			checkTokenText=true;
+		}
+		if((_p_token2&&(_p_token2->txt()=="=")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [IDENTIFIER,'=',constant_expression]");
+			checkTokenText=true;
+		}
+		assert(checkTokenText);
+		if(!checkTokenText)LOG("\033[37;41;1;mCREATING\033[0m enumerator");
 	LOG("\033[32mCREATING\033[0m enumerator");
 }
 
@@ -5127,6 +5503,8 @@ assignment_expression1::assignment_expression1
 	_p_assignment_operator(_arg__p_assignment_operator),
 	_p_assignment_expression(_arg__p_assignment_expression)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m assignment_expression1");
 }
 
@@ -5217,6 +5595,8 @@ assignment_expression2::assignment_expression2
 	_refCount(new int(1)),
 	_p_conditional_expression(_arg__p_conditional_expression)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m assignment_expression2");
 }
 
@@ -5299,6 +5679,21 @@ parameter_type_list::parameter_type_list
 	_p_token1(_arg__p_token1),
 	_p_token2(_arg__p_token2)
 {
+
+	
+		bool checkTokenText=false;
+		if((_p_token1&&(_p_token1->txt()==","))&&(_p_token2&&(_p_token2->txt()=="...")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [parameter_list,',',ELLIPSIS]");
+			checkTokenText=true;
+		}
+		if(_p_token1==NULL&&_p_token2==NULL)
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [parameter_list]");
+			checkTokenText=true;
+		}
+		assert(checkTokenText);
+		if(!checkTokenText)LOG("\033[37;41;1;mCREATING\033[0m parameter_type_list");
 	LOG("\033[32mCREATING\033[0m parameter_type_list");
 }
 
@@ -5392,6 +5787,8 @@ parameter_declaration1::parameter_declaration1
 	_p_declaration_specifiers(_arg__p_declaration_specifiers),
 	_p_declarator(_arg__p_declarator)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m parameter_declaration1");
 }
 
@@ -5478,6 +5875,8 @@ parameter_declaration2::parameter_declaration2
 	_p_declaration_specifiers(_arg__p_declaration_specifiers),
 	_p_abstract_declarator(_arg__p_abstract_declarator)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m parameter_declaration2");
 }
 
@@ -6025,6 +6424,8 @@ direct_abstract_declarator1::direct_abstract_declarator1
 	_p_direct_abstract_declarator(_arg__p_direct_abstract_declarator),
 	_p_constant_expression(_arg__p_constant_expression)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m direct_abstract_declarator1");
 }
 
@@ -6113,6 +6514,8 @@ direct_abstract_declarator2::direct_abstract_declarator2
 	_p_direct_abstract_declarator(_arg__p_direct_abstract_declarator),
 	_p_parameter_type_list(_arg__p_parameter_type_list)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m direct_abstract_declarator2");
 }
 
@@ -6198,6 +6601,8 @@ direct_abstract_declarator3::direct_abstract_declarator3
 	_refCount(new int(1)),
 	_p_abstract_declarator(_arg__p_abstract_declarator)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m direct_abstract_declarator3");
 }
 
@@ -6436,6 +6841,8 @@ primary_expression1::primary_expression1
 	_refCount(new int(1)),
 	_p_expression(_arg__p_expression)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m primary_expression1");
 }
 
@@ -6512,6 +6919,8 @@ primary_expression2::primary_expression2
 	_refCount(new int(1)),
 	_p_token1(_arg__p_token1)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m primary_expression2");
 }
 
@@ -7039,6 +7448,8 @@ declaration::declaration
 	_p_declaration_specifiers(_arg__p_declaration_specifiers),
 	_p_init_declarator_list(_arg__p_init_declarator_list)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m declaration");
 }
 
@@ -7127,6 +7538,8 @@ direct_declarator1::direct_declarator1
 	_p_direct_declarator(_arg__p_direct_declarator),
 	_p_constant_expression(_arg__p_constant_expression)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m direct_declarator1");
 }
 
@@ -7215,6 +7628,8 @@ direct_declarator2::direct_declarator2
 	_p_direct_declarator(_arg__p_direct_declarator),
 	_p_parameter_type_list(_arg__p_parameter_type_list)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m direct_declarator2");
 }
 
@@ -7303,6 +7718,8 @@ direct_declarator3::direct_declarator3
 	_p_direct_declarator(_arg__p_direct_declarator),
 	_p_identifier_list(_arg__p_identifier_list)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m direct_declarator3");
 }
 
@@ -7388,6 +7805,8 @@ direct_declarator4::direct_declarator4
 	_refCount(new int(1)),
 	_p_declarator(_arg__p_declarator)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m direct_declarator4");
 }
 
@@ -7464,6 +7883,8 @@ direct_declarator5::direct_declarator5
 	_refCount(new int(1)),
 	_p_token1(_arg__p_token1)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m direct_declarator5");
 }
 
@@ -8152,6 +8573,8 @@ jump_statement1::jump_statement1
 	_refCount(new int(1)),
 	_p_token1(_arg__p_token1)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m jump_statement1");
 }
 
@@ -8230,6 +8653,8 @@ jump_statement2::jump_statement2
 	_refCount(new int(1)),
 	_p_expression(_arg__p_expression)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m jump_statement2");
 }
 
@@ -8307,6 +8732,21 @@ jump_statement3::jump_statement3
 	_refCount(new int(1)),
 	_p_token1(_arg__p_token1)
 {
+
+	
+		bool checkTokenText=false;
+		if((_p_token1&&(_p_token1->txt()=="continue")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [CONTINUE,';']");
+			checkTokenText=true;
+		}
+		if((_p_token1&&(_p_token1->txt()=="break")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [BREAK,';']");
+			checkTokenText=true;
+		}
+		assert(checkTokenText);
+		if(!checkTokenText)LOG("\033[37;41;1;mCREATING\033[0m jump_statement3");
 	LOG("\033[32mCREATING\033[0m jump_statement3");
 }
 
@@ -8389,6 +8829,26 @@ struct_declarator::struct_declarator
 	_p_token1(_arg__p_token1),
 	_p_constant_expression(_arg__p_constant_expression)
 {
+
+	
+		bool checkTokenText=false;
+		if((_p_token1&&(_p_token1->txt()==":")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [declarator,':',constant_expression]");
+			checkTokenText=true;
+		}
+		if(_p_token1==NULL)
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [declarator]");
+			checkTokenText=true;
+		}
+		if((_p_token1&&(_p_token1->txt()==":")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [':',constant_expression]");
+			checkTokenText=true;
+		}
+		assert(checkTokenText);
+		if(!checkTokenText)LOG("\033[37;41;1;mCREATING\033[0m struct_declarator");
 	LOG("\033[32mCREATING\033[0m struct_declarator");
 }
 
@@ -8488,6 +8948,8 @@ function_definition::function_definition
 	_p_declaration_list(_arg__p_declaration_list),
 	_p_compound_statement(_arg__p_compound_statement)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m function_definition");
 }
 
@@ -8745,6 +9207,26 @@ enum_specifier::enum_specifier
 	_p_enumerator_list(_arg__p_enumerator_list),
 	_p_token3(_arg__p_token3)
 {
+
+	
+		bool checkTokenText=false;
+		if(_p_token1==NULL&&(_p_token2&&(_p_token2->txt()=="{"))&&(_p_token3&&(_p_token3->txt()=="}")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [ENUM,'{',enumerator_list,'}']");
+			checkTokenText=true;
+		}
+		if((_p_token2&&(_p_token2->txt()=="{"))&&(_p_token3&&(_p_token3->txt()=="}")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [ENUM,IDENTIFIER,'{',enumerator_list,'}']");
+			checkTokenText=true;
+		}
+		if(_p_token2==NULL&&_p_token3==NULL)
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [ENUM,IDENTIFIER]");
+			checkTokenText=true;
+		}
+		assert(checkTokenText);
+		if(!checkTokenText)LOG("\033[37;41;1;mCREATING\033[0m enum_specifier");
 	LOG("\033[32mCREATING\033[0m enum_specifier");
 }
 
@@ -8842,6 +9324,21 @@ type_qualifier::type_qualifier
 	_refCount(new int(1)),
 	_p_token1(_arg__p_token1)
 {
+
+	
+		bool checkTokenText=false;
+		if((_p_token1&&(_p_token1->txt()=="const")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [CONST]");
+			checkTokenText=true;
+		}
+		if((_p_token1&&(_p_token1->txt()=="volatile")))
+		{
+			LOG("\033[34mMATCHED PATTERN\033[0m [VOLATILE]");
+			checkTokenText=true;
+		}
+		assert(checkTokenText);
+		if(!checkTokenText)LOG("\033[37;41;1;mCREATING\033[0m type_qualifier");
 	LOG("\033[32mCREATING\033[0m type_qualifier");
 }
 
@@ -9073,6 +9570,8 @@ labeled_statement1::labeled_statement1
 	_p_constant_expression(_arg__p_constant_expression),
 	_p_statement(_arg__p_statement)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m labeled_statement1");
 }
 
@@ -9160,6 +9659,8 @@ labeled_statement2::labeled_statement2
 	_p_token1(_arg__p_token1),
 	_p_statement(_arg__p_statement)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m labeled_statement2");
 }
 
@@ -9839,6 +10340,8 @@ constant_expression::constant_expression
 	_refCount(new int(1)),
 	_p_conditional_expression(_arg__p_conditional_expression)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m constant_expression");
 }
 
@@ -10367,6 +10870,8 @@ declarator::declarator
 	_p_pointer(_arg__p_pointer),
 	_p_direct_declarator(_arg__p_direct_declarator)
 {
+
+	
 	LOG("\033[32mCREATING\033[0m declarator");
 }
 

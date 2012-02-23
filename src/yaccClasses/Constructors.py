@@ -57,13 +57,16 @@ class _Constructor_(object):
 		if(not hasattr(self,"parameters")):self._setParameters()
 		from Rule import Rule
 		st=self.className
-		st+="\033[0m("
-		st+=", ".join([ "\033[1m%s\033[0m"%(v if v!='NULL' else "\033[38;5;236m"+v+"\033[0m") for t,n,p,v,i,v1 in self.parameters])
+		st+="("
+		#st+=", ".join([ "%s"%(repr(v) if v!='NULL' else 'NULL') for t,n,p,v,i,v1 in self.parameters])
 		st+=")"
 		return st
 
 	def __str__(self):
-		return "\033[31m"+self.NAME+"\033[0m:  "+repr(self)
+		if(not hasattr(self,"parameters")):self._setParameters()
+		st="\033[31m"+self.NAME+"\033[0m:  "
+		st+=", ".join([ "\033[1m%s\033[0m"%(v if v!='NULL' else "\033[38;5;236m"+v+"\033[0m") for t,n,p,v,i,v1 in self.parameters])
+		return st
 	
 	def finalize(self):
 		if(not hasattr(self,"classCoder")):self._setClassCoder()
@@ -83,6 +86,7 @@ class _Constructor_(object):
 		fh.write(");")
 		if(isStart):fh.write("root=$<_t_%s>$;"%self.className)
 		#fh.write(";".join([ "delete %s;%s=0;"%(v1,v1) for t,n,p,v,i,v1 in self.parameters if t =='Token' and p.typeName=='tok' and v!='NULL']))
+		fh.write("std::cerr<<($<_t_%s>$);"%self.baseClassName)
 		fh.write("}")
 
 		
@@ -95,8 +99,9 @@ class _Constructor_(object):
 		self.parameters=[]
 		self.parameterMap={}
 		counts={}
+		self.originalParameterMap={}
 		n=1
-		for i,p in enumerate(self.pattern):
+		for i,p in enumerate(self.pattern):# if self.parent is None else self.originalPattern):
 			if(i in self.includedParameterIndices):
 				t=Token if isinstance(p,Token) else p
 				if(t in counts):	counts[t]+=1
@@ -118,11 +123,12 @@ class _Constructor_(object):
 				p=(typName,varName,p,val,i,val1)
 				self.parameters.append(p)
 				self.parameterMap[i]=p
+				print repr(self.originalPattern),n
+				if(i not in self.nullParameterIndices):
+					self.originalParameterMap[i]=self.originalPattern[n-2]
 			else:
 				if(i not in self.nullParameterIndices):
 					n+=1
-
-
 
 
 def Simple(rule,patterns):
