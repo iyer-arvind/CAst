@@ -37,7 +37,7 @@ namespace CAst
 
 class CAst;
 
-enum CAstType { CAST_TYPE_TOKEN, CAST_TYPE_STORAGE_CLASS_SPECIFIER, CAST_TYPE_EXPRESSION_STATEMENT, CAST_TYPE_TYPE_NAME, CAST_TYPE_UNARY_EXPRESSION1, CAST_TYPE_UNARY_EXPRESSION2, CAST_TYPE_UNARY_EXPRESSION3, CAST_TYPE_UNARY_EXPRESSION4, CAST_TYPE_CONDITIONAL_EXPRESSION, CAST_TYPE_STRUCT_OR_UNION_SPECIFIER, CAST_TYPE_EXCLUSIVE_OR_EXPRESSION, CAST_TYPE_INITIALIZER1, CAST_TYPE_INITIALIZER2, CAST_TYPE_STRUCT_DECLARATION_LIST, CAST_TYPE_ASSIGNMENT_OPERATOR, CAST_TYPE_STRUCT_DECLARATION, CAST_TYPE_ABSTRACT_DECLARATOR, CAST_TYPE_ITERATION_STATEMENT1, CAST_TYPE_ITERATION_STATEMENT2, CAST_TYPE_ITERATION_STATEMENT3, CAST_TYPE_ADDITIVE_EXPRESSION, CAST_TYPE_EXTERNAL_DECLARATION1, CAST_TYPE_EXTERNAL_DECLARATION2, CAST_TYPE_TYPE_SPECIFIER1, CAST_TYPE_TYPE_SPECIFIER2, CAST_TYPE_TYPE_SPECIFIER3, CAST_TYPE_COMPOUND_STATEMENT, CAST_TYPE_INCLUSIVE_OR_EXPRESSION, CAST_TYPE_POINTER, CAST_TYPE_SELECTION_STATEMENT1, CAST_TYPE_SELECTION_STATEMENT2, CAST_TYPE_POSTFIX_EXPRESSION1, CAST_TYPE_POSTFIX_EXPRESSION2, CAST_TYPE_POSTFIX_EXPRESSION3, CAST_TYPE_POSTFIX_EXPRESSION4, CAST_TYPE_POSTFIX_EXPRESSION5, CAST_TYPE_AND_EXPRESSION, CAST_TYPE_STATEMENT1, CAST_TYPE_STATEMENT2, CAST_TYPE_STATEMENT3, CAST_TYPE_STATEMENT4, CAST_TYPE_STATEMENT5, CAST_TYPE_STATEMENT6, CAST_TYPE_CAST_EXPRESSION1, CAST_TYPE_CAST_EXPRESSION2, CAST_TYPE_INIT_DECLARATOR, CAST_TYPE_STRUCT_DECLARATOR_LIST, CAST_TYPE_LOGICAL_OR_EXPRESSION, CAST_TYPE_UNARY_OPERATOR, CAST_TYPE_RELATIONAL_EXPRESSION, CAST_TYPE_STRUCT_OR_UNION, CAST_TYPE_ENUMERATOR, CAST_TYPE_ASSIGNMENT_EXPRESSION1, CAST_TYPE_ASSIGNMENT_EXPRESSION2, CAST_TYPE_PARAMETER_TYPE_LIST, CAST_TYPE_PARAMETER_DECLARATION1, CAST_TYPE_PARAMETER_DECLARATION2, CAST_TYPE_MULTIPLICATIVE_EXPRESSION, CAST_TYPE_TYPE_QUALIFIER_LIST, CAST_TYPE_ARGUMENT_EXPRESSION_LIST, CAST_TYPE_DIRECT_ABSTRACT_DECLARATOR1, CAST_TYPE_DIRECT_ABSTRACT_DECLARATOR2, CAST_TYPE_DIRECT_ABSTRACT_DECLARATOR3, CAST_TYPE_EQUALITY_EXPRESSION, CAST_TYPE_PRIMARY_EXPRESSION1, CAST_TYPE_PRIMARY_EXPRESSION2, CAST_TYPE_DECLARATION_SPECIFIERS1, CAST_TYPE_DECLARATION_SPECIFIERS2, CAST_TYPE_DECLARATION_SPECIFIERS3, CAST_TYPE_DECLARATION, CAST_TYPE_DIRECT_DECLARATOR1, CAST_TYPE_DIRECT_DECLARATOR2, CAST_TYPE_DIRECT_DECLARATOR3, CAST_TYPE_DIRECT_DECLARATOR4, CAST_TYPE_DIRECT_DECLARATOR5, CAST_TYPE_LOGICAL_AND_EXPRESSION, CAST_TYPE_INIT_DECLARATOR_LIST, CAST_TYPE_SHIFT_EXPRESSION, CAST_TYPE_IDENTIFIER_LIST, CAST_TYPE_JUMP_STATEMENT1, CAST_TYPE_JUMP_STATEMENT2, CAST_TYPE_JUMP_STATEMENT3, CAST_TYPE_STRUCT_DECLARATOR, CAST_TYPE_FUNCTION_DEFINITION, CAST_TYPE_PARAMETER_LIST, CAST_TYPE_ENUM_SPECIFIER, CAST_TYPE_TYPE_QUALIFIER, CAST_TYPE_ENUMERATOR_LIST, CAST_TYPE_LABELED_STATEMENT1, CAST_TYPE_LABELED_STATEMENT2, CAST_TYPE_DECLARATION_LIST, CAST_TYPE_SPECIFIER_QUALIFIER_LIST1, CAST_TYPE_SPECIFIER_QUALIFIER_LIST2, CAST_TYPE_TRANSLATION_UNIT, CAST_TYPE_CONSTANT_EXPRESSION, CAST_TYPE_INITIALIZER_LIST, CAST_TYPE_STATEMENT_LIST, CAST_TYPE_EXPRESSION, CAST_TYPE_DECLARATOR};
+enum CAstType { CAST_TYPE_TOKEN, CAST_TYPE_STORAGE_CLASS_SPECIFIER, CAST_TYPE_EXPRESSION_STATEMENT, CAST_TYPE_TYPE_NAME, CAST_TYPE_UNARY_EXPRESSION1, CAST_TYPE_UNARY_EXPRESSION2, CAST_TYPE_UNARY_EXPRESSION3, CAST_TYPE_UNARY_EXPRESSION4, CAST_TYPE_CONDITIONAL_EXPRESSION, CAST_TYPE_STRUCT_OR_UNION_SPECIFIER, CAST_TYPE_EXCLUSIVE_OR_EXPRESSION, CAST_TYPE_INITIALIZER1, CAST_TYPE_INITIALIZER2, CAST_TYPE_STRUCT_DECLARATION_LIST, CAST_TYPE_ASSIGNMENT_OPERATOR, CAST_TYPE_STRUCT_DECLARATION, CAST_TYPE_ABSTRACT_DECLARATOR, CAST_TYPE_ITERATION_STATEMENT1, CAST_TYPE_ITERATION_STATEMENT2, CAST_TYPE_ITERATION_STATEMENT3, CAST_TYPE_ADDITIVE_EXPRESSION, CAST_TYPE_EXTERNAL_DECLARATION1, CAST_TYPE_EXTERNAL_DECLARATION2, CAST_TYPE_TYPE_SPECIFIER1, CAST_TYPE_TYPE_SPECIFIER2, CAST_TYPE_TYPE_SPECIFIER3, CAST_TYPE_COMPOUND_STATEMENT, CAST_TYPE_INCLUSIVE_OR_EXPRESSION, CAST_TYPE_POINTER, CAST_TYPE_SELECTION_STATEMENT1, CAST_TYPE_SELECTION_STATEMENT2, CAST_TYPE_POSTFIX_EXPRESSION1, CAST_TYPE_POSTFIX_EXPRESSION2, CAST_TYPE_POSTFIX_EXPRESSION3, CAST_TYPE_POSTFIX_EXPRESSION4, CAST_TYPE_POSTFIX_EXPRESSION5, CAST_TYPE_AND_EXPRESSION, CAST_TYPE_STATEMENT1, CAST_TYPE_STATEMENT2, CAST_TYPE_STATEMENT3, CAST_TYPE_STATEMENT4, CAST_TYPE_STATEMENT5, CAST_TYPE_STATEMENT6, CAST_TYPE_CAST_EXPRESSION1, CAST_TYPE_CAST_EXPRESSION2, CAST_TYPE_INIT_DECLARATOR, CAST_TYPE_STRUCT_DECLARATOR_LIST, CAST_TYPE_LOGICAL_OR_EXPRESSION, CAST_TYPE_UNARY_OPERATOR, CAST_TYPE_RELATIONAL_EXPRESSION, CAST_TYPE_STRUCT_OR_UNION, CAST_TYPE_ENUMERATOR, CAST_TYPE_ASSIGNMENT_EXPRESSION1, CAST_TYPE_ASSIGNMENT_EXPRESSION2, CAST_TYPE_PARAMETER_TYPE_LIST, CAST_TYPE_PARAMETER_DECLARATION1, CAST_TYPE_PARAMETER_DECLARATION2, CAST_TYPE_MULTIPLICATIVE_EXPRESSION, CAST_TYPE_TYPE_QUALIFIER_LIST, CAST_TYPE_ARGUMENT_EXPRESSION_LIST, CAST_TYPE_DIRECT_ABSTRACT_DECLARATOR1, CAST_TYPE_DIRECT_ABSTRACT_DECLARATOR2, CAST_TYPE_DIRECT_ABSTRACT_DECLARATOR3, CAST_TYPE_EQUALITY_EXPRESSION, CAST_TYPE_PRIMARY_EXPRESSION1, CAST_TYPE_PRIMARY_EXPRESSION2, CAST_TYPE_DECLARATION_SPECIFIERS3, CAST_TYPE_DECLARATION_SPECIFIERS3, CAST_TYPE_DECLARATION_SPECIFIERS3, CAST_TYPE_DECLARATION, CAST_TYPE_DIRECT_DECLARATOR1, CAST_TYPE_DIRECT_DECLARATOR2, CAST_TYPE_DIRECT_DECLARATOR3, CAST_TYPE_DIRECT_DECLARATOR4, CAST_TYPE_DIRECT_DECLARATOR5, CAST_TYPE_LOGICAL_AND_EXPRESSION, CAST_TYPE_INIT_DECLARATOR_LIST, CAST_TYPE_SHIFT_EXPRESSION, CAST_TYPE_IDENTIFIER_LIST, CAST_TYPE_JUMP_STATEMENT1, CAST_TYPE_JUMP_STATEMENT2, CAST_TYPE_JUMP_STATEMENT3, CAST_TYPE_STRUCT_DECLARATOR, CAST_TYPE_FUNCTION_DEFINITION, CAST_TYPE_PARAMETER_LIST, CAST_TYPE_ENUM_SPECIFIER, CAST_TYPE_TYPE_QUALIFIER, CAST_TYPE_ENUMERATOR_LIST, CAST_TYPE_LABELED_STATEMENT1, CAST_TYPE_LABELED_STATEMENT2, CAST_TYPE_DECLARATION_LIST, CAST_TYPE_SPECIFIER_QUALIFIER_LIST2, CAST_TYPE_SPECIFIER_QUALIFIER_LIST2, CAST_TYPE_TRANSLATION_UNIT, CAST_TYPE_CONSTANT_EXPRESSION, CAST_TYPE_INITIALIZER_LIST, CAST_TYPE_STATEMENT_LIST, CAST_TYPE_EXPRESSION, CAST_TYPE_DECLARATOR};
 
 
 /*=============================================================================================================*\
@@ -559,6 +559,7 @@ public:
 // FORWARD DECLARATION
 class logical_or_expression;
 class expression;
+
 /*------------------------------------------------------------*\
  							        
   item class conditional_expression_item                              
@@ -608,10 +609,13 @@ private:
 	typedef ItemsListType::const_iterator CItemsListIter;
 	ItemsListType _items;
 public:
+//ASDFG
+	
 	conditional_expression
 		(
 			std::string _arg_s_matchedPattern,
-			logical_or_expression *_arg__p_logical_or_expression
+			logical_or_expression *_arg__p_logical_or_expression,
+			expression *_arg__p_expression
 		);
 
 	void append
@@ -720,6 +724,7 @@ public:
 
 // FORWARD DECLARATION
 class and_expression;
+
 /*------------------------------------------------------------*\
  							        
   item class exclusive_or_expression_item                              
@@ -765,6 +770,8 @@ private:
 	typedef ItemsListType::const_iterator CItemsListIter;
 	ItemsListType _items;
 public:
+//ASDFG
+	
 	exclusive_or_expression
 		(
 			std::string _arg_s_matchedPattern,
@@ -930,6 +937,7 @@ public:
 
 // FORWARD DECLARATION
 class struct_declaration;
+
 /*------------------------------------------------------------*\
  							        
   item class struct_declaration_list_item                              
@@ -975,6 +983,8 @@ private:
 	typedef ItemsListType::const_iterator CItemsListIter;
 	ItemsListType _items;
 public:
+//ASDFG
+	
 	struct_declaration_list
 		(
 			std::string _arg_s_matchedPattern,
@@ -1355,6 +1365,7 @@ public:
 // FORWARD DECLARATION
 class Token;
 class multiplicative_expression;
+
 /*------------------------------------------------------------*\
  							        
   item class additive_expression_item                              
@@ -1404,9 +1415,12 @@ private:
 	typedef ItemsListType::const_iterator CItemsListIter;
 	ItemsListType _items;
 public:
+//ASDFG
+	
 	additive_expression
 		(
 			std::string _arg_s_matchedPattern,
+			Token *_arg__p_token1,
 			multiplicative_expression *_arg__p_multiplicative_expression
 		);
 
@@ -1777,6 +1791,7 @@ public:
 
 // FORWARD DECLARATION
 class exclusive_or_expression;
+
 /*------------------------------------------------------------*\
  							        
   item class inclusive_or_expression_item                              
@@ -1822,6 +1837,8 @@ private:
 	typedef ItemsListType::const_iterator CItemsListIter;
 	ItemsListType _items;
 public:
+//ASDFG
+	
 	inclusive_or_expression
 		(
 			std::string _arg_s_matchedPattern,
@@ -1867,36 +1884,8 @@ typedef std::deque<inclusive_or_expression_item>::const_iterator inclusive_or_ex
 
 // FORWARD DECLARATION
 class type_qualifier_list;
-/*------------------------------------------------------------*\
- 							        
-  item class pointer_item                              
-                                                                
-\*------------------------------------------------------------*/
-class pointer_item
-{
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-	type_qualifier_list *_p_type_qualifier_list;                    // type_qualifier_list
-public:
-	pointer_item
-		(
-			std::string _arg_s_matchedPattern,
-			type_qualifier_list *_arg__p_type_qualifier_list
-		);
-	pointer_item(const pointer_item &);
-	virtual std::string name()const{return "pointer_item";}			//returns the class name, here "pointer"
-	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual Properties getProperties()const;
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const type_qualifier_list* get_p_type_qualifier_list()const{return _p_type_qualifier_list;}							//returns const pointer to _p_type_qualifier_list
-	      type_qualifier_list* get_p_type_qualifier_list()     {return _p_type_qualifier_list;}							//returns const pointer to _p_type_qualifier_list
-	virtual ~pointer_item();
-	
-	
-};
+
+//QWERTY
 /*------------------------------------------------------------*\
  							        
   main class pointer                         
@@ -1912,6 +1901,8 @@ private:
 	typedef ItemsListType::const_iterator CItemsListIter;
 	ItemsListType _items;
 public:
+//ASDFG
+	
 	pointer
 		(
 			std::string _arg_s_matchedPattern,
@@ -2370,6 +2361,7 @@ public:
 
 // FORWARD DECLARATION
 class equality_expression;
+
 /*------------------------------------------------------------*\
  							        
   item class and_expression_item                              
@@ -2415,6 +2407,8 @@ private:
 	typedef ItemsListType::const_iterator CItemsListIter;
 	ItemsListType _items;
 public:
+//ASDFG
+	
 	and_expression
 		(
 			std::string _arg_s_matchedPattern,
@@ -2935,6 +2929,7 @@ public:
 
 // FORWARD DECLARATION
 class struct_declarator;
+
 /*------------------------------------------------------------*\
  							        
   item class struct_declarator_list_item                              
@@ -2980,6 +2975,8 @@ private:
 	typedef ItemsListType::const_iterator CItemsListIter;
 	ItemsListType _items;
 public:
+//ASDFG
+	
 	struct_declarator_list
 		(
 			std::string _arg_s_matchedPattern,
@@ -3025,6 +3022,7 @@ typedef std::deque<struct_declarator_list_item>::const_iterator struct_declarato
 
 // FORWARD DECLARATION
 class logical_and_expression;
+
 /*------------------------------------------------------------*\
  							        
   item class logical_or_expression_item                              
@@ -3070,6 +3068,8 @@ private:
 	typedef ItemsListType::const_iterator CItemsListIter;
 	ItemsListType _items;
 public:
+//ASDFG
+	
 	logical_or_expression
 		(
 			std::string _arg_s_matchedPattern,
@@ -3162,6 +3162,7 @@ public:
 // FORWARD DECLARATION
 class Token;
 class shift_expression;
+
 /*------------------------------------------------------------*\
  							        
   item class relational_expression_item                              
@@ -3211,9 +3212,12 @@ private:
 	typedef ItemsListType::const_iterator CItemsListIter;
 	ItemsListType _items;
 public:
+//ASDFG
+	
 	relational_expression
 		(
 			std::string _arg_s_matchedPattern,
+			Token *_arg__p_token1,
 			shift_expression *_arg__p_shift_expression
 		);
 
@@ -3666,6 +3670,7 @@ public:
 // FORWARD DECLARATION
 class Token;
 class cast_expression;
+
 /*------------------------------------------------------------*\
  							        
   item class multiplicative_expression_item                              
@@ -3715,9 +3720,12 @@ private:
 	typedef ItemsListType::const_iterator CItemsListIter;
 	ItemsListType _items;
 public:
+//ASDFG
+	
 	multiplicative_expression
 		(
 			std::string _arg_s_matchedPattern,
+			Token *_arg__p_token1,
 			cast_expression *_arg__p_cast_expression
 		);
 
@@ -3761,6 +3769,7 @@ typedef std::deque<multiplicative_expression_item>::const_iterator multiplicativ
 
 // FORWARD DECLARATION
 class type_qualifier;
+
 /*------------------------------------------------------------*\
  							        
   item class type_qualifier_list_item                              
@@ -3806,6 +3815,8 @@ private:
 	typedef ItemsListType::const_iterator CItemsListIter;
 	ItemsListType _items;
 public:
+//ASDFG
+	
 	type_qualifier_list
 		(
 			std::string _arg_s_matchedPattern,
@@ -3851,6 +3862,7 @@ typedef std::deque<type_qualifier_list_item>::const_iterator type_qualifier_list
 
 // FORWARD DECLARATION
 class assignment_expression;
+
 /*------------------------------------------------------------*\
  							        
   item class argument_expression_list_item                              
@@ -3896,6 +3908,8 @@ private:
 	typedef ItemsListType::const_iterator CItemsListIter;
 	ItemsListType _items;
 public:
+//ASDFG
+	
 	argument_expression_list
 		(
 			std::string _arg_s_matchedPattern,
@@ -4113,6 +4127,7 @@ public:
 // FORWARD DECLARATION
 class Token;
 class relational_expression;
+
 /*------------------------------------------------------------*\
  							        
   item class equality_expression_item                              
@@ -4162,9 +4177,12 @@ private:
 	typedef ItemsListType::const_iterator CItemsListIter;
 	ItemsListType _items;
 public:
+//ASDFG
+	
 	equality_expression
 		(
 			std::string _arg_s_matchedPattern,
+			Token *_arg__p_token1,
 			relational_expression *_arg__p_relational_expression
 		);
 
@@ -4314,30 +4332,7 @@ public:
 			
 /*=============================================================================================================*\
                                                                                                                  
- 	THE declaration_specifiers BASE CLASS                                                                    
-                                                                                                                 
-\*=============================================================================================================*/  
-
-
-class declaration_specifiers :public CAst
-{
-public:
-	virtual std::string name()const=0;
-	virtual std::ostream& codeStream(std::ostream&)const=0;
-	virtual CAstType typeId()const=0;
-	virtual std::string pattern()const=0;
-	virtual bool isList()const=0;
-	virtual Properties getProperties()const=0;
-	virtual PropertiesList getPropertiesList()const=0;
-	virtual ~declaration_specifiers (){};
-};
-
-
-
-
-/*=============================================================================================================*\
-                                                                                                                 
-        THE declaration_specifiers1 CLASS                                                                                 
+        THE declaration_specifiers3 CLASS                                                                                 
         FOR PATTERN : [storage_class_specifier,declaration_specifiers]		                                                                 
  														 
 \*=============================================================================================================*/  
@@ -4346,216 +4341,8 @@ public:
 
 // FORWARD DECLARATION
 class storage_class_specifier;
-/*------------------------------------------------------------*\
- 							        
-  item class declaration_specifiers1_item                              
-                                                                
-\*------------------------------------------------------------*/
-class declaration_specifiers1_item
-{
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-	storage_class_specifier *_p_storage_class_specifier;            // storage_class_specifier
-public:
-	declaration_specifiers1_item
-		(
-			std::string _arg_s_matchedPattern,
-			storage_class_specifier *_arg__p_storage_class_specifier
-		);
-	declaration_specifiers1_item(const declaration_specifiers1_item &);
-	virtual std::string name()const{return "declaration_specifiers1_item";}			//returns the class name, here "declaration_specifiers1"
-	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual Properties getProperties()const;
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const storage_class_specifier* get_p_storage_class_specifier()const{return _p_storage_class_specifier;}							//returns const pointer to _p_storage_class_specifier
-	      storage_class_specifier* get_p_storage_class_specifier()     {return _p_storage_class_specifier;}							//returns const pointer to _p_storage_class_specifier
-	virtual ~declaration_specifiers1_item();
-	
-	
-};
-/*------------------------------------------------------------*\
- 							        
-  main class declaration_specifiers1                         
-                                                                
-\*------------------------------------------------------------*/
 
-class declaration_specifiers1
-	:public declaration_specifiers 
-{
-private:
-	typedef std::deque<declaration_specifiers1_item> ItemsListType;
-	typedef ItemsListType::iterator ItemsListIter;
-	typedef ItemsListType::const_iterator CItemsListIter;
-	ItemsListType _items;
-public:
-	declaration_specifiers1
-		(
-			std::string _arg_s_matchedPattern,
-			storage_class_specifier *_arg__p_storage_class_specifier
-		);
-
-	void append
-		(
-			std::string _arg_s_matchedPattern,
-			storage_class_specifier *_arg__p_storage_class_specifier
-		);
-
-	virtual std::string name()const;							//returns the class name, here "declaration_specifiers1"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_DECLARATION_SPECIFIERS1
-	virtual std::string pattern()const;							//returns the pattern, here "[storage_class_specifier,declaration_specifiers]"
-	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
-	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
-	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
-	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
-	virtual int size()const{return _items.size();}						//returns the size of the container
-	virtual declaration_specifiers1_item& operator[](int i){return _items[i];}
-	virtual ~declaration_specifiers1 ();
-
-};
-
-typedef std::deque<declaration_specifiers1_item>::iterator declaration_specifiers1_iterator;
-typedef std::deque<declaration_specifiers1_item>::const_iterator declaration_specifiers1_const_iterator;
-
-
-			
-			
-/*=============================================================================================================*\
-                                                                                                                 
-        THE declaration_specifiers2 CLASS                                                                                 
-        FOR PATTERN : [type_specifier,declaration_specifiers]		                                                                 
- 														 
-\*=============================================================================================================*/  
-
-
-
-// FORWARD DECLARATION
-class type_specifier;
-/*------------------------------------------------------------*\
- 							        
-  item class declaration_specifiers2_item                              
-                                                                
-\*------------------------------------------------------------*/
-class declaration_specifiers2_item
-{
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-	type_specifier *_p_type_specifier;                              // type_specifier
-public:
-	declaration_specifiers2_item
-		(
-			std::string _arg_s_matchedPattern,
-			type_specifier *_arg__p_type_specifier
-		);
-	declaration_specifiers2_item(const declaration_specifiers2_item &);
-	virtual std::string name()const{return "declaration_specifiers2_item";}			//returns the class name, here "declaration_specifiers2"
-	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual Properties getProperties()const;
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const type_specifier* get_p_type_specifier()const{return _p_type_specifier;}							//returns const pointer to _p_type_specifier
-	      type_specifier* get_p_type_specifier()     {return _p_type_specifier;}							//returns const pointer to _p_type_specifier
-	virtual ~declaration_specifiers2_item();
-	
-	
-};
-/*------------------------------------------------------------*\
- 							        
-  main class declaration_specifiers2                         
-                                                                
-\*------------------------------------------------------------*/
-
-class declaration_specifiers2
-	:public declaration_specifiers 
-{
-private:
-	typedef std::deque<declaration_specifiers2_item> ItemsListType;
-	typedef ItemsListType::iterator ItemsListIter;
-	typedef ItemsListType::const_iterator CItemsListIter;
-	ItemsListType _items;
-public:
-	declaration_specifiers2
-		(
-			std::string _arg_s_matchedPattern,
-			type_specifier *_arg__p_type_specifier
-		);
-
-	void append
-		(
-			std::string _arg_s_matchedPattern,
-			type_specifier *_arg__p_type_specifier
-		);
-
-	virtual std::string name()const;							//returns the class name, here "declaration_specifiers2"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_DECLARATION_SPECIFIERS2
-	virtual std::string pattern()const;							//returns the pattern, here "[type_specifier,declaration_specifiers]"
-	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
-	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
-	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
-	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
-	virtual int size()const{return _items.size();}						//returns the size of the container
-	virtual declaration_specifiers2_item& operator[](int i){return _items[i];}
-	virtual ~declaration_specifiers2 ();
-
-};
-
-typedef std::deque<declaration_specifiers2_item>::iterator declaration_specifiers2_iterator;
-typedef std::deque<declaration_specifiers2_item>::const_iterator declaration_specifiers2_const_iterator;
-
-
-			
-			
-/*=============================================================================================================*\
-                                                                                                                 
-        THE declaration_specifiers3 CLASS                                                                                 
-        FOR PATTERN : [type_qualifier,declaration_specifiers]		                                                                 
- 														 
-\*=============================================================================================================*/  
-
-
-
-// FORWARD DECLARATION
-class type_qualifier;
-/*------------------------------------------------------------*\
- 							        
-  item class declaration_specifiers3_item                              
-                                                                
-\*------------------------------------------------------------*/
-class declaration_specifiers3_item
-{
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-	type_qualifier *_p_type_qualifier;                              // type_qualifier
-public:
-	declaration_specifiers3_item
-		(
-			std::string _arg_s_matchedPattern,
-			type_qualifier *_arg__p_type_qualifier
-		);
-	declaration_specifiers3_item(const declaration_specifiers3_item &);
-	virtual std::string name()const{return "declaration_specifiers3_item";}			//returns the class name, here "declaration_specifiers3"
-	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual Properties getProperties()const;
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const type_qualifier* get_p_type_qualifier()const{return _p_type_qualifier;}							//returns const pointer to _p_type_qualifier
-	      type_qualifier* get_p_type_qualifier()     {return _p_type_qualifier;}							//returns const pointer to _p_type_qualifier
-	virtual ~declaration_specifiers3_item();
-	
-	
-};
+//QWERTY
 /*------------------------------------------------------------*\
  							        
   main class declaration_specifiers3                         
@@ -4571,23 +4358,153 @@ private:
 	typedef ItemsListType::const_iterator CItemsListIter;
 	ItemsListType _items;
 public:
+//ASDFG
+	
 	declaration_specifiers3
 		(
 			std::string _arg_s_matchedPattern,
-			type_qualifier *_arg__p_type_qualifier
+			storage_class_specifier *_arg__p_storage_class_specifier
 		);
 
 	void append
 		(
 			std::string _arg_s_matchedPattern,
-			type_qualifier *_arg__p_type_qualifier
+			storage_class_specifier *_arg__p_storage_class_specifier
 		);
 
 	virtual std::string name()const;							//returns the class name, here "declaration_specifiers3"
 	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
 	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_DECLARATION_SPECIFIERS3
-	virtual std::string pattern()const;							//returns the pattern, here "[type_qualifier,declaration_specifiers]"
+	virtual std::string pattern()const;							//returns the pattern, here "[storage_class_specifier,declaration_specifiers]"
+	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
+	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
+	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
+	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
+	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
+	virtual int size()const{return _items.size();}						//returns the size of the container
+	virtual declaration_specifiers3_item& operator[](int i){return _items[i];}
+	virtual ~declaration_specifiers3 ();
+
+};
+
+typedef std::deque<declaration_specifiers3_item>::iterator declaration_specifiers3_iterator;
+typedef std::deque<declaration_specifiers3_item>::const_iterator declaration_specifiers3_const_iterator;
+
+
+			
+			
+/*=============================================================================================================*\
+                                                                                                                 
+        THE declaration_specifiers3 CLASS                                                                                 
+        FOR PATTERN : [storage_class_specifier,declaration_specifiers]		                                                                 
+ 														 
+\*=============================================================================================================*/  
+
+
+
+// FORWARD DECLARATION
+class storage_class_specifier;
+
+//QWERTY
+/*------------------------------------------------------------*\
+ 							        
+  main class declaration_specifiers3                         
+                                                                
+\*------------------------------------------------------------*/
+
+class declaration_specifiers3
+	:public declaration_specifiers 
+{
+private:
+	typedef std::deque<declaration_specifiers3_item> ItemsListType;
+	typedef ItemsListType::iterator ItemsListIter;
+	typedef ItemsListType::const_iterator CItemsListIter;
+	ItemsListType _items;
+public:
+//ASDFG
+	
+	declaration_specifiers3
+		(
+			std::string _arg_s_matchedPattern,
+			storage_class_specifier *_arg__p_storage_class_specifier
+		);
+
+	void append
+		(
+			std::string _arg_s_matchedPattern,
+			storage_class_specifier *_arg__p_storage_class_specifier
+		);
+
+	virtual std::string name()const;							//returns the class name, here "declaration_specifiers3"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_DECLARATION_SPECIFIERS3
+	virtual std::string pattern()const;							//returns the pattern, here "[storage_class_specifier,declaration_specifiers]"
+	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
+	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
+	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
+	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
+	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
+	virtual int size()const{return _items.size();}						//returns the size of the container
+	virtual declaration_specifiers3_item& operator[](int i){return _items[i];}
+	virtual ~declaration_specifiers3 ();
+
+};
+
+typedef std::deque<declaration_specifiers3_item>::iterator declaration_specifiers3_iterator;
+typedef std::deque<declaration_specifiers3_item>::const_iterator declaration_specifiers3_const_iterator;
+
+
+			
+			
+/*=============================================================================================================*\
+                                                                                                                 
+        THE declaration_specifiers3 CLASS                                                                                 
+        FOR PATTERN : [storage_class_specifier,declaration_specifiers]		                                                                 
+ 														 
+\*=============================================================================================================*/  
+
+
+
+// FORWARD DECLARATION
+class storage_class_specifier;
+
+//QWERTY
+/*------------------------------------------------------------*\
+ 							        
+  main class declaration_specifiers3                         
+                                                                
+\*------------------------------------------------------------*/
+
+class declaration_specifiers3
+	:public declaration_specifiers 
+{
+private:
+	typedef std::deque<declaration_specifiers3_item> ItemsListType;
+	typedef ItemsListType::iterator ItemsListIter;
+	typedef ItemsListType::const_iterator CItemsListIter;
+	ItemsListType _items;
+public:
+//ASDFG
+	
+	declaration_specifiers3
+		(
+			std::string _arg_s_matchedPattern,
+			storage_class_specifier *_arg__p_storage_class_specifier
+		);
+
+	void append
+		(
+			std::string _arg_s_matchedPattern,
+			storage_class_specifier *_arg__p_storage_class_specifier
+		);
+
+	virtual std::string name()const;							//returns the class name, here "declaration_specifiers3"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_DECLARATION_SPECIFIERS3
+	virtual std::string pattern()const;							//returns the pattern, here "[storage_class_specifier,declaration_specifiers]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
 	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
 	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
@@ -4935,6 +4852,7 @@ public:
 
 // FORWARD DECLARATION
 class inclusive_or_expression;
+
 /*------------------------------------------------------------*\
  							        
   item class logical_and_expression_item                              
@@ -4980,6 +4898,8 @@ private:
 	typedef ItemsListType::const_iterator CItemsListIter;
 	ItemsListType _items;
 public:
+//ASDFG
+	
 	logical_and_expression
 		(
 			std::string _arg_s_matchedPattern,
@@ -5025,6 +4945,7 @@ typedef std::deque<logical_and_expression_item>::const_iterator logical_and_expr
 
 // FORWARD DECLARATION
 class init_declarator;
+
 /*------------------------------------------------------------*\
  							        
   item class init_declarator_list_item                              
@@ -5070,6 +4991,8 @@ private:
 	typedef ItemsListType::const_iterator CItemsListIter;
 	ItemsListType _items;
 public:
+//ASDFG
+	
 	init_declarator_list
 		(
 			std::string _arg_s_matchedPattern,
@@ -5116,6 +5039,7 @@ typedef std::deque<init_declarator_list_item>::const_iterator init_declarator_li
 // FORWARD DECLARATION
 class Token;
 class additive_expression;
+
 /*------------------------------------------------------------*\
  							        
   item class shift_expression_item                              
@@ -5165,9 +5089,12 @@ private:
 	typedef ItemsListType::const_iterator CItemsListIter;
 	ItemsListType _items;
 public:
+//ASDFG
+	
 	shift_expression
 		(
 			std::string _arg_s_matchedPattern,
+			Token *_arg__p_token1,
 			additive_expression *_arg__p_additive_expression
 		);
 
@@ -5211,6 +5138,7 @@ typedef std::deque<shift_expression_item>::const_iterator shift_expression_const
 
 // FORWARD DECLARATION
 class Token;
+
 /*------------------------------------------------------------*\
  							        
   item class identifier_list_item                              
@@ -5256,6 +5184,8 @@ private:
 	typedef ItemsListType::const_iterator CItemsListIter;
 	ItemsListType _items;
 public:
+//ASDFG
+	
 	identifier_list
 		(
 			std::string _arg_s_matchedPattern,
@@ -5579,6 +5509,7 @@ public:
 
 // FORWARD DECLARATION
 class parameter_declaration;
+
 /*------------------------------------------------------------*\
  							        
   item class parameter_list_item                              
@@ -5624,6 +5555,8 @@ private:
 	typedef ItemsListType::const_iterator CItemsListIter;
 	ItemsListType _items;
 public:
+//ASDFG
+	
 	parameter_list
 		(
 			std::string _arg_s_matchedPattern,
@@ -5776,6 +5709,7 @@ public:
 
 // FORWARD DECLARATION
 class enumerator;
+
 /*------------------------------------------------------------*\
  							        
   item class enumerator_list_item                              
@@ -5821,6 +5755,8 @@ private:
 	typedef ItemsListType::const_iterator CItemsListIter;
 	ItemsListType _items;
 public:
+//ASDFG
+	
 	enumerator_list
 		(
 			std::string _arg_s_matchedPattern,
@@ -5991,6 +5927,7 @@ public:
 
 // FORWARD DECLARATION
 class declaration;
+
 /*------------------------------------------------------------*\
  							        
   item class declaration_list_item                              
@@ -6036,6 +5973,8 @@ private:
 	typedef ItemsListType::const_iterator CItemsListIter;
 	ItemsListType _items;
 public:
+//ASDFG
+	
 	declaration_list
 		(
 			std::string _arg_s_matchedPattern,
@@ -6072,30 +6011,7 @@ typedef std::deque<declaration_list_item>::const_iterator declaration_list_const
 			
 /*=============================================================================================================*\
                                                                                                                  
- 	THE specifier_qualifier_list BASE CLASS                                                                    
-                                                                                                                 
-\*=============================================================================================================*/  
-
-
-class specifier_qualifier_list :public CAst
-{
-public:
-	virtual std::string name()const=0;
-	virtual std::ostream& codeStream(std::ostream&)const=0;
-	virtual CAstType typeId()const=0;
-	virtual std::string pattern()const=0;
-	virtual bool isList()const=0;
-	virtual Properties getProperties()const=0;
-	virtual PropertiesList getPropertiesList()const=0;
-	virtual ~specifier_qualifier_list (){};
-};
-
-
-
-
-/*=============================================================================================================*\
-                                                                                                                 
-        THE specifier_qualifier_list1 CLASS                                                                                 
+        THE specifier_qualifier_list2 CLASS                                                                                 
         FOR PATTERN : [type_specifier,specifier_qualifier_list]		                                                                 
  														 
 \*=============================================================================================================*/  
@@ -6104,126 +6020,8 @@ public:
 
 // FORWARD DECLARATION
 class type_specifier;
-/*------------------------------------------------------------*\
- 							        
-  item class specifier_qualifier_list1_item                              
-                                                                
-\*------------------------------------------------------------*/
-class specifier_qualifier_list1_item
-{
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-	type_specifier *_p_type_specifier;                              // type_specifier
-public:
-	specifier_qualifier_list1_item
-		(
-			std::string _arg_s_matchedPattern,
-			type_specifier *_arg__p_type_specifier
-		);
-	specifier_qualifier_list1_item(const specifier_qualifier_list1_item &);
-	virtual std::string name()const{return "specifier_qualifier_list1_item";}			//returns the class name, here "specifier_qualifier_list1"
-	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual Properties getProperties()const;
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const type_specifier* get_p_type_specifier()const{return _p_type_specifier;}							//returns const pointer to _p_type_specifier
-	      type_specifier* get_p_type_specifier()     {return _p_type_specifier;}							//returns const pointer to _p_type_specifier
-	virtual ~specifier_qualifier_list1_item();
-	
-	
-};
-/*------------------------------------------------------------*\
- 							        
-  main class specifier_qualifier_list1                         
-                                                                
-\*------------------------------------------------------------*/
 
-class specifier_qualifier_list1
-	:public specifier_qualifier_list 
-{
-private:
-	typedef std::deque<specifier_qualifier_list1_item> ItemsListType;
-	typedef ItemsListType::iterator ItemsListIter;
-	typedef ItemsListType::const_iterator CItemsListIter;
-	ItemsListType _items;
-public:
-	specifier_qualifier_list1
-		(
-			std::string _arg_s_matchedPattern,
-			type_specifier *_arg__p_type_specifier
-		);
-
-	void append
-		(
-			std::string _arg_s_matchedPattern,
-			type_specifier *_arg__p_type_specifier
-		);
-
-	virtual std::string name()const;							//returns the class name, here "specifier_qualifier_list1"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_SPECIFIER_QUALIFIER_LIST1
-	virtual std::string pattern()const;							//returns the pattern, here "[type_specifier,specifier_qualifier_list]"
-	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
-	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
-	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
-	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
-	virtual int size()const{return _items.size();}						//returns the size of the container
-	virtual specifier_qualifier_list1_item& operator[](int i){return _items[i];}
-	virtual ~specifier_qualifier_list1 ();
-
-};
-
-typedef std::deque<specifier_qualifier_list1_item>::iterator specifier_qualifier_list1_iterator;
-typedef std::deque<specifier_qualifier_list1_item>::const_iterator specifier_qualifier_list1_const_iterator;
-
-
-			
-			
-/*=============================================================================================================*\
-                                                                                                                 
-        THE specifier_qualifier_list2 CLASS                                                                                 
-        FOR PATTERN : [type_qualifier,specifier_qualifier_list]		                                                                 
- 														 
-\*=============================================================================================================*/  
-
-
-
-// FORWARD DECLARATION
-class type_qualifier;
-/*------------------------------------------------------------*\
- 							        
-  item class specifier_qualifier_list2_item                              
-                                                                
-\*------------------------------------------------------------*/
-class specifier_qualifier_list2_item
-{
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-	type_qualifier *_p_type_qualifier;                              // type_qualifier
-public:
-	specifier_qualifier_list2_item
-		(
-			std::string _arg_s_matchedPattern,
-			type_qualifier *_arg__p_type_qualifier
-		);
-	specifier_qualifier_list2_item(const specifier_qualifier_list2_item &);
-	virtual std::string name()const{return "specifier_qualifier_list2_item";}			//returns the class name, here "specifier_qualifier_list2"
-	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual Properties getProperties()const;
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const type_qualifier* get_p_type_qualifier()const{return _p_type_qualifier;}							//returns const pointer to _p_type_qualifier
-	      type_qualifier* get_p_type_qualifier()     {return _p_type_qualifier;}							//returns const pointer to _p_type_qualifier
-	virtual ~specifier_qualifier_list2_item();
-	
-	
-};
+//QWERTY
 /*------------------------------------------------------------*\
  							        
   main class specifier_qualifier_list2                         
@@ -6239,23 +6037,89 @@ private:
 	typedef ItemsListType::const_iterator CItemsListIter;
 	ItemsListType _items;
 public:
+//ASDFG
+	
 	specifier_qualifier_list2
 		(
 			std::string _arg_s_matchedPattern,
-			type_qualifier *_arg__p_type_qualifier
+			type_specifier *_arg__p_type_specifier
 		);
 
 	void append
 		(
 			std::string _arg_s_matchedPattern,
-			type_qualifier *_arg__p_type_qualifier
+			type_specifier *_arg__p_type_specifier
 		);
 
 	virtual std::string name()const;							//returns the class name, here "specifier_qualifier_list2"
 	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
 	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
 	virtual CAstType typeId()const;								//here returns CAST_TYPE_SPECIFIER_QUALIFIER_LIST2
-	virtual std::string pattern()const;							//returns the pattern, here "[type_qualifier,specifier_qualifier_list]"
+	virtual std::string pattern()const;							//returns the pattern, here "[type_specifier,specifier_qualifier_list]"
+	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
+	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
+	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
+	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
+	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
+	virtual int size()const{return _items.size();}						//returns the size of the container
+	virtual specifier_qualifier_list2_item& operator[](int i){return _items[i];}
+	virtual ~specifier_qualifier_list2 ();
+
+};
+
+typedef std::deque<specifier_qualifier_list2_item>::iterator specifier_qualifier_list2_iterator;
+typedef std::deque<specifier_qualifier_list2_item>::const_iterator specifier_qualifier_list2_const_iterator;
+
+
+			
+			
+/*=============================================================================================================*\
+                                                                                                                 
+        THE specifier_qualifier_list2 CLASS                                                                                 
+        FOR PATTERN : [type_specifier,specifier_qualifier_list]		                                                                 
+ 														 
+\*=============================================================================================================*/  
+
+
+
+// FORWARD DECLARATION
+class type_specifier;
+
+//QWERTY
+/*------------------------------------------------------------*\
+ 							        
+  main class specifier_qualifier_list2                         
+                                                                
+\*------------------------------------------------------------*/
+
+class specifier_qualifier_list2
+	:public specifier_qualifier_list 
+{
+private:
+	typedef std::deque<specifier_qualifier_list2_item> ItemsListType;
+	typedef ItemsListType::iterator ItemsListIter;
+	typedef ItemsListType::const_iterator CItemsListIter;
+	ItemsListType _items;
+public:
+//ASDFG
+	
+	specifier_qualifier_list2
+		(
+			std::string _arg_s_matchedPattern,
+			type_specifier *_arg__p_type_specifier
+		);
+
+	void append
+		(
+			std::string _arg_s_matchedPattern,
+			type_specifier *_arg__p_type_specifier
+		);
+
+	virtual std::string name()const;							//returns the class name, here "specifier_qualifier_list2"
+	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
+	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
+	virtual CAstType typeId()const;								//here returns CAST_TYPE_SPECIFIER_QUALIFIER_LIST2
+	virtual std::string pattern()const;							//returns the pattern, here "[type_specifier,specifier_qualifier_list]"
 	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
 	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
 	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
@@ -6284,6 +6148,7 @@ typedef std::deque<specifier_qualifier_list2_item>::const_iterator specifier_qua
 
 // FORWARD DECLARATION
 class external_declaration;
+
 /*------------------------------------------------------------*\
  							        
   item class translation_unit_item                              
@@ -6329,6 +6194,8 @@ private:
 	typedef ItemsListType::const_iterator CItemsListIter;
 	ItemsListType _items;
 public:
+//ASDFG
+	
 	translation_unit
 		(
 			std::string _arg_s_matchedPattern,
@@ -6420,6 +6287,7 @@ public:
 
 // FORWARD DECLARATION
 class initializer;
+
 /*------------------------------------------------------------*\
  							        
   item class initializer_list_item                              
@@ -6465,6 +6333,8 @@ private:
 	typedef ItemsListType::const_iterator CItemsListIter;
 	ItemsListType _items;
 public:
+//ASDFG
+	
 	initializer_list
 		(
 			std::string _arg_s_matchedPattern,
@@ -6510,6 +6380,7 @@ typedef std::deque<initializer_list_item>::const_iterator initializer_list_const
 
 // FORWARD DECLARATION
 class statement;
+
 /*------------------------------------------------------------*\
  							        
   item class statement_list_item                              
@@ -6555,6 +6426,8 @@ private:
 	typedef ItemsListType::const_iterator CItemsListIter;
 	ItemsListType _items;
 public:
+//ASDFG
+	
 	statement_list
 		(
 			std::string _arg_s_matchedPattern,
@@ -6600,6 +6473,7 @@ typedef std::deque<statement_list_item>::const_iterator statement_list_const_ite
 
 // FORWARD DECLARATION
 class assignment_expression;
+
 /*------------------------------------------------------------*\
  							        
   item class expression_item                              
@@ -6645,6 +6519,8 @@ private:
 	typedef ItemsListType::const_iterator CItemsListIter;
 	ItemsListType _items;
 public:
+//ASDFG
+	
 	expression
 		(
 			std::string _arg_s_matchedPattern,

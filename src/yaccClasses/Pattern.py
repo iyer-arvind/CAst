@@ -40,6 +40,8 @@ class Pattern(list):
 					repList.append(i)
 			return True,repList
 		return False,None
+
+		
 				
 		
 	def __repr__(self):

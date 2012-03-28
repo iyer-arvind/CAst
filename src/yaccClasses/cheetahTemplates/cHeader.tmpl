@@ -134,6 +134,8 @@ $baseClassCoder($cls)
 #for $t,$n,$p,$v,$i,$v1 in $cls.parameters:
 class $t;
 #end for
+
+#if len($cls.constructor.initializers)==1:
 /*------------------------------------------------------------*\
  							        
   item class ${cls.className}_item                              
@@ -175,6 +177,9 @@ public:
 	
 	
 };
+#else
+//QWERTY
+#end if
 /*------------------------------------------------------------*\
  							        
   main class ${cls.className}                         
@@ -194,12 +199,16 @@ private:
 	typedef ItemsListType::const_iterator CItemsListIter;
 	ItemsListType _items;
 public:
+//ASDFG
+#for $ii in $cls.constructor.initParameters
+	
 	$cls.className
 		(
 			std::string _arg_s_matchedPattern,
-#echo ",\n".join(["\t\t\t%s *_arg_%s"%(t,n) for t,n,p,v,i,v1 in $cls.parameters if i in $cls.constructor.init_includedParameterIndices])
+#echo ",\n".join(["\t\t\t%s *_arg_%s"%(t,n) for t,n in $ii])
 
 		);
+#end for
 
 	void append
 		(

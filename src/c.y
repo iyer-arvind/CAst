@@ -114,7 +114,7 @@ unary_expression
 
 conditional_expression
 	:logical_or_expression '?' expression ':' conditional_expression                    {RULE_MARKER(      "conditional_expression");CAST_PTR(conditional_expression,$<_t_conditional_expression>5)->append("[logical_or_expression,'?',expression,':',conditional_expression]", $<_t_logical_or_expression>1, $<_t_expression>3);$<_t_conditional_expression>$=$<_t_conditional_expression>5;}
-	|logical_or_expression                                                              {RULE_MARKER(      "conditional_expression");$<_t_conditional_expression>$=new CAst::conditional_expression("[logical_or_expression]",$<_t_logical_or_expression>1);std::cerr<<($<_t_conditional_expression>$);}
+	|logical_or_expression                                                              {RULE_MARKER(      "conditional_expression");$<_t_conditional_expression>$=new CAst::conditional_expression("[logical_or_expression]",$<_t_logical_or_expression>1, NULL);std::cerr<<($<_t_conditional_expression>$);}
 	;
 
 
@@ -182,7 +182,7 @@ iteration_statement
 additive_expression
 	:additive_expression '+' multiplicative_expression                                  {RULE_MARKER(         "additive_expression");CAST_PTR(additive_expression,$<_t_additive_expression>1)->append("[additive_expression,'+',multiplicative_expression]", CAst::GetToken('+',$<_t_str>2), $<_t_multiplicative_expression>3);$<_t_additive_expression>$=$<_t_additive_expression>1;}
 	|additive_expression '-' multiplicative_expression                                  {RULE_MARKER(         "additive_expression");CAST_PTR(additive_expression,$<_t_additive_expression>1)->append("[additive_expression,'-',multiplicative_expression]", CAst::GetToken('+',$<_t_str>2), $<_t_multiplicative_expression>3);$<_t_additive_expression>$=$<_t_additive_expression>1;}
-	|multiplicative_expression                                                          {RULE_MARKER(         "additive_expression");$<_t_additive_expression>$=new CAst::additive_expression("[multiplicative_expression]",$<_t_multiplicative_expression>1);std::cerr<<($<_t_additive_expression>$);}
+	|multiplicative_expression                                                          {RULE_MARKER(         "additive_expression");$<_t_additive_expression>$=new CAst::additive_expression("[multiplicative_expression]",NULL, $<_t_multiplicative_expression>1);std::cerr<<($<_t_additive_expression>$);}
 	;
 
 
@@ -303,7 +303,7 @@ relational_expression
 	|relational_expression '>' shift_expression                                         {RULE_MARKER(       "relational_expression");CAST_PTR(relational_expression,$<_t_relational_expression>1)->append("[relational_expression,'>',shift_expression]", CAst::GetToken('<',$<_t_str>2), $<_t_shift_expression>3);$<_t_relational_expression>$=$<_t_relational_expression>1;}
 	|relational_expression LE_OP shift_expression                                       {RULE_MARKER(       "relational_expression");CAST_PTR(relational_expression,$<_t_relational_expression>1)->append("[relational_expression,LE_OP,shift_expression]", CAst::GetToken('<',$<_t_str>2), $<_t_shift_expression>3);$<_t_relational_expression>$=$<_t_relational_expression>1;}
 	|relational_expression GE_OP shift_expression                                       {RULE_MARKER(       "relational_expression");CAST_PTR(relational_expression,$<_t_relational_expression>1)->append("[relational_expression,GE_OP,shift_expression]", CAst::GetToken('<',$<_t_str>2), $<_t_shift_expression>3);$<_t_relational_expression>$=$<_t_relational_expression>1;}
-	|shift_expression                                                                   {RULE_MARKER(       "relational_expression");$<_t_relational_expression>$=new CAst::relational_expression("[shift_expression]",$<_t_shift_expression>1);std::cerr<<($<_t_relational_expression>$);}
+	|shift_expression                                                                   {RULE_MARKER(       "relational_expression");$<_t_relational_expression>$=new CAst::relational_expression("[shift_expression]",NULL, $<_t_shift_expression>1);std::cerr<<($<_t_relational_expression>$);}
 	;
 
 
@@ -342,7 +342,7 @@ multiplicative_expression
 	:multiplicative_expression '*' cast_expression                                      {RULE_MARKER(   "multiplicative_expression");CAST_PTR(multiplicative_expression,$<_t_multiplicative_expression>1)->append("[multiplicative_expression,'*',cast_expression]", CAst::GetToken('*',$<_t_str>2), $<_t_cast_expression>3);$<_t_multiplicative_expression>$=$<_t_multiplicative_expression>1;}
 	|multiplicative_expression '/' cast_expression                                      {RULE_MARKER(   "multiplicative_expression");CAST_PTR(multiplicative_expression,$<_t_multiplicative_expression>1)->append("[multiplicative_expression,'/',cast_expression]", CAst::GetToken('*',$<_t_str>2), $<_t_cast_expression>3);$<_t_multiplicative_expression>$=$<_t_multiplicative_expression>1;}
 	|multiplicative_expression '%' cast_expression                                      {RULE_MARKER(   "multiplicative_expression");CAST_PTR(multiplicative_expression,$<_t_multiplicative_expression>1)->append("[multiplicative_expression,'%',cast_expression]", CAst::GetToken('*',$<_t_str>2), $<_t_cast_expression>3);$<_t_multiplicative_expression>$=$<_t_multiplicative_expression>1;}
-	|cast_expression                                                                    {RULE_MARKER(   "multiplicative_expression");$<_t_multiplicative_expression>$=new CAst::multiplicative_expression("[cast_expression]",$<_t_cast_expression>1);std::cerr<<($<_t_multiplicative_expression>$);}
+	|cast_expression                                                                    {RULE_MARKER(   "multiplicative_expression");$<_t_multiplicative_expression>$=new CAst::multiplicative_expression("[cast_expression]",NULL, $<_t_cast_expression>1);std::cerr<<($<_t_multiplicative_expression>$);}
 	;
 
 
@@ -374,7 +374,7 @@ direct_abstract_declarator
 equality_expression
 	:equality_expression EQ_OP relational_expression                                    {RULE_MARKER(         "equality_expression");CAST_PTR(equality_expression,$<_t_equality_expression>1)->append("[equality_expression,EQ_OP,relational_expression]", CAst::GetToken(EQ_OP,$<_t_str>2), $<_t_relational_expression>3);$<_t_equality_expression>$=$<_t_equality_expression>1;}
 	|equality_expression NE_OP relational_expression                                    {RULE_MARKER(         "equality_expression");CAST_PTR(equality_expression,$<_t_equality_expression>1)->append("[equality_expression,NE_OP,relational_expression]", CAst::GetToken(EQ_OP,$<_t_str>2), $<_t_relational_expression>3);$<_t_equality_expression>$=$<_t_equality_expression>1;}
-	|relational_expression                                                              {RULE_MARKER(         "equality_expression");$<_t_equality_expression>$=new CAst::equality_expression("[relational_expression]",$<_t_relational_expression>1);std::cerr<<($<_t_equality_expression>$);}
+	|relational_expression                                                              {RULE_MARKER(         "equality_expression");$<_t_equality_expression>$=new CAst::equality_expression("[relational_expression]",NULL, $<_t_relational_expression>1);std::cerr<<($<_t_equality_expression>$);}
 	;
 
 
@@ -387,12 +387,12 @@ primary_expression
 
 
 declaration_specifiers
-	:storage_class_specifier declaration_specifiers                                     {RULE_MARKER(     "declaration_specifiers1");CAST_PTR(declaration_specifiers1,$<_t_declaration_specifiers>2)->append("[storage_class_specifier,declaration_specifiers]", $<_t_storage_class_specifier>1);$<_t_declaration_specifiers>$=$<_t_declaration_specifiers>2;}
-	|type_specifier declaration_specifiers                                              {RULE_MARKER(     "declaration_specifiers2");CAST_PTR(declaration_specifiers2,$<_t_declaration_specifiers>2)->append("[type_specifier,declaration_specifiers]", $<_t_type_specifier>1);$<_t_declaration_specifiers>$=$<_t_declaration_specifiers>2;}
-	|type_qualifier declaration_specifiers                                              {RULE_MARKER(     "declaration_specifiers3");CAST_PTR(declaration_specifiers3,$<_t_declaration_specifiers>2)->append("[type_qualifier,declaration_specifiers]", $<_t_type_qualifier>1);$<_t_declaration_specifiers>$=$<_t_declaration_specifiers>2;}
-	|storage_class_specifier                                                            {RULE_MARKER(     "declaration_specifiers1");$<_t_declaration_specifiers>$=new CAst::declaration_specifiers1("[storage_class_specifier]",$<_t_storage_class_specifier>1);std::cerr<<($<_t_declaration_specifiers>$);}
-	|type_specifier                                                                     {RULE_MARKER(     "declaration_specifiers2");$<_t_declaration_specifiers>$=new CAst::declaration_specifiers2("[type_specifier]",$<_t_type_specifier>1);std::cerr<<($<_t_declaration_specifiers>$);}
-	|type_qualifier                                                                     {RULE_MARKER(     "declaration_specifiers3");$<_t_declaration_specifiers>$=new CAst::declaration_specifiers3("[type_qualifier]",$<_t_type_qualifier>1);std::cerr<<($<_t_declaration_specifiers>$);}
+	:storage_class_specifier declaration_specifiers                                     {RULE_MARKER(     "declaration_specifiers3");CAST_PTR(declaration_specifiers3,$<_t_declaration_specifiers>2)->append("[type_qualifier,declaration_specifiers]", $<_t_storage_class_specifier>1);$<_t_declaration_specifiers>$=$<_t_declaration_specifiers>2;}
+	|type_specifier declaration_specifiers                                              {RULE_MARKER(     "declaration_specifiers3");CAST_PTR(declaration_specifiers3,$<_t_declaration_specifiers>2)->append("[type_qualifier,declaration_specifiers]", $<_t_storage_class_specifier>1);$<_t_declaration_specifiers>$=$<_t_declaration_specifiers>2;}
+	|type_qualifier declaration_specifiers                                              {RULE_MARKER(     "declaration_specifiers3");CAST_PTR(declaration_specifiers3,$<_t_declaration_specifiers>2)->append("[type_qualifier,declaration_specifiers]", $<_t_storage_class_specifier>1);$<_t_declaration_specifiers>$=$<_t_declaration_specifiers>2;}
+	|storage_class_specifier                                                            {RULE_MARKER(     "declaration_specifiers3");$<_t_declaration_specifiers>$=new CAst::declaration_specifiers3("[storage_class_specifier]",$<_t_storage_class_specifier>1);std::cerr<<($<_t_declaration_specifiers>$);}
+	|type_specifier                                                                     {RULE_MARKER(     "declaration_specifiers3");$<_t_declaration_specifiers>$=new CAst::declaration_specifiers3("[type_specifier]",NULL);std::cerr<<($<_t_declaration_specifiers>$);}
+	|type_qualifier                                                                     {RULE_MARKER(     "declaration_specifiers3");$<_t_declaration_specifiers>$=new CAst::declaration_specifiers3("[type_qualifier]",NULL);std::cerr<<($<_t_declaration_specifiers>$);}
 	;
 
 
@@ -428,7 +428,7 @@ init_declarator_list
 shift_expression
 	:shift_expression LEFT_OP additive_expression                                       {RULE_MARKER(            "shift_expression");CAST_PTR(shift_expression,$<_t_shift_expression>1)->append("[shift_expression,LEFT_OP,additive_expression]", CAst::GetToken(LEFT_OP,$<_t_str>2), $<_t_additive_expression>3);$<_t_shift_expression>$=$<_t_shift_expression>1;}
 	|shift_expression RIGHT_OP additive_expression                                      {RULE_MARKER(            "shift_expression");CAST_PTR(shift_expression,$<_t_shift_expression>1)->append("[shift_expression,RIGHT_OP,additive_expression]", CAst::GetToken(LEFT_OP,$<_t_str>2), $<_t_additive_expression>3);$<_t_shift_expression>$=$<_t_shift_expression>1;}
-	|additive_expression                                                                {RULE_MARKER(            "shift_expression");$<_t_shift_expression>$=new CAst::shift_expression("[additive_expression]",$<_t_additive_expression>1);std::cerr<<($<_t_shift_expression>$);}
+	|additive_expression                                                                {RULE_MARKER(            "shift_expression");$<_t_shift_expression>$=new CAst::shift_expression("[additive_expression]",NULL, $<_t_additive_expression>1);std::cerr<<($<_t_shift_expression>$);}
 	;
 
 
@@ -501,10 +501,10 @@ declaration_list
 
 
 specifier_qualifier_list
-	:type_specifier specifier_qualifier_list                                            {RULE_MARKER(   "specifier_qualifier_list1");CAST_PTR(specifier_qualifier_list1,$<_t_specifier_qualifier_list>2)->append("[type_specifier,specifier_qualifier_list]", $<_t_type_specifier>1);$<_t_specifier_qualifier_list>$=$<_t_specifier_qualifier_list>2;}
-	|type_qualifier specifier_qualifier_list                                            {RULE_MARKER(   "specifier_qualifier_list2");CAST_PTR(specifier_qualifier_list2,$<_t_specifier_qualifier_list>2)->append("[type_qualifier,specifier_qualifier_list]", $<_t_type_qualifier>1);$<_t_specifier_qualifier_list>$=$<_t_specifier_qualifier_list>2;}
-	|type_specifier                                                                     {RULE_MARKER(   "specifier_qualifier_list1");$<_t_specifier_qualifier_list>$=new CAst::specifier_qualifier_list1("[type_specifier]",$<_t_type_specifier>1);std::cerr<<($<_t_specifier_qualifier_list>$);}
-	|type_qualifier                                                                     {RULE_MARKER(   "specifier_qualifier_list2");$<_t_specifier_qualifier_list>$=new CAst::specifier_qualifier_list2("[type_qualifier]",$<_t_type_qualifier>1);std::cerr<<($<_t_specifier_qualifier_list>$);}
+	:type_specifier specifier_qualifier_list                                            {RULE_MARKER(   "specifier_qualifier_list2");CAST_PTR(specifier_qualifier_list2,$<_t_specifier_qualifier_list>2)->append("[type_qualifier,specifier_qualifier_list]", $<_t_type_specifier>1);$<_t_specifier_qualifier_list>$=$<_t_specifier_qualifier_list>2;}
+	|type_qualifier specifier_qualifier_list                                            {RULE_MARKER(   "specifier_qualifier_list2");CAST_PTR(specifier_qualifier_list2,$<_t_specifier_qualifier_list>2)->append("[type_qualifier,specifier_qualifier_list]", $<_t_type_specifier>1);$<_t_specifier_qualifier_list>$=$<_t_specifier_qualifier_list>2;}
+	|type_specifier                                                                     {RULE_MARKER(   "specifier_qualifier_list2");$<_t_specifier_qualifier_list>$=new CAst::specifier_qualifier_list2("[type_specifier]",$<_t_type_specifier>1);std::cerr<<($<_t_specifier_qualifier_list>$);}
+	|type_qualifier                                                                     {RULE_MARKER(   "specifier_qualifier_list2");$<_t_specifier_qualifier_list>$=new CAst::specifier_qualifier_list2("[type_qualifier]",NULL);std::cerr<<($<_t_specifier_qualifier_list>$);}
 	;
 
 

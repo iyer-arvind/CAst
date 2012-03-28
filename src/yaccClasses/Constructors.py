@@ -235,9 +235,13 @@ class __ListAccumulateConstructor(_Constructor_):
 
 	def _setParameters(self):
 		_Constructor_._setParameters(self)
-		self.init_includedParameterIndices=set()
-		for i in self.initializers:
-			self.init_includedParameterIndices=i.includedParameterIndices.union(self.init_includedParameterIndices)
+		self.initParameters=set()
+		for ini in self.initializers:
+			ini._setParameters()
+			pList=[]
+			for t,n,p,v,i,v1 in ini.parameters:
+				pList.append((t,n))
+			self.initParameters.add(tuple(pList))
 
 
 class __ListInitializeConstructor(_Constructor_):
@@ -257,7 +261,7 @@ class __ListInitializeConstructor(_Constructor_):
 		counts={}
 		n=1
 		for i,p in enumerate(self.pattern):
-			if(i in self.parent.init_includedParameterIndices):
+			if(i in self.parent.includedParameterIndices):
 				t=Token if isinstance(p,Token) else p
 				if(t in counts):	counts[t]+=1
 				else:			counts[t]=0
@@ -284,10 +288,15 @@ class __ListInitializeConstructor(_Constructor_):
 def List(rule,patterns):
 	from Token import Token
 	from Rule  import Rule
+	accumulator=None
 	for p1 in patterns:
 		if(rule in p1):
 			if(p1.constructor is None):
-				p1.setConstructor(__ListAccumulateConstructor(p1,p1.index(rule)))
+				if(accumulator):
+					p1.setConstructor(accumulator)
+				else:
+					p1.setConstructor(__ListAccumulateConstructor(p1,p1.index(rule)))
+					accumulator=p1.constructor
 				p1.constructor.originalPattern=p1
 				for p2 in patterns:
 					if (p1!=p2):

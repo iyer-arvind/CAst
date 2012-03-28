@@ -14419,7 +14419,7 @@ static PyTypeObject  PyCAst_type_primary_expression2 =
 
 /*=====================================================================================================================================*\
 
-        DEFINITION OF declaration_specifiers1_iterator
+        DEFINITION OF declaration_specifiers3_iterator
 
 \*=====================================================================================================================================*/
 
@@ -14433,9 +14433,9 @@ static PyTypeObject  PyCAst_type_primary_expression2 =
 typedef struct
 {
 	PyObject_HEAD
-	CAst::declaration_specifiers1_iterator *_p_cast_object;
-	CAst::declaration_specifiers1 *_p_cast_list_object;
-}PyCAst_object_declaration_specifiers1_iterator;
+	CAst::declaration_specifiers3_iterator *_p_cast_object;
+	CAst::declaration_specifiers3 *_p_cast_list_object;
+}PyCAst_object_declaration_specifiers3_iterator;
 
 
 /*---------------------------------------------------------------------------------------------*\
@@ -14447,7 +14447,7 @@ typedef struct
 
 
 
-static PyMethodDef PyCAst_methods_declaration_specifiers1_iterator [] = {{
+static PyMethodDef PyCAst_methods_declaration_specifiers3_iterator [] = {{
 
 NULL
 }};
@@ -14458,7 +14458,7 @@ NULL
       Class Members
 
 \*---------------------------------------------------------------------------------------------*/
-static PyMemberDef PyCAst_members_declaration_specifiers1_iterator [] = {{NULL}};
+static PyMemberDef PyCAst_members_declaration_specifiers3_iterator [] = {{NULL}};
 
 
 
@@ -14466,8 +14466,8 @@ static PyMemberDef PyCAst_members_declaration_specifiers1_iterator [] = {{NULL}}
 
       Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
-static PyObject * PyCAst_new_declaration_specifiers1_iterator(PyTypeObject *type, PyObject *args, PyObject *kwds);
-static void       PyCAst_delete_declaration_specifiers1_iterator(PyObject *_self);
+static PyObject * PyCAst_new_declaration_specifiers3_iterator(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_declaration_specifiers3_iterator(PyObject *_self);
 
 
 
@@ -14485,7 +14485,7 @@ static void       PyCAst_delete_declaration_specifiers1_iterator(PyObject *_self
 
 
 
-static PyGetSetDef PyCAst_getsetter_declaration_specifiers1_iterator[] = 
+static PyGetSetDef PyCAst_getsetter_declaration_specifiers3_iterator[] = 
 {
 	
 	NULL
@@ -14499,7 +14499,7 @@ static PyGetSetDef PyCAst_getsetter_declaration_specifiers1_iterator[] =
 \*---------------------------------------------------------------------------------------------*/
 
 
-PyObject* PyCAst_iter_next_declaration_specifiers1_iterator(PyObject* self);
+PyObject* PyCAst_iter_next_declaration_specifiers3_iterator(PyObject* self);
 
 /*---------------------------------------------------------------------------------------------*\
 
@@ -14507,14 +14507,14 @@ PyObject* PyCAst_iter_next_declaration_specifiers1_iterator(PyObject* self);
 
 \*---------------------------------------------------------------------------------------------*/
 
-static PyTypeObject  PyCAst_type_declaration_specifiers1_iterator = 
+static PyTypeObject  PyCAst_type_declaration_specifiers3_iterator = 
 {
 	                                PyObject_HEAD_INIT(NULL)
 	/* ob_size -------------*/      0,
-	/* tp_name--------------*/      "CAst.declaration_specifiers1_iterator",
-	/* tp_basicsize---------*/      sizeof(PyCAst_object_declaration_specifiers1_iterator),
+	/* tp_name--------------*/      "CAst.declaration_specifiers3_iterator",
+	/* tp_basicsize---------*/      sizeof(PyCAst_object_declaration_specifiers3_iterator),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_declaration_specifiers1_iterator,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_declaration_specifiers3_iterator,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
@@ -14531,16 +14531,16 @@ static PyTypeObject  PyCAst_type_declaration_specifiers1_iterator =
 	/* tp_setattro----------*/      0,
 	/* tp_as_buffer---------*/      0,
 	/* tp_flags-------------*/      Py_TPFLAGS_DEFAULT,
-	/* tp_doc---------------*/      "Object representing the declaration_specifiers1_iterator",
+	/* tp_doc---------------*/      "Object representing the declaration_specifiers3_iterator",
 	/* tp_traverse----------*/      0,
 	/* tp_clear-------------*/      0,
 	/* tp_richcompare-------*/      0,
 	/* tp_weaklistoffset----*/      0,
 	/* tp_iter--------------*/      0,
-	/* tp_iternext----------*/      (iternextfunc)PyCAst_iter_next_declaration_specifiers1_iterator,
-	/* tp_methods-----------*/      PyCAst_methods_declaration_specifiers1_iterator,
-	/* tp_members-----------*/      PyCAst_members_declaration_specifiers1_iterator,
-	/* tp_getset------------*/      PyCAst_getsetter_declaration_specifiers1_iterator,
+	/* tp_iternext----------*/      (iternextfunc)PyCAst_iter_next_declaration_specifiers3_iterator,
+	/* tp_methods-----------*/      PyCAst_methods_declaration_specifiers3_iterator,
+	/* tp_members-----------*/      PyCAst_members_declaration_specifiers3_iterator,
+	/* tp_getset------------*/      PyCAst_getsetter_declaration_specifiers3_iterator,
 	/* tp_base--------------*/      0,
 	/* tp_dict--------------*/      0,
 	/* tp_descr_get---------*/      0,
@@ -14548,7 +14548,7 @@ static PyTypeObject  PyCAst_type_declaration_specifiers1_iterator =
 	/* tp_dictoffset--------*/      0,
 	/* tp_init--------------*/      0,
 	/* tp_alloc-------------*/      0,
-	/* tp_new---------------*/      PyCAst_new_declaration_specifiers1_iterator,
+	/* tp_new---------------*/      PyCAst_new_declaration_specifiers3_iterator,
 	
 };
 
@@ -14564,7 +14564,7 @@ static PyTypeObject  PyCAst_type_declaration_specifiers1_iterator =
 
 /*=====================================================================================================================================*\
 
-        DEFINITION OF declaration_specifiers1_item
+        DEFINITION OF declaration_specifiers3_item
 
 \*=====================================================================================================================================*/
 
@@ -14578,8 +14578,8 @@ static PyTypeObject  PyCAst_type_declaration_specifiers1_iterator =
 typedef struct
 {
 	PyObject_HEAD
-	CAst::declaration_specifiers1_item *_p_cast_object;
-}PyCAst_object_declaration_specifiers1_item;
+	CAst::declaration_specifiers3_item *_p_cast_object;
+}PyCAst_object_declaration_specifiers3_item;
 
 
 /*---------------------------------------------------------------------------------------------*\
@@ -14591,7 +14591,7 @@ typedef struct
 
 
 
-static PyMethodDef PyCAst_methods_declaration_specifiers1_item [] = {{
+static PyMethodDef PyCAst_methods_declaration_specifiers3_item [] = {{
 
 NULL
 }};
@@ -14602,7 +14602,7 @@ NULL
       Class Members
 
 \*---------------------------------------------------------------------------------------------*/
-static PyMemberDef PyCAst_members_declaration_specifiers1_item [] = {{NULL}};
+static PyMemberDef PyCAst_members_declaration_specifiers3_item [] = {{NULL}};
 
 
 
@@ -14610,8 +14610,8 @@ static PyMemberDef PyCAst_members_declaration_specifiers1_item [] = {{NULL}};
 
       Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
-static PyObject * PyCAst_new_declaration_specifiers1_item(PyTypeObject *type, PyObject *args, PyObject *kwds);
-static void       PyCAst_delete_declaration_specifiers1_item(PyObject *_self);
+static PyObject * PyCAst_new_declaration_specifiers3_item(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_declaration_specifiers3_item(PyObject *_self);
 
 
 
@@ -14622,21 +14622,21 @@ static void       PyCAst_delete_declaration_specifiers1_item(PyObject *_self);
       Class Attribute getters and setters
 
 \*---------------------------------------------------------------------------------------------*/
-static PyObject *PyCAst_getter_declaration_specifiers1_item_ast(PyObject *_self);
+static PyObject *PyCAst_getter_declaration_specifiers3_item_ast(PyObject *_self);
 
-static PyObject *PyCAst_getter_declaration_specifiers1_item_code(PyObject *_self);
+static PyObject *PyCAst_getter_declaration_specifiers3_item_code(PyObject *_self);
 
-static PyObject *PyCAst_getter_declaration_specifiers1_item_storage_class_specifier(PyObject *_self);
-
-
+static PyObject *PyCAst_getter_declaration_specifiers3_item_storage_class_specifier(PyObject *_self);
 
 
 
-static PyGetSetDef PyCAst_getsetter_declaration_specifiers1_item[] = 
+
+
+static PyGetSetDef PyCAst_getsetter_declaration_specifiers3_item[] = 
 {
-	{(char*)"ast", (getter)PyCAst_getter_declaration_specifiers1_item_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
-	{(char*)"code", (getter)PyCAst_getter_declaration_specifiers1_item_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
-	{(char*)"storage_class_specifier", (getter)PyCAst_getter_declaration_specifiers1_item_storage_class_specifier,NULL,(char*)"Parameter storage_class_specifier", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_declaration_specifiers3_item_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_declaration_specifiers3_item_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
+	{(char*)"storage_class_specifier", (getter)PyCAst_getter_declaration_specifiers3_item_storage_class_specifier,NULL,(char*)"Parameter storage_class_specifier", NULL},
 
 	NULL
 };
@@ -14656,14 +14656,14 @@ static PyGetSetDef PyCAst_getsetter_declaration_specifiers1_item[] =
 
 \*---------------------------------------------------------------------------------------------*/
 
-static PyTypeObject  PyCAst_type_declaration_specifiers1_item = 
+static PyTypeObject  PyCAst_type_declaration_specifiers3_item = 
 {
 	                                PyObject_HEAD_INIT(NULL)
 	/* ob_size -------------*/      0,
-	/* tp_name--------------*/      "CAst.declaration_specifiers1_item",
-	/* tp_basicsize---------*/      sizeof(PyCAst_object_declaration_specifiers1_item),
+	/* tp_name--------------*/      "CAst.declaration_specifiers3_item",
+	/* tp_basicsize---------*/      sizeof(PyCAst_object_declaration_specifiers3_item),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_declaration_specifiers1_item,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_declaration_specifiers3_item,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
@@ -14680,16 +14680,16 @@ static PyTypeObject  PyCAst_type_declaration_specifiers1_item =
 	/* tp_setattro----------*/      0,
 	/* tp_as_buffer---------*/      0,
 	/* tp_flags-------------*/      Py_TPFLAGS_DEFAULT,
-	/* tp_doc---------------*/      "Object representing the declaration_specifiers1_item",
+	/* tp_doc---------------*/      "Object representing the declaration_specifiers3_item",
 	/* tp_traverse----------*/      0,
 	/* tp_clear-------------*/      0,
 	/* tp_richcompare-------*/      0,
 	/* tp_weaklistoffset----*/      0,
 	/* tp_iter--------------*/      0,
 	/* tp_iternext----------*/      0,
-	/* tp_methods-----------*/      PyCAst_methods_declaration_specifiers1_item,
-	/* tp_members-----------*/      PyCAst_members_declaration_specifiers1_item,
-	/* tp_getset------------*/      PyCAst_getsetter_declaration_specifiers1_item,
+	/* tp_methods-----------*/      PyCAst_methods_declaration_specifiers3_item,
+	/* tp_members-----------*/      PyCAst_members_declaration_specifiers3_item,
+	/* tp_getset------------*/      PyCAst_getsetter_declaration_specifiers3_item,
 	/* tp_base--------------*/      0,
 	/* tp_dict--------------*/      0,
 	/* tp_descr_get---------*/      0,
@@ -14697,7 +14697,7 @@ static PyTypeObject  PyCAst_type_declaration_specifiers1_item =
 	/* tp_dictoffset--------*/      0,
 	/* tp_init--------------*/      0,
 	/* tp_alloc-------------*/      0,
-	/* tp_new---------------*/      PyCAst_new_declaration_specifiers1_item,
+	/* tp_new---------------*/      PyCAst_new_declaration_specifiers3_item,
 	
 };
 
@@ -14713,7 +14713,7 @@ static PyTypeObject  PyCAst_type_declaration_specifiers1_item =
 
 /*=====================================================================================================================================*\
 
-        DEFINITION OF declaration_specifiers1
+        DEFINITION OF declaration_specifiers3
 
 \*=====================================================================================================================================*/
 
@@ -14727,8 +14727,8 @@ static PyTypeObject  PyCAst_type_declaration_specifiers1_item =
 typedef struct
 {
 	PyObject_HEAD
-	CAst::declaration_specifiers1 *_p_cast_object;
-}PyCAst_object_declaration_specifiers1;
+	CAst::declaration_specifiers3 *_p_cast_object;
+}PyCAst_object_declaration_specifiers3;
 
 
 /*---------------------------------------------------------------------------------------------*\
@@ -14740,7 +14740,7 @@ typedef struct
 
 
 
-static PyMethodDef PyCAst_methods_declaration_specifiers1 [] = {{
+static PyMethodDef PyCAst_methods_declaration_specifiers3 [] = {{
 
 NULL
 }};
@@ -14751,7 +14751,7 @@ NULL
       Class Members
 
 \*---------------------------------------------------------------------------------------------*/
-static PyMemberDef PyCAst_members_declaration_specifiers1 [] = {{NULL}};
+static PyMemberDef PyCAst_members_declaration_specifiers3 [] = {{NULL}};
 
 
 
@@ -14760,9 +14760,9 @@ static PyMemberDef PyCAst_members_declaration_specifiers1 [] = {{NULL}};
       Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
-static PyObject * PyCAst_new_declaration_specifiers1(PyTypeObject *type, PyObject *args, PyObject *kwds);
-static void       PyCAst_delete_declaration_specifiers1(PyObject *_self);
-static int PyCAst_init_declaration_specifiers1(PyCAst_object_declaration_specifiers1 *self, PyObject *args, PyObject *kwds);
+static PyObject * PyCAst_new_declaration_specifiers3(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_declaration_specifiers3(PyObject *_self);
+static int PyCAst_init_declaration_specifiers3(PyCAst_object_declaration_specifiers3 *self, PyObject *args, PyObject *kwds);
 
 
 
@@ -14773,19 +14773,19 @@ static int PyCAst_init_declaration_specifiers1(PyCAst_object_declaration_specifi
       Class Attribute getters and setters
 
 \*---------------------------------------------------------------------------------------------*/
-static PyObject *PyCAst_getter_declaration_specifiers1_ast(PyObject *_self);
+static PyObject *PyCAst_getter_declaration_specifiers3_ast(PyObject *_self);
 
-static PyObject *PyCAst_getter_declaration_specifiers1_code(PyObject *_self);
-
-
+static PyObject *PyCAst_getter_declaration_specifiers3_code(PyObject *_self);
 
 
 
 
-static PyGetSetDef PyCAst_getsetter_declaration_specifiers1[] = 
+
+
+static PyGetSetDef PyCAst_getsetter_declaration_specifiers3[] = 
 {
-	{(char*)"ast", (getter)PyCAst_getter_declaration_specifiers1_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
-	{(char*)"code", (getter)PyCAst_getter_declaration_specifiers1_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_declaration_specifiers3_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_declaration_specifiers3_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	
 	NULL
 };
@@ -14797,18 +14797,18 @@ static PyGetSetDef PyCAst_getsetter_declaration_specifiers1[] =
 
 \*---------------------------------------------------------------------------------------------*/
 
-PyObject* PyCAst_iter_declaration_specifiers1(PyObject* self);
+PyObject* PyCAst_iter_declaration_specifiers3(PyObject* self);
 
 
-Py_ssize_t PyCAst_length_declaration_specifiers1(PyObject *self);
-PyObject* PyCAst_item_declaration_specifiers1(PyObject *self, Py_ssize_t i);
+Py_ssize_t PyCAst_length_declaration_specifiers3(PyObject *self);
+PyObject* PyCAst_item_declaration_specifiers3(PyObject *self, Py_ssize_t i);
 
-static PySequenceMethods PyCAst_sequence_declaration_specifiers1 =
+static PySequenceMethods PyCAst_sequence_declaration_specifiers3 =
 {
-	/*sq_length		*/	(lenfunc)PyCAst_length_declaration_specifiers1,
+	/*sq_length		*/	(lenfunc)PyCAst_length_declaration_specifiers3,
 	/*sq_concat		*/	0,
 	/*sq_repeat		*/	0,
-	/*sq_item		*/	(ssizeargfunc)PyCAst_item_declaration_specifiers1,
+	/*sq_item		*/	(ssizeargfunc)PyCAst_item_declaration_specifiers3,
 	/*sq_slice		*/	0,
 	/*sq_ass_item		*/	0,
 	/*sq_ass_slice		*/	0,
@@ -14822,14 +14822,14 @@ static PySequenceMethods PyCAst_sequence_declaration_specifiers1 =
 
 \*---------------------------------------------------------------------------------------------*/
 
-static PyTypeObject  PyCAst_type_declaration_specifiers1 = 
+static PyTypeObject  PyCAst_type_declaration_specifiers3 = 
 {
 	                                PyObject_HEAD_INIT(NULL)
 	/* ob_size -------------*/      0,
-	/* tp_name--------------*/      "CAst.declaration_specifiers1",
-	/* tp_basicsize---------*/      sizeof(PyCAst_object_declaration_specifiers1),
+	/* tp_name--------------*/      "CAst.declaration_specifiers3",
+	/* tp_basicsize---------*/      sizeof(PyCAst_object_declaration_specifiers3),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_declaration_specifiers1,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_declaration_specifiers3,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
@@ -14837,7 +14837,7 @@ static PyTypeObject  PyCAst_type_declaration_specifiers1 =
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
 	/* tp_as_sequence-------*/      
-&PyCAst_sequence_declaration_specifiers1,
+&PyCAst_sequence_declaration_specifiers3,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -14846,485 +14846,24 @@ static PyTypeObject  PyCAst_type_declaration_specifiers1 =
 	/* tp_setattro----------*/      0,
 	/* tp_as_buffer---------*/      0,
 	/* tp_flags-------------*/      Py_TPFLAGS_DEFAULT,
-	/* tp_doc---------------*/      "Object representing the declaration_specifiers1",
+	/* tp_doc---------------*/      "Object representing the declaration_specifiers3",
 	/* tp_traverse----------*/      0,
 	/* tp_clear-------------*/      0,
 	/* tp_richcompare-------*/      0,
 	/* tp_weaklistoffset----*/      0,
-	/* tp_iter--------------*/      (getiterfunc)PyCAst_iter_declaration_specifiers1,
+	/* tp_iter--------------*/      (getiterfunc)PyCAst_iter_declaration_specifiers3,
 	/* tp_iternext----------*/      0,
-	/* tp_methods-----------*/      PyCAst_methods_declaration_specifiers1,
-	/* tp_members-----------*/      PyCAst_members_declaration_specifiers1,
-	/* tp_getset------------*/      PyCAst_getsetter_declaration_specifiers1,
+	/* tp_methods-----------*/      PyCAst_methods_declaration_specifiers3,
+	/* tp_members-----------*/      PyCAst_members_declaration_specifiers3,
+	/* tp_getset------------*/      PyCAst_getsetter_declaration_specifiers3,
 	/* tp_base--------------*/      0,
 	/* tp_dict--------------*/      0,
 	/* tp_descr_get---------*/      0,
 	/* tp_descr_set---------*/      0,
 	/* tp_dictoffset--------*/      0,
-	/* tp_init--------------*/      (initproc)PyCAst_init_declaration_specifiers1,
+	/* tp_init--------------*/      (initproc)PyCAst_init_declaration_specifiers3,
 	/* tp_alloc-------------*/      0,
-	/* tp_new---------------*/      PyCAst_new_declaration_specifiers1,
-	
-};
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-			
-
-
-
-
-
-
-/*=====================================================================================================================================*\
-
-        DEFINITION OF declaration_specifiers2_iterator
-
-\*=====================================================================================================================================*/
-
-
-/*---------------------------------------------------------------------------------------------*\
-
-      Class Declaration
-
-\*---------------------------------------------------------------------------------------------*/
-
-typedef struct
-{
-	PyObject_HEAD
-	CAst::declaration_specifiers2_iterator *_p_cast_object;
-	CAst::declaration_specifiers2 *_p_cast_list_object;
-}PyCAst_object_declaration_specifiers2_iterator;
-
-
-/*---------------------------------------------------------------------------------------------*\
-
-      Class Methods
-
-\*---------------------------------------------------------------------------------------------*/
-
-
-
-
-static PyMethodDef PyCAst_methods_declaration_specifiers2_iterator [] = {{
-
-NULL
-}};
-
-
-/*---------------------------------------------------------------------------------------------*\
-
-      Class Members
-
-\*---------------------------------------------------------------------------------------------*/
-static PyMemberDef PyCAst_members_declaration_specifiers2_iterator [] = {{NULL}};
-
-
-
-/*---------------------------------------------------------------------------------------------*\
-
-      Class New, Delete 
-\*---------------------------------------------------------------------------------------------*/
-static PyObject * PyCAst_new_declaration_specifiers2_iterator(PyTypeObject *type, PyObject *args, PyObject *kwds);
-static void       PyCAst_delete_declaration_specifiers2_iterator(PyObject *_self);
-
-
-
-
-
-/*---------------------------------------------------------------------------------------------*\
-
-      Class Attribute getters and setters
-
-\*---------------------------------------------------------------------------------------------*/
-
-
-
-
-
-
-
-static PyGetSetDef PyCAst_getsetter_declaration_specifiers2_iterator[] = 
-{
-	
-	NULL
-};
-
-
-/*---------------------------------------------------------------------------------------------*\
-
-      Other Functions
-
-\*---------------------------------------------------------------------------------------------*/
-
-
-PyObject* PyCAst_iter_next_declaration_specifiers2_iterator(PyObject* self);
-
-/*---------------------------------------------------------------------------------------------*\
-
-      Class Type Declaration
-
-\*---------------------------------------------------------------------------------------------*/
-
-static PyTypeObject  PyCAst_type_declaration_specifiers2_iterator = 
-{
-	                                PyObject_HEAD_INIT(NULL)
-	/* ob_size -------------*/      0,
-	/* tp_name--------------*/      "CAst.declaration_specifiers2_iterator",
-	/* tp_basicsize---------*/      sizeof(PyCAst_object_declaration_specifiers2_iterator),
-	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_declaration_specifiers2_iterator,
-	/* tp_print-------------*/      0,
-	/* tp_getattr-----------*/      0,
-	/* tp_setattr-----------*/      0,
-	/* tp_compare-----------*/      0,
-	/* tp_repr--------------*/      0,
-	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      
-0,
-	/* tp_as_mapping--------*/      0,
-	/* tp_hash--------------*/      0,
-	/* tp_call--------------*/      0,
-	/* tp_str---------------*/      0,
-	/* tp_getattro----------*/      0,
-	/* tp_setattro----------*/      0,
-	/* tp_as_buffer---------*/      0,
-	/* tp_flags-------------*/      Py_TPFLAGS_DEFAULT,
-	/* tp_doc---------------*/      "Object representing the declaration_specifiers2_iterator",
-	/* tp_traverse----------*/      0,
-	/* tp_clear-------------*/      0,
-	/* tp_richcompare-------*/      0,
-	/* tp_weaklistoffset----*/      0,
-	/* tp_iter--------------*/      0,
-	/* tp_iternext----------*/      (iternextfunc)PyCAst_iter_next_declaration_specifiers2_iterator,
-	/* tp_methods-----------*/      PyCAst_methods_declaration_specifiers2_iterator,
-	/* tp_members-----------*/      PyCAst_members_declaration_specifiers2_iterator,
-	/* tp_getset------------*/      PyCAst_getsetter_declaration_specifiers2_iterator,
-	/* tp_base--------------*/      0,
-	/* tp_dict--------------*/      0,
-	/* tp_descr_get---------*/      0,
-	/* tp_descr_set---------*/      0,
-	/* tp_dictoffset--------*/      0,
-	/* tp_init--------------*/      0,
-	/* tp_alloc-------------*/      0,
-	/* tp_new---------------*/      PyCAst_new_declaration_specifiers2_iterator,
-	
-};
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-
-
-
-
-/*=====================================================================================================================================*\
-
-        DEFINITION OF declaration_specifiers2_item
-
-\*=====================================================================================================================================*/
-
-
-/*---------------------------------------------------------------------------------------------*\
-
-      Class Declaration
-
-\*---------------------------------------------------------------------------------------------*/
-
-typedef struct
-{
-	PyObject_HEAD
-	CAst::declaration_specifiers2_item *_p_cast_object;
-}PyCAst_object_declaration_specifiers2_item;
-
-
-/*---------------------------------------------------------------------------------------------*\
-
-      Class Methods
-
-\*---------------------------------------------------------------------------------------------*/
-
-
-
-
-static PyMethodDef PyCAst_methods_declaration_specifiers2_item [] = {{
-
-NULL
-}};
-
-
-/*---------------------------------------------------------------------------------------------*\
-
-      Class Members
-
-\*---------------------------------------------------------------------------------------------*/
-static PyMemberDef PyCAst_members_declaration_specifiers2_item [] = {{NULL}};
-
-
-
-/*---------------------------------------------------------------------------------------------*\
-
-      Class New, Delete 
-\*---------------------------------------------------------------------------------------------*/
-static PyObject * PyCAst_new_declaration_specifiers2_item(PyTypeObject *type, PyObject *args, PyObject *kwds);
-static void       PyCAst_delete_declaration_specifiers2_item(PyObject *_self);
-
-
-
-
-
-/*---------------------------------------------------------------------------------------------*\
-
-      Class Attribute getters and setters
-
-\*---------------------------------------------------------------------------------------------*/
-static PyObject *PyCAst_getter_declaration_specifiers2_item_ast(PyObject *_self);
-
-static PyObject *PyCAst_getter_declaration_specifiers2_item_code(PyObject *_self);
-
-static PyObject *PyCAst_getter_declaration_specifiers2_item_type_specifier(PyObject *_self);
-
-
-
-
-
-static PyGetSetDef PyCAst_getsetter_declaration_specifiers2_item[] = 
-{
-	{(char*)"ast", (getter)PyCAst_getter_declaration_specifiers2_item_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
-	{(char*)"code", (getter)PyCAst_getter_declaration_specifiers2_item_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
-	{(char*)"type_specifier", (getter)PyCAst_getter_declaration_specifiers2_item_type_specifier,NULL,(char*)"Parameter type_specifier", NULL},
-
-	NULL
-};
-
-
-/*---------------------------------------------------------------------------------------------*\
-
-      Other Functions
-
-\*---------------------------------------------------------------------------------------------*/
-
-
-
-/*---------------------------------------------------------------------------------------------*\
-
-      Class Type Declaration
-
-\*---------------------------------------------------------------------------------------------*/
-
-static PyTypeObject  PyCAst_type_declaration_specifiers2_item = 
-{
-	                                PyObject_HEAD_INIT(NULL)
-	/* ob_size -------------*/      0,
-	/* tp_name--------------*/      "CAst.declaration_specifiers2_item",
-	/* tp_basicsize---------*/      sizeof(PyCAst_object_declaration_specifiers2_item),
-	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_declaration_specifiers2_item,
-	/* tp_print-------------*/      0,
-	/* tp_getattr-----------*/      0,
-	/* tp_setattr-----------*/      0,
-	/* tp_compare-----------*/      0,
-	/* tp_repr--------------*/      0,
-	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      
-0,
-	/* tp_as_mapping--------*/      0,
-	/* tp_hash--------------*/      0,
-	/* tp_call--------------*/      0,
-	/* tp_str---------------*/      0,
-	/* tp_getattro----------*/      0,
-	/* tp_setattro----------*/      0,
-	/* tp_as_buffer---------*/      0,
-	/* tp_flags-------------*/      Py_TPFLAGS_DEFAULT,
-	/* tp_doc---------------*/      "Object representing the declaration_specifiers2_item",
-	/* tp_traverse----------*/      0,
-	/* tp_clear-------------*/      0,
-	/* tp_richcompare-------*/      0,
-	/* tp_weaklistoffset----*/      0,
-	/* tp_iter--------------*/      0,
-	/* tp_iternext----------*/      0,
-	/* tp_methods-----------*/      PyCAst_methods_declaration_specifiers2_item,
-	/* tp_members-----------*/      PyCAst_members_declaration_specifiers2_item,
-	/* tp_getset------------*/      PyCAst_getsetter_declaration_specifiers2_item,
-	/* tp_base--------------*/      0,
-	/* tp_dict--------------*/      0,
-	/* tp_descr_get---------*/      0,
-	/* tp_descr_set---------*/      0,
-	/* tp_dictoffset--------*/      0,
-	/* tp_init--------------*/      0,
-	/* tp_alloc-------------*/      0,
-	/* tp_new---------------*/      PyCAst_new_declaration_specifiers2_item,
-	
-};
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-
-
-
-
-/*=====================================================================================================================================*\
-
-        DEFINITION OF declaration_specifiers2
-
-\*=====================================================================================================================================*/
-
-
-/*---------------------------------------------------------------------------------------------*\
-
-      Class Declaration
-
-\*---------------------------------------------------------------------------------------------*/
-
-typedef struct
-{
-	PyObject_HEAD
-	CAst::declaration_specifiers2 *_p_cast_object;
-}PyCAst_object_declaration_specifiers2;
-
-
-/*---------------------------------------------------------------------------------------------*\
-
-      Class Methods
-
-\*---------------------------------------------------------------------------------------------*/
-
-
-
-
-static PyMethodDef PyCAst_methods_declaration_specifiers2 [] = {{
-
-NULL
-}};
-
-
-/*---------------------------------------------------------------------------------------------*\
-
-      Class Members
-
-\*---------------------------------------------------------------------------------------------*/
-static PyMemberDef PyCAst_members_declaration_specifiers2 [] = {{NULL}};
-
-
-
-/*---------------------------------------------------------------------------------------------*\
-
-      Class New, Delete and Init
-
-\*---------------------------------------------------------------------------------------------*/
-static PyObject * PyCAst_new_declaration_specifiers2(PyTypeObject *type, PyObject *args, PyObject *kwds);
-static void       PyCAst_delete_declaration_specifiers2(PyObject *_self);
-static int PyCAst_init_declaration_specifiers2(PyCAst_object_declaration_specifiers2 *self, PyObject *args, PyObject *kwds);
-
-
-
-
-
-/*---------------------------------------------------------------------------------------------*\
-
-      Class Attribute getters and setters
-
-\*---------------------------------------------------------------------------------------------*/
-static PyObject *PyCAst_getter_declaration_specifiers2_ast(PyObject *_self);
-
-static PyObject *PyCAst_getter_declaration_specifiers2_code(PyObject *_self);
-
-
-
-
-
-
-static PyGetSetDef PyCAst_getsetter_declaration_specifiers2[] = 
-{
-	{(char*)"ast", (getter)PyCAst_getter_declaration_specifiers2_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
-	{(char*)"code", (getter)PyCAst_getter_declaration_specifiers2_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
-	
-	NULL
-};
-
-
-/*---------------------------------------------------------------------------------------------*\
-
-      Other Functions
-
-\*---------------------------------------------------------------------------------------------*/
-
-PyObject* PyCAst_iter_declaration_specifiers2(PyObject* self);
-
-
-Py_ssize_t PyCAst_length_declaration_specifiers2(PyObject *self);
-PyObject* PyCAst_item_declaration_specifiers2(PyObject *self, Py_ssize_t i);
-
-static PySequenceMethods PyCAst_sequence_declaration_specifiers2 =
-{
-	/*sq_length		*/	(lenfunc)PyCAst_length_declaration_specifiers2,
-	/*sq_concat		*/	0,
-	/*sq_repeat		*/	0,
-	/*sq_item		*/	(ssizeargfunc)PyCAst_item_declaration_specifiers2,
-	/*sq_slice		*/	0,
-	/*sq_ass_item		*/	0,
-	/*sq_ass_slice		*/	0,
-	/*sq_contains		*/	0,
-	/*sq_inplace_concat	*/	0,
-	/*sq_inplace_repeat	*/	0
-};
-/*---------------------------------------------------------------------------------------------*\
-
-      Class Type Declaration
-
-\*---------------------------------------------------------------------------------------------*/
-
-static PyTypeObject  PyCAst_type_declaration_specifiers2 = 
-{
-	                                PyObject_HEAD_INIT(NULL)
-	/* ob_size -------------*/      0,
-	/* tp_name--------------*/      "CAst.declaration_specifiers2",
-	/* tp_basicsize---------*/      sizeof(PyCAst_object_declaration_specifiers2),
-	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_declaration_specifiers2,
-	/* tp_print-------------*/      0,
-	/* tp_getattr-----------*/      0,
-	/* tp_setattr-----------*/      0,
-	/* tp_compare-----------*/      0,
-	/* tp_repr--------------*/      0,
-	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      
-&PyCAst_sequence_declaration_specifiers2,
-	/* tp_as_mapping--------*/      0,
-	/* tp_hash--------------*/      0,
-	/* tp_call--------------*/      0,
-	/* tp_str---------------*/      0,
-	/* tp_getattro----------*/      0,
-	/* tp_setattro----------*/      0,
-	/* tp_as_buffer---------*/      0,
-	/* tp_flags-------------*/      Py_TPFLAGS_DEFAULT,
-	/* tp_doc---------------*/      "Object representing the declaration_specifiers2",
-	/* tp_traverse----------*/      0,
-	/* tp_clear-------------*/      0,
-	/* tp_richcompare-------*/      0,
-	/* tp_weaklistoffset----*/      0,
-	/* tp_iter--------------*/      (getiterfunc)PyCAst_iter_declaration_specifiers2,
-	/* tp_iternext----------*/      0,
-	/* tp_methods-----------*/      PyCAst_methods_declaration_specifiers2,
-	/* tp_members-----------*/      PyCAst_members_declaration_specifiers2,
-	/* tp_getset------------*/      PyCAst_getsetter_declaration_specifiers2,
-	/* tp_base--------------*/      0,
-	/* tp_dict--------------*/      0,
-	/* tp_descr_get---------*/      0,
-	/* tp_descr_set---------*/      0,
-	/* tp_dictoffset--------*/      0,
-	/* tp_init--------------*/      (initproc)PyCAst_init_declaration_specifiers2,
-	/* tp_alloc-------------*/      0,
-	/* tp_new---------------*/      PyCAst_new_declaration_specifiers2,
+	/* tp_new---------------*/      PyCAst_new_declaration_specifiers3,
 	
 };
 
@@ -15548,7 +15087,7 @@ static PyObject *PyCAst_getter_declaration_specifiers3_item_ast(PyObject *_self)
 
 static PyObject *PyCAst_getter_declaration_specifiers3_item_code(PyObject *_self);
 
-static PyObject *PyCAst_getter_declaration_specifiers3_item_type_qualifier(PyObject *_self);
+static PyObject *PyCAst_getter_declaration_specifiers3_item_storage_class_specifier(PyObject *_self);
 
 
 
@@ -15558,7 +15097,468 @@ static PyGetSetDef PyCAst_getsetter_declaration_specifiers3_item[] =
 {
 	{(char*)"ast", (getter)PyCAst_getter_declaration_specifiers3_item_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
 	{(char*)"code", (getter)PyCAst_getter_declaration_specifiers3_item_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
-	{(char*)"type_qualifier", (getter)PyCAst_getter_declaration_specifiers3_item_type_qualifier,NULL,(char*)"Parameter type_qualifier", NULL},
+	{(char*)"storage_class_specifier", (getter)PyCAst_getter_declaration_specifiers3_item_storage_class_specifier,NULL,(char*)"Parameter storage_class_specifier", NULL},
+
+	NULL
+};
+
+
+/*---------------------------------------------------------------------------------------------*\
+
+      Other Functions
+
+\*---------------------------------------------------------------------------------------------*/
+
+
+
+/*---------------------------------------------------------------------------------------------*\
+
+      Class Type Declaration
+
+\*---------------------------------------------------------------------------------------------*/
+
+static PyTypeObject  PyCAst_type_declaration_specifiers3_item = 
+{
+	                                PyObject_HEAD_INIT(NULL)
+	/* ob_size -------------*/      0,
+	/* tp_name--------------*/      "CAst.declaration_specifiers3_item",
+	/* tp_basicsize---------*/      sizeof(PyCAst_object_declaration_specifiers3_item),
+	/* tp_itemsize----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_declaration_specifiers3_item,
+	/* tp_print-------------*/      0,
+	/* tp_getattr-----------*/      0,
+	/* tp_setattr-----------*/      0,
+	/* tp_compare-----------*/      0,
+	/* tp_repr--------------*/      0,
+	/* tp_as_number---------*/      0,
+	/* tp_as_sequence-------*/      
+0,
+	/* tp_as_mapping--------*/      0,
+	/* tp_hash--------------*/      0,
+	/* tp_call--------------*/      0,
+	/* tp_str---------------*/      0,
+	/* tp_getattro----------*/      0,
+	/* tp_setattro----------*/      0,
+	/* tp_as_buffer---------*/      0,
+	/* tp_flags-------------*/      Py_TPFLAGS_DEFAULT,
+	/* tp_doc---------------*/      "Object representing the declaration_specifiers3_item",
+	/* tp_traverse----------*/      0,
+	/* tp_clear-------------*/      0,
+	/* tp_richcompare-------*/      0,
+	/* tp_weaklistoffset----*/      0,
+	/* tp_iter--------------*/      0,
+	/* tp_iternext----------*/      0,
+	/* tp_methods-----------*/      PyCAst_methods_declaration_specifiers3_item,
+	/* tp_members-----------*/      PyCAst_members_declaration_specifiers3_item,
+	/* tp_getset------------*/      PyCAst_getsetter_declaration_specifiers3_item,
+	/* tp_base--------------*/      0,
+	/* tp_dict--------------*/      0,
+	/* tp_descr_get---------*/      0,
+	/* tp_descr_set---------*/      0,
+	/* tp_dictoffset--------*/      0,
+	/* tp_init--------------*/      0,
+	/* tp_alloc-------------*/      0,
+	/* tp_new---------------*/      PyCAst_new_declaration_specifiers3_item,
+	
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+/*=====================================================================================================================================*\
+
+        DEFINITION OF declaration_specifiers3
+
+\*=====================================================================================================================================*/
+
+
+/*---------------------------------------------------------------------------------------------*\
+
+      Class Declaration
+
+\*---------------------------------------------------------------------------------------------*/
+
+typedef struct
+{
+	PyObject_HEAD
+	CAst::declaration_specifiers3 *_p_cast_object;
+}PyCAst_object_declaration_specifiers3;
+
+
+/*---------------------------------------------------------------------------------------------*\
+
+      Class Methods
+
+\*---------------------------------------------------------------------------------------------*/
+
+
+
+
+static PyMethodDef PyCAst_methods_declaration_specifiers3 [] = {{
+
+NULL
+}};
+
+
+/*---------------------------------------------------------------------------------------------*\
+
+      Class Members
+
+\*---------------------------------------------------------------------------------------------*/
+static PyMemberDef PyCAst_members_declaration_specifiers3 [] = {{NULL}};
+
+
+
+/*---------------------------------------------------------------------------------------------*\
+
+      Class New, Delete and Init
+
+\*---------------------------------------------------------------------------------------------*/
+static PyObject * PyCAst_new_declaration_specifiers3(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_declaration_specifiers3(PyObject *_self);
+static int PyCAst_init_declaration_specifiers3(PyCAst_object_declaration_specifiers3 *self, PyObject *args, PyObject *kwds);
+
+
+
+
+
+/*---------------------------------------------------------------------------------------------*\
+
+      Class Attribute getters and setters
+
+\*---------------------------------------------------------------------------------------------*/
+static PyObject *PyCAst_getter_declaration_specifiers3_ast(PyObject *_self);
+
+static PyObject *PyCAst_getter_declaration_specifiers3_code(PyObject *_self);
+
+
+
+
+
+
+static PyGetSetDef PyCAst_getsetter_declaration_specifiers3[] = 
+{
+	{(char*)"ast", (getter)PyCAst_getter_declaration_specifiers3_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_declaration_specifiers3_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
+	
+	NULL
+};
+
+
+/*---------------------------------------------------------------------------------------------*\
+
+      Other Functions
+
+\*---------------------------------------------------------------------------------------------*/
+
+PyObject* PyCAst_iter_declaration_specifiers3(PyObject* self);
+
+
+Py_ssize_t PyCAst_length_declaration_specifiers3(PyObject *self);
+PyObject* PyCAst_item_declaration_specifiers3(PyObject *self, Py_ssize_t i);
+
+static PySequenceMethods PyCAst_sequence_declaration_specifiers3 =
+{
+	/*sq_length		*/	(lenfunc)PyCAst_length_declaration_specifiers3,
+	/*sq_concat		*/	0,
+	/*sq_repeat		*/	0,
+	/*sq_item		*/	(ssizeargfunc)PyCAst_item_declaration_specifiers3,
+	/*sq_slice		*/	0,
+	/*sq_ass_item		*/	0,
+	/*sq_ass_slice		*/	0,
+	/*sq_contains		*/	0,
+	/*sq_inplace_concat	*/	0,
+	/*sq_inplace_repeat	*/	0
+};
+/*---------------------------------------------------------------------------------------------*\
+
+      Class Type Declaration
+
+\*---------------------------------------------------------------------------------------------*/
+
+static PyTypeObject  PyCAst_type_declaration_specifiers3 = 
+{
+	                                PyObject_HEAD_INIT(NULL)
+	/* ob_size -------------*/      0,
+	/* tp_name--------------*/      "CAst.declaration_specifiers3",
+	/* tp_basicsize---------*/      sizeof(PyCAst_object_declaration_specifiers3),
+	/* tp_itemsize----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_declaration_specifiers3,
+	/* tp_print-------------*/      0,
+	/* tp_getattr-----------*/      0,
+	/* tp_setattr-----------*/      0,
+	/* tp_compare-----------*/      0,
+	/* tp_repr--------------*/      0,
+	/* tp_as_number---------*/      0,
+	/* tp_as_sequence-------*/      
+&PyCAst_sequence_declaration_specifiers3,
+	/* tp_as_mapping--------*/      0,
+	/* tp_hash--------------*/      0,
+	/* tp_call--------------*/      0,
+	/* tp_str---------------*/      0,
+	/* tp_getattro----------*/      0,
+	/* tp_setattro----------*/      0,
+	/* tp_as_buffer---------*/      0,
+	/* tp_flags-------------*/      Py_TPFLAGS_DEFAULT,
+	/* tp_doc---------------*/      "Object representing the declaration_specifiers3",
+	/* tp_traverse----------*/      0,
+	/* tp_clear-------------*/      0,
+	/* tp_richcompare-------*/      0,
+	/* tp_weaklistoffset----*/      0,
+	/* tp_iter--------------*/      (getiterfunc)PyCAst_iter_declaration_specifiers3,
+	/* tp_iternext----------*/      0,
+	/* tp_methods-----------*/      PyCAst_methods_declaration_specifiers3,
+	/* tp_members-----------*/      PyCAst_members_declaration_specifiers3,
+	/* tp_getset------------*/      PyCAst_getsetter_declaration_specifiers3,
+	/* tp_base--------------*/      0,
+	/* tp_dict--------------*/      0,
+	/* tp_descr_get---------*/      0,
+	/* tp_descr_set---------*/      0,
+	/* tp_dictoffset--------*/      0,
+	/* tp_init--------------*/      (initproc)PyCAst_init_declaration_specifiers3,
+	/* tp_alloc-------------*/      0,
+	/* tp_new---------------*/      PyCAst_new_declaration_specifiers3,
+	
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+			
+
+
+
+
+
+
+/*=====================================================================================================================================*\
+
+        DEFINITION OF declaration_specifiers3_iterator
+
+\*=====================================================================================================================================*/
+
+
+/*---------------------------------------------------------------------------------------------*\
+
+      Class Declaration
+
+\*---------------------------------------------------------------------------------------------*/
+
+typedef struct
+{
+	PyObject_HEAD
+	CAst::declaration_specifiers3_iterator *_p_cast_object;
+	CAst::declaration_specifiers3 *_p_cast_list_object;
+}PyCAst_object_declaration_specifiers3_iterator;
+
+
+/*---------------------------------------------------------------------------------------------*\
+
+      Class Methods
+
+\*---------------------------------------------------------------------------------------------*/
+
+
+
+
+static PyMethodDef PyCAst_methods_declaration_specifiers3_iterator [] = {{
+
+NULL
+}};
+
+
+/*---------------------------------------------------------------------------------------------*\
+
+      Class Members
+
+\*---------------------------------------------------------------------------------------------*/
+static PyMemberDef PyCAst_members_declaration_specifiers3_iterator [] = {{NULL}};
+
+
+
+/*---------------------------------------------------------------------------------------------*\
+
+      Class New, Delete 
+\*---------------------------------------------------------------------------------------------*/
+static PyObject * PyCAst_new_declaration_specifiers3_iterator(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_declaration_specifiers3_iterator(PyObject *_self);
+
+
+
+
+
+/*---------------------------------------------------------------------------------------------*\
+
+      Class Attribute getters and setters
+
+\*---------------------------------------------------------------------------------------------*/
+
+
+
+
+
+
+
+static PyGetSetDef PyCAst_getsetter_declaration_specifiers3_iterator[] = 
+{
+	
+	NULL
+};
+
+
+/*---------------------------------------------------------------------------------------------*\
+
+      Other Functions
+
+\*---------------------------------------------------------------------------------------------*/
+
+
+PyObject* PyCAst_iter_next_declaration_specifiers3_iterator(PyObject* self);
+
+/*---------------------------------------------------------------------------------------------*\
+
+      Class Type Declaration
+
+\*---------------------------------------------------------------------------------------------*/
+
+static PyTypeObject  PyCAst_type_declaration_specifiers3_iterator = 
+{
+	                                PyObject_HEAD_INIT(NULL)
+	/* ob_size -------------*/      0,
+	/* tp_name--------------*/      "CAst.declaration_specifiers3_iterator",
+	/* tp_basicsize---------*/      sizeof(PyCAst_object_declaration_specifiers3_iterator),
+	/* tp_itemsize----------*/      0,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_declaration_specifiers3_iterator,
+	/* tp_print-------------*/      0,
+	/* tp_getattr-----------*/      0,
+	/* tp_setattr-----------*/      0,
+	/* tp_compare-----------*/      0,
+	/* tp_repr--------------*/      0,
+	/* tp_as_number---------*/      0,
+	/* tp_as_sequence-------*/      
+0,
+	/* tp_as_mapping--------*/      0,
+	/* tp_hash--------------*/      0,
+	/* tp_call--------------*/      0,
+	/* tp_str---------------*/      0,
+	/* tp_getattro----------*/      0,
+	/* tp_setattro----------*/      0,
+	/* tp_as_buffer---------*/      0,
+	/* tp_flags-------------*/      Py_TPFLAGS_DEFAULT,
+	/* tp_doc---------------*/      "Object representing the declaration_specifiers3_iterator",
+	/* tp_traverse----------*/      0,
+	/* tp_clear-------------*/      0,
+	/* tp_richcompare-------*/      0,
+	/* tp_weaklistoffset----*/      0,
+	/* tp_iter--------------*/      0,
+	/* tp_iternext----------*/      (iternextfunc)PyCAst_iter_next_declaration_specifiers3_iterator,
+	/* tp_methods-----------*/      PyCAst_methods_declaration_specifiers3_iterator,
+	/* tp_members-----------*/      PyCAst_members_declaration_specifiers3_iterator,
+	/* tp_getset------------*/      PyCAst_getsetter_declaration_specifiers3_iterator,
+	/* tp_base--------------*/      0,
+	/* tp_dict--------------*/      0,
+	/* tp_descr_get---------*/      0,
+	/* tp_descr_set---------*/      0,
+	/* tp_dictoffset--------*/      0,
+	/* tp_init--------------*/      0,
+	/* tp_alloc-------------*/      0,
+	/* tp_new---------------*/      PyCAst_new_declaration_specifiers3_iterator,
+	
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+/*=====================================================================================================================================*\
+
+        DEFINITION OF declaration_specifiers3_item
+
+\*=====================================================================================================================================*/
+
+
+/*---------------------------------------------------------------------------------------------*\
+
+      Class Declaration
+
+\*---------------------------------------------------------------------------------------------*/
+
+typedef struct
+{
+	PyObject_HEAD
+	CAst::declaration_specifiers3_item *_p_cast_object;
+}PyCAst_object_declaration_specifiers3_item;
+
+
+/*---------------------------------------------------------------------------------------------*\
+
+      Class Methods
+
+\*---------------------------------------------------------------------------------------------*/
+
+
+
+
+static PyMethodDef PyCAst_methods_declaration_specifiers3_item [] = {{
+
+NULL
+}};
+
+
+/*---------------------------------------------------------------------------------------------*\
+
+      Class Members
+
+\*---------------------------------------------------------------------------------------------*/
+static PyMemberDef PyCAst_members_declaration_specifiers3_item [] = {{NULL}};
+
+
+
+/*---------------------------------------------------------------------------------------------*\
+
+      Class New, Delete 
+\*---------------------------------------------------------------------------------------------*/
+static PyObject * PyCAst_new_declaration_specifiers3_item(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_declaration_specifiers3_item(PyObject *_self);
+
+
+
+
+
+/*---------------------------------------------------------------------------------------------*\
+
+      Class Attribute getters and setters
+
+\*---------------------------------------------------------------------------------------------*/
+static PyObject *PyCAst_getter_declaration_specifiers3_item_ast(PyObject *_self);
+
+static PyObject *PyCAst_getter_declaration_specifiers3_item_code(PyObject *_self);
+
+static PyObject *PyCAst_getter_declaration_specifiers3_item_storage_class_specifier(PyObject *_self);
+
+
+
+
+
+static PyGetSetDef PyCAst_getsetter_declaration_specifiers3_item[] = 
+{
+	{(char*)"ast", (getter)PyCAst_getter_declaration_specifiers3_item_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_declaration_specifiers3_item_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
+	{(char*)"storage_class_specifier", (getter)PyCAst_getter_declaration_specifiers3_item_storage_class_specifier,NULL,(char*)"Parameter storage_class_specifier", NULL},
 
 	NULL
 };
@@ -21324,7 +21324,7 @@ static PyTypeObject  PyCAst_type_declaration_list =
 
 /*=====================================================================================================================================*\
 
-        DEFINITION OF specifier_qualifier_list1_iterator
+        DEFINITION OF specifier_qualifier_list2_iterator
 
 \*=====================================================================================================================================*/
 
@@ -21338,9 +21338,9 @@ static PyTypeObject  PyCAst_type_declaration_list =
 typedef struct
 {
 	PyObject_HEAD
-	CAst::specifier_qualifier_list1_iterator *_p_cast_object;
-	CAst::specifier_qualifier_list1 *_p_cast_list_object;
-}PyCAst_object_specifier_qualifier_list1_iterator;
+	CAst::specifier_qualifier_list2_iterator *_p_cast_object;
+	CAst::specifier_qualifier_list2 *_p_cast_list_object;
+}PyCAst_object_specifier_qualifier_list2_iterator;
 
 
 /*---------------------------------------------------------------------------------------------*\
@@ -21352,7 +21352,7 @@ typedef struct
 
 
 
-static PyMethodDef PyCAst_methods_specifier_qualifier_list1_iterator [] = {{
+static PyMethodDef PyCAst_methods_specifier_qualifier_list2_iterator [] = {{
 
 NULL
 }};
@@ -21363,7 +21363,7 @@ NULL
       Class Members
 
 \*---------------------------------------------------------------------------------------------*/
-static PyMemberDef PyCAst_members_specifier_qualifier_list1_iterator [] = {{NULL}};
+static PyMemberDef PyCAst_members_specifier_qualifier_list2_iterator [] = {{NULL}};
 
 
 
@@ -21371,8 +21371,8 @@ static PyMemberDef PyCAst_members_specifier_qualifier_list1_iterator [] = {{NULL
 
       Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
-static PyObject * PyCAst_new_specifier_qualifier_list1_iterator(PyTypeObject *type, PyObject *args, PyObject *kwds);
-static void       PyCAst_delete_specifier_qualifier_list1_iterator(PyObject *_self);
+static PyObject * PyCAst_new_specifier_qualifier_list2_iterator(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_specifier_qualifier_list2_iterator(PyObject *_self);
 
 
 
@@ -21390,7 +21390,7 @@ static void       PyCAst_delete_specifier_qualifier_list1_iterator(PyObject *_se
 
 
 
-static PyGetSetDef PyCAst_getsetter_specifier_qualifier_list1_iterator[] = 
+static PyGetSetDef PyCAst_getsetter_specifier_qualifier_list2_iterator[] = 
 {
 	
 	NULL
@@ -21404,7 +21404,7 @@ static PyGetSetDef PyCAst_getsetter_specifier_qualifier_list1_iterator[] =
 \*---------------------------------------------------------------------------------------------*/
 
 
-PyObject* PyCAst_iter_next_specifier_qualifier_list1_iterator(PyObject* self);
+PyObject* PyCAst_iter_next_specifier_qualifier_list2_iterator(PyObject* self);
 
 /*---------------------------------------------------------------------------------------------*\
 
@@ -21412,14 +21412,14 @@ PyObject* PyCAst_iter_next_specifier_qualifier_list1_iterator(PyObject* self);
 
 \*---------------------------------------------------------------------------------------------*/
 
-static PyTypeObject  PyCAst_type_specifier_qualifier_list1_iterator = 
+static PyTypeObject  PyCAst_type_specifier_qualifier_list2_iterator = 
 {
 	                                PyObject_HEAD_INIT(NULL)
 	/* ob_size -------------*/      0,
-	/* tp_name--------------*/      "CAst.specifier_qualifier_list1_iterator",
-	/* tp_basicsize---------*/      sizeof(PyCAst_object_specifier_qualifier_list1_iterator),
+	/* tp_name--------------*/      "CAst.specifier_qualifier_list2_iterator",
+	/* tp_basicsize---------*/      sizeof(PyCAst_object_specifier_qualifier_list2_iterator),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_specifier_qualifier_list1_iterator,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_specifier_qualifier_list2_iterator,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
@@ -21436,16 +21436,16 @@ static PyTypeObject  PyCAst_type_specifier_qualifier_list1_iterator =
 	/* tp_setattro----------*/      0,
 	/* tp_as_buffer---------*/      0,
 	/* tp_flags-------------*/      Py_TPFLAGS_DEFAULT,
-	/* tp_doc---------------*/      "Object representing the specifier_qualifier_list1_iterator",
+	/* tp_doc---------------*/      "Object representing the specifier_qualifier_list2_iterator",
 	/* tp_traverse----------*/      0,
 	/* tp_clear-------------*/      0,
 	/* tp_richcompare-------*/      0,
 	/* tp_weaklistoffset----*/      0,
 	/* tp_iter--------------*/      0,
-	/* tp_iternext----------*/      (iternextfunc)PyCAst_iter_next_specifier_qualifier_list1_iterator,
-	/* tp_methods-----------*/      PyCAst_methods_specifier_qualifier_list1_iterator,
-	/* tp_members-----------*/      PyCAst_members_specifier_qualifier_list1_iterator,
-	/* tp_getset------------*/      PyCAst_getsetter_specifier_qualifier_list1_iterator,
+	/* tp_iternext----------*/      (iternextfunc)PyCAst_iter_next_specifier_qualifier_list2_iterator,
+	/* tp_methods-----------*/      PyCAst_methods_specifier_qualifier_list2_iterator,
+	/* tp_members-----------*/      PyCAst_members_specifier_qualifier_list2_iterator,
+	/* tp_getset------------*/      PyCAst_getsetter_specifier_qualifier_list2_iterator,
 	/* tp_base--------------*/      0,
 	/* tp_dict--------------*/      0,
 	/* tp_descr_get---------*/      0,
@@ -21453,7 +21453,7 @@ static PyTypeObject  PyCAst_type_specifier_qualifier_list1_iterator =
 	/* tp_dictoffset--------*/      0,
 	/* tp_init--------------*/      0,
 	/* tp_alloc-------------*/      0,
-	/* tp_new---------------*/      PyCAst_new_specifier_qualifier_list1_iterator,
+	/* tp_new---------------*/      PyCAst_new_specifier_qualifier_list2_iterator,
 	
 };
 
@@ -21469,7 +21469,7 @@ static PyTypeObject  PyCAst_type_specifier_qualifier_list1_iterator =
 
 /*=====================================================================================================================================*\
 
-        DEFINITION OF specifier_qualifier_list1_item
+        DEFINITION OF specifier_qualifier_list2_item
 
 \*=====================================================================================================================================*/
 
@@ -21483,8 +21483,8 @@ static PyTypeObject  PyCAst_type_specifier_qualifier_list1_iterator =
 typedef struct
 {
 	PyObject_HEAD
-	CAst::specifier_qualifier_list1_item *_p_cast_object;
-}PyCAst_object_specifier_qualifier_list1_item;
+	CAst::specifier_qualifier_list2_item *_p_cast_object;
+}PyCAst_object_specifier_qualifier_list2_item;
 
 
 /*---------------------------------------------------------------------------------------------*\
@@ -21496,7 +21496,7 @@ typedef struct
 
 
 
-static PyMethodDef PyCAst_methods_specifier_qualifier_list1_item [] = {{
+static PyMethodDef PyCAst_methods_specifier_qualifier_list2_item [] = {{
 
 NULL
 }};
@@ -21507,7 +21507,7 @@ NULL
       Class Members
 
 \*---------------------------------------------------------------------------------------------*/
-static PyMemberDef PyCAst_members_specifier_qualifier_list1_item [] = {{NULL}};
+static PyMemberDef PyCAst_members_specifier_qualifier_list2_item [] = {{NULL}};
 
 
 
@@ -21515,8 +21515,8 @@ static PyMemberDef PyCAst_members_specifier_qualifier_list1_item [] = {{NULL}};
 
       Class New, Delete 
 \*---------------------------------------------------------------------------------------------*/
-static PyObject * PyCAst_new_specifier_qualifier_list1_item(PyTypeObject *type, PyObject *args, PyObject *kwds);
-static void       PyCAst_delete_specifier_qualifier_list1_item(PyObject *_self);
+static PyObject * PyCAst_new_specifier_qualifier_list2_item(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_specifier_qualifier_list2_item(PyObject *_self);
 
 
 
@@ -21527,21 +21527,21 @@ static void       PyCAst_delete_specifier_qualifier_list1_item(PyObject *_self);
       Class Attribute getters and setters
 
 \*---------------------------------------------------------------------------------------------*/
-static PyObject *PyCAst_getter_specifier_qualifier_list1_item_ast(PyObject *_self);
+static PyObject *PyCAst_getter_specifier_qualifier_list2_item_ast(PyObject *_self);
 
-static PyObject *PyCAst_getter_specifier_qualifier_list1_item_code(PyObject *_self);
+static PyObject *PyCAst_getter_specifier_qualifier_list2_item_code(PyObject *_self);
 
-static PyObject *PyCAst_getter_specifier_qualifier_list1_item_type_specifier(PyObject *_self);
-
-
+static PyObject *PyCAst_getter_specifier_qualifier_list2_item_type_specifier(PyObject *_self);
 
 
 
-static PyGetSetDef PyCAst_getsetter_specifier_qualifier_list1_item[] = 
+
+
+static PyGetSetDef PyCAst_getsetter_specifier_qualifier_list2_item[] = 
 {
-	{(char*)"ast", (getter)PyCAst_getter_specifier_qualifier_list1_item_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
-	{(char*)"code", (getter)PyCAst_getter_specifier_qualifier_list1_item_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
-	{(char*)"type_specifier", (getter)PyCAst_getter_specifier_qualifier_list1_item_type_specifier,NULL,(char*)"Parameter type_specifier", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_specifier_qualifier_list2_item_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_specifier_qualifier_list2_item_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
+	{(char*)"type_specifier", (getter)PyCAst_getter_specifier_qualifier_list2_item_type_specifier,NULL,(char*)"Parameter type_specifier", NULL},
 
 	NULL
 };
@@ -21561,14 +21561,14 @@ static PyGetSetDef PyCAst_getsetter_specifier_qualifier_list1_item[] =
 
 \*---------------------------------------------------------------------------------------------*/
 
-static PyTypeObject  PyCAst_type_specifier_qualifier_list1_item = 
+static PyTypeObject  PyCAst_type_specifier_qualifier_list2_item = 
 {
 	                                PyObject_HEAD_INIT(NULL)
 	/* ob_size -------------*/      0,
-	/* tp_name--------------*/      "CAst.specifier_qualifier_list1_item",
-	/* tp_basicsize---------*/      sizeof(PyCAst_object_specifier_qualifier_list1_item),
+	/* tp_name--------------*/      "CAst.specifier_qualifier_list2_item",
+	/* tp_basicsize---------*/      sizeof(PyCAst_object_specifier_qualifier_list2_item),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_specifier_qualifier_list1_item,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_specifier_qualifier_list2_item,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
@@ -21585,16 +21585,16 @@ static PyTypeObject  PyCAst_type_specifier_qualifier_list1_item =
 	/* tp_setattro----------*/      0,
 	/* tp_as_buffer---------*/      0,
 	/* tp_flags-------------*/      Py_TPFLAGS_DEFAULT,
-	/* tp_doc---------------*/      "Object representing the specifier_qualifier_list1_item",
+	/* tp_doc---------------*/      "Object representing the specifier_qualifier_list2_item",
 	/* tp_traverse----------*/      0,
 	/* tp_clear-------------*/      0,
 	/* tp_richcompare-------*/      0,
 	/* tp_weaklistoffset----*/      0,
 	/* tp_iter--------------*/      0,
 	/* tp_iternext----------*/      0,
-	/* tp_methods-----------*/      PyCAst_methods_specifier_qualifier_list1_item,
-	/* tp_members-----------*/      PyCAst_members_specifier_qualifier_list1_item,
-	/* tp_getset------------*/      PyCAst_getsetter_specifier_qualifier_list1_item,
+	/* tp_methods-----------*/      PyCAst_methods_specifier_qualifier_list2_item,
+	/* tp_members-----------*/      PyCAst_members_specifier_qualifier_list2_item,
+	/* tp_getset------------*/      PyCAst_getsetter_specifier_qualifier_list2_item,
 	/* tp_base--------------*/      0,
 	/* tp_dict--------------*/      0,
 	/* tp_descr_get---------*/      0,
@@ -21602,7 +21602,7 @@ static PyTypeObject  PyCAst_type_specifier_qualifier_list1_item =
 	/* tp_dictoffset--------*/      0,
 	/* tp_init--------------*/      0,
 	/* tp_alloc-------------*/      0,
-	/* tp_new---------------*/      PyCAst_new_specifier_qualifier_list1_item,
+	/* tp_new---------------*/      PyCAst_new_specifier_qualifier_list2_item,
 	
 };
 
@@ -21618,7 +21618,7 @@ static PyTypeObject  PyCAst_type_specifier_qualifier_list1_item =
 
 /*=====================================================================================================================================*\
 
-        DEFINITION OF specifier_qualifier_list1
+        DEFINITION OF specifier_qualifier_list2
 
 \*=====================================================================================================================================*/
 
@@ -21632,8 +21632,8 @@ static PyTypeObject  PyCAst_type_specifier_qualifier_list1_item =
 typedef struct
 {
 	PyObject_HEAD
-	CAst::specifier_qualifier_list1 *_p_cast_object;
-}PyCAst_object_specifier_qualifier_list1;
+	CAst::specifier_qualifier_list2 *_p_cast_object;
+}PyCAst_object_specifier_qualifier_list2;
 
 
 /*---------------------------------------------------------------------------------------------*\
@@ -21645,7 +21645,7 @@ typedef struct
 
 
 
-static PyMethodDef PyCAst_methods_specifier_qualifier_list1 [] = {{
+static PyMethodDef PyCAst_methods_specifier_qualifier_list2 [] = {{
 
 NULL
 }};
@@ -21656,7 +21656,7 @@ NULL
       Class Members
 
 \*---------------------------------------------------------------------------------------------*/
-static PyMemberDef PyCAst_members_specifier_qualifier_list1 [] = {{NULL}};
+static PyMemberDef PyCAst_members_specifier_qualifier_list2 [] = {{NULL}};
 
 
 
@@ -21665,9 +21665,9 @@ static PyMemberDef PyCAst_members_specifier_qualifier_list1 [] = {{NULL}};
       Class New, Delete and Init
 
 \*---------------------------------------------------------------------------------------------*/
-static PyObject * PyCAst_new_specifier_qualifier_list1(PyTypeObject *type, PyObject *args, PyObject *kwds);
-static void       PyCAst_delete_specifier_qualifier_list1(PyObject *_self);
-static int PyCAst_init_specifier_qualifier_list1(PyCAst_object_specifier_qualifier_list1 *self, PyObject *args, PyObject *kwds);
+static PyObject * PyCAst_new_specifier_qualifier_list2(PyTypeObject *type, PyObject *args, PyObject *kwds);
+static void       PyCAst_delete_specifier_qualifier_list2(PyObject *_self);
+static int PyCAst_init_specifier_qualifier_list2(PyCAst_object_specifier_qualifier_list2 *self, PyObject *args, PyObject *kwds);
 
 
 
@@ -21678,19 +21678,19 @@ static int PyCAst_init_specifier_qualifier_list1(PyCAst_object_specifier_qualifi
       Class Attribute getters and setters
 
 \*---------------------------------------------------------------------------------------------*/
-static PyObject *PyCAst_getter_specifier_qualifier_list1_ast(PyObject *_self);
+static PyObject *PyCAst_getter_specifier_qualifier_list2_ast(PyObject *_self);
 
-static PyObject *PyCAst_getter_specifier_qualifier_list1_code(PyObject *_self);
-
-
+static PyObject *PyCAst_getter_specifier_qualifier_list2_code(PyObject *_self);
 
 
 
 
-static PyGetSetDef PyCAst_getsetter_specifier_qualifier_list1[] = 
+
+
+static PyGetSetDef PyCAst_getsetter_specifier_qualifier_list2[] = 
 {
-	{(char*)"ast", (getter)PyCAst_getter_specifier_qualifier_list1_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
-	{(char*)"code", (getter)PyCAst_getter_specifier_qualifier_list1_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
+	{(char*)"ast", (getter)PyCAst_getter_specifier_qualifier_list2_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
+	{(char*)"code", (getter)PyCAst_getter_specifier_qualifier_list2_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
 	
 	NULL
 };
@@ -21702,18 +21702,18 @@ static PyGetSetDef PyCAst_getsetter_specifier_qualifier_list1[] =
 
 \*---------------------------------------------------------------------------------------------*/
 
-PyObject* PyCAst_iter_specifier_qualifier_list1(PyObject* self);
+PyObject* PyCAst_iter_specifier_qualifier_list2(PyObject* self);
 
 
-Py_ssize_t PyCAst_length_specifier_qualifier_list1(PyObject *self);
-PyObject* PyCAst_item_specifier_qualifier_list1(PyObject *self, Py_ssize_t i);
+Py_ssize_t PyCAst_length_specifier_qualifier_list2(PyObject *self);
+PyObject* PyCAst_item_specifier_qualifier_list2(PyObject *self, Py_ssize_t i);
 
-static PySequenceMethods PyCAst_sequence_specifier_qualifier_list1 =
+static PySequenceMethods PyCAst_sequence_specifier_qualifier_list2 =
 {
-	/*sq_length		*/	(lenfunc)PyCAst_length_specifier_qualifier_list1,
+	/*sq_length		*/	(lenfunc)PyCAst_length_specifier_qualifier_list2,
 	/*sq_concat		*/	0,
 	/*sq_repeat		*/	0,
-	/*sq_item		*/	(ssizeargfunc)PyCAst_item_specifier_qualifier_list1,
+	/*sq_item		*/	(ssizeargfunc)PyCAst_item_specifier_qualifier_list2,
 	/*sq_slice		*/	0,
 	/*sq_ass_item		*/	0,
 	/*sq_ass_slice		*/	0,
@@ -21727,14 +21727,14 @@ static PySequenceMethods PyCAst_sequence_specifier_qualifier_list1 =
 
 \*---------------------------------------------------------------------------------------------*/
 
-static PyTypeObject  PyCAst_type_specifier_qualifier_list1 = 
+static PyTypeObject  PyCAst_type_specifier_qualifier_list2 = 
 {
 	                                PyObject_HEAD_INIT(NULL)
 	/* ob_size -------------*/      0,
-	/* tp_name--------------*/      "CAst.specifier_qualifier_list1",
-	/* tp_basicsize---------*/      sizeof(PyCAst_object_specifier_qualifier_list1),
+	/* tp_name--------------*/      "CAst.specifier_qualifier_list2",
+	/* tp_basicsize---------*/      sizeof(PyCAst_object_specifier_qualifier_list2),
 	/* tp_itemsize----------*/      0,
-	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_specifier_qualifier_list1,
+	/* tp_dealloc-----------*/      (destructor)PyCAst_delete_specifier_qualifier_list2,
 	/* tp_print-------------*/      0,
 	/* tp_getattr-----------*/      0,
 	/* tp_setattr-----------*/      0,
@@ -21742,7 +21742,7 @@ static PyTypeObject  PyCAst_type_specifier_qualifier_list1 =
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
 	/* tp_as_sequence-------*/      
-&PyCAst_sequence_specifier_qualifier_list1,
+&PyCAst_sequence_specifier_qualifier_list2,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,
@@ -21751,24 +21751,24 @@ static PyTypeObject  PyCAst_type_specifier_qualifier_list1 =
 	/* tp_setattro----------*/      0,
 	/* tp_as_buffer---------*/      0,
 	/* tp_flags-------------*/      Py_TPFLAGS_DEFAULT,
-	/* tp_doc---------------*/      "Object representing the specifier_qualifier_list1",
+	/* tp_doc---------------*/      "Object representing the specifier_qualifier_list2",
 	/* tp_traverse----------*/      0,
 	/* tp_clear-------------*/      0,
 	/* tp_richcompare-------*/      0,
 	/* tp_weaklistoffset----*/      0,
-	/* tp_iter--------------*/      (getiterfunc)PyCAst_iter_specifier_qualifier_list1,
+	/* tp_iter--------------*/      (getiterfunc)PyCAst_iter_specifier_qualifier_list2,
 	/* tp_iternext----------*/      0,
-	/* tp_methods-----------*/      PyCAst_methods_specifier_qualifier_list1,
-	/* tp_members-----------*/      PyCAst_members_specifier_qualifier_list1,
-	/* tp_getset------------*/      PyCAst_getsetter_specifier_qualifier_list1,
+	/* tp_methods-----------*/      PyCAst_methods_specifier_qualifier_list2,
+	/* tp_members-----------*/      PyCAst_members_specifier_qualifier_list2,
+	/* tp_getset------------*/      PyCAst_getsetter_specifier_qualifier_list2,
 	/* tp_base--------------*/      0,
 	/* tp_dict--------------*/      0,
 	/* tp_descr_get---------*/      0,
 	/* tp_descr_set---------*/      0,
 	/* tp_dictoffset--------*/      0,
-	/* tp_init--------------*/      (initproc)PyCAst_init_specifier_qualifier_list1,
+	/* tp_init--------------*/      (initproc)PyCAst_init_specifier_qualifier_list2,
 	/* tp_alloc-------------*/      0,
-	/* tp_new---------------*/      PyCAst_new_specifier_qualifier_list1,
+	/* tp_new---------------*/      PyCAst_new_specifier_qualifier_list2,
 	
 };
 
@@ -21992,7 +21992,7 @@ static PyObject *PyCAst_getter_specifier_qualifier_list2_item_ast(PyObject *_sel
 
 static PyObject *PyCAst_getter_specifier_qualifier_list2_item_code(PyObject *_self);
 
-static PyObject *PyCAst_getter_specifier_qualifier_list2_item_type_qualifier(PyObject *_self);
+static PyObject *PyCAst_getter_specifier_qualifier_list2_item_type_specifier(PyObject *_self);
 
 
 
@@ -22002,7 +22002,7 @@ static PyGetSetDef PyCAst_getsetter_specifier_qualifier_list2_item[] =
 {
 	{(char*)"ast", (getter)PyCAst_getter_specifier_qualifier_list2_item_ast,NULL,(char*)"Abstract Syntax Tree", NULL},
 	{(char*)"code", (getter)PyCAst_getter_specifier_qualifier_list2_item_code,NULL,(char*)"Code corresponding to this node of Abstract Syntax Tree", NULL},
-	{(char*)"type_qualifier", (getter)PyCAst_getter_specifier_qualifier_list2_item_type_qualifier,NULL,(char*)"Parameter type_qualifier", NULL},
+	{(char*)"type_specifier", (getter)PyCAst_getter_specifier_qualifier_list2_item_type_specifier,NULL,(char*)"Parameter type_specifier", NULL},
 
 	NULL
 };

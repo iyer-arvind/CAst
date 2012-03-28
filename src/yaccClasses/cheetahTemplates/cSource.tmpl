@@ -210,19 +210,19 @@ std::ostream& ${cls.className}_item::codeStream(std::ostream& stream,bool initFl
 {
 	if(initFlag)
 	{
-	#for $i,$r in enumerate($cls.constructor.pattern):
-		#if $i not in $cls.constructor.init_includedParameterIndices:
-			#continue
-		#end if
-		#if $i==$cls.constructor.selfIndex:
-			#continue
-		#end if
-		#if (isinstance($r,Token) and not $r.isValued):
-	stream<<$r.code<<" ";
-		#else:
-	if($cls.constructor.parameterMap[$i][1])$cls.constructor.parameterMap[$i][1]->codeStream(stream);
-		#end if
-	#end for
+##	#for $i,$r in enumerate($cls.constructor.pattern):
+##		#if $i not in $cls.constructor.init_includedParameterIndices:
+##			#continue
+##		#end if
+##		#if $i==$cls.constructor.selfIndex:
+##			#continue
+##		#end if
+##		#if (isinstance($r,Token) and not $r.isValued):
+##	stream<<$r.code<<" ";
+##		#else:
+##	if($cls.constructor.parameterMap[$i][1])$cls.constructor.parameterMap[$i][1]->codeStream(stream);
+##		#end if
+##	#end for
 	}
 	else
 	{
@@ -313,26 +313,26 @@ std::string $cls.className::pattern()const {return "$cls.pattern[1:-1]";}
 
 
 /*construct from elements*/
-$cls.className::$cls.className
-	(
-		std::string _arg_s_matchedPattern,
-#echo ",\n".join([ "\t\t%s *_arg_%s"%(t,n)  for t,n,p,v,i,v1 in $cls.parameters if i in $cls.constructor.init_includedParameterIndices])
-
-	 )
-{
-	LOG("\033[32mCREATING\033[0m $cls.className");
-	${cls.className}_item item(_arg_s_matchedPattern#slurp
-	#for $t,$n,$p,$v,$i,$v1 in $cls.parameters:
-		#if $i != $cls.constructor.selfIndex:
-			#if i in $cls.constructor.init_includedParameterIndices:
-,_arg_$n#slurp
-			#else
-,NULL#slurp
-			#end if
-		#end if
-	#end for
-);
-	_items.push_back(item);
+##$cls.className::$cls.className
+##	(
+##		std::string _arg_s_matchedPattern,
+###echo ",\n".join([ "\t\t%s *_arg_%s"%(t,n)  for t,n,p,v,i,v1 in $cls.parameters if i in $cls.constructor.init_includedParameterIndices])
+##
+##	 )
+##{
+##	LOG("\033[32mCREATING\033[0m $cls.className");
+##	${cls.className}_item item(_arg_s_matchedPattern#slurp
+##	#for $t,$n,$p,$v,$i,$v1 in $cls.parameters:
+##		#if $i != $cls.constructor.selfIndex:
+##			#if i in $cls.constructor.init_includedParameterIndices:
+##,_arg_$n#slurp
+##			#else
+##,NULL#slurp
+##			#end if
+##		#end if
+##	#end for
+##);
+##	_items.push_back(item);
 }
 
 /*$cls.className::append() appends an item to the list of items*/

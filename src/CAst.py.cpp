@@ -371,10 +371,10 @@ static PyObject *PyCAst_getter_type_name_specifier_qualifier_list(PyObject *_sel
 	{
 		Py_RETURN_NONE;
 	}
-	if(_p_parameter->typeId()==CAst::CAST_TYPE_SPECIFIER_QUALIFIER_LIST1)
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_SPECIFIER_QUALIFIER_LIST2)
 	{
-		PyCAst_object_specifier_qualifier_list1 *pyObj=(PyCAst_object_specifier_qualifier_list1*)PyCAst_type_specifier_qualifier_list1.tp_new(&PyCAst_type_specifier_qualifier_list1,NULL,NULL);
-		pyObj->_p_cast_object=new CAst::specifier_qualifier_list1(*dynamic_cast<CAst::specifier_qualifier_list1*>(_p_parameter));
+		PyCAst_object_specifier_qualifier_list2 *pyObj=(PyCAst_object_specifier_qualifier_list2*)PyCAst_type_specifier_qualifier_list2.tp_new(&PyCAst_type_specifier_qualifier_list2,NULL,NULL);
+		pyObj->_p_cast_object=new CAst::specifier_qualifier_list2(*dynamic_cast<CAst::specifier_qualifier_list2*>(_p_parameter));
 		return (PyObject*)pyObj;
 	}
 	if(_p_parameter->typeId()==CAst::CAST_TYPE_SPECIFIER_QUALIFIER_LIST2)
@@ -2203,10 +2203,10 @@ static PyObject *PyCAst_getter_struct_declaration_specifier_qualifier_list(PyObj
 	{
 		Py_RETURN_NONE;
 	}
-	if(_p_parameter->typeId()==CAst::CAST_TYPE_SPECIFIER_QUALIFIER_LIST1)
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_SPECIFIER_QUALIFIER_LIST2)
 	{
-		PyCAst_object_specifier_qualifier_list1 *pyObj=(PyCAst_object_specifier_qualifier_list1*)PyCAst_type_specifier_qualifier_list1.tp_new(&PyCAst_type_specifier_qualifier_list1,NULL,NULL);
-		pyObj->_p_cast_object=new CAst::specifier_qualifier_list1(*dynamic_cast<CAst::specifier_qualifier_list1*>(_p_parameter));
+		PyCAst_object_specifier_qualifier_list2 *pyObj=(PyCAst_object_specifier_qualifier_list2*)PyCAst_type_specifier_qualifier_list2.tp_new(&PyCAst_type_specifier_qualifier_list2,NULL,NULL);
+		pyObj->_p_cast_object=new CAst::specifier_qualifier_list2(*dynamic_cast<CAst::specifier_qualifier_list2*>(_p_parameter));
 		return (PyObject*)pyObj;
 	}
 	if(_p_parameter->typeId()==CAst::CAST_TYPE_SPECIFIER_QUALIFIER_LIST2)
@@ -8007,16 +8007,16 @@ static PyObject *PyCAst_getter_parameter_declaration1_declaration_specifiers(PyO
 	{
 		Py_RETURN_NONE;
 	}
-	if(_p_parameter->typeId()==CAst::CAST_TYPE_DECLARATION_SPECIFIERS1)
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_DECLARATION_SPECIFIERS3)
 	{
-		PyCAst_object_declaration_specifiers1 *pyObj=(PyCAst_object_declaration_specifiers1*)PyCAst_type_declaration_specifiers1.tp_new(&PyCAst_type_declaration_specifiers1,NULL,NULL);
-		pyObj->_p_cast_object=new CAst::declaration_specifiers1(*dynamic_cast<CAst::declaration_specifiers1*>(_p_parameter));
+		PyCAst_object_declaration_specifiers3 *pyObj=(PyCAst_object_declaration_specifiers3*)PyCAst_type_declaration_specifiers3.tp_new(&PyCAst_type_declaration_specifiers3,NULL,NULL);
+		pyObj->_p_cast_object=new CAst::declaration_specifiers3(*dynamic_cast<CAst::declaration_specifiers3*>(_p_parameter));
 		return (PyObject*)pyObj;
 	}
-	if(_p_parameter->typeId()==CAst::CAST_TYPE_DECLARATION_SPECIFIERS2)
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_DECLARATION_SPECIFIERS3)
 	{
-		PyCAst_object_declaration_specifiers2 *pyObj=(PyCAst_object_declaration_specifiers2*)PyCAst_type_declaration_specifiers2.tp_new(&PyCAst_type_declaration_specifiers2,NULL,NULL);
-		pyObj->_p_cast_object=new CAst::declaration_specifiers2(*dynamic_cast<CAst::declaration_specifiers2*>(_p_parameter));
+		PyCAst_object_declaration_specifiers3 *pyObj=(PyCAst_object_declaration_specifiers3*)PyCAst_type_declaration_specifiers3.tp_new(&PyCAst_type_declaration_specifiers3,NULL,NULL);
+		pyObj->_p_cast_object=new CAst::declaration_specifiers3(*dynamic_cast<CAst::declaration_specifiers3*>(_p_parameter));
 		return (PyObject*)pyObj;
 	}
 	if(_p_parameter->typeId()==CAst::CAST_TYPE_DECLARATION_SPECIFIERS3)
@@ -8133,16 +8133,16 @@ static PyObject *PyCAst_getter_parameter_declaration2_declaration_specifiers(PyO
 	{
 		Py_RETURN_NONE;
 	}
-	if(_p_parameter->typeId()==CAst::CAST_TYPE_DECLARATION_SPECIFIERS1)
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_DECLARATION_SPECIFIERS3)
 	{
-		PyCAst_object_declaration_specifiers1 *pyObj=(PyCAst_object_declaration_specifiers1*)PyCAst_type_declaration_specifiers1.tp_new(&PyCAst_type_declaration_specifiers1,NULL,NULL);
-		pyObj->_p_cast_object=new CAst::declaration_specifiers1(*dynamic_cast<CAst::declaration_specifiers1*>(_p_parameter));
+		PyCAst_object_declaration_specifiers3 *pyObj=(PyCAst_object_declaration_specifiers3*)PyCAst_type_declaration_specifiers3.tp_new(&PyCAst_type_declaration_specifiers3,NULL,NULL);
+		pyObj->_p_cast_object=new CAst::declaration_specifiers3(*dynamic_cast<CAst::declaration_specifiers3*>(_p_parameter));
 		return (PyObject*)pyObj;
 	}
-	if(_p_parameter->typeId()==CAst::CAST_TYPE_DECLARATION_SPECIFIERS2)
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_DECLARATION_SPECIFIERS3)
 	{
-		PyCAst_object_declaration_specifiers2 *pyObj=(PyCAst_object_declaration_specifiers2*)PyCAst_type_declaration_specifiers2.tp_new(&PyCAst_type_declaration_specifiers2,NULL,NULL);
-		pyObj->_p_cast_object=new CAst::declaration_specifiers2(*dynamic_cast<CAst::declaration_specifiers2*>(_p_parameter));
+		PyCAst_object_declaration_specifiers3 *pyObj=(PyCAst_object_declaration_specifiers3*)PyCAst_type_declaration_specifiers3.tp_new(&PyCAst_type_declaration_specifiers3,NULL,NULL);
+		pyObj->_p_cast_object=new CAst::declaration_specifiers3(*dynamic_cast<CAst::declaration_specifiers3*>(_p_parameter));
 		return (PyObject*)pyObj;
 	}
 	if(_p_parameter->typeId()==CAst::CAST_TYPE_DECLARATION_SPECIFIERS3)
@@ -9778,7 +9778,7 @@ static PyObject *PyCAst_getter_primary_expression2_token1(PyObject *_self)
 
 /*=====================================================================================================================================*\
 
-        DEFINITION OF declaration_specifiers1_iterator
+        DEFINITION OF declaration_specifiers3_iterator
 
 \*=====================================================================================================================================*/
 
@@ -9788,18 +9788,18 @@ static PyObject *PyCAst_getter_primary_expression2_token1(PyObject *_self)
 
 \*---------------------------------------------------------------------------------------------*/
 
-static PyObject * PyCAst_new_declaration_specifiers1_iterator(PyTypeObject *type, PyObject *args, PyObject *kwds)
+static PyObject * PyCAst_new_declaration_specifiers3_iterator(PyTypeObject *type, PyObject *args, PyObject *kwds)
 {
-    printf("\033[32mnew PyCAst::declaration_specifiers1_iterator\033[0m\n");
-    PyCAst_object_declaration_specifiers1_iterator *self;
-    self = (PyCAst_object_declaration_specifiers1_iterator*)type->tp_alloc(type, 0);
+    printf("\033[32mnew PyCAst::declaration_specifiers3_iterator\033[0m\n");
+    PyCAst_object_declaration_specifiers3_iterator *self;
+    self = (PyCAst_object_declaration_specifiers3_iterator*)type->tp_alloc(type, 0);
     return (PyObject *)self;
 }
 
-static void PyCAst_delete_declaration_specifiers1_iterator(PyObject *_self)
+static void PyCAst_delete_declaration_specifiers3_iterator(PyObject *_self)
 {
-    printf("\033[31mDeleting PyCAst::declaration_specifiers1_iterator\033[0m\n");
-    PyCAst_object_declaration_specifiers1_iterator *self=(PyCAst_object_declaration_specifiers1_iterator*)_self;
+    printf("\033[31mDeleting PyCAst::declaration_specifiers3_iterator\033[0m\n");
+    PyCAst_object_declaration_specifiers3_iterator *self=(PyCAst_object_declaration_specifiers3_iterator*)_self;
     delete self->_p_cast_object;
     self->_p_cast_object=0;
 }
@@ -9820,7 +9820,7 @@ static void PyCAst_delete_declaration_specifiers1_iterator(PyObject *_self)
 
 /*=====================================================================================================================================*\
 
-        DEFINITION OF declaration_specifiers1_item
+        DEFINITION OF declaration_specifiers3_item
 
 \*=====================================================================================================================================*/
 
@@ -9830,18 +9830,18 @@ static void PyCAst_delete_declaration_specifiers1_iterator(PyObject *_self)
 
 \*---------------------------------------------------------------------------------------------*/
 
-static PyObject * PyCAst_new_declaration_specifiers1_item(PyTypeObject *type, PyObject *args, PyObject *kwds)
+static PyObject * PyCAst_new_declaration_specifiers3_item(PyTypeObject *type, PyObject *args, PyObject *kwds)
 {
-    printf("\033[32mnew PyCAst::declaration_specifiers1_item\033[0m\n");
-    PyCAst_object_declaration_specifiers1_item *self;
-    self = (PyCAst_object_declaration_specifiers1_item*)type->tp_alloc(type, 0);
+    printf("\033[32mnew PyCAst::declaration_specifiers3_item\033[0m\n");
+    PyCAst_object_declaration_specifiers3_item *self;
+    self = (PyCAst_object_declaration_specifiers3_item*)type->tp_alloc(type, 0);
     return (PyObject *)self;
 }
 
-static void PyCAst_delete_declaration_specifiers1_item(PyObject *_self)
+static void PyCAst_delete_declaration_specifiers3_item(PyObject *_self)
 {
-    printf("\033[31mDeleting PyCAst::declaration_specifiers1_item\033[0m\n");
-    PyCAst_object_declaration_specifiers1_item *self=(PyCAst_object_declaration_specifiers1_item*)_self;
+    printf("\033[31mDeleting PyCAst::declaration_specifiers3_item\033[0m\n");
+    PyCAst_object_declaration_specifiers3_item *self=(PyCAst_object_declaration_specifiers3_item*)_self;
     delete self->_p_cast_object;
     self->_p_cast_object=0;
 }
@@ -9856,9 +9856,9 @@ static void PyCAst_delete_declaration_specifiers1_item(PyObject *_self)
 
 \*---------------------------------------------------------------------------------------------*/
 
-static PyObject *PyCAst_getter_declaration_specifiers1_item_ast(PyObject *_self)
+static PyObject *PyCAst_getter_declaration_specifiers3_item_ast(PyObject *_self)
 {
-	PyCAst_object_declaration_specifiers1_item *self=(PyCAst_object_declaration_specifiers1_item*)(_self);
+	PyCAst_object_declaration_specifiers3_item *self=(PyCAst_object_declaration_specifiers3_item*)(_self);
 	if(self->_p_cast_object->isList())
 		return PyString_FromString
 		(
@@ -9873,9 +9873,9 @@ static PyObject *PyCAst_getter_declaration_specifiers1_item_ast(PyObject *_self)
 
 }
 
-static PyObject *PyCAst_getter_declaration_specifiers1_item_code(PyObject *_self)
+static PyObject *PyCAst_getter_declaration_specifiers3_item_code(PyObject *_self)
 {
-	PyCAst_object_declaration_specifiers1_item *self=(PyCAst_object_declaration_specifiers1_item*)(_self);
+	PyCAst_object_declaration_specifiers3_item *self=(PyCAst_object_declaration_specifiers3_item*)(_self);
 	if(!self->_p_cast_object)
 		Py_RETURN_NONE;
 	
@@ -9890,7 +9890,7 @@ static PyObject *PyCAst_getter_declaration_specifiers1_item_code(PyObject *_self
 
 /*=====================================================================================================================================*\
 
-        DEFINITION OF declaration_specifiers1
+        DEFINITION OF declaration_specifiers3
 
 \*=====================================================================================================================================*/
 
@@ -9900,24 +9900,24 @@ static PyObject *PyCAst_getter_declaration_specifiers1_item_code(PyObject *_self
 
 \*---------------------------------------------------------------------------------------------*/
 
-static PyObject * PyCAst_new_declaration_specifiers1(PyTypeObject *type, PyObject *args, PyObject *kwds)
+static PyObject * PyCAst_new_declaration_specifiers3(PyTypeObject *type, PyObject *args, PyObject *kwds)
 {
-    printf("\033[32mnew PyCAst::declaration_specifiers1\033[0m\n");
-    PyCAst_object_declaration_specifiers1 *self;
-    self = (PyCAst_object_declaration_specifiers1*)type->tp_alloc(type, 0);
+    printf("\033[32mnew PyCAst::declaration_specifiers3\033[0m\n");
+    PyCAst_object_declaration_specifiers3 *self;
+    self = (PyCAst_object_declaration_specifiers3*)type->tp_alloc(type, 0);
     return (PyObject *)self;
 }
 
-static void PyCAst_delete_declaration_specifiers1(PyObject *_self)
+static void PyCAst_delete_declaration_specifiers3(PyObject *_self)
 {
-    printf("\033[31mDeleting PyCAst::declaration_specifiers1\033[0m\n");
-    PyCAst_object_declaration_specifiers1 *self=(PyCAst_object_declaration_specifiers1*)_self;
+    printf("\033[31mDeleting PyCAst::declaration_specifiers3\033[0m\n");
+    PyCAst_object_declaration_specifiers3 *self=(PyCAst_object_declaration_specifiers3*)_self;
     delete self->_p_cast_object;
     self->_p_cast_object=0;
 }
-static int PyCAst_init_declaration_specifiers1(PyCAst_object_declaration_specifiers1 *self, PyObject *args, PyObject *kwds)
+static int PyCAst_init_declaration_specifiers3(PyCAst_object_declaration_specifiers3 *self, PyObject *args, PyObject *kwds)
 {
-    printf("initializing PyCAst::declaration_specifiers1\n\n");
+    printf("initializing PyCAst::declaration_specifiers3\n\n");
     return 0;
 }
 
@@ -9931,9 +9931,9 @@ static int PyCAst_init_declaration_specifiers1(PyCAst_object_declaration_specifi
 
 \*---------------------------------------------------------------------------------------------*/
 
-static PyObject *PyCAst_getter_declaration_specifiers1_ast(PyObject *_self)
+static PyObject *PyCAst_getter_declaration_specifiers3_ast(PyObject *_self)
 {
-	PyCAst_object_declaration_specifiers1 *self=(PyCAst_object_declaration_specifiers1*)(_self);
+	PyCAst_object_declaration_specifiers3 *self=(PyCAst_object_declaration_specifiers3*)(_self);
 	if(self->_p_cast_object->isList())
 		return PyString_FromString
 		(
@@ -9948,9 +9948,9 @@ static PyObject *PyCAst_getter_declaration_specifiers1_ast(PyObject *_self)
 
 }
 
-static PyObject *PyCAst_getter_declaration_specifiers1_code(PyObject *_self)
+static PyObject *PyCAst_getter_declaration_specifiers3_code(PyObject *_self)
 {
-	PyCAst_object_declaration_specifiers1 *self=(PyCAst_object_declaration_specifiers1*)(_self);
+	PyCAst_object_declaration_specifiers3 *self=(PyCAst_object_declaration_specifiers3*)(_self);
 	if(!self->_p_cast_object)
 		Py_RETURN_NONE;
 	
@@ -9963,335 +9963,65 @@ static PyObject *PyCAst_getter_declaration_specifiers1_code(PyObject *_self)
 }
 
 
-Py_ssize_t PyCAst_length_declaration_specifiers1(PyObject *_self)
+Py_ssize_t PyCAst_length_declaration_specifiers3(PyObject *_self)
 {
-	PyCAst_object_declaration_specifiers1 *self=(PyCAst_object_declaration_specifiers1*)_self;
-	CAst::declaration_specifiers1 *obj=self->_p_cast_object;
+	PyCAst_object_declaration_specifiers3 *self=(PyCAst_object_declaration_specifiers3*)_self;
+	CAst::declaration_specifiers3 *obj=self->_p_cast_object;
 	return obj->size();
 }
-PyObject* PyCAst_item_declaration_specifiers1(PyObject *_self, Py_ssize_t i)
+PyObject* PyCAst_item_declaration_specifiers3(PyObject *_self, Py_ssize_t i)
 {
-	PyCAst_object_declaration_specifiers1 *self=(PyCAst_object_declaration_specifiers1*)_self;
-	CAst::declaration_specifiers1 *obj=self->_p_cast_object;
+	PyCAst_object_declaration_specifiers3 *self=(PyCAst_object_declaration_specifiers3*)_self;
+	CAst::declaration_specifiers3 *obj=self->_p_cast_object;
 	if(i<0 || i>obj->size())
 	{
 		Py_RETURN_NONE;
 	}
-	PyCAst_object_declaration_specifiers1_item *ret=(PyCAst_object_declaration_specifiers1_item*)PyCAst_type_declaration_specifiers1_item.tp_new(&PyCAst_type_declaration_specifiers1_item,NULL,NULL);
-	ret->_p_cast_object=new CAst::declaration_specifiers1_item((*obj)[i]);
+	PyCAst_object_declaration_specifiers3_item *ret=(PyCAst_object_declaration_specifiers3_item*)PyCAst_type_declaration_specifiers3_item.tp_new(&PyCAst_type_declaration_specifiers3_item,NULL,NULL);
+	ret->_p_cast_object=new CAst::declaration_specifiers3_item((*obj)[i]);
 	return (PyObject*)ret;
 }
 
 
-PyObject* PyCAst_iter_declaration_specifiers1(PyObject* _self)
+PyObject* PyCAst_iter_declaration_specifiers3(PyObject* _self)
 {
-	PyCAst_object_declaration_specifiers1 *self=(PyCAst_object_declaration_specifiers1*)_self;
-	PyCAst_object_declaration_specifiers1_iterator *iter=(PyCAst_object_declaration_specifiers1_iterator*)PyCAst_type_declaration_specifiers1_iterator.tp_new(&PyCAst_type_declaration_specifiers1_iterator,NULL,NULL);
-	iter->_p_cast_object=new CAst::declaration_specifiers1_iterator(self->_p_cast_object->begin());
+	PyCAst_object_declaration_specifiers3 *self=(PyCAst_object_declaration_specifiers3*)_self;
+	PyCAst_object_declaration_specifiers3_iterator *iter=(PyCAst_object_declaration_specifiers3_iterator*)PyCAst_type_declaration_specifiers3_iterator.tp_new(&PyCAst_type_declaration_specifiers3_iterator,NULL,NULL);
+	iter->_p_cast_object=new CAst::declaration_specifiers3_iterator(self->_p_cast_object->begin());
 	iter->_p_cast_list_object=self->_p_cast_object;
 	return (PyObject*)iter;
 }
 
-PyObject* PyCAst_iter_next_declaration_specifiers1_iterator(PyObject* _self)
+PyObject* PyCAst_iter_next_declaration_specifiers3_iterator(PyObject* _self)
 {
-	PyCAst_object_declaration_specifiers1_iterator *self=(PyCAst_object_declaration_specifiers1_iterator*)_self;
-	CAst::declaration_specifiers1_iterator *iter=self->_p_cast_object;
-	CAst::declaration_specifiers1 *list=self->_p_cast_list_object;
+	PyCAst_object_declaration_specifiers3_iterator *self=(PyCAst_object_declaration_specifiers3_iterator*)_self;
+	CAst::declaration_specifiers3_iterator *iter=self->_p_cast_object;
+	CAst::declaration_specifiers3 *list=self->_p_cast_list_object;
 	if((*iter)==(list->end()))
 	{
       		PyErr_SetNone(PyExc_StopIteration);
 		return NULL;
 	}
-	PyCAst_object_declaration_specifiers1_item *ret=(PyCAst_object_declaration_specifiers1_item*)PyCAst_type_declaration_specifiers1_item.tp_new(&PyCAst_type_declaration_specifiers1_item,NULL,NULL);
+	PyCAst_object_declaration_specifiers3_item *ret=(PyCAst_object_declaration_specifiers3_item*)PyCAst_type_declaration_specifiers3_item.tp_new(&PyCAst_type_declaration_specifiers3_item,NULL,NULL);
 	
-	ret->_p_cast_object=new CAst::declaration_specifiers1_item(*(*iter));
+	ret->_p_cast_object=new CAst::declaration_specifiers3_item(*(*iter));
 	(*iter)++;
 	return (PyObject*)ret;
 }
 
-PyObject* PyCAst_iter_declaration_specifiers1_iterator(PyObject* _self)
+PyObject* PyCAst_iter_declaration_specifiers3_iterator(PyObject* _self)
 {
 	return _self;
 }
-static PyObject *PyCAst_getter_declaration_specifiers1_item_storage_class_specifier(PyObject *_self)
+static PyObject *PyCAst_getter_declaration_specifiers3_item_storage_class_specifier(PyObject *_self)
 {
-	PyCAst_object_declaration_specifiers1_item *self=(PyCAst_object_declaration_specifiers1_item*)(_self);
-	CAst::declaration_specifiers1_item *_c_obj=self->_p_cast_object;
+	PyCAst_object_declaration_specifiers3_item *self=(PyCAst_object_declaration_specifiers3_item*)(_self);
+	CAst::declaration_specifiers3_item *_c_obj=self->_p_cast_object;
 	CAst::storage_class_specifier *_p_parameter=const_cast<CAst::storage_class_specifier*>(_c_obj->get_p_storage_class_specifier());
 	if(_p_parameter->typeId()==CAst::CAST_TYPE_STORAGE_CLASS_SPECIFIER)
 	{
 		PyCAst_object_storage_class_specifier *pyObj=(PyCAst_object_storage_class_specifier*)PyCAst_type_storage_class_specifier.tp_new(&PyCAst_type_storage_class_specifier,NULL,NULL);
 		pyObj->_p_cast_object=new CAst::storage_class_specifier(*dynamic_cast<CAst::storage_class_specifier*>(_p_parameter));
-		return (PyObject*)pyObj;
-	}
-	return (PyObject*)(PyString_FromString("NotFound!!! Report bug"));
-
-}
-
-			
-			
-			
-
-			
-
-/*=====================================================================================================================================*\
-
-        DEFINITION OF declaration_specifiers2_iterator
-
-\*=====================================================================================================================================*/
-
-/*---------------------------------------------------------------------------------------------*\
-
-      Class New and Init
-
-\*---------------------------------------------------------------------------------------------*/
-
-static PyObject * PyCAst_new_declaration_specifiers2_iterator(PyTypeObject *type, PyObject *args, PyObject *kwds)
-{
-    printf("\033[32mnew PyCAst::declaration_specifiers2_iterator\033[0m\n");
-    PyCAst_object_declaration_specifiers2_iterator *self;
-    self = (PyCAst_object_declaration_specifiers2_iterator*)type->tp_alloc(type, 0);
-    return (PyObject *)self;
-}
-
-static void PyCAst_delete_declaration_specifiers2_iterator(PyObject *_self)
-{
-    printf("\033[31mDeleting PyCAst::declaration_specifiers2_iterator\033[0m\n");
-    PyCAst_object_declaration_specifiers2_iterator *self=(PyCAst_object_declaration_specifiers2_iterator*)_self;
-    delete self->_p_cast_object;
-    self->_p_cast_object=0;
-}
-
-
-
-
-
-/*---------------------------------------------------------------------------------------------*\
-
-      Class Getters and Setters
-
-\*---------------------------------------------------------------------------------------------*/
-
-
-
-
-
-/*=====================================================================================================================================*\
-
-        DEFINITION OF declaration_specifiers2_item
-
-\*=====================================================================================================================================*/
-
-/*---------------------------------------------------------------------------------------------*\
-
-      Class New and Init
-
-\*---------------------------------------------------------------------------------------------*/
-
-static PyObject * PyCAst_new_declaration_specifiers2_item(PyTypeObject *type, PyObject *args, PyObject *kwds)
-{
-    printf("\033[32mnew PyCAst::declaration_specifiers2_item\033[0m\n");
-    PyCAst_object_declaration_specifiers2_item *self;
-    self = (PyCAst_object_declaration_specifiers2_item*)type->tp_alloc(type, 0);
-    return (PyObject *)self;
-}
-
-static void PyCAst_delete_declaration_specifiers2_item(PyObject *_self)
-{
-    printf("\033[31mDeleting PyCAst::declaration_specifiers2_item\033[0m\n");
-    PyCAst_object_declaration_specifiers2_item *self=(PyCAst_object_declaration_specifiers2_item*)_self;
-    delete self->_p_cast_object;
-    self->_p_cast_object=0;
-}
-
-
-
-
-
-/*---------------------------------------------------------------------------------------------*\
-
-      Class Getters and Setters
-
-\*---------------------------------------------------------------------------------------------*/
-
-static PyObject *PyCAst_getter_declaration_specifiers2_item_ast(PyObject *_self)
-{
-	PyCAst_object_declaration_specifiers2_item *self=(PyCAst_object_declaration_specifiers2_item*)(_self);
-	if(self->_p_cast_object->isList())
-		return PyString_FromString
-		(
-			self->_p_cast_object->getPropertiesList().str().c_str()
-		);
-	else 
-		return PyString_FromString
-		(
-			self->_p_cast_object->getProperties().str().c_str()
-		);
-
-
-}
-
-static PyObject *PyCAst_getter_declaration_specifiers2_item_code(PyObject *_self)
-{
-	PyCAst_object_declaration_specifiers2_item *self=(PyCAst_object_declaration_specifiers2_item*)(_self);
-	if(!self->_p_cast_object)
-		Py_RETURN_NONE;
-	
-	return PyString_FromString
-	(
-		self->_p_cast_object->code().c_str()
-	);
-
-
-}
-
-
-/*=====================================================================================================================================*\
-
-        DEFINITION OF declaration_specifiers2
-
-\*=====================================================================================================================================*/
-
-/*---------------------------------------------------------------------------------------------*\
-
-      Class New and Init
-
-\*---------------------------------------------------------------------------------------------*/
-
-static PyObject * PyCAst_new_declaration_specifiers2(PyTypeObject *type, PyObject *args, PyObject *kwds)
-{
-    printf("\033[32mnew PyCAst::declaration_specifiers2\033[0m\n");
-    PyCAst_object_declaration_specifiers2 *self;
-    self = (PyCAst_object_declaration_specifiers2*)type->tp_alloc(type, 0);
-    return (PyObject *)self;
-}
-
-static void PyCAst_delete_declaration_specifiers2(PyObject *_self)
-{
-    printf("\033[31mDeleting PyCAst::declaration_specifiers2\033[0m\n");
-    PyCAst_object_declaration_specifiers2 *self=(PyCAst_object_declaration_specifiers2*)_self;
-    delete self->_p_cast_object;
-    self->_p_cast_object=0;
-}
-static int PyCAst_init_declaration_specifiers2(PyCAst_object_declaration_specifiers2 *self, PyObject *args, PyObject *kwds)
-{
-    printf("initializing PyCAst::declaration_specifiers2\n\n");
-    return 0;
-}
-
-
-
-
-
-/*---------------------------------------------------------------------------------------------*\
-
-      Class Getters and Setters
-
-\*---------------------------------------------------------------------------------------------*/
-
-static PyObject *PyCAst_getter_declaration_specifiers2_ast(PyObject *_self)
-{
-	PyCAst_object_declaration_specifiers2 *self=(PyCAst_object_declaration_specifiers2*)(_self);
-	if(self->_p_cast_object->isList())
-		return PyString_FromString
-		(
-			self->_p_cast_object->getPropertiesList().str().c_str()
-		);
-	else 
-		return PyString_FromString
-		(
-			self->_p_cast_object->getProperties().str().c_str()
-		);
-
-
-}
-
-static PyObject *PyCAst_getter_declaration_specifiers2_code(PyObject *_self)
-{
-	PyCAst_object_declaration_specifiers2 *self=(PyCAst_object_declaration_specifiers2*)(_self);
-	if(!self->_p_cast_object)
-		Py_RETURN_NONE;
-	
-	return PyString_FromString
-	(
-		self->_p_cast_object->code().c_str()
-	);
-
-
-}
-
-
-Py_ssize_t PyCAst_length_declaration_specifiers2(PyObject *_self)
-{
-	PyCAst_object_declaration_specifiers2 *self=(PyCAst_object_declaration_specifiers2*)_self;
-	CAst::declaration_specifiers2 *obj=self->_p_cast_object;
-	return obj->size();
-}
-PyObject* PyCAst_item_declaration_specifiers2(PyObject *_self, Py_ssize_t i)
-{
-	PyCAst_object_declaration_specifiers2 *self=(PyCAst_object_declaration_specifiers2*)_self;
-	CAst::declaration_specifiers2 *obj=self->_p_cast_object;
-	if(i<0 || i>obj->size())
-	{
-		Py_RETURN_NONE;
-	}
-	PyCAst_object_declaration_specifiers2_item *ret=(PyCAst_object_declaration_specifiers2_item*)PyCAst_type_declaration_specifiers2_item.tp_new(&PyCAst_type_declaration_specifiers2_item,NULL,NULL);
-	ret->_p_cast_object=new CAst::declaration_specifiers2_item((*obj)[i]);
-	return (PyObject*)ret;
-}
-
-
-PyObject* PyCAst_iter_declaration_specifiers2(PyObject* _self)
-{
-	PyCAst_object_declaration_specifiers2 *self=(PyCAst_object_declaration_specifiers2*)_self;
-	PyCAst_object_declaration_specifiers2_iterator *iter=(PyCAst_object_declaration_specifiers2_iterator*)PyCAst_type_declaration_specifiers2_iterator.tp_new(&PyCAst_type_declaration_specifiers2_iterator,NULL,NULL);
-	iter->_p_cast_object=new CAst::declaration_specifiers2_iterator(self->_p_cast_object->begin());
-	iter->_p_cast_list_object=self->_p_cast_object;
-	return (PyObject*)iter;
-}
-
-PyObject* PyCAst_iter_next_declaration_specifiers2_iterator(PyObject* _self)
-{
-	PyCAst_object_declaration_specifiers2_iterator *self=(PyCAst_object_declaration_specifiers2_iterator*)_self;
-	CAst::declaration_specifiers2_iterator *iter=self->_p_cast_object;
-	CAst::declaration_specifiers2 *list=self->_p_cast_list_object;
-	if((*iter)==(list->end()))
-	{
-      		PyErr_SetNone(PyExc_StopIteration);
-		return NULL;
-	}
-	PyCAst_object_declaration_specifiers2_item *ret=(PyCAst_object_declaration_specifiers2_item*)PyCAst_type_declaration_specifiers2_item.tp_new(&PyCAst_type_declaration_specifiers2_item,NULL,NULL);
-	
-	ret->_p_cast_object=new CAst::declaration_specifiers2_item(*(*iter));
-	(*iter)++;
-	return (PyObject*)ret;
-}
-
-PyObject* PyCAst_iter_declaration_specifiers2_iterator(PyObject* _self)
-{
-	return _self;
-}
-static PyObject *PyCAst_getter_declaration_specifiers2_item_type_specifier(PyObject *_self)
-{
-	PyCAst_object_declaration_specifiers2_item *self=(PyCAst_object_declaration_specifiers2_item*)(_self);
-	CAst::declaration_specifiers2_item *_c_obj=self->_p_cast_object;
-	CAst::type_specifier *_p_parameter=const_cast<CAst::type_specifier*>(_c_obj->get_p_type_specifier());
-	if(_p_parameter->typeId()==CAst::CAST_TYPE_TYPE_SPECIFIER1)
-	{
-		PyCAst_object_type_specifier1 *pyObj=(PyCAst_object_type_specifier1*)PyCAst_type_type_specifier1.tp_new(&PyCAst_type_type_specifier1,NULL,NULL);
-		pyObj->_p_cast_object=new CAst::type_specifier1(*dynamic_cast<CAst::type_specifier1*>(_p_parameter));
-		return (PyObject*)pyObj;
-	}
-	if(_p_parameter->typeId()==CAst::CAST_TYPE_TYPE_SPECIFIER2)
-	{
-		PyCAst_object_type_specifier2 *pyObj=(PyCAst_object_type_specifier2*)PyCAst_type_type_specifier2.tp_new(&PyCAst_type_type_specifier2,NULL,NULL);
-		pyObj->_p_cast_object=new CAst::type_specifier2(*dynamic_cast<CAst::type_specifier2*>(_p_parameter));
-		return (PyObject*)pyObj;
-	}
-	if(_p_parameter->typeId()==CAst::CAST_TYPE_TYPE_SPECIFIER3)
-	{
-		PyCAst_object_type_specifier3 *pyObj=(PyCAst_object_type_specifier3*)PyCAst_type_type_specifier3.tp_new(&PyCAst_type_type_specifier3,NULL,NULL);
-		pyObj->_p_cast_object=new CAst::type_specifier3(*dynamic_cast<CAst::type_specifier3*>(_p_parameter));
 		return (PyObject*)pyObj;
 	}
 	return (PyObject*)(PyString_FromString("NotFound!!! Report bug"));
@@ -10541,15 +10271,273 @@ PyObject* PyCAst_iter_declaration_specifiers3_iterator(PyObject* _self)
 {
 	return _self;
 }
-static PyObject *PyCAst_getter_declaration_specifiers3_item_type_qualifier(PyObject *_self)
+static PyObject *PyCAst_getter_declaration_specifiers3_item_storage_class_specifier(PyObject *_self)
 {
 	PyCAst_object_declaration_specifiers3_item *self=(PyCAst_object_declaration_specifiers3_item*)(_self);
 	CAst::declaration_specifiers3_item *_c_obj=self->_p_cast_object;
-	CAst::type_qualifier *_p_parameter=const_cast<CAst::type_qualifier*>(_c_obj->get_p_type_qualifier());
-	if(_p_parameter->typeId()==CAst::CAST_TYPE_TYPE_QUALIFIER)
+	CAst::storage_class_specifier *_p_parameter=const_cast<CAst::storage_class_specifier*>(_c_obj->get_p_storage_class_specifier());
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_STORAGE_CLASS_SPECIFIER)
 	{
-		PyCAst_object_type_qualifier *pyObj=(PyCAst_object_type_qualifier*)PyCAst_type_type_qualifier.tp_new(&PyCAst_type_type_qualifier,NULL,NULL);
-		pyObj->_p_cast_object=new CAst::type_qualifier(*dynamic_cast<CAst::type_qualifier*>(_p_parameter));
+		PyCAst_object_storage_class_specifier *pyObj=(PyCAst_object_storage_class_specifier*)PyCAst_type_storage_class_specifier.tp_new(&PyCAst_type_storage_class_specifier,NULL,NULL);
+		pyObj->_p_cast_object=new CAst::storage_class_specifier(*dynamic_cast<CAst::storage_class_specifier*>(_p_parameter));
+		return (PyObject*)pyObj;
+	}
+	return (PyObject*)(PyString_FromString("NotFound!!! Report bug"));
+
+}
+
+			
+			
+			
+
+			
+
+/*=====================================================================================================================================*\
+
+        DEFINITION OF declaration_specifiers3_iterator
+
+\*=====================================================================================================================================*/
+
+/*---------------------------------------------------------------------------------------------*\
+
+      Class New and Init
+
+\*---------------------------------------------------------------------------------------------*/
+
+static PyObject * PyCAst_new_declaration_specifiers3_iterator(PyTypeObject *type, PyObject *args, PyObject *kwds)
+{
+    printf("\033[32mnew PyCAst::declaration_specifiers3_iterator\033[0m\n");
+    PyCAst_object_declaration_specifiers3_iterator *self;
+    self = (PyCAst_object_declaration_specifiers3_iterator*)type->tp_alloc(type, 0);
+    return (PyObject *)self;
+}
+
+static void PyCAst_delete_declaration_specifiers3_iterator(PyObject *_self)
+{
+    printf("\033[31mDeleting PyCAst::declaration_specifiers3_iterator\033[0m\n");
+    PyCAst_object_declaration_specifiers3_iterator *self=(PyCAst_object_declaration_specifiers3_iterator*)_self;
+    delete self->_p_cast_object;
+    self->_p_cast_object=0;
+}
+
+
+
+
+
+/*---------------------------------------------------------------------------------------------*\
+
+      Class Getters and Setters
+
+\*---------------------------------------------------------------------------------------------*/
+
+
+
+
+
+/*=====================================================================================================================================*\
+
+        DEFINITION OF declaration_specifiers3_item
+
+\*=====================================================================================================================================*/
+
+/*---------------------------------------------------------------------------------------------*\
+
+      Class New and Init
+
+\*---------------------------------------------------------------------------------------------*/
+
+static PyObject * PyCAst_new_declaration_specifiers3_item(PyTypeObject *type, PyObject *args, PyObject *kwds)
+{
+    printf("\033[32mnew PyCAst::declaration_specifiers3_item\033[0m\n");
+    PyCAst_object_declaration_specifiers3_item *self;
+    self = (PyCAst_object_declaration_specifiers3_item*)type->tp_alloc(type, 0);
+    return (PyObject *)self;
+}
+
+static void PyCAst_delete_declaration_specifiers3_item(PyObject *_self)
+{
+    printf("\033[31mDeleting PyCAst::declaration_specifiers3_item\033[0m\n");
+    PyCAst_object_declaration_specifiers3_item *self=(PyCAst_object_declaration_specifiers3_item*)_self;
+    delete self->_p_cast_object;
+    self->_p_cast_object=0;
+}
+
+
+
+
+
+/*---------------------------------------------------------------------------------------------*\
+
+      Class Getters and Setters
+
+\*---------------------------------------------------------------------------------------------*/
+
+static PyObject *PyCAst_getter_declaration_specifiers3_item_ast(PyObject *_self)
+{
+	PyCAst_object_declaration_specifiers3_item *self=(PyCAst_object_declaration_specifiers3_item*)(_self);
+	if(self->_p_cast_object->isList())
+		return PyString_FromString
+		(
+			self->_p_cast_object->getPropertiesList().str().c_str()
+		);
+	else 
+		return PyString_FromString
+		(
+			self->_p_cast_object->getProperties().str().c_str()
+		);
+
+
+}
+
+static PyObject *PyCAst_getter_declaration_specifiers3_item_code(PyObject *_self)
+{
+	PyCAst_object_declaration_specifiers3_item *self=(PyCAst_object_declaration_specifiers3_item*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
+
+
+/*=====================================================================================================================================*\
+
+        DEFINITION OF declaration_specifiers3
+
+\*=====================================================================================================================================*/
+
+/*---------------------------------------------------------------------------------------------*\
+
+      Class New and Init
+
+\*---------------------------------------------------------------------------------------------*/
+
+static PyObject * PyCAst_new_declaration_specifiers3(PyTypeObject *type, PyObject *args, PyObject *kwds)
+{
+    printf("\033[32mnew PyCAst::declaration_specifiers3\033[0m\n");
+    PyCAst_object_declaration_specifiers3 *self;
+    self = (PyCAst_object_declaration_specifiers3*)type->tp_alloc(type, 0);
+    return (PyObject *)self;
+}
+
+static void PyCAst_delete_declaration_specifiers3(PyObject *_self)
+{
+    printf("\033[31mDeleting PyCAst::declaration_specifiers3\033[0m\n");
+    PyCAst_object_declaration_specifiers3 *self=(PyCAst_object_declaration_specifiers3*)_self;
+    delete self->_p_cast_object;
+    self->_p_cast_object=0;
+}
+static int PyCAst_init_declaration_specifiers3(PyCAst_object_declaration_specifiers3 *self, PyObject *args, PyObject *kwds)
+{
+    printf("initializing PyCAst::declaration_specifiers3\n\n");
+    return 0;
+}
+
+
+
+
+
+/*---------------------------------------------------------------------------------------------*\
+
+      Class Getters and Setters
+
+\*---------------------------------------------------------------------------------------------*/
+
+static PyObject *PyCAst_getter_declaration_specifiers3_ast(PyObject *_self)
+{
+	PyCAst_object_declaration_specifiers3 *self=(PyCAst_object_declaration_specifiers3*)(_self);
+	if(self->_p_cast_object->isList())
+		return PyString_FromString
+		(
+			self->_p_cast_object->getPropertiesList().str().c_str()
+		);
+	else 
+		return PyString_FromString
+		(
+			self->_p_cast_object->getProperties().str().c_str()
+		);
+
+
+}
+
+static PyObject *PyCAst_getter_declaration_specifiers3_code(PyObject *_self)
+{
+	PyCAst_object_declaration_specifiers3 *self=(PyCAst_object_declaration_specifiers3*)(_self);
+	if(!self->_p_cast_object)
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+
+
+}
+
+
+Py_ssize_t PyCAst_length_declaration_specifiers3(PyObject *_self)
+{
+	PyCAst_object_declaration_specifiers3 *self=(PyCAst_object_declaration_specifiers3*)_self;
+	CAst::declaration_specifiers3 *obj=self->_p_cast_object;
+	return obj->size();
+}
+PyObject* PyCAst_item_declaration_specifiers3(PyObject *_self, Py_ssize_t i)
+{
+	PyCAst_object_declaration_specifiers3 *self=(PyCAst_object_declaration_specifiers3*)_self;
+	CAst::declaration_specifiers3 *obj=self->_p_cast_object;
+	if(i<0 || i>obj->size())
+	{
+		Py_RETURN_NONE;
+	}
+	PyCAst_object_declaration_specifiers3_item *ret=(PyCAst_object_declaration_specifiers3_item*)PyCAst_type_declaration_specifiers3_item.tp_new(&PyCAst_type_declaration_specifiers3_item,NULL,NULL);
+	ret->_p_cast_object=new CAst::declaration_specifiers3_item((*obj)[i]);
+	return (PyObject*)ret;
+}
+
+
+PyObject* PyCAst_iter_declaration_specifiers3(PyObject* _self)
+{
+	PyCAst_object_declaration_specifiers3 *self=(PyCAst_object_declaration_specifiers3*)_self;
+	PyCAst_object_declaration_specifiers3_iterator *iter=(PyCAst_object_declaration_specifiers3_iterator*)PyCAst_type_declaration_specifiers3_iterator.tp_new(&PyCAst_type_declaration_specifiers3_iterator,NULL,NULL);
+	iter->_p_cast_object=new CAst::declaration_specifiers3_iterator(self->_p_cast_object->begin());
+	iter->_p_cast_list_object=self->_p_cast_object;
+	return (PyObject*)iter;
+}
+
+PyObject* PyCAst_iter_next_declaration_specifiers3_iterator(PyObject* _self)
+{
+	PyCAst_object_declaration_specifiers3_iterator *self=(PyCAst_object_declaration_specifiers3_iterator*)_self;
+	CAst::declaration_specifiers3_iterator *iter=self->_p_cast_object;
+	CAst::declaration_specifiers3 *list=self->_p_cast_list_object;
+	if((*iter)==(list->end()))
+	{
+      		PyErr_SetNone(PyExc_StopIteration);
+		return NULL;
+	}
+	PyCAst_object_declaration_specifiers3_item *ret=(PyCAst_object_declaration_specifiers3_item*)PyCAst_type_declaration_specifiers3_item.tp_new(&PyCAst_type_declaration_specifiers3_item,NULL,NULL);
+	
+	ret->_p_cast_object=new CAst::declaration_specifiers3_item(*(*iter));
+	(*iter)++;
+	return (PyObject*)ret;
+}
+
+PyObject* PyCAst_iter_declaration_specifiers3_iterator(PyObject* _self)
+{
+	return _self;
+}
+static PyObject *PyCAst_getter_declaration_specifiers3_item_storage_class_specifier(PyObject *_self)
+{
+	PyCAst_object_declaration_specifiers3_item *self=(PyCAst_object_declaration_specifiers3_item*)(_self);
+	CAst::declaration_specifiers3_item *_c_obj=self->_p_cast_object;
+	CAst::storage_class_specifier *_p_parameter=const_cast<CAst::storage_class_specifier*>(_c_obj->get_p_storage_class_specifier());
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_STORAGE_CLASS_SPECIFIER)
+	{
+		PyCAst_object_storage_class_specifier *pyObj=(PyCAst_object_storage_class_specifier*)PyCAst_type_storage_class_specifier.tp_new(&PyCAst_type_storage_class_specifier,NULL,NULL);
+		pyObj->_p_cast_object=new CAst::storage_class_specifier(*dynamic_cast<CAst::storage_class_specifier*>(_p_parameter));
 		return (PyObject*)pyObj;
 	}
 	return (PyObject*)(PyString_FromString("NotFound!!! Report bug"));
@@ -10645,16 +10633,16 @@ static PyObject *PyCAst_getter_declaration_declaration_specifiers(PyObject *_sel
 	{
 		Py_RETURN_NONE;
 	}
-	if(_p_parameter->typeId()==CAst::CAST_TYPE_DECLARATION_SPECIFIERS1)
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_DECLARATION_SPECIFIERS3)
 	{
-		PyCAst_object_declaration_specifiers1 *pyObj=(PyCAst_object_declaration_specifiers1*)PyCAst_type_declaration_specifiers1.tp_new(&PyCAst_type_declaration_specifiers1,NULL,NULL);
-		pyObj->_p_cast_object=new CAst::declaration_specifiers1(*dynamic_cast<CAst::declaration_specifiers1*>(_p_parameter));
+		PyCAst_object_declaration_specifiers3 *pyObj=(PyCAst_object_declaration_specifiers3*)PyCAst_type_declaration_specifiers3.tp_new(&PyCAst_type_declaration_specifiers3,NULL,NULL);
+		pyObj->_p_cast_object=new CAst::declaration_specifiers3(*dynamic_cast<CAst::declaration_specifiers3*>(_p_parameter));
 		return (PyObject*)pyObj;
 	}
-	if(_p_parameter->typeId()==CAst::CAST_TYPE_DECLARATION_SPECIFIERS2)
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_DECLARATION_SPECIFIERS3)
 	{
-		PyCAst_object_declaration_specifiers2 *pyObj=(PyCAst_object_declaration_specifiers2*)PyCAst_type_declaration_specifiers2.tp_new(&PyCAst_type_declaration_specifiers2,NULL,NULL);
-		pyObj->_p_cast_object=new CAst::declaration_specifiers2(*dynamic_cast<CAst::declaration_specifiers2*>(_p_parameter));
+		PyCAst_object_declaration_specifiers3 *pyObj=(PyCAst_object_declaration_specifiers3*)PyCAst_type_declaration_specifiers3.tp_new(&PyCAst_type_declaration_specifiers3,NULL,NULL);
+		pyObj->_p_cast_object=new CAst::declaration_specifiers3(*dynamic_cast<CAst::declaration_specifiers3*>(_p_parameter));
 		return (PyObject*)pyObj;
 	}
 	if(_p_parameter->typeId()==CAst::CAST_TYPE_DECLARATION_SPECIFIERS3)
@@ -12819,16 +12807,16 @@ static PyObject *PyCAst_getter_function_definition_declaration_specifiers(PyObje
 	{
 		Py_RETURN_NONE;
 	}
-	if(_p_parameter->typeId()==CAst::CAST_TYPE_DECLARATION_SPECIFIERS1)
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_DECLARATION_SPECIFIERS3)
 	{
-		PyCAst_object_declaration_specifiers1 *pyObj=(PyCAst_object_declaration_specifiers1*)PyCAst_type_declaration_specifiers1.tp_new(&PyCAst_type_declaration_specifiers1,NULL,NULL);
-		pyObj->_p_cast_object=new CAst::declaration_specifiers1(*dynamic_cast<CAst::declaration_specifiers1*>(_p_parameter));
+		PyCAst_object_declaration_specifiers3 *pyObj=(PyCAst_object_declaration_specifiers3*)PyCAst_type_declaration_specifiers3.tp_new(&PyCAst_type_declaration_specifiers3,NULL,NULL);
+		pyObj->_p_cast_object=new CAst::declaration_specifiers3(*dynamic_cast<CAst::declaration_specifiers3*>(_p_parameter));
 		return (PyObject*)pyObj;
 	}
-	if(_p_parameter->typeId()==CAst::CAST_TYPE_DECLARATION_SPECIFIERS2)
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_DECLARATION_SPECIFIERS3)
 	{
-		PyCAst_object_declaration_specifiers2 *pyObj=(PyCAst_object_declaration_specifiers2*)PyCAst_type_declaration_specifiers2.tp_new(&PyCAst_type_declaration_specifiers2,NULL,NULL);
-		pyObj->_p_cast_object=new CAst::declaration_specifiers2(*dynamic_cast<CAst::declaration_specifiers2*>(_p_parameter));
+		PyCAst_object_declaration_specifiers3 *pyObj=(PyCAst_object_declaration_specifiers3*)PyCAst_type_declaration_specifiers3.tp_new(&PyCAst_type_declaration_specifiers3,NULL,NULL);
+		pyObj->_p_cast_object=new CAst::declaration_specifiers3(*dynamic_cast<CAst::declaration_specifiers3*>(_p_parameter));
 		return (PyObject*)pyObj;
 	}
 	if(_p_parameter->typeId()==CAst::CAST_TYPE_DECLARATION_SPECIFIERS3)
@@ -14194,7 +14182,7 @@ static PyObject *PyCAst_getter_declaration_list_item_declaration(PyObject *_self
 
 /*=====================================================================================================================================*\
 
-        DEFINITION OF specifier_qualifier_list1_iterator
+        DEFINITION OF specifier_qualifier_list2_iterator
 
 \*=====================================================================================================================================*/
 
@@ -14204,18 +14192,18 @@ static PyObject *PyCAst_getter_declaration_list_item_declaration(PyObject *_self
 
 \*---------------------------------------------------------------------------------------------*/
 
-static PyObject * PyCAst_new_specifier_qualifier_list1_iterator(PyTypeObject *type, PyObject *args, PyObject *kwds)
+static PyObject * PyCAst_new_specifier_qualifier_list2_iterator(PyTypeObject *type, PyObject *args, PyObject *kwds)
 {
-    printf("\033[32mnew PyCAst::specifier_qualifier_list1_iterator\033[0m\n");
-    PyCAst_object_specifier_qualifier_list1_iterator *self;
-    self = (PyCAst_object_specifier_qualifier_list1_iterator*)type->tp_alloc(type, 0);
+    printf("\033[32mnew PyCAst::specifier_qualifier_list2_iterator\033[0m\n");
+    PyCAst_object_specifier_qualifier_list2_iterator *self;
+    self = (PyCAst_object_specifier_qualifier_list2_iterator*)type->tp_alloc(type, 0);
     return (PyObject *)self;
 }
 
-static void PyCAst_delete_specifier_qualifier_list1_iterator(PyObject *_self)
+static void PyCAst_delete_specifier_qualifier_list2_iterator(PyObject *_self)
 {
-    printf("\033[31mDeleting PyCAst::specifier_qualifier_list1_iterator\033[0m\n");
-    PyCAst_object_specifier_qualifier_list1_iterator *self=(PyCAst_object_specifier_qualifier_list1_iterator*)_self;
+    printf("\033[31mDeleting PyCAst::specifier_qualifier_list2_iterator\033[0m\n");
+    PyCAst_object_specifier_qualifier_list2_iterator *self=(PyCAst_object_specifier_qualifier_list2_iterator*)_self;
     delete self->_p_cast_object;
     self->_p_cast_object=0;
 }
@@ -14236,7 +14224,7 @@ static void PyCAst_delete_specifier_qualifier_list1_iterator(PyObject *_self)
 
 /*=====================================================================================================================================*\
 
-        DEFINITION OF specifier_qualifier_list1_item
+        DEFINITION OF specifier_qualifier_list2_item
 
 \*=====================================================================================================================================*/
 
@@ -14246,18 +14234,18 @@ static void PyCAst_delete_specifier_qualifier_list1_iterator(PyObject *_self)
 
 \*---------------------------------------------------------------------------------------------*/
 
-static PyObject * PyCAst_new_specifier_qualifier_list1_item(PyTypeObject *type, PyObject *args, PyObject *kwds)
+static PyObject * PyCAst_new_specifier_qualifier_list2_item(PyTypeObject *type, PyObject *args, PyObject *kwds)
 {
-    printf("\033[32mnew PyCAst::specifier_qualifier_list1_item\033[0m\n");
-    PyCAst_object_specifier_qualifier_list1_item *self;
-    self = (PyCAst_object_specifier_qualifier_list1_item*)type->tp_alloc(type, 0);
+    printf("\033[32mnew PyCAst::specifier_qualifier_list2_item\033[0m\n");
+    PyCAst_object_specifier_qualifier_list2_item *self;
+    self = (PyCAst_object_specifier_qualifier_list2_item*)type->tp_alloc(type, 0);
     return (PyObject *)self;
 }
 
-static void PyCAst_delete_specifier_qualifier_list1_item(PyObject *_self)
+static void PyCAst_delete_specifier_qualifier_list2_item(PyObject *_self)
 {
-    printf("\033[31mDeleting PyCAst::specifier_qualifier_list1_item\033[0m\n");
-    PyCAst_object_specifier_qualifier_list1_item *self=(PyCAst_object_specifier_qualifier_list1_item*)_self;
+    printf("\033[31mDeleting PyCAst::specifier_qualifier_list2_item\033[0m\n");
+    PyCAst_object_specifier_qualifier_list2_item *self=(PyCAst_object_specifier_qualifier_list2_item*)_self;
     delete self->_p_cast_object;
     self->_p_cast_object=0;
 }
@@ -14272,9 +14260,9 @@ static void PyCAst_delete_specifier_qualifier_list1_item(PyObject *_self)
 
 \*---------------------------------------------------------------------------------------------*/
 
-static PyObject *PyCAst_getter_specifier_qualifier_list1_item_ast(PyObject *_self)
+static PyObject *PyCAst_getter_specifier_qualifier_list2_item_ast(PyObject *_self)
 {
-	PyCAst_object_specifier_qualifier_list1_item *self=(PyCAst_object_specifier_qualifier_list1_item*)(_self);
+	PyCAst_object_specifier_qualifier_list2_item *self=(PyCAst_object_specifier_qualifier_list2_item*)(_self);
 	if(self->_p_cast_object->isList())
 		return PyString_FromString
 		(
@@ -14289,9 +14277,9 @@ static PyObject *PyCAst_getter_specifier_qualifier_list1_item_ast(PyObject *_sel
 
 }
 
-static PyObject *PyCAst_getter_specifier_qualifier_list1_item_code(PyObject *_self)
+static PyObject *PyCAst_getter_specifier_qualifier_list2_item_code(PyObject *_self)
 {
-	PyCAst_object_specifier_qualifier_list1_item *self=(PyCAst_object_specifier_qualifier_list1_item*)(_self);
+	PyCAst_object_specifier_qualifier_list2_item *self=(PyCAst_object_specifier_qualifier_list2_item*)(_self);
 	if(!self->_p_cast_object)
 		Py_RETURN_NONE;
 	
@@ -14306,7 +14294,7 @@ static PyObject *PyCAst_getter_specifier_qualifier_list1_item_code(PyObject *_se
 
 /*=====================================================================================================================================*\
 
-        DEFINITION OF specifier_qualifier_list1
+        DEFINITION OF specifier_qualifier_list2
 
 \*=====================================================================================================================================*/
 
@@ -14316,24 +14304,24 @@ static PyObject *PyCAst_getter_specifier_qualifier_list1_item_code(PyObject *_se
 
 \*---------------------------------------------------------------------------------------------*/
 
-static PyObject * PyCAst_new_specifier_qualifier_list1(PyTypeObject *type, PyObject *args, PyObject *kwds)
+static PyObject * PyCAst_new_specifier_qualifier_list2(PyTypeObject *type, PyObject *args, PyObject *kwds)
 {
-    printf("\033[32mnew PyCAst::specifier_qualifier_list1\033[0m\n");
-    PyCAst_object_specifier_qualifier_list1 *self;
-    self = (PyCAst_object_specifier_qualifier_list1*)type->tp_alloc(type, 0);
+    printf("\033[32mnew PyCAst::specifier_qualifier_list2\033[0m\n");
+    PyCAst_object_specifier_qualifier_list2 *self;
+    self = (PyCAst_object_specifier_qualifier_list2*)type->tp_alloc(type, 0);
     return (PyObject *)self;
 }
 
-static void PyCAst_delete_specifier_qualifier_list1(PyObject *_self)
+static void PyCAst_delete_specifier_qualifier_list2(PyObject *_self)
 {
-    printf("\033[31mDeleting PyCAst::specifier_qualifier_list1\033[0m\n");
-    PyCAst_object_specifier_qualifier_list1 *self=(PyCAst_object_specifier_qualifier_list1*)_self;
+    printf("\033[31mDeleting PyCAst::specifier_qualifier_list2\033[0m\n");
+    PyCAst_object_specifier_qualifier_list2 *self=(PyCAst_object_specifier_qualifier_list2*)_self;
     delete self->_p_cast_object;
     self->_p_cast_object=0;
 }
-static int PyCAst_init_specifier_qualifier_list1(PyCAst_object_specifier_qualifier_list1 *self, PyObject *args, PyObject *kwds)
+static int PyCAst_init_specifier_qualifier_list2(PyCAst_object_specifier_qualifier_list2 *self, PyObject *args, PyObject *kwds)
 {
-    printf("initializing PyCAst::specifier_qualifier_list1\n\n");
+    printf("initializing PyCAst::specifier_qualifier_list2\n\n");
     return 0;
 }
 
@@ -14347,9 +14335,9 @@ static int PyCAst_init_specifier_qualifier_list1(PyCAst_object_specifier_qualifi
 
 \*---------------------------------------------------------------------------------------------*/
 
-static PyObject *PyCAst_getter_specifier_qualifier_list1_ast(PyObject *_self)
+static PyObject *PyCAst_getter_specifier_qualifier_list2_ast(PyObject *_self)
 {
-	PyCAst_object_specifier_qualifier_list1 *self=(PyCAst_object_specifier_qualifier_list1*)(_self);
+	PyCAst_object_specifier_qualifier_list2 *self=(PyCAst_object_specifier_qualifier_list2*)(_self);
 	if(self->_p_cast_object->isList())
 		return PyString_FromString
 		(
@@ -14364,9 +14352,9 @@ static PyObject *PyCAst_getter_specifier_qualifier_list1_ast(PyObject *_self)
 
 }
 
-static PyObject *PyCAst_getter_specifier_qualifier_list1_code(PyObject *_self)
+static PyObject *PyCAst_getter_specifier_qualifier_list2_code(PyObject *_self)
 {
-	PyCAst_object_specifier_qualifier_list1 *self=(PyCAst_object_specifier_qualifier_list1*)(_self);
+	PyCAst_object_specifier_qualifier_list2 *self=(PyCAst_object_specifier_qualifier_list2*)(_self);
 	if(!self->_p_cast_object)
 		Py_RETURN_NONE;
 	
@@ -14379,60 +14367,60 @@ static PyObject *PyCAst_getter_specifier_qualifier_list1_code(PyObject *_self)
 }
 
 
-Py_ssize_t PyCAst_length_specifier_qualifier_list1(PyObject *_self)
+Py_ssize_t PyCAst_length_specifier_qualifier_list2(PyObject *_self)
 {
-	PyCAst_object_specifier_qualifier_list1 *self=(PyCAst_object_specifier_qualifier_list1*)_self;
-	CAst::specifier_qualifier_list1 *obj=self->_p_cast_object;
+	PyCAst_object_specifier_qualifier_list2 *self=(PyCAst_object_specifier_qualifier_list2*)_self;
+	CAst::specifier_qualifier_list2 *obj=self->_p_cast_object;
 	return obj->size();
 }
-PyObject* PyCAst_item_specifier_qualifier_list1(PyObject *_self, Py_ssize_t i)
+PyObject* PyCAst_item_specifier_qualifier_list2(PyObject *_self, Py_ssize_t i)
 {
-	PyCAst_object_specifier_qualifier_list1 *self=(PyCAst_object_specifier_qualifier_list1*)_self;
-	CAst::specifier_qualifier_list1 *obj=self->_p_cast_object;
+	PyCAst_object_specifier_qualifier_list2 *self=(PyCAst_object_specifier_qualifier_list2*)_self;
+	CAst::specifier_qualifier_list2 *obj=self->_p_cast_object;
 	if(i<0 || i>obj->size())
 	{
 		Py_RETURN_NONE;
 	}
-	PyCAst_object_specifier_qualifier_list1_item *ret=(PyCAst_object_specifier_qualifier_list1_item*)PyCAst_type_specifier_qualifier_list1_item.tp_new(&PyCAst_type_specifier_qualifier_list1_item,NULL,NULL);
-	ret->_p_cast_object=new CAst::specifier_qualifier_list1_item((*obj)[i]);
+	PyCAst_object_specifier_qualifier_list2_item *ret=(PyCAst_object_specifier_qualifier_list2_item*)PyCAst_type_specifier_qualifier_list2_item.tp_new(&PyCAst_type_specifier_qualifier_list2_item,NULL,NULL);
+	ret->_p_cast_object=new CAst::specifier_qualifier_list2_item((*obj)[i]);
 	return (PyObject*)ret;
 }
 
 
-PyObject* PyCAst_iter_specifier_qualifier_list1(PyObject* _self)
+PyObject* PyCAst_iter_specifier_qualifier_list2(PyObject* _self)
 {
-	PyCAst_object_specifier_qualifier_list1 *self=(PyCAst_object_specifier_qualifier_list1*)_self;
-	PyCAst_object_specifier_qualifier_list1_iterator *iter=(PyCAst_object_specifier_qualifier_list1_iterator*)PyCAst_type_specifier_qualifier_list1_iterator.tp_new(&PyCAst_type_specifier_qualifier_list1_iterator,NULL,NULL);
-	iter->_p_cast_object=new CAst::specifier_qualifier_list1_iterator(self->_p_cast_object->begin());
+	PyCAst_object_specifier_qualifier_list2 *self=(PyCAst_object_specifier_qualifier_list2*)_self;
+	PyCAst_object_specifier_qualifier_list2_iterator *iter=(PyCAst_object_specifier_qualifier_list2_iterator*)PyCAst_type_specifier_qualifier_list2_iterator.tp_new(&PyCAst_type_specifier_qualifier_list2_iterator,NULL,NULL);
+	iter->_p_cast_object=new CAst::specifier_qualifier_list2_iterator(self->_p_cast_object->begin());
 	iter->_p_cast_list_object=self->_p_cast_object;
 	return (PyObject*)iter;
 }
 
-PyObject* PyCAst_iter_next_specifier_qualifier_list1_iterator(PyObject* _self)
+PyObject* PyCAst_iter_next_specifier_qualifier_list2_iterator(PyObject* _self)
 {
-	PyCAst_object_specifier_qualifier_list1_iterator *self=(PyCAst_object_specifier_qualifier_list1_iterator*)_self;
-	CAst::specifier_qualifier_list1_iterator *iter=self->_p_cast_object;
-	CAst::specifier_qualifier_list1 *list=self->_p_cast_list_object;
+	PyCAst_object_specifier_qualifier_list2_iterator *self=(PyCAst_object_specifier_qualifier_list2_iterator*)_self;
+	CAst::specifier_qualifier_list2_iterator *iter=self->_p_cast_object;
+	CAst::specifier_qualifier_list2 *list=self->_p_cast_list_object;
 	if((*iter)==(list->end()))
 	{
       		PyErr_SetNone(PyExc_StopIteration);
 		return NULL;
 	}
-	PyCAst_object_specifier_qualifier_list1_item *ret=(PyCAst_object_specifier_qualifier_list1_item*)PyCAst_type_specifier_qualifier_list1_item.tp_new(&PyCAst_type_specifier_qualifier_list1_item,NULL,NULL);
+	PyCAst_object_specifier_qualifier_list2_item *ret=(PyCAst_object_specifier_qualifier_list2_item*)PyCAst_type_specifier_qualifier_list2_item.tp_new(&PyCAst_type_specifier_qualifier_list2_item,NULL,NULL);
 	
-	ret->_p_cast_object=new CAst::specifier_qualifier_list1_item(*(*iter));
+	ret->_p_cast_object=new CAst::specifier_qualifier_list2_item(*(*iter));
 	(*iter)++;
 	return (PyObject*)ret;
 }
 
-PyObject* PyCAst_iter_specifier_qualifier_list1_iterator(PyObject* _self)
+PyObject* PyCAst_iter_specifier_qualifier_list2_iterator(PyObject* _self)
 {
 	return _self;
 }
-static PyObject *PyCAst_getter_specifier_qualifier_list1_item_type_specifier(PyObject *_self)
+static PyObject *PyCAst_getter_specifier_qualifier_list2_item_type_specifier(PyObject *_self)
 {
-	PyCAst_object_specifier_qualifier_list1_item *self=(PyCAst_object_specifier_qualifier_list1_item*)(_self);
-	CAst::specifier_qualifier_list1_item *_c_obj=self->_p_cast_object;
+	PyCAst_object_specifier_qualifier_list2_item *self=(PyCAst_object_specifier_qualifier_list2_item*)(_self);
+	CAst::specifier_qualifier_list2_item *_c_obj=self->_p_cast_object;
 	CAst::type_specifier *_p_parameter=const_cast<CAst::type_specifier*>(_c_obj->get_p_type_specifier());
 	if(_p_parameter->typeId()==CAst::CAST_TYPE_TYPE_SPECIFIER1)
 	{
@@ -14699,15 +14687,27 @@ PyObject* PyCAst_iter_specifier_qualifier_list2_iterator(PyObject* _self)
 {
 	return _self;
 }
-static PyObject *PyCAst_getter_specifier_qualifier_list2_item_type_qualifier(PyObject *_self)
+static PyObject *PyCAst_getter_specifier_qualifier_list2_item_type_specifier(PyObject *_self)
 {
 	PyCAst_object_specifier_qualifier_list2_item *self=(PyCAst_object_specifier_qualifier_list2_item*)(_self);
 	CAst::specifier_qualifier_list2_item *_c_obj=self->_p_cast_object;
-	CAst::type_qualifier *_p_parameter=const_cast<CAst::type_qualifier*>(_c_obj->get_p_type_qualifier());
-	if(_p_parameter->typeId()==CAst::CAST_TYPE_TYPE_QUALIFIER)
+	CAst::type_specifier *_p_parameter=const_cast<CAst::type_specifier*>(_c_obj->get_p_type_specifier());
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_TYPE_SPECIFIER1)
 	{
-		PyCAst_object_type_qualifier *pyObj=(PyCAst_object_type_qualifier*)PyCAst_type_type_qualifier.tp_new(&PyCAst_type_type_qualifier,NULL,NULL);
-		pyObj->_p_cast_object=new CAst::type_qualifier(*dynamic_cast<CAst::type_qualifier*>(_p_parameter));
+		PyCAst_object_type_specifier1 *pyObj=(PyCAst_object_type_specifier1*)PyCAst_type_type_specifier1.tp_new(&PyCAst_type_type_specifier1,NULL,NULL);
+		pyObj->_p_cast_object=new CAst::type_specifier1(*dynamic_cast<CAst::type_specifier1*>(_p_parameter));
+		return (PyObject*)pyObj;
+	}
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_TYPE_SPECIFIER2)
+	{
+		PyCAst_object_type_specifier2 *pyObj=(PyCAst_object_type_specifier2*)PyCAst_type_type_specifier2.tp_new(&PyCAst_type_type_specifier2,NULL,NULL);
+		pyObj->_p_cast_object=new CAst::type_specifier2(*dynamic_cast<CAst::type_specifier2*>(_p_parameter));
+		return (PyObject*)pyObj;
+	}
+	if(_p_parameter->typeId()==CAst::CAST_TYPE_TYPE_SPECIFIER3)
+	{
+		PyCAst_object_type_specifier3 *pyObj=(PyCAst_object_type_specifier3*)PyCAst_type_type_specifier3.tp_new(&PyCAst_type_type_specifier3,NULL,NULL);
+		pyObj->_p_cast_object=new CAst::type_specifier3(*dynamic_cast<CAst::type_specifier3*>(_p_parameter));
 		return (PyObject*)pyObj;
 	}
 	return (PyObject*)(PyString_FromString("NotFound!!! Report bug"));
@@ -16151,12 +16151,12 @@ initPyCAst(void)
 	if (PyType_Ready(&PyCAst_type_equality_expression_item) < 0) {printf("Initialization of PyCAst_type_equality_expression_items FAILED");return;}
 	if (PyType_Ready(&PyCAst_type_primary_expression1) < 0) {printf("Initialization of PyCAst_type_primary_expression1s FAILED");return;}
 	if (PyType_Ready(&PyCAst_type_primary_expression2) < 0) {printf("Initialization of PyCAst_type_primary_expression2s FAILED");return;}
-	if (PyType_Ready(&PyCAst_type_declaration_specifiers1) < 0) {printf("Initialization of PyCAst_type_declaration_specifiers1s FAILED");return;}
-	if (PyType_Ready(&PyCAst_type_declaration_specifiers1_iterator) < 0) {printf("Initialization of PyCAst_type_declaration_specifiers1_iterators FAILED");return;}
-	if (PyType_Ready(&PyCAst_type_declaration_specifiers1_item) < 0) {printf("Initialization of PyCAst_type_declaration_specifiers1_items FAILED");return;}
-	if (PyType_Ready(&PyCAst_type_declaration_specifiers2) < 0) {printf("Initialization of PyCAst_type_declaration_specifiers2s FAILED");return;}
-	if (PyType_Ready(&PyCAst_type_declaration_specifiers2_iterator) < 0) {printf("Initialization of PyCAst_type_declaration_specifiers2_iterators FAILED");return;}
-	if (PyType_Ready(&PyCAst_type_declaration_specifiers2_item) < 0) {printf("Initialization of PyCAst_type_declaration_specifiers2_items FAILED");return;}
+	if (PyType_Ready(&PyCAst_type_declaration_specifiers3) < 0) {printf("Initialization of PyCAst_type_declaration_specifiers3s FAILED");return;}
+	if (PyType_Ready(&PyCAst_type_declaration_specifiers3_iterator) < 0) {printf("Initialization of PyCAst_type_declaration_specifiers3_iterators FAILED");return;}
+	if (PyType_Ready(&PyCAst_type_declaration_specifiers3_item) < 0) {printf("Initialization of PyCAst_type_declaration_specifiers3_items FAILED");return;}
+	if (PyType_Ready(&PyCAst_type_declaration_specifiers3) < 0) {printf("Initialization of PyCAst_type_declaration_specifiers3s FAILED");return;}
+	if (PyType_Ready(&PyCAst_type_declaration_specifiers3_iterator) < 0) {printf("Initialization of PyCAst_type_declaration_specifiers3_iterators FAILED");return;}
+	if (PyType_Ready(&PyCAst_type_declaration_specifiers3_item) < 0) {printf("Initialization of PyCAst_type_declaration_specifiers3_items FAILED");return;}
 	if (PyType_Ready(&PyCAst_type_declaration_specifiers3) < 0) {printf("Initialization of PyCAst_type_declaration_specifiers3s FAILED");return;}
 	if (PyType_Ready(&PyCAst_type_declaration_specifiers3_iterator) < 0) {printf("Initialization of PyCAst_type_declaration_specifiers3_iterators FAILED");return;}
 	if (PyType_Ready(&PyCAst_type_declaration_specifiers3_item) < 0) {printf("Initialization of PyCAst_type_declaration_specifiers3_items FAILED");return;}
@@ -16196,9 +16196,9 @@ initPyCAst(void)
 	if (PyType_Ready(&PyCAst_type_declaration_list) < 0) {printf("Initialization of PyCAst_type_declaration_lists FAILED");return;}
 	if (PyType_Ready(&PyCAst_type_declaration_list_iterator) < 0) {printf("Initialization of PyCAst_type_declaration_list_iterators FAILED");return;}
 	if (PyType_Ready(&PyCAst_type_declaration_list_item) < 0) {printf("Initialization of PyCAst_type_declaration_list_items FAILED");return;}
-	if (PyType_Ready(&PyCAst_type_specifier_qualifier_list1) < 0) {printf("Initialization of PyCAst_type_specifier_qualifier_list1s FAILED");return;}
-	if (PyType_Ready(&PyCAst_type_specifier_qualifier_list1_iterator) < 0) {printf("Initialization of PyCAst_type_specifier_qualifier_list1_iterators FAILED");return;}
-	if (PyType_Ready(&PyCAst_type_specifier_qualifier_list1_item) < 0) {printf("Initialization of PyCAst_type_specifier_qualifier_list1_items FAILED");return;}
+	if (PyType_Ready(&PyCAst_type_specifier_qualifier_list2) < 0) {printf("Initialization of PyCAst_type_specifier_qualifier_list2s FAILED");return;}
+	if (PyType_Ready(&PyCAst_type_specifier_qualifier_list2_iterator) < 0) {printf("Initialization of PyCAst_type_specifier_qualifier_list2_iterators FAILED");return;}
+	if (PyType_Ready(&PyCAst_type_specifier_qualifier_list2_item) < 0) {printf("Initialization of PyCAst_type_specifier_qualifier_list2_items FAILED");return;}
 	if (PyType_Ready(&PyCAst_type_specifier_qualifier_list2) < 0) {printf("Initialization of PyCAst_type_specifier_qualifier_list2s FAILED");return;}
 	if (PyType_Ready(&PyCAst_type_specifier_qualifier_list2_iterator) < 0) {printf("Initialization of PyCAst_type_specifier_qualifier_list2_iterators FAILED");return;}
 	if (PyType_Ready(&PyCAst_type_specifier_qualifier_list2_item) < 0) {printf("Initialization of PyCAst_type_specifier_qualifier_list2_items FAILED");return;}
@@ -16406,18 +16406,18 @@ initPyCAst(void)
 	PyModule_AddObject(m,"primary_expression1", (PyObject *)&PyCAst_type_primary_expression1);
 	Py_INCREF(&PyCAst_type_primary_expression2);
 	PyModule_AddObject(m,"primary_expression2", (PyObject *)&PyCAst_type_primary_expression2);
-	Py_INCREF(&PyCAst_type_declaration_specifiers1);
-	PyModule_AddObject(m,"declaration_specifiers1", (PyObject *)&PyCAst_type_declaration_specifiers1);
-	Py_INCREF(&PyCAst_type_declaration_specifiers1_iterator);
-	PyModule_AddObject(m,"declaration_specifiers1_iterator", (PyObject *)&PyCAst_type_declaration_specifiers1_iterator);
-	Py_INCREF(&PyCAst_type_declaration_specifiers1_item);
-	PyModule_AddObject(m,"declaration_specifiers1_item", (PyObject *)&PyCAst_type_declaration_specifiers1_item);
-	Py_INCREF(&PyCAst_type_declaration_specifiers2);
-	PyModule_AddObject(m,"declaration_specifiers2", (PyObject *)&PyCAst_type_declaration_specifiers2);
-	Py_INCREF(&PyCAst_type_declaration_specifiers2_iterator);
-	PyModule_AddObject(m,"declaration_specifiers2_iterator", (PyObject *)&PyCAst_type_declaration_specifiers2_iterator);
-	Py_INCREF(&PyCAst_type_declaration_specifiers2_item);
-	PyModule_AddObject(m,"declaration_specifiers2_item", (PyObject *)&PyCAst_type_declaration_specifiers2_item);
+	Py_INCREF(&PyCAst_type_declaration_specifiers3);
+	PyModule_AddObject(m,"declaration_specifiers3", (PyObject *)&PyCAst_type_declaration_specifiers3);
+	Py_INCREF(&PyCAst_type_declaration_specifiers3_iterator);
+	PyModule_AddObject(m,"declaration_specifiers3_iterator", (PyObject *)&PyCAst_type_declaration_specifiers3_iterator);
+	Py_INCREF(&PyCAst_type_declaration_specifiers3_item);
+	PyModule_AddObject(m,"declaration_specifiers3_item", (PyObject *)&PyCAst_type_declaration_specifiers3_item);
+	Py_INCREF(&PyCAst_type_declaration_specifiers3);
+	PyModule_AddObject(m,"declaration_specifiers3", (PyObject *)&PyCAst_type_declaration_specifiers3);
+	Py_INCREF(&PyCAst_type_declaration_specifiers3_iterator);
+	PyModule_AddObject(m,"declaration_specifiers3_iterator", (PyObject *)&PyCAst_type_declaration_specifiers3_iterator);
+	Py_INCREF(&PyCAst_type_declaration_specifiers3_item);
+	PyModule_AddObject(m,"declaration_specifiers3_item", (PyObject *)&PyCAst_type_declaration_specifiers3_item);
 	Py_INCREF(&PyCAst_type_declaration_specifiers3);
 	PyModule_AddObject(m,"declaration_specifiers3", (PyObject *)&PyCAst_type_declaration_specifiers3);
 	Py_INCREF(&PyCAst_type_declaration_specifiers3_iterator);
@@ -16496,12 +16496,12 @@ initPyCAst(void)
 	PyModule_AddObject(m,"declaration_list_iterator", (PyObject *)&PyCAst_type_declaration_list_iterator);
 	Py_INCREF(&PyCAst_type_declaration_list_item);
 	PyModule_AddObject(m,"declaration_list_item", (PyObject *)&PyCAst_type_declaration_list_item);
-	Py_INCREF(&PyCAst_type_specifier_qualifier_list1);
-	PyModule_AddObject(m,"specifier_qualifier_list1", (PyObject *)&PyCAst_type_specifier_qualifier_list1);
-	Py_INCREF(&PyCAst_type_specifier_qualifier_list1_iterator);
-	PyModule_AddObject(m,"specifier_qualifier_list1_iterator", (PyObject *)&PyCAst_type_specifier_qualifier_list1_iterator);
-	Py_INCREF(&PyCAst_type_specifier_qualifier_list1_item);
-	PyModule_AddObject(m,"specifier_qualifier_list1_item", (PyObject *)&PyCAst_type_specifier_qualifier_list1_item);
+	Py_INCREF(&PyCAst_type_specifier_qualifier_list2);
+	PyModule_AddObject(m,"specifier_qualifier_list2", (PyObject *)&PyCAst_type_specifier_qualifier_list2);
+	Py_INCREF(&PyCAst_type_specifier_qualifier_list2_iterator);
+	PyModule_AddObject(m,"specifier_qualifier_list2_iterator", (PyObject *)&PyCAst_type_specifier_qualifier_list2_iterator);
+	Py_INCREF(&PyCAst_type_specifier_qualifier_list2_item);
+	PyModule_AddObject(m,"specifier_qualifier_list2_item", (PyObject *)&PyCAst_type_specifier_qualifier_list2_item);
 	Py_INCREF(&PyCAst_type_specifier_qualifier_list2);
 	PyModule_AddObject(m,"specifier_qualifier_list2", (PyObject *)&PyCAst_type_specifier_qualifier_list2);
 	Py_INCREF(&PyCAst_type_specifier_qualifier_list2_iterator);

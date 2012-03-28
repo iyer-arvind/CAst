@@ -768,7 +768,6 @@ std::ostream& conditional_expression_item::codeStream(std::ostream& stream,bool 
 {
 	if(initFlag)
 	{
-	if(_p_logical_or_expression)_p_logical_or_expression->codeStream(stream);
 	}
 	else
 	{
@@ -850,15 +849,6 @@ std::string conditional_expression::pattern()const {return "logical_or_expressio
 
 
 /*construct from elements*/
-conditional_expression::conditional_expression
-	(
-		std::string _arg_s_matchedPattern,
-		logical_or_expression *_arg__p_logical_or_expression
-	 )
-{
-	LOG("\033[32mCREATING\033[0m conditional_expression");
-	conditional_expression_item item(_arg_s_matchedPattern,_arg__p_logical_or_expression,NULL);
-	_items.push_back(item);
 }
 
 /*conditional_expression::append() appends an item to the list of items*/
@@ -1064,7 +1054,6 @@ std::ostream& exclusive_or_expression_item::codeStream(std::ostream& stream,bool
 {
 	if(initFlag)
 	{
-	if(_p_and_expression)_p_and_expression->codeStream(stream);
 	}
 	else
 	{
@@ -1137,15 +1126,6 @@ std::string exclusive_or_expression::pattern()const {return "exclusive_or_expres
 
 
 /*construct from elements*/
-exclusive_or_expression::exclusive_or_expression
-	(
-		std::string _arg_s_matchedPattern,
-		and_expression *_arg__p_and_expression
-	 )
-{
-	LOG("\033[32mCREATING\033[0m exclusive_or_expression");
-	exclusive_or_expression_item item(_arg_s_matchedPattern,_arg__p_and_expression);
-	_items.push_back(item);
 }
 
 /*exclusive_or_expression::append() appends an item to the list of items*/
@@ -1395,7 +1375,6 @@ std::ostream& struct_declaration_list_item::codeStream(std::ostream& stream,bool
 {
 	if(initFlag)
 	{
-	if(_p_struct_declaration)_p_struct_declaration->codeStream(stream);
 	}
 	else
 	{
@@ -1467,15 +1446,6 @@ std::string struct_declaration_list::pattern()const {return "struct_declaration_
 
 
 /*construct from elements*/
-struct_declaration_list::struct_declaration_list
-	(
-		std::string _arg_s_matchedPattern,
-		struct_declaration *_arg__p_struct_declaration
-	 )
-{
-	LOG("\033[32mCREATING\033[0m struct_declaration_list");
-	struct_declaration_list_item item(_arg_s_matchedPattern,_arg__p_struct_declaration);
-	_items.push_back(item);
 }
 
 /*struct_declaration_list::append() appends an item to the list of items*/
@@ -2154,7 +2124,6 @@ std::ostream& additive_expression_item::codeStream(std::ostream& stream,bool ini
 {
 	if(initFlag)
 	{
-	if(_p_multiplicative_expression)_p_multiplicative_expression->codeStream(stream);
 	}
 	else
 	{
@@ -2234,15 +2203,6 @@ std::string additive_expression::pattern()const {return "additive_expression,'+'
 
 
 /*construct from elements*/
-additive_expression::additive_expression
-	(
-		std::string _arg_s_matchedPattern,
-		multiplicative_expression *_arg__p_multiplicative_expression
-	 )
-{
-	LOG("\033[32mCREATING\033[0m additive_expression");
-	additive_expression_item item(_arg_s_matchedPattern,NULL,_arg__p_multiplicative_expression);
-	_items.push_back(item);
 }
 
 /*additive_expression::append() appends an item to the list of items*/
@@ -2840,7 +2800,6 @@ std::ostream& inclusive_or_expression_item::codeStream(std::ostream& stream,bool
 {
 	if(initFlag)
 	{
-	if(_p_exclusive_or_expression)_p_exclusive_or_expression->codeStream(stream);
 	}
 	else
 	{
@@ -2913,15 +2872,6 @@ std::string inclusive_or_expression::pattern()const {return "inclusive_or_expres
 
 
 /*construct from elements*/
-inclusive_or_expression::inclusive_or_expression
-	(
-		std::string _arg_s_matchedPattern,
-		exclusive_or_expression *_arg__p_exclusive_or_expression
-	 )
-{
-	LOG("\033[32mCREATING\033[0m inclusive_or_expression");
-	inclusive_or_expression_item item(_arg_s_matchedPattern,_arg__p_exclusive_or_expression);
-	_items.push_back(item);
 }
 
 /*inclusive_or_expression::append() appends an item to the list of items*/
@@ -2990,7 +2940,6 @@ std::ostream& pointer_item::codeStream(std::ostream& stream,bool initFlag)const
 {
 	if(initFlag)
 	{
-	if(_p_type_qualifier_list)_p_type_qualifier_list->codeStream(stream);
 	}
 	else
 	{
@@ -3063,15 +3012,6 @@ std::string pointer::pattern()const {return "'*',type_qualifier_list,pointer";}
 
 
 /*construct from elements*/
-pointer::pointer
-	(
-		std::string _arg_s_matchedPattern,
-		type_qualifier_list *_arg__p_type_qualifier_list
-	 )
-{
-	LOG("\033[32mCREATING\033[0m pointer");
-	pointer_item item(_arg_s_matchedPattern,_arg__p_type_qualifier_list);
-	_items.push_back(item);
 }
 
 /*pointer::append() appends an item to the list of items*/
@@ -3825,7 +3765,6 @@ std::ostream& and_expression_item::codeStream(std::ostream& stream,bool initFlag
 {
 	if(initFlag)
 	{
-	if(_p_equality_expression)_p_equality_expression->codeStream(stream);
 	}
 	else
 	{
@@ -3898,15 +3837,6 @@ std::string and_expression::pattern()const {return "and_expression,'&',equality_
 
 
 /*construct from elements*/
-and_expression::and_expression
-	(
-		std::string _arg_s_matchedPattern,
-		equality_expression *_arg__p_equality_expression
-	 )
-{
-	LOG("\033[32mCREATING\033[0m and_expression");
-	and_expression_item item(_arg_s_matchedPattern,_arg__p_equality_expression);
-	_items.push_back(item);
 }
 
 /*and_expression::append() appends an item to the list of items*/
@@ -4722,7 +4652,6 @@ std::ostream& struct_declarator_list_item::codeStream(std::ostream& stream,bool 
 {
 	if(initFlag)
 	{
-	if(_p_struct_declarator)_p_struct_declarator->codeStream(stream);
 	}
 	else
 	{
@@ -4795,15 +4724,6 @@ std::string struct_declarator_list::pattern()const {return "struct_declarator_li
 
 
 /*construct from elements*/
-struct_declarator_list::struct_declarator_list
-	(
-		std::string _arg_s_matchedPattern,
-		struct_declarator *_arg__p_struct_declarator
-	 )
-{
-	LOG("\033[32mCREATING\033[0m struct_declarator_list");
-	struct_declarator_list_item item(_arg_s_matchedPattern,_arg__p_struct_declarator);
-	_items.push_back(item);
 }
 
 /*struct_declarator_list::append() appends an item to the list of items*/
@@ -4872,7 +4792,6 @@ std::ostream& logical_or_expression_item::codeStream(std::ostream& stream,bool i
 {
 	if(initFlag)
 	{
-	if(_p_logical_and_expression)_p_logical_and_expression->codeStream(stream);
 	}
 	else
 	{
@@ -4945,15 +4864,6 @@ std::string logical_or_expression::pattern()const {return "logical_or_expression
 
 
 /*construct from elements*/
-logical_or_expression::logical_or_expression
-	(
-		std::string _arg_s_matchedPattern,
-		logical_and_expression *_arg__p_logical_and_expression
-	 )
-{
-	LOG("\033[32mCREATING\033[0m logical_or_expression");
-	logical_or_expression_item item(_arg_s_matchedPattern,_arg__p_logical_and_expression);
-	_items.push_back(item);
 }
 
 /*logical_or_expression::append() appends an item to the list of items*/
@@ -5135,7 +5045,6 @@ std::ostream& relational_expression_item::codeStream(std::ostream& stream,bool i
 {
 	if(initFlag)
 	{
-	if(_p_shift_expression)_p_shift_expression->codeStream(stream);
 	}
 	else
 	{
@@ -5215,15 +5124,6 @@ std::string relational_expression::pattern()const {return "relational_expression
 
 
 /*construct from elements*/
-relational_expression::relational_expression
-	(
-		std::string _arg_s_matchedPattern,
-		shift_expression *_arg__p_shift_expression
-	 )
-{
-	LOG("\033[32mCREATING\033[0m relational_expression");
-	relational_expression_item item(_arg_s_matchedPattern,NULL,_arg__p_shift_expression);
-	_items.push_back(item);
 }
 
 /*relational_expression::append() appends an item to the list of items*/
@@ -5960,7 +5860,6 @@ std::ostream& multiplicative_expression_item::codeStream(std::ostream& stream,bo
 {
 	if(initFlag)
 	{
-	if(_p_cast_expression)_p_cast_expression->codeStream(stream);
 	}
 	else
 	{
@@ -6040,15 +5939,6 @@ std::string multiplicative_expression::pattern()const {return "multiplicative_ex
 
 
 /*construct from elements*/
-multiplicative_expression::multiplicative_expression
-	(
-		std::string _arg_s_matchedPattern,
-		cast_expression *_arg__p_cast_expression
-	 )
-{
-	LOG("\033[32mCREATING\033[0m multiplicative_expression");
-	multiplicative_expression_item item(_arg_s_matchedPattern,NULL,_arg__p_cast_expression);
-	_items.push_back(item);
 }
 
 /*multiplicative_expression::append() appends an item to the list of items*/
@@ -6118,7 +6008,6 @@ std::ostream& type_qualifier_list_item::codeStream(std::ostream& stream,bool ini
 {
 	if(initFlag)
 	{
-	if(_p_type_qualifier)_p_type_qualifier->codeStream(stream);
 	}
 	else
 	{
@@ -6190,15 +6079,6 @@ std::string type_qualifier_list::pattern()const {return "type_qualifier_list,typ
 
 
 /*construct from elements*/
-type_qualifier_list::type_qualifier_list
-	(
-		std::string _arg_s_matchedPattern,
-		type_qualifier *_arg__p_type_qualifier
-	 )
-{
-	LOG("\033[32mCREATING\033[0m type_qualifier_list");
-	type_qualifier_list_item item(_arg_s_matchedPattern,_arg__p_type_qualifier);
-	_items.push_back(item);
 }
 
 /*type_qualifier_list::append() appends an item to the list of items*/
@@ -6267,7 +6147,6 @@ std::ostream& argument_expression_list_item::codeStream(std::ostream& stream,boo
 {
 	if(initFlag)
 	{
-	if(_p_assignment_expression)_p_assignment_expression->codeStream(stream);
 	}
 	else
 	{
@@ -6340,15 +6219,6 @@ std::string argument_expression_list::pattern()const {return "argument_expressio
 
 
 /*construct from elements*/
-argument_expression_list::argument_expression_list
-	(
-		std::string _arg_s_matchedPattern,
-		assignment_expression *_arg__p_assignment_expression
-	 )
-{
-	LOG("\033[32mCREATING\033[0m argument_expression_list");
-	argument_expression_list_item item(_arg_s_matchedPattern,_arg__p_assignment_expression);
-	_items.push_back(item);
 }
 
 /*argument_expression_list::append() appends an item to the list of items*/
@@ -6679,7 +6549,6 @@ std::ostream& equality_expression_item::codeStream(std::ostream& stream,bool ini
 {
 	if(initFlag)
 	{
-	if(_p_relational_expression)_p_relational_expression->codeStream(stream);
 	}
 	else
 	{
@@ -6759,15 +6628,6 @@ std::string equality_expression::pattern()const {return "equality_expression,EQ_
 
 
 /*construct from elements*/
-equality_expression::equality_expression
-	(
-		std::string _arg_s_matchedPattern,
-		relational_expression *_arg__p_relational_expression
-	 )
-{
-	LOG("\033[32mCREATING\033[0m equality_expression");
-	equality_expression_item item(_arg_s_matchedPattern,NULL,_arg__p_relational_expression);
-	_items.push_back(item);
 }
 
 /*equality_expression::append() appends an item to the list of items*/
@@ -6965,306 +6825,8 @@ primary_expression2::~primary_expression2()
 			
 /*=============================================================================================================*\
                                                                                                                  
- 	THE declaration_specifiers1 CLASS                                                                                 
- 	FOR PATTERN : [storage_class_specifier,declaration_specifiers]		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
-
-/*------------------------------------------------------------*\
- 							        
-  item class declaration_specifiers1_item                              
-                                                                
-\*------------------------------------------------------------*/
-/*construct item from elements*/
-declaration_specifiers1_item::declaration_specifiers1_item
-	(
-		std::string _arg_s_matchedPattern,
-		storage_class_specifier *_arg__p_storage_class_specifier
-	):
-	_s_matchedPattern(_arg_s_matchedPattern),
-	_refCount(new int(1)),
-	_p_storage_class_specifier(_arg__p_storage_class_specifier)
-{
-	LOG("\033[32mCREATING\033[0m declaration_specifiers1");
-	LOG("[ "<<_refCount<<" ]\t"<<"refCount after creation:"<<(*_refCount));//>>>>
-}
-
-
-/*declaration_specifiers1_item::codeStream() returns the code for the node of AST*/
-std::ostream& declaration_specifiers1_item::codeStream(std::ostream& stream,bool initFlag)const 
-{
-	if(initFlag)
-	{
-	if(_p_storage_class_specifier)_p_storage_class_specifier->codeStream(stream);
-	}
-	else
-	{
-	if(_p_storage_class_specifier)_p_storage_class_specifier->codeStream(stream);
-	}
-	return  stream;
-}
-
-/*copy constructor*/
-declaration_specifiers1_item::declaration_specifiers1_item(const declaration_specifiers1_item& other):
-		_s_matchedPattern(other._s_matchedPattern),
-		_refCount(other._refCount),
-		_p_storage_class_specifier(other._p_storage_class_specifier)
-{
-	LOG("\033[32mCOPYING\033[0m declaration_specifiers1_item");
-	(*_refCount)++;
-	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increement:"<<(*_refCount));//>>>>
-
-}
-
-
-/*declaration_specifiers1_item::getProperties returns a map of properties for the item*/
-Properties declaration_specifiers1_item::getProperties()const
-{
-	Properties props("declaration_specifiers1_items");
-	props["storage_class_specifier"]=_p_storage_class_specifier;
-	return props;
-}
-
-
-/*the destructor*/
-declaration_specifiers1_item::~declaration_specifiers1_item()
-{
-	(*_refCount)--;
-	LOG("\033[33mDELETING?\033[0m declaration_specifiers1_item refCount:"<<(*_refCount));
-	if((*_refCount)>0)return;
-	LOG("[ "<<_refCount<<" ]\t"<<"refCount after decrement:"<<(*_refCount));//>>>>
-	if(_p_storage_class_specifier)
-	{
-		delete _p_storage_class_specifier;
-		_p_storage_class_specifier=0;
-	}
-	delete _refCount;_refCount=0;
-	LOG("\033[31mDELETED\033[0m declaration_specifiers1_item");
-}
-/*------------------------------------------------------------*\
- 							        
-  main class declaration_specifiers1                         
-                                                                
-\*------------------------------------------------------------*/
-/*declaration_specifiers1::name() returns the name of the class*/
-std::string declaration_specifiers1::name()const {return "declaration_specifiers1";}
-
-/*declaration_specifiers1::codeStream() returns the code for the node of AST*/
-std::ostream& declaration_specifiers1::codeStream(std::ostream& stream )const 
-{
-	for(CItemsListIter item=_items.begin();item!=_items.end();item++)
-	{
-		item->codeStream(stream,item==_items.begin());
-	}
-	return  stream;
-}
-
-/*declaration_specifiers1::typeId() returns the type of the class, here, CAST_TYPE_DECLARATION_SPECIFIERS1*/
-CAstType declaration_specifiers1::typeId()const {return CAST_TYPE_DECLARATION_SPECIFIERS1;}
-
-/*declaration_specifiers1::pattern returns the pattern matched*/
-std::string declaration_specifiers1::pattern()const {return "storage_class_specifier,declaration_specifiers";}
-
-
-/*construct from elements*/
-declaration_specifiers1::declaration_specifiers1
-	(
-		std::string _arg_s_matchedPattern,
-		storage_class_specifier *_arg__p_storage_class_specifier
-	 )
-{
-	LOG("\033[32mCREATING\033[0m declaration_specifiers1");
-	declaration_specifiers1_item item(_arg_s_matchedPattern,_arg__p_storage_class_specifier);
-	_items.push_back(item);
-}
-
-/*declaration_specifiers1::append() appends an item to the list of items*/
-void declaration_specifiers1::append
-	(
-		std::string _arg_s_matchedPattern,
-		storage_class_specifier *_arg__p_storage_class_specifier	)
-{
-	declaration_specifiers1_item item(_arg_s_matchedPattern, _arg__p_storage_class_specifier);
-	_items.push_back(item);
-		
-}
-
-/*declaration_specifiers1::getPropertyList() returns the list of properties*/
-PropertiesList declaration_specifiers1::getPropertiesList()const
-{
-	PropertiesList pList("declaration_specifiers1");
-	for (CItemsListIter i=_items.begin();i!=_items.end();i++)
-	{
-		pList.push_back(i->getProperties());
-	}
-	return pList;
-	
-}
-
-/*the destructor*/
-declaration_specifiers1::~declaration_specifiers1()
-{
-	LOG("\033[33mDELETING?\033[0m declaration_specifiers1");
-	_items.clear();
-	LOG("\033[31mDELETED\033[0m declaration_specifiers1");
-}
-
-
-			
-			
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE declaration_specifiers2 CLASS                                                                                 
- 	FOR PATTERN : [type_specifier,declaration_specifiers]		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
-
-/*------------------------------------------------------------*\
- 							        
-  item class declaration_specifiers2_item                              
-                                                                
-\*------------------------------------------------------------*/
-/*construct item from elements*/
-declaration_specifiers2_item::declaration_specifiers2_item
-	(
-		std::string _arg_s_matchedPattern,
-		type_specifier *_arg__p_type_specifier
-	):
-	_s_matchedPattern(_arg_s_matchedPattern),
-	_refCount(new int(1)),
-	_p_type_specifier(_arg__p_type_specifier)
-{
-	LOG("\033[32mCREATING\033[0m declaration_specifiers2");
-	LOG("[ "<<_refCount<<" ]\t"<<"refCount after creation:"<<(*_refCount));//>>>>
-}
-
-
-/*declaration_specifiers2_item::codeStream() returns the code for the node of AST*/
-std::ostream& declaration_specifiers2_item::codeStream(std::ostream& stream,bool initFlag)const 
-{
-	if(initFlag)
-	{
-	if(_p_type_specifier)_p_type_specifier->codeStream(stream);
-	}
-	else
-	{
-	if(_p_type_specifier)_p_type_specifier->codeStream(stream);
-	}
-	return  stream;
-}
-
-/*copy constructor*/
-declaration_specifiers2_item::declaration_specifiers2_item(const declaration_specifiers2_item& other):
-		_s_matchedPattern(other._s_matchedPattern),
-		_refCount(other._refCount),
-		_p_type_specifier(other._p_type_specifier)
-{
-	LOG("\033[32mCOPYING\033[0m declaration_specifiers2_item");
-	(*_refCount)++;
-	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increement:"<<(*_refCount));//>>>>
-
-}
-
-
-/*declaration_specifiers2_item::getProperties returns a map of properties for the item*/
-Properties declaration_specifiers2_item::getProperties()const
-{
-	Properties props("declaration_specifiers2_items");
-	props["type_specifier"]=_p_type_specifier;
-	return props;
-}
-
-
-/*the destructor*/
-declaration_specifiers2_item::~declaration_specifiers2_item()
-{
-	(*_refCount)--;
-	LOG("\033[33mDELETING?\033[0m declaration_specifiers2_item refCount:"<<(*_refCount));
-	if((*_refCount)>0)return;
-	LOG("[ "<<_refCount<<" ]\t"<<"refCount after decrement:"<<(*_refCount));//>>>>
-	if(_p_type_specifier)
-	{
-		delete _p_type_specifier;
-		_p_type_specifier=0;
-	}
-	delete _refCount;_refCount=0;
-	LOG("\033[31mDELETED\033[0m declaration_specifiers2_item");
-}
-/*------------------------------------------------------------*\
- 							        
-  main class declaration_specifiers2                         
-                                                                
-\*------------------------------------------------------------*/
-/*declaration_specifiers2::name() returns the name of the class*/
-std::string declaration_specifiers2::name()const {return "declaration_specifiers2";}
-
-/*declaration_specifiers2::codeStream() returns the code for the node of AST*/
-std::ostream& declaration_specifiers2::codeStream(std::ostream& stream )const 
-{
-	for(CItemsListIter item=_items.begin();item!=_items.end();item++)
-	{
-		item->codeStream(stream,item==_items.begin());
-	}
-	return  stream;
-}
-
-/*declaration_specifiers2::typeId() returns the type of the class, here, CAST_TYPE_DECLARATION_SPECIFIERS2*/
-CAstType declaration_specifiers2::typeId()const {return CAST_TYPE_DECLARATION_SPECIFIERS2;}
-
-/*declaration_specifiers2::pattern returns the pattern matched*/
-std::string declaration_specifiers2::pattern()const {return "type_specifier,declaration_specifiers";}
-
-
-/*construct from elements*/
-declaration_specifiers2::declaration_specifiers2
-	(
-		std::string _arg_s_matchedPattern,
-		type_specifier *_arg__p_type_specifier
-	 )
-{
-	LOG("\033[32mCREATING\033[0m declaration_specifiers2");
-	declaration_specifiers2_item item(_arg_s_matchedPattern,_arg__p_type_specifier);
-	_items.push_back(item);
-}
-
-/*declaration_specifiers2::append() appends an item to the list of items*/
-void declaration_specifiers2::append
-	(
-		std::string _arg_s_matchedPattern,
-		type_specifier *_arg__p_type_specifier	)
-{
-	declaration_specifiers2_item item(_arg_s_matchedPattern, _arg__p_type_specifier);
-	_items.push_back(item);
-		
-}
-
-/*declaration_specifiers2::getPropertyList() returns the list of properties*/
-PropertiesList declaration_specifiers2::getPropertiesList()const
-{
-	PropertiesList pList("declaration_specifiers2");
-	for (CItemsListIter i=_items.begin();i!=_items.end();i++)
-	{
-		pList.push_back(i->getProperties());
-	}
-	return pList;
-	
-}
-
-/*the destructor*/
-declaration_specifiers2::~declaration_specifiers2()
-{
-	LOG("\033[33mDELETING?\033[0m declaration_specifiers2");
-	_items.clear();
-	LOG("\033[31mDELETED\033[0m declaration_specifiers2");
-}
-
-
-			
-			
-/*=============================================================================================================*\
-                                                                                                                 
  	THE declaration_specifiers3 CLASS                                                                                 
- 	FOR PATTERN : [type_qualifier,declaration_specifiers]		                                                                 
+ 	FOR PATTERN : [storage_class_specifier,declaration_specifiers]		                                                                 
                                                                                                                  
 \*=============================================================================================================*/  
 
@@ -7277,11 +6839,11 @@ declaration_specifiers2::~declaration_specifiers2()
 declaration_specifiers3_item::declaration_specifiers3_item
 	(
 		std::string _arg_s_matchedPattern,
-		type_qualifier *_arg__p_type_qualifier
+		storage_class_specifier *_arg__p_storage_class_specifier
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
 	_refCount(new int(1)),
-	_p_type_qualifier(_arg__p_type_qualifier)
+	_p_storage_class_specifier(_arg__p_storage_class_specifier)
 {
 	LOG("\033[32mCREATING\033[0m declaration_specifiers3");
 	LOG("[ "<<_refCount<<" ]\t"<<"refCount after creation:"<<(*_refCount));//>>>>
@@ -7293,11 +6855,10 @@ std::ostream& declaration_specifiers3_item::codeStream(std::ostream& stream,bool
 {
 	if(initFlag)
 	{
-	if(_p_type_qualifier)_p_type_qualifier->codeStream(stream);
 	}
 	else
 	{
-	if(_p_type_qualifier)_p_type_qualifier->codeStream(stream);
+	if(_p_storage_class_specifier)_p_storage_class_specifier->codeStream(stream);
 	}
 	return  stream;
 }
@@ -7306,7 +6867,7 @@ std::ostream& declaration_specifiers3_item::codeStream(std::ostream& stream,bool
 declaration_specifiers3_item::declaration_specifiers3_item(const declaration_specifiers3_item& other):
 		_s_matchedPattern(other._s_matchedPattern),
 		_refCount(other._refCount),
-		_p_type_qualifier(other._p_type_qualifier)
+		_p_storage_class_specifier(other._p_storage_class_specifier)
 {
 	LOG("\033[32mCOPYING\033[0m declaration_specifiers3_item");
 	(*_refCount)++;
@@ -7319,7 +6880,7 @@ declaration_specifiers3_item::declaration_specifiers3_item(const declaration_spe
 Properties declaration_specifiers3_item::getProperties()const
 {
 	Properties props("declaration_specifiers3_items");
-	props["type_qualifier"]=_p_type_qualifier;
+	props["storage_class_specifier"]=_p_storage_class_specifier;
 	return props;
 }
 
@@ -7331,10 +6892,10 @@ declaration_specifiers3_item::~declaration_specifiers3_item()
 	LOG("\033[33mDELETING?\033[0m declaration_specifiers3_item refCount:"<<(*_refCount));
 	if((*_refCount)>0)return;
 	LOG("[ "<<_refCount<<" ]\t"<<"refCount after decrement:"<<(*_refCount));//>>>>
-	if(_p_type_qualifier)
+	if(_p_storage_class_specifier)
 	{
-		delete _p_type_qualifier;
-		_p_type_qualifier=0;
+		delete _p_storage_class_specifier;
+		_p_storage_class_specifier=0;
 	}
 	delete _refCount;_refCount=0;
 	LOG("\033[31mDELETED\033[0m declaration_specifiers3_item");
@@ -7361,28 +6922,297 @@ std::ostream& declaration_specifiers3::codeStream(std::ostream& stream )const
 CAstType declaration_specifiers3::typeId()const {return CAST_TYPE_DECLARATION_SPECIFIERS3;}
 
 /*declaration_specifiers3::pattern returns the pattern matched*/
-std::string declaration_specifiers3::pattern()const {return "type_qualifier,declaration_specifiers";}
+std::string declaration_specifiers3::pattern()const {return "storage_class_specifier,declaration_specifiers";}
 
 
 /*construct from elements*/
-declaration_specifiers3::declaration_specifiers3
-	(
-		std::string _arg_s_matchedPattern,
-		type_qualifier *_arg__p_type_qualifier
-	 )
-{
-	LOG("\033[32mCREATING\033[0m declaration_specifiers3");
-	declaration_specifiers3_item item(_arg_s_matchedPattern,_arg__p_type_qualifier);
-	_items.push_back(item);
 }
 
 /*declaration_specifiers3::append() appends an item to the list of items*/
 void declaration_specifiers3::append
 	(
 		std::string _arg_s_matchedPattern,
-		type_qualifier *_arg__p_type_qualifier	)
+		storage_class_specifier *_arg__p_storage_class_specifier	)
 {
-	declaration_specifiers3_item item(_arg_s_matchedPattern, _arg__p_type_qualifier);
+	declaration_specifiers3_item item(_arg_s_matchedPattern, _arg__p_storage_class_specifier);
+	_items.push_back(item);
+		
+}
+
+/*declaration_specifiers3::getPropertyList() returns the list of properties*/
+PropertiesList declaration_specifiers3::getPropertiesList()const
+{
+	PropertiesList pList("declaration_specifiers3");
+	for (CItemsListIter i=_items.begin();i!=_items.end();i++)
+	{
+		pList.push_back(i->getProperties());
+	}
+	return pList;
+	
+}
+
+/*the destructor*/
+declaration_specifiers3::~declaration_specifiers3()
+{
+	LOG("\033[33mDELETING?\033[0m declaration_specifiers3");
+	_items.clear();
+	LOG("\033[31mDELETED\033[0m declaration_specifiers3");
+}
+
+
+			
+			
+/*=============================================================================================================*\
+                                                                                                                 
+ 	THE declaration_specifiers3 CLASS                                                                                 
+ 	FOR PATTERN : [storage_class_specifier,declaration_specifiers]		                                                                 
+                                                                                                                 
+\*=============================================================================================================*/  
+
+/*------------------------------------------------------------*\
+ 							        
+  item class declaration_specifiers3_item                              
+                                                                
+\*------------------------------------------------------------*/
+/*construct item from elements*/
+declaration_specifiers3_item::declaration_specifiers3_item
+	(
+		std::string _arg_s_matchedPattern,
+		storage_class_specifier *_arg__p_storage_class_specifier
+	):
+	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
+	_p_storage_class_specifier(_arg__p_storage_class_specifier)
+{
+	LOG("\033[32mCREATING\033[0m declaration_specifiers3");
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after creation:"<<(*_refCount));//>>>>
+}
+
+
+/*declaration_specifiers3_item::codeStream() returns the code for the node of AST*/
+std::ostream& declaration_specifiers3_item::codeStream(std::ostream& stream,bool initFlag)const 
+{
+	if(initFlag)
+	{
+	}
+	else
+	{
+	if(_p_storage_class_specifier)_p_storage_class_specifier->codeStream(stream);
+	}
+	return  stream;
+}
+
+/*copy constructor*/
+declaration_specifiers3_item::declaration_specifiers3_item(const declaration_specifiers3_item& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_storage_class_specifier(other._p_storage_class_specifier)
+{
+	LOG("\033[32mCOPYING\033[0m declaration_specifiers3_item");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increement:"<<(*_refCount));//>>>>
+
+}
+
+
+/*declaration_specifiers3_item::getProperties returns a map of properties for the item*/
+Properties declaration_specifiers3_item::getProperties()const
+{
+	Properties props("declaration_specifiers3_items");
+	props["storage_class_specifier"]=_p_storage_class_specifier;
+	return props;
+}
+
+
+/*the destructor*/
+declaration_specifiers3_item::~declaration_specifiers3_item()
+{
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m declaration_specifiers3_item refCount:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after decrement:"<<(*_refCount));//>>>>
+	if(_p_storage_class_specifier)
+	{
+		delete _p_storage_class_specifier;
+		_p_storage_class_specifier=0;
+	}
+	delete _refCount;_refCount=0;
+	LOG("\033[31mDELETED\033[0m declaration_specifiers3_item");
+}
+/*------------------------------------------------------------*\
+ 							        
+  main class declaration_specifiers3                         
+                                                                
+\*------------------------------------------------------------*/
+/*declaration_specifiers3::name() returns the name of the class*/
+std::string declaration_specifiers3::name()const {return "declaration_specifiers3";}
+
+/*declaration_specifiers3::codeStream() returns the code for the node of AST*/
+std::ostream& declaration_specifiers3::codeStream(std::ostream& stream )const 
+{
+	for(CItemsListIter item=_items.begin();item!=_items.end();item++)
+	{
+		item->codeStream(stream,item==_items.begin());
+	}
+	return  stream;
+}
+
+/*declaration_specifiers3::typeId() returns the type of the class, here, CAST_TYPE_DECLARATION_SPECIFIERS3*/
+CAstType declaration_specifiers3::typeId()const {return CAST_TYPE_DECLARATION_SPECIFIERS3;}
+
+/*declaration_specifiers3::pattern returns the pattern matched*/
+std::string declaration_specifiers3::pattern()const {return "storage_class_specifier,declaration_specifiers";}
+
+
+/*construct from elements*/
+}
+
+/*declaration_specifiers3::append() appends an item to the list of items*/
+void declaration_specifiers3::append
+	(
+		std::string _arg_s_matchedPattern,
+		storage_class_specifier *_arg__p_storage_class_specifier	)
+{
+	declaration_specifiers3_item item(_arg_s_matchedPattern, _arg__p_storage_class_specifier);
+	_items.push_back(item);
+		
+}
+
+/*declaration_specifiers3::getPropertyList() returns the list of properties*/
+PropertiesList declaration_specifiers3::getPropertiesList()const
+{
+	PropertiesList pList("declaration_specifiers3");
+	for (CItemsListIter i=_items.begin();i!=_items.end();i++)
+	{
+		pList.push_back(i->getProperties());
+	}
+	return pList;
+	
+}
+
+/*the destructor*/
+declaration_specifiers3::~declaration_specifiers3()
+{
+	LOG("\033[33mDELETING?\033[0m declaration_specifiers3");
+	_items.clear();
+	LOG("\033[31mDELETED\033[0m declaration_specifiers3");
+}
+
+
+			
+			
+/*=============================================================================================================*\
+                                                                                                                 
+ 	THE declaration_specifiers3 CLASS                                                                                 
+ 	FOR PATTERN : [storage_class_specifier,declaration_specifiers]		                                                                 
+                                                                                                                 
+\*=============================================================================================================*/  
+
+/*------------------------------------------------------------*\
+ 							        
+  item class declaration_specifiers3_item                              
+                                                                
+\*------------------------------------------------------------*/
+/*construct item from elements*/
+declaration_specifiers3_item::declaration_specifiers3_item
+	(
+		std::string _arg_s_matchedPattern,
+		storage_class_specifier *_arg__p_storage_class_specifier
+	):
+	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
+	_p_storage_class_specifier(_arg__p_storage_class_specifier)
+{
+	LOG("\033[32mCREATING\033[0m declaration_specifiers3");
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after creation:"<<(*_refCount));//>>>>
+}
+
+
+/*declaration_specifiers3_item::codeStream() returns the code for the node of AST*/
+std::ostream& declaration_specifiers3_item::codeStream(std::ostream& stream,bool initFlag)const 
+{
+	if(initFlag)
+	{
+	}
+	else
+	{
+	if(_p_storage_class_specifier)_p_storage_class_specifier->codeStream(stream);
+	}
+	return  stream;
+}
+
+/*copy constructor*/
+declaration_specifiers3_item::declaration_specifiers3_item(const declaration_specifiers3_item& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_storage_class_specifier(other._p_storage_class_specifier)
+{
+	LOG("\033[32mCOPYING\033[0m declaration_specifiers3_item");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increement:"<<(*_refCount));//>>>>
+
+}
+
+
+/*declaration_specifiers3_item::getProperties returns a map of properties for the item*/
+Properties declaration_specifiers3_item::getProperties()const
+{
+	Properties props("declaration_specifiers3_items");
+	props["storage_class_specifier"]=_p_storage_class_specifier;
+	return props;
+}
+
+
+/*the destructor*/
+declaration_specifiers3_item::~declaration_specifiers3_item()
+{
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m declaration_specifiers3_item refCount:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after decrement:"<<(*_refCount));//>>>>
+	if(_p_storage_class_specifier)
+	{
+		delete _p_storage_class_specifier;
+		_p_storage_class_specifier=0;
+	}
+	delete _refCount;_refCount=0;
+	LOG("\033[31mDELETED\033[0m declaration_specifiers3_item");
+}
+/*------------------------------------------------------------*\
+ 							        
+  main class declaration_specifiers3                         
+                                                                
+\*------------------------------------------------------------*/
+/*declaration_specifiers3::name() returns the name of the class*/
+std::string declaration_specifiers3::name()const {return "declaration_specifiers3";}
+
+/*declaration_specifiers3::codeStream() returns the code for the node of AST*/
+std::ostream& declaration_specifiers3::codeStream(std::ostream& stream )const 
+{
+	for(CItemsListIter item=_items.begin();item!=_items.end();item++)
+	{
+		item->codeStream(stream,item==_items.begin());
+	}
+	return  stream;
+}
+
+/*declaration_specifiers3::typeId() returns the type of the class, here, CAST_TYPE_DECLARATION_SPECIFIERS3*/
+CAstType declaration_specifiers3::typeId()const {return CAST_TYPE_DECLARATION_SPECIFIERS3;}
+
+/*declaration_specifiers3::pattern returns the pattern matched*/
+std::string declaration_specifiers3::pattern()const {return "storage_class_specifier,declaration_specifiers";}
+
+
+/*construct from elements*/
+}
+
+/*declaration_specifiers3::append() appends an item to the list of items*/
+void declaration_specifiers3::append
+	(
+		std::string _arg_s_matchedPattern,
+		storage_class_specifier *_arg__p_storage_class_specifier	)
+{
+	declaration_specifiers3_item item(_arg_s_matchedPattern, _arg__p_storage_class_specifier);
 	_items.push_back(item);
 		
 }
@@ -7959,7 +7789,6 @@ std::ostream& logical_and_expression_item::codeStream(std::ostream& stream,bool 
 {
 	if(initFlag)
 	{
-	if(_p_inclusive_or_expression)_p_inclusive_or_expression->codeStream(stream);
 	}
 	else
 	{
@@ -8032,15 +7861,6 @@ std::string logical_and_expression::pattern()const {return "logical_and_expressi
 
 
 /*construct from elements*/
-logical_and_expression::logical_and_expression
-	(
-		std::string _arg_s_matchedPattern,
-		inclusive_or_expression *_arg__p_inclusive_or_expression
-	 )
-{
-	LOG("\033[32mCREATING\033[0m logical_and_expression");
-	logical_and_expression_item item(_arg_s_matchedPattern,_arg__p_inclusive_or_expression);
-	_items.push_back(item);
 }
 
 /*logical_and_expression::append() appends an item to the list of items*/
@@ -8109,7 +7929,6 @@ std::ostream& init_declarator_list_item::codeStream(std::ostream& stream,bool in
 {
 	if(initFlag)
 	{
-	if(_p_init_declarator)_p_init_declarator->codeStream(stream);
 	}
 	else
 	{
@@ -8182,15 +8001,6 @@ std::string init_declarator_list::pattern()const {return "init_declarator_list,'
 
 
 /*construct from elements*/
-init_declarator_list::init_declarator_list
-	(
-		std::string _arg_s_matchedPattern,
-		init_declarator *_arg__p_init_declarator
-	 )
-{
-	LOG("\033[32mCREATING\033[0m init_declarator_list");
-	init_declarator_list_item item(_arg_s_matchedPattern,_arg__p_init_declarator);
-	_items.push_back(item);
 }
 
 /*init_declarator_list::append() appends an item to the list of items*/
@@ -8261,7 +8071,6 @@ std::ostream& shift_expression_item::codeStream(std::ostream& stream,bool initFl
 {
 	if(initFlag)
 	{
-	if(_p_additive_expression)_p_additive_expression->codeStream(stream);
 	}
 	else
 	{
@@ -8341,15 +8150,6 @@ std::string shift_expression::pattern()const {return "shift_expression,LEFT_OP,a
 
 
 /*construct from elements*/
-shift_expression::shift_expression
-	(
-		std::string _arg_s_matchedPattern,
-		additive_expression *_arg__p_additive_expression
-	 )
-{
-	LOG("\033[32mCREATING\033[0m shift_expression");
-	shift_expression_item item(_arg_s_matchedPattern,NULL,_arg__p_additive_expression);
-	_items.push_back(item);
 }
 
 /*shift_expression::append() appends an item to the list of items*/
@@ -8419,7 +8219,6 @@ std::ostream& identifier_list_item::codeStream(std::ostream& stream,bool initFla
 {
 	if(initFlag)
 	{
-	if(_p_token1)_p_token1->codeStream(stream);
 	}
 	else
 	{
@@ -8492,15 +8291,6 @@ std::string identifier_list::pattern()const {return "identifier_list,',',IDENTIF
 
 
 /*construct from elements*/
-identifier_list::identifier_list
-	(
-		std::string _arg_s_matchedPattern,
-		Token *_arg__p_token1
-	 )
-{
-	LOG("\033[32mCREATING\033[0m identifier_list");
-	identifier_list_item item(_arg_s_matchedPattern,_arg__p_token1);
-	_items.push_back(item);
 }
 
 /*identifier_list::append() appends an item to the list of items*/
@@ -9045,7 +8835,6 @@ std::ostream& parameter_list_item::codeStream(std::ostream& stream,bool initFlag
 {
 	if(initFlag)
 	{
-	if(_p_parameter_declaration)_p_parameter_declaration->codeStream(stream);
 	}
 	else
 	{
@@ -9118,15 +8907,6 @@ std::string parameter_list::pattern()const {return "parameter_list,',',parameter
 
 
 /*construct from elements*/
-parameter_list::parameter_list
-	(
-		std::string _arg_s_matchedPattern,
-		parameter_declaration *_arg__p_parameter_declaration
-	 )
-{
-	LOG("\033[32mCREATING\033[0m parameter_list");
-	parameter_list_item item(_arg_s_matchedPattern,_arg__p_parameter_declaration);
-	_items.push_back(item);
 }
 
 /*parameter_list::append() appends an item to the list of items*/
@@ -9413,7 +9193,6 @@ std::ostream& enumerator_list_item::codeStream(std::ostream& stream,bool initFla
 {
 	if(initFlag)
 	{
-	if(_p_enumerator)_p_enumerator->codeStream(stream);
 	}
 	else
 	{
@@ -9486,15 +9265,6 @@ std::string enumerator_list::pattern()const {return "enumerator_list,',',enumera
 
 
 /*construct from elements*/
-enumerator_list::enumerator_list
-	(
-		std::string _arg_s_matchedPattern,
-		enumerator *_arg__p_enumerator
-	 )
-{
-	LOG("\033[32mCREATING\033[0m enumerator_list");
-	enumerator_list_item item(_arg_s_matchedPattern,_arg__p_enumerator);
-	_items.push_back(item);
 }
 
 /*enumerator_list::append() appends an item to the list of items*/
@@ -9742,7 +9512,6 @@ std::ostream& declaration_list_item::codeStream(std::ostream& stream,bool initFl
 {
 	if(initFlag)
 	{
-	if(_p_declaration)_p_declaration->codeStream(stream);
 	}
 	else
 	{
@@ -9814,15 +9583,6 @@ std::string declaration_list::pattern()const {return "declaration_list,declarati
 
 
 /*construct from elements*/
-declaration_list::declaration_list
-	(
-		std::string _arg_s_matchedPattern,
-		declaration *_arg__p_declaration
-	 )
-{
-	LOG("\033[32mCREATING\033[0m declaration_list");
-	declaration_list_item item(_arg_s_matchedPattern,_arg__p_declaration);
-	_items.push_back(item);
 }
 
 /*declaration_list::append() appends an item to the list of items*/
@@ -9861,157 +9621,8 @@ declaration_list::~declaration_list()
 			
 /*=============================================================================================================*\
                                                                                                                  
- 	THE specifier_qualifier_list1 CLASS                                                                                 
- 	FOR PATTERN : [type_specifier,specifier_qualifier_list]		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
-
-/*------------------------------------------------------------*\
- 							        
-  item class specifier_qualifier_list1_item                              
-                                                                
-\*------------------------------------------------------------*/
-/*construct item from elements*/
-specifier_qualifier_list1_item::specifier_qualifier_list1_item
-	(
-		std::string _arg_s_matchedPattern,
-		type_specifier *_arg__p_type_specifier
-	):
-	_s_matchedPattern(_arg_s_matchedPattern),
-	_refCount(new int(1)),
-	_p_type_specifier(_arg__p_type_specifier)
-{
-	LOG("\033[32mCREATING\033[0m specifier_qualifier_list1");
-	LOG("[ "<<_refCount<<" ]\t"<<"refCount after creation:"<<(*_refCount));//>>>>
-}
-
-
-/*specifier_qualifier_list1_item::codeStream() returns the code for the node of AST*/
-std::ostream& specifier_qualifier_list1_item::codeStream(std::ostream& stream,bool initFlag)const 
-{
-	if(initFlag)
-	{
-	if(_p_type_specifier)_p_type_specifier->codeStream(stream);
-	}
-	else
-	{
-	if(_p_type_specifier)_p_type_specifier->codeStream(stream);
-	}
-	return  stream;
-}
-
-/*copy constructor*/
-specifier_qualifier_list1_item::specifier_qualifier_list1_item(const specifier_qualifier_list1_item& other):
-		_s_matchedPattern(other._s_matchedPattern),
-		_refCount(other._refCount),
-		_p_type_specifier(other._p_type_specifier)
-{
-	LOG("\033[32mCOPYING\033[0m specifier_qualifier_list1_item");
-	(*_refCount)++;
-	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increement:"<<(*_refCount));//>>>>
-
-}
-
-
-/*specifier_qualifier_list1_item::getProperties returns a map of properties for the item*/
-Properties specifier_qualifier_list1_item::getProperties()const
-{
-	Properties props("specifier_qualifier_list1_items");
-	props["type_specifier"]=_p_type_specifier;
-	return props;
-}
-
-
-/*the destructor*/
-specifier_qualifier_list1_item::~specifier_qualifier_list1_item()
-{
-	(*_refCount)--;
-	LOG("\033[33mDELETING?\033[0m specifier_qualifier_list1_item refCount:"<<(*_refCount));
-	if((*_refCount)>0)return;
-	LOG("[ "<<_refCount<<" ]\t"<<"refCount after decrement:"<<(*_refCount));//>>>>
-	if(_p_type_specifier)
-	{
-		delete _p_type_specifier;
-		_p_type_specifier=0;
-	}
-	delete _refCount;_refCount=0;
-	LOG("\033[31mDELETED\033[0m specifier_qualifier_list1_item");
-}
-/*------------------------------------------------------------*\
- 							        
-  main class specifier_qualifier_list1                         
-                                                                
-\*------------------------------------------------------------*/
-/*specifier_qualifier_list1::name() returns the name of the class*/
-std::string specifier_qualifier_list1::name()const {return "specifier_qualifier_list1";}
-
-/*specifier_qualifier_list1::codeStream() returns the code for the node of AST*/
-std::ostream& specifier_qualifier_list1::codeStream(std::ostream& stream )const 
-{
-	for(CItemsListIter item=_items.begin();item!=_items.end();item++)
-	{
-		item->codeStream(stream,item==_items.begin());
-	}
-	return  stream;
-}
-
-/*specifier_qualifier_list1::typeId() returns the type of the class, here, CAST_TYPE_SPECIFIER_QUALIFIER_LIST1*/
-CAstType specifier_qualifier_list1::typeId()const {return CAST_TYPE_SPECIFIER_QUALIFIER_LIST1;}
-
-/*specifier_qualifier_list1::pattern returns the pattern matched*/
-std::string specifier_qualifier_list1::pattern()const {return "type_specifier,specifier_qualifier_list";}
-
-
-/*construct from elements*/
-specifier_qualifier_list1::specifier_qualifier_list1
-	(
-		std::string _arg_s_matchedPattern,
-		type_specifier *_arg__p_type_specifier
-	 )
-{
-	LOG("\033[32mCREATING\033[0m specifier_qualifier_list1");
-	specifier_qualifier_list1_item item(_arg_s_matchedPattern,_arg__p_type_specifier);
-	_items.push_back(item);
-}
-
-/*specifier_qualifier_list1::append() appends an item to the list of items*/
-void specifier_qualifier_list1::append
-	(
-		std::string _arg_s_matchedPattern,
-		type_specifier *_arg__p_type_specifier	)
-{
-	specifier_qualifier_list1_item item(_arg_s_matchedPattern, _arg__p_type_specifier);
-	_items.push_back(item);
-		
-}
-
-/*specifier_qualifier_list1::getPropertyList() returns the list of properties*/
-PropertiesList specifier_qualifier_list1::getPropertiesList()const
-{
-	PropertiesList pList("specifier_qualifier_list1");
-	for (CItemsListIter i=_items.begin();i!=_items.end();i++)
-	{
-		pList.push_back(i->getProperties());
-	}
-	return pList;
-	
-}
-
-/*the destructor*/
-specifier_qualifier_list1::~specifier_qualifier_list1()
-{
-	LOG("\033[33mDELETING?\033[0m specifier_qualifier_list1");
-	_items.clear();
-	LOG("\033[31mDELETED\033[0m specifier_qualifier_list1");
-}
-
-
-			
-			
-/*=============================================================================================================*\
-                                                                                                                 
  	THE specifier_qualifier_list2 CLASS                                                                                 
- 	FOR PATTERN : [type_qualifier,specifier_qualifier_list]		                                                                 
+ 	FOR PATTERN : [type_specifier,specifier_qualifier_list]		                                                                 
                                                                                                                  
 \*=============================================================================================================*/  
 
@@ -10024,11 +9635,11 @@ specifier_qualifier_list1::~specifier_qualifier_list1()
 specifier_qualifier_list2_item::specifier_qualifier_list2_item
 	(
 		std::string _arg_s_matchedPattern,
-		type_qualifier *_arg__p_type_qualifier
+		type_specifier *_arg__p_type_specifier
 	):
 	_s_matchedPattern(_arg_s_matchedPattern),
 	_refCount(new int(1)),
-	_p_type_qualifier(_arg__p_type_qualifier)
+	_p_type_specifier(_arg__p_type_specifier)
 {
 	LOG("\033[32mCREATING\033[0m specifier_qualifier_list2");
 	LOG("[ "<<_refCount<<" ]\t"<<"refCount after creation:"<<(*_refCount));//>>>>
@@ -10040,11 +9651,10 @@ std::ostream& specifier_qualifier_list2_item::codeStream(std::ostream& stream,bo
 {
 	if(initFlag)
 	{
-	if(_p_type_qualifier)_p_type_qualifier->codeStream(stream);
 	}
 	else
 	{
-	if(_p_type_qualifier)_p_type_qualifier->codeStream(stream);
+	if(_p_type_specifier)_p_type_specifier->codeStream(stream);
 	}
 	return  stream;
 }
@@ -10053,7 +9663,7 @@ std::ostream& specifier_qualifier_list2_item::codeStream(std::ostream& stream,bo
 specifier_qualifier_list2_item::specifier_qualifier_list2_item(const specifier_qualifier_list2_item& other):
 		_s_matchedPattern(other._s_matchedPattern),
 		_refCount(other._refCount),
-		_p_type_qualifier(other._p_type_qualifier)
+		_p_type_specifier(other._p_type_specifier)
 {
 	LOG("\033[32mCOPYING\033[0m specifier_qualifier_list2_item");
 	(*_refCount)++;
@@ -10066,7 +9676,7 @@ specifier_qualifier_list2_item::specifier_qualifier_list2_item(const specifier_q
 Properties specifier_qualifier_list2_item::getProperties()const
 {
 	Properties props("specifier_qualifier_list2_items");
-	props["type_qualifier"]=_p_type_qualifier;
+	props["type_specifier"]=_p_type_specifier;
 	return props;
 }
 
@@ -10078,10 +9688,10 @@ specifier_qualifier_list2_item::~specifier_qualifier_list2_item()
 	LOG("\033[33mDELETING?\033[0m specifier_qualifier_list2_item refCount:"<<(*_refCount));
 	if((*_refCount)>0)return;
 	LOG("[ "<<_refCount<<" ]\t"<<"refCount after decrement:"<<(*_refCount));//>>>>
-	if(_p_type_qualifier)
+	if(_p_type_specifier)
 	{
-		delete _p_type_qualifier;
-		_p_type_qualifier=0;
+		delete _p_type_specifier;
+		_p_type_specifier=0;
 	}
 	delete _refCount;_refCount=0;
 	LOG("\033[31mDELETED\033[0m specifier_qualifier_list2_item");
@@ -10108,28 +9718,158 @@ std::ostream& specifier_qualifier_list2::codeStream(std::ostream& stream )const
 CAstType specifier_qualifier_list2::typeId()const {return CAST_TYPE_SPECIFIER_QUALIFIER_LIST2;}
 
 /*specifier_qualifier_list2::pattern returns the pattern matched*/
-std::string specifier_qualifier_list2::pattern()const {return "type_qualifier,specifier_qualifier_list";}
+std::string specifier_qualifier_list2::pattern()const {return "type_specifier,specifier_qualifier_list";}
 
 
 /*construct from elements*/
-specifier_qualifier_list2::specifier_qualifier_list2
-	(
-		std::string _arg_s_matchedPattern,
-		type_qualifier *_arg__p_type_qualifier
-	 )
-{
-	LOG("\033[32mCREATING\033[0m specifier_qualifier_list2");
-	specifier_qualifier_list2_item item(_arg_s_matchedPattern,_arg__p_type_qualifier);
-	_items.push_back(item);
 }
 
 /*specifier_qualifier_list2::append() appends an item to the list of items*/
 void specifier_qualifier_list2::append
 	(
 		std::string _arg_s_matchedPattern,
-		type_qualifier *_arg__p_type_qualifier	)
+		type_specifier *_arg__p_type_specifier	)
 {
-	specifier_qualifier_list2_item item(_arg_s_matchedPattern, _arg__p_type_qualifier);
+	specifier_qualifier_list2_item item(_arg_s_matchedPattern, _arg__p_type_specifier);
+	_items.push_back(item);
+		
+}
+
+/*specifier_qualifier_list2::getPropertyList() returns the list of properties*/
+PropertiesList specifier_qualifier_list2::getPropertiesList()const
+{
+	PropertiesList pList("specifier_qualifier_list2");
+	for (CItemsListIter i=_items.begin();i!=_items.end();i++)
+	{
+		pList.push_back(i->getProperties());
+	}
+	return pList;
+	
+}
+
+/*the destructor*/
+specifier_qualifier_list2::~specifier_qualifier_list2()
+{
+	LOG("\033[33mDELETING?\033[0m specifier_qualifier_list2");
+	_items.clear();
+	LOG("\033[31mDELETED\033[0m specifier_qualifier_list2");
+}
+
+
+			
+			
+/*=============================================================================================================*\
+                                                                                                                 
+ 	THE specifier_qualifier_list2 CLASS                                                                                 
+ 	FOR PATTERN : [type_specifier,specifier_qualifier_list]		                                                                 
+                                                                                                                 
+\*=============================================================================================================*/  
+
+/*------------------------------------------------------------*\
+ 							        
+  item class specifier_qualifier_list2_item                              
+                                                                
+\*------------------------------------------------------------*/
+/*construct item from elements*/
+specifier_qualifier_list2_item::specifier_qualifier_list2_item
+	(
+		std::string _arg_s_matchedPattern,
+		type_specifier *_arg__p_type_specifier
+	):
+	_s_matchedPattern(_arg_s_matchedPattern),
+	_refCount(new int(1)),
+	_p_type_specifier(_arg__p_type_specifier)
+{
+	LOG("\033[32mCREATING\033[0m specifier_qualifier_list2");
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after creation:"<<(*_refCount));//>>>>
+}
+
+
+/*specifier_qualifier_list2_item::codeStream() returns the code for the node of AST*/
+std::ostream& specifier_qualifier_list2_item::codeStream(std::ostream& stream,bool initFlag)const 
+{
+	if(initFlag)
+	{
+	}
+	else
+	{
+	if(_p_type_specifier)_p_type_specifier->codeStream(stream);
+	}
+	return  stream;
+}
+
+/*copy constructor*/
+specifier_qualifier_list2_item::specifier_qualifier_list2_item(const specifier_qualifier_list2_item& other):
+		_s_matchedPattern(other._s_matchedPattern),
+		_refCount(other._refCount),
+		_p_type_specifier(other._p_type_specifier)
+{
+	LOG("\033[32mCOPYING\033[0m specifier_qualifier_list2_item");
+	(*_refCount)++;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after increement:"<<(*_refCount));//>>>>
+
+}
+
+
+/*specifier_qualifier_list2_item::getProperties returns a map of properties for the item*/
+Properties specifier_qualifier_list2_item::getProperties()const
+{
+	Properties props("specifier_qualifier_list2_items");
+	props["type_specifier"]=_p_type_specifier;
+	return props;
+}
+
+
+/*the destructor*/
+specifier_qualifier_list2_item::~specifier_qualifier_list2_item()
+{
+	(*_refCount)--;
+	LOG("\033[33mDELETING?\033[0m specifier_qualifier_list2_item refCount:"<<(*_refCount));
+	if((*_refCount)>0)return;
+	LOG("[ "<<_refCount<<" ]\t"<<"refCount after decrement:"<<(*_refCount));//>>>>
+	if(_p_type_specifier)
+	{
+		delete _p_type_specifier;
+		_p_type_specifier=0;
+	}
+	delete _refCount;_refCount=0;
+	LOG("\033[31mDELETED\033[0m specifier_qualifier_list2_item");
+}
+/*------------------------------------------------------------*\
+ 							        
+  main class specifier_qualifier_list2                         
+                                                                
+\*------------------------------------------------------------*/
+/*specifier_qualifier_list2::name() returns the name of the class*/
+std::string specifier_qualifier_list2::name()const {return "specifier_qualifier_list2";}
+
+/*specifier_qualifier_list2::codeStream() returns the code for the node of AST*/
+std::ostream& specifier_qualifier_list2::codeStream(std::ostream& stream )const 
+{
+	for(CItemsListIter item=_items.begin();item!=_items.end();item++)
+	{
+		item->codeStream(stream,item==_items.begin());
+	}
+	return  stream;
+}
+
+/*specifier_qualifier_list2::typeId() returns the type of the class, here, CAST_TYPE_SPECIFIER_QUALIFIER_LIST2*/
+CAstType specifier_qualifier_list2::typeId()const {return CAST_TYPE_SPECIFIER_QUALIFIER_LIST2;}
+
+/*specifier_qualifier_list2::pattern returns the pattern matched*/
+std::string specifier_qualifier_list2::pattern()const {return "type_specifier,specifier_qualifier_list";}
+
+
+/*construct from elements*/
+}
+
+/*specifier_qualifier_list2::append() appends an item to the list of items*/
+void specifier_qualifier_list2::append
+	(
+		std::string _arg_s_matchedPattern,
+		type_specifier *_arg__p_type_specifier	)
+{
+	specifier_qualifier_list2_item item(_arg_s_matchedPattern, _arg__p_type_specifier);
 	_items.push_back(item);
 		
 }
@@ -10189,7 +9929,6 @@ std::ostream& translation_unit_item::codeStream(std::ostream& stream,bool initFl
 {
 	if(initFlag)
 	{
-	if(_p_external_declaration)_p_external_declaration->codeStream(stream);
 	}
 	else
 	{
@@ -10261,15 +10000,6 @@ std::string translation_unit::pattern()const {return "translation_unit,external_
 
 
 /*construct from elements*/
-translation_unit::translation_unit
-	(
-		std::string _arg_s_matchedPattern,
-		external_declaration *_arg__p_external_declaration
-	 )
-{
-	LOG("\033[32mCREATING\033[0m translation_unit");
-	translation_unit_item item(_arg_s_matchedPattern,_arg__p_external_declaration);
-	_items.push_back(item);
 }
 
 /*translation_unit::append() appends an item to the list of items*/
@@ -10416,7 +10146,6 @@ std::ostream& initializer_list_item::codeStream(std::ostream& stream,bool initFl
 {
 	if(initFlag)
 	{
-	if(_p_initializer)_p_initializer->codeStream(stream);
 	}
 	else
 	{
@@ -10489,15 +10218,6 @@ std::string initializer_list::pattern()const {return "initializer_list,',',initi
 
 
 /*construct from elements*/
-initializer_list::initializer_list
-	(
-		std::string _arg_s_matchedPattern,
-		initializer *_arg__p_initializer
-	 )
-{
-	LOG("\033[32mCREATING\033[0m initializer_list");
-	initializer_list_item item(_arg_s_matchedPattern,_arg__p_initializer);
-	_items.push_back(item);
 }
 
 /*initializer_list::append() appends an item to the list of items*/
@@ -10566,7 +10286,6 @@ std::ostream& statement_list_item::codeStream(std::ostream& stream,bool initFlag
 {
 	if(initFlag)
 	{
-	if(_p_statement)_p_statement->codeStream(stream);
 	}
 	else
 	{
@@ -10638,15 +10357,6 @@ std::string statement_list::pattern()const {return "statement_list,statement";}
 
 
 /*construct from elements*/
-statement_list::statement_list
-	(
-		std::string _arg_s_matchedPattern,
-		statement *_arg__p_statement
-	 )
-{
-	LOG("\033[32mCREATING\033[0m statement_list");
-	statement_list_item item(_arg_s_matchedPattern,_arg__p_statement);
-	_items.push_back(item);
 }
 
 /*statement_list::append() appends an item to the list of items*/
@@ -10715,7 +10425,6 @@ std::ostream& expression_item::codeStream(std::ostream& stream,bool initFlag)con
 {
 	if(initFlag)
 	{
-	if(_p_assignment_expression)_p_assignment_expression->codeStream(stream);
 	}
 	else
 	{
@@ -10788,15 +10497,6 @@ std::string expression::pattern()const {return "expression,',',assignment_expres
 
 
 /*construct from elements*/
-expression::expression
-	(
-		std::string _arg_s_matchedPattern,
-		assignment_expression *_arg__p_assignment_expression
-	 )
-{
-	LOG("\033[32mCREATING\033[0m expression");
-	expression_item item(_arg_s_matchedPattern,_arg__p_assignment_expression);
-	_items.push_back(item);
 }
 
 /*expression::append() appends an item to the list of items*/
