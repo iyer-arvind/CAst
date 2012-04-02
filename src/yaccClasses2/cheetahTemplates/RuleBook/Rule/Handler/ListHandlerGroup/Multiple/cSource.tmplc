@@ -1,0 +1,5 @@
+
+#for $h in $object.handlers:
+#set $h.parent=$object.ruleName+"_item"
+$utils.simpleClassCreator.defineClass($h)
+#end for

@@ -89,3 +89,32 @@ class ${h.className}#echo ":public "+$h.parent if $h.parent else ""
 
 
 #end def
+
+
+#def defineClass($h)
+
+#set pText=",\n\t\t".join(["ReferenceCountedAutoPointer<"+p.parameterType.name+"> "+p.argName for p in $h.parameters if $p.isIncluded])
+#set iText=",\n\t\t".join([$p.memName+"("+$p.argName+")" for p in $h.parameters if $p.isIncluded])
+${h.className}::${h.className}
+	(
+		$pText
+	):
+#if $h.parent is not None
+		${h.parent}() #echo "," if len($iText) else ""
+#end if
+		$iText
+{
+#for p in $h.parameters:
+#if $p.isIncluded:
+#if $p.parameterType.name == "token":
+#set cText=" || ".join([("(" + $p.memName + "->text() == \"" + repr($pv) + "\" )" ) if ($pv is not None) else $p.memName+".isNull()" for $pv in $p.possibleValues])
+	AssertTokenType($cText)
+#else
+#if None not in $p.possibleValues
+	AssertNotNullRule($p.memName)
+#end if
+#end if
+#end if
+#end for
+}
+#end def

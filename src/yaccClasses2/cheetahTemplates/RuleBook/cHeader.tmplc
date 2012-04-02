@@ -2,7 +2,7 @@
 \#define CAST_HEADER_INCLUDED
 \#include <string>
 \#include <list>
-
+\#include <assert.h>
 
 namespace CAst
 {
@@ -111,6 +111,15 @@ class ReferenceCountedAutoPointer
 		 */
 		const int refCount()const{return *__refCount;}
 
+		/**
+		 * \brief returns if the data is null
+		 */		
+		const bool isNull()const{return __data==0;}
+
+		DataType* operator->()
+		{
+			return __data;
+		}
 
 		/**
 		 * \brief Calls __clear();
@@ -176,8 +185,12 @@ class token:public CAst
 		std::string _text;
 	public:
 		/** The constructor takes the string*/
-		token(text):
+		token(std::string text):
+			_text(text)
+		{}
 
+
+		const std::string& text()const {return _text;}
 		/** Returns the name of the class */
 		virtual std::string name()const{return "token";};
 
@@ -189,6 +202,8 @@ class token:public CAst
 		{}
 };
 
+\#define AssertNotNullRule(rule) assert(!rule.isNull());
+\#define AssertTokenType(expr) assert(expr);
 
 #for i in $object:
 

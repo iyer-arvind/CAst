@@ -11,64 +11,15 @@ namespace CAst
 
 
 
-class token;
-
-
-
-
-/**
- * \brief storage_class_specifier implements the pattern: <b>(typedef,)</b>
-
-
- * \dot
- * digraph AST {
- *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
- *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
- *     node_storage_class_specifier [ label="storage_class_specifier", URL="\ref storage_class_specifier", color="#00AAAA" ];
- *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
- *     node_storage_class_specifier ->  node_token [label="_p_token" style=solid];
- * }
- * \enddot
- */
-class storage_class_specifier:public CAst
+storage_class_specifier::storage_class_specifier
+	(
+		ReferenceCountedAutoPointer<token> _arg_token
+	):
+		CAst() ,
+		_p_token(_arg_token)
 {
-	private:
-		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>auto</b>, <b>typedef</b>, <b>extern</b>, <b>register</b>, <b>static</b>
-	public:
-		/** 
-		 * \brief Constructor of storage_class_specifier
-		 *
-		 * This function handles the storage_class_specifier
-                 */
-		storage_class_specifier	
-				(
-					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>auto</b>, <b>typedef</b>, <b>extern</b>, <b>register</b>, <b>static</b>
-				);
-		/**
-                 * \brief Returns the name of the class.
-                 *
-                 * Returns the name of the class. Here, returns <b>"storage_class_specifier"</b>
-		 * \returns <b>"storage_class_specifier"</b>
-                 */
-		virtual std::string name()const		{return std::string("storage_class_specifier");}
-
-		/**
-                 * \brief Returns the ID of the class
-                 *
-                 * Returns the ID of the class. Here, returns ID_STORAGE_CLASS_SPECIFIER
-		 * \returns  ID_STORAGE_CLASS_SPECIFIER
-                 */
-		virtual CAST_CLASS_ID classId()const		{return ID_STORAGE_CLASS_SPECIFIER;}
-
-		/**
-		 * \brief Default destructor. 
-		 */
-		virtual ~storage_class_specifier()
-		{}
-};
-
-
-
+	AssertTokenType((_p_token->text() == "auto" ) || (_p_token->text() == "typedef" ) || (_p_token->text() == "extern" ) || (_p_token->text() == "register" ) || (_p_token->text() == "static" ))
+}
 
 
 
@@ -92,63 +43,14 @@ class storage_class_specifier:public CAst
 
 
 
-class expression;
-
-
-
-/**
- * \brief expression_statement implements the pattern: <b>(expression, ;)</b>
-
-
- * \dot
- * digraph AST {
- *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
- *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
- *     node_expression_statement [ label="expression_statement", URL="\ref expression_statement", color="#00AAAA" ];
- *     node_expression [ label="expression", URL="\ref expression", color="#00AAAA"];
- *     node_expression_statement ->  node_expression [label="_p_expression" style=dotted];
- * }
- * \enddot
- */
-class expression_statement:public CAst
+expression_statement::expression_statement
+	(
+		ReferenceCountedAutoPointer<expression> _arg_expression
+	):
+		CAst() ,
+		_p_expression(_arg_expression)
 {
-	private:
-		ReferenceCountedAutoPointer<expression> _p_expression;	  ///< A pointer to expression. This parameter can be <b>Null</b>
-	public:
-		/** 
-		 * \brief Constructor of expression_statement
-		 *
-		 * This function handles the expression_statement
-                 */
-		expression_statement	
-				(
-					ReferenceCountedAutoPointer<expression> _arg_expression  ///< A pointer to expression. This parameter can be <b>Null</b>
-				);
-		/**
-                 * \brief Returns the name of the class.
-                 *
-                 * Returns the name of the class. Here, returns <b>"expression_statement"</b>
-		 * \returns <b>"expression_statement"</b>
-                 */
-		virtual std::string name()const		{return std::string("expression_statement");}
-
-		/**
-                 * \brief Returns the ID of the class
-                 *
-                 * Returns the ID of the class. Here, returns ID_EXPRESSION_STATEMENT
-		 * \returns  ID_EXPRESSION_STATEMENT
-                 */
-		virtual CAST_CLASS_ID classId()const		{return ID_EXPRESSION_STATEMENT;}
-
-		/**
-		 * \brief Default destructor. 
-		 */
-		virtual ~expression_statement()
-		{}
-};
-
-
-
+}
 
 
 
@@ -172,69 +74,17 @@ class expression_statement:public CAst
 
 
 
-class specifier_qualifier_list;
-class abstract_declarator;
-
-
-
-
-/**
- * \brief type_name implements the pattern: <b>(specifier_qualifier_list, abstract_declarator)</b>
-
-
- * \dot
- * digraph AST {
- *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
- *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
- *     node_type_name [ label="type_name", URL="\ref type_name", color="#00AAAA" ];
- *     node_specifier_qualifier_list [ label="specifier_qualifier_list", URL="\ref specifier_qualifier_list", color="#00AAAA"];
- *     node_abstract_declarator [ label="abstract_declarator", URL="\ref abstract_declarator", color="#00AAAA"];
- *     node_type_name ->  node_specifier_qualifier_list [label="_p_specifier_qualifier_list" style=solid];
- *     node_type_name ->  node_abstract_declarator [label="_p_abstract_declarator" style=dotted];
- * }
- * \enddot
- */
-class type_name:public CAst
+type_name::type_name
+	(
+		ReferenceCountedAutoPointer<specifier_qualifier_list> _arg_specifier_qualifier_list,
+		ReferenceCountedAutoPointer<abstract_declarator> _arg_abstract_declarator
+	):
+		CAst() ,
+		_p_specifier_qualifier_list(_arg_specifier_qualifier_list),
+		_p_abstract_declarator(_arg_abstract_declarator)
 {
-	private:
-		ReferenceCountedAutoPointer<specifier_qualifier_list> _p_specifier_qualifier_list;	  ///< A pointer to specifier_qualifier_list.
-		ReferenceCountedAutoPointer<abstract_declarator> _p_abstract_declarator;	  ///< A pointer to abstract_declarator. This parameter can be <b>Null</b>
-	public:
-		/** 
-		 * \brief Constructor of type_name
-		 *
-		 * This function handles the type_name
-                 */
-		type_name	
-				(
-					ReferenceCountedAutoPointer<specifier_qualifier_list> _arg_specifier_qualifier_list,   ///< A pointer to specifier_qualifier_list.
-					ReferenceCountedAutoPointer<abstract_declarator> _arg_abstract_declarator  ///< A pointer to abstract_declarator. This parameter can be <b>Null</b>
-				);
-		/**
-                 * \brief Returns the name of the class.
-                 *
-                 * Returns the name of the class. Here, returns <b>"type_name"</b>
-		 * \returns <b>"type_name"</b>
-                 */
-		virtual std::string name()const		{return std::string("type_name");}
-
-		/**
-                 * \brief Returns the ID of the class
-                 *
-                 * Returns the ID of the class. Here, returns ID_TYPE_NAME
-		 * \returns  ID_TYPE_NAME
-                 */
-		virtual CAST_CLASS_ID classId()const		{return ID_TYPE_NAME;}
-
-		/**
-		 * \brief Default destructor. 
-		 */
-		virtual ~type_name()
-		{}
-};
-
-
-
+	AssertNotNullRule(_p_specifier_qualifier_list)
+}
 
 
 
@@ -257,6 +107,57 @@ class type_name:public CAst
 
 
 
+unary_expression_1::unary_expression_1
+	(
+		ReferenceCountedAutoPointer<type_name> _arg_type_name
+	):
+		unary_expression() ,
+		_p_type_name(_arg_type_name)
+{
+	AssertNotNullRule(_p_type_name)
+}
+
+
+unary_expression_2::unary_expression_2
+	(
+		ReferenceCountedAutoPointer<unary_operator> _arg_unary_operator,
+		ReferenceCountedAutoPointer<cast_expression> _arg_cast_expression
+	):
+		unary_expression() ,
+		_p_unary_operator(_arg_unary_operator),
+		_p_cast_expression(_arg_cast_expression)
+{
+	AssertNotNullRule(_p_unary_operator)
+	AssertNotNullRule(_p_cast_expression)
+}
+
+
+unary_expression_3::unary_expression_3
+	(
+		ReferenceCountedAutoPointer<token> _arg_token,
+		ReferenceCountedAutoPointer<unary_expression> _arg_unary_expression
+	):
+		unary_expression() ,
+		_p_token(_arg_token),
+		_p_unary_expression(_arg_unary_expression)
+{
+	AssertTokenType((_p_token->text() == "++" ) || (_p_token->text() == "--" ) || (_p_token->text() == "sizeof" ))
+	AssertNotNullRule(_p_unary_expression)
+}
+
+
+unary_expression_4::unary_expression_4
+	(
+		ReferenceCountedAutoPointer<postfix_expression> _arg_postfix_expression
+	):
+		unary_expression() ,
+		_p_postfix_expression(_arg_postfix_expression)
+{
+	AssertNotNullRule(_p_postfix_expression)
+}
+
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -273,6 +174,20 @@ class type_name:public CAst
 //RULE:conditional_expression
 //////////////////////////////////////////
 
+
+
+
+
+conditional_expression_item::conditional_expression_item
+	(
+		ReferenceCountedAutoPointer<logical_or_expression> _arg_logical_or_expression,
+		ReferenceCountedAutoPointer<expression> _arg_expression
+	):
+		_p_logical_or_expression(_arg_logical_or_expression),
+		_p_expression(_arg_expression)
+{
+	AssertNotNullRule(_p_logical_or_expression)
+}
 
 
 
@@ -296,88 +211,26 @@ class type_name:public CAst
 
 
 
-class struct_or_union;
-class token;
-class struct_declaration_list;
-
-
-
-
-
-
-
-
-
-
-/**
- * \brief struct_or_union_specifier implements the pattern: <b>(struct_or_union, [IDENTIFIER], {, struct_declaration_list, })</b>
-
-
- * \dot
- * digraph AST {
- *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
- *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
- *     node_struct_or_union_specifier [ label="struct_or_union_specifier", URL="\ref struct_or_union_specifier", color="#00AAAA" ];
- *     node_struct_or_union [ label="struct_or_union", URL="\ref struct_or_union", color="#00AAAA"];
- *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
- *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
- *     node_struct_declaration_list [ label="struct_declaration_list", URL="\ref struct_declaration_list", color="#00AAAA"];
- *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
- *     node_struct_or_union_specifier ->  node_struct_or_union [label="_p_struct_or_union" style=solid];
- *     node_struct_or_union_specifier ->  node_token [label="_p_token1" style=dotted];
- *     node_struct_or_union_specifier ->  node_token [label="_p_token2" style=dotted];
- *     node_struct_or_union_specifier ->  node_struct_declaration_list [label="_p_struct_declaration_list" style=dotted];
- *     node_struct_or_union_specifier ->  node_token [label="_p_token3" style=dotted];
- * }
- * \enddot
- */
-class struct_or_union_specifier:public CAst
+struct_or_union_specifier::struct_or_union_specifier
+	(
+		ReferenceCountedAutoPointer<struct_or_union> _arg_struct_or_union,
+		ReferenceCountedAutoPointer<token> _arg_token1,
+		ReferenceCountedAutoPointer<token> _arg_token2,
+		ReferenceCountedAutoPointer<struct_declaration_list> _arg_struct_declaration_list,
+		ReferenceCountedAutoPointer<token> _arg_token3
+	):
+		CAst() ,
+		_p_struct_or_union(_arg_struct_or_union),
+		_p_token1(_arg_token1),
+		_p_token2(_arg_token2),
+		_p_struct_declaration_list(_arg_struct_declaration_list),
+		_p_token3(_arg_token3)
 {
-	private:
-		ReferenceCountedAutoPointer<struct_or_union> _p_struct_or_union;	  ///< A pointer to struct_or_union.
-		ReferenceCountedAutoPointer<token> _p_token1;	  ///< A pointer to a token, accepts <b>[IDENTIFIER]</b>, <b>None</b>
-		ReferenceCountedAutoPointer<token> _p_token2;	  ///< A pointer to a token, accepts <b>{</b>, <b>None</b>
-		ReferenceCountedAutoPointer<struct_declaration_list> _p_struct_declaration_list;	  ///< A pointer to struct_declaration_list. This parameter can be <b>Null</b>
-		ReferenceCountedAutoPointer<token> _p_token3;	  ///< A pointer to a token, accepts <b>}</b>, <b>None</b>
-	public:
-		/** 
-		 * \brief Constructor of struct_or_union_specifier
-		 *
-		 * This function handles the struct_or_union_specifier
-                 */
-		struct_or_union_specifier	
-				(
-					ReferenceCountedAutoPointer<struct_or_union> _arg_struct_or_union,   ///< A pointer to struct_or_union.
-					ReferenceCountedAutoPointer<token> _arg_token1,   ///< A pointer to a token, accepts <b>[IDENTIFIER]</b>, <b>None</b>
-					ReferenceCountedAutoPointer<token> _arg_token2,   ///< A pointer to a token, accepts <b>{</b>, <b>None</b>
-					ReferenceCountedAutoPointer<struct_declaration_list> _arg_struct_declaration_list,   ///< A pointer to struct_declaration_list. This parameter can be <b>Null</b>
-					ReferenceCountedAutoPointer<token> _arg_token3  ///< A pointer to a token, accepts <b>}</b>, <b>None</b>
-				);
-		/**
-                 * \brief Returns the name of the class.
-                 *
-                 * Returns the name of the class. Here, returns <b>"struct_or_union_specifier"</b>
-		 * \returns <b>"struct_or_union_specifier"</b>
-                 */
-		virtual std::string name()const		{return std::string("struct_or_union_specifier");}
-
-		/**
-                 * \brief Returns the ID of the class
-                 *
-                 * Returns the ID of the class. Here, returns ID_STRUCT_OR_UNION_SPECIFIER
-		 * \returns  ID_STRUCT_OR_UNION_SPECIFIER
-                 */
-		virtual CAST_CLASS_ID classId()const		{return ID_STRUCT_OR_UNION_SPECIFIER;}
-
-		/**
-		 * \brief Default destructor. 
-		 */
-		virtual ~struct_or_union_specifier()
-		{}
-};
-
-
-
+	AssertNotNullRule(_p_struct_or_union)
+	AssertTokenType((_p_token1->text() == "[IDENTIFIER]" ) || _p_token1.isNull())
+	AssertTokenType((_p_token2->text() == "{" ) || _p_token2.isNull())
+	AssertTokenType((_p_token3->text() == "}" ) || _p_token3.isNull())
+}
 
 
 
@@ -400,6 +253,18 @@ class struct_or_union_specifier:public CAst
 
 
 
+
+exclusive_or_expression_item::exclusive_or_expression_item
+	(
+		ReferenceCountedAutoPointer<and_expression> _arg_and_expression
+	):
+		_p_and_expression(_arg_and_expression)
+{
+	AssertNotNullRule(_p_and_expression)
+}
+
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -419,6 +284,32 @@ class struct_or_union_specifier:public CAst
 
 
 
+initializer_1::initializer_1
+	(
+		ReferenceCountedAutoPointer<initializer_list> _arg_initializer_list,
+		ReferenceCountedAutoPointer<token> _arg_token
+	):
+		initializer() ,
+		_p_initializer_list(_arg_initializer_list),
+		_p_token(_arg_token)
+{
+	AssertNotNullRule(_p_initializer_list)
+	AssertTokenType((_p_token->text() == "," ) || _p_token.isNull())
+}
+
+
+initializer_2::initializer_2
+	(
+		ReferenceCountedAutoPointer<assignment_expression> _arg_assignment_expression
+	):
+		initializer() ,
+		_p_assignment_expression(_arg_assignment_expression)
+{
+	AssertNotNullRule(_p_assignment_expression)
+}
+
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -435,6 +326,18 @@ class struct_or_union_specifier:public CAst
 //RULE:struct_declaration_list
 //////////////////////////////////////////
 
+
+
+
+
+struct_declaration_list_item::struct_declaration_list_item
+	(
+		ReferenceCountedAutoPointer<struct_declaration> _arg_struct_declaration
+	):
+		_p_struct_declaration(_arg_struct_declaration)
+{
+	AssertNotNullRule(_p_struct_declaration)
+}
 
 
 
@@ -458,64 +361,15 @@ class struct_or_union_specifier:public CAst
 
 
 
-class token;
-
-
-
-
-/**
- * \brief assignment_operator implements the pattern: <b>(=,)</b>
-
-
- * \dot
- * digraph AST {
- *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
- *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
- *     node_assignment_operator [ label="assignment_operator", URL="\ref assignment_operator", color="#00AAAA" ];
- *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
- *     node_assignment_operator ->  node_token [label="_p_token" style=solid];
- * }
- * \enddot
- */
-class assignment_operator:public CAst
+assignment_operator::assignment_operator
+	(
+		ReferenceCountedAutoPointer<token> _arg_token
+	):
+		CAst() ,
+		_p_token(_arg_token)
 {
-	private:
-		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>>>=</b>, <b>&=</b>, <b>^=</b>, <b>|=</b>, <b>=</b>, <b>*=</b>, <b>/=</b>, <b>%=</b>, <b>+=</b>, <b>-=</b>, <b><<=</b>
-	public:
-		/** 
-		 * \brief Constructor of assignment_operator
-		 *
-		 * This function handles the assignment_operator
-                 */
-		assignment_operator	
-				(
-					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>>>=</b>, <b>&=</b>, <b>^=</b>, <b>|=</b>, <b>=</b>, <b>*=</b>, <b>/=</b>, <b>%=</b>, <b>+=</b>, <b>-=</b>, <b><<=</b>
-				);
-		/**
-                 * \brief Returns the name of the class.
-                 *
-                 * Returns the name of the class. Here, returns <b>"assignment_operator"</b>
-		 * \returns <b>"assignment_operator"</b>
-                 */
-		virtual std::string name()const		{return std::string("assignment_operator");}
-
-		/**
-                 * \brief Returns the ID of the class
-                 *
-                 * Returns the ID of the class. Here, returns ID_ASSIGNMENT_OPERATOR
-		 * \returns  ID_ASSIGNMENT_OPERATOR
-                 */
-		virtual CAST_CLASS_ID classId()const		{return ID_ASSIGNMENT_OPERATOR;}
-
-		/**
-		 * \brief Default destructor. 
-		 */
-		virtual ~assignment_operator()
-		{}
-};
-
-
-
+	AssertTokenType((_p_token->text() == ">>=" ) || (_p_token->text() == "&=" ) || (_p_token->text() == "^=" ) || (_p_token->text() == "|=" ) || (_p_token->text() == "=" ) || (_p_token->text() == "*=" ) || (_p_token->text() == "/=" ) || (_p_token->text() == "%=" ) || (_p_token->text() == "+=" ) || (_p_token->text() == "-=" ) || (_p_token->text() == "<<=" ))
+}
 
 
 
@@ -539,69 +393,18 @@ class assignment_operator:public CAst
 
 
 
-class specifier_qualifier_list;
-class struct_declarator_list;
-
-
-
-
-/**
- * \brief struct_declaration implements the pattern: <b>(specifier_qualifier_list, struct_declarator_list, ;)</b>
-
-
- * \dot
- * digraph AST {
- *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
- *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
- *     node_struct_declaration [ label="struct_declaration", URL="\ref struct_declaration", color="#00AAAA" ];
- *     node_specifier_qualifier_list [ label="specifier_qualifier_list", URL="\ref specifier_qualifier_list", color="#00AAAA"];
- *     node_struct_declarator_list [ label="struct_declarator_list", URL="\ref struct_declarator_list", color="#00AAAA"];
- *     node_struct_declaration ->  node_specifier_qualifier_list [label="_p_specifier_qualifier_list" style=solid];
- *     node_struct_declaration ->  node_struct_declarator_list [label="_p_struct_declarator_list" style=solid];
- * }
- * \enddot
- */
-class struct_declaration:public CAst
+struct_declaration::struct_declaration
+	(
+		ReferenceCountedAutoPointer<specifier_qualifier_list> _arg_specifier_qualifier_list,
+		ReferenceCountedAutoPointer<struct_declarator_list> _arg_struct_declarator_list
+	):
+		CAst() ,
+		_p_specifier_qualifier_list(_arg_specifier_qualifier_list),
+		_p_struct_declarator_list(_arg_struct_declarator_list)
 {
-	private:
-		ReferenceCountedAutoPointer<specifier_qualifier_list> _p_specifier_qualifier_list;	  ///< A pointer to specifier_qualifier_list.
-		ReferenceCountedAutoPointer<struct_declarator_list> _p_struct_declarator_list;	  ///< A pointer to struct_declarator_list.
-	public:
-		/** 
-		 * \brief Constructor of struct_declaration
-		 *
-		 * This function handles the struct_declaration
-                 */
-		struct_declaration	
-				(
-					ReferenceCountedAutoPointer<specifier_qualifier_list> _arg_specifier_qualifier_list,   ///< A pointer to specifier_qualifier_list.
-					ReferenceCountedAutoPointer<struct_declarator_list> _arg_struct_declarator_list  ///< A pointer to struct_declarator_list.
-				);
-		/**
-                 * \brief Returns the name of the class.
-                 *
-                 * Returns the name of the class. Here, returns <b>"struct_declaration"</b>
-		 * \returns <b>"struct_declaration"</b>
-                 */
-		virtual std::string name()const		{return std::string("struct_declaration");}
-
-		/**
-                 * \brief Returns the ID of the class
-                 *
-                 * Returns the ID of the class. Here, returns ID_STRUCT_DECLARATION
-		 * \returns  ID_STRUCT_DECLARATION
-                 */
-		virtual CAST_CLASS_ID classId()const		{return ID_STRUCT_DECLARATION;}
-
-		/**
-		 * \brief Default destructor. 
-		 */
-		virtual ~struct_declaration()
-		{}
-};
-
-
-
+	AssertNotNullRule(_p_specifier_qualifier_list)
+	AssertNotNullRule(_p_struct_declarator_list)
+}
 
 
 
@@ -625,69 +428,16 @@ class struct_declaration:public CAst
 
 
 
-class direct_abstract_declarator;
-class pointer;
-
-
-
-
-/**
- * \brief abstract_declarator implements the pattern: <b>(pointer, direct_abstract_declarator)</b>
-
-
- * \dot
- * digraph AST {
- *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
- *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
- *     node_abstract_declarator [ label="abstract_declarator", URL="\ref abstract_declarator", color="#00AAAA" ];
- *     node_pointer [ label="pointer", URL="\ref pointer", color="#00AAAA"];
- *     node_direct_abstract_declarator [ label="direct_abstract_declarator", URL="\ref direct_abstract_declarator", color="#00AAAA"];
- *     node_abstract_declarator ->  node_pointer [label="_p_pointer" style=dotted];
- *     node_abstract_declarator ->  node_direct_abstract_declarator [label="_p_direct_abstract_declarator" style=dotted];
- * }
- * \enddot
- */
-class abstract_declarator:public CAst
+abstract_declarator::abstract_declarator
+	(
+		ReferenceCountedAutoPointer<pointer> _arg_pointer,
+		ReferenceCountedAutoPointer<direct_abstract_declarator> _arg_direct_abstract_declarator
+	):
+		CAst() ,
+		_p_pointer(_arg_pointer),
+		_p_direct_abstract_declarator(_arg_direct_abstract_declarator)
 {
-	private:
-		ReferenceCountedAutoPointer<pointer> _p_pointer;	  ///< A pointer to pointer. This parameter can be <b>Null</b>
-		ReferenceCountedAutoPointer<direct_abstract_declarator> _p_direct_abstract_declarator;	  ///< A pointer to direct_abstract_declarator. This parameter can be <b>Null</b>
-	public:
-		/** 
-		 * \brief Constructor of abstract_declarator
-		 *
-		 * This function handles the abstract_declarator
-                 */
-		abstract_declarator	
-				(
-					ReferenceCountedAutoPointer<pointer> _arg_pointer,   ///< A pointer to pointer. This parameter can be <b>Null</b>
-					ReferenceCountedAutoPointer<direct_abstract_declarator> _arg_direct_abstract_declarator  ///< A pointer to direct_abstract_declarator. This parameter can be <b>Null</b>
-				);
-		/**
-                 * \brief Returns the name of the class.
-                 *
-                 * Returns the name of the class. Here, returns <b>"abstract_declarator"</b>
-		 * \returns <b>"abstract_declarator"</b>
-                 */
-		virtual std::string name()const		{return std::string("abstract_declarator");}
-
-		/**
-                 * \brief Returns the ID of the class
-                 *
-                 * Returns the ID of the class. Here, returns ID_ABSTRACT_DECLARATOR
-		 * \returns  ID_ABSTRACT_DECLARATOR
-                 */
-		virtual CAST_CLASS_ID classId()const		{return ID_ABSTRACT_DECLARATOR;}
-
-		/**
-		 * \brief Default destructor. 
-		 */
-		virtual ~abstract_declarator()
-		{}
-};
-
-
-
+}
 
 
 
@@ -710,6 +460,54 @@ class abstract_declarator:public CAst
 
 
 
+iteration_statement_1::iteration_statement_1
+	(
+		ReferenceCountedAutoPointer<expression_statement> _arg_expression_statement1,
+		ReferenceCountedAutoPointer<expression_statement> _arg_expression_statement2,
+		ReferenceCountedAutoPointer<expression> _arg_expression,
+		ReferenceCountedAutoPointer<statement> _arg_statement
+	):
+		iteration_statement() ,
+		_p_expression_statement1(_arg_expression_statement1),
+		_p_expression_statement2(_arg_expression_statement2),
+		_p_expression(_arg_expression),
+		_p_statement(_arg_statement)
+{
+	AssertNotNullRule(_p_expression_statement1)
+	AssertNotNullRule(_p_expression_statement2)
+	AssertNotNullRule(_p_statement)
+}
+
+
+iteration_statement_2::iteration_statement_2
+	(
+		ReferenceCountedAutoPointer<expression> _arg_expression,
+		ReferenceCountedAutoPointer<statement> _arg_statement
+	):
+		iteration_statement() ,
+		_p_expression(_arg_expression),
+		_p_statement(_arg_statement)
+{
+	AssertNotNullRule(_p_expression)
+	AssertNotNullRule(_p_statement)
+}
+
+
+iteration_statement_3::iteration_statement_3
+	(
+		ReferenceCountedAutoPointer<statement> _arg_statement,
+		ReferenceCountedAutoPointer<expression> _arg_expression
+	):
+		iteration_statement() ,
+		_p_statement(_arg_statement),
+		_p_expression(_arg_expression)
+{
+	AssertNotNullRule(_p_statement)
+	AssertNotNullRule(_p_expression)
+}
+
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -726,6 +524,21 @@ class abstract_declarator:public CAst
 //RULE:additive_expression
 //////////////////////////////////////////
 
+
+
+
+
+additive_expression_item::additive_expression_item
+	(
+		ReferenceCountedAutoPointer<token> _arg_token,
+		ReferenceCountedAutoPointer<multiplicative_expression> _arg_multiplicative_expression
+	):
+		_p_token(_arg_token),
+		_p_multiplicative_expression(_arg_multiplicative_expression)
+{
+	AssertTokenType((_p_token->text() == "+" ) || (_p_token->text() == "-" ) || _p_token.isNull())
+	AssertNotNullRule(_p_multiplicative_expression)
+}
 
 
 
@@ -748,6 +561,29 @@ class abstract_declarator:public CAst
 
 
 
+external_declaration_1::external_declaration_1
+	(
+		ReferenceCountedAutoPointer<declaration> _arg_declaration
+	):
+		external_declaration() ,
+		_p_declaration(_arg_declaration)
+{
+	AssertNotNullRule(_p_declaration)
+}
+
+
+external_declaration_2::external_declaration_2
+	(
+		ReferenceCountedAutoPointer<function_definition> _arg_function_definition
+	):
+		external_declaration() ,
+		_p_function_definition(_arg_function_definition)
+{
+	AssertNotNullRule(_p_function_definition)
+}
+
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -764,6 +600,40 @@ class abstract_declarator:public CAst
 //RULE:type_specifier
 //////////////////////////////////////////
 
+
+
+
+type_specifier_1::type_specifier_1
+	(
+		ReferenceCountedAutoPointer<struct_or_union_specifier> _arg_struct_or_union_specifier
+	):
+		type_specifier() ,
+		_p_struct_or_union_specifier(_arg_struct_or_union_specifier)
+{
+	AssertNotNullRule(_p_struct_or_union_specifier)
+}
+
+
+type_specifier_2::type_specifier_2
+	(
+		ReferenceCountedAutoPointer<enum_specifier> _arg_enum_specifier
+	):
+		type_specifier() ,
+		_p_enum_specifier(_arg_enum_specifier)
+{
+	AssertNotNullRule(_p_enum_specifier)
+}
+
+
+type_specifier_3::type_specifier_3
+	(
+		ReferenceCountedAutoPointer<token> _arg_token
+	):
+		type_specifier() ,
+		_p_token(_arg_token)
+{
+	AssertTokenType((_p_token->text() == "float" ) || (_p_token->text() == "double" ) || (_p_token->text() == "void" ) || (_p_token->text() == "char" ) || (_p_token->text() == "short" ) || (_p_token->text() == "int" ) || (_p_token->text() == "long" ) || (_p_token->text() == "signed" ) || (_p_token->text() == "unsigned" ))
+}
 
 
 
@@ -787,69 +657,16 @@ class abstract_declarator:public CAst
 
 
 
-class statement_list;
-class declaration_list;
-
-
-
-
-/**
- * \brief compound_statement implements the pattern: <b>({, declaration_list, statement_list, })</b>
-
-
- * \dot
- * digraph AST {
- *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
- *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
- *     node_compound_statement [ label="compound_statement", URL="\ref compound_statement", color="#00AAAA" ];
- *     node_declaration_list [ label="declaration_list", URL="\ref declaration_list", color="#00AAAA"];
- *     node_statement_list [ label="statement_list", URL="\ref statement_list", color="#00AAAA"];
- *     node_compound_statement ->  node_declaration_list [label="_p_declaration_list" style=dotted];
- *     node_compound_statement ->  node_statement_list [label="_p_statement_list" style=dotted];
- * }
- * \enddot
- */
-class compound_statement:public CAst
+compound_statement::compound_statement
+	(
+		ReferenceCountedAutoPointer<declaration_list> _arg_declaration_list,
+		ReferenceCountedAutoPointer<statement_list> _arg_statement_list
+	):
+		CAst() ,
+		_p_declaration_list(_arg_declaration_list),
+		_p_statement_list(_arg_statement_list)
 {
-	private:
-		ReferenceCountedAutoPointer<declaration_list> _p_declaration_list;	  ///< A pointer to declaration_list. This parameter can be <b>Null</b>
-		ReferenceCountedAutoPointer<statement_list> _p_statement_list;	  ///< A pointer to statement_list. This parameter can be <b>Null</b>
-	public:
-		/** 
-		 * \brief Constructor of compound_statement
-		 *
-		 * This function handles the compound_statement
-                 */
-		compound_statement	
-				(
-					ReferenceCountedAutoPointer<declaration_list> _arg_declaration_list,   ///< A pointer to declaration_list. This parameter can be <b>Null</b>
-					ReferenceCountedAutoPointer<statement_list> _arg_statement_list  ///< A pointer to statement_list. This parameter can be <b>Null</b>
-				);
-		/**
-                 * \brief Returns the name of the class.
-                 *
-                 * Returns the name of the class. Here, returns <b>"compound_statement"</b>
-		 * \returns <b>"compound_statement"</b>
-                 */
-		virtual std::string name()const		{return std::string("compound_statement");}
-
-		/**
-                 * \brief Returns the ID of the class
-                 *
-                 * Returns the ID of the class. Here, returns ID_COMPOUND_STATEMENT
-		 * \returns  ID_COMPOUND_STATEMENT
-                 */
-		virtual CAST_CLASS_ID classId()const		{return ID_COMPOUND_STATEMENT;}
-
-		/**
-		 * \brief Default destructor. 
-		 */
-		virtual ~compound_statement()
-		{}
-};
-
-
-
+}
 
 
 
@@ -872,6 +689,18 @@ class compound_statement:public CAst
 
 
 
+
+inclusive_or_expression_item::inclusive_or_expression_item
+	(
+		ReferenceCountedAutoPointer<exclusive_or_expression> _arg_exclusive_or_expression
+	):
+		_p_exclusive_or_expression(_arg_exclusive_or_expression)
+{
+	AssertNotNullRule(_p_exclusive_or_expression)
+}
+
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -888,6 +717,27 @@ class compound_statement:public CAst
 //RULE:pointer
 //////////////////////////////////////////
 
+
+
+
+pointer_item_1::pointer_item_1
+	(
+		ReferenceCountedAutoPointer<type_qualifier_list> _arg_type_qualifier_list
+	):
+		pointer_item() ,
+		_p_type_qualifier_list(_arg_type_qualifier_list)
+{
+}
+
+
+pointer_item_2::pointer_item_2
+	(
+		
+	):
+		pointer_item() 
+		
+{
+}
 
 
 
@@ -911,87 +761,26 @@ class compound_statement:public CAst
 
 
 
-class token;
-class expression;
-class statement;
-
-
-
-
-
-
-
-
-
-/**
- * \brief selection_statement implements the pattern: <b>(if, (, expression, ), statement, else, statement)</b>
-
-
- * \dot
- * digraph AST {
- *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
- *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
- *     node_selection_statement [ label="selection_statement", URL="\ref selection_statement", color="#00AAAA" ];
- *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
- *     node_expression [ label="expression", URL="\ref expression", color="#00AAAA"];
- *     node_statement [ label="statement", URL="\ref statement", color="#00AAAA"];
- *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
- *     node_statement [ label="statement", URL="\ref statement", color="#00AAAA"];
- *     node_selection_statement ->  node_token [label="_p_token1" style=solid];
- *     node_selection_statement ->  node_expression [label="_p_expression" style=solid];
- *     node_selection_statement ->  node_statement [label="_p_statement1" style=solid];
- *     node_selection_statement ->  node_token [label="_p_token2" style=dotted];
- *     node_selection_statement ->  node_statement [label="_p_statement2" style=dotted];
- * }
- * \enddot
- */
-class selection_statement:public CAst
+selection_statement::selection_statement
+	(
+		ReferenceCountedAutoPointer<token> _arg_token1,
+		ReferenceCountedAutoPointer<expression> _arg_expression,
+		ReferenceCountedAutoPointer<statement> _arg_statement1,
+		ReferenceCountedAutoPointer<token> _arg_token2,
+		ReferenceCountedAutoPointer<statement> _arg_statement2
+	):
+		CAst() ,
+		_p_token1(_arg_token1),
+		_p_expression(_arg_expression),
+		_p_statement1(_arg_statement1),
+		_p_token2(_arg_token2),
+		_p_statement2(_arg_statement2)
 {
-	private:
-		ReferenceCountedAutoPointer<token> _p_token1;	  ///< A pointer to a token, accepts <b>switch</b>, <b>if</b>
-		ReferenceCountedAutoPointer<expression> _p_expression;	  ///< A pointer to expression.
-		ReferenceCountedAutoPointer<statement> _p_statement1;	  ///< A pointer to statement.
-		ReferenceCountedAutoPointer<token> _p_token2;	  ///< A pointer to a token, accepts <b>else</b>, <b>None</b>
-		ReferenceCountedAutoPointer<statement> _p_statement2;	  ///< A pointer to statement. This parameter can be <b>Null</b>
-	public:
-		/** 
-		 * \brief Constructor of selection_statement
-		 *
-		 * This function handles the selection_statement
-                 */
-		selection_statement	
-				(
-					ReferenceCountedAutoPointer<token> _arg_token1,   ///< A pointer to a token, accepts <b>switch</b>, <b>if</b>
-					ReferenceCountedAutoPointer<expression> _arg_expression,   ///< A pointer to expression.
-					ReferenceCountedAutoPointer<statement> _arg_statement1,   ///< A pointer to statement.
-					ReferenceCountedAutoPointer<token> _arg_token2,   ///< A pointer to a token, accepts <b>else</b>, <b>None</b>
-					ReferenceCountedAutoPointer<statement> _arg_statement2  ///< A pointer to statement. This parameter can be <b>Null</b>
-				);
-		/**
-                 * \brief Returns the name of the class.
-                 *
-                 * Returns the name of the class. Here, returns <b>"selection_statement"</b>
-		 * \returns <b>"selection_statement"</b>
-                 */
-		virtual std::string name()const		{return std::string("selection_statement");}
-
-		/**
-                 * \brief Returns the ID of the class
-                 *
-                 * Returns the ID of the class. Here, returns ID_SELECTION_STATEMENT
-		 * \returns  ID_SELECTION_STATEMENT
-                 */
-		virtual CAST_CLASS_ID classId()const		{return ID_SELECTION_STATEMENT;}
-
-		/**
-		 * \brief Default destructor. 
-		 */
-		virtual ~selection_statement()
-		{}
-};
-
-
-
+	AssertTokenType((_p_token1->text() == "switch" ) || (_p_token1->text() == "if" ))
+	AssertNotNullRule(_p_expression)
+	AssertNotNullRule(_p_statement1)
+	AssertTokenType((_p_token2->text() == "else" ) || _p_token2.isNull())
+}
 
 
 
@@ -1014,6 +803,62 @@ class selection_statement:public CAst
 
 
 
+postfix_expression_1::postfix_expression_1
+	(
+		ReferenceCountedAutoPointer<postfix_expression> _arg_postfix_expression,
+		ReferenceCountedAutoPointer<token> _arg_token,
+		ReferenceCountedAutoPointer<argument_expression_list> _arg_argument_expression_list
+	):
+		postfix_expression() ,
+		_p_postfix_expression(_arg_postfix_expression),
+		_p_token(_arg_token),
+		_p_argument_expression_list(_arg_argument_expression_list)
+{
+	AssertNotNullRule(_p_postfix_expression)
+	AssertTokenType((_p_token->text() == "->" ) || (_p_token->text() == "." ) || (_p_token->text() == "(" ))
+}
+
+
+postfix_expression_2::postfix_expression_2
+	(
+		ReferenceCountedAutoPointer<postfix_expression> _arg_postfix_expression,
+		ReferenceCountedAutoPointer<token> _arg_token
+	):
+		postfix_expression() ,
+		_p_postfix_expression(_arg_postfix_expression),
+		_p_token(_arg_token)
+{
+	AssertNotNullRule(_p_postfix_expression)
+	AssertTokenType((_p_token->text() == "++" ) || (_p_token->text() == "--" ))
+}
+
+
+postfix_expression_3::postfix_expression_3
+	(
+		ReferenceCountedAutoPointer<primary_expression> _arg_primary_expression
+	):
+		postfix_expression() ,
+		_p_primary_expression(_arg_primary_expression)
+{
+	AssertNotNullRule(_p_primary_expression)
+}
+
+
+postfix_expression_4::postfix_expression_4
+	(
+		ReferenceCountedAutoPointer<postfix_expression> _arg_postfix_expression,
+		ReferenceCountedAutoPointer<expression> _arg_expression
+	):
+		postfix_expression() ,
+		_p_postfix_expression(_arg_postfix_expression),
+		_p_expression(_arg_expression)
+{
+	AssertNotNullRule(_p_postfix_expression)
+	AssertNotNullRule(_p_expression)
+}
+
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -1030,6 +875,18 @@ class selection_statement:public CAst
 //RULE:and_expression
 //////////////////////////////////////////
 
+
+
+
+
+and_expression_item::and_expression_item
+	(
+		ReferenceCountedAutoPointer<equality_expression> _arg_equality_expression
+	):
+		_p_equality_expression(_arg_equality_expression)
+{
+	AssertNotNullRule(_p_equality_expression)
+}
 
 
 
@@ -1052,6 +909,73 @@ class selection_statement:public CAst
 
 
 
+statement_1::statement_1
+	(
+		ReferenceCountedAutoPointer<iteration_statement> _arg_iteration_statement
+	):
+		statement() ,
+		_p_iteration_statement(_arg_iteration_statement)
+{
+	AssertNotNullRule(_p_iteration_statement)
+}
+
+
+statement_2::statement_2
+	(
+		ReferenceCountedAutoPointer<jump_statement> _arg_jump_statement
+	):
+		statement() ,
+		_p_jump_statement(_arg_jump_statement)
+{
+	AssertNotNullRule(_p_jump_statement)
+}
+
+
+statement_3::statement_3
+	(
+		ReferenceCountedAutoPointer<labeled_statement> _arg_labeled_statement
+	):
+		statement() ,
+		_p_labeled_statement(_arg_labeled_statement)
+{
+	AssertNotNullRule(_p_labeled_statement)
+}
+
+
+statement_4::statement_4
+	(
+		ReferenceCountedAutoPointer<compound_statement> _arg_compound_statement
+	):
+		statement() ,
+		_p_compound_statement(_arg_compound_statement)
+{
+	AssertNotNullRule(_p_compound_statement)
+}
+
+
+statement_5::statement_5
+	(
+		ReferenceCountedAutoPointer<expression_statement> _arg_expression_statement
+	):
+		statement() ,
+		_p_expression_statement(_arg_expression_statement)
+{
+	AssertNotNullRule(_p_expression_statement)
+}
+
+
+statement_6::statement_6
+	(
+		ReferenceCountedAutoPointer<selection_statement> _arg_selection_statement
+	):
+		statement() ,
+		_p_selection_statement(_arg_selection_statement)
+{
+	AssertNotNullRule(_p_selection_statement)
+}
+
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -1068,6 +992,32 @@ class selection_statement:public CAst
 //RULE:cast_expression
 //////////////////////////////////////////
 
+
+
+
+cast_expression_1::cast_expression_1
+	(
+		ReferenceCountedAutoPointer<unary_expression> _arg_unary_expression
+	):
+		cast_expression() ,
+		_p_unary_expression(_arg_unary_expression)
+{
+	AssertNotNullRule(_p_unary_expression)
+}
+
+
+cast_expression_2::cast_expression_2
+	(
+		ReferenceCountedAutoPointer<type_name> _arg_type_name,
+		ReferenceCountedAutoPointer<cast_expression> _arg_cast_expression
+	):
+		cast_expression() ,
+		_p_type_name(_arg_type_name),
+		_p_cast_expression(_arg_cast_expression)
+{
+	AssertNotNullRule(_p_type_name)
+	AssertNotNullRule(_p_cast_expression)
+}
 
 
 
@@ -1091,76 +1041,20 @@ class selection_statement:public CAst
 
 
 
-class token;
-class initializer;
-class declarator;
-
-
-
-
-
-
-/**
- * \brief init_declarator implements the pattern: <b>(declarator, =, initializer)</b>
-
-
- * \dot
- * digraph AST {
- *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
- *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
- *     node_init_declarator [ label="init_declarator", URL="\ref init_declarator", color="#00AAAA" ];
- *     node_declarator [ label="declarator", URL="\ref declarator", color="#00AAAA"];
- *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
- *     node_initializer [ label="initializer", URL="\ref initializer", color="#00AAAA"];
- *     node_init_declarator ->  node_declarator [label="_p_declarator" style=solid];
- *     node_init_declarator ->  node_token [label="_p_token" style=dotted];
- *     node_init_declarator ->  node_initializer [label="_p_initializer" style=dotted];
- * }
- * \enddot
- */
-class init_declarator:public CAst
+init_declarator::init_declarator
+	(
+		ReferenceCountedAutoPointer<declarator> _arg_declarator,
+		ReferenceCountedAutoPointer<token> _arg_token,
+		ReferenceCountedAutoPointer<initializer> _arg_initializer
+	):
+		CAst() ,
+		_p_declarator(_arg_declarator),
+		_p_token(_arg_token),
+		_p_initializer(_arg_initializer)
 {
-	private:
-		ReferenceCountedAutoPointer<declarator> _p_declarator;	  ///< A pointer to declarator.
-		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>=</b>, <b>None</b>
-		ReferenceCountedAutoPointer<initializer> _p_initializer;	  ///< A pointer to initializer. This parameter can be <b>Null</b>
-	public:
-		/** 
-		 * \brief Constructor of init_declarator
-		 *
-		 * This function handles the init_declarator
-                 */
-		init_declarator	
-				(
-					ReferenceCountedAutoPointer<declarator> _arg_declarator,   ///< A pointer to declarator.
-					ReferenceCountedAutoPointer<token> _arg_token,   ///< A pointer to a token, accepts <b>=</b>, <b>None</b>
-					ReferenceCountedAutoPointer<initializer> _arg_initializer  ///< A pointer to initializer. This parameter can be <b>Null</b>
-				);
-		/**
-                 * \brief Returns the name of the class.
-                 *
-                 * Returns the name of the class. Here, returns <b>"init_declarator"</b>
-		 * \returns <b>"init_declarator"</b>
-                 */
-		virtual std::string name()const		{return std::string("init_declarator");}
-
-		/**
-                 * \brief Returns the ID of the class
-                 *
-                 * Returns the ID of the class. Here, returns ID_INIT_DECLARATOR
-		 * \returns  ID_INIT_DECLARATOR
-                 */
-		virtual CAST_CLASS_ID classId()const		{return ID_INIT_DECLARATOR;}
-
-		/**
-		 * \brief Default destructor. 
-		 */
-		virtual ~init_declarator()
-		{}
-};
-
-
-
+	AssertNotNullRule(_p_declarator)
+	AssertTokenType((_p_token->text() == "=" ) || _p_token.isNull())
+}
 
 
 
@@ -1183,6 +1077,18 @@ class init_declarator:public CAst
 
 
 
+
+struct_declarator_list_item::struct_declarator_list_item
+	(
+		ReferenceCountedAutoPointer<struct_declarator> _arg_struct_declarator
+	):
+		_p_struct_declarator(_arg_struct_declarator)
+{
+	AssertNotNullRule(_p_struct_declarator)
+}
+
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -1199,6 +1105,18 @@ class init_declarator:public CAst
 //RULE:logical_or_expression
 //////////////////////////////////////////
 
+
+
+
+
+logical_or_expression_item::logical_or_expression_item
+	(
+		ReferenceCountedAutoPointer<logical_and_expression> _arg_logical_and_expression
+	):
+		_p_logical_and_expression(_arg_logical_and_expression)
+{
+	AssertNotNullRule(_p_logical_and_expression)
+}
 
 
 
@@ -1222,64 +1140,15 @@ class init_declarator:public CAst
 
 
 
-class token;
-
-
-
-
-/**
- * \brief unary_operator implements the pattern: <b>(&,)</b>
-
-
- * \dot
- * digraph AST {
- *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
- *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
- *     node_unary_operator [ label="unary_operator", URL="\ref unary_operator", color="#00AAAA" ];
- *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
- *     node_unary_operator ->  node_token [label="_p_token" style=solid];
- * }
- * \enddot
- */
-class unary_operator:public CAst
+unary_operator::unary_operator
+	(
+		ReferenceCountedAutoPointer<token> _arg_token
+	):
+		CAst() ,
+		_p_token(_arg_token)
 {
-	private:
-		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>-</b>, <b>~</b>, <b>!</b>, <b>*</b>, <b>&</b>, <b>+</b>
-	public:
-		/** 
-		 * \brief Constructor of unary_operator
-		 *
-		 * This function handles the unary_operator
-                 */
-		unary_operator	
-				(
-					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>-</b>, <b>~</b>, <b>!</b>, <b>*</b>, <b>&</b>, <b>+</b>
-				);
-		/**
-                 * \brief Returns the name of the class.
-                 *
-                 * Returns the name of the class. Here, returns <b>"unary_operator"</b>
-		 * \returns <b>"unary_operator"</b>
-                 */
-		virtual std::string name()const		{return std::string("unary_operator");}
-
-		/**
-                 * \brief Returns the ID of the class
-                 *
-                 * Returns the ID of the class. Here, returns ID_UNARY_OPERATOR
-		 * \returns  ID_UNARY_OPERATOR
-                 */
-		virtual CAST_CLASS_ID classId()const		{return ID_UNARY_OPERATOR;}
-
-		/**
-		 * \brief Default destructor. 
-		 */
-		virtual ~unary_operator()
-		{}
-};
-
-
-
+	AssertTokenType((_p_token->text() == "+" ) || (_p_token->text() == "-" ) || (_p_token->text() == "~" ) || (_p_token->text() == "!" ) || (_p_token->text() == "*" ) || (_p_token->text() == "&" ))
+}
 
 
 
@@ -1299,6 +1168,21 @@ class unary_operator:public CAst
 //RULE:relational_expression
 //////////////////////////////////////////
 
+
+
+
+
+relational_expression_item::relational_expression_item
+	(
+		ReferenceCountedAutoPointer<token> _arg_token,
+		ReferenceCountedAutoPointer<shift_expression> _arg_shift_expression
+	):
+		_p_token(_arg_token),
+		_p_shift_expression(_arg_shift_expression)
+{
+	AssertTokenType((_p_token->text() == "<" ) || (_p_token->text() == "<=" ) || (_p_token->text() == ">" ) || (_p_token->text() == ">=" ) || _p_token.isNull())
+	AssertNotNullRule(_p_shift_expression)
+}
 
 
 
@@ -1322,64 +1206,15 @@ class unary_operator:public CAst
 
 
 
-class token;
-
-
-
-
-/**
- * \brief struct_or_union implements the pattern: <b>(struct,)</b>
-
-
- * \dot
- * digraph AST {
- *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
- *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
- *     node_struct_or_union [ label="struct_or_union", URL="\ref struct_or_union", color="#00AAAA" ];
- *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
- *     node_struct_or_union ->  node_token [label="_p_token" style=solid];
- * }
- * \enddot
- */
-class struct_or_union:public CAst
+struct_or_union::struct_or_union
+	(
+		ReferenceCountedAutoPointer<token> _arg_token
+	):
+		CAst() ,
+		_p_token(_arg_token)
 {
-	private:
-		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>struct</b>, <b>union</b>
-	public:
-		/** 
-		 * \brief Constructor of struct_or_union
-		 *
-		 * This function handles the struct_or_union
-                 */
-		struct_or_union	
-				(
-					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>struct</b>, <b>union</b>
-				);
-		/**
-                 * \brief Returns the name of the class.
-                 *
-                 * Returns the name of the class. Here, returns <b>"struct_or_union"</b>
-		 * \returns <b>"struct_or_union"</b>
-                 */
-		virtual std::string name()const		{return std::string("struct_or_union");}
-
-		/**
-                 * \brief Returns the ID of the class
-                 *
-                 * Returns the ID of the class. Here, returns ID_STRUCT_OR_UNION
-		 * \returns  ID_STRUCT_OR_UNION
-                 */
-		virtual CAST_CLASS_ID classId()const		{return ID_STRUCT_OR_UNION;}
-
-		/**
-		 * \brief Default destructor. 
-		 */
-		virtual ~struct_or_union()
-		{}
-};
-
-
-
+	AssertTokenType((_p_token->text() == "struct" ) || (_p_token->text() == "union" ))
+}
 
 
 
@@ -1403,76 +1238,20 @@ class struct_or_union:public CAst
 
 
 
-class token;
-class constant_expression;
-
-
-
-
-
-
-
-/**
- * \brief enumerator implements the pattern: <b>([IDENTIFIER], =, constant_expression)</b>
-
-
- * \dot
- * digraph AST {
- *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
- *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
- *     node_enumerator [ label="enumerator", URL="\ref enumerator", color="#00AAAA" ];
- *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
- *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
- *     node_constant_expression [ label="constant_expression", URL="\ref constant_expression", color="#00AAAA"];
- *     node_enumerator ->  node_token [label="_p_token1" style=solid];
- *     node_enumerator ->  node_token [label="_p_token2" style=dotted];
- *     node_enumerator ->  node_constant_expression [label="_p_constant_expression" style=dotted];
- * }
- * \enddot
- */
-class enumerator:public CAst
+enumerator::enumerator
+	(
+		ReferenceCountedAutoPointer<token> _arg_token1,
+		ReferenceCountedAutoPointer<token> _arg_token2,
+		ReferenceCountedAutoPointer<constant_expression> _arg_constant_expression
+	):
+		CAst() ,
+		_p_token1(_arg_token1),
+		_p_token2(_arg_token2),
+		_p_constant_expression(_arg_constant_expression)
 {
-	private:
-		ReferenceCountedAutoPointer<token> _p_token1;	  ///< A pointer to a token, accepts <b>[IDENTIFIER]</b>
-		ReferenceCountedAutoPointer<token> _p_token2;	  ///< A pointer to a token, accepts <b>=</b>, <b>None</b>
-		ReferenceCountedAutoPointer<constant_expression> _p_constant_expression;	  ///< A pointer to constant_expression. This parameter can be <b>Null</b>
-	public:
-		/** 
-		 * \brief Constructor of enumerator
-		 *
-		 * This function handles the enumerator
-                 */
-		enumerator	
-				(
-					ReferenceCountedAutoPointer<token> _arg_token1,   ///< A pointer to a token, accepts <b>[IDENTIFIER]</b>
-					ReferenceCountedAutoPointer<token> _arg_token2,   ///< A pointer to a token, accepts <b>=</b>, <b>None</b>
-					ReferenceCountedAutoPointer<constant_expression> _arg_constant_expression  ///< A pointer to constant_expression. This parameter can be <b>Null</b>
-				);
-		/**
-                 * \brief Returns the name of the class.
-                 *
-                 * Returns the name of the class. Here, returns <b>"enumerator"</b>
-		 * \returns <b>"enumerator"</b>
-                 */
-		virtual std::string name()const		{return std::string("enumerator");}
-
-		/**
-                 * \brief Returns the ID of the class
-                 *
-                 * Returns the ID of the class. Here, returns ID_ENUMERATOR
-		 * \returns  ID_ENUMERATOR
-                 */
-		virtual CAST_CLASS_ID classId()const		{return ID_ENUMERATOR;}
-
-		/**
-		 * \brief Default destructor. 
-		 */
-		virtual ~enumerator()
-		{}
-};
-
-
-
+	AssertTokenType((_p_token1->text() == "[IDENTIFIER]" ))
+	AssertTokenType((_p_token2->text() == "=" ) || _p_token2.isNull())
+}
 
 
 
@@ -1492,6 +1271,35 @@ class enumerator:public CAst
 //RULE:assignment_expression
 //////////////////////////////////////////
 
+
+
+
+assignment_expression_1::assignment_expression_1
+	(
+		ReferenceCountedAutoPointer<conditional_expression> _arg_conditional_expression
+	):
+		assignment_expression() ,
+		_p_conditional_expression(_arg_conditional_expression)
+{
+	AssertNotNullRule(_p_conditional_expression)
+}
+
+
+assignment_expression_2::assignment_expression_2
+	(
+		ReferenceCountedAutoPointer<unary_expression> _arg_unary_expression,
+		ReferenceCountedAutoPointer<assignment_operator> _arg_assignment_operator,
+		ReferenceCountedAutoPointer<assignment_expression> _arg_assignment_expression
+	):
+		assignment_expression() ,
+		_p_unary_expression(_arg_unary_expression),
+		_p_assignment_operator(_arg_assignment_operator),
+		_p_assignment_expression(_arg_assignment_expression)
+{
+	AssertNotNullRule(_p_unary_expression)
+	AssertNotNullRule(_p_assignment_operator)
+	AssertNotNullRule(_p_assignment_expression)
+}
 
 
 
@@ -1515,76 +1323,21 @@ class enumerator:public CAst
 
 
 
-class token;
-class parameter_list;
-
-
-
-
-
-
-
-/**
- * \brief parameter_type_list implements the pattern: <b>(parameter_list, ,, ...)</b>
-
-
- * \dot
- * digraph AST {
- *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
- *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
- *     node_parameter_type_list [ label="parameter_type_list", URL="\ref parameter_type_list", color="#00AAAA" ];
- *     node_parameter_list [ label="parameter_list", URL="\ref parameter_list", color="#00AAAA"];
- *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
- *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
- *     node_parameter_type_list ->  node_parameter_list [label="_p_parameter_list" style=solid];
- *     node_parameter_type_list ->  node_token [label="_p_token1" style=dotted];
- *     node_parameter_type_list ->  node_token [label="_p_token2" style=dotted];
- * }
- * \enddot
- */
-class parameter_type_list:public CAst
+parameter_type_list::parameter_type_list
+	(
+		ReferenceCountedAutoPointer<parameter_list> _arg_parameter_list,
+		ReferenceCountedAutoPointer<token> _arg_token1,
+		ReferenceCountedAutoPointer<token> _arg_token2
+	):
+		CAst() ,
+		_p_parameter_list(_arg_parameter_list),
+		_p_token1(_arg_token1),
+		_p_token2(_arg_token2)
 {
-	private:
-		ReferenceCountedAutoPointer<parameter_list> _p_parameter_list;	  ///< A pointer to parameter_list.
-		ReferenceCountedAutoPointer<token> _p_token1;	  ///< A pointer to a token, accepts <b>,</b>, <b>None</b>
-		ReferenceCountedAutoPointer<token> _p_token2;	  ///< A pointer to a token, accepts <b>...</b>, <b>None</b>
-	public:
-		/** 
-		 * \brief Constructor of parameter_type_list
-		 *
-		 * This function handles the parameter_type_list
-                 */
-		parameter_type_list	
-				(
-					ReferenceCountedAutoPointer<parameter_list> _arg_parameter_list,   ///< A pointer to parameter_list.
-					ReferenceCountedAutoPointer<token> _arg_token1,   ///< A pointer to a token, accepts <b>,</b>, <b>None</b>
-					ReferenceCountedAutoPointer<token> _arg_token2  ///< A pointer to a token, accepts <b>...</b>, <b>None</b>
-				);
-		/**
-                 * \brief Returns the name of the class.
-                 *
-                 * Returns the name of the class. Here, returns <b>"parameter_type_list"</b>
-		 * \returns <b>"parameter_type_list"</b>
-                 */
-		virtual std::string name()const		{return std::string("parameter_type_list");}
-
-		/**
-                 * \brief Returns the ID of the class
-                 *
-                 * Returns the ID of the class. Here, returns ID_PARAMETER_TYPE_LIST
-		 * \returns  ID_PARAMETER_TYPE_LIST
-                 */
-		virtual CAST_CLASS_ID classId()const		{return ID_PARAMETER_TYPE_LIST;}
-
-		/**
-		 * \brief Default destructor. 
-		 */
-		virtual ~parameter_type_list()
-		{}
-};
-
-
-
+	AssertNotNullRule(_p_parameter_list)
+	AssertTokenType((_p_token1->text() == "," ) || _p_token1.isNull())
+	AssertTokenType((_p_token2->text() == "..." ) || _p_token2.isNull())
+}
 
 
 
@@ -1607,6 +1360,34 @@ class parameter_type_list:public CAst
 
 
 
+parameter_declaration_1::parameter_declaration_1
+	(
+		ReferenceCountedAutoPointer<declaration_specifiers> _arg_declaration_specifiers,
+		ReferenceCountedAutoPointer<abstract_declarator> _arg_abstract_declarator
+	):
+		parameter_declaration() ,
+		_p_declaration_specifiers(_arg_declaration_specifiers),
+		_p_abstract_declarator(_arg_abstract_declarator)
+{
+	AssertNotNullRule(_p_declaration_specifiers)
+	AssertNotNullRule(_p_abstract_declarator)
+}
+
+
+parameter_declaration_2::parameter_declaration_2
+	(
+		ReferenceCountedAutoPointer<declaration_specifiers> _arg_declaration_specifiers,
+		ReferenceCountedAutoPointer<declarator> _arg_declarator
+	):
+		parameter_declaration() ,
+		_p_declaration_specifiers(_arg_declaration_specifiers),
+		_p_declarator(_arg_declarator)
+{
+	AssertNotNullRule(_p_declaration_specifiers)
+}
+
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -1623,6 +1404,21 @@ class parameter_type_list:public CAst
 //RULE:multiplicative_expression
 //////////////////////////////////////////
 
+
+
+
+
+multiplicative_expression_item::multiplicative_expression_item
+	(
+		ReferenceCountedAutoPointer<token> _arg_token,
+		ReferenceCountedAutoPointer<cast_expression> _arg_cast_expression
+	):
+		_p_token(_arg_token),
+		_p_cast_expression(_arg_cast_expression)
+{
+	AssertTokenType((_p_token->text() == "/" ) || (_p_token->text() == "*" ) || (_p_token->text() == "%" ) || _p_token.isNull())
+	AssertNotNullRule(_p_cast_expression)
+}
 
 
 
@@ -1645,6 +1441,18 @@ class parameter_type_list:public CAst
 
 
 
+
+type_qualifier_list_item::type_qualifier_list_item
+	(
+		ReferenceCountedAutoPointer<type_qualifier> _arg_type_qualifier
+	):
+		_p_type_qualifier(_arg_type_qualifier)
+{
+	AssertNotNullRule(_p_type_qualifier)
+}
+
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -1661,6 +1469,18 @@ class parameter_type_list:public CAst
 //RULE:argument_expression_list
 //////////////////////////////////////////
 
+
+
+
+
+argument_expression_list_item::argument_expression_list_item
+	(
+		ReferenceCountedAutoPointer<assignment_expression> _arg_assignment_expression
+	):
+		_p_assignment_expression(_arg_assignment_expression)
+{
+	AssertNotNullRule(_p_assignment_expression)
+}
 
 
 
@@ -1683,6 +1503,42 @@ class parameter_type_list:public CAst
 
 
 
+direct_abstract_declarator_1::direct_abstract_declarator_1
+	(
+		ReferenceCountedAutoPointer<direct_abstract_declarator> _arg_direct_abstract_declarator,
+		ReferenceCountedAutoPointer<parameter_type_list> _arg_parameter_type_list
+	):
+		direct_abstract_declarator() ,
+		_p_direct_abstract_declarator(_arg_direct_abstract_declarator),
+		_p_parameter_type_list(_arg_parameter_type_list)
+{
+}
+
+
+direct_abstract_declarator_2::direct_abstract_declarator_2
+	(
+		ReferenceCountedAutoPointer<abstract_declarator> _arg_abstract_declarator
+	):
+		direct_abstract_declarator() ,
+		_p_abstract_declarator(_arg_abstract_declarator)
+{
+	AssertNotNullRule(_p_abstract_declarator)
+}
+
+
+direct_abstract_declarator_3::direct_abstract_declarator_3
+	(
+		ReferenceCountedAutoPointer<direct_abstract_declarator> _arg_direct_abstract_declarator,
+		ReferenceCountedAutoPointer<constant_expression> _arg_constant_expression
+	):
+		direct_abstract_declarator() ,
+		_p_direct_abstract_declarator(_arg_direct_abstract_declarator),
+		_p_constant_expression(_arg_constant_expression)
+{
+}
+
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -1699,6 +1555,21 @@ class parameter_type_list:public CAst
 //RULE:equality_expression
 //////////////////////////////////////////
 
+
+
+
+
+equality_expression_item::equality_expression_item
+	(
+		ReferenceCountedAutoPointer<token> _arg_token,
+		ReferenceCountedAutoPointer<relational_expression> _arg_relational_expression
+	):
+		_p_token(_arg_token),
+		_p_relational_expression(_arg_relational_expression)
+{
+	AssertTokenType((_p_token->text() == "==" ) || (_p_token->text() == "!=" ) || _p_token.isNull())
+	AssertNotNullRule(_p_relational_expression)
+}
 
 
 
@@ -1721,6 +1592,29 @@ class parameter_type_list:public CAst
 
 
 
+primary_expression_1::primary_expression_1
+	(
+		ReferenceCountedAutoPointer<expression> _arg_expression
+	):
+		primary_expression() ,
+		_p_expression(_arg_expression)
+{
+	AssertNotNullRule(_p_expression)
+}
+
+
+primary_expression_2::primary_expression_2
+	(
+		ReferenceCountedAutoPointer<token> _arg_token
+	):
+		primary_expression() ,
+		_p_token(_arg_token)
+{
+	AssertTokenType((_p_token->text() == "[STRING_LITERAL]" ) || (_p_token->text() == "[IDENTIFIER]" ) || (_p_token->text() == "[CONSTANT]" ))
+}
+
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -1737,6 +1631,40 @@ class parameter_type_list:public CAst
 //RULE:declaration_specifiers
 //////////////////////////////////////////
 
+
+
+
+declaration_specifiers_item_1::declaration_specifiers_item_1
+	(
+		ReferenceCountedAutoPointer<type_qualifier> _arg_type_qualifier
+	):
+		declaration_specifiers_item() ,
+		_p_type_qualifier(_arg_type_qualifier)
+{
+	AssertNotNullRule(_p_type_qualifier)
+}
+
+
+declaration_specifiers_item_2::declaration_specifiers_item_2
+	(
+		ReferenceCountedAutoPointer<storage_class_specifier> _arg_storage_class_specifier
+	):
+		declaration_specifiers_item() ,
+		_p_storage_class_specifier(_arg_storage_class_specifier)
+{
+	AssertNotNullRule(_p_storage_class_specifier)
+}
+
+
+declaration_specifiers_item_3::declaration_specifiers_item_3
+	(
+		ReferenceCountedAutoPointer<type_specifier> _arg_type_specifier
+	):
+		declaration_specifiers_item() ,
+		_p_type_specifier(_arg_type_specifier)
+{
+	AssertNotNullRule(_p_type_specifier)
+}
 
 
 
@@ -1760,69 +1688,17 @@ class parameter_type_list:public CAst
 
 
 
-class declaration_specifiers;
-class init_declarator_list;
-
-
-
-
-/**
- * \brief declaration implements the pattern: <b>(declaration_specifiers, init_declarator_list, ;)</b>
-
-
- * \dot
- * digraph AST {
- *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
- *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
- *     node_declaration [ label="declaration", URL="\ref declaration", color="#00AAAA" ];
- *     node_declaration_specifiers [ label="declaration_specifiers", URL="\ref declaration_specifiers", color="#00AAAA"];
- *     node_init_declarator_list [ label="init_declarator_list", URL="\ref init_declarator_list", color="#00AAAA"];
- *     node_declaration ->  node_declaration_specifiers [label="_p_declaration_specifiers" style=solid];
- *     node_declaration ->  node_init_declarator_list [label="_p_init_declarator_list" style=dotted];
- * }
- * \enddot
- */
-class declaration:public CAst
+declaration::declaration
+	(
+		ReferenceCountedAutoPointer<declaration_specifiers> _arg_declaration_specifiers,
+		ReferenceCountedAutoPointer<init_declarator_list> _arg_init_declarator_list
+	):
+		CAst() ,
+		_p_declaration_specifiers(_arg_declaration_specifiers),
+		_p_init_declarator_list(_arg_init_declarator_list)
 {
-	private:
-		ReferenceCountedAutoPointer<declaration_specifiers> _p_declaration_specifiers;	  ///< A pointer to declaration_specifiers.
-		ReferenceCountedAutoPointer<init_declarator_list> _p_init_declarator_list;	  ///< A pointer to init_declarator_list. This parameter can be <b>Null</b>
-	public:
-		/** 
-		 * \brief Constructor of declaration
-		 *
-		 * This function handles the declaration
-                 */
-		declaration	
-				(
-					ReferenceCountedAutoPointer<declaration_specifiers> _arg_declaration_specifiers,   ///< A pointer to declaration_specifiers.
-					ReferenceCountedAutoPointer<init_declarator_list> _arg_init_declarator_list  ///< A pointer to init_declarator_list. This parameter can be <b>Null</b>
-				);
-		/**
-                 * \brief Returns the name of the class.
-                 *
-                 * Returns the name of the class. Here, returns <b>"declaration"</b>
-		 * \returns <b>"declaration"</b>
-                 */
-		virtual std::string name()const		{return std::string("declaration");}
-
-		/**
-                 * \brief Returns the ID of the class
-                 *
-                 * Returns the ID of the class. Here, returns ID_DECLARATION
-		 * \returns  ID_DECLARATION
-                 */
-		virtual CAST_CLASS_ID classId()const		{return ID_DECLARATION;}
-
-		/**
-		 * \brief Default destructor. 
-		 */
-		virtual ~declaration()
-		{}
-};
-
-
-
+	AssertNotNullRule(_p_declaration_specifiers)
+}
 
 
 
@@ -1845,6 +1721,69 @@ class declaration:public CAst
 
 
 
+direct_declarator_1::direct_declarator_1
+	(
+		ReferenceCountedAutoPointer<declarator> _arg_declarator
+	):
+		direct_declarator() ,
+		_p_declarator(_arg_declarator)
+{
+	AssertNotNullRule(_p_declarator)
+}
+
+
+direct_declarator_2::direct_declarator_2
+	(
+		ReferenceCountedAutoPointer<direct_declarator> _arg_direct_declarator,
+		ReferenceCountedAutoPointer<constant_expression> _arg_constant_expression
+	):
+		direct_declarator() ,
+		_p_direct_declarator(_arg_direct_declarator),
+		_p_constant_expression(_arg_constant_expression)
+{
+	AssertNotNullRule(_p_direct_declarator)
+}
+
+
+direct_declarator_3::direct_declarator_3
+	(
+		ReferenceCountedAutoPointer<direct_declarator> _arg_direct_declarator,
+		ReferenceCountedAutoPointer<parameter_type_list> _arg_parameter_type_list
+	):
+		direct_declarator() ,
+		_p_direct_declarator(_arg_direct_declarator),
+		_p_parameter_type_list(_arg_parameter_type_list)
+{
+	AssertNotNullRule(_p_direct_declarator)
+}
+
+
+direct_declarator_4::direct_declarator_4
+	(
+		ReferenceCountedAutoPointer<direct_declarator> _arg_direct_declarator,
+		ReferenceCountedAutoPointer<identifier_list> _arg_identifier_list
+	):
+		direct_declarator() ,
+		_p_direct_declarator(_arg_direct_declarator),
+		_p_identifier_list(_arg_identifier_list)
+{
+	AssertNotNullRule(_p_direct_declarator)
+	AssertNotNullRule(_p_identifier_list)
+}
+
+
+direct_declarator_5::direct_declarator_5
+	(
+		ReferenceCountedAutoPointer<token> _arg_token
+	):
+		direct_declarator() ,
+		_p_token(_arg_token)
+{
+	AssertTokenType((_p_token->text() == "[IDENTIFIER]" ))
+}
+
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -1861,6 +1800,18 @@ class declaration:public CAst
 //RULE:logical_and_expression
 //////////////////////////////////////////
 
+
+
+
+
+logical_and_expression_item::logical_and_expression_item
+	(
+		ReferenceCountedAutoPointer<inclusive_or_expression> _arg_inclusive_or_expression
+	):
+		_p_inclusive_or_expression(_arg_inclusive_or_expression)
+{
+	AssertNotNullRule(_p_inclusive_or_expression)
+}
 
 
 
@@ -1883,6 +1834,18 @@ class declaration:public CAst
 
 
 
+
+init_declarator_list_item::init_declarator_list_item
+	(
+		ReferenceCountedAutoPointer<init_declarator> _arg_init_declarator
+	):
+		_p_init_declarator(_arg_init_declarator)
+{
+	AssertNotNullRule(_p_init_declarator)
+}
+
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -1899,6 +1862,21 @@ class declaration:public CAst
 //RULE:shift_expression
 //////////////////////////////////////////
 
+
+
+
+
+shift_expression_item::shift_expression_item
+	(
+		ReferenceCountedAutoPointer<token> _arg_token,
+		ReferenceCountedAutoPointer<additive_expression> _arg_additive_expression
+	):
+		_p_token(_arg_token),
+		_p_additive_expression(_arg_additive_expression)
+{
+	AssertTokenType((_p_token->text() == "<<" ) || (_p_token->text() == ">>" ) || _p_token.isNull())
+	AssertNotNullRule(_p_additive_expression)
+}
 
 
 
@@ -1921,6 +1899,18 @@ class declaration:public CAst
 
 
 
+
+identifier_list_item::identifier_list_item
+	(
+		ReferenceCountedAutoPointer<token> _arg_token
+	):
+		_p_token(_arg_token)
+{
+	AssertTokenType((_p_token->text() == "[IDENTIFIER]" ))
+}
+
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -1937,6 +1927,39 @@ class declaration:public CAst
 //RULE:jump_statement
 //////////////////////////////////////////
 
+
+
+
+jump_statement_1::jump_statement_1
+	(
+		ReferenceCountedAutoPointer<token> _arg_token
+	):
+		jump_statement() ,
+		_p_token(_arg_token)
+{
+	AssertTokenType((_p_token->text() == "[IDENTIFIER]" ))
+}
+
+
+jump_statement_2::jump_statement_2
+	(
+		ReferenceCountedAutoPointer<token> _arg_token
+	):
+		jump_statement() ,
+		_p_token(_arg_token)
+{
+	AssertTokenType((_p_token->text() == "continue" ) || (_p_token->text() == "break" ))
+}
+
+
+jump_statement_3::jump_statement_3
+	(
+		ReferenceCountedAutoPointer<expression> _arg_expression
+	):
+		jump_statement() ,
+		_p_expression(_arg_expression)
+{
+}
 
 
 
@@ -1960,76 +1983,19 @@ class declaration:public CAst
 
 
 
-class token;
-class constant_expression;
-class declarator;
-
-
-
-
-
-
-/**
- * \brief struct_declarator implements the pattern: <b>(declarator, :, constant_expression)</b>
-
-
- * \dot
- * digraph AST {
- *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
- *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
- *     node_struct_declarator [ label="struct_declarator", URL="\ref struct_declarator", color="#00AAAA" ];
- *     node_declarator [ label="declarator", URL="\ref declarator", color="#00AAAA"];
- *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
- *     node_constant_expression [ label="constant_expression", URL="\ref constant_expression", color="#00AAAA"];
- *     node_struct_declarator ->  node_declarator [label="_p_declarator" style=dotted];
- *     node_struct_declarator ->  node_token [label="_p_token" style=dotted];
- *     node_struct_declarator ->  node_constant_expression [label="_p_constant_expression" style=dotted];
- * }
- * \enddot
- */
-class struct_declarator:public CAst
+struct_declarator::struct_declarator
+	(
+		ReferenceCountedAutoPointer<declarator> _arg_declarator,
+		ReferenceCountedAutoPointer<token> _arg_token,
+		ReferenceCountedAutoPointer<constant_expression> _arg_constant_expression
+	):
+		CAst() ,
+		_p_declarator(_arg_declarator),
+		_p_token(_arg_token),
+		_p_constant_expression(_arg_constant_expression)
 {
-	private:
-		ReferenceCountedAutoPointer<declarator> _p_declarator;	  ///< A pointer to declarator. This parameter can be <b>Null</b>
-		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>:</b>, <b>None</b>
-		ReferenceCountedAutoPointer<constant_expression> _p_constant_expression;	  ///< A pointer to constant_expression. This parameter can be <b>Null</b>
-	public:
-		/** 
-		 * \brief Constructor of struct_declarator
-		 *
-		 * This function handles the struct_declarator
-                 */
-		struct_declarator	
-				(
-					ReferenceCountedAutoPointer<declarator> _arg_declarator,   ///< A pointer to declarator. This parameter can be <b>Null</b>
-					ReferenceCountedAutoPointer<token> _arg_token,   ///< A pointer to a token, accepts <b>:</b>, <b>None</b>
-					ReferenceCountedAutoPointer<constant_expression> _arg_constant_expression  ///< A pointer to constant_expression. This parameter can be <b>Null</b>
-				);
-		/**
-                 * \brief Returns the name of the class.
-                 *
-                 * Returns the name of the class. Here, returns <b>"struct_declarator"</b>
-		 * \returns <b>"struct_declarator"</b>
-                 */
-		virtual std::string name()const		{return std::string("struct_declarator");}
-
-		/**
-                 * \brief Returns the ID of the class
-                 *
-                 * Returns the ID of the class. Here, returns ID_STRUCT_DECLARATOR
-		 * \returns  ID_STRUCT_DECLARATOR
-                 */
-		virtual CAST_CLASS_ID classId()const		{return ID_STRUCT_DECLARATOR;}
-
-		/**
-		 * \brief Default destructor. 
-		 */
-		virtual ~struct_declarator()
-		{}
-};
-
-
-
+	AssertTokenType((_p_token->text() == ":" ) || _p_token.isNull())
+}
 
 
 
@@ -2053,81 +2019,22 @@ class struct_declarator:public CAst
 
 
 
-class declaration_list;
-class compound_statement;
-class declaration_specifiers;
-class declarator;
-
-
-
-
-
-
-/**
- * \brief function_definition implements the pattern: <b>(declaration_specifiers, declarator, declaration_list, compound_statement)</b>
-
-
- * \dot
- * digraph AST {
- *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
- *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
- *     node_function_definition [ label="function_definition", URL="\ref function_definition", color="#00AAAA" ];
- *     node_declaration_specifiers [ label="declaration_specifiers", URL="\ref declaration_specifiers", color="#00AAAA"];
- *     node_declarator [ label="declarator", URL="\ref declarator", color="#00AAAA"];
- *     node_declaration_list [ label="declaration_list", URL="\ref declaration_list", color="#00AAAA"];
- *     node_compound_statement [ label="compound_statement", URL="\ref compound_statement", color="#00AAAA"];
- *     node_function_definition ->  node_declaration_specifiers [label="_p_declaration_specifiers" style=dotted];
- *     node_function_definition ->  node_declarator [label="_p_declarator" style=solid];
- *     node_function_definition ->  node_declaration_list [label="_p_declaration_list" style=dotted];
- *     node_function_definition ->  node_compound_statement [label="_p_compound_statement" style=solid];
- * }
- * \enddot
- */
-class function_definition:public CAst
+function_definition::function_definition
+	(
+		ReferenceCountedAutoPointer<declaration_specifiers> _arg_declaration_specifiers,
+		ReferenceCountedAutoPointer<declarator> _arg_declarator,
+		ReferenceCountedAutoPointer<declaration_list> _arg_declaration_list,
+		ReferenceCountedAutoPointer<compound_statement> _arg_compound_statement
+	):
+		CAst() ,
+		_p_declaration_specifiers(_arg_declaration_specifiers),
+		_p_declarator(_arg_declarator),
+		_p_declaration_list(_arg_declaration_list),
+		_p_compound_statement(_arg_compound_statement)
 {
-	private:
-		ReferenceCountedAutoPointer<declaration_specifiers> _p_declaration_specifiers;	  ///< A pointer to declaration_specifiers. This parameter can be <b>Null</b>
-		ReferenceCountedAutoPointer<declarator> _p_declarator;	  ///< A pointer to declarator.
-		ReferenceCountedAutoPointer<declaration_list> _p_declaration_list;	  ///< A pointer to declaration_list. This parameter can be <b>Null</b>
-		ReferenceCountedAutoPointer<compound_statement> _p_compound_statement;	  ///< A pointer to compound_statement.
-	public:
-		/** 
-		 * \brief Constructor of function_definition
-		 *
-		 * This function handles the function_definition
-                 */
-		function_definition	
-				(
-					ReferenceCountedAutoPointer<declaration_specifiers> _arg_declaration_specifiers,   ///< A pointer to declaration_specifiers. This parameter can be <b>Null</b>
-					ReferenceCountedAutoPointer<declarator> _arg_declarator,   ///< A pointer to declarator.
-					ReferenceCountedAutoPointer<declaration_list> _arg_declaration_list,   ///< A pointer to declaration_list. This parameter can be <b>Null</b>
-					ReferenceCountedAutoPointer<compound_statement> _arg_compound_statement  ///< A pointer to compound_statement.
-				);
-		/**
-                 * \brief Returns the name of the class.
-                 *
-                 * Returns the name of the class. Here, returns <b>"function_definition"</b>
-		 * \returns <b>"function_definition"</b>
-                 */
-		virtual std::string name()const		{return std::string("function_definition");}
-
-		/**
-                 * \brief Returns the ID of the class
-                 *
-                 * Returns the ID of the class. Here, returns ID_FUNCTION_DEFINITION
-		 * \returns  ID_FUNCTION_DEFINITION
-                 */
-		virtual CAST_CLASS_ID classId()const		{return ID_FUNCTION_DEFINITION;}
-
-		/**
-		 * \brief Default destructor. 
-		 */
-		virtual ~function_definition()
-		{}
-};
-
-
-
+	AssertNotNullRule(_p_declarator)
+	AssertNotNullRule(_p_compound_statement)
+}
 
 
 
@@ -2147,6 +2054,18 @@ class function_definition:public CAst
 //RULE:parameter_list
 //////////////////////////////////////////
 
+
+
+
+
+parameter_list_item::parameter_list_item
+	(
+		ReferenceCountedAutoPointer<parameter_declaration> _arg_parameter_declaration
+	):
+		_p_parameter_declaration(_arg_parameter_declaration)
+{
+	AssertNotNullRule(_p_parameter_declaration)
+}
 
 
 
@@ -2170,82 +2089,23 @@ class function_definition:public CAst
 
 
 
-class token;
-class enumerator_list;
-
-
-
-
-
-
-
-
-
-/**
- * \brief enum_specifier implements the pattern: <b>(enum, [IDENTIFIER], {, enumerator_list, })</b>
-
-
- * \dot
- * digraph AST {
- *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
- *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
- *     node_enum_specifier [ label="enum_specifier", URL="\ref enum_specifier", color="#00AAAA" ];
- *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
- *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
- *     node_enumerator_list [ label="enumerator_list", URL="\ref enumerator_list", color="#00AAAA"];
- *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
- *     node_enum_specifier ->  node_token [label="_p_token1" style=dotted];
- *     node_enum_specifier ->  node_token [label="_p_token2" style=dotted];
- *     node_enum_specifier ->  node_enumerator_list [label="_p_enumerator_list" style=dotted];
- *     node_enum_specifier ->  node_token [label="_p_token3" style=dotted];
- * }
- * \enddot
- */
-class enum_specifier:public CAst
+enum_specifier::enum_specifier
+	(
+		ReferenceCountedAutoPointer<token> _arg_token1,
+		ReferenceCountedAutoPointer<token> _arg_token2,
+		ReferenceCountedAutoPointer<enumerator_list> _arg_enumerator_list,
+		ReferenceCountedAutoPointer<token> _arg_token3
+	):
+		CAst() ,
+		_p_token1(_arg_token1),
+		_p_token2(_arg_token2),
+		_p_enumerator_list(_arg_enumerator_list),
+		_p_token3(_arg_token3)
 {
-	private:
-		ReferenceCountedAutoPointer<token> _p_token1;	  ///< A pointer to a token, accepts <b>[IDENTIFIER]</b>, <b>None</b>
-		ReferenceCountedAutoPointer<token> _p_token2;	  ///< A pointer to a token, accepts <b>{</b>, <b>None</b>
-		ReferenceCountedAutoPointer<enumerator_list> _p_enumerator_list;	  ///< A pointer to enumerator_list. This parameter can be <b>Null</b>
-		ReferenceCountedAutoPointer<token> _p_token3;	  ///< A pointer to a token, accepts <b>}</b>, <b>None</b>
-	public:
-		/** 
-		 * \brief Constructor of enum_specifier
-		 *
-		 * This function handles the enum_specifier
-                 */
-		enum_specifier	
-				(
-					ReferenceCountedAutoPointer<token> _arg_token1,   ///< A pointer to a token, accepts <b>[IDENTIFIER]</b>, <b>None</b>
-					ReferenceCountedAutoPointer<token> _arg_token2,   ///< A pointer to a token, accepts <b>{</b>, <b>None</b>
-					ReferenceCountedAutoPointer<enumerator_list> _arg_enumerator_list,   ///< A pointer to enumerator_list. This parameter can be <b>Null</b>
-					ReferenceCountedAutoPointer<token> _arg_token3  ///< A pointer to a token, accepts <b>}</b>, <b>None</b>
-				);
-		/**
-                 * \brief Returns the name of the class.
-                 *
-                 * Returns the name of the class. Here, returns <b>"enum_specifier"</b>
-		 * \returns <b>"enum_specifier"</b>
-                 */
-		virtual std::string name()const		{return std::string("enum_specifier");}
-
-		/**
-                 * \brief Returns the ID of the class
-                 *
-                 * Returns the ID of the class. Here, returns ID_ENUM_SPECIFIER
-		 * \returns  ID_ENUM_SPECIFIER
-                 */
-		virtual CAST_CLASS_ID classId()const		{return ID_ENUM_SPECIFIER;}
-
-		/**
-		 * \brief Default destructor. 
-		 */
-		virtual ~enum_specifier()
-		{}
-};
-
-
-
+	AssertTokenType((_p_token1->text() == "[IDENTIFIER]" ) || _p_token1.isNull())
+	AssertTokenType((_p_token2->text() == "{" ) || _p_token2.isNull())
+	AssertTokenType((_p_token3->text() == "}" ) || _p_token3.isNull())
+}
 
 
 
@@ -2269,64 +2129,15 @@ class enum_specifier:public CAst
 
 
 
-class token;
-
-
-
-
-/**
- * \brief type_qualifier implements the pattern: <b>(const,)</b>
-
-
- * \dot
- * digraph AST {
- *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
- *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
- *     node_type_qualifier [ label="type_qualifier", URL="\ref type_qualifier", color="#00AAAA" ];
- *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
- *     node_type_qualifier ->  node_token [label="_p_token" style=solid];
- * }
- * \enddot
- */
-class type_qualifier:public CAst
+type_qualifier::type_qualifier
+	(
+		ReferenceCountedAutoPointer<token> _arg_token
+	):
+		CAst() ,
+		_p_token(_arg_token)
 {
-	private:
-		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>const</b>, <b>volatile</b>
-	public:
-		/** 
-		 * \brief Constructor of type_qualifier
-		 *
-		 * This function handles the type_qualifier
-                 */
-		type_qualifier	
-				(
-					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>const</b>, <b>volatile</b>
-				);
-		/**
-                 * \brief Returns the name of the class.
-                 *
-                 * Returns the name of the class. Here, returns <b>"type_qualifier"</b>
-		 * \returns <b>"type_qualifier"</b>
-                 */
-		virtual std::string name()const		{return std::string("type_qualifier");}
-
-		/**
-                 * \brief Returns the ID of the class
-                 *
-                 * Returns the ID of the class. Here, returns ID_TYPE_QUALIFIER
-		 * \returns  ID_TYPE_QUALIFIER
-                 */
-		virtual CAST_CLASS_ID classId()const		{return ID_TYPE_QUALIFIER;}
-
-		/**
-		 * \brief Default destructor. 
-		 */
-		virtual ~type_qualifier()
-		{}
-};
-
-
-
+	AssertTokenType((_p_token->text() == "const" ) || (_p_token->text() == "volatile" ))
+}
 
 
 
@@ -2349,6 +2160,18 @@ class type_qualifier:public CAst
 
 
 
+
+enumerator_list_item::enumerator_list_item
+	(
+		ReferenceCountedAutoPointer<enumerator> _arg_enumerator
+	):
+		_p_enumerator(_arg_enumerator)
+{
+	AssertNotNullRule(_p_enumerator)
+}
+
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -2365,6 +2188,35 @@ class type_qualifier:public CAst
 //RULE:labeled_statement
 //////////////////////////////////////////
 
+
+
+
+labeled_statement_1::labeled_statement_1
+	(
+		ReferenceCountedAutoPointer<constant_expression> _arg_constant_expression,
+		ReferenceCountedAutoPointer<statement> _arg_statement
+	):
+		labeled_statement() ,
+		_p_constant_expression(_arg_constant_expression),
+		_p_statement(_arg_statement)
+{
+	AssertNotNullRule(_p_constant_expression)
+	AssertNotNullRule(_p_statement)
+}
+
+
+labeled_statement_2::labeled_statement_2
+	(
+		ReferenceCountedAutoPointer<token> _arg_token,
+		ReferenceCountedAutoPointer<statement> _arg_statement
+	):
+		labeled_statement() ,
+		_p_token(_arg_token),
+		_p_statement(_arg_statement)
+{
+	AssertTokenType((_p_token->text() == "default" ) || (_p_token->text() == "[IDENTIFIER]" ))
+	AssertNotNullRule(_p_statement)
+}
 
 
 
@@ -2387,6 +2239,18 @@ class type_qualifier:public CAst
 
 
 
+
+declaration_list_item::declaration_list_item
+	(
+		ReferenceCountedAutoPointer<declaration> _arg_declaration
+	):
+		_p_declaration(_arg_declaration)
+{
+	AssertNotNullRule(_p_declaration)
+}
+
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -2406,6 +2270,29 @@ class type_qualifier:public CAst
 
 
 
+specifier_qualifier_list_item_1::specifier_qualifier_list_item_1
+	(
+		ReferenceCountedAutoPointer<type_qualifier> _arg_type_qualifier
+	):
+		specifier_qualifier_list_item() ,
+		_p_type_qualifier(_arg_type_qualifier)
+{
+	AssertNotNullRule(_p_type_qualifier)
+}
+
+
+specifier_qualifier_list_item_2::specifier_qualifier_list_item_2
+	(
+		ReferenceCountedAutoPointer<type_specifier> _arg_type_specifier
+	):
+		specifier_qualifier_list_item() ,
+		_p_type_specifier(_arg_type_specifier)
+{
+	AssertNotNullRule(_p_type_specifier)
+}
+
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -2422,6 +2309,18 @@ class type_qualifier:public CAst
 //RULE:translation_unit
 //////////////////////////////////////////
 
+
+
+
+
+translation_unit_item::translation_unit_item
+	(
+		ReferenceCountedAutoPointer<external_declaration> _arg_external_declaration
+	):
+		_p_external_declaration(_arg_external_declaration)
+{
+	AssertNotNullRule(_p_external_declaration)
+}
 
 
 
@@ -2445,63 +2344,15 @@ class type_qualifier:public CAst
 
 
 
-class conditional_expression;
-
-
-
-/**
- * \brief constant_expression implements the pattern: <b>(conditional_expression,)</b>
-
-
- * \dot
- * digraph AST {
- *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
- *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
- *     node_constant_expression [ label="constant_expression", URL="\ref constant_expression", color="#00AAAA" ];
- *     node_conditional_expression [ label="conditional_expression", URL="\ref conditional_expression", color="#00AAAA"];
- *     node_constant_expression ->  node_conditional_expression [label="_p_conditional_expression" style=solid];
- * }
- * \enddot
- */
-class constant_expression:public CAst
+constant_expression::constant_expression
+	(
+		ReferenceCountedAutoPointer<conditional_expression> _arg_conditional_expression
+	):
+		CAst() ,
+		_p_conditional_expression(_arg_conditional_expression)
 {
-	private:
-		ReferenceCountedAutoPointer<conditional_expression> _p_conditional_expression;	  ///< A pointer to conditional_expression.
-	public:
-		/** 
-		 * \brief Constructor of constant_expression
-		 *
-		 * This function handles the constant_expression
-                 */
-		constant_expression	
-				(
-					ReferenceCountedAutoPointer<conditional_expression> _arg_conditional_expression  ///< A pointer to conditional_expression.
-				);
-		/**
-                 * \brief Returns the name of the class.
-                 *
-                 * Returns the name of the class. Here, returns <b>"constant_expression"</b>
-		 * \returns <b>"constant_expression"</b>
-                 */
-		virtual std::string name()const		{return std::string("constant_expression");}
-
-		/**
-                 * \brief Returns the ID of the class
-                 *
-                 * Returns the ID of the class. Here, returns ID_CONSTANT_EXPRESSION
-		 * \returns  ID_CONSTANT_EXPRESSION
-                 */
-		virtual CAST_CLASS_ID classId()const		{return ID_CONSTANT_EXPRESSION;}
-
-		/**
-		 * \brief Default destructor. 
-		 */
-		virtual ~constant_expression()
-		{}
-};
-
-
-
+	AssertNotNullRule(_p_conditional_expression)
+}
 
 
 
@@ -2524,6 +2375,18 @@ class constant_expression:public CAst
 
 
 
+
+initializer_list_item::initializer_list_item
+	(
+		ReferenceCountedAutoPointer<initializer> _arg_initializer
+	):
+		_p_initializer(_arg_initializer)
+{
+	AssertNotNullRule(_p_initializer)
+}
+
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -2543,6 +2406,18 @@ class constant_expression:public CAst
 
 
 
+
+statement_list_item::statement_list_item
+	(
+		ReferenceCountedAutoPointer<statement> _arg_statement
+	):
+		_p_statement(_arg_statement)
+{
+	AssertNotNullRule(_p_statement)
+}
+
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -2559,6 +2434,18 @@ class constant_expression:public CAst
 //RULE:expression
 //////////////////////////////////////////
 
+
+
+
+
+expression_item::expression_item
+	(
+		ReferenceCountedAutoPointer<assignment_expression> _arg_assignment_expression
+	):
+		_p_assignment_expression(_arg_assignment_expression)
+{
+	AssertNotNullRule(_p_assignment_expression)
+}
 
 
 
@@ -2582,69 +2469,17 @@ class constant_expression:public CAst
 
 
 
-class direct_declarator;
-class pointer;
-
-
-
-
-/**
- * \brief declarator implements the pattern: <b>(pointer, direct_declarator)</b>
-
-
- * \dot
- * digraph AST {
- *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
- *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
- *     node_declarator [ label="declarator", URL="\ref declarator", color="#00AAAA" ];
- *     node_pointer [ label="pointer", URL="\ref pointer", color="#00AAAA"];
- *     node_direct_declarator [ label="direct_declarator", URL="\ref direct_declarator", color="#00AAAA"];
- *     node_declarator ->  node_pointer [label="_p_pointer" style=dotted];
- *     node_declarator ->  node_direct_declarator [label="_p_direct_declarator" style=solid];
- * }
- * \enddot
- */
-class declarator:public CAst
+declarator::declarator
+	(
+		ReferenceCountedAutoPointer<pointer> _arg_pointer,
+		ReferenceCountedAutoPointer<direct_declarator> _arg_direct_declarator
+	):
+		CAst() ,
+		_p_pointer(_arg_pointer),
+		_p_direct_declarator(_arg_direct_declarator)
 {
-	private:
-		ReferenceCountedAutoPointer<pointer> _p_pointer;	  ///< A pointer to pointer. This parameter can be <b>Null</b>
-		ReferenceCountedAutoPointer<direct_declarator> _p_direct_declarator;	  ///< A pointer to direct_declarator.
-	public:
-		/** 
-		 * \brief Constructor of declarator
-		 *
-		 * This function handles the declarator
-                 */
-		declarator	
-				(
-					ReferenceCountedAutoPointer<pointer> _arg_pointer,   ///< A pointer to pointer. This parameter can be <b>Null</b>
-					ReferenceCountedAutoPointer<direct_declarator> _arg_direct_declarator  ///< A pointer to direct_declarator.
-				);
-		/**
-                 * \brief Returns the name of the class.
-                 *
-                 * Returns the name of the class. Here, returns <b>"declarator"</b>
-		 * \returns <b>"declarator"</b>
-                 */
-		virtual std::string name()const		{return std::string("declarator");}
-
-		/**
-                 * \brief Returns the ID of the class
-                 *
-                 * Returns the ID of the class. Here, returns ID_DECLARATOR
-		 * \returns  ID_DECLARATOR
-                 */
-		virtual CAST_CLASS_ID classId()const		{return ID_DECLARATOR;}
-
-		/**
-		 * \brief Default destructor. 
-		 */
-		virtual ~declarator()
-		{}
-};
-
-
-
+	AssertNotNullRule(_p_direct_declarator)
+}
 
 
 
