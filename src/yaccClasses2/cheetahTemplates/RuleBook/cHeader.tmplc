@@ -1,0 +1,214 @@
+\#ifndef CAST_HEADER_INCLUDED
+\#define CAST_HEADER_INCLUDED
+\#include <string>
+\#include <list>
+
+
+namespace CAst
+{
+
+
+/**
+ *  \brief Simple Reference Counting class
+ *
+ *  This class is to be inherited by the CAst classes. This is a simple reference counting class
+ */
+template <typename DataType>
+class ReferenceCountedAutoPointer
+{
+	private:
+		int *__refCount;					///< The reference count
+		DataType *__data;
+
+		
+		/**
+		 * \brief Clears the reference count
+		 *
+		 * This first decrements the reference count, next, checks if this is the sole refernce. If so, clear() is called
+		 */
+		void __clear()
+		{
+			if(!__refCount)return;
+			__refCountDown();
+			if((*__refCount)==0)
+			{
+				delete __refCount;
+				delete __data;
+			}
+			__refCount=0;
+			__data=0;
+		}
+		/**
+		 * \brief Increments the reference count
+		 */
+		void __refCountUp(){(*__refCount)++;}
+
+		
+		/**
+		 * \brief Decrements the reference count
+		 */
+		void __refCountDown(){(*__refCount)--;}
+	public:
+		/**
+		 * \brief Default constructor
+		 * 
+		 *  Initializes the reference count and data to 0
+		 */
+			
+		ReferenceCountedAutoPointer():
+				__data(0),
+				__refCount(0)
+		{}
+
+		/** 
+		 * \brief Constructor with data
+                 *
+                 * Initializes the reference count and data to 0 if data is void, else sets the data
+                 */
+		
+		ReferenceCountedAutoPointer(DataType *data)
+		{
+			if(data)
+			{
+				__data=data;
+				__refCount=new int(1);
+			}
+			else
+			{
+				__data=0;
+				__refCount=0;
+			}
+		}
+		
+		/**
+		 * \brief Copy constructor
+		 * 
+		 * Adopts the other's reference count and increments the reference count
+                 *
+                 */
+		ReferenceCountedAutoPointer(const ReferenceCountedAutoPointer&other ):				
+				__refCount(other.__refCount),
+				__data(other.__data)
+		{
+			__refCountUp();
+		}
+
+		/**
+		 * \brief Assignment operator
+                 *
+                 * Decrements the current reference count, and adopts the other's reference count and increments it
+                 */
+		ReferenceCountedAutoPointer& operator=(const ReferenceCountedAutoPointer&other)
+		{
+			__clear();
+			__refCount=other.__refCount;
+			__data=other.__data;
+			__refCountUp();
+		}
+
+		/**
+		 * \brief Returns the reference count
+		 */
+		const int refCount()const{return *__refCount;}
+
+
+		/**
+		 * \brief Calls __clear();
+		 */
+		virtual ~ReferenceCountedAutoPointer()
+		{
+			__clear();
+		}
+			
+};
+
+//! This is the enumeration of the class ids 
+#set ID_LIST=[("ID_CAST",0),("ID_TOKEN",1)]
+#for r in $object:
+#set h=$object[$r].handler
+#if $len($h.handlers)>1 
+#echo ID_LIST.append(("ID_"+$r.upper(),$object[$r].classId))
+	#if $h.__class__.__name__=="ListHandlerGroup":
+#echo ID_LIST.append(("ID_"+$r.upper()+"_ITEM",$object[$r].classId+1))
+	#end if
+#else
+	#if $h.__class__.__name__=="ListHandlerGroup":
+#echo ID_LIST.append(("ID_"+$r.upper(),$object[$r].classId))
+	#end if
+#end if
+#for i,hh in enumerate($h.handlers)
+#set nn="ID_"+$hh.className.upper()
+#set n=$object[$r].classId+$i+(1 if $len($h.handlers)>1 else 0)+(1 if $h.__class__.__name__=="ListHandlerGroup" else 0)
+#echo ID_LIST.append(($nn,$n))
+#end for
+#end for
+
+enum CAST_CLASS_ID
+{
+#for n,i in sorted(ID_LIST,key=lambda x:x[1])
+	#set nn="%40s"%$n
+	$nn = $i,
+#end for
+};
+
+/**
+ *
+ * \brief The main base class of all CAst classes
+ * 
+ */
+class CAst
+{
+	public:
+		/** Returns the name of the class */
+		virtual std::string name()const=0;
+
+		/** Returns the class ID of the class */
+		virtual CAST_CLASS_ID classId()const=0;
+
+		/** The destructor */
+		virtual ~CAst()
+		{}
+};
+
+class token:public CAst
+{
+	private:
+		std::string _text;
+	public:
+		/** The constructor takes the string*/
+		token(text):
+
+		/** Returns the name of the class */
+		virtual std::string name()const{return "token";};
+
+		/** Returns the class ID of the class */
+		virtual CAST_CLASS_ID classId()const{return ID_TOKEN;};
+
+		/** The destructor */
+		virtual ~token()
+		{}
+};
+
+
+#for i in $object:
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:$i
+//////////////////////////////////////////
+
+
+$object[$i].dump("cHeader")
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+#end for
+}
+\#endif

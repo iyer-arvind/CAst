@@ -22,7 +22,7 @@ class TextToken(Token):
 class ValuedToken(Token):
 	def __init__(self,name):
 		self.tokenName=name
-		self.code="<"+self.tokenName+">"
+		self.code="["+self.tokenName+"]"
 
 class TokenFactory(object):
 	__tokCache__=dict()

@@ -21,3 +21,4 @@ with open(args.tokMap) as fh:
 
 import YaccFile
 yaccFile=YaccFile.YaccFile(args.inp)
+cFile=args.cFile

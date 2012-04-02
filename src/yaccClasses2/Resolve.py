@@ -8,13 +8,11 @@ from Handler.ListHandler import Check as ListCheck
 def resolve(rule):
 	handler=ListCheck(rule)
 	if handler:
-		handler.rule=rule
 		rule.handler=handler
 		return
 
 	handler=BasicCheck(rule)
 	if handler:
-		handler.rule=rule
 		rule.handler=handler
 		return
 	raise ValueError

@@ -1,0 +1,31 @@
+/**
+ * \brief Implements $object.ruleName
+ * 
+ * This is the interface class. This implements the patterns
+#for $p in $object.rule.patterns:
+ *  - $repr($p)
+#end for
+ * 
+ **/
+class ${object.ruleName}:public CAst
+{
+	public:
+		/**
+                 * \brief Interface for the child classes to return the name
+                 *
+                 */
+		virtual std::string name()const=0;
+
+		/**
+                 *  \brief Interface for the child classes to return the class ID
+                 *
+                 */
+		virtual CAST_CLASS_ID classId()const=0;
+};
+
+
+
+#for $h in $object.handlers:
+#set $h.parent=$object.ruleName
+$utils.simpleClassCreator.declareClass($h)
+#end for

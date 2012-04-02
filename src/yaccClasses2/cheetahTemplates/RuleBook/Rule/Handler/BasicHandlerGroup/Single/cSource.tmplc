@@ -1,0 +1,5 @@
+
+#set h=$list($object.handlers)[0]
+
+#set $h.parent="CAst"
+$utils.simpleClassCreator.declareClass($h)

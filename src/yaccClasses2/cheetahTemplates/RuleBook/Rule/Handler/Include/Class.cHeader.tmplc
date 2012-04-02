@@ -1,0 +1,91 @@
+
+
+
+#def declareClass($h)
+#set $fwdClasses=set([ p.parameterType.name for p in $h.parameters if $p.isIncluded])
+
+#for $p in $fwdClasses:
+class $p;
+#end for
+
+#set $paramLst=[]
+#set $commentLst=[]
+#for p in $h.parameters:
+#if $p.isIncluded :
+	#echo $paramLst.append($p)
+#if ($p.parameterType.name=="token"):
+
+#echo $commentLst.append("  ///< A pointer to a token, accepts "+", ".join([ "<b>"+repr($v)+"</b>" for $v in $p.possibleValues]))
+#else
+#echo $commentLst.append("  ///< A pointer to "+$p.parameterType.name+ (". This parameter can be <b>Null</b>" if None in $p.possibleValues else ".") )
+#end if
+
+#end if
+#end for
+#set $nParams=len(paramLst)
+#set $fparamLst=[ "ReferenceCountedAutoPointer<"+$p.parameterType.name+">"+" "+$p.argName+(", " if $i+1<$nParams else "")+$c for $i,($p,$c) in enumerate(zip($paramLst,$commentLst))]
+
+/**
+ * \brief $h.className implements the pattern: <b>$repr($h.masterPattern)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_$h.className [ label="$h.className", URL="\ref $h.className", color="#00AAAA" ];
+#for $p in $paramLst:
+#set col=("#FFFF44" if $p.parameterType.name =="token" else "#00AAAA")
+ *     node_$p.parameterType.name [ label="$p.parameterType.name", URL="\ref $p.parameterType.name", color="$col"];
+#end for
+#for $p in $paramLst:
+#set style=("dotted" if None in ($p.possibleValues) else "solid")
+ *     node_$h.className ->  node_$p.parameterType.name [label="$p.memName" style=$style];
+#end for
+ * }
+ * \enddot
+ */
+class ${h.className}#echo ":public "+$h.parent if $h.parent else ""
+{
+	private:
+#for p,c in zip($paramLst,$commentLst):
+		ReferenceCountedAutoPointer<$p.parameterType.name> $p.memName;	$c
+#end for
+	public:
+		/** 
+		 * \brief Constructor of ${h.className}
+		 *
+		 * This function handles the ${h.className}
+                 */
+		${h.className}	
+				(
+#for $p in $fparamLst:
+					$p
+#end for
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"${h.className}"</b>
+		 * \returns <b>"${h.className}"</b>
+                 */
+		virtual std::string name()const		{return std::string("${h.className}");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_$h.className.upper()
+		 * \returns  ID_$h.className.upper()
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_$h.className.upper();}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~${h.className}()
+		{}
+};
+
+
+
+#end def

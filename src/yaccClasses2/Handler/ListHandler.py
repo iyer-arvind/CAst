@@ -1,30 +1,42 @@
 from .. import Token
 from .. import Rule
 import difflib
-from Parameter import Parameter
+from Parameter import Parameter,ParameterList
 from ..Pattern import _Pattern
+from ..Template import TemplateFill
 
 import copy
 
 class ListHandlerGroup(object):
-	def __init__(self,handlers,ruleName):
+	def __init__(self,handlers,rule):
+		self.rule=rule
 		self.handlers=handlers
-		self.ruleName=ruleName
+		self.ruleName=self.rule.ruleName
 		if len(self.handlers)>1 :
 			for i,h in enumerate(self.handlers):
-				h.className=self.ruleName+"_item_"+str(i)
+				h.className=self.ruleName+"_item_"+str(i+1)
+				h.parameters.finalize()
 		else:
 			for i,h in enumerate(self.handlers):
 				h.className=self.ruleName+"_item"
+				h.parameters.finalize()
+	def dump(self,s):
+		if(len(self.handlers)==1):
+			return TemplateFill(self,"RuleBook","Rule","Handler","ListHandlerGroup","Single",s)
+		else:
+			return TemplateFill(self,"RuleBook","Rule","Handler","ListHandlerGroup","Multiple",s)
+
+
 class ListHandler(object):
 	def __init__(self,rule,pattern):
 		#a=list(pattern)
 		#a.pop(a.index(rule))
 		self.masterPattern=copy.copy(pattern)#_Pattern(a)
 		self.selfRule=rule
-		self.parameters=[Parameter(i,p,pattern) for i,p in enumerate(self.masterPattern)]
+		self.parameters=ParameterList([Parameter(i,p,pattern) for i,p in enumerate(self.masterPattern)])
 		self.initializer=None
 		self.selfIndex=pattern.index(rule)
+		self.parameters[self.selfIndex].isIncluded=False
 		self.className="<noname>"
 
 	def strOut(self,pattern):
@@ -123,7 +135,7 @@ def Check(rule):
 
 	if(flag):
 		print "\033[41;37;mListHandler Suitable for "+repr(rule)+"\033[0m"
-		return ListHandlerGroup(set([p.handler for p in patterns]),rule.ruleName)
+		return ListHandlerGroup(set([p.handler for p in patterns]),rule)
 	else:
 		for p in patterns:
 			p.handler=None

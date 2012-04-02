@@ -1,0 +1,53 @@
+
+
+#def createListClass($object)
+/**
+ * \brief The basic class to handle ${object.ruleName}
+ *
+ * Since the rule contains itself, this rule will be implemented in the form of a list
+ */
+class $object.ruleName:public CAst
+{
+	public:
+		typedef std::list<ReferenceCountedAutoPointer<${object.ruleName}_item> > ${object.ruleName}ListType;	///< This defines the list type which will store the ${object.ruleName}_item
+		typedef ${object.ruleName}ListType::iterator ${object.ruleName}IterType;				///< This defines the iterator over ${object.ruleName}ListType
+		typedef ${object.ruleName}ListType::const_iterator C${object.ruleName}IterType;				///< This defines the constant iterator over ${object.ruleName}ListType
+
+	private:
+		${object.ruleName}ListType _itemList;									///< The list of items
+	public:
+		/**
+		 * \brief The default constructor calls the parent constructor
+		 *
+		 */
+		${object.ruleName}():CAst()
+		{}
+
+		/**
+		 * \brief Append an item to the list
+		 *
+		 */
+		void append( ReferenceCountedAutoPointer<${object.ruleName}_item> item)
+		{
+			_itemList.push_back(item);
+		}
+		
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"${object.ruleName}"</b>
+		 * \returns <b>"${object.ruleName}"</b>
+                 */
+		virtual std::string name()const {return "$object.ruleName";}
+		
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_$object.ruleName.upper()
+		 * \returns  ID_$object.ruleName.upper()
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_$object.ruleName.upper();}
+
+};
+
+#end def

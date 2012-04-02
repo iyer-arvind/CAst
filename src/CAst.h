@@ -1,6615 +1,9562 @@
-
-
-
-
-
-
-
-
-
-
 #ifndef CAST_HEADER_INCLUDED
 #define CAST_HEADER_INCLUDED
-
-#define RULE_MARKER(txt) std::cerr<<"\033[36m"<<__FILE__<<":"<<__LINE__<<"\033[0m\t"<<txt<<"\n";
-#define CAST_PTR(TYPE,PTR) assert(PTR);CAst::TYPE* __p__;__p__=dynamic_cast<CAst::TYPE*>(PTR);assert(__p__);__p__
 #include <string>
-#include <cstring>
-#include <stdio.h>
-#include <deque>
 #include <list>
-#include <iostream>
-#include <sstream>
-#include <iomanip>
-#include <map>
-#include <assert.h>
-#define LOG(txt) std::cerr<<"[\033[33m"<<std::setw(20)<<std::left<<this<<"\033[0m\t]"<<txt<<"\n";
 
 
-extern "C"
-{
-    int yylex(void);
-    int yyerror(const char *s);
-}
 namespace CAst
 {
 
 
-class CAst;
-
-enum CAstType { CAST_TYPE_TOKEN, CAST_TYPE_STORAGE_CLASS_SPECIFIER, CAST_TYPE_EXPRESSION_STATEMENT, CAST_TYPE_TYPE_NAME, CAST_TYPE_UNARY_EXPRESSION1, CAST_TYPE_UNARY_EXPRESSION2, CAST_TYPE_UNARY_EXPRESSION3, CAST_TYPE_UNARY_EXPRESSION4, CAST_TYPE_CONDITIONAL_EXPRESSION, CAST_TYPE_STRUCT_OR_UNION_SPECIFIER, CAST_TYPE_EXCLUSIVE_OR_EXPRESSION, CAST_TYPE_INITIALIZER1, CAST_TYPE_INITIALIZER2, CAST_TYPE_STRUCT_DECLARATION_LIST, CAST_TYPE_ASSIGNMENT_OPERATOR, CAST_TYPE_STRUCT_DECLARATION, CAST_TYPE_ABSTRACT_DECLARATOR, CAST_TYPE_ITERATION_STATEMENT1, CAST_TYPE_ITERATION_STATEMENT2, CAST_TYPE_ITERATION_STATEMENT3, CAST_TYPE_ADDITIVE_EXPRESSION, CAST_TYPE_EXTERNAL_DECLARATION1, CAST_TYPE_EXTERNAL_DECLARATION2, CAST_TYPE_TYPE_SPECIFIER1, CAST_TYPE_TYPE_SPECIFIER2, CAST_TYPE_TYPE_SPECIFIER3, CAST_TYPE_COMPOUND_STATEMENT, CAST_TYPE_INCLUSIVE_OR_EXPRESSION, CAST_TYPE_POINTER, CAST_TYPE_SELECTION_STATEMENT1, CAST_TYPE_SELECTION_STATEMENT2, CAST_TYPE_POSTFIX_EXPRESSION1, CAST_TYPE_POSTFIX_EXPRESSION2, CAST_TYPE_POSTFIX_EXPRESSION3, CAST_TYPE_POSTFIX_EXPRESSION4, CAST_TYPE_POSTFIX_EXPRESSION5, CAST_TYPE_AND_EXPRESSION, CAST_TYPE_STATEMENT1, CAST_TYPE_STATEMENT2, CAST_TYPE_STATEMENT3, CAST_TYPE_STATEMENT4, CAST_TYPE_STATEMENT5, CAST_TYPE_STATEMENT6, CAST_TYPE_CAST_EXPRESSION1, CAST_TYPE_CAST_EXPRESSION2, CAST_TYPE_INIT_DECLARATOR, CAST_TYPE_STRUCT_DECLARATOR_LIST, CAST_TYPE_LOGICAL_OR_EXPRESSION, CAST_TYPE_UNARY_OPERATOR, CAST_TYPE_RELATIONAL_EXPRESSION, CAST_TYPE_STRUCT_OR_UNION, CAST_TYPE_ENUMERATOR, CAST_TYPE_ASSIGNMENT_EXPRESSION1, CAST_TYPE_ASSIGNMENT_EXPRESSION2, CAST_TYPE_PARAMETER_TYPE_LIST, CAST_TYPE_PARAMETER_DECLARATION1, CAST_TYPE_PARAMETER_DECLARATION2, CAST_TYPE_MULTIPLICATIVE_EXPRESSION, CAST_TYPE_TYPE_QUALIFIER_LIST, CAST_TYPE_ARGUMENT_EXPRESSION_LIST, CAST_TYPE_DIRECT_ABSTRACT_DECLARATOR1, CAST_TYPE_DIRECT_ABSTRACT_DECLARATOR2, CAST_TYPE_DIRECT_ABSTRACT_DECLARATOR3, CAST_TYPE_EQUALITY_EXPRESSION, CAST_TYPE_PRIMARY_EXPRESSION1, CAST_TYPE_PRIMARY_EXPRESSION2, CAST_TYPE_DECLARATION_SPECIFIERS3, CAST_TYPE_DECLARATION_SPECIFIERS3, CAST_TYPE_DECLARATION_SPECIFIERS3, CAST_TYPE_DECLARATION, CAST_TYPE_DIRECT_DECLARATOR1, CAST_TYPE_DIRECT_DECLARATOR2, CAST_TYPE_DIRECT_DECLARATOR3, CAST_TYPE_DIRECT_DECLARATOR4, CAST_TYPE_DIRECT_DECLARATOR5, CAST_TYPE_LOGICAL_AND_EXPRESSION, CAST_TYPE_INIT_DECLARATOR_LIST, CAST_TYPE_SHIFT_EXPRESSION, CAST_TYPE_IDENTIFIER_LIST, CAST_TYPE_JUMP_STATEMENT1, CAST_TYPE_JUMP_STATEMENT2, CAST_TYPE_JUMP_STATEMENT3, CAST_TYPE_STRUCT_DECLARATOR, CAST_TYPE_FUNCTION_DEFINITION, CAST_TYPE_PARAMETER_LIST, CAST_TYPE_ENUM_SPECIFIER, CAST_TYPE_TYPE_QUALIFIER, CAST_TYPE_ENUMERATOR_LIST, CAST_TYPE_LABELED_STATEMENT1, CAST_TYPE_LABELED_STATEMENT2, CAST_TYPE_DECLARATION_LIST, CAST_TYPE_SPECIFIER_QUALIFIER_LIST2, CAST_TYPE_SPECIFIER_QUALIFIER_LIST2, CAST_TYPE_TRANSLATION_UNIT, CAST_TYPE_CONSTANT_EXPRESSION, CAST_TYPE_INITIALIZER_LIST, CAST_TYPE_STATEMENT_LIST, CAST_TYPE_EXPRESSION, CAST_TYPE_DECLARATOR};
-
-
-/*=============================================================================================================*\
-
-	THE PROPERTIES CLASS
-
-\*=============================================================================================================*/  
-
-
-
-class Properties:public std::map<std::string,CAst*> 
+/**
+ *  \brief Simple Reference Counting class
+ *
+ *  This class is to be inherited by the CAst classes. This is a simple reference counting class
+ */
+template <typename DataType>
+class ReferenceCountedAutoPointer
 {
-private:
-	std::string __className;
-	std::string __tokValue;
-public:
-	Properties(std::string className):
-		std::map<std::string,CAst*>(),
-		__className(className)
-	{}
-	void setTokValue(std::string v){__tokValue=v;}
-	
-	std::ostream& toStream(std::ostream& stream,int indent=0)const;
-	std::string str()const
-	{
-		std::stringstream stream;
-		toStream(stream);
-		return stream.str();
-	}
-};
-inline std::ostream& operator<<(std::ostream &stream,const Properties &p)
-{
-	return p.toStream(stream);
-}
+	private:
+		int *__refCount;					///< The reference count
+		DataType *__data;
 
-/*=============================================================================================================*\
+		
+		/**
+		 * \brief Clears the reference count
+		 *
+		 * This first decrements the reference count, next, checks if this is the sole refernce. If so, clear() is called
+		 */
+		void __clear()
+		{
+			if(!__refCount)return;
+			__refCountDown();
+			if((*__refCount)==0)
+			{
+				delete __refCount;
+				delete __data;
+			}
+			__refCount=0;
+			__data=0;
+		}
+		/**
+		 * \brief Increments the reference count
+		 */
+		void __refCountUp(){(*__refCount)++;}
 
-	THE PROPERTY LIST CLASS
-
-\*=============================================================================================================*/  
-
-
-
-
-class PropertiesList:public std::list<Properties>
-{
-private:
-	std::string __className;
-public:
-	PropertiesList(std::string className):
-			std::list<Properties>(),
-			__className(className)
-	{}
+		
+		/**
+		 * \brief Decrements the reference count
+		 */
+		void __refCountDown(){(*__refCount)--;}
+	public:
+		/**
+		 * \brief Default constructor
+		 * 
+		 *  Initializes the reference count and data to 0
+		 */
 			
-	std::ostream& toStream(std::ostream& stream,int indent=0)const;
-	std::string str()const
-	{
-		std::stringstream stream;
-		toStream(stream);
-		return stream.str();
-	}
+		ReferenceCountedAutoPointer():
+				__data(0),
+				__refCount(0)
+		{}
+
+		/** 
+		 * \brief Constructor with data
+                 *
+                 * Initializes the reference count and data to 0 if data is void, else sets the data
+                 */
+		
+		ReferenceCountedAutoPointer(DataType *data)
+		{
+			if(data)
+			{
+				__data=data;
+				__refCount=new int(1);
+			}
+			else
+			{
+				__data=0;
+				__refCount=0;
+			}
+		}
+		
+		/**
+		 * \brief Copy constructor
+		 * 
+		 * Adopts the other's reference count and increments the reference count
+                 *
+                 */
+		ReferenceCountedAutoPointer(const ReferenceCountedAutoPointer&other ):				
+				__refCount(other.__refCount),
+				__data(other.__data)
+		{
+			__refCountUp();
+		}
+
+		/**
+		 * \brief Assignment operator
+                 *
+                 * Decrements the current reference count, and adopts the other's reference count and increments it
+                 */
+		ReferenceCountedAutoPointer& operator=(const ReferenceCountedAutoPointer&other)
+		{
+			__clear();
+			__refCount=other.__refCount;
+			__data=other.__data;
+			__refCountUp();
+		}
+
+		/**
+		 * \brief Returns the reference count
+		 */
+		const int refCount()const{return *__refCount;}
+
+
+		/**
+		 * \brief Calls __clear();
+		 */
+		virtual ~ReferenceCountedAutoPointer()
+		{
+			__clear();
+		}
+			
 };
 
-inline std::ostream& operator<<(std::ostream &stream,const PropertiesList &p){return p.toStream(stream);}
+//! This is the enumeration of the class ids 
 
+enum CAST_CLASS_ID
+{
+	                                 ID_CAST = 0,
+	                                ID_TOKEN = 1,
+	              ID_STORAGE_CLASS_SPECIFIER = 16,
+	                 ID_EXPRESSION_STATEMENT = 32,
+	                  ID_SELECTION_STATEMENT = 48,
+	                     ID_UNARY_EXPRESSION = 64,
+	                   ID_UNARY_EXPRESSION_1 = 65,
+	                   ID_UNARY_EXPRESSION_2 = 66,
+	                   ID_UNARY_EXPRESSION_3 = 67,
+	                   ID_UNARY_EXPRESSION_4 = 68,
+	                          ID_INITIALIZER = 80,
+	                        ID_INITIALIZER_1 = 81,
+	                        ID_INITIALIZER_2 = 82,
+	            ID_STRUCT_OR_UNION_SPECIFIER = 96,
+	              ID_EXCLUSIVE_OR_EXPRESSION = 112,
+	         ID_EXCLUSIVE_OR_EXPRESSION_ITEM = 113,
+	                      ID_IDENTIFIER_LIST = 128,
+	                 ID_IDENTIFIER_LIST_ITEM = 129,
+	                 ID_INIT_DECLARATOR_LIST = 144,
+	            ID_INIT_DECLARATOR_LIST_ITEM = 145,
+	              ID_STRUCT_DECLARATION_LIST = 160,
+	         ID_STRUCT_DECLARATION_LIST_ITEM = 161,
+	                           ID_ENUMERATOR = 176,
+	                     ID_DECLARATION_LIST = 192,
+	                ID_DECLARATION_LIST_ITEM = 193,
+	                              ID_POINTER = 208,
+	                         ID_POINTER_ITEM = 209,
+	                       ID_POINTER_ITEM_1 = 210,
+	                       ID_POINTER_ITEM_2 = 211,
+	                       ID_AND_EXPRESSION = 224,
+	                  ID_AND_EXPRESSION_ITEM = 225,
+	                 ID_EXTERNAL_DECLARATION = 240,
+	               ID_EXTERNAL_DECLARATION_1 = 241,
+	               ID_EXTERNAL_DECLARATION_2 = 242,
+	                       ID_TYPE_SPECIFIER = 256,
+	                     ID_TYPE_SPECIFIER_1 = 257,
+	                     ID_TYPE_SPECIFIER_2 = 258,
+	                     ID_TYPE_SPECIFIER_3 = 259,
+	                   ID_COMPOUND_STATEMENT = 272,
+	              ID_INCLUSIVE_OR_EXPRESSION = 288,
+	         ID_INCLUSIVE_OR_EXPRESSION_ITEM = 289,
+	                  ID_ITERATION_STATEMENT = 304,
+	                ID_ITERATION_STATEMENT_1 = 305,
+	                ID_ITERATION_STATEMENT_2 = 306,
+	                ID_ITERATION_STATEMENT_3 = 307,
+	                            ID_TYPE_NAME = 320,
+	                   ID_POSTFIX_EXPRESSION = 336,
+	                 ID_POSTFIX_EXPRESSION_1 = 337,
+	                 ID_POSTFIX_EXPRESSION_2 = 338,
+	                 ID_POSTFIX_EXPRESSION_3 = 339,
+	                 ID_POSTFIX_EXPRESSION_4 = 340,
+	                  ID_ADDITIVE_EXPRESSION = 352,
+	             ID_ADDITIVE_EXPRESSION_ITEM = 353,
+	                            ID_STATEMENT = 368,
+	                          ID_STATEMENT_1 = 369,
+	                          ID_STATEMENT_2 = 370,
+	                          ID_STATEMENT_3 = 371,
+	                          ID_STATEMENT_4 = 372,
+	                          ID_STATEMENT_5 = 373,
+	                          ID_STATEMENT_6 = 374,
+	                       ID_UNARY_OPERATOR = 384,
+	                      ID_CAST_EXPRESSION = 400,
+	                    ID_CAST_EXPRESSION_1 = 401,
+	                    ID_CAST_EXPRESSION_2 = 402,
+	                     ID_INITIALIZER_LIST = 416,
+	                ID_INITIALIZER_LIST_ITEM = 417,
+	               ID_STRUCT_DECLARATOR_LIST = 432,
+	          ID_STRUCT_DECLARATOR_LIST_ITEM = 433,
+	                ID_LOGICAL_OR_EXPRESSION = 448,
+	           ID_LOGICAL_OR_EXPRESSION_ITEM = 449,
+	                  ID_CONSTANT_EXPRESSION = 464,
+	                ID_RELATIONAL_EXPRESSION = 480,
+	           ID_RELATIONAL_EXPRESSION_ITEM = 481,
+	                      ID_STRUCT_OR_UNION = 496,
+	                  ID_TYPE_QUALIFIER_LIST = 512,
+	             ID_TYPE_QUALIFIER_LIST_ITEM = 513,
+	                   ID_STRUCT_DECLARATION = 528,
+	                ID_ASSIGNMENT_EXPRESSION = 544,
+	              ID_ASSIGNMENT_EXPRESSION_1 = 545,
+	              ID_ASSIGNMENT_EXPRESSION_2 = 546,
+	                  ID_PARAMETER_TYPE_LIST = 560,
+	                ID_PARAMETER_DECLARATION = 576,
+	              ID_PARAMETER_DECLARATION_1 = 577,
+	              ID_PARAMETER_DECLARATION_2 = 578,
+	            ID_MULTIPLICATIVE_EXPRESSION = 592,
+	       ID_MULTIPLICATIVE_EXPRESSION_ITEM = 593,
+	                      ID_INIT_DECLARATOR = 608,
+	             ID_ARGUMENT_EXPRESSION_LIST = 624,
+	        ID_ARGUMENT_EXPRESSION_LIST_ITEM = 625,
+	                       ID_STATEMENT_LIST = 640,
+	                  ID_STATEMENT_LIST_ITEM = 641,
+	                   ID_PRIMARY_EXPRESSION = 656,
+	                 ID_PRIMARY_EXPRESSION_1 = 657,
+	                 ID_PRIMARY_EXPRESSION_2 = 658,
+	               ID_DECLARATION_SPECIFIERS = 672,
+	          ID_DECLARATION_SPECIFIERS_ITEM = 673,
+	        ID_DECLARATION_SPECIFIERS_ITEM_1 = 674,
+	        ID_DECLARATION_SPECIFIERS_ITEM_2 = 675,
+	        ID_DECLARATION_SPECIFIERS_ITEM_3 = 676,
+	                          ID_DECLARATION = 688,
+	                    ID_DIRECT_DECLARATOR = 704,
+	                  ID_DIRECT_DECLARATOR_1 = 705,
+	                  ID_DIRECT_DECLARATOR_2 = 706,
+	                  ID_DIRECT_DECLARATOR_3 = 707,
+	                  ID_DIRECT_DECLARATOR_4 = 708,
+	                  ID_DIRECT_DECLARATOR_5 = 709,
+	               ID_LOGICAL_AND_EXPRESSION = 720,
+	          ID_LOGICAL_AND_EXPRESSION_ITEM = 721,
+	                           ID_DECLARATOR = 736,
+	                     ID_SHIFT_EXPRESSION = 752,
+	                ID_SHIFT_EXPRESSION_ITEM = 753,
+	                  ID_EQUALITY_EXPRESSION = 768,
+	             ID_EQUALITY_EXPRESSION_ITEM = 769,
+	                       ID_JUMP_STATEMENT = 784,
+	                     ID_JUMP_STATEMENT_1 = 785,
+	                     ID_JUMP_STATEMENT_2 = 786,
+	                     ID_JUMP_STATEMENT_3 = 787,
+	                    ID_STRUCT_DECLARATOR = 800,
+	                  ID_FUNCTION_DEFINITION = 816,
+	                       ID_PARAMETER_LIST = 832,
+	                  ID_PARAMETER_LIST_ITEM = 833,
+	                       ID_ENUM_SPECIFIER = 848,
+	                       ID_TYPE_QUALIFIER = 864,
+	                      ID_ENUMERATOR_LIST = 880,
+	                 ID_ENUMERATOR_LIST_ITEM = 881,
+	                    ID_LABELED_STATEMENT = 896,
+	                  ID_LABELED_STATEMENT_1 = 897,
+	                  ID_LABELED_STATEMENT_2 = 898,
+	                  ID_ABSTRACT_DECLARATOR = 912,
+	             ID_SPECIFIER_QUALIFIER_LIST = 928,
+	        ID_SPECIFIER_QUALIFIER_LIST_ITEM = 929,
+	      ID_SPECIFIER_QUALIFIER_LIST_ITEM_1 = 930,
+	      ID_SPECIFIER_QUALIFIER_LIST_ITEM_2 = 931,
+	                     ID_TRANSLATION_UNIT = 944,
+	                ID_TRANSLATION_UNIT_ITEM = 945,
+	                  ID_ASSIGNMENT_OPERATOR = 960,
+	               ID_CONDITIONAL_EXPRESSION = 976,
+	          ID_CONDITIONAL_EXPRESSION_ITEM = 977,
+	           ID_DIRECT_ABSTRACT_DECLARATOR = 992,
+	         ID_DIRECT_ABSTRACT_DECLARATOR_1 = 993,
+	         ID_DIRECT_ABSTRACT_DECLARATOR_2 = 994,
+	         ID_DIRECT_ABSTRACT_DECLARATOR_3 = 995,
+	                           ID_EXPRESSION = 1008,
+	                      ID_EXPRESSION_ITEM = 1009,
+};
 
-
-/*=============================================================================================================*\
-
-	THE CAst CLASS
-
-\*=============================================================================================================*/  
-
+/**
+ *
+ * \brief The main base class of all CAst classes
+ * 
+ */
 class CAst
 {
 	public:
+		/** Returns the name of the class */
 		virtual std::string name()const=0;
-		virtual std::ostream& codeStream(std::ostream&)const=0;
-		virtual bool isList()const=0;
-		virtual PropertiesList getPropertiesList()const=0;
-		virtual Properties getProperties()const=0;
+
+		/** Returns the class ID of the class */
+		virtual CAST_CLASS_ID classId()const=0;
+
+		/** The destructor */
+		virtual ~CAst()
+		{}
 };
 
-
-
-/*=============================================================================================================*\
-
-	THE Token CLASS
-
-\*=============================================================================================================*/  
-class Token: public CAst
+class token:public CAst
 {
+	private:
+		std::string _text;
 	public:
-		virtual std::string name()const			=0;
-		virtual std::ostream& codeStream(std::ostream&)const			=0;
-	virtual std::string code()const				=0;
-		virtual bool isList()const			=0;
-		virtual Properties getProperties()const		=0;
-		virtual std::string txt()const 			=0;
-		virtual PropertiesList getPropertiesList()const	=0;
-		Token()
-		{
-			LOG("\033[32mCREATING\033[0m Token")
-		}
-		virtual ~Token()
-		{
-			LOG("\033[31mDELETING\033[0m Token")
-		}
+		/** The constructor takes the string*/
+		token(text):
+
+		/** Returns the name of the class */
+		virtual std::string name()const{return "token";};
+
+		/** Returns the class ID of the class */
+		virtual CAST_CLASS_ID classId()const{return ID_TOKEN;};
+
+		/** The destructor */
+		virtual ~token()
+		{}
 };
 
 
-/*=============================================================================================================*\
 
-	THE GenericToken CLASS
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:storage_class_specifier
+//////////////////////////////////////////
 
-\*=============================================================================================================*/  
 
 
-class GenericToken:public Token
+
+
+class token;
+
+
+
+
+/**
+ * \brief storage_class_specifier implements the pattern: <b>(typedef,)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_storage_class_specifier [ label="storage_class_specifier", URL="\ref storage_class_specifier", color="#00AAAA" ];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_storage_class_specifier ->  node_token [label="_p_token" style=solid];
+ * }
+ * \enddot
+ */
+class storage_class_specifier:public CAst
 {
-	std::string _txt;
-public:
-	
-	virtual std::string name()const{return "token";}
-	GenericToken(std::string txt):
-		Token(),
-		_txt(txt)
-	{
-	}
-	GenericToken(const GenericToken& other):
-		_txt(other._txt)
-	{}
-	virtual std::ostream& codeStream(std::ostream& stream)const			{return stream<<_txt<<" ";}
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual std::string txt()const {return _txt;}
-	virtual bool isList()const							{return false;}
-	virtual Properties getProperties()const						{Properties p(name());p.setTokValue(_txt);return p;}
-	virtual PropertiesList getPropertiesList()const					{return PropertiesList(name());}
-	virtual ~GenericToken()
-	{}
-};
-inline Token* GetToken(int i,std::string txt)
-{
-	std::cerr<<"\033[34m GENERATING TOKEN \033[0m"<<"i"<<i<<" txt:"<<txt;
-	return new GenericToken(txt);
-}
+	private:
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>auto</b>, <b>typedef</b>, <b>extern</b>, <b>register</b>, <b>static</b>
+	public:
+		/** 
+		 * \brief Constructor of storage_class_specifier
+		 *
+		 * This function handles the storage_class_specifier
+                 */
+		storage_class_specifier	
+				(
+					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>auto</b>, <b>typedef</b>, <b>extern</b>, <b>register</b>, <b>static</b>
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"storage_class_specifier"</b>
+		 * \returns <b>"storage_class_specifier"</b>
+                 */
+		virtual std::string name()const		{return std::string("storage_class_specifier");}
 
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_STORAGE_CLASS_SPECIFIER
+		 * \returns  ID_STORAGE_CLASS_SPECIFIER
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_STORAGE_CLASS_SPECIFIER;}
 
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE storage_class_specifier CLASS                                                                                 
- 	FOR PATTERN : [TYPEDEF]		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
-
-
-
-// FORWARD DECLARATION
-class Token;
-
-
-class storage_class_specifier 
-	:public CAst 
-{
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		Token *_p_token1;                                               // TYPEDEF
-public:
-	storage_class_specifier	                                     // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				Token *_arg__p_token1			
-		);
-	storage_class_specifier(const storage_class_specifier& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "storage_class_specifier"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_STORAGE_CLASS_SPECIFIER
-	virtual std::string pattern()const;							//returns the pattern, here "[TYPEDEF]"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
-	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
-	virtual ~storage_class_specifier ();
-
-	
-		
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~storage_class_specifier()
+		{}
 };
 
 
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE expression_statement CLASS                                                                                 
- 	FOR PATTERN : [expression,';']		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:expression_statement
+//////////////////////////////////////////
+
+
+
+
+
 class expression;
 
 
-class expression_statement 
-	:public CAst 
-{
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		expression *_p_expression;                                      // expression
-public:
-	expression_statement	                                        // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				expression *_arg__p_expression			
-		);
-	expression_statement(const expression_statement& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "expression_statement"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_EXPRESSION_STATEMENT
-	virtual std::string pattern()const;							//returns the pattern, here "[expression,';']"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const expression* get_p_expression()const{return _p_expression;}							//returns const pointer to _p_expression
-	      expression* get_p_expression()     {return _p_expression;}							//returns       pointer to _p_expression
-	virtual ~expression_statement ();
 
-	
-		
+/**
+ * \brief expression_statement implements the pattern: <b>(expression, ;)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_expression_statement [ label="expression_statement", URL="\ref expression_statement", color="#00AAAA" ];
+ *     node_expression [ label="expression", URL="\ref expression", color="#00AAAA"];
+ *     node_expression_statement ->  node_expression [label="_p_expression" style=dotted];
+ * }
+ * \enddot
+ */
+class expression_statement:public CAst
+{
+	private:
+		ReferenceCountedAutoPointer<expression> _p_expression;	  ///< A pointer to expression. This parameter can be <b>Null</b>
+	public:
+		/** 
+		 * \brief Constructor of expression_statement
+		 *
+		 * This function handles the expression_statement
+                 */
+		expression_statement	
+				(
+					ReferenceCountedAutoPointer<expression> _arg_expression  ///< A pointer to expression. This parameter can be <b>Null</b>
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"expression_statement"</b>
+		 * \returns <b>"expression_statement"</b>
+                 */
+		virtual std::string name()const		{return std::string("expression_statement");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_EXPRESSION_STATEMENT
+		 * \returns  ID_EXPRESSION_STATEMENT
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_EXPRESSION_STATEMENT;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~expression_statement()
+		{}
 };
 
 
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE type_name CLASS                                                                                 
- 	FOR PATTERN : [specifier_qualifier_list,abstract_declarator]		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:type_name
+//////////////////////////////////////////
+
+
+
+
+
 class specifier_qualifier_list;
 class abstract_declarator;
 
 
-class type_name 
-	:public CAst 
-{
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		specifier_qualifier_list *_p_specifier_qualifier_list;          // specifier_qualifier_list
-		abstract_declarator *_p_abstract_declarator;                    // abstract_declarator
-public:
-	type_name	                                                   // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				specifier_qualifier_list *_arg__p_specifier_qualifier_list,
-				abstract_declarator *_arg__p_abstract_declarator			
-		);
-	type_name(const type_name& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "type_name"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_TYPE_NAME
-	virtual std::string pattern()const;							//returns the pattern, here "[specifier_qualifier_list,abstract_declarator]"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const specifier_qualifier_list* get_p_specifier_qualifier_list()const{return _p_specifier_qualifier_list;}							//returns const pointer to _p_specifier_qualifier_list
-	      specifier_qualifier_list* get_p_specifier_qualifier_list()     {return _p_specifier_qualifier_list;}							//returns       pointer to _p_specifier_qualifier_list
-	const abstract_declarator* get_p_abstract_declarator()const{return _p_abstract_declarator;}							//returns const pointer to _p_abstract_declarator
-	      abstract_declarator* get_p_abstract_declarator()     {return _p_abstract_declarator;}							//returns       pointer to _p_abstract_declarator
-	virtual ~type_name ();
 
-	
-		
+
+/**
+ * \brief type_name implements the pattern: <b>(specifier_qualifier_list, abstract_declarator)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_type_name [ label="type_name", URL="\ref type_name", color="#00AAAA" ];
+ *     node_specifier_qualifier_list [ label="specifier_qualifier_list", URL="\ref specifier_qualifier_list", color="#00AAAA"];
+ *     node_abstract_declarator [ label="abstract_declarator", URL="\ref abstract_declarator", color="#00AAAA"];
+ *     node_type_name ->  node_specifier_qualifier_list [label="_p_specifier_qualifier_list" style=solid];
+ *     node_type_name ->  node_abstract_declarator [label="_p_abstract_declarator" style=dotted];
+ * }
+ * \enddot
+ */
+class type_name:public CAst
+{
+	private:
+		ReferenceCountedAutoPointer<specifier_qualifier_list> _p_specifier_qualifier_list;	  ///< A pointer to specifier_qualifier_list.
+		ReferenceCountedAutoPointer<abstract_declarator> _p_abstract_declarator;	  ///< A pointer to abstract_declarator. This parameter can be <b>Null</b>
+	public:
+		/** 
+		 * \brief Constructor of type_name
+		 *
+		 * This function handles the type_name
+                 */
+		type_name	
+				(
+					ReferenceCountedAutoPointer<specifier_qualifier_list> _arg_specifier_qualifier_list,   ///< A pointer to specifier_qualifier_list.
+					ReferenceCountedAutoPointer<abstract_declarator> _arg_abstract_declarator  ///< A pointer to abstract_declarator. This parameter can be <b>Null</b>
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"type_name"</b>
+		 * \returns <b>"type_name"</b>
+                 */
+		virtual std::string name()const		{return std::string("type_name");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_TYPE_NAME
+		 * \returns  ID_TYPE_NAME
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_TYPE_NAME;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~type_name()
+		{}
 };
 
 
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE unary_expression BASE CLASS                                                                    
-                                                                                                                 
-\*=============================================================================================================*/  
 
 
-class unary_expression :public CAst
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:unary_expression
+//////////////////////////////////////////
+
+
+/**
+ * \brief Implements unary_expression
+ * 
+ * This is the interface class. This implements the patterns
+ *  - (postfix_expression,)
+ *  - (++, unary_expression)
+ *  - (--, unary_expression)
+ *  - (unary_operator, cast_expression)
+ *  - (sizeof, unary_expression)
+ *  - (sizeof, (, type_name, ))
+ * 
+ **/
+class unary_expression:public CAst
 {
-public:
-	virtual std::string name()const=0;
-	virtual std::ostream& codeStream(std::ostream&)const=0;
-	virtual CAstType typeId()const=0;
-	virtual std::string pattern()const=0;
-	virtual bool isList()const=0;
-	virtual Properties getProperties()const=0;
-	virtual PropertiesList getPropertiesList()const=0;
-	virtual ~unary_expression (){};
+	public:
+		/**
+                 * \brief Interface for the child classes to return the name
+                 *
+                 */
+		virtual std::string name()const=0;
+
+		/**
+                 *  \brief Interface for the child classes to return the class ID
+                 *
+                 */
+		virtual CAST_CLASS_ID classId()const=0;
 };
 
 
 
 
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE unary_expression1 CLASS                                                                                 
- 	FOR PATTERN : [SIZEOF,'(',type_name,')']		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
-
-
-
-// FORWARD DECLARATION
-class type_name;
-
-
-class unary_expression1 
-	:public unary_expression 
-{
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		type_name *_p_type_name;                                        // type_name
-public:
-	unary_expression1	                                           // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				type_name *_arg__p_type_name			
-		);
-	unary_expression1(const unary_expression1& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "unary_expression1"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_UNARY_EXPRESSION1
-	virtual std::string pattern()const;							//returns the pattern, here "[SIZEOF,'(',type_name,')']"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const type_name* get_p_type_name()const{return _p_type_name;}							//returns const pointer to _p_type_name
-	      type_name* get_p_type_name()     {return _p_type_name;}							//returns       pointer to _p_type_name
-	virtual ~unary_expression1 ();
-
-	
-		
-};
-
-
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE unary_expression2 CLASS                                                                                 
- 	FOR PATTERN : [INC_OP,unary_expression]		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
-
-
-
-// FORWARD DECLARATION
-class Token;
+class token;
 class unary_expression;
 
 
-class unary_expression2 
-	:public unary_expression 
-{
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		Token *_p_token1;                                               // INC_OP
-		unary_expression *_p_unary_expression;                          // unary_expression
-public:
-	unary_expression2	                                           // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				Token *_arg__p_token1,
-				unary_expression *_arg__p_unary_expression			
-		);
-	unary_expression2(const unary_expression2& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "unary_expression2"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_UNARY_EXPRESSION2
-	virtual std::string pattern()const;							//returns the pattern, here "[INC_OP,unary_expression]"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
-	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
-	const unary_expression* get_p_unary_expression()const{return _p_unary_expression;}							//returns const pointer to _p_unary_expression
-	      unary_expression* get_p_unary_expression()     {return _p_unary_expression;}							//returns       pointer to _p_unary_expression
-	virtual ~unary_expression2 ();
 
-	
-		
+
+
+/**
+ * \brief unary_expression_1 implements the pattern: <b>(++, unary_expression)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_unary_expression_1 [ label="unary_expression_1", URL="\ref unary_expression_1", color="#00AAAA" ];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_unary_expression [ label="unary_expression", URL="\ref unary_expression", color="#00AAAA"];
+ *     node_unary_expression_1 ->  node_token [label="_p_token" style=solid];
+ *     node_unary_expression_1 ->  node_unary_expression [label="_p_unary_expression" style=solid];
+ * }
+ * \enddot
+ */
+class unary_expression_1:public unary_expression
+{
+	private:
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>++</b>, <b>--</b>, <b>sizeof</b>
+		ReferenceCountedAutoPointer<unary_expression> _p_unary_expression;	  ///< A pointer to unary_expression.
+	public:
+		/** 
+		 * \brief Constructor of unary_expression_1
+		 *
+		 * This function handles the unary_expression_1
+                 */
+		unary_expression_1	
+				(
+					ReferenceCountedAutoPointer<token> _arg_token,   ///< A pointer to a token, accepts <b>++</b>, <b>--</b>, <b>sizeof</b>
+					ReferenceCountedAutoPointer<unary_expression> _arg_unary_expression  ///< A pointer to unary_expression.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"unary_expression_1"</b>
+		 * \returns <b>"unary_expression_1"</b>
+                 */
+		virtual std::string name()const		{return std::string("unary_expression_1");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_UNARY_EXPRESSION_1
+		 * \returns  ID_UNARY_EXPRESSION_1
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_UNARY_EXPRESSION_1;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~unary_expression_1()
+		{}
 };
 
 
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE unary_expression3 CLASS                                                                                 
- 	FOR PATTERN : [unary_operator,cast_expression]		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
-class unary_operator;
-class cast_expression;
-
-
-class unary_expression3 
-	:public unary_expression 
-{
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		unary_operator *_p_unary_operator;                              // unary_operator
-		cast_expression *_p_cast_expression;                            // cast_expression
-public:
-	unary_expression3	                                           // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				unary_operator *_arg__p_unary_operator,
-				cast_expression *_arg__p_cast_expression			
-		);
-	unary_expression3(const unary_expression3& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "unary_expression3"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_UNARY_EXPRESSION3
-	virtual std::string pattern()const;							//returns the pattern, here "[unary_operator,cast_expression]"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const unary_operator* get_p_unary_operator()const{return _p_unary_operator;}							//returns const pointer to _p_unary_operator
-	      unary_operator* get_p_unary_operator()     {return _p_unary_operator;}							//returns       pointer to _p_unary_operator
-	const cast_expression* get_p_cast_expression()const{return _p_cast_expression;}							//returns const pointer to _p_cast_expression
-	      cast_expression* get_p_cast_expression()     {return _p_cast_expression;}							//returns       pointer to _p_cast_expression
-	virtual ~unary_expression3 ();
-
-	
-		
-};
-
-
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE unary_expression4 CLASS                                                                                 
- 	FOR PATTERN : [postfix_expression]		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
-
-
-
-// FORWARD DECLARATION
 class postfix_expression;
 
 
-class unary_expression4 
-	:public unary_expression 
-{
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		postfix_expression *_p_postfix_expression;                      // postfix_expression
-public:
-	unary_expression4	                                           // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				postfix_expression *_arg__p_postfix_expression			
-		);
-	unary_expression4(const unary_expression4& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "unary_expression4"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_UNARY_EXPRESSION4
-	virtual std::string pattern()const;							//returns the pattern, here "[postfix_expression]"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const postfix_expression* get_p_postfix_expression()const{return _p_postfix_expression;}							//returns const pointer to _p_postfix_expression
-	      postfix_expression* get_p_postfix_expression()     {return _p_postfix_expression;}							//returns       pointer to _p_postfix_expression
-	virtual ~unary_expression4 ();
 
-	
-		
+/**
+ * \brief unary_expression_2 implements the pattern: <b>(postfix_expression,)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_unary_expression_2 [ label="unary_expression_2", URL="\ref unary_expression_2", color="#00AAAA" ];
+ *     node_postfix_expression [ label="postfix_expression", URL="\ref postfix_expression", color="#00AAAA"];
+ *     node_unary_expression_2 ->  node_postfix_expression [label="_p_postfix_expression" style=solid];
+ * }
+ * \enddot
+ */
+class unary_expression_2:public unary_expression
+{
+	private:
+		ReferenceCountedAutoPointer<postfix_expression> _p_postfix_expression;	  ///< A pointer to postfix_expression.
+	public:
+		/** 
+		 * \brief Constructor of unary_expression_2
+		 *
+		 * This function handles the unary_expression_2
+                 */
+		unary_expression_2	
+				(
+					ReferenceCountedAutoPointer<postfix_expression> _arg_postfix_expression  ///< A pointer to postfix_expression.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"unary_expression_2"</b>
+		 * \returns <b>"unary_expression_2"</b>
+                 */
+		virtual std::string name()const		{return std::string("unary_expression_2");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_UNARY_EXPRESSION_2
+		 * \returns  ID_UNARY_EXPRESSION_2
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_UNARY_EXPRESSION_2;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~unary_expression_2()
+		{}
 };
 
 
-			
-/*=============================================================================================================*\
-                                                                                                                 
-        THE conditional_expression CLASS                                                                                 
-        FOR PATTERN : [logical_or_expression,'?',expression,':',conditional_expression]		                                                                 
- 														 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
-class logical_or_expression;
+class cast_expression;
+class unary_operator;
+
+
+
+
+/**
+ * \brief unary_expression_3 implements the pattern: <b>(unary_operator, cast_expression)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_unary_expression_3 [ label="unary_expression_3", URL="\ref unary_expression_3", color="#00AAAA" ];
+ *     node_unary_operator [ label="unary_operator", URL="\ref unary_operator", color="#00AAAA"];
+ *     node_cast_expression [ label="cast_expression", URL="\ref cast_expression", color="#00AAAA"];
+ *     node_unary_expression_3 ->  node_unary_operator [label="_p_unary_operator" style=solid];
+ *     node_unary_expression_3 ->  node_cast_expression [label="_p_cast_expression" style=solid];
+ * }
+ * \enddot
+ */
+class unary_expression_3:public unary_expression
+{
+	private:
+		ReferenceCountedAutoPointer<unary_operator> _p_unary_operator;	  ///< A pointer to unary_operator.
+		ReferenceCountedAutoPointer<cast_expression> _p_cast_expression;	  ///< A pointer to cast_expression.
+	public:
+		/** 
+		 * \brief Constructor of unary_expression_3
+		 *
+		 * This function handles the unary_expression_3
+                 */
+		unary_expression_3	
+				(
+					ReferenceCountedAutoPointer<unary_operator> _arg_unary_operator,   ///< A pointer to unary_operator.
+					ReferenceCountedAutoPointer<cast_expression> _arg_cast_expression  ///< A pointer to cast_expression.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"unary_expression_3"</b>
+		 * \returns <b>"unary_expression_3"</b>
+                 */
+		virtual std::string name()const		{return std::string("unary_expression_3");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_UNARY_EXPRESSION_3
+		 * \returns  ID_UNARY_EXPRESSION_3
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_UNARY_EXPRESSION_3;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~unary_expression_3()
+		{}
+};
+
+
+
+
+
+class type_name;
+
+
+
+/**
+ * \brief unary_expression_4 implements the pattern: <b>(sizeof, (, type_name, ))</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_unary_expression_4 [ label="unary_expression_4", URL="\ref unary_expression_4", color="#00AAAA" ];
+ *     node_type_name [ label="type_name", URL="\ref type_name", color="#00AAAA"];
+ *     node_unary_expression_4 ->  node_type_name [label="_p_type_name" style=solid];
+ * }
+ * \enddot
+ */
+class unary_expression_4:public unary_expression
+{
+	private:
+		ReferenceCountedAutoPointer<type_name> _p_type_name;	  ///< A pointer to type_name.
+	public:
+		/** 
+		 * \brief Constructor of unary_expression_4
+		 *
+		 * This function handles the unary_expression_4
+                 */
+		unary_expression_4	
+				(
+					ReferenceCountedAutoPointer<type_name> _arg_type_name  ///< A pointer to type_name.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"unary_expression_4"</b>
+		 * \returns <b>"unary_expression_4"</b>
+                 */
+		virtual std::string name()const		{return std::string("unary_expression_4");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_UNARY_EXPRESSION_4
+		 * \returns  ID_UNARY_EXPRESSION_4
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_UNARY_EXPRESSION_4;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~unary_expression_4()
+		{}
+};
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:conditional_expression
+//////////////////////////////////////////
+
+
+
+
+
 class expression;
+class logical_or_expression;
 
-/*------------------------------------------------------------*\
- 							        
-  item class conditional_expression_item                              
-                                                                
-\*------------------------------------------------------------*/
+
+
+
+/**
+ * \brief conditional_expression_item implements the pattern: <b>(logical_or_expression, ?, expression, :, conditional_expression)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_conditional_expression_item [ label="conditional_expression_item", URL="\ref conditional_expression_item", color="#00AAAA" ];
+ *     node_logical_or_expression [ label="logical_or_expression", URL="\ref logical_or_expression", color="#00AAAA"];
+ *     node_expression [ label="expression", URL="\ref expression", color="#00AAAA"];
+ *     node_conditional_expression_item ->  node_logical_or_expression [label="_p_logical_or_expression" style=solid];
+ *     node_conditional_expression_item ->  node_expression [label="_p_expression" style=dotted];
+ * }
+ * \enddot
+ */
 class conditional_expression_item
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-	logical_or_expression *_p_logical_or_expression;                // logical_or_expression
-	expression *_p_expression;                                      // expression
-public:
-	conditional_expression_item
-		(
-			std::string _arg_s_matchedPattern,
-			logical_or_expression *_arg__p_logical_or_expression,
-			expression *_arg__p_expression
-		);
-	conditional_expression_item(const conditional_expression_item &);
-	virtual std::string name()const{return "conditional_expression_item";}			//returns the class name, here "conditional_expression"
-	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual Properties getProperties()const;
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const logical_or_expression* get_p_logical_or_expression()const{return _p_logical_or_expression;}							//returns const pointer to _p_logical_or_expression
-	      logical_or_expression* get_p_logical_or_expression()     {return _p_logical_or_expression;}							//returns const pointer to _p_logical_or_expression
-	const expression* get_p_expression()const{return _p_expression;}							//returns const pointer to _p_expression
-	      expression* get_p_expression()     {return _p_expression;}							//returns const pointer to _p_expression
-	virtual ~conditional_expression_item();
-	
-	
-};
-/*------------------------------------------------------------*\
- 							        
-  main class conditional_expression                         
-                                                                
-\*------------------------------------------------------------*/
+	private:
+		ReferenceCountedAutoPointer<logical_or_expression> _p_logical_or_expression;	  ///< A pointer to logical_or_expression.
+		ReferenceCountedAutoPointer<expression> _p_expression;	  ///< A pointer to expression. This parameter can be <b>Null</b>
+	public:
+		/** 
+		 * \brief Constructor of conditional_expression_item
+		 *
+		 * This function handles the conditional_expression_item
+                 */
+		conditional_expression_item	
+				(
+					ReferenceCountedAutoPointer<logical_or_expression> _arg_logical_or_expression,   ///< A pointer to logical_or_expression.
+					ReferenceCountedAutoPointer<expression> _arg_expression  ///< A pointer to expression. This parameter can be <b>Null</b>
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"conditional_expression_item"</b>
+		 * \returns <b>"conditional_expression_item"</b>
+                 */
+		virtual std::string name()const		{return std::string("conditional_expression_item");}
 
-class conditional_expression
-	:public CAst 
-{
-private:
-	typedef std::deque<conditional_expression_item> ItemsListType;
-	typedef ItemsListType::iterator ItemsListIter;
-	typedef ItemsListType::const_iterator CItemsListIter;
-	ItemsListType _items;
-public:
-//ASDFG
-	
-	conditional_expression
-		(
-			std::string _arg_s_matchedPattern,
-			logical_or_expression *_arg__p_logical_or_expression,
-			expression *_arg__p_expression
-		);
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_CONDITIONAL_EXPRESSION_ITEM
+		 * \returns  ID_CONDITIONAL_EXPRESSION_ITEM
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_CONDITIONAL_EXPRESSION_ITEM;}
 
-	void append
-		(
-			std::string _arg_s_matchedPattern,
-			logical_or_expression *_arg__p_logical_or_expression,
-			expression *_arg__p_expression
-		);
-
-	virtual std::string name()const;							//returns the class name, here "conditional_expression"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_CONDITIONAL_EXPRESSION
-	virtual std::string pattern()const;							//returns the pattern, here "[logical_or_expression,'?',expression,':',conditional_expression]"
-	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
-	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
-	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
-	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
-	virtual int size()const{return _items.size();}						//returns the size of the container
-	virtual conditional_expression_item& operator[](int i){return _items[i];}
-	virtual ~conditional_expression ();
-
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~conditional_expression_item()
+		{}
 };
 
-typedef std::deque<conditional_expression_item>::iterator conditional_expression_iterator;
-typedef std::deque<conditional_expression_item>::const_iterator conditional_expression_const_iterator;
-
-
-			
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE struct_or_union_specifier CLASS                                                                                 
- 	FOR PATTERN : [struct_or_union,IDENTIFIER,'{',struct_declaration_list,'}']		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
-class struct_or_union;
-class Token;
-class Token;
-class struct_declaration_list;
-class Token;
 
-
-class struct_or_union_specifier 
-	:public CAst 
+/**
+ * \brief The basic class to handle conditional_expression
+ *
+ * Since the rule contains itself, this rule will be implemented in the form of a list
+ */
+class conditional_expression:public CAst
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		struct_or_union *_p_struct_or_union;                            // struct_or_union
-		Token *_p_token1;                                               // IDENTIFIER
-		Token *_p_token2;                                               // '{'
-		struct_declaration_list *_p_struct_declaration_list;            // struct_declaration_list
-		Token *_p_token3;                                               // '}'
-public:
-	struct_or_union_specifier	                                   // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				struct_or_union *_arg__p_struct_or_union,
-				Token *_arg__p_token1,
-				Token *_arg__p_token2,
-				struct_declaration_list *_arg__p_struct_declaration_list,
-				Token *_arg__p_token3			
-		);
-	struct_or_union_specifier(const struct_or_union_specifier& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "struct_or_union_specifier"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_STRUCT_OR_UNION_SPECIFIER
-	virtual std::string pattern()const;							//returns the pattern, here "[struct_or_union,IDENTIFIER,'{',struct_declaration_list,'}']"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const struct_or_union* get_p_struct_or_union()const{return _p_struct_or_union;}							//returns const pointer to _p_struct_or_union
-	      struct_or_union* get_p_struct_or_union()     {return _p_struct_or_union;}							//returns       pointer to _p_struct_or_union
-	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
-	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
-	const Token* get_p_token2()const{return _p_token2;}							//returns const pointer to _p_token2
-	      Token* get_p_token2()     {return _p_token2;}							//returns       pointer to _p_token2
-	const struct_declaration_list* get_p_struct_declaration_list()const{return _p_struct_declaration_list;}							//returns const pointer to _p_struct_declaration_list
-	      struct_declaration_list* get_p_struct_declaration_list()     {return _p_struct_declaration_list;}							//returns       pointer to _p_struct_declaration_list
-	const Token* get_p_token3()const{return _p_token3;}							//returns const pointer to _p_token3
-	      Token* get_p_token3()     {return _p_token3;}							//returns       pointer to _p_token3
-	virtual ~struct_or_union_specifier ();
+	public:
+		typedef std::list<ReferenceCountedAutoPointer<conditional_expression_item> > conditional_expressionListType;	///< This defines the list type which will store the conditional_expression_item
+		typedef conditional_expressionListType::iterator conditional_expressionIterType;				///< This defines the iterator over conditional_expressionListType
+		typedef conditional_expressionListType::const_iterator Cconditional_expressionIterType;				///< This defines the constant iterator over conditional_expressionListType
 
-	
+	private:
+		conditional_expressionListType _itemList;									///< The list of items
+	public:
+		/**
+		 * \brief The default constructor calls the parent constructor
+		 *
+		 */
+		conditional_expression():CAst()
+		{}
+
+		/**
+		 * \brief Append an item to the list
+		 *
+		 */
+		void append( ReferenceCountedAutoPointer<conditional_expression_item> item)
+		{
+			_itemList.push_back(item);
+		}
 		
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"conditional_expression"</b>
+		 * \returns <b>"conditional_expression"</b>
+                 */
+		virtual std::string name()const {return "conditional_expression";}
+		
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_CONDITIONAL_EXPRESSION
+		 * \returns  ID_CONDITIONAL_EXPRESSION
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_CONDITIONAL_EXPRESSION;}
+
 };
 
 
-			
-/*=============================================================================================================*\
-                                                                                                                 
-        THE exclusive_or_expression CLASS                                                                                 
-        FOR PATTERN : [exclusive_or_expression,'^',and_expression]		                                                                 
- 														 
-\*=============================================================================================================*/  
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
-// FORWARD DECLARATION
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:struct_or_union_specifier
+//////////////////////////////////////////
+
+
+
+
+
+class struct_or_union;
+class token;
+class struct_declaration_list;
+
+
+
+
+
+
+
+
+
+
+/**
+ * \brief struct_or_union_specifier implements the pattern: <b>(struct_or_union, [IDENTIFIER], {, struct_declaration_list, })</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_struct_or_union_specifier [ label="struct_or_union_specifier", URL="\ref struct_or_union_specifier", color="#00AAAA" ];
+ *     node_struct_or_union [ label="struct_or_union", URL="\ref struct_or_union", color="#00AAAA"];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_struct_declaration_list [ label="struct_declaration_list", URL="\ref struct_declaration_list", color="#00AAAA"];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_struct_or_union_specifier ->  node_struct_or_union [label="_p_struct_or_union" style=solid];
+ *     node_struct_or_union_specifier ->  node_token [label="_p_token1" style=dotted];
+ *     node_struct_or_union_specifier ->  node_token [label="_p_token2" style=dotted];
+ *     node_struct_or_union_specifier ->  node_struct_declaration_list [label="_p_struct_declaration_list" style=dotted];
+ *     node_struct_or_union_specifier ->  node_token [label="_p_token3" style=dotted];
+ * }
+ * \enddot
+ */
+class struct_or_union_specifier:public CAst
+{
+	private:
+		ReferenceCountedAutoPointer<struct_or_union> _p_struct_or_union;	  ///< A pointer to struct_or_union.
+		ReferenceCountedAutoPointer<token> _p_token1;	  ///< A pointer to a token, accepts <b>[IDENTIFIER]</b>, <b>None</b>
+		ReferenceCountedAutoPointer<token> _p_token2;	  ///< A pointer to a token, accepts <b>{</b>, <b>None</b>
+		ReferenceCountedAutoPointer<struct_declaration_list> _p_struct_declaration_list;	  ///< A pointer to struct_declaration_list. This parameter can be <b>Null</b>
+		ReferenceCountedAutoPointer<token> _p_token3;	  ///< A pointer to a token, accepts <b>}</b>, <b>None</b>
+	public:
+		/** 
+		 * \brief Constructor of struct_or_union_specifier
+		 *
+		 * This function handles the struct_or_union_specifier
+                 */
+		struct_or_union_specifier	
+				(
+					ReferenceCountedAutoPointer<struct_or_union> _arg_struct_or_union,   ///< A pointer to struct_or_union.
+					ReferenceCountedAutoPointer<token> _arg_token1,   ///< A pointer to a token, accepts <b>[IDENTIFIER]</b>, <b>None</b>
+					ReferenceCountedAutoPointer<token> _arg_token2,   ///< A pointer to a token, accepts <b>{</b>, <b>None</b>
+					ReferenceCountedAutoPointer<struct_declaration_list> _arg_struct_declaration_list,   ///< A pointer to struct_declaration_list. This parameter can be <b>Null</b>
+					ReferenceCountedAutoPointer<token> _arg_token3  ///< A pointer to a token, accepts <b>}</b>, <b>None</b>
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"struct_or_union_specifier"</b>
+		 * \returns <b>"struct_or_union_specifier"</b>
+                 */
+		virtual std::string name()const		{return std::string("struct_or_union_specifier");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_STRUCT_OR_UNION_SPECIFIER
+		 * \returns  ID_STRUCT_OR_UNION_SPECIFIER
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_STRUCT_OR_UNION_SPECIFIER;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~struct_or_union_specifier()
+		{}
+};
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:exclusive_or_expression
+//////////////////////////////////////////
+
+
+
+
+
 class and_expression;
 
-/*------------------------------------------------------------*\
- 							        
-  item class exclusive_or_expression_item                              
-                                                                
-\*------------------------------------------------------------*/
+
+
+/**
+ * \brief exclusive_or_expression_item implements the pattern: <b>(exclusive_or_expression, ^, and_expression)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_exclusive_or_expression_item [ label="exclusive_or_expression_item", URL="\ref exclusive_or_expression_item", color="#00AAAA" ];
+ *     node_and_expression [ label="and_expression", URL="\ref and_expression", color="#00AAAA"];
+ *     node_exclusive_or_expression_item ->  node_and_expression [label="_p_and_expression" style=solid];
+ * }
+ * \enddot
+ */
 class exclusive_or_expression_item
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-	and_expression *_p_and_expression;                              // and_expression
-public:
-	exclusive_or_expression_item
-		(
-			std::string _arg_s_matchedPattern,
-			and_expression *_arg__p_and_expression
-		);
-	exclusive_or_expression_item(const exclusive_or_expression_item &);
-	virtual std::string name()const{return "exclusive_or_expression_item";}			//returns the class name, here "exclusive_or_expression"
-	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual Properties getProperties()const;
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const and_expression* get_p_and_expression()const{return _p_and_expression;}							//returns const pointer to _p_and_expression
-	      and_expression* get_p_and_expression()     {return _p_and_expression;}							//returns const pointer to _p_and_expression
-	virtual ~exclusive_or_expression_item();
-	
-	
-};
-/*------------------------------------------------------------*\
- 							        
-  main class exclusive_or_expression                         
-                                                                
-\*------------------------------------------------------------*/
+	private:
+		ReferenceCountedAutoPointer<and_expression> _p_and_expression;	  ///< A pointer to and_expression.
+	public:
+		/** 
+		 * \brief Constructor of exclusive_or_expression_item
+		 *
+		 * This function handles the exclusive_or_expression_item
+                 */
+		exclusive_or_expression_item	
+				(
+					ReferenceCountedAutoPointer<and_expression> _arg_and_expression  ///< A pointer to and_expression.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"exclusive_or_expression_item"</b>
+		 * \returns <b>"exclusive_or_expression_item"</b>
+                 */
+		virtual std::string name()const		{return std::string("exclusive_or_expression_item");}
 
-class exclusive_or_expression
-	:public CAst 
-{
-private:
-	typedef std::deque<exclusive_or_expression_item> ItemsListType;
-	typedef ItemsListType::iterator ItemsListIter;
-	typedef ItemsListType::const_iterator CItemsListIter;
-	ItemsListType _items;
-public:
-//ASDFG
-	
-	exclusive_or_expression
-		(
-			std::string _arg_s_matchedPattern,
-			and_expression *_arg__p_and_expression
-		);
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_EXCLUSIVE_OR_EXPRESSION_ITEM
+		 * \returns  ID_EXCLUSIVE_OR_EXPRESSION_ITEM
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_EXCLUSIVE_OR_EXPRESSION_ITEM;}
 
-	void append
-		(
-			std::string _arg_s_matchedPattern,
-			and_expression *_arg__p_and_expression
-		);
-
-	virtual std::string name()const;							//returns the class name, here "exclusive_or_expression"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_EXCLUSIVE_OR_EXPRESSION
-	virtual std::string pattern()const;							//returns the pattern, here "[exclusive_or_expression,'^',and_expression]"
-	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
-	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
-	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
-	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
-	virtual int size()const{return _items.size();}						//returns the size of the container
-	virtual exclusive_or_expression_item& operator[](int i){return _items[i];}
-	virtual ~exclusive_or_expression ();
-
-};
-
-typedef std::deque<exclusive_or_expression_item>::iterator exclusive_or_expression_iterator;
-typedef std::deque<exclusive_or_expression_item>::const_iterator exclusive_or_expression_const_iterator;
-
-
-			
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE initializer BASE CLASS                                                                    
-                                                                                                                 
-\*=============================================================================================================*/  
-
-
-class initializer :public CAst
-{
-public:
-	virtual std::string name()const=0;
-	virtual std::ostream& codeStream(std::ostream&)const=0;
-	virtual CAstType typeId()const=0;
-	virtual std::string pattern()const=0;
-	virtual bool isList()const=0;
-	virtual Properties getProperties()const=0;
-	virtual PropertiesList getPropertiesList()const=0;
-	virtual ~initializer (){};
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~exclusive_or_expression_item()
+		{}
 };
 
 
 
 
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE initializer1 CLASS                                                                                 
- 	FOR PATTERN : ['{',initializer_list,',','}']		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
 
-
-
-// FORWARD DECLARATION
-class initializer_list;
-class Token;
-
-
-class initializer1 
-	:public initializer 
+/**
+ * \brief The basic class to handle exclusive_or_expression
+ *
+ * Since the rule contains itself, this rule will be implemented in the form of a list
+ */
+class exclusive_or_expression:public CAst
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		initializer_list *_p_initializer_list;                          // initializer_list
-		Token *_p_token1;                                               // ','
-public:
-	initializer1	                                                // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				initializer_list *_arg__p_initializer_list,
-				Token *_arg__p_token1			
-		);
-	initializer1(const initializer1& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "initializer1"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_INITIALIZER1
-	virtual std::string pattern()const;							//returns the pattern, here "['{',initializer_list,',','}']"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const initializer_list* get_p_initializer_list()const{return _p_initializer_list;}							//returns const pointer to _p_initializer_list
-	      initializer_list* get_p_initializer_list()     {return _p_initializer_list;}							//returns       pointer to _p_initializer_list
-	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
-	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
-	virtual ~initializer1 ();
+	public:
+		typedef std::list<ReferenceCountedAutoPointer<exclusive_or_expression_item> > exclusive_or_expressionListType;	///< This defines the list type which will store the exclusive_or_expression_item
+		typedef exclusive_or_expressionListType::iterator exclusive_or_expressionIterType;				///< This defines the iterator over exclusive_or_expressionListType
+		typedef exclusive_or_expressionListType::const_iterator Cexclusive_or_expressionIterType;				///< This defines the constant iterator over exclusive_or_expressionListType
 
-	
+	private:
+		exclusive_or_expressionListType _itemList;									///< The list of items
+	public:
+		/**
+		 * \brief The default constructor calls the parent constructor
+		 *
+		 */
+		exclusive_or_expression():CAst()
+		{}
+
+		/**
+		 * \brief Append an item to the list
+		 *
+		 */
+		void append( ReferenceCountedAutoPointer<exclusive_or_expression_item> item)
+		{
+			_itemList.push_back(item);
+		}
 		
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"exclusive_or_expression"</b>
+		 * \returns <b>"exclusive_or_expression"</b>
+                 */
+		virtual std::string name()const {return "exclusive_or_expression";}
+		
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_EXCLUSIVE_OR_EXPRESSION
+		 * \returns  ID_EXCLUSIVE_OR_EXPRESSION
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_EXCLUSIVE_OR_EXPRESSION;}
+
 };
 
 
-			
 
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE initializer2 CLASS                                                                                 
- 	FOR PATTERN : [assignment_expression]		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
-// FORWARD DECLARATION
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:initializer
+//////////////////////////////////////////
+
+
+/**
+ * \brief Implements initializer
+ * 
+ * This is the interface class. This implements the patterns
+ *  - (assignment_expression,)
+ *  - ({, initializer_list, })
+ *  - ({, initializer_list, ,, })
+ * 
+ **/
+class initializer:public CAst
+{
+	public:
+		/**
+                 * \brief Interface for the child classes to return the name
+                 *
+                 */
+		virtual std::string name()const=0;
+
+		/**
+                 *  \brief Interface for the child classes to return the class ID
+                 *
+                 */
+		virtual CAST_CLASS_ID classId()const=0;
+};
+
+
+
+
+class token;
+class initializer_list;
+
+
+
+
+
+/**
+ * \brief initializer_1 implements the pattern: <b>({, initializer_list, ,, })</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_initializer_1 [ label="initializer_1", URL="\ref initializer_1", color="#00AAAA" ];
+ *     node_initializer_list [ label="initializer_list", URL="\ref initializer_list", color="#00AAAA"];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_initializer_1 ->  node_initializer_list [label="_p_initializer_list" style=solid];
+ *     node_initializer_1 ->  node_token [label="_p_token" style=dotted];
+ * }
+ * \enddot
+ */
+class initializer_1:public initializer
+{
+	private:
+		ReferenceCountedAutoPointer<initializer_list> _p_initializer_list;	  ///< A pointer to initializer_list.
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>,</b>, <b>None</b>
+	public:
+		/** 
+		 * \brief Constructor of initializer_1
+		 *
+		 * This function handles the initializer_1
+                 */
+		initializer_1	
+				(
+					ReferenceCountedAutoPointer<initializer_list> _arg_initializer_list,   ///< A pointer to initializer_list.
+					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>,</b>, <b>None</b>
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"initializer_1"</b>
+		 * \returns <b>"initializer_1"</b>
+                 */
+		virtual std::string name()const		{return std::string("initializer_1");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_INITIALIZER_1
+		 * \returns  ID_INITIALIZER_1
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_INITIALIZER_1;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~initializer_1()
+		{}
+};
+
+
+
+
+
 class assignment_expression;
 
 
-class initializer2 
-	:public initializer 
-{
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		assignment_expression *_p_assignment_expression;                // assignment_expression
-public:
-	initializer2	                                                // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				assignment_expression *_arg__p_assignment_expression			
-		);
-	initializer2(const initializer2& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "initializer2"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_INITIALIZER2
-	virtual std::string pattern()const;							//returns the pattern, here "[assignment_expression]"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const assignment_expression* get_p_assignment_expression()const{return _p_assignment_expression;}							//returns const pointer to _p_assignment_expression
-	      assignment_expression* get_p_assignment_expression()     {return _p_assignment_expression;}							//returns       pointer to _p_assignment_expression
-	virtual ~initializer2 ();
 
-	
-		
+/**
+ * \brief initializer_2 implements the pattern: <b>(assignment_expression,)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_initializer_2 [ label="initializer_2", URL="\ref initializer_2", color="#00AAAA" ];
+ *     node_assignment_expression [ label="assignment_expression", URL="\ref assignment_expression", color="#00AAAA"];
+ *     node_initializer_2 ->  node_assignment_expression [label="_p_assignment_expression" style=solid];
+ * }
+ * \enddot
+ */
+class initializer_2:public initializer
+{
+	private:
+		ReferenceCountedAutoPointer<assignment_expression> _p_assignment_expression;	  ///< A pointer to assignment_expression.
+	public:
+		/** 
+		 * \brief Constructor of initializer_2
+		 *
+		 * This function handles the initializer_2
+                 */
+		initializer_2	
+				(
+					ReferenceCountedAutoPointer<assignment_expression> _arg_assignment_expression  ///< A pointer to assignment_expression.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"initializer_2"</b>
+		 * \returns <b>"initializer_2"</b>
+                 */
+		virtual std::string name()const		{return std::string("initializer_2");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_INITIALIZER_2
+		 * \returns  ID_INITIALIZER_2
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_INITIALIZER_2;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~initializer_2()
+		{}
 };
 
 
-			
-/*=============================================================================================================*\
-                                                                                                                 
-        THE struct_declaration_list CLASS                                                                                 
-        FOR PATTERN : [struct_declaration_list,struct_declaration]		                                                                 
- 														 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:struct_declaration_list
+//////////////////////////////////////////
+
+
+
+
+
 class struct_declaration;
 
-/*------------------------------------------------------------*\
- 							        
-  item class struct_declaration_list_item                              
-                                                                
-\*------------------------------------------------------------*/
+
+
+/**
+ * \brief struct_declaration_list_item implements the pattern: <b>(struct_declaration_list, struct_declaration)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_struct_declaration_list_item [ label="struct_declaration_list_item", URL="\ref struct_declaration_list_item", color="#00AAAA" ];
+ *     node_struct_declaration [ label="struct_declaration", URL="\ref struct_declaration", color="#00AAAA"];
+ *     node_struct_declaration_list_item ->  node_struct_declaration [label="_p_struct_declaration" style=solid];
+ * }
+ * \enddot
+ */
 class struct_declaration_list_item
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-	struct_declaration *_p_struct_declaration;                      // struct_declaration
-public:
-	struct_declaration_list_item
-		(
-			std::string _arg_s_matchedPattern,
-			struct_declaration *_arg__p_struct_declaration
-		);
-	struct_declaration_list_item(const struct_declaration_list_item &);
-	virtual std::string name()const{return "struct_declaration_list_item";}			//returns the class name, here "struct_declaration_list"
-	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual Properties getProperties()const;
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const struct_declaration* get_p_struct_declaration()const{return _p_struct_declaration;}							//returns const pointer to _p_struct_declaration
-	      struct_declaration* get_p_struct_declaration()     {return _p_struct_declaration;}							//returns const pointer to _p_struct_declaration
-	virtual ~struct_declaration_list_item();
-	
-	
-};
-/*------------------------------------------------------------*\
- 							        
-  main class struct_declaration_list                         
-                                                                
-\*------------------------------------------------------------*/
+	private:
+		ReferenceCountedAutoPointer<struct_declaration> _p_struct_declaration;	  ///< A pointer to struct_declaration.
+	public:
+		/** 
+		 * \brief Constructor of struct_declaration_list_item
+		 *
+		 * This function handles the struct_declaration_list_item
+                 */
+		struct_declaration_list_item	
+				(
+					ReferenceCountedAutoPointer<struct_declaration> _arg_struct_declaration  ///< A pointer to struct_declaration.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"struct_declaration_list_item"</b>
+		 * \returns <b>"struct_declaration_list_item"</b>
+                 */
+		virtual std::string name()const		{return std::string("struct_declaration_list_item");}
 
-class struct_declaration_list
-	:public CAst 
-{
-private:
-	typedef std::deque<struct_declaration_list_item> ItemsListType;
-	typedef ItemsListType::iterator ItemsListIter;
-	typedef ItemsListType::const_iterator CItemsListIter;
-	ItemsListType _items;
-public:
-//ASDFG
-	
-	struct_declaration_list
-		(
-			std::string _arg_s_matchedPattern,
-			struct_declaration *_arg__p_struct_declaration
-		);
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_STRUCT_DECLARATION_LIST_ITEM
+		 * \returns  ID_STRUCT_DECLARATION_LIST_ITEM
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_STRUCT_DECLARATION_LIST_ITEM;}
 
-	void append
-		(
-			std::string _arg_s_matchedPattern,
-			struct_declaration *_arg__p_struct_declaration
-		);
-
-	virtual std::string name()const;							//returns the class name, here "struct_declaration_list"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_STRUCT_DECLARATION_LIST
-	virtual std::string pattern()const;							//returns the pattern, here "[struct_declaration_list,struct_declaration]"
-	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
-	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
-	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
-	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
-	virtual int size()const{return _items.size();}						//returns the size of the container
-	virtual struct_declaration_list_item& operator[](int i){return _items[i];}
-	virtual ~struct_declaration_list ();
-
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~struct_declaration_list_item()
+		{}
 };
 
-typedef std::deque<struct_declaration_list_item>::iterator struct_declaration_list_iterator;
-typedef std::deque<struct_declaration_list_item>::const_iterator struct_declaration_list_const_iterator;
-
-
-			
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE assignment_operator CLASS                                                                                 
- 	FOR PATTERN : ['=']		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
-class Token;
 
-
-class assignment_operator 
-	:public CAst 
+/**
+ * \brief The basic class to handle struct_declaration_list
+ *
+ * Since the rule contains itself, this rule will be implemented in the form of a list
+ */
+class struct_declaration_list:public CAst
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		Token *_p_token1;                                               // '='
-public:
-	assignment_operator	                                         // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				Token *_arg__p_token1			
-		);
-	assignment_operator(const assignment_operator& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "assignment_operator"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_ASSIGNMENT_OPERATOR
-	virtual std::string pattern()const;							//returns the pattern, here "['=']"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
-	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
-	virtual ~assignment_operator ();
+	public:
+		typedef std::list<ReferenceCountedAutoPointer<struct_declaration_list_item> > struct_declaration_listListType;	///< This defines the list type which will store the struct_declaration_list_item
+		typedef struct_declaration_listListType::iterator struct_declaration_listIterType;				///< This defines the iterator over struct_declaration_listListType
+		typedef struct_declaration_listListType::const_iterator Cstruct_declaration_listIterType;				///< This defines the constant iterator over struct_declaration_listListType
 
-	
+	private:
+		struct_declaration_listListType _itemList;									///< The list of items
+	public:
+		/**
+		 * \brief The default constructor calls the parent constructor
+		 *
+		 */
+		struct_declaration_list():CAst()
+		{}
+
+		/**
+		 * \brief Append an item to the list
+		 *
+		 */
+		void append( ReferenceCountedAutoPointer<struct_declaration_list_item> item)
+		{
+			_itemList.push_back(item);
+		}
 		
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"struct_declaration_list"</b>
+		 * \returns <b>"struct_declaration_list"</b>
+                 */
+		virtual std::string name()const {return "struct_declaration_list";}
+		
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_STRUCT_DECLARATION_LIST
+		 * \returns  ID_STRUCT_DECLARATION_LIST
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_STRUCT_DECLARATION_LIST;}
+
 };
 
 
-			
 
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE struct_declaration CLASS                                                                                 
- 	FOR PATTERN : [specifier_qualifier_list,struct_declarator_list,';']		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
-// FORWARD DECLARATION
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:assignment_operator
+//////////////////////////////////////////
+
+
+
+
+
+class token;
+
+
+
+
+/**
+ * \brief assignment_operator implements the pattern: <b>(=,)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_assignment_operator [ label="assignment_operator", URL="\ref assignment_operator", color="#00AAAA" ];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_assignment_operator ->  node_token [label="_p_token" style=solid];
+ * }
+ * \enddot
+ */
+class assignment_operator:public CAst
+{
+	private:
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>>>=</b>, <b>&=</b>, <b>^=</b>, <b>|=</b>, <b>=</b>, <b>*=</b>, <b>/=</b>, <b>%=</b>, <b>+=</b>, <b>-=</b>, <b><<=</b>
+	public:
+		/** 
+		 * \brief Constructor of assignment_operator
+		 *
+		 * This function handles the assignment_operator
+                 */
+		assignment_operator	
+				(
+					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>>>=</b>, <b>&=</b>, <b>^=</b>, <b>|=</b>, <b>=</b>, <b>*=</b>, <b>/=</b>, <b>%=</b>, <b>+=</b>, <b>-=</b>, <b><<=</b>
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"assignment_operator"</b>
+		 * \returns <b>"assignment_operator"</b>
+                 */
+		virtual std::string name()const		{return std::string("assignment_operator");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_ASSIGNMENT_OPERATOR
+		 * \returns  ID_ASSIGNMENT_OPERATOR
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_ASSIGNMENT_OPERATOR;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~assignment_operator()
+		{}
+};
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:struct_declaration
+//////////////////////////////////////////
+
+
+
+
+
 class specifier_qualifier_list;
 class struct_declarator_list;
 
 
-class struct_declaration 
-	:public CAst 
-{
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		specifier_qualifier_list *_p_specifier_qualifier_list;          // specifier_qualifier_list
-		struct_declarator_list *_p_struct_declarator_list;              // struct_declarator_list
-public:
-	struct_declaration	                                          // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				specifier_qualifier_list *_arg__p_specifier_qualifier_list,
-				struct_declarator_list *_arg__p_struct_declarator_list			
-		);
-	struct_declaration(const struct_declaration& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "struct_declaration"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_STRUCT_DECLARATION
-	virtual std::string pattern()const;							//returns the pattern, here "[specifier_qualifier_list,struct_declarator_list,';']"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const specifier_qualifier_list* get_p_specifier_qualifier_list()const{return _p_specifier_qualifier_list;}							//returns const pointer to _p_specifier_qualifier_list
-	      specifier_qualifier_list* get_p_specifier_qualifier_list()     {return _p_specifier_qualifier_list;}							//returns       pointer to _p_specifier_qualifier_list
-	const struct_declarator_list* get_p_struct_declarator_list()const{return _p_struct_declarator_list;}							//returns const pointer to _p_struct_declarator_list
-	      struct_declarator_list* get_p_struct_declarator_list()     {return _p_struct_declarator_list;}							//returns       pointer to _p_struct_declarator_list
-	virtual ~struct_declaration ();
 
-	
-		
+
+/**
+ * \brief struct_declaration implements the pattern: <b>(specifier_qualifier_list, struct_declarator_list, ;)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_struct_declaration [ label="struct_declaration", URL="\ref struct_declaration", color="#00AAAA" ];
+ *     node_specifier_qualifier_list [ label="specifier_qualifier_list", URL="\ref specifier_qualifier_list", color="#00AAAA"];
+ *     node_struct_declarator_list [ label="struct_declarator_list", URL="\ref struct_declarator_list", color="#00AAAA"];
+ *     node_struct_declaration ->  node_specifier_qualifier_list [label="_p_specifier_qualifier_list" style=solid];
+ *     node_struct_declaration ->  node_struct_declarator_list [label="_p_struct_declarator_list" style=solid];
+ * }
+ * \enddot
+ */
+class struct_declaration:public CAst
+{
+	private:
+		ReferenceCountedAutoPointer<specifier_qualifier_list> _p_specifier_qualifier_list;	  ///< A pointer to specifier_qualifier_list.
+		ReferenceCountedAutoPointer<struct_declarator_list> _p_struct_declarator_list;	  ///< A pointer to struct_declarator_list.
+	public:
+		/** 
+		 * \brief Constructor of struct_declaration
+		 *
+		 * This function handles the struct_declaration
+                 */
+		struct_declaration	
+				(
+					ReferenceCountedAutoPointer<specifier_qualifier_list> _arg_specifier_qualifier_list,   ///< A pointer to specifier_qualifier_list.
+					ReferenceCountedAutoPointer<struct_declarator_list> _arg_struct_declarator_list  ///< A pointer to struct_declarator_list.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"struct_declaration"</b>
+		 * \returns <b>"struct_declaration"</b>
+                 */
+		virtual std::string name()const		{return std::string("struct_declaration");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_STRUCT_DECLARATION
+		 * \returns  ID_STRUCT_DECLARATION
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_STRUCT_DECLARATION;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~struct_declaration()
+		{}
 };
 
 
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE abstract_declarator CLASS                                                                                 
- 	FOR PATTERN : [pointer,direct_abstract_declarator]		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
-class pointer;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:abstract_declarator
+//////////////////////////////////////////
+
+
+
+
+
 class direct_abstract_declarator;
+class pointer;
 
 
-class abstract_declarator 
-	:public CAst 
+
+
+/**
+ * \brief abstract_declarator implements the pattern: <b>(pointer, direct_abstract_declarator)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_abstract_declarator [ label="abstract_declarator", URL="\ref abstract_declarator", color="#00AAAA" ];
+ *     node_pointer [ label="pointer", URL="\ref pointer", color="#00AAAA"];
+ *     node_direct_abstract_declarator [ label="direct_abstract_declarator", URL="\ref direct_abstract_declarator", color="#00AAAA"];
+ *     node_abstract_declarator ->  node_pointer [label="_p_pointer" style=dotted];
+ *     node_abstract_declarator ->  node_direct_abstract_declarator [label="_p_direct_abstract_declarator" style=dotted];
+ * }
+ * \enddot
+ */
+class abstract_declarator:public CAst
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		pointer *_p_pointer;                                            // pointer
-		direct_abstract_declarator *_p_direct_abstract_declarator;      // direct_abstract_declarator
-public:
-	abstract_declarator	                                         // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				pointer *_arg__p_pointer,
-				direct_abstract_declarator *_arg__p_direct_abstract_declarator			
-		);
-	abstract_declarator(const abstract_declarator& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "abstract_declarator"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_ABSTRACT_DECLARATOR
-	virtual std::string pattern()const;							//returns the pattern, here "[pointer,direct_abstract_declarator]"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const pointer* get_p_pointer()const{return _p_pointer;}							//returns const pointer to _p_pointer
-	      pointer* get_p_pointer()     {return _p_pointer;}							//returns       pointer to _p_pointer
-	const direct_abstract_declarator* get_p_direct_abstract_declarator()const{return _p_direct_abstract_declarator;}							//returns const pointer to _p_direct_abstract_declarator
-	      direct_abstract_declarator* get_p_direct_abstract_declarator()     {return _p_direct_abstract_declarator;}							//returns       pointer to _p_direct_abstract_declarator
-	virtual ~abstract_declarator ();
+	private:
+		ReferenceCountedAutoPointer<pointer> _p_pointer;	  ///< A pointer to pointer. This parameter can be <b>Null</b>
+		ReferenceCountedAutoPointer<direct_abstract_declarator> _p_direct_abstract_declarator;	  ///< A pointer to direct_abstract_declarator. This parameter can be <b>Null</b>
+	public:
+		/** 
+		 * \brief Constructor of abstract_declarator
+		 *
+		 * This function handles the abstract_declarator
+                 */
+		abstract_declarator	
+				(
+					ReferenceCountedAutoPointer<pointer> _arg_pointer,   ///< A pointer to pointer. This parameter can be <b>Null</b>
+					ReferenceCountedAutoPointer<direct_abstract_declarator> _arg_direct_abstract_declarator  ///< A pointer to direct_abstract_declarator. This parameter can be <b>Null</b>
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"abstract_declarator"</b>
+		 * \returns <b>"abstract_declarator"</b>
+                 */
+		virtual std::string name()const		{return std::string("abstract_declarator");}
 
-	
-		
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_ABSTRACT_DECLARATOR
+		 * \returns  ID_ABSTRACT_DECLARATOR
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_ABSTRACT_DECLARATOR;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~abstract_declarator()
+		{}
 };
 
 
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE iteration_statement BASE CLASS                                                                    
-                                                                                                                 
-\*=============================================================================================================*/  
 
 
-class iteration_statement :public CAst
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:iteration_statement
+//////////////////////////////////////////
+
+
+/**
+ * \brief Implements iteration_statement
+ * 
+ * This is the interface class. This implements the patterns
+ *  - (while, (, expression, ), statement)
+ *  - (do, statement, while, (, expression, ), ;)
+ *  - (for, (, expression_statement, expression_statement, ), statement)
+ *  - (for, (, expression_statement, expression_statement, expression, ), statement)
+ * 
+ **/
+class iteration_statement:public CAst
 {
-public:
-	virtual std::string name()const=0;
-	virtual std::ostream& codeStream(std::ostream&)const=0;
-	virtual CAstType typeId()const=0;
-	virtual std::string pattern()const=0;
-	virtual bool isList()const=0;
-	virtual Properties getProperties()const=0;
-	virtual PropertiesList getPropertiesList()const=0;
-	virtual ~iteration_statement (){};
+	public:
+		/**
+                 * \brief Interface for the child classes to return the name
+                 *
+                 */
+		virtual std::string name()const=0;
+
+		/**
+                 *  \brief Interface for the child classes to return the class ID
+                 *
+                 */
+		virtual CAST_CLASS_ID classId()const=0;
 };
 
 
 
 
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE iteration_statement1 CLASS                                                                                 
- 	FOR PATTERN : [DO,statement,WHILE,'(',expression,')',';']		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
-
-
-
-// FORWARD DECLARATION
-class statement;
-class expression;
-
-
-class iteration_statement1 
-	:public iteration_statement 
-{
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		statement *_p_statement;                                        // statement
-		expression *_p_expression;                                      // expression
-public:
-	iteration_statement1	                                        // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				statement *_arg__p_statement,
-				expression *_arg__p_expression			
-		);
-	iteration_statement1(const iteration_statement1& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "iteration_statement1"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_ITERATION_STATEMENT1
-	virtual std::string pattern()const;							//returns the pattern, here "[DO,statement,WHILE,'(',expression,')',';']"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const statement* get_p_statement()const{return _p_statement;}							//returns const pointer to _p_statement
-	      statement* get_p_statement()     {return _p_statement;}							//returns       pointer to _p_statement
-	const expression* get_p_expression()const{return _p_expression;}							//returns const pointer to _p_expression
-	      expression* get_p_expression()     {return _p_expression;}							//returns       pointer to _p_expression
-	virtual ~iteration_statement1 ();
-
-	
-		
-};
-
-
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE iteration_statement2 CLASS                                                                                 
- 	FOR PATTERN : [FOR,'(',expression_statement,expression_statement,expression,')',statement]		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
-
-
-
-// FORWARD DECLARATION
-class expression_statement;
 class expression_statement;
 class expression;
 class statement;
 
 
-class iteration_statement2 
-	:public iteration_statement 
-{
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		expression_statement *_p_expression_statement;                  // expression_statement
-		expression_statement *_p_expression_statement1;                 // expression_statement
-		expression *_p_expression;                                      // expression
-		statement *_p_statement;                                        // statement
-public:
-	iteration_statement2	                                        // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				expression_statement *_arg__p_expression_statement,
-				expression_statement *_arg__p_expression_statement1,
-				expression *_arg__p_expression,
-				statement *_arg__p_statement			
-		);
-	iteration_statement2(const iteration_statement2& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "iteration_statement2"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_ITERATION_STATEMENT2
-	virtual std::string pattern()const;							//returns the pattern, here "[FOR,'(',expression_statement,expression_statement,expression,')',statement]"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const expression_statement* get_p_expression_statement()const{return _p_expression_statement;}							//returns const pointer to _p_expression_statement
-	      expression_statement* get_p_expression_statement()     {return _p_expression_statement;}							//returns       pointer to _p_expression_statement
-	const expression_statement* get_p_expression_statement1()const{return _p_expression_statement1;}							//returns const pointer to _p_expression_statement1
-	      expression_statement* get_p_expression_statement1()     {return _p_expression_statement1;}							//returns       pointer to _p_expression_statement1
-	const expression* get_p_expression()const{return _p_expression;}							//returns const pointer to _p_expression
-	      expression* get_p_expression()     {return _p_expression;}							//returns       pointer to _p_expression
-	const statement* get_p_statement()const{return _p_statement;}							//returns const pointer to _p_statement
-	      statement* get_p_statement()     {return _p_statement;}							//returns       pointer to _p_statement
-	virtual ~iteration_statement2 ();
 
-	
-		
+
+
+
+/**
+ * \brief iteration_statement_1 implements the pattern: <b>(for, (, expression_statement, expression_statement, expression, ), statement)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_iteration_statement_1 [ label="iteration_statement_1", URL="\ref iteration_statement_1", color="#00AAAA" ];
+ *     node_expression_statement [ label="expression_statement", URL="\ref expression_statement", color="#00AAAA"];
+ *     node_expression_statement [ label="expression_statement", URL="\ref expression_statement", color="#00AAAA"];
+ *     node_expression [ label="expression", URL="\ref expression", color="#00AAAA"];
+ *     node_statement [ label="statement", URL="\ref statement", color="#00AAAA"];
+ *     node_iteration_statement_1 ->  node_expression_statement [label="_p_expression_statement1" style=solid];
+ *     node_iteration_statement_1 ->  node_expression_statement [label="_p_expression_statement2" style=solid];
+ *     node_iteration_statement_1 ->  node_expression [label="_p_expression" style=dotted];
+ *     node_iteration_statement_1 ->  node_statement [label="_p_statement" style=solid];
+ * }
+ * \enddot
+ */
+class iteration_statement_1:public iteration_statement
+{
+	private:
+		ReferenceCountedAutoPointer<expression_statement> _p_expression_statement1;	  ///< A pointer to expression_statement.
+		ReferenceCountedAutoPointer<expression_statement> _p_expression_statement2;	  ///< A pointer to expression_statement.
+		ReferenceCountedAutoPointer<expression> _p_expression;	  ///< A pointer to expression. This parameter can be <b>Null</b>
+		ReferenceCountedAutoPointer<statement> _p_statement;	  ///< A pointer to statement.
+	public:
+		/** 
+		 * \brief Constructor of iteration_statement_1
+		 *
+		 * This function handles the iteration_statement_1
+                 */
+		iteration_statement_1	
+				(
+					ReferenceCountedAutoPointer<expression_statement> _arg_expression_statement1,   ///< A pointer to expression_statement.
+					ReferenceCountedAutoPointer<expression_statement> _arg_expression_statement2,   ///< A pointer to expression_statement.
+					ReferenceCountedAutoPointer<expression> _arg_expression,   ///< A pointer to expression. This parameter can be <b>Null</b>
+					ReferenceCountedAutoPointer<statement> _arg_statement  ///< A pointer to statement.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"iteration_statement_1"</b>
+		 * \returns <b>"iteration_statement_1"</b>
+                 */
+		virtual std::string name()const		{return std::string("iteration_statement_1");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_ITERATION_STATEMENT_1
+		 * \returns  ID_ITERATION_STATEMENT_1
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_ITERATION_STATEMENT_1;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~iteration_statement_1()
+		{}
 };
 
 
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE iteration_statement3 CLASS                                                                                 
- 	FOR PATTERN : [WHILE,'(',expression,')',statement]		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
 class expression;
 class statement;
 
 
-class iteration_statement3 
-	:public iteration_statement 
-{
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		expression *_p_expression;                                      // expression
-		statement *_p_statement;                                        // statement
-public:
-	iteration_statement3	                                        // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				expression *_arg__p_expression,
-				statement *_arg__p_statement			
-		);
-	iteration_statement3(const iteration_statement3& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "iteration_statement3"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_ITERATION_STATEMENT3
-	virtual std::string pattern()const;							//returns the pattern, here "[WHILE,'(',expression,')',statement]"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const expression* get_p_expression()const{return _p_expression;}							//returns const pointer to _p_expression
-	      expression* get_p_expression()     {return _p_expression;}							//returns       pointer to _p_expression
-	const statement* get_p_statement()const{return _p_statement;}							//returns const pointer to _p_statement
-	      statement* get_p_statement()     {return _p_statement;}							//returns       pointer to _p_statement
-	virtual ~iteration_statement3 ();
 
-	
-		
+
+/**
+ * \brief iteration_statement_2 implements the pattern: <b>(while, (, expression, ), statement)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_iteration_statement_2 [ label="iteration_statement_2", URL="\ref iteration_statement_2", color="#00AAAA" ];
+ *     node_expression [ label="expression", URL="\ref expression", color="#00AAAA"];
+ *     node_statement [ label="statement", URL="\ref statement", color="#00AAAA"];
+ *     node_iteration_statement_2 ->  node_expression [label="_p_expression" style=solid];
+ *     node_iteration_statement_2 ->  node_statement [label="_p_statement" style=solid];
+ * }
+ * \enddot
+ */
+class iteration_statement_2:public iteration_statement
+{
+	private:
+		ReferenceCountedAutoPointer<expression> _p_expression;	  ///< A pointer to expression.
+		ReferenceCountedAutoPointer<statement> _p_statement;	  ///< A pointer to statement.
+	public:
+		/** 
+		 * \brief Constructor of iteration_statement_2
+		 *
+		 * This function handles the iteration_statement_2
+                 */
+		iteration_statement_2	
+				(
+					ReferenceCountedAutoPointer<expression> _arg_expression,   ///< A pointer to expression.
+					ReferenceCountedAutoPointer<statement> _arg_statement  ///< A pointer to statement.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"iteration_statement_2"</b>
+		 * \returns <b>"iteration_statement_2"</b>
+                 */
+		virtual std::string name()const		{return std::string("iteration_statement_2");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_ITERATION_STATEMENT_2
+		 * \returns  ID_ITERATION_STATEMENT_2
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_ITERATION_STATEMENT_2;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~iteration_statement_2()
+		{}
 };
 
 
-			
-/*=============================================================================================================*\
-                                                                                                                 
-        THE additive_expression CLASS                                                                                 
-        FOR PATTERN : [additive_expression,'+',multiplicative_expression]		                                                                 
- 														 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
-class Token;
+class expression;
+class statement;
+
+
+
+
+/**
+ * \brief iteration_statement_3 implements the pattern: <b>(do, statement, while, (, expression, ), ;)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_iteration_statement_3 [ label="iteration_statement_3", URL="\ref iteration_statement_3", color="#00AAAA" ];
+ *     node_statement [ label="statement", URL="\ref statement", color="#00AAAA"];
+ *     node_expression [ label="expression", URL="\ref expression", color="#00AAAA"];
+ *     node_iteration_statement_3 ->  node_statement [label="_p_statement" style=solid];
+ *     node_iteration_statement_3 ->  node_expression [label="_p_expression" style=solid];
+ * }
+ * \enddot
+ */
+class iteration_statement_3:public iteration_statement
+{
+	private:
+		ReferenceCountedAutoPointer<statement> _p_statement;	  ///< A pointer to statement.
+		ReferenceCountedAutoPointer<expression> _p_expression;	  ///< A pointer to expression.
+	public:
+		/** 
+		 * \brief Constructor of iteration_statement_3
+		 *
+		 * This function handles the iteration_statement_3
+                 */
+		iteration_statement_3	
+				(
+					ReferenceCountedAutoPointer<statement> _arg_statement,   ///< A pointer to statement.
+					ReferenceCountedAutoPointer<expression> _arg_expression  ///< A pointer to expression.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"iteration_statement_3"</b>
+		 * \returns <b>"iteration_statement_3"</b>
+                 */
+		virtual std::string name()const		{return std::string("iteration_statement_3");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_ITERATION_STATEMENT_3
+		 * \returns  ID_ITERATION_STATEMENT_3
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_ITERATION_STATEMENT_3;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~iteration_statement_3()
+		{}
+};
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:additive_expression
+//////////////////////////////////////////
+
+
+
+
+
+class token;
 class multiplicative_expression;
 
-/*------------------------------------------------------------*\
- 							        
-  item class additive_expression_item                              
-                                                                
-\*------------------------------------------------------------*/
+
+
+
+
+/**
+ * \brief additive_expression_item implements the pattern: <b>(additive_expression, +, multiplicative_expression)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_additive_expression_item [ label="additive_expression_item", URL="\ref additive_expression_item", color="#00AAAA" ];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_multiplicative_expression [ label="multiplicative_expression", URL="\ref multiplicative_expression", color="#00AAAA"];
+ *     node_additive_expression_item ->  node_token [label="_p_token" style=dotted];
+ *     node_additive_expression_item ->  node_multiplicative_expression [label="_p_multiplicative_expression" style=solid];
+ * }
+ * \enddot
+ */
 class additive_expression_item
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-	Token *_p_token1;                                               // '+'
-	multiplicative_expression *_p_multiplicative_expression;        // multiplicative_expression
-public:
-	additive_expression_item
-		(
-			std::string _arg_s_matchedPattern,
-			Token *_arg__p_token1,
-			multiplicative_expression *_arg__p_multiplicative_expression
-		);
-	additive_expression_item(const additive_expression_item &);
-	virtual std::string name()const{return "additive_expression_item";}			//returns the class name, here "additive_expression"
-	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual Properties getProperties()const;
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
-	      Token* get_p_token1()     {return _p_token1;}							//returns const pointer to _p_token1
-	const multiplicative_expression* get_p_multiplicative_expression()const{return _p_multiplicative_expression;}							//returns const pointer to _p_multiplicative_expression
-	      multiplicative_expression* get_p_multiplicative_expression()     {return _p_multiplicative_expression;}							//returns const pointer to _p_multiplicative_expression
-	virtual ~additive_expression_item();
-	
-	
-};
-/*------------------------------------------------------------*\
- 							        
-  main class additive_expression                         
-                                                                
-\*------------------------------------------------------------*/
+	private:
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>-</b>, <b>+</b>, <b>None</b>
+		ReferenceCountedAutoPointer<multiplicative_expression> _p_multiplicative_expression;	  ///< A pointer to multiplicative_expression.
+	public:
+		/** 
+		 * \brief Constructor of additive_expression_item
+		 *
+		 * This function handles the additive_expression_item
+                 */
+		additive_expression_item	
+				(
+					ReferenceCountedAutoPointer<token> _arg_token,   ///< A pointer to a token, accepts <b>-</b>, <b>+</b>, <b>None</b>
+					ReferenceCountedAutoPointer<multiplicative_expression> _arg_multiplicative_expression  ///< A pointer to multiplicative_expression.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"additive_expression_item"</b>
+		 * \returns <b>"additive_expression_item"</b>
+                 */
+		virtual std::string name()const		{return std::string("additive_expression_item");}
 
-class additive_expression
-	:public CAst 
-{
-private:
-	typedef std::deque<additive_expression_item> ItemsListType;
-	typedef ItemsListType::iterator ItemsListIter;
-	typedef ItemsListType::const_iterator CItemsListIter;
-	ItemsListType _items;
-public:
-//ASDFG
-	
-	additive_expression
-		(
-			std::string _arg_s_matchedPattern,
-			Token *_arg__p_token1,
-			multiplicative_expression *_arg__p_multiplicative_expression
-		);
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_ADDITIVE_EXPRESSION_ITEM
+		 * \returns  ID_ADDITIVE_EXPRESSION_ITEM
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_ADDITIVE_EXPRESSION_ITEM;}
 
-	void append
-		(
-			std::string _arg_s_matchedPattern,
-			Token *_arg__p_token1,
-			multiplicative_expression *_arg__p_multiplicative_expression
-		);
-
-	virtual std::string name()const;							//returns the class name, here "additive_expression"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_ADDITIVE_EXPRESSION
-	virtual std::string pattern()const;							//returns the pattern, here "[additive_expression,'+',multiplicative_expression]"
-	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
-	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
-	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
-	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
-	virtual int size()const{return _items.size();}						//returns the size of the container
-	virtual additive_expression_item& operator[](int i){return _items[i];}
-	virtual ~additive_expression ();
-
-};
-
-typedef std::deque<additive_expression_item>::iterator additive_expression_iterator;
-typedef std::deque<additive_expression_item>::const_iterator additive_expression_const_iterator;
-
-
-			
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE external_declaration BASE CLASS                                                                    
-                                                                                                                 
-\*=============================================================================================================*/  
-
-
-class external_declaration :public CAst
-{
-public:
-	virtual std::string name()const=0;
-	virtual std::ostream& codeStream(std::ostream&)const=0;
-	virtual CAstType typeId()const=0;
-	virtual std::string pattern()const=0;
-	virtual bool isList()const=0;
-	virtual Properties getProperties()const=0;
-	virtual PropertiesList getPropertiesList()const=0;
-	virtual ~external_declaration (){};
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~additive_expression_item()
+		{}
 };
 
 
 
 
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE external_declaration1 CLASS                                                                                 
- 	FOR PATTERN : [function_definition]		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
 
-
-
-// FORWARD DECLARATION
-class function_definition;
-
-
-class external_declaration1 
-	:public external_declaration 
+/**
+ * \brief The basic class to handle additive_expression
+ *
+ * Since the rule contains itself, this rule will be implemented in the form of a list
+ */
+class additive_expression:public CAst
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		function_definition *_p_function_definition;                    // function_definition
-public:
-	external_declaration1	                                       // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				function_definition *_arg__p_function_definition			
-		);
-	external_declaration1(const external_declaration1& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "external_declaration1"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_EXTERNAL_DECLARATION1
-	virtual std::string pattern()const;							//returns the pattern, here "[function_definition]"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const function_definition* get_p_function_definition()const{return _p_function_definition;}							//returns const pointer to _p_function_definition
-	      function_definition* get_p_function_definition()     {return _p_function_definition;}							//returns       pointer to _p_function_definition
-	virtual ~external_declaration1 ();
+	public:
+		typedef std::list<ReferenceCountedAutoPointer<additive_expression_item> > additive_expressionListType;	///< This defines the list type which will store the additive_expression_item
+		typedef additive_expressionListType::iterator additive_expressionIterType;				///< This defines the iterator over additive_expressionListType
+		typedef additive_expressionListType::const_iterator Cadditive_expressionIterType;				///< This defines the constant iterator over additive_expressionListType
 
-	
+	private:
+		additive_expressionListType _itemList;									///< The list of items
+	public:
+		/**
+		 * \brief The default constructor calls the parent constructor
+		 *
+		 */
+		additive_expression():CAst()
+		{}
+
+		/**
+		 * \brief Append an item to the list
+		 *
+		 */
+		void append( ReferenceCountedAutoPointer<additive_expression_item> item)
+		{
+			_itemList.push_back(item);
+		}
 		
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"additive_expression"</b>
+		 * \returns <b>"additive_expression"</b>
+                 */
+		virtual std::string name()const {return "additive_expression";}
+		
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_ADDITIVE_EXPRESSION
+		 * \returns  ID_ADDITIVE_EXPRESSION
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_ADDITIVE_EXPRESSION;}
+
 };
 
 
-			
 
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE external_declaration2 CLASS                                                                                 
- 	FOR PATTERN : [declaration]		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
-// FORWARD DECLARATION
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:external_declaration
+//////////////////////////////////////////
+
+
+/**
+ * \brief Implements external_declaration
+ * 
+ * This is the interface class. This implements the patterns
+ *  - (function_definition,)
+ *  - (declaration,)
+ * 
+ **/
+class external_declaration:public CAst
+{
+	public:
+		/**
+                 * \brief Interface for the child classes to return the name
+                 *
+                 */
+		virtual std::string name()const=0;
+
+		/**
+                 *  \brief Interface for the child classes to return the class ID
+                 *
+                 */
+		virtual CAST_CLASS_ID classId()const=0;
+};
+
+
+
+
 class declaration;
 
 
-class external_declaration2 
-	:public external_declaration 
-{
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		declaration *_p_declaration;                                    // declaration
-public:
-	external_declaration2	                                       // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				declaration *_arg__p_declaration			
-		);
-	external_declaration2(const external_declaration2& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "external_declaration2"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_EXTERNAL_DECLARATION2
-	virtual std::string pattern()const;							//returns the pattern, here "[declaration]"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const declaration* get_p_declaration()const{return _p_declaration;}							//returns const pointer to _p_declaration
-	      declaration* get_p_declaration()     {return _p_declaration;}							//returns       pointer to _p_declaration
-	virtual ~external_declaration2 ();
 
-	
-		
+/**
+ * \brief external_declaration_1 implements the pattern: <b>(declaration,)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_external_declaration_1 [ label="external_declaration_1", URL="\ref external_declaration_1", color="#00AAAA" ];
+ *     node_declaration [ label="declaration", URL="\ref declaration", color="#00AAAA"];
+ *     node_external_declaration_1 ->  node_declaration [label="_p_declaration" style=solid];
+ * }
+ * \enddot
+ */
+class external_declaration_1:public external_declaration
+{
+	private:
+		ReferenceCountedAutoPointer<declaration> _p_declaration;	  ///< A pointer to declaration.
+	public:
+		/** 
+		 * \brief Constructor of external_declaration_1
+		 *
+		 * This function handles the external_declaration_1
+                 */
+		external_declaration_1	
+				(
+					ReferenceCountedAutoPointer<declaration> _arg_declaration  ///< A pointer to declaration.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"external_declaration_1"</b>
+		 * \returns <b>"external_declaration_1"</b>
+                 */
+		virtual std::string name()const		{return std::string("external_declaration_1");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_EXTERNAL_DECLARATION_1
+		 * \returns  ID_EXTERNAL_DECLARATION_1
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_EXTERNAL_DECLARATION_1;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~external_declaration_1()
+		{}
 };
 
 
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE type_specifier BASE CLASS                                                                    
-                                                                                                                 
-\*=============================================================================================================*/  
 
 
-class type_specifier :public CAst
+
+class function_definition;
+
+
+
+/**
+ * \brief external_declaration_2 implements the pattern: <b>(function_definition,)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_external_declaration_2 [ label="external_declaration_2", URL="\ref external_declaration_2", color="#00AAAA" ];
+ *     node_function_definition [ label="function_definition", URL="\ref function_definition", color="#00AAAA"];
+ *     node_external_declaration_2 ->  node_function_definition [label="_p_function_definition" style=solid];
+ * }
+ * \enddot
+ */
+class external_declaration_2:public external_declaration
 {
-public:
-	virtual std::string name()const=0;
-	virtual std::ostream& codeStream(std::ostream&)const=0;
-	virtual CAstType typeId()const=0;
-	virtual std::string pattern()const=0;
-	virtual bool isList()const=0;
-	virtual Properties getProperties()const=0;
-	virtual PropertiesList getPropertiesList()const=0;
-	virtual ~type_specifier (){};
+	private:
+		ReferenceCountedAutoPointer<function_definition> _p_function_definition;	  ///< A pointer to function_definition.
+	public:
+		/** 
+		 * \brief Constructor of external_declaration_2
+		 *
+		 * This function handles the external_declaration_2
+                 */
+		external_declaration_2	
+				(
+					ReferenceCountedAutoPointer<function_definition> _arg_function_definition  ///< A pointer to function_definition.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"external_declaration_2"</b>
+		 * \returns <b>"external_declaration_2"</b>
+                 */
+		virtual std::string name()const		{return std::string("external_declaration_2");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_EXTERNAL_DECLARATION_2
+		 * \returns  ID_EXTERNAL_DECLARATION_2
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_EXTERNAL_DECLARATION_2;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~external_declaration_2()
+		{}
 };
 
 
 
 
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE type_specifier1 CLASS                                                                                 
- 	FOR PATTERN : [VOID]		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
-// FORWARD DECLARATION
-class Token;
 
 
-class type_specifier1 
-	:public type_specifier 
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:type_specifier
+//////////////////////////////////////////
+
+
+/**
+ * \brief Implements type_specifier
+ * 
+ * This is the interface class. This implements the patterns
+ *  - (void,)
+ *  - (char,)
+ *  - (short,)
+ *  - (int,)
+ *  - (long,)
+ *  - (float,)
+ *  - (double,)
+ *  - (signed,)
+ *  - (unsigned,)
+ *  - (struct_or_union_specifier,)
+ *  - (enum_specifier,)
+ * 
+ **/
+class type_specifier:public CAst
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		Token *_p_token1;                                               // VOID
-public:
-	type_specifier1	                                             // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				Token *_arg__p_token1			
-		);
-	type_specifier1(const type_specifier1& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "type_specifier1"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_TYPE_SPECIFIER1
-	virtual std::string pattern()const;							//returns the pattern, here "[VOID]"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
-	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
-	virtual ~type_specifier1 ();
+	public:
+		/**
+                 * \brief Interface for the child classes to return the name
+                 *
+                 */
+		virtual std::string name()const=0;
 
-	
-		
+		/**
+                 *  \brief Interface for the child classes to return the class ID
+                 *
+                 */
+		virtual CAST_CLASS_ID classId()const=0;
 };
 
 
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE type_specifier2 CLASS                                                                                 
- 	FOR PATTERN : [struct_or_union_specifier]		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
 
 
-
-// FORWARD DECLARATION
-class struct_or_union_specifier;
-
-
-class type_specifier2 
-	:public type_specifier 
-{
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		struct_or_union_specifier *_p_struct_or_union_specifier;        // struct_or_union_specifier
-public:
-	type_specifier2	                                             // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				struct_or_union_specifier *_arg__p_struct_or_union_specifier			
-		);
-	type_specifier2(const type_specifier2& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "type_specifier2"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_TYPE_SPECIFIER2
-	virtual std::string pattern()const;							//returns the pattern, here "[struct_or_union_specifier]"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const struct_or_union_specifier* get_p_struct_or_union_specifier()const{return _p_struct_or_union_specifier;}							//returns const pointer to _p_struct_or_union_specifier
-	      struct_or_union_specifier* get_p_struct_or_union_specifier()     {return _p_struct_or_union_specifier;}							//returns       pointer to _p_struct_or_union_specifier
-	virtual ~type_specifier2 ();
-
-	
-		
-};
-
-
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE type_specifier3 CLASS                                                                                 
- 	FOR PATTERN : [enum_specifier]		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
-
-
-
-// FORWARD DECLARATION
 class enum_specifier;
 
 
-class type_specifier3 
-	:public type_specifier 
-{
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		enum_specifier *_p_enum_specifier;                              // enum_specifier
-public:
-	type_specifier3	                                             // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				enum_specifier *_arg__p_enum_specifier			
-		);
-	type_specifier3(const type_specifier3& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "type_specifier3"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_TYPE_SPECIFIER3
-	virtual std::string pattern()const;							//returns the pattern, here "[enum_specifier]"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const enum_specifier* get_p_enum_specifier()const{return _p_enum_specifier;}							//returns const pointer to _p_enum_specifier
-	      enum_specifier* get_p_enum_specifier()     {return _p_enum_specifier;}							//returns       pointer to _p_enum_specifier
-	virtual ~type_specifier3 ();
 
-	
-		
+/**
+ * \brief type_specifier_1 implements the pattern: <b>(enum_specifier,)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_type_specifier_1 [ label="type_specifier_1", URL="\ref type_specifier_1", color="#00AAAA" ];
+ *     node_enum_specifier [ label="enum_specifier", URL="\ref enum_specifier", color="#00AAAA"];
+ *     node_type_specifier_1 ->  node_enum_specifier [label="_p_enum_specifier" style=solid];
+ * }
+ * \enddot
+ */
+class type_specifier_1:public type_specifier
+{
+	private:
+		ReferenceCountedAutoPointer<enum_specifier> _p_enum_specifier;	  ///< A pointer to enum_specifier.
+	public:
+		/** 
+		 * \brief Constructor of type_specifier_1
+		 *
+		 * This function handles the type_specifier_1
+                 */
+		type_specifier_1	
+				(
+					ReferenceCountedAutoPointer<enum_specifier> _arg_enum_specifier  ///< A pointer to enum_specifier.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"type_specifier_1"</b>
+		 * \returns <b>"type_specifier_1"</b>
+                 */
+		virtual std::string name()const		{return std::string("type_specifier_1");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_TYPE_SPECIFIER_1
+		 * \returns  ID_TYPE_SPECIFIER_1
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_TYPE_SPECIFIER_1;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~type_specifier_1()
+		{}
 };
 
 
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE compound_statement CLASS                                                                                 
- 	FOR PATTERN : ['{',declaration_list,statement_list,'}']		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
-class declaration_list;
+class token;
+
+
+
+
+/**
+ * \brief type_specifier_2 implements the pattern: <b>(void,)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_type_specifier_2 [ label="type_specifier_2", URL="\ref type_specifier_2", color="#00AAAA" ];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_type_specifier_2 ->  node_token [label="_p_token" style=solid];
+ * }
+ * \enddot
+ */
+class type_specifier_2:public type_specifier
+{
+	private:
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>float</b>, <b>double</b>, <b>void</b>, <b>char</b>, <b>short</b>, <b>int</b>, <b>long</b>, <b>signed</b>, <b>unsigned</b>
+	public:
+		/** 
+		 * \brief Constructor of type_specifier_2
+		 *
+		 * This function handles the type_specifier_2
+                 */
+		type_specifier_2	
+				(
+					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>float</b>, <b>double</b>, <b>void</b>, <b>char</b>, <b>short</b>, <b>int</b>, <b>long</b>, <b>signed</b>, <b>unsigned</b>
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"type_specifier_2"</b>
+		 * \returns <b>"type_specifier_2"</b>
+                 */
+		virtual std::string name()const		{return std::string("type_specifier_2");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_TYPE_SPECIFIER_2
+		 * \returns  ID_TYPE_SPECIFIER_2
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_TYPE_SPECIFIER_2;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~type_specifier_2()
+		{}
+};
+
+
+
+
+
+class struct_or_union_specifier;
+
+
+
+/**
+ * \brief type_specifier_3 implements the pattern: <b>(struct_or_union_specifier,)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_type_specifier_3 [ label="type_specifier_3", URL="\ref type_specifier_3", color="#00AAAA" ];
+ *     node_struct_or_union_specifier [ label="struct_or_union_specifier", URL="\ref struct_or_union_specifier", color="#00AAAA"];
+ *     node_type_specifier_3 ->  node_struct_or_union_specifier [label="_p_struct_or_union_specifier" style=solid];
+ * }
+ * \enddot
+ */
+class type_specifier_3:public type_specifier
+{
+	private:
+		ReferenceCountedAutoPointer<struct_or_union_specifier> _p_struct_or_union_specifier;	  ///< A pointer to struct_or_union_specifier.
+	public:
+		/** 
+		 * \brief Constructor of type_specifier_3
+		 *
+		 * This function handles the type_specifier_3
+                 */
+		type_specifier_3	
+				(
+					ReferenceCountedAutoPointer<struct_or_union_specifier> _arg_struct_or_union_specifier  ///< A pointer to struct_or_union_specifier.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"type_specifier_3"</b>
+		 * \returns <b>"type_specifier_3"</b>
+                 */
+		virtual std::string name()const		{return std::string("type_specifier_3");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_TYPE_SPECIFIER_3
+		 * \returns  ID_TYPE_SPECIFIER_3
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_TYPE_SPECIFIER_3;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~type_specifier_3()
+		{}
+};
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:compound_statement
+//////////////////////////////////////////
+
+
+
+
+
 class statement_list;
+class declaration_list;
 
 
-class compound_statement 
-	:public CAst 
+
+
+/**
+ * \brief compound_statement implements the pattern: <b>({, declaration_list, statement_list, })</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_compound_statement [ label="compound_statement", URL="\ref compound_statement", color="#00AAAA" ];
+ *     node_declaration_list [ label="declaration_list", URL="\ref declaration_list", color="#00AAAA"];
+ *     node_statement_list [ label="statement_list", URL="\ref statement_list", color="#00AAAA"];
+ *     node_compound_statement ->  node_declaration_list [label="_p_declaration_list" style=dotted];
+ *     node_compound_statement ->  node_statement_list [label="_p_statement_list" style=dotted];
+ * }
+ * \enddot
+ */
+class compound_statement:public CAst
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		declaration_list *_p_declaration_list;                          // declaration_list
-		statement_list *_p_statement_list;                              // statement_list
-public:
-	compound_statement	                                          // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				declaration_list *_arg__p_declaration_list,
-				statement_list *_arg__p_statement_list			
-		);
-	compound_statement(const compound_statement& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "compound_statement"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_COMPOUND_STATEMENT
-	virtual std::string pattern()const;							//returns the pattern, here "['{',declaration_list,statement_list,'}']"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const declaration_list* get_p_declaration_list()const{return _p_declaration_list;}							//returns const pointer to _p_declaration_list
-	      declaration_list* get_p_declaration_list()     {return _p_declaration_list;}							//returns       pointer to _p_declaration_list
-	const statement_list* get_p_statement_list()const{return _p_statement_list;}							//returns const pointer to _p_statement_list
-	      statement_list* get_p_statement_list()     {return _p_statement_list;}							//returns       pointer to _p_statement_list
-	virtual ~compound_statement ();
+	private:
+		ReferenceCountedAutoPointer<declaration_list> _p_declaration_list;	  ///< A pointer to declaration_list. This parameter can be <b>Null</b>
+		ReferenceCountedAutoPointer<statement_list> _p_statement_list;	  ///< A pointer to statement_list. This parameter can be <b>Null</b>
+	public:
+		/** 
+		 * \brief Constructor of compound_statement
+		 *
+		 * This function handles the compound_statement
+                 */
+		compound_statement	
+				(
+					ReferenceCountedAutoPointer<declaration_list> _arg_declaration_list,   ///< A pointer to declaration_list. This parameter can be <b>Null</b>
+					ReferenceCountedAutoPointer<statement_list> _arg_statement_list  ///< A pointer to statement_list. This parameter can be <b>Null</b>
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"compound_statement"</b>
+		 * \returns <b>"compound_statement"</b>
+                 */
+		virtual std::string name()const		{return std::string("compound_statement");}
 
-	
-		
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_COMPOUND_STATEMENT
+		 * \returns  ID_COMPOUND_STATEMENT
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_COMPOUND_STATEMENT;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~compound_statement()
+		{}
 };
 
 
-			
-/*=============================================================================================================*\
-                                                                                                                 
-        THE inclusive_or_expression CLASS                                                                                 
-        FOR PATTERN : [inclusive_or_expression,'|',exclusive_or_expression]		                                                                 
- 														 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:inclusive_or_expression
+//////////////////////////////////////////
+
+
+
+
+
 class exclusive_or_expression;
 
-/*------------------------------------------------------------*\
- 							        
-  item class inclusive_or_expression_item                              
-                                                                
-\*------------------------------------------------------------*/
+
+
+/**
+ * \brief inclusive_or_expression_item implements the pattern: <b>(inclusive_or_expression, |, exclusive_or_expression)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_inclusive_or_expression_item [ label="inclusive_or_expression_item", URL="\ref inclusive_or_expression_item", color="#00AAAA" ];
+ *     node_exclusive_or_expression [ label="exclusive_or_expression", URL="\ref exclusive_or_expression", color="#00AAAA"];
+ *     node_inclusive_or_expression_item ->  node_exclusive_or_expression [label="_p_exclusive_or_expression" style=solid];
+ * }
+ * \enddot
+ */
 class inclusive_or_expression_item
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-	exclusive_or_expression *_p_exclusive_or_expression;            // exclusive_or_expression
-public:
-	inclusive_or_expression_item
-		(
-			std::string _arg_s_matchedPattern,
-			exclusive_or_expression *_arg__p_exclusive_or_expression
-		);
-	inclusive_or_expression_item(const inclusive_or_expression_item &);
-	virtual std::string name()const{return "inclusive_or_expression_item";}			//returns the class name, here "inclusive_or_expression"
-	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual Properties getProperties()const;
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const exclusive_or_expression* get_p_exclusive_or_expression()const{return _p_exclusive_or_expression;}							//returns const pointer to _p_exclusive_or_expression
-	      exclusive_or_expression* get_p_exclusive_or_expression()     {return _p_exclusive_or_expression;}							//returns const pointer to _p_exclusive_or_expression
-	virtual ~inclusive_or_expression_item();
-	
-	
-};
-/*------------------------------------------------------------*\
- 							        
-  main class inclusive_or_expression                         
-                                                                
-\*------------------------------------------------------------*/
+	private:
+		ReferenceCountedAutoPointer<exclusive_or_expression> _p_exclusive_or_expression;	  ///< A pointer to exclusive_or_expression.
+	public:
+		/** 
+		 * \brief Constructor of inclusive_or_expression_item
+		 *
+		 * This function handles the inclusive_or_expression_item
+                 */
+		inclusive_or_expression_item	
+				(
+					ReferenceCountedAutoPointer<exclusive_or_expression> _arg_exclusive_or_expression  ///< A pointer to exclusive_or_expression.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"inclusive_or_expression_item"</b>
+		 * \returns <b>"inclusive_or_expression_item"</b>
+                 */
+		virtual std::string name()const		{return std::string("inclusive_or_expression_item");}
 
-class inclusive_or_expression
-	:public CAst 
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_INCLUSIVE_OR_EXPRESSION_ITEM
+		 * \returns  ID_INCLUSIVE_OR_EXPRESSION_ITEM
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_INCLUSIVE_OR_EXPRESSION_ITEM;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~inclusive_or_expression_item()
+		{}
+};
+
+
+
+
+
+/**
+ * \brief The basic class to handle inclusive_or_expression
+ *
+ * Since the rule contains itself, this rule will be implemented in the form of a list
+ */
+class inclusive_or_expression:public CAst
 {
-private:
-	typedef std::deque<inclusive_or_expression_item> ItemsListType;
-	typedef ItemsListType::iterator ItemsListIter;
-	typedef ItemsListType::const_iterator CItemsListIter;
-	ItemsListType _items;
-public:
-//ASDFG
-	
-	inclusive_or_expression
-		(
-			std::string _arg_s_matchedPattern,
-			exclusive_or_expression *_arg__p_exclusive_or_expression
-		);
+	public:
+		typedef std::list<ReferenceCountedAutoPointer<inclusive_or_expression_item> > inclusive_or_expressionListType;	///< This defines the list type which will store the inclusive_or_expression_item
+		typedef inclusive_or_expressionListType::iterator inclusive_or_expressionIterType;				///< This defines the iterator over inclusive_or_expressionListType
+		typedef inclusive_or_expressionListType::const_iterator Cinclusive_or_expressionIterType;				///< This defines the constant iterator over inclusive_or_expressionListType
 
-	void append
-		(
-			std::string _arg_s_matchedPattern,
-			exclusive_or_expression *_arg__p_exclusive_or_expression
-		);
+	private:
+		inclusive_or_expressionListType _itemList;									///< The list of items
+	public:
+		/**
+		 * \brief The default constructor calls the parent constructor
+		 *
+		 */
+		inclusive_or_expression():CAst()
+		{}
 
-	virtual std::string name()const;							//returns the class name, here "inclusive_or_expression"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_INCLUSIVE_OR_EXPRESSION
-	virtual std::string pattern()const;							//returns the pattern, here "[inclusive_or_expression,'|',exclusive_or_expression]"
-	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
-	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
-	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
-	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
-	virtual int size()const{return _items.size();}						//returns the size of the container
-	virtual inclusive_or_expression_item& operator[](int i){return _items[i];}
-	virtual ~inclusive_or_expression ();
+		/**
+		 * \brief Append an item to the list
+		 *
+		 */
+		void append( ReferenceCountedAutoPointer<inclusive_or_expression_item> item)
+		{
+			_itemList.push_back(item);
+		}
+		
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"inclusive_or_expression"</b>
+		 * \returns <b>"inclusive_or_expression"</b>
+                 */
+		virtual std::string name()const {return "inclusive_or_expression";}
+		
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_INCLUSIVE_OR_EXPRESSION
+		 * \returns  ID_INCLUSIVE_OR_EXPRESSION
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_INCLUSIVE_OR_EXPRESSION;}
 
 };
 
-typedef std::deque<inclusive_or_expression_item>::iterator inclusive_or_expression_iterator;
-typedef std::deque<inclusive_or_expression_item>::const_iterator inclusive_or_expression_const_iterator;
-
-
-			
-			
-/*=============================================================================================================*\
-                                                                                                                 
-        THE pointer CLASS                                                                                 
-        FOR PATTERN : ['*',type_qualifier_list,pointer]		                                                                 
- 														 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:pointer
+//////////////////////////////////////////
+
+
+
+
+
+class pointer_item
+{
+	
+	public:
+		/**
+                 * \brief Interface for the child classes to return the name
+                 *
+                 */
+		virtual std::string name()const=0;
+
+		/**
+                 *  \brief Interface for the child classes to return the class ID
+                 *
+                 */
+		virtual CAST_CLASS_ID classId()const=0;
+};
+
 class type_qualifier_list;
 
-//QWERTY
-/*------------------------------------------------------------*\
- 							        
-  main class pointer                         
-                                                                
-\*------------------------------------------------------------*/
 
-class pointer
-	:public CAst 
+
+/**
+ * \brief pointer_item_1 implements the pattern: <b>(*, type_qualifier_list, pointer)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_pointer_item_1 [ label="pointer_item_1", URL="\ref pointer_item_1", color="#00AAAA" ];
+ *     node_type_qualifier_list [ label="type_qualifier_list", URL="\ref type_qualifier_list", color="#00AAAA"];
+ *     node_pointer_item_1 ->  node_type_qualifier_list [label="_p_type_qualifier_list" style=dotted];
+ * }
+ * \enddot
+ */
+class pointer_item_1:public pointer_item
 {
-private:
-	typedef std::deque<pointer_item> ItemsListType;
-	typedef ItemsListType::iterator ItemsListIter;
-	typedef ItemsListType::const_iterator CItemsListIter;
-	ItemsListType _items;
-public:
-//ASDFG
-	
-	pointer
-		(
-			std::string _arg_s_matchedPattern,
-			type_qualifier_list *_arg__p_type_qualifier_list
-		);
+	private:
+		ReferenceCountedAutoPointer<type_qualifier_list> _p_type_qualifier_list;	  ///< A pointer to type_qualifier_list. This parameter can be <b>Null</b>
+	public:
+		/** 
+		 * \brief Constructor of pointer_item_1
+		 *
+		 * This function handles the pointer_item_1
+                 */
+		pointer_item_1	
+				(
+					ReferenceCountedAutoPointer<type_qualifier_list> _arg_type_qualifier_list  ///< A pointer to type_qualifier_list. This parameter can be <b>Null</b>
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"pointer_item_1"</b>
+		 * \returns <b>"pointer_item_1"</b>
+                 */
+		virtual std::string name()const		{return std::string("pointer_item_1");}
 
-	void append
-		(
-			std::string _arg_s_matchedPattern,
-			type_qualifier_list *_arg__p_type_qualifier_list
-		);
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_POINTER_ITEM_1
+		 * \returns  ID_POINTER_ITEM_1
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_POINTER_ITEM_1;}
 
-	virtual std::string name()const;							//returns the class name, here "pointer"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_POINTER
-	virtual std::string pattern()const;							//returns the pattern, here "['*',type_qualifier_list,pointer]"
-	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
-	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
-	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
-	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
-	virtual int size()const{return _items.size();}						//returns the size of the container
-	virtual pointer_item& operator[](int i){return _items[i];}
-	virtual ~pointer ();
-
-};
-
-typedef std::deque<pointer_item>::iterator pointer_iterator;
-typedef std::deque<pointer_item>::const_iterator pointer_const_iterator;
-
-
-			
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE selection_statement BASE CLASS                                                                    
-                                                                                                                 
-\*=============================================================================================================*/  
-
-
-class selection_statement :public CAst
-{
-public:
-	virtual std::string name()const=0;
-	virtual std::ostream& codeStream(std::ostream&)const=0;
-	virtual CAstType typeId()const=0;
-	virtual std::string pattern()const=0;
-	virtual bool isList()const=0;
-	virtual Properties getProperties()const=0;
-	virtual PropertiesList getPropertiesList()const=0;
-	virtual ~selection_statement (){};
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~pointer_item_1()
+		{}
 };
 
 
 
 
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE selection_statement1 CLASS                                                                                 
- 	FOR PATTERN : [IF,'(',expression,')',statement,ELSE,statement]		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
+/**
+ * \brief pointer_item_2 implements the pattern: <b>(*, pointer)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_pointer_item_2 [ label="pointer_item_2", URL="\ref pointer_item_2", color="#00AAAA" ];
+ * }
+ * \enddot
+ */
+class pointer_item_2:public pointer_item
+{
+	private:
+	public:
+		/** 
+		 * \brief Constructor of pointer_item_2
+		 *
+		 * This function handles the pointer_item_2
+                 */
+		pointer_item_2	
+				(
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"pointer_item_2"</b>
+		 * \returns <b>"pointer_item_2"</b>
+                 */
+		virtual std::string name()const		{return std::string("pointer_item_2");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_POINTER_ITEM_2
+		 * \returns  ID_POINTER_ITEM_2
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_POINTER_ITEM_2;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~pointer_item_2()
+		{}
+};
+
+
+
+
+
+/**
+ * \brief The basic class to handle pointer
+ *
+ * Since the rule contains itself, this rule will be implemented in the form of a list
+ */
+class pointer:public CAst
+{
+	public:
+		typedef std::list<ReferenceCountedAutoPointer<pointer_item> > pointerListType;	///< This defines the list type which will store the pointer_item
+		typedef pointerListType::iterator pointerIterType;				///< This defines the iterator over pointerListType
+		typedef pointerListType::const_iterator CpointerIterType;				///< This defines the constant iterator over pointerListType
+
+	private:
+		pointerListType _itemList;									///< The list of items
+	public:
+		/**
+		 * \brief The default constructor calls the parent constructor
+		 *
+		 */
+		pointer():CAst()
+		{}
+
+		/**
+		 * \brief Append an item to the list
+		 *
+		 */
+		void append( ReferenceCountedAutoPointer<pointer_item> item)
+		{
+			_itemList.push_back(item);
+		}
+		
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"pointer"</b>
+		 * \returns <b>"pointer"</b>
+                 */
+		virtual std::string name()const {return "pointer";}
+		
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_POINTER
+		 * \returns  ID_POINTER
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_POINTER;}
+
+};
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:selection_statement
+//////////////////////////////////////////
+
+
+
+
+
+class token;
 class expression;
 class statement;
-class Token;
-class statement;
 
 
-class selection_statement1 
-	:public selection_statement 
+
+
+
+
+
+
+
+/**
+ * \brief selection_statement implements the pattern: <b>(if, (, expression, ), statement, else, statement)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_selection_statement [ label="selection_statement", URL="\ref selection_statement", color="#00AAAA" ];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_expression [ label="expression", URL="\ref expression", color="#00AAAA"];
+ *     node_statement [ label="statement", URL="\ref statement", color="#00AAAA"];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_statement [ label="statement", URL="\ref statement", color="#00AAAA"];
+ *     node_selection_statement ->  node_token [label="_p_token1" style=solid];
+ *     node_selection_statement ->  node_expression [label="_p_expression" style=solid];
+ *     node_selection_statement ->  node_statement [label="_p_statement1" style=solid];
+ *     node_selection_statement ->  node_token [label="_p_token2" style=dotted];
+ *     node_selection_statement ->  node_statement [label="_p_statement2" style=dotted];
+ * }
+ * \enddot
+ */
+class selection_statement:public CAst
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		expression *_p_expression;                                      // expression
-		statement *_p_statement;                                        // statement
-		Token *_p_token1;                                               // ELSE
-		statement *_p_statement1;                                       // statement
-public:
-	selection_statement1	                                        // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				expression *_arg__p_expression,
-				statement *_arg__p_statement,
-				Token *_arg__p_token1,
-				statement *_arg__p_statement1			
-		);
-	selection_statement1(const selection_statement1& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "selection_statement1"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_SELECTION_STATEMENT1
-	virtual std::string pattern()const;							//returns the pattern, here "[IF,'(',expression,')',statement,ELSE,statement]"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const expression* get_p_expression()const{return _p_expression;}							//returns const pointer to _p_expression
-	      expression* get_p_expression()     {return _p_expression;}							//returns       pointer to _p_expression
-	const statement* get_p_statement()const{return _p_statement;}							//returns const pointer to _p_statement
-	      statement* get_p_statement()     {return _p_statement;}							//returns       pointer to _p_statement
-	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
-	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
-	const statement* get_p_statement1()const{return _p_statement1;}							//returns const pointer to _p_statement1
-	      statement* get_p_statement1()     {return _p_statement1;}							//returns       pointer to _p_statement1
-	virtual ~selection_statement1 ();
+	private:
+		ReferenceCountedAutoPointer<token> _p_token1;	  ///< A pointer to a token, accepts <b>switch</b>, <b>if</b>
+		ReferenceCountedAutoPointer<expression> _p_expression;	  ///< A pointer to expression.
+		ReferenceCountedAutoPointer<statement> _p_statement1;	  ///< A pointer to statement.
+		ReferenceCountedAutoPointer<token> _p_token2;	  ///< A pointer to a token, accepts <b>else</b>, <b>None</b>
+		ReferenceCountedAutoPointer<statement> _p_statement2;	  ///< A pointer to statement. This parameter can be <b>Null</b>
+	public:
+		/** 
+		 * \brief Constructor of selection_statement
+		 *
+		 * This function handles the selection_statement
+                 */
+		selection_statement	
+				(
+					ReferenceCountedAutoPointer<token> _arg_token1,   ///< A pointer to a token, accepts <b>switch</b>, <b>if</b>
+					ReferenceCountedAutoPointer<expression> _arg_expression,   ///< A pointer to expression.
+					ReferenceCountedAutoPointer<statement> _arg_statement1,   ///< A pointer to statement.
+					ReferenceCountedAutoPointer<token> _arg_token2,   ///< A pointer to a token, accepts <b>else</b>, <b>None</b>
+					ReferenceCountedAutoPointer<statement> _arg_statement2  ///< A pointer to statement. This parameter can be <b>Null</b>
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"selection_statement"</b>
+		 * \returns <b>"selection_statement"</b>
+                 */
+		virtual std::string name()const		{return std::string("selection_statement");}
 
-	
-		
-};
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_SELECTION_STATEMENT
+		 * \returns  ID_SELECTION_STATEMENT
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_SELECTION_STATEMENT;}
 
-
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE selection_statement2 CLASS                                                                                 
- 	FOR PATTERN : [SWITCH,'(',expression,')',statement]		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
-
-
-
-// FORWARD DECLARATION
-class expression;
-class statement;
-
-
-class selection_statement2 
-	:public selection_statement 
-{
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		expression *_p_expression;                                      // expression
-		statement *_p_statement;                                        // statement
-public:
-	selection_statement2	                                        // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				expression *_arg__p_expression,
-				statement *_arg__p_statement			
-		);
-	selection_statement2(const selection_statement2& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "selection_statement2"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_SELECTION_STATEMENT2
-	virtual std::string pattern()const;							//returns the pattern, here "[SWITCH,'(',expression,')',statement]"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const expression* get_p_expression()const{return _p_expression;}							//returns const pointer to _p_expression
-	      expression* get_p_expression()     {return _p_expression;}							//returns       pointer to _p_expression
-	const statement* get_p_statement()const{return _p_statement;}							//returns const pointer to _p_statement
-	      statement* get_p_statement()     {return _p_statement;}							//returns       pointer to _p_statement
-	virtual ~selection_statement2 ();
-
-	
-		
-};
-
-
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE postfix_expression BASE CLASS                                                                    
-                                                                                                                 
-\*=============================================================================================================*/  
-
-
-class postfix_expression :public CAst
-{
-public:
-	virtual std::string name()const=0;
-	virtual std::ostream& codeStream(std::ostream&)const=0;
-	virtual CAstType typeId()const=0;
-	virtual std::string pattern()const=0;
-	virtual bool isList()const=0;
-	virtual Properties getProperties()const=0;
-	virtual PropertiesList getPropertiesList()const=0;
-	virtual ~postfix_expression (){};
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~selection_statement()
+		{}
 };
 
 
 
 
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE postfix_expression1 CLASS                                                                                 
- 	FOR PATTERN : [postfix_expression,'[',expression,']']		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
-// FORWARD DECLARATION
-class postfix_expression;
-class expression;
 
 
-class postfix_expression1 
-	:public postfix_expression 
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:postfix_expression
+//////////////////////////////////////////
+
+
+/**
+ * \brief Implements postfix_expression
+ * 
+ * This is the interface class. This implements the patterns
+ *  - (primary_expression,)
+ *  - (postfix_expression, [, expression, ])
+ *  - (postfix_expression, (, ))
+ *  - (postfix_expression, (, argument_expression_list, ))
+ *  - (postfix_expression, ., [IDENTIFIER])
+ *  - (postfix_expression, ->, [IDENTIFIER])
+ *  - (postfix_expression, ++)
+ *  - (postfix_expression, --)
+ * 
+ **/
+class postfix_expression:public CAst
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		postfix_expression *_p_postfix_expression;                      // postfix_expression
-		expression *_p_expression;                                      // expression
-public:
-	postfix_expression1	                                         // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				postfix_expression *_arg__p_postfix_expression,
-				expression *_arg__p_expression			
-		);
-	postfix_expression1(const postfix_expression1& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "postfix_expression1"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_POSTFIX_EXPRESSION1
-	virtual std::string pattern()const;							//returns the pattern, here "[postfix_expression,'[',expression,']']"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const postfix_expression* get_p_postfix_expression()const{return _p_postfix_expression;}							//returns const pointer to _p_postfix_expression
-	      postfix_expression* get_p_postfix_expression()     {return _p_postfix_expression;}							//returns       pointer to _p_postfix_expression
-	const expression* get_p_expression()const{return _p_expression;}							//returns const pointer to _p_expression
-	      expression* get_p_expression()     {return _p_expression;}							//returns       pointer to _p_expression
-	virtual ~postfix_expression1 ();
+	public:
+		/**
+                 * \brief Interface for the child classes to return the name
+                 *
+                 */
+		virtual std::string name()const=0;
 
-	
-		
+		/**
+                 *  \brief Interface for the child classes to return the class ID
+                 *
+                 */
+		virtual CAST_CLASS_ID classId()const=0;
 };
 
 
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE postfix_expression2 CLASS                                                                                 
- 	FOR PATTERN : [postfix_expression,'(',argument_expression_list,')']		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
 
 
-
-// FORWARD DECLARATION
-class postfix_expression;
+class token;
 class argument_expression_list;
-
-
-class postfix_expression2 
-	:public postfix_expression 
-{
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		postfix_expression *_p_postfix_expression;                      // postfix_expression
-		argument_expression_list *_p_argument_expression_list;          // argument_expression_list
-public:
-	postfix_expression2	                                         // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				postfix_expression *_arg__p_postfix_expression,
-				argument_expression_list *_arg__p_argument_expression_list			
-		);
-	postfix_expression2(const postfix_expression2& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "postfix_expression2"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_POSTFIX_EXPRESSION2
-	virtual std::string pattern()const;							//returns the pattern, here "[postfix_expression,'(',argument_expression_list,')']"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const postfix_expression* get_p_postfix_expression()const{return _p_postfix_expression;}							//returns const pointer to _p_postfix_expression
-	      postfix_expression* get_p_postfix_expression()     {return _p_postfix_expression;}							//returns       pointer to _p_postfix_expression
-	const argument_expression_list* get_p_argument_expression_list()const{return _p_argument_expression_list;}							//returns const pointer to _p_argument_expression_list
-	      argument_expression_list* get_p_argument_expression_list()     {return _p_argument_expression_list;}							//returns       pointer to _p_argument_expression_list
-	virtual ~postfix_expression2 ();
-
-	
-		
-};
-
-
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE postfix_expression3 CLASS                                                                                 
- 	FOR PATTERN : [postfix_expression,'.',IDENTIFIER]		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
-
-
-
-// FORWARD DECLARATION
 class postfix_expression;
-class Token;
-class Token;
 
 
-class postfix_expression3 
-	:public postfix_expression 
+
+
+
+
+/**
+ * \brief postfix_expression_1 implements the pattern: <b>(postfix_expression, (, argument_expression_list, ))</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_postfix_expression_1 [ label="postfix_expression_1", URL="\ref postfix_expression_1", color="#00AAAA" ];
+ *     node_postfix_expression [ label="postfix_expression", URL="\ref postfix_expression", color="#00AAAA"];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_argument_expression_list [ label="argument_expression_list", URL="\ref argument_expression_list", color="#00AAAA"];
+ *     node_postfix_expression_1 ->  node_postfix_expression [label="_p_postfix_expression" style=solid];
+ *     node_postfix_expression_1 ->  node_token [label="_p_token" style=solid];
+ *     node_postfix_expression_1 ->  node_argument_expression_list [label="_p_argument_expression_list" style=dotted];
+ * }
+ * \enddot
+ */
+class postfix_expression_1:public postfix_expression
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		postfix_expression *_p_postfix_expression;                      // postfix_expression
-		Token *_p_token1;                                               // '.'
-		Token *_p_token2;                                               // IDENTIFIER
-public:
-	postfix_expression3	                                         // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				postfix_expression *_arg__p_postfix_expression,
-				Token *_arg__p_token1,
-				Token *_arg__p_token2			
-		);
-	postfix_expression3(const postfix_expression3& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "postfix_expression3"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_POSTFIX_EXPRESSION3
-	virtual std::string pattern()const;							//returns the pattern, here "[postfix_expression,'.',IDENTIFIER]"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const postfix_expression* get_p_postfix_expression()const{return _p_postfix_expression;}							//returns const pointer to _p_postfix_expression
-	      postfix_expression* get_p_postfix_expression()     {return _p_postfix_expression;}							//returns       pointer to _p_postfix_expression
-	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
-	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
-	const Token* get_p_token2()const{return _p_token2;}							//returns const pointer to _p_token2
-	      Token* get_p_token2()     {return _p_token2;}							//returns       pointer to _p_token2
-	virtual ~postfix_expression3 ();
+	private:
+		ReferenceCountedAutoPointer<postfix_expression> _p_postfix_expression;	  ///< A pointer to postfix_expression.
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>.</b>, <b>(</b>, <b>-></b>
+		ReferenceCountedAutoPointer<argument_expression_list> _p_argument_expression_list;	  ///< A pointer to argument_expression_list. This parameter can be <b>Null</b>
+	public:
+		/** 
+		 * \brief Constructor of postfix_expression_1
+		 *
+		 * This function handles the postfix_expression_1
+                 */
+		postfix_expression_1	
+				(
+					ReferenceCountedAutoPointer<postfix_expression> _arg_postfix_expression,   ///< A pointer to postfix_expression.
+					ReferenceCountedAutoPointer<token> _arg_token,   ///< A pointer to a token, accepts <b>.</b>, <b>(</b>, <b>-></b>
+					ReferenceCountedAutoPointer<argument_expression_list> _arg_argument_expression_list  ///< A pointer to argument_expression_list. This parameter can be <b>Null</b>
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"postfix_expression_1"</b>
+		 * \returns <b>"postfix_expression_1"</b>
+                 */
+		virtual std::string name()const		{return std::string("postfix_expression_1");}
 
-	
-		
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_POSTFIX_EXPRESSION_1
+		 * \returns  ID_POSTFIX_EXPRESSION_1
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_POSTFIX_EXPRESSION_1;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~postfix_expression_1()
+		{}
 };
 
 
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE postfix_expression4 CLASS                                                                                 
- 	FOR PATTERN : [postfix_expression,INC_OP]		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
+class token;
 class postfix_expression;
-class Token;
 
 
-class postfix_expression4 
-	:public postfix_expression 
+
+
+
+/**
+ * \brief postfix_expression_2 implements the pattern: <b>(postfix_expression, ++)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_postfix_expression_2 [ label="postfix_expression_2", URL="\ref postfix_expression_2", color="#00AAAA" ];
+ *     node_postfix_expression [ label="postfix_expression", URL="\ref postfix_expression", color="#00AAAA"];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_postfix_expression_2 ->  node_postfix_expression [label="_p_postfix_expression" style=solid];
+ *     node_postfix_expression_2 ->  node_token [label="_p_token" style=solid];
+ * }
+ * \enddot
+ */
+class postfix_expression_2:public postfix_expression
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		postfix_expression *_p_postfix_expression;                      // postfix_expression
-		Token *_p_token1;                                               // INC_OP
-public:
-	postfix_expression4	                                         // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				postfix_expression *_arg__p_postfix_expression,
-				Token *_arg__p_token1			
-		);
-	postfix_expression4(const postfix_expression4& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "postfix_expression4"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_POSTFIX_EXPRESSION4
-	virtual std::string pattern()const;							//returns the pattern, here "[postfix_expression,INC_OP]"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const postfix_expression* get_p_postfix_expression()const{return _p_postfix_expression;}							//returns const pointer to _p_postfix_expression
-	      postfix_expression* get_p_postfix_expression()     {return _p_postfix_expression;}							//returns       pointer to _p_postfix_expression
-	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
-	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
-	virtual ~postfix_expression4 ();
+	private:
+		ReferenceCountedAutoPointer<postfix_expression> _p_postfix_expression;	  ///< A pointer to postfix_expression.
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>++</b>, <b>--</b>
+	public:
+		/** 
+		 * \brief Constructor of postfix_expression_2
+		 *
+		 * This function handles the postfix_expression_2
+                 */
+		postfix_expression_2	
+				(
+					ReferenceCountedAutoPointer<postfix_expression> _arg_postfix_expression,   ///< A pointer to postfix_expression.
+					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>++</b>, <b>--</b>
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"postfix_expression_2"</b>
+		 * \returns <b>"postfix_expression_2"</b>
+                 */
+		virtual std::string name()const		{return std::string("postfix_expression_2");}
 
-	
-		
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_POSTFIX_EXPRESSION_2
+		 * \returns  ID_POSTFIX_EXPRESSION_2
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_POSTFIX_EXPRESSION_2;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~postfix_expression_2()
+		{}
 };
 
 
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE postfix_expression5 CLASS                                                                                 
- 	FOR PATTERN : [primary_expression]		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
 class primary_expression;
 
 
-class postfix_expression5 
-	:public postfix_expression 
-{
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		primary_expression *_p_primary_expression;                      // primary_expression
-public:
-	postfix_expression5	                                         // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				primary_expression *_arg__p_primary_expression			
-		);
-	postfix_expression5(const postfix_expression5& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "postfix_expression5"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_POSTFIX_EXPRESSION5
-	virtual std::string pattern()const;							//returns the pattern, here "[primary_expression]"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const primary_expression* get_p_primary_expression()const{return _p_primary_expression;}							//returns const pointer to _p_primary_expression
-	      primary_expression* get_p_primary_expression()     {return _p_primary_expression;}							//returns       pointer to _p_primary_expression
-	virtual ~postfix_expression5 ();
 
-	
-		
+/**
+ * \brief postfix_expression_3 implements the pattern: <b>(primary_expression,)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_postfix_expression_3 [ label="postfix_expression_3", URL="\ref postfix_expression_3", color="#00AAAA" ];
+ *     node_primary_expression [ label="primary_expression", URL="\ref primary_expression", color="#00AAAA"];
+ *     node_postfix_expression_3 ->  node_primary_expression [label="_p_primary_expression" style=solid];
+ * }
+ * \enddot
+ */
+class postfix_expression_3:public postfix_expression
+{
+	private:
+		ReferenceCountedAutoPointer<primary_expression> _p_primary_expression;	  ///< A pointer to primary_expression.
+	public:
+		/** 
+		 * \brief Constructor of postfix_expression_3
+		 *
+		 * This function handles the postfix_expression_3
+                 */
+		postfix_expression_3	
+				(
+					ReferenceCountedAutoPointer<primary_expression> _arg_primary_expression  ///< A pointer to primary_expression.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"postfix_expression_3"</b>
+		 * \returns <b>"postfix_expression_3"</b>
+                 */
+		virtual std::string name()const		{return std::string("postfix_expression_3");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_POSTFIX_EXPRESSION_3
+		 * \returns  ID_POSTFIX_EXPRESSION_3
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_POSTFIX_EXPRESSION_3;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~postfix_expression_3()
+		{}
 };
 
 
-			
-/*=============================================================================================================*\
-                                                                                                                 
-        THE and_expression CLASS                                                                                 
-        FOR PATTERN : [and_expression,'&',equality_expression]		                                                                 
- 														 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
+class expression;
+class postfix_expression;
+
+
+
+
+/**
+ * \brief postfix_expression_4 implements the pattern: <b>(postfix_expression, [, expression, ])</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_postfix_expression_4 [ label="postfix_expression_4", URL="\ref postfix_expression_4", color="#00AAAA" ];
+ *     node_postfix_expression [ label="postfix_expression", URL="\ref postfix_expression", color="#00AAAA"];
+ *     node_expression [ label="expression", URL="\ref expression", color="#00AAAA"];
+ *     node_postfix_expression_4 ->  node_postfix_expression [label="_p_postfix_expression" style=solid];
+ *     node_postfix_expression_4 ->  node_expression [label="_p_expression" style=solid];
+ * }
+ * \enddot
+ */
+class postfix_expression_4:public postfix_expression
+{
+	private:
+		ReferenceCountedAutoPointer<postfix_expression> _p_postfix_expression;	  ///< A pointer to postfix_expression.
+		ReferenceCountedAutoPointer<expression> _p_expression;	  ///< A pointer to expression.
+	public:
+		/** 
+		 * \brief Constructor of postfix_expression_4
+		 *
+		 * This function handles the postfix_expression_4
+                 */
+		postfix_expression_4	
+				(
+					ReferenceCountedAutoPointer<postfix_expression> _arg_postfix_expression,   ///< A pointer to postfix_expression.
+					ReferenceCountedAutoPointer<expression> _arg_expression  ///< A pointer to expression.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"postfix_expression_4"</b>
+		 * \returns <b>"postfix_expression_4"</b>
+                 */
+		virtual std::string name()const		{return std::string("postfix_expression_4");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_POSTFIX_EXPRESSION_4
+		 * \returns  ID_POSTFIX_EXPRESSION_4
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_POSTFIX_EXPRESSION_4;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~postfix_expression_4()
+		{}
+};
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:and_expression
+//////////////////////////////////////////
+
+
+
+
+
 class equality_expression;
 
-/*------------------------------------------------------------*\
- 							        
-  item class and_expression_item                              
-                                                                
-\*------------------------------------------------------------*/
+
+
+/**
+ * \brief and_expression_item implements the pattern: <b>(and_expression, &, equality_expression)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_and_expression_item [ label="and_expression_item", URL="\ref and_expression_item", color="#00AAAA" ];
+ *     node_equality_expression [ label="equality_expression", URL="\ref equality_expression", color="#00AAAA"];
+ *     node_and_expression_item ->  node_equality_expression [label="_p_equality_expression" style=solid];
+ * }
+ * \enddot
+ */
 class and_expression_item
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-	equality_expression *_p_equality_expression;                    // equality_expression
-public:
-	and_expression_item
-		(
-			std::string _arg_s_matchedPattern,
-			equality_expression *_arg__p_equality_expression
-		);
-	and_expression_item(const and_expression_item &);
-	virtual std::string name()const{return "and_expression_item";}			//returns the class name, here "and_expression"
-	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual Properties getProperties()const;
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const equality_expression* get_p_equality_expression()const{return _p_equality_expression;}							//returns const pointer to _p_equality_expression
-	      equality_expression* get_p_equality_expression()     {return _p_equality_expression;}							//returns const pointer to _p_equality_expression
-	virtual ~and_expression_item();
-	
-	
-};
-/*------------------------------------------------------------*\
- 							        
-  main class and_expression                         
-                                                                
-\*------------------------------------------------------------*/
+	private:
+		ReferenceCountedAutoPointer<equality_expression> _p_equality_expression;	  ///< A pointer to equality_expression.
+	public:
+		/** 
+		 * \brief Constructor of and_expression_item
+		 *
+		 * This function handles the and_expression_item
+                 */
+		and_expression_item	
+				(
+					ReferenceCountedAutoPointer<equality_expression> _arg_equality_expression  ///< A pointer to equality_expression.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"and_expression_item"</b>
+		 * \returns <b>"and_expression_item"</b>
+                 */
+		virtual std::string name()const		{return std::string("and_expression_item");}
 
-class and_expression
-	:public CAst 
-{
-private:
-	typedef std::deque<and_expression_item> ItemsListType;
-	typedef ItemsListType::iterator ItemsListIter;
-	typedef ItemsListType::const_iterator CItemsListIter;
-	ItemsListType _items;
-public:
-//ASDFG
-	
-	and_expression
-		(
-			std::string _arg_s_matchedPattern,
-			equality_expression *_arg__p_equality_expression
-		);
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_AND_EXPRESSION_ITEM
+		 * \returns  ID_AND_EXPRESSION_ITEM
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_AND_EXPRESSION_ITEM;}
 
-	void append
-		(
-			std::string _arg_s_matchedPattern,
-			equality_expression *_arg__p_equality_expression
-		);
-
-	virtual std::string name()const;							//returns the class name, here "and_expression"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_AND_EXPRESSION
-	virtual std::string pattern()const;							//returns the pattern, here "[and_expression,'&',equality_expression]"
-	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
-	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
-	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
-	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
-	virtual int size()const{return _items.size();}						//returns the size of the container
-	virtual and_expression_item& operator[](int i){return _items[i];}
-	virtual ~and_expression ();
-
-};
-
-typedef std::deque<and_expression_item>::iterator and_expression_iterator;
-typedef std::deque<and_expression_item>::const_iterator and_expression_const_iterator;
-
-
-			
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE statement BASE CLASS                                                                    
-                                                                                                                 
-\*=============================================================================================================*/  
-
-
-class statement :public CAst
-{
-public:
-	virtual std::string name()const=0;
-	virtual std::ostream& codeStream(std::ostream&)const=0;
-	virtual CAstType typeId()const=0;
-	virtual std::string pattern()const=0;
-	virtual bool isList()const=0;
-	virtual Properties getProperties()const=0;
-	virtual PropertiesList getPropertiesList()const=0;
-	virtual ~statement (){};
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~and_expression_item()
+		{}
 };
 
 
 
 
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE statement1 CLASS                                                                                 
- 	FOR PATTERN : [labeled_statement]		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
 
-
-
-// FORWARD DECLARATION
-class labeled_statement;
-
-
-class statement1 
-	:public statement 
+/**
+ * \brief The basic class to handle and_expression
+ *
+ * Since the rule contains itself, this rule will be implemented in the form of a list
+ */
+class and_expression:public CAst
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		labeled_statement *_p_labeled_statement;                        // labeled_statement
-public:
-	statement1	                                                  // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				labeled_statement *_arg__p_labeled_statement			
-		);
-	statement1(const statement1& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "statement1"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_STATEMENT1
-	virtual std::string pattern()const;							//returns the pattern, here "[labeled_statement]"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const labeled_statement* get_p_labeled_statement()const{return _p_labeled_statement;}							//returns const pointer to _p_labeled_statement
-	      labeled_statement* get_p_labeled_statement()     {return _p_labeled_statement;}							//returns       pointer to _p_labeled_statement
-	virtual ~statement1 ();
+	public:
+		typedef std::list<ReferenceCountedAutoPointer<and_expression_item> > and_expressionListType;	///< This defines the list type which will store the and_expression_item
+		typedef and_expressionListType::iterator and_expressionIterType;				///< This defines the iterator over and_expressionListType
+		typedef and_expressionListType::const_iterator Cand_expressionIterType;				///< This defines the constant iterator over and_expressionListType
 
-	
+	private:
+		and_expressionListType _itemList;									///< The list of items
+	public:
+		/**
+		 * \brief The default constructor calls the parent constructor
+		 *
+		 */
+		and_expression():CAst()
+		{}
+
+		/**
+		 * \brief Append an item to the list
+		 *
+		 */
+		void append( ReferenceCountedAutoPointer<and_expression_item> item)
+		{
+			_itemList.push_back(item);
+		}
 		
-};
-
-
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE statement2 CLASS                                                                                 
- 	FOR PATTERN : [compound_statement]		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
-
-
-
-// FORWARD DECLARATION
-class compound_statement;
-
-
-class statement2 
-	:public statement 
-{
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		compound_statement *_p_compound_statement;                      // compound_statement
-public:
-	statement2	                                                  // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				compound_statement *_arg__p_compound_statement			
-		);
-	statement2(const statement2& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "statement2"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_STATEMENT2
-	virtual std::string pattern()const;							//returns the pattern, here "[compound_statement]"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const compound_statement* get_p_compound_statement()const{return _p_compound_statement;}							//returns const pointer to _p_compound_statement
-	      compound_statement* get_p_compound_statement()     {return _p_compound_statement;}							//returns       pointer to _p_compound_statement
-	virtual ~statement2 ();
-
-	
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"and_expression"</b>
+		 * \returns <b>"and_expression"</b>
+                 */
+		virtual std::string name()const {return "and_expression";}
 		
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_AND_EXPRESSION
+		 * \returns  ID_AND_EXPRESSION
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_AND_EXPRESSION;}
+
 };
 
 
-			
 
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE statement3 CLASS                                                                                 
- 	FOR PATTERN : [expression_statement]		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
-// FORWARD DECLARATION
-class expression_statement;
 
 
-class statement3 
-	:public statement 
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:statement
+//////////////////////////////////////////
+
+
+/**
+ * \brief Implements statement
+ * 
+ * This is the interface class. This implements the patterns
+ *  - (labeled_statement,)
+ *  - (compound_statement,)
+ *  - (expression_statement,)
+ *  - (selection_statement,)
+ *  - (iteration_statement,)
+ *  - (jump_statement,)
+ * 
+ **/
+class statement:public CAst
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		expression_statement *_p_expression_statement;                  // expression_statement
-public:
-	statement3	                                                  // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				expression_statement *_arg__p_expression_statement			
-		);
-	statement3(const statement3& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "statement3"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_STATEMENT3
-	virtual std::string pattern()const;							//returns the pattern, here "[expression_statement]"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const expression_statement* get_p_expression_statement()const{return _p_expression_statement;}							//returns const pointer to _p_expression_statement
-	      expression_statement* get_p_expression_statement()     {return _p_expression_statement;}							//returns       pointer to _p_expression_statement
-	virtual ~statement3 ();
+	public:
+		/**
+                 * \brief Interface for the child classes to return the name
+                 *
+                 */
+		virtual std::string name()const=0;
 
-	
-		
+		/**
+                 *  \brief Interface for the child classes to return the class ID
+                 *
+                 */
+		virtual CAST_CLASS_ID classId()const=0;
 };
 
 
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE statement4 CLASS                                                                                 
- 	FOR PATTERN : [selection_statement]		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
 
 
-
-// FORWARD DECLARATION
-class selection_statement;
-
-
-class statement4 
-	:public statement 
-{
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		selection_statement *_p_selection_statement;                    // selection_statement
-public:
-	statement4	                                                  // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				selection_statement *_arg__p_selection_statement			
-		);
-	statement4(const statement4& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "statement4"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_STATEMENT4
-	virtual std::string pattern()const;							//returns the pattern, here "[selection_statement]"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const selection_statement* get_p_selection_statement()const{return _p_selection_statement;}							//returns const pointer to _p_selection_statement
-	      selection_statement* get_p_selection_statement()     {return _p_selection_statement;}							//returns       pointer to _p_selection_statement
-	virtual ~statement4 ();
-
-	
-		
-};
-
-
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE statement5 CLASS                                                                                 
- 	FOR PATTERN : [iteration_statement]		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
-
-
-
-// FORWARD DECLARATION
 class iteration_statement;
 
 
-class statement5 
-	:public statement 
-{
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		iteration_statement *_p_iteration_statement;                    // iteration_statement
-public:
-	statement5	                                                  // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				iteration_statement *_arg__p_iteration_statement			
-		);
-	statement5(const statement5& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "statement5"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_STATEMENT5
-	virtual std::string pattern()const;							//returns the pattern, here "[iteration_statement]"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const iteration_statement* get_p_iteration_statement()const{return _p_iteration_statement;}							//returns const pointer to _p_iteration_statement
-	      iteration_statement* get_p_iteration_statement()     {return _p_iteration_statement;}							//returns       pointer to _p_iteration_statement
-	virtual ~statement5 ();
 
-	
-		
+/**
+ * \brief statement_1 implements the pattern: <b>(iteration_statement,)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_statement_1 [ label="statement_1", URL="\ref statement_1", color="#00AAAA" ];
+ *     node_iteration_statement [ label="iteration_statement", URL="\ref iteration_statement", color="#00AAAA"];
+ *     node_statement_1 ->  node_iteration_statement [label="_p_iteration_statement" style=solid];
+ * }
+ * \enddot
+ */
+class statement_1:public statement
+{
+	private:
+		ReferenceCountedAutoPointer<iteration_statement> _p_iteration_statement;	  ///< A pointer to iteration_statement.
+	public:
+		/** 
+		 * \brief Constructor of statement_1
+		 *
+		 * This function handles the statement_1
+                 */
+		statement_1	
+				(
+					ReferenceCountedAutoPointer<iteration_statement> _arg_iteration_statement  ///< A pointer to iteration_statement.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"statement_1"</b>
+		 * \returns <b>"statement_1"</b>
+                 */
+		virtual std::string name()const		{return std::string("statement_1");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_STATEMENT_1
+		 * \returns  ID_STATEMENT_1
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_STATEMENT_1;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~statement_1()
+		{}
 };
 
 
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE statement6 CLASS                                                                                 
- 	FOR PATTERN : [jump_statement]		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
 class jump_statement;
 
 
-class statement6 
-	:public statement 
-{
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		jump_statement *_p_jump_statement;                              // jump_statement
-public:
-	statement6	                                                  // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				jump_statement *_arg__p_jump_statement			
-		);
-	statement6(const statement6& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "statement6"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_STATEMENT6
-	virtual std::string pattern()const;							//returns the pattern, here "[jump_statement]"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const jump_statement* get_p_jump_statement()const{return _p_jump_statement;}							//returns const pointer to _p_jump_statement
-	      jump_statement* get_p_jump_statement()     {return _p_jump_statement;}							//returns       pointer to _p_jump_statement
-	virtual ~statement6 ();
 
-	
-		
+/**
+ * \brief statement_2 implements the pattern: <b>(jump_statement,)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_statement_2 [ label="statement_2", URL="\ref statement_2", color="#00AAAA" ];
+ *     node_jump_statement [ label="jump_statement", URL="\ref jump_statement", color="#00AAAA"];
+ *     node_statement_2 ->  node_jump_statement [label="_p_jump_statement" style=solid];
+ * }
+ * \enddot
+ */
+class statement_2:public statement
+{
+	private:
+		ReferenceCountedAutoPointer<jump_statement> _p_jump_statement;	  ///< A pointer to jump_statement.
+	public:
+		/** 
+		 * \brief Constructor of statement_2
+		 *
+		 * This function handles the statement_2
+                 */
+		statement_2	
+				(
+					ReferenceCountedAutoPointer<jump_statement> _arg_jump_statement  ///< A pointer to jump_statement.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"statement_2"</b>
+		 * \returns <b>"statement_2"</b>
+                 */
+		virtual std::string name()const		{return std::string("statement_2");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_STATEMENT_2
+		 * \returns  ID_STATEMENT_2
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_STATEMENT_2;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~statement_2()
+		{}
 };
 
 
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE cast_expression BASE CLASS                                                                    
-                                                                                                                 
-\*=============================================================================================================*/  
 
 
-class cast_expression :public CAst
+
+class labeled_statement;
+
+
+
+/**
+ * \brief statement_3 implements the pattern: <b>(labeled_statement,)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_statement_3 [ label="statement_3", URL="\ref statement_3", color="#00AAAA" ];
+ *     node_labeled_statement [ label="labeled_statement", URL="\ref labeled_statement", color="#00AAAA"];
+ *     node_statement_3 ->  node_labeled_statement [label="_p_labeled_statement" style=solid];
+ * }
+ * \enddot
+ */
+class statement_3:public statement
 {
-public:
-	virtual std::string name()const=0;
-	virtual std::ostream& codeStream(std::ostream&)const=0;
-	virtual CAstType typeId()const=0;
-	virtual std::string pattern()const=0;
-	virtual bool isList()const=0;
-	virtual Properties getProperties()const=0;
-	virtual PropertiesList getPropertiesList()const=0;
-	virtual ~cast_expression (){};
+	private:
+		ReferenceCountedAutoPointer<labeled_statement> _p_labeled_statement;	  ///< A pointer to labeled_statement.
+	public:
+		/** 
+		 * \brief Constructor of statement_3
+		 *
+		 * This function handles the statement_3
+                 */
+		statement_3	
+				(
+					ReferenceCountedAutoPointer<labeled_statement> _arg_labeled_statement  ///< A pointer to labeled_statement.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"statement_3"</b>
+		 * \returns <b>"statement_3"</b>
+                 */
+		virtual std::string name()const		{return std::string("statement_3");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_STATEMENT_3
+		 * \returns  ID_STATEMENT_3
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_STATEMENT_3;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~statement_3()
+		{}
 };
 
 
 
 
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE cast_expression1 CLASS                                                                                 
- 	FOR PATTERN : ['(',type_name,')',cast_expression]		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
+
+class compound_statement;
 
 
 
-// FORWARD DECLARATION
-class type_name;
+/**
+ * \brief statement_4 implements the pattern: <b>(compound_statement,)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_statement_4 [ label="statement_4", URL="\ref statement_4", color="#00AAAA" ];
+ *     node_compound_statement [ label="compound_statement", URL="\ref compound_statement", color="#00AAAA"];
+ *     node_statement_4 ->  node_compound_statement [label="_p_compound_statement" style=solid];
+ * }
+ * \enddot
+ */
+class statement_4:public statement
+{
+	private:
+		ReferenceCountedAutoPointer<compound_statement> _p_compound_statement;	  ///< A pointer to compound_statement.
+	public:
+		/** 
+		 * \brief Constructor of statement_4
+		 *
+		 * This function handles the statement_4
+                 */
+		statement_4	
+				(
+					ReferenceCountedAutoPointer<compound_statement> _arg_compound_statement  ///< A pointer to compound_statement.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"statement_4"</b>
+		 * \returns <b>"statement_4"</b>
+                 */
+		virtual std::string name()const		{return std::string("statement_4");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_STATEMENT_4
+		 * \returns  ID_STATEMENT_4
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_STATEMENT_4;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~statement_4()
+		{}
+};
+
+
+
+
+
+class expression_statement;
+
+
+
+/**
+ * \brief statement_5 implements the pattern: <b>(expression_statement,)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_statement_5 [ label="statement_5", URL="\ref statement_5", color="#00AAAA" ];
+ *     node_expression_statement [ label="expression_statement", URL="\ref expression_statement", color="#00AAAA"];
+ *     node_statement_5 ->  node_expression_statement [label="_p_expression_statement" style=solid];
+ * }
+ * \enddot
+ */
+class statement_5:public statement
+{
+	private:
+		ReferenceCountedAutoPointer<expression_statement> _p_expression_statement;	  ///< A pointer to expression_statement.
+	public:
+		/** 
+		 * \brief Constructor of statement_5
+		 *
+		 * This function handles the statement_5
+                 */
+		statement_5	
+				(
+					ReferenceCountedAutoPointer<expression_statement> _arg_expression_statement  ///< A pointer to expression_statement.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"statement_5"</b>
+		 * \returns <b>"statement_5"</b>
+                 */
+		virtual std::string name()const		{return std::string("statement_5");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_STATEMENT_5
+		 * \returns  ID_STATEMENT_5
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_STATEMENT_5;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~statement_5()
+		{}
+};
+
+
+
+
+
+class selection_statement;
+
+
+
+/**
+ * \brief statement_6 implements the pattern: <b>(selection_statement,)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_statement_6 [ label="statement_6", URL="\ref statement_6", color="#00AAAA" ];
+ *     node_selection_statement [ label="selection_statement", URL="\ref selection_statement", color="#00AAAA"];
+ *     node_statement_6 ->  node_selection_statement [label="_p_selection_statement" style=solid];
+ * }
+ * \enddot
+ */
+class statement_6:public statement
+{
+	private:
+		ReferenceCountedAutoPointer<selection_statement> _p_selection_statement;	  ///< A pointer to selection_statement.
+	public:
+		/** 
+		 * \brief Constructor of statement_6
+		 *
+		 * This function handles the statement_6
+                 */
+		statement_6	
+				(
+					ReferenceCountedAutoPointer<selection_statement> _arg_selection_statement  ///< A pointer to selection_statement.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"statement_6"</b>
+		 * \returns <b>"statement_6"</b>
+                 */
+		virtual std::string name()const		{return std::string("statement_6");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_STATEMENT_6
+		 * \returns  ID_STATEMENT_6
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_STATEMENT_6;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~statement_6()
+		{}
+};
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:cast_expression
+//////////////////////////////////////////
+
+
+/**
+ * \brief Implements cast_expression
+ * 
+ * This is the interface class. This implements the patterns
+ *  - (unary_expression,)
+ *  - ((, type_name, ), cast_expression)
+ * 
+ **/
+class cast_expression:public CAst
+{
+	public:
+		/**
+                 * \brief Interface for the child classes to return the name
+                 *
+                 */
+		virtual std::string name()const=0;
+
+		/**
+                 *  \brief Interface for the child classes to return the class ID
+                 *
+                 */
+		virtual CAST_CLASS_ID classId()const=0;
+};
+
+
+
+
 class cast_expression;
+class type_name;
 
 
-class cast_expression1 
-	:public cast_expression 
+
+
+/**
+ * \brief cast_expression_1 implements the pattern: <b>((, type_name, ), cast_expression)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_cast_expression_1 [ label="cast_expression_1", URL="\ref cast_expression_1", color="#00AAAA" ];
+ *     node_type_name [ label="type_name", URL="\ref type_name", color="#00AAAA"];
+ *     node_cast_expression [ label="cast_expression", URL="\ref cast_expression", color="#00AAAA"];
+ *     node_cast_expression_1 ->  node_type_name [label="_p_type_name" style=solid];
+ *     node_cast_expression_1 ->  node_cast_expression [label="_p_cast_expression" style=solid];
+ * }
+ * \enddot
+ */
+class cast_expression_1:public cast_expression
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		type_name *_p_type_name;                                        // type_name
-		cast_expression *_p_cast_expression;                            // cast_expression
-public:
-	cast_expression1	                                            // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				type_name *_arg__p_type_name,
-				cast_expression *_arg__p_cast_expression			
-		);
-	cast_expression1(const cast_expression1& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "cast_expression1"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_CAST_EXPRESSION1
-	virtual std::string pattern()const;							//returns the pattern, here "['(',type_name,')',cast_expression]"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const type_name* get_p_type_name()const{return _p_type_name;}							//returns const pointer to _p_type_name
-	      type_name* get_p_type_name()     {return _p_type_name;}							//returns       pointer to _p_type_name
-	const cast_expression* get_p_cast_expression()const{return _p_cast_expression;}							//returns const pointer to _p_cast_expression
-	      cast_expression* get_p_cast_expression()     {return _p_cast_expression;}							//returns       pointer to _p_cast_expression
-	virtual ~cast_expression1 ();
+	private:
+		ReferenceCountedAutoPointer<type_name> _p_type_name;	  ///< A pointer to type_name.
+		ReferenceCountedAutoPointer<cast_expression> _p_cast_expression;	  ///< A pointer to cast_expression.
+	public:
+		/** 
+		 * \brief Constructor of cast_expression_1
+		 *
+		 * This function handles the cast_expression_1
+                 */
+		cast_expression_1	
+				(
+					ReferenceCountedAutoPointer<type_name> _arg_type_name,   ///< A pointer to type_name.
+					ReferenceCountedAutoPointer<cast_expression> _arg_cast_expression  ///< A pointer to cast_expression.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"cast_expression_1"</b>
+		 * \returns <b>"cast_expression_1"</b>
+                 */
+		virtual std::string name()const		{return std::string("cast_expression_1");}
 
-	
-		
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_CAST_EXPRESSION_1
+		 * \returns  ID_CAST_EXPRESSION_1
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_CAST_EXPRESSION_1;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~cast_expression_1()
+		{}
 };
 
 
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE cast_expression2 CLASS                                                                                 
- 	FOR PATTERN : [unary_expression]		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
 class unary_expression;
 
 
-class cast_expression2 
-	:public cast_expression 
-{
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		unary_expression *_p_unary_expression;                          // unary_expression
-public:
-	cast_expression2	                                            // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				unary_expression *_arg__p_unary_expression			
-		);
-	cast_expression2(const cast_expression2& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "cast_expression2"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_CAST_EXPRESSION2
-	virtual std::string pattern()const;							//returns the pattern, here "[unary_expression]"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const unary_expression* get_p_unary_expression()const{return _p_unary_expression;}							//returns const pointer to _p_unary_expression
-	      unary_expression* get_p_unary_expression()     {return _p_unary_expression;}							//returns       pointer to _p_unary_expression
-	virtual ~cast_expression2 ();
 
-	
-		
+/**
+ * \brief cast_expression_2 implements the pattern: <b>(unary_expression,)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_cast_expression_2 [ label="cast_expression_2", URL="\ref cast_expression_2", color="#00AAAA" ];
+ *     node_unary_expression [ label="unary_expression", URL="\ref unary_expression", color="#00AAAA"];
+ *     node_cast_expression_2 ->  node_unary_expression [label="_p_unary_expression" style=solid];
+ * }
+ * \enddot
+ */
+class cast_expression_2:public cast_expression
+{
+	private:
+		ReferenceCountedAutoPointer<unary_expression> _p_unary_expression;	  ///< A pointer to unary_expression.
+	public:
+		/** 
+		 * \brief Constructor of cast_expression_2
+		 *
+		 * This function handles the cast_expression_2
+                 */
+		cast_expression_2	
+				(
+					ReferenceCountedAutoPointer<unary_expression> _arg_unary_expression  ///< A pointer to unary_expression.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"cast_expression_2"</b>
+		 * \returns <b>"cast_expression_2"</b>
+                 */
+		virtual std::string name()const		{return std::string("cast_expression_2");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_CAST_EXPRESSION_2
+		 * \returns  ID_CAST_EXPRESSION_2
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_CAST_EXPRESSION_2;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~cast_expression_2()
+		{}
 };
 
 
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE init_declarator CLASS                                                                                 
- 	FOR PATTERN : [declarator,'=',initializer]		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
-class declarator;
-class Token;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:init_declarator
+//////////////////////////////////////////
+
+
+
+
+
+class token;
 class initializer;
+class declarator;
 
 
-class init_declarator 
-	:public CAst 
+
+
+
+
+/**
+ * \brief init_declarator implements the pattern: <b>(declarator, =, initializer)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_init_declarator [ label="init_declarator", URL="\ref init_declarator", color="#00AAAA" ];
+ *     node_declarator [ label="declarator", URL="\ref declarator", color="#00AAAA"];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_initializer [ label="initializer", URL="\ref initializer", color="#00AAAA"];
+ *     node_init_declarator ->  node_declarator [label="_p_declarator" style=solid];
+ *     node_init_declarator ->  node_token [label="_p_token" style=dotted];
+ *     node_init_declarator ->  node_initializer [label="_p_initializer" style=dotted];
+ * }
+ * \enddot
+ */
+class init_declarator:public CAst
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		declarator *_p_declarator;                                      // declarator
-		Token *_p_token1;                                               // '='
-		initializer *_p_initializer;                                    // initializer
-public:
-	init_declarator	                                             // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				declarator *_arg__p_declarator,
-				Token *_arg__p_token1,
-				initializer *_arg__p_initializer			
-		);
-	init_declarator(const init_declarator& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "init_declarator"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_INIT_DECLARATOR
-	virtual std::string pattern()const;							//returns the pattern, here "[declarator,'=',initializer]"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const declarator* get_p_declarator()const{return _p_declarator;}							//returns const pointer to _p_declarator
-	      declarator* get_p_declarator()     {return _p_declarator;}							//returns       pointer to _p_declarator
-	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
-	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
-	const initializer* get_p_initializer()const{return _p_initializer;}							//returns const pointer to _p_initializer
-	      initializer* get_p_initializer()     {return _p_initializer;}							//returns       pointer to _p_initializer
-	virtual ~init_declarator ();
+	private:
+		ReferenceCountedAutoPointer<declarator> _p_declarator;	  ///< A pointer to declarator.
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>=</b>, <b>None</b>
+		ReferenceCountedAutoPointer<initializer> _p_initializer;	  ///< A pointer to initializer. This parameter can be <b>Null</b>
+	public:
+		/** 
+		 * \brief Constructor of init_declarator
+		 *
+		 * This function handles the init_declarator
+                 */
+		init_declarator	
+				(
+					ReferenceCountedAutoPointer<declarator> _arg_declarator,   ///< A pointer to declarator.
+					ReferenceCountedAutoPointer<token> _arg_token,   ///< A pointer to a token, accepts <b>=</b>, <b>None</b>
+					ReferenceCountedAutoPointer<initializer> _arg_initializer  ///< A pointer to initializer. This parameter can be <b>Null</b>
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"init_declarator"</b>
+		 * \returns <b>"init_declarator"</b>
+                 */
+		virtual std::string name()const		{return std::string("init_declarator");}
 
-	
-		
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_INIT_DECLARATOR
+		 * \returns  ID_INIT_DECLARATOR
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_INIT_DECLARATOR;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~init_declarator()
+		{}
 };
 
 
-			
-/*=============================================================================================================*\
-                                                                                                                 
-        THE struct_declarator_list CLASS                                                                                 
-        FOR PATTERN : [struct_declarator_list,',',struct_declarator]		                                                                 
- 														 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:struct_declarator_list
+//////////////////////////////////////////
+
+
+
+
+
 class struct_declarator;
 
-/*------------------------------------------------------------*\
- 							        
-  item class struct_declarator_list_item                              
-                                                                
-\*------------------------------------------------------------*/
+
+
+/**
+ * \brief struct_declarator_list_item implements the pattern: <b>(struct_declarator_list, ,, struct_declarator)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_struct_declarator_list_item [ label="struct_declarator_list_item", URL="\ref struct_declarator_list_item", color="#00AAAA" ];
+ *     node_struct_declarator [ label="struct_declarator", URL="\ref struct_declarator", color="#00AAAA"];
+ *     node_struct_declarator_list_item ->  node_struct_declarator [label="_p_struct_declarator" style=solid];
+ * }
+ * \enddot
+ */
 class struct_declarator_list_item
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-	struct_declarator *_p_struct_declarator;                        // struct_declarator
-public:
-	struct_declarator_list_item
-		(
-			std::string _arg_s_matchedPattern,
-			struct_declarator *_arg__p_struct_declarator
-		);
-	struct_declarator_list_item(const struct_declarator_list_item &);
-	virtual std::string name()const{return "struct_declarator_list_item";}			//returns the class name, here "struct_declarator_list"
-	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual Properties getProperties()const;
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const struct_declarator* get_p_struct_declarator()const{return _p_struct_declarator;}							//returns const pointer to _p_struct_declarator
-	      struct_declarator* get_p_struct_declarator()     {return _p_struct_declarator;}							//returns const pointer to _p_struct_declarator
-	virtual ~struct_declarator_list_item();
-	
-	
-};
-/*------------------------------------------------------------*\
- 							        
-  main class struct_declarator_list                         
-                                                                
-\*------------------------------------------------------------*/
+	private:
+		ReferenceCountedAutoPointer<struct_declarator> _p_struct_declarator;	  ///< A pointer to struct_declarator.
+	public:
+		/** 
+		 * \brief Constructor of struct_declarator_list_item
+		 *
+		 * This function handles the struct_declarator_list_item
+                 */
+		struct_declarator_list_item	
+				(
+					ReferenceCountedAutoPointer<struct_declarator> _arg_struct_declarator  ///< A pointer to struct_declarator.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"struct_declarator_list_item"</b>
+		 * \returns <b>"struct_declarator_list_item"</b>
+                 */
+		virtual std::string name()const		{return std::string("struct_declarator_list_item");}
 
-class struct_declarator_list
-	:public CAst 
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_STRUCT_DECLARATOR_LIST_ITEM
+		 * \returns  ID_STRUCT_DECLARATOR_LIST_ITEM
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_STRUCT_DECLARATOR_LIST_ITEM;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~struct_declarator_list_item()
+		{}
+};
+
+
+
+
+
+/**
+ * \brief The basic class to handle struct_declarator_list
+ *
+ * Since the rule contains itself, this rule will be implemented in the form of a list
+ */
+class struct_declarator_list:public CAst
 {
-private:
-	typedef std::deque<struct_declarator_list_item> ItemsListType;
-	typedef ItemsListType::iterator ItemsListIter;
-	typedef ItemsListType::const_iterator CItemsListIter;
-	ItemsListType _items;
-public:
-//ASDFG
-	
-	struct_declarator_list
-		(
-			std::string _arg_s_matchedPattern,
-			struct_declarator *_arg__p_struct_declarator
-		);
+	public:
+		typedef std::list<ReferenceCountedAutoPointer<struct_declarator_list_item> > struct_declarator_listListType;	///< This defines the list type which will store the struct_declarator_list_item
+		typedef struct_declarator_listListType::iterator struct_declarator_listIterType;				///< This defines the iterator over struct_declarator_listListType
+		typedef struct_declarator_listListType::const_iterator Cstruct_declarator_listIterType;				///< This defines the constant iterator over struct_declarator_listListType
 
-	void append
-		(
-			std::string _arg_s_matchedPattern,
-			struct_declarator *_arg__p_struct_declarator
-		);
+	private:
+		struct_declarator_listListType _itemList;									///< The list of items
+	public:
+		/**
+		 * \brief The default constructor calls the parent constructor
+		 *
+		 */
+		struct_declarator_list():CAst()
+		{}
 
-	virtual std::string name()const;							//returns the class name, here "struct_declarator_list"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_STRUCT_DECLARATOR_LIST
-	virtual std::string pattern()const;							//returns the pattern, here "[struct_declarator_list,',',struct_declarator]"
-	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
-	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
-	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
-	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
-	virtual int size()const{return _items.size();}						//returns the size of the container
-	virtual struct_declarator_list_item& operator[](int i){return _items[i];}
-	virtual ~struct_declarator_list ();
+		/**
+		 * \brief Append an item to the list
+		 *
+		 */
+		void append( ReferenceCountedAutoPointer<struct_declarator_list_item> item)
+		{
+			_itemList.push_back(item);
+		}
+		
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"struct_declarator_list"</b>
+		 * \returns <b>"struct_declarator_list"</b>
+                 */
+		virtual std::string name()const {return "struct_declarator_list";}
+		
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_STRUCT_DECLARATOR_LIST
+		 * \returns  ID_STRUCT_DECLARATOR_LIST
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_STRUCT_DECLARATOR_LIST;}
 
 };
 
-typedef std::deque<struct_declarator_list_item>::iterator struct_declarator_list_iterator;
-typedef std::deque<struct_declarator_list_item>::const_iterator struct_declarator_list_const_iterator;
-
-
-			
-			
-/*=============================================================================================================*\
-                                                                                                                 
-        THE logical_or_expression CLASS                                                                                 
-        FOR PATTERN : [logical_or_expression,OR_OP,logical_and_expression]		                                                                 
- 														 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:logical_or_expression
+//////////////////////////////////////////
+
+
+
+
+
 class logical_and_expression;
 
-/*------------------------------------------------------------*\
- 							        
-  item class logical_or_expression_item                              
-                                                                
-\*------------------------------------------------------------*/
+
+
+/**
+ * \brief logical_or_expression_item implements the pattern: <b>(logical_or_expression, ||, logical_and_expression)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_logical_or_expression_item [ label="logical_or_expression_item", URL="\ref logical_or_expression_item", color="#00AAAA" ];
+ *     node_logical_and_expression [ label="logical_and_expression", URL="\ref logical_and_expression", color="#00AAAA"];
+ *     node_logical_or_expression_item ->  node_logical_and_expression [label="_p_logical_and_expression" style=solid];
+ * }
+ * \enddot
+ */
 class logical_or_expression_item
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-	logical_and_expression *_p_logical_and_expression;              // logical_and_expression
-public:
-	logical_or_expression_item
-		(
-			std::string _arg_s_matchedPattern,
-			logical_and_expression *_arg__p_logical_and_expression
-		);
-	logical_or_expression_item(const logical_or_expression_item &);
-	virtual std::string name()const{return "logical_or_expression_item";}			//returns the class name, here "logical_or_expression"
-	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual Properties getProperties()const;
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const logical_and_expression* get_p_logical_and_expression()const{return _p_logical_and_expression;}							//returns const pointer to _p_logical_and_expression
-	      logical_and_expression* get_p_logical_and_expression()     {return _p_logical_and_expression;}							//returns const pointer to _p_logical_and_expression
-	virtual ~logical_or_expression_item();
-	
-	
-};
-/*------------------------------------------------------------*\
- 							        
-  main class logical_or_expression                         
-                                                                
-\*------------------------------------------------------------*/
+	private:
+		ReferenceCountedAutoPointer<logical_and_expression> _p_logical_and_expression;	  ///< A pointer to logical_and_expression.
+	public:
+		/** 
+		 * \brief Constructor of logical_or_expression_item
+		 *
+		 * This function handles the logical_or_expression_item
+                 */
+		logical_or_expression_item	
+				(
+					ReferenceCountedAutoPointer<logical_and_expression> _arg_logical_and_expression  ///< A pointer to logical_and_expression.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"logical_or_expression_item"</b>
+		 * \returns <b>"logical_or_expression_item"</b>
+                 */
+		virtual std::string name()const		{return std::string("logical_or_expression_item");}
 
-class logical_or_expression
-	:public CAst 
-{
-private:
-	typedef std::deque<logical_or_expression_item> ItemsListType;
-	typedef ItemsListType::iterator ItemsListIter;
-	typedef ItemsListType::const_iterator CItemsListIter;
-	ItemsListType _items;
-public:
-//ASDFG
-	
-	logical_or_expression
-		(
-			std::string _arg_s_matchedPattern,
-			logical_and_expression *_arg__p_logical_and_expression
-		);
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_LOGICAL_OR_EXPRESSION_ITEM
+		 * \returns  ID_LOGICAL_OR_EXPRESSION_ITEM
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_LOGICAL_OR_EXPRESSION_ITEM;}
 
-	void append
-		(
-			std::string _arg_s_matchedPattern,
-			logical_and_expression *_arg__p_logical_and_expression
-		);
-
-	virtual std::string name()const;							//returns the class name, here "logical_or_expression"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_LOGICAL_OR_EXPRESSION
-	virtual std::string pattern()const;							//returns the pattern, here "[logical_or_expression,OR_OP,logical_and_expression]"
-	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
-	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
-	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
-	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
-	virtual int size()const{return _items.size();}						//returns the size of the container
-	virtual logical_or_expression_item& operator[](int i){return _items[i];}
-	virtual ~logical_or_expression ();
-
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~logical_or_expression_item()
+		{}
 };
 
-typedef std::deque<logical_or_expression_item>::iterator logical_or_expression_iterator;
-typedef std::deque<logical_or_expression_item>::const_iterator logical_or_expression_const_iterator;
-
-
-			
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE unary_operator CLASS                                                                                 
- 	FOR PATTERN : ['&']		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
-class Token;
 
-
-class unary_operator 
-	:public CAst 
+/**
+ * \brief The basic class to handle logical_or_expression
+ *
+ * Since the rule contains itself, this rule will be implemented in the form of a list
+ */
+class logical_or_expression:public CAst
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		Token *_p_token1;                                               // '&'
-public:
-	unary_operator	                                              // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				Token *_arg__p_token1			
-		);
-	unary_operator(const unary_operator& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "unary_operator"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_UNARY_OPERATOR
-	virtual std::string pattern()const;							//returns the pattern, here "['&']"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
-	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
-	virtual ~unary_operator ();
+	public:
+		typedef std::list<ReferenceCountedAutoPointer<logical_or_expression_item> > logical_or_expressionListType;	///< This defines the list type which will store the logical_or_expression_item
+		typedef logical_or_expressionListType::iterator logical_or_expressionIterType;				///< This defines the iterator over logical_or_expressionListType
+		typedef logical_or_expressionListType::const_iterator Clogical_or_expressionIterType;				///< This defines the constant iterator over logical_or_expressionListType
 
-	
+	private:
+		logical_or_expressionListType _itemList;									///< The list of items
+	public:
+		/**
+		 * \brief The default constructor calls the parent constructor
+		 *
+		 */
+		logical_or_expression():CAst()
+		{}
+
+		/**
+		 * \brief Append an item to the list
+		 *
+		 */
+		void append( ReferenceCountedAutoPointer<logical_or_expression_item> item)
+		{
+			_itemList.push_back(item);
+		}
 		
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"logical_or_expression"</b>
+		 * \returns <b>"logical_or_expression"</b>
+                 */
+		virtual std::string name()const {return "logical_or_expression";}
+		
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_LOGICAL_OR_EXPRESSION
+		 * \returns  ID_LOGICAL_OR_EXPRESSION
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_LOGICAL_OR_EXPRESSION;}
+
 };
 
 
-			
-/*=============================================================================================================*\
-                                                                                                                 
-        THE relational_expression CLASS                                                                                 
-        FOR PATTERN : [relational_expression,'<',shift_expression]		                                                                 
- 														 
-\*=============================================================================================================*/  
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
-// FORWARD DECLARATION
-class Token;
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:unary_operator
+//////////////////////////////////////////
+
+
+
+
+
+class token;
+
+
+
+
+/**
+ * \brief unary_operator implements the pattern: <b>(&,)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_unary_operator [ label="unary_operator", URL="\ref unary_operator", color="#00AAAA" ];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_unary_operator ->  node_token [label="_p_token" style=solid];
+ * }
+ * \enddot
+ */
+class unary_operator:public CAst
+{
+	private:
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>-</b>, <b>~</b>, <b>!</b>, <b>*</b>, <b>&</b>, <b>+</b>
+	public:
+		/** 
+		 * \brief Constructor of unary_operator
+		 *
+		 * This function handles the unary_operator
+                 */
+		unary_operator	
+				(
+					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>-</b>, <b>~</b>, <b>!</b>, <b>*</b>, <b>&</b>, <b>+</b>
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"unary_operator"</b>
+		 * \returns <b>"unary_operator"</b>
+                 */
+		virtual std::string name()const		{return std::string("unary_operator");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_UNARY_OPERATOR
+		 * \returns  ID_UNARY_OPERATOR
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_UNARY_OPERATOR;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~unary_operator()
+		{}
+};
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:relational_expression
+//////////////////////////////////////////
+
+
+
+
+
+class token;
 class shift_expression;
 
-/*------------------------------------------------------------*\
- 							        
-  item class relational_expression_item                              
-                                                                
-\*------------------------------------------------------------*/
+
+
+
+
+/**
+ * \brief relational_expression_item implements the pattern: <b>(relational_expression, <, shift_expression)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_relational_expression_item [ label="relational_expression_item", URL="\ref relational_expression_item", color="#00AAAA" ];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_shift_expression [ label="shift_expression", URL="\ref shift_expression", color="#00AAAA"];
+ *     node_relational_expression_item ->  node_token [label="_p_token" style=dotted];
+ *     node_relational_expression_item ->  node_shift_expression [label="_p_shift_expression" style=solid];
+ * }
+ * \enddot
+ */
 class relational_expression_item
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-	Token *_p_token1;                                               // '<'
-	shift_expression *_p_shift_expression;                          // shift_expression
-public:
-	relational_expression_item
-		(
-			std::string _arg_s_matchedPattern,
-			Token *_arg__p_token1,
-			shift_expression *_arg__p_shift_expression
-		);
-	relational_expression_item(const relational_expression_item &);
-	virtual std::string name()const{return "relational_expression_item";}			//returns the class name, here "relational_expression"
-	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual Properties getProperties()const;
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
-	      Token* get_p_token1()     {return _p_token1;}							//returns const pointer to _p_token1
-	const shift_expression* get_p_shift_expression()const{return _p_shift_expression;}							//returns const pointer to _p_shift_expression
-	      shift_expression* get_p_shift_expression()     {return _p_shift_expression;}							//returns const pointer to _p_shift_expression
-	virtual ~relational_expression_item();
-	
-	
-};
-/*------------------------------------------------------------*\
- 							        
-  main class relational_expression                         
-                                                                
-\*------------------------------------------------------------*/
+	private:
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b><</b>, <b><=</b>, <b>></b>, <b>>=</b>, <b>None</b>
+		ReferenceCountedAutoPointer<shift_expression> _p_shift_expression;	  ///< A pointer to shift_expression.
+	public:
+		/** 
+		 * \brief Constructor of relational_expression_item
+		 *
+		 * This function handles the relational_expression_item
+                 */
+		relational_expression_item	
+				(
+					ReferenceCountedAutoPointer<token> _arg_token,   ///< A pointer to a token, accepts <b><</b>, <b><=</b>, <b>></b>, <b>>=</b>, <b>None</b>
+					ReferenceCountedAutoPointer<shift_expression> _arg_shift_expression  ///< A pointer to shift_expression.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"relational_expression_item"</b>
+		 * \returns <b>"relational_expression_item"</b>
+                 */
+		virtual std::string name()const		{return std::string("relational_expression_item");}
 
-class relational_expression
-	:public CAst 
-{
-private:
-	typedef std::deque<relational_expression_item> ItemsListType;
-	typedef ItemsListType::iterator ItemsListIter;
-	typedef ItemsListType::const_iterator CItemsListIter;
-	ItemsListType _items;
-public:
-//ASDFG
-	
-	relational_expression
-		(
-			std::string _arg_s_matchedPattern,
-			Token *_arg__p_token1,
-			shift_expression *_arg__p_shift_expression
-		);
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_RELATIONAL_EXPRESSION_ITEM
+		 * \returns  ID_RELATIONAL_EXPRESSION_ITEM
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_RELATIONAL_EXPRESSION_ITEM;}
 
-	void append
-		(
-			std::string _arg_s_matchedPattern,
-			Token *_arg__p_token1,
-			shift_expression *_arg__p_shift_expression
-		);
-
-	virtual std::string name()const;							//returns the class name, here "relational_expression"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_RELATIONAL_EXPRESSION
-	virtual std::string pattern()const;							//returns the pattern, here "[relational_expression,'<',shift_expression]"
-	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
-	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
-	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
-	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
-	virtual int size()const{return _items.size();}						//returns the size of the container
-	virtual relational_expression_item& operator[](int i){return _items[i];}
-	virtual ~relational_expression ();
-
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~relational_expression_item()
+		{}
 };
 
-typedef std::deque<relational_expression_item>::iterator relational_expression_iterator;
-typedef std::deque<relational_expression_item>::const_iterator relational_expression_const_iterator;
-
-
-			
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE struct_or_union CLASS                                                                                 
- 	FOR PATTERN : [STRUCT]		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
-class Token;
 
-
-class struct_or_union 
-	:public CAst 
+/**
+ * \brief The basic class to handle relational_expression
+ *
+ * Since the rule contains itself, this rule will be implemented in the form of a list
+ */
+class relational_expression:public CAst
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		Token *_p_token1;                                               // STRUCT
-public:
-	struct_or_union	                                             // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				Token *_arg__p_token1			
-		);
-	struct_or_union(const struct_or_union& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "struct_or_union"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_STRUCT_OR_UNION
-	virtual std::string pattern()const;							//returns the pattern, here "[STRUCT]"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
-	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
-	virtual ~struct_or_union ();
+	public:
+		typedef std::list<ReferenceCountedAutoPointer<relational_expression_item> > relational_expressionListType;	///< This defines the list type which will store the relational_expression_item
+		typedef relational_expressionListType::iterator relational_expressionIterType;				///< This defines the iterator over relational_expressionListType
+		typedef relational_expressionListType::const_iterator Crelational_expressionIterType;				///< This defines the constant iterator over relational_expressionListType
 
-	
+	private:
+		relational_expressionListType _itemList;									///< The list of items
+	public:
+		/**
+		 * \brief The default constructor calls the parent constructor
+		 *
+		 */
+		relational_expression():CAst()
+		{}
+
+		/**
+		 * \brief Append an item to the list
+		 *
+		 */
+		void append( ReferenceCountedAutoPointer<relational_expression_item> item)
+		{
+			_itemList.push_back(item);
+		}
 		
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"relational_expression"</b>
+		 * \returns <b>"relational_expression"</b>
+                 */
+		virtual std::string name()const {return "relational_expression";}
+		
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_RELATIONAL_EXPRESSION
+		 * \returns  ID_RELATIONAL_EXPRESSION
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_RELATIONAL_EXPRESSION;}
+
 };
 
 
-			
 
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE enumerator CLASS                                                                                 
- 	FOR PATTERN : [IDENTIFIER,'=',constant_expression]		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
-// FORWARD DECLARATION
-class Token;
-class Token;
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:struct_or_union
+//////////////////////////////////////////
+
+
+
+
+
+class token;
+
+
+
+
+/**
+ * \brief struct_or_union implements the pattern: <b>(struct,)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_struct_or_union [ label="struct_or_union", URL="\ref struct_or_union", color="#00AAAA" ];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_struct_or_union ->  node_token [label="_p_token" style=solid];
+ * }
+ * \enddot
+ */
+class struct_or_union:public CAst
+{
+	private:
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>struct</b>, <b>union</b>
+	public:
+		/** 
+		 * \brief Constructor of struct_or_union
+		 *
+		 * This function handles the struct_or_union
+                 */
+		struct_or_union	
+				(
+					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>struct</b>, <b>union</b>
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"struct_or_union"</b>
+		 * \returns <b>"struct_or_union"</b>
+                 */
+		virtual std::string name()const		{return std::string("struct_or_union");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_STRUCT_OR_UNION
+		 * \returns  ID_STRUCT_OR_UNION
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_STRUCT_OR_UNION;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~struct_or_union()
+		{}
+};
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:enumerator
+//////////////////////////////////////////
+
+
+
+
+
+class token;
 class constant_expression;
 
 
-class enumerator 
-	:public CAst 
-{
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		Token *_p_token1;                                               // IDENTIFIER
-		Token *_p_token2;                                               // '='
-		constant_expression *_p_constant_expression;                    // constant_expression
-public:
-	enumerator	                                                  // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				Token *_arg__p_token1,
-				Token *_arg__p_token2,
-				constant_expression *_arg__p_constant_expression			
-		);
-	enumerator(const enumerator& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "enumerator"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_ENUMERATOR
-	virtual std::string pattern()const;							//returns the pattern, here "[IDENTIFIER,'=',constant_expression]"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
-	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
-	const Token* get_p_token2()const{return _p_token2;}							//returns const pointer to _p_token2
-	      Token* get_p_token2()     {return _p_token2;}							//returns       pointer to _p_token2
-	const constant_expression* get_p_constant_expression()const{return _p_constant_expression;}							//returns const pointer to _p_constant_expression
-	      constant_expression* get_p_constant_expression()     {return _p_constant_expression;}							//returns       pointer to _p_constant_expression
-	virtual ~enumerator ();
 
-	
-		
+
+
+
+
+/**
+ * \brief enumerator implements the pattern: <b>([IDENTIFIER], =, constant_expression)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_enumerator [ label="enumerator", URL="\ref enumerator", color="#00AAAA" ];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_constant_expression [ label="constant_expression", URL="\ref constant_expression", color="#00AAAA"];
+ *     node_enumerator ->  node_token [label="_p_token1" style=solid];
+ *     node_enumerator ->  node_token [label="_p_token2" style=dotted];
+ *     node_enumerator ->  node_constant_expression [label="_p_constant_expression" style=dotted];
+ * }
+ * \enddot
+ */
+class enumerator:public CAst
+{
+	private:
+		ReferenceCountedAutoPointer<token> _p_token1;	  ///< A pointer to a token, accepts <b>[IDENTIFIER]</b>
+		ReferenceCountedAutoPointer<token> _p_token2;	  ///< A pointer to a token, accepts <b>=</b>, <b>None</b>
+		ReferenceCountedAutoPointer<constant_expression> _p_constant_expression;	  ///< A pointer to constant_expression. This parameter can be <b>Null</b>
+	public:
+		/** 
+		 * \brief Constructor of enumerator
+		 *
+		 * This function handles the enumerator
+                 */
+		enumerator	
+				(
+					ReferenceCountedAutoPointer<token> _arg_token1,   ///< A pointer to a token, accepts <b>[IDENTIFIER]</b>
+					ReferenceCountedAutoPointer<token> _arg_token2,   ///< A pointer to a token, accepts <b>=</b>, <b>None</b>
+					ReferenceCountedAutoPointer<constant_expression> _arg_constant_expression  ///< A pointer to constant_expression. This parameter can be <b>Null</b>
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"enumerator"</b>
+		 * \returns <b>"enumerator"</b>
+                 */
+		virtual std::string name()const		{return std::string("enumerator");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_ENUMERATOR
+		 * \returns  ID_ENUMERATOR
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_ENUMERATOR;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~enumerator()
+		{}
 };
 
 
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE assignment_expression BASE CLASS                                                                    
-                                                                                                                 
-\*=============================================================================================================*/  
 
 
-class assignment_expression :public CAst
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:assignment_expression
+//////////////////////////////////////////
+
+
+/**
+ * \brief Implements assignment_expression
+ * 
+ * This is the interface class. This implements the patterns
+ *  - (conditional_expression,)
+ *  - (unary_expression, assignment_operator, assignment_expression)
+ * 
+ **/
+class assignment_expression:public CAst
 {
-public:
-	virtual std::string name()const=0;
-	virtual std::ostream& codeStream(std::ostream&)const=0;
-	virtual CAstType typeId()const=0;
-	virtual std::string pattern()const=0;
-	virtual bool isList()const=0;
-	virtual Properties getProperties()const=0;
-	virtual PropertiesList getPropertiesList()const=0;
-	virtual ~assignment_expression (){};
+	public:
+		/**
+                 * \brief Interface for the child classes to return the name
+                 *
+                 */
+		virtual std::string name()const=0;
+
+		/**
+                 *  \brief Interface for the child classes to return the class ID
+                 *
+                 */
+		virtual CAST_CLASS_ID classId()const=0;
 };
 
 
 
 
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE assignment_expression1 CLASS                                                                                 
- 	FOR PATTERN : [unary_expression,assignment_operator,assignment_expression]		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
-
-
-
-// FORWARD DECLARATION
-class unary_expression;
-class assignment_operator;
-class assignment_expression;
-
-
-class assignment_expression1 
-	:public assignment_expression 
-{
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		unary_expression *_p_unary_expression;                          // unary_expression
-		assignment_operator *_p_assignment_operator;                    // assignment_operator
-		assignment_expression *_p_assignment_expression;                // assignment_expression
-public:
-	assignment_expression1	                                      // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				unary_expression *_arg__p_unary_expression,
-				assignment_operator *_arg__p_assignment_operator,
-				assignment_expression *_arg__p_assignment_expression			
-		);
-	assignment_expression1(const assignment_expression1& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "assignment_expression1"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_ASSIGNMENT_EXPRESSION1
-	virtual std::string pattern()const;							//returns the pattern, here "[unary_expression,assignment_operator,assignment_expression]"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const unary_expression* get_p_unary_expression()const{return _p_unary_expression;}							//returns const pointer to _p_unary_expression
-	      unary_expression* get_p_unary_expression()     {return _p_unary_expression;}							//returns       pointer to _p_unary_expression
-	const assignment_operator* get_p_assignment_operator()const{return _p_assignment_operator;}							//returns const pointer to _p_assignment_operator
-	      assignment_operator* get_p_assignment_operator()     {return _p_assignment_operator;}							//returns       pointer to _p_assignment_operator
-	const assignment_expression* get_p_assignment_expression()const{return _p_assignment_expression;}							//returns const pointer to _p_assignment_expression
-	      assignment_expression* get_p_assignment_expression()     {return _p_assignment_expression;}							//returns       pointer to _p_assignment_expression
-	virtual ~assignment_expression1 ();
-
-	
-		
-};
-
-
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE assignment_expression2 CLASS                                                                                 
- 	FOR PATTERN : [conditional_expression]		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
-
-
-
-// FORWARD DECLARATION
 class conditional_expression;
 
 
-class assignment_expression2 
-	:public assignment_expression 
-{
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		conditional_expression *_p_conditional_expression;              // conditional_expression
-public:
-	assignment_expression2	                                      // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				conditional_expression *_arg__p_conditional_expression			
-		);
-	assignment_expression2(const assignment_expression2& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "assignment_expression2"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_ASSIGNMENT_EXPRESSION2
-	virtual std::string pattern()const;							//returns the pattern, here "[conditional_expression]"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const conditional_expression* get_p_conditional_expression()const{return _p_conditional_expression;}							//returns const pointer to _p_conditional_expression
-	      conditional_expression* get_p_conditional_expression()     {return _p_conditional_expression;}							//returns       pointer to _p_conditional_expression
-	virtual ~assignment_expression2 ();
 
-	
-		
+/**
+ * \brief assignment_expression_1 implements the pattern: <b>(conditional_expression,)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_assignment_expression_1 [ label="assignment_expression_1", URL="\ref assignment_expression_1", color="#00AAAA" ];
+ *     node_conditional_expression [ label="conditional_expression", URL="\ref conditional_expression", color="#00AAAA"];
+ *     node_assignment_expression_1 ->  node_conditional_expression [label="_p_conditional_expression" style=solid];
+ * }
+ * \enddot
+ */
+class assignment_expression_1:public assignment_expression
+{
+	private:
+		ReferenceCountedAutoPointer<conditional_expression> _p_conditional_expression;	  ///< A pointer to conditional_expression.
+	public:
+		/** 
+		 * \brief Constructor of assignment_expression_1
+		 *
+		 * This function handles the assignment_expression_1
+                 */
+		assignment_expression_1	
+				(
+					ReferenceCountedAutoPointer<conditional_expression> _arg_conditional_expression  ///< A pointer to conditional_expression.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"assignment_expression_1"</b>
+		 * \returns <b>"assignment_expression_1"</b>
+                 */
+		virtual std::string name()const		{return std::string("assignment_expression_1");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_ASSIGNMENT_EXPRESSION_1
+		 * \returns  ID_ASSIGNMENT_EXPRESSION_1
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_ASSIGNMENT_EXPRESSION_1;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~assignment_expression_1()
+		{}
 };
 
 
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE parameter_type_list CLASS                                                                                 
- 	FOR PATTERN : [parameter_list,',',ELLIPSIS]		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
+class assignment_operator;
+class unary_expression;
+class assignment_expression;
+
+
+
+
+
+/**
+ * \brief assignment_expression_2 implements the pattern: <b>(unary_expression, assignment_operator, assignment_expression)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_assignment_expression_2 [ label="assignment_expression_2", URL="\ref assignment_expression_2", color="#00AAAA" ];
+ *     node_unary_expression [ label="unary_expression", URL="\ref unary_expression", color="#00AAAA"];
+ *     node_assignment_operator [ label="assignment_operator", URL="\ref assignment_operator", color="#00AAAA"];
+ *     node_assignment_expression [ label="assignment_expression", URL="\ref assignment_expression", color="#00AAAA"];
+ *     node_assignment_expression_2 ->  node_unary_expression [label="_p_unary_expression" style=solid];
+ *     node_assignment_expression_2 ->  node_assignment_operator [label="_p_assignment_operator" style=solid];
+ *     node_assignment_expression_2 ->  node_assignment_expression [label="_p_assignment_expression" style=solid];
+ * }
+ * \enddot
+ */
+class assignment_expression_2:public assignment_expression
+{
+	private:
+		ReferenceCountedAutoPointer<unary_expression> _p_unary_expression;	  ///< A pointer to unary_expression.
+		ReferenceCountedAutoPointer<assignment_operator> _p_assignment_operator;	  ///< A pointer to assignment_operator.
+		ReferenceCountedAutoPointer<assignment_expression> _p_assignment_expression;	  ///< A pointer to assignment_expression.
+	public:
+		/** 
+		 * \brief Constructor of assignment_expression_2
+		 *
+		 * This function handles the assignment_expression_2
+                 */
+		assignment_expression_2	
+				(
+					ReferenceCountedAutoPointer<unary_expression> _arg_unary_expression,   ///< A pointer to unary_expression.
+					ReferenceCountedAutoPointer<assignment_operator> _arg_assignment_operator,   ///< A pointer to assignment_operator.
+					ReferenceCountedAutoPointer<assignment_expression> _arg_assignment_expression  ///< A pointer to assignment_expression.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"assignment_expression_2"</b>
+		 * \returns <b>"assignment_expression_2"</b>
+                 */
+		virtual std::string name()const		{return std::string("assignment_expression_2");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_ASSIGNMENT_EXPRESSION_2
+		 * \returns  ID_ASSIGNMENT_EXPRESSION_2
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_ASSIGNMENT_EXPRESSION_2;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~assignment_expression_2()
+		{}
+};
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:parameter_type_list
+//////////////////////////////////////////
+
+
+
+
+
+class token;
 class parameter_list;
-class Token;
-class Token;
 
 
-class parameter_type_list 
-	:public CAst 
+
+
+
+
+
+/**
+ * \brief parameter_type_list implements the pattern: <b>(parameter_list, ,, ...)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_parameter_type_list [ label="parameter_type_list", URL="\ref parameter_type_list", color="#00AAAA" ];
+ *     node_parameter_list [ label="parameter_list", URL="\ref parameter_list", color="#00AAAA"];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_parameter_type_list ->  node_parameter_list [label="_p_parameter_list" style=solid];
+ *     node_parameter_type_list ->  node_token [label="_p_token1" style=dotted];
+ *     node_parameter_type_list ->  node_token [label="_p_token2" style=dotted];
+ * }
+ * \enddot
+ */
+class parameter_type_list:public CAst
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		parameter_list *_p_parameter_list;                              // parameter_list
-		Token *_p_token1;                                               // ','
-		Token *_p_token2;                                               // ELLIPSIS
-public:
-	parameter_type_list	                                         // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				parameter_list *_arg__p_parameter_list,
-				Token *_arg__p_token1,
-				Token *_arg__p_token2			
-		);
-	parameter_type_list(const parameter_type_list& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "parameter_type_list"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_PARAMETER_TYPE_LIST
-	virtual std::string pattern()const;							//returns the pattern, here "[parameter_list,',',ELLIPSIS]"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const parameter_list* get_p_parameter_list()const{return _p_parameter_list;}							//returns const pointer to _p_parameter_list
-	      parameter_list* get_p_parameter_list()     {return _p_parameter_list;}							//returns       pointer to _p_parameter_list
-	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
-	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
-	const Token* get_p_token2()const{return _p_token2;}							//returns const pointer to _p_token2
-	      Token* get_p_token2()     {return _p_token2;}							//returns       pointer to _p_token2
-	virtual ~parameter_type_list ();
+	private:
+		ReferenceCountedAutoPointer<parameter_list> _p_parameter_list;	  ///< A pointer to parameter_list.
+		ReferenceCountedAutoPointer<token> _p_token1;	  ///< A pointer to a token, accepts <b>,</b>, <b>None</b>
+		ReferenceCountedAutoPointer<token> _p_token2;	  ///< A pointer to a token, accepts <b>...</b>, <b>None</b>
+	public:
+		/** 
+		 * \brief Constructor of parameter_type_list
+		 *
+		 * This function handles the parameter_type_list
+                 */
+		parameter_type_list	
+				(
+					ReferenceCountedAutoPointer<parameter_list> _arg_parameter_list,   ///< A pointer to parameter_list.
+					ReferenceCountedAutoPointer<token> _arg_token1,   ///< A pointer to a token, accepts <b>,</b>, <b>None</b>
+					ReferenceCountedAutoPointer<token> _arg_token2  ///< A pointer to a token, accepts <b>...</b>, <b>None</b>
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"parameter_type_list"</b>
+		 * \returns <b>"parameter_type_list"</b>
+                 */
+		virtual std::string name()const		{return std::string("parameter_type_list");}
 
-	
-		
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_PARAMETER_TYPE_LIST
+		 * \returns  ID_PARAMETER_TYPE_LIST
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_PARAMETER_TYPE_LIST;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~parameter_type_list()
+		{}
 };
 
 
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE parameter_declaration BASE CLASS                                                                    
-                                                                                                                 
-\*=============================================================================================================*/  
 
 
-class parameter_declaration :public CAst
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:parameter_declaration
+//////////////////////////////////////////
+
+
+/**
+ * \brief Implements parameter_declaration
+ * 
+ * This is the interface class. This implements the patterns
+ *  - (declaration_specifiers, declarator)
+ *  - (declaration_specifiers, abstract_declarator)
+ *  - (declaration_specifiers,)
+ * 
+ **/
+class parameter_declaration:public CAst
 {
-public:
-	virtual std::string name()const=0;
-	virtual std::ostream& codeStream(std::ostream&)const=0;
-	virtual CAstType typeId()const=0;
-	virtual std::string pattern()const=0;
-	virtual bool isList()const=0;
-	virtual Properties getProperties()const=0;
-	virtual PropertiesList getPropertiesList()const=0;
-	virtual ~parameter_declaration (){};
+	public:
+		/**
+                 * \brief Interface for the child classes to return the name
+                 *
+                 */
+		virtual std::string name()const=0;
+
+		/**
+                 *  \brief Interface for the child classes to return the class ID
+                 *
+                 */
+		virtual CAST_CLASS_ID classId()const=0;
 };
 
 
 
 
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE parameter_declaration1 CLASS                                                                                 
- 	FOR PATTERN : [declaration_specifiers,declarator]		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
-
-
-
-// FORWARD DECLARATION
-class declaration_specifiers;
-class declarator;
-
-
-class parameter_declaration1 
-	:public parameter_declaration 
-{
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		declaration_specifiers *_p_declaration_specifiers;              // declaration_specifiers
-		declarator *_p_declarator;                                      // declarator
-public:
-	parameter_declaration1	                                      // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				declaration_specifiers *_arg__p_declaration_specifiers,
-				declarator *_arg__p_declarator			
-		);
-	parameter_declaration1(const parameter_declaration1& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "parameter_declaration1"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_PARAMETER_DECLARATION1
-	virtual std::string pattern()const;							//returns the pattern, here "[declaration_specifiers,declarator]"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const declaration_specifiers* get_p_declaration_specifiers()const{return _p_declaration_specifiers;}							//returns const pointer to _p_declaration_specifiers
-	      declaration_specifiers* get_p_declaration_specifiers()     {return _p_declaration_specifiers;}							//returns       pointer to _p_declaration_specifiers
-	const declarator* get_p_declarator()const{return _p_declarator;}							//returns const pointer to _p_declarator
-	      declarator* get_p_declarator()     {return _p_declarator;}							//returns       pointer to _p_declarator
-	virtual ~parameter_declaration1 ();
-
-	
-		
-};
-
-
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE parameter_declaration2 CLASS                                                                                 
- 	FOR PATTERN : [declaration_specifiers,abstract_declarator]		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
-
-
-
-// FORWARD DECLARATION
 class declaration_specifiers;
 class abstract_declarator;
 
 
-class parameter_declaration2 
-	:public parameter_declaration 
-{
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		declaration_specifiers *_p_declaration_specifiers;              // declaration_specifiers
-		abstract_declarator *_p_abstract_declarator;                    // abstract_declarator
-public:
-	parameter_declaration2	                                      // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				declaration_specifiers *_arg__p_declaration_specifiers,
-				abstract_declarator *_arg__p_abstract_declarator			
-		);
-	parameter_declaration2(const parameter_declaration2& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "parameter_declaration2"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_PARAMETER_DECLARATION2
-	virtual std::string pattern()const;							//returns the pattern, here "[declaration_specifiers,abstract_declarator]"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const declaration_specifiers* get_p_declaration_specifiers()const{return _p_declaration_specifiers;}							//returns const pointer to _p_declaration_specifiers
-	      declaration_specifiers* get_p_declaration_specifiers()     {return _p_declaration_specifiers;}							//returns       pointer to _p_declaration_specifiers
-	const abstract_declarator* get_p_abstract_declarator()const{return _p_abstract_declarator;}							//returns const pointer to _p_abstract_declarator
-	      abstract_declarator* get_p_abstract_declarator()     {return _p_abstract_declarator;}							//returns       pointer to _p_abstract_declarator
-	virtual ~parameter_declaration2 ();
 
-	
-		
+
+/**
+ * \brief parameter_declaration_1 implements the pattern: <b>(declaration_specifiers, abstract_declarator)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_parameter_declaration_1 [ label="parameter_declaration_1", URL="\ref parameter_declaration_1", color="#00AAAA" ];
+ *     node_declaration_specifiers [ label="declaration_specifiers", URL="\ref declaration_specifiers", color="#00AAAA"];
+ *     node_abstract_declarator [ label="abstract_declarator", URL="\ref abstract_declarator", color="#00AAAA"];
+ *     node_parameter_declaration_1 ->  node_declaration_specifiers [label="_p_declaration_specifiers" style=solid];
+ *     node_parameter_declaration_1 ->  node_abstract_declarator [label="_p_abstract_declarator" style=solid];
+ * }
+ * \enddot
+ */
+class parameter_declaration_1:public parameter_declaration
+{
+	private:
+		ReferenceCountedAutoPointer<declaration_specifiers> _p_declaration_specifiers;	  ///< A pointer to declaration_specifiers.
+		ReferenceCountedAutoPointer<abstract_declarator> _p_abstract_declarator;	  ///< A pointer to abstract_declarator.
+	public:
+		/** 
+		 * \brief Constructor of parameter_declaration_1
+		 *
+		 * This function handles the parameter_declaration_1
+                 */
+		parameter_declaration_1	
+				(
+					ReferenceCountedAutoPointer<declaration_specifiers> _arg_declaration_specifiers,   ///< A pointer to declaration_specifiers.
+					ReferenceCountedAutoPointer<abstract_declarator> _arg_abstract_declarator  ///< A pointer to abstract_declarator.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"parameter_declaration_1"</b>
+		 * \returns <b>"parameter_declaration_1"</b>
+                 */
+		virtual std::string name()const		{return std::string("parameter_declaration_1");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_PARAMETER_DECLARATION_1
+		 * \returns  ID_PARAMETER_DECLARATION_1
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_PARAMETER_DECLARATION_1;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~parameter_declaration_1()
+		{}
 };
 
 
-			
-/*=============================================================================================================*\
-                                                                                                                 
-        THE multiplicative_expression CLASS                                                                                 
-        FOR PATTERN : [multiplicative_expression,'*',cast_expression]		                                                                 
- 														 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
-class Token;
+class declaration_specifiers;
+class declarator;
+
+
+
+
+/**
+ * \brief parameter_declaration_2 implements the pattern: <b>(declaration_specifiers, declarator)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_parameter_declaration_2 [ label="parameter_declaration_2", URL="\ref parameter_declaration_2", color="#00AAAA" ];
+ *     node_declaration_specifiers [ label="declaration_specifiers", URL="\ref declaration_specifiers", color="#00AAAA"];
+ *     node_declarator [ label="declarator", URL="\ref declarator", color="#00AAAA"];
+ *     node_parameter_declaration_2 ->  node_declaration_specifiers [label="_p_declaration_specifiers" style=solid];
+ *     node_parameter_declaration_2 ->  node_declarator [label="_p_declarator" style=dotted];
+ * }
+ * \enddot
+ */
+class parameter_declaration_2:public parameter_declaration
+{
+	private:
+		ReferenceCountedAutoPointer<declaration_specifiers> _p_declaration_specifiers;	  ///< A pointer to declaration_specifiers.
+		ReferenceCountedAutoPointer<declarator> _p_declarator;	  ///< A pointer to declarator. This parameter can be <b>Null</b>
+	public:
+		/** 
+		 * \brief Constructor of parameter_declaration_2
+		 *
+		 * This function handles the parameter_declaration_2
+                 */
+		parameter_declaration_2	
+				(
+					ReferenceCountedAutoPointer<declaration_specifiers> _arg_declaration_specifiers,   ///< A pointer to declaration_specifiers.
+					ReferenceCountedAutoPointer<declarator> _arg_declarator  ///< A pointer to declarator. This parameter can be <b>Null</b>
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"parameter_declaration_2"</b>
+		 * \returns <b>"parameter_declaration_2"</b>
+                 */
+		virtual std::string name()const		{return std::string("parameter_declaration_2");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_PARAMETER_DECLARATION_2
+		 * \returns  ID_PARAMETER_DECLARATION_2
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_PARAMETER_DECLARATION_2;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~parameter_declaration_2()
+		{}
+};
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:multiplicative_expression
+//////////////////////////////////////////
+
+
+
+
+
 class cast_expression;
+class token;
 
-/*------------------------------------------------------------*\
- 							        
-  item class multiplicative_expression_item                              
-                                                                
-\*------------------------------------------------------------*/
+
+
+
+
+/**
+ * \brief multiplicative_expression_item implements the pattern: <b>(multiplicative_expression, *, cast_expression)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_multiplicative_expression_item [ label="multiplicative_expression_item", URL="\ref multiplicative_expression_item", color="#00AAAA" ];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_cast_expression [ label="cast_expression", URL="\ref cast_expression", color="#00AAAA"];
+ *     node_multiplicative_expression_item ->  node_token [label="_p_token" style=dotted];
+ *     node_multiplicative_expression_item ->  node_cast_expression [label="_p_cast_expression" style=solid];
+ * }
+ * \enddot
+ */
 class multiplicative_expression_item
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-	Token *_p_token1;                                               // '*'
-	cast_expression *_p_cast_expression;                            // cast_expression
-public:
-	multiplicative_expression_item
-		(
-			std::string _arg_s_matchedPattern,
-			Token *_arg__p_token1,
-			cast_expression *_arg__p_cast_expression
-		);
-	multiplicative_expression_item(const multiplicative_expression_item &);
-	virtual std::string name()const{return "multiplicative_expression_item";}			//returns the class name, here "multiplicative_expression"
-	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual Properties getProperties()const;
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
-	      Token* get_p_token1()     {return _p_token1;}							//returns const pointer to _p_token1
-	const cast_expression* get_p_cast_expression()const{return _p_cast_expression;}							//returns const pointer to _p_cast_expression
-	      cast_expression* get_p_cast_expression()     {return _p_cast_expression;}							//returns const pointer to _p_cast_expression
-	virtual ~multiplicative_expression_item();
-	
-	
-};
-/*------------------------------------------------------------*\
- 							        
-  main class multiplicative_expression                         
-                                                                
-\*------------------------------------------------------------*/
+	private:
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>*</b>, <b>/</b>, <b>%</b>, <b>None</b>
+		ReferenceCountedAutoPointer<cast_expression> _p_cast_expression;	  ///< A pointer to cast_expression.
+	public:
+		/** 
+		 * \brief Constructor of multiplicative_expression_item
+		 *
+		 * This function handles the multiplicative_expression_item
+                 */
+		multiplicative_expression_item	
+				(
+					ReferenceCountedAutoPointer<token> _arg_token,   ///< A pointer to a token, accepts <b>*</b>, <b>/</b>, <b>%</b>, <b>None</b>
+					ReferenceCountedAutoPointer<cast_expression> _arg_cast_expression  ///< A pointer to cast_expression.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"multiplicative_expression_item"</b>
+		 * \returns <b>"multiplicative_expression_item"</b>
+                 */
+		virtual std::string name()const		{return std::string("multiplicative_expression_item");}
 
-class multiplicative_expression
-	:public CAst 
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_MULTIPLICATIVE_EXPRESSION_ITEM
+		 * \returns  ID_MULTIPLICATIVE_EXPRESSION_ITEM
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_MULTIPLICATIVE_EXPRESSION_ITEM;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~multiplicative_expression_item()
+		{}
+};
+
+
+
+
+
+/**
+ * \brief The basic class to handle multiplicative_expression
+ *
+ * Since the rule contains itself, this rule will be implemented in the form of a list
+ */
+class multiplicative_expression:public CAst
 {
-private:
-	typedef std::deque<multiplicative_expression_item> ItemsListType;
-	typedef ItemsListType::iterator ItemsListIter;
-	typedef ItemsListType::const_iterator CItemsListIter;
-	ItemsListType _items;
-public:
-//ASDFG
-	
-	multiplicative_expression
-		(
-			std::string _arg_s_matchedPattern,
-			Token *_arg__p_token1,
-			cast_expression *_arg__p_cast_expression
-		);
+	public:
+		typedef std::list<ReferenceCountedAutoPointer<multiplicative_expression_item> > multiplicative_expressionListType;	///< This defines the list type which will store the multiplicative_expression_item
+		typedef multiplicative_expressionListType::iterator multiplicative_expressionIterType;				///< This defines the iterator over multiplicative_expressionListType
+		typedef multiplicative_expressionListType::const_iterator Cmultiplicative_expressionIterType;				///< This defines the constant iterator over multiplicative_expressionListType
 
-	void append
-		(
-			std::string _arg_s_matchedPattern,
-			Token *_arg__p_token1,
-			cast_expression *_arg__p_cast_expression
-		);
+	private:
+		multiplicative_expressionListType _itemList;									///< The list of items
+	public:
+		/**
+		 * \brief The default constructor calls the parent constructor
+		 *
+		 */
+		multiplicative_expression():CAst()
+		{}
 
-	virtual std::string name()const;							//returns the class name, here "multiplicative_expression"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_MULTIPLICATIVE_EXPRESSION
-	virtual std::string pattern()const;							//returns the pattern, here "[multiplicative_expression,'*',cast_expression]"
-	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
-	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
-	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
-	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
-	virtual int size()const{return _items.size();}						//returns the size of the container
-	virtual multiplicative_expression_item& operator[](int i){return _items[i];}
-	virtual ~multiplicative_expression ();
+		/**
+		 * \brief Append an item to the list
+		 *
+		 */
+		void append( ReferenceCountedAutoPointer<multiplicative_expression_item> item)
+		{
+			_itemList.push_back(item);
+		}
+		
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"multiplicative_expression"</b>
+		 * \returns <b>"multiplicative_expression"</b>
+                 */
+		virtual std::string name()const {return "multiplicative_expression";}
+		
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_MULTIPLICATIVE_EXPRESSION
+		 * \returns  ID_MULTIPLICATIVE_EXPRESSION
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_MULTIPLICATIVE_EXPRESSION;}
 
 };
 
-typedef std::deque<multiplicative_expression_item>::iterator multiplicative_expression_iterator;
-typedef std::deque<multiplicative_expression_item>::const_iterator multiplicative_expression_const_iterator;
-
-
-			
-			
-/*=============================================================================================================*\
-                                                                                                                 
-        THE type_qualifier_list CLASS                                                                                 
-        FOR PATTERN : [type_qualifier_list,type_qualifier]		                                                                 
- 														 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:type_qualifier_list
+//////////////////////////////////////////
+
+
+
+
+
 class type_qualifier;
 
-/*------------------------------------------------------------*\
- 							        
-  item class type_qualifier_list_item                              
-                                                                
-\*------------------------------------------------------------*/
+
+
+/**
+ * \brief type_qualifier_list_item implements the pattern: <b>(type_qualifier_list, type_qualifier)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_type_qualifier_list_item [ label="type_qualifier_list_item", URL="\ref type_qualifier_list_item", color="#00AAAA" ];
+ *     node_type_qualifier [ label="type_qualifier", URL="\ref type_qualifier", color="#00AAAA"];
+ *     node_type_qualifier_list_item ->  node_type_qualifier [label="_p_type_qualifier" style=solid];
+ * }
+ * \enddot
+ */
 class type_qualifier_list_item
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-	type_qualifier *_p_type_qualifier;                              // type_qualifier
-public:
-	type_qualifier_list_item
-		(
-			std::string _arg_s_matchedPattern,
-			type_qualifier *_arg__p_type_qualifier
-		);
-	type_qualifier_list_item(const type_qualifier_list_item &);
-	virtual std::string name()const{return "type_qualifier_list_item";}			//returns the class name, here "type_qualifier_list"
-	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual Properties getProperties()const;
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const type_qualifier* get_p_type_qualifier()const{return _p_type_qualifier;}							//returns const pointer to _p_type_qualifier
-	      type_qualifier* get_p_type_qualifier()     {return _p_type_qualifier;}							//returns const pointer to _p_type_qualifier
-	virtual ~type_qualifier_list_item();
-	
-	
-};
-/*------------------------------------------------------------*\
- 							        
-  main class type_qualifier_list                         
-                                                                
-\*------------------------------------------------------------*/
+	private:
+		ReferenceCountedAutoPointer<type_qualifier> _p_type_qualifier;	  ///< A pointer to type_qualifier.
+	public:
+		/** 
+		 * \brief Constructor of type_qualifier_list_item
+		 *
+		 * This function handles the type_qualifier_list_item
+                 */
+		type_qualifier_list_item	
+				(
+					ReferenceCountedAutoPointer<type_qualifier> _arg_type_qualifier  ///< A pointer to type_qualifier.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"type_qualifier_list_item"</b>
+		 * \returns <b>"type_qualifier_list_item"</b>
+                 */
+		virtual std::string name()const		{return std::string("type_qualifier_list_item");}
 
-class type_qualifier_list
-	:public CAst 
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_TYPE_QUALIFIER_LIST_ITEM
+		 * \returns  ID_TYPE_QUALIFIER_LIST_ITEM
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_TYPE_QUALIFIER_LIST_ITEM;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~type_qualifier_list_item()
+		{}
+};
+
+
+
+
+
+/**
+ * \brief The basic class to handle type_qualifier_list
+ *
+ * Since the rule contains itself, this rule will be implemented in the form of a list
+ */
+class type_qualifier_list:public CAst
 {
-private:
-	typedef std::deque<type_qualifier_list_item> ItemsListType;
-	typedef ItemsListType::iterator ItemsListIter;
-	typedef ItemsListType::const_iterator CItemsListIter;
-	ItemsListType _items;
-public:
-//ASDFG
-	
-	type_qualifier_list
-		(
-			std::string _arg_s_matchedPattern,
-			type_qualifier *_arg__p_type_qualifier
-		);
+	public:
+		typedef std::list<ReferenceCountedAutoPointer<type_qualifier_list_item> > type_qualifier_listListType;	///< This defines the list type which will store the type_qualifier_list_item
+		typedef type_qualifier_listListType::iterator type_qualifier_listIterType;				///< This defines the iterator over type_qualifier_listListType
+		typedef type_qualifier_listListType::const_iterator Ctype_qualifier_listIterType;				///< This defines the constant iterator over type_qualifier_listListType
 
-	void append
-		(
-			std::string _arg_s_matchedPattern,
-			type_qualifier *_arg__p_type_qualifier
-		);
+	private:
+		type_qualifier_listListType _itemList;									///< The list of items
+	public:
+		/**
+		 * \brief The default constructor calls the parent constructor
+		 *
+		 */
+		type_qualifier_list():CAst()
+		{}
 
-	virtual std::string name()const;							//returns the class name, here "type_qualifier_list"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_TYPE_QUALIFIER_LIST
-	virtual std::string pattern()const;							//returns the pattern, here "[type_qualifier_list,type_qualifier]"
-	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
-	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
-	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
-	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
-	virtual int size()const{return _items.size();}						//returns the size of the container
-	virtual type_qualifier_list_item& operator[](int i){return _items[i];}
-	virtual ~type_qualifier_list ();
+		/**
+		 * \brief Append an item to the list
+		 *
+		 */
+		void append( ReferenceCountedAutoPointer<type_qualifier_list_item> item)
+		{
+			_itemList.push_back(item);
+		}
+		
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"type_qualifier_list"</b>
+		 * \returns <b>"type_qualifier_list"</b>
+                 */
+		virtual std::string name()const {return "type_qualifier_list";}
+		
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_TYPE_QUALIFIER_LIST
+		 * \returns  ID_TYPE_QUALIFIER_LIST
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_TYPE_QUALIFIER_LIST;}
 
 };
 
-typedef std::deque<type_qualifier_list_item>::iterator type_qualifier_list_iterator;
-typedef std::deque<type_qualifier_list_item>::const_iterator type_qualifier_list_const_iterator;
-
-
-			
-			
-/*=============================================================================================================*\
-                                                                                                                 
-        THE argument_expression_list CLASS                                                                                 
-        FOR PATTERN : [argument_expression_list,',',assignment_expression]		                                                                 
- 														 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:argument_expression_list
+//////////////////////////////////////////
+
+
+
+
+
 class assignment_expression;
 
-/*------------------------------------------------------------*\
- 							        
-  item class argument_expression_list_item                              
-                                                                
-\*------------------------------------------------------------*/
+
+
+/**
+ * \brief argument_expression_list_item implements the pattern: <b>(argument_expression_list, ,, assignment_expression)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_argument_expression_list_item [ label="argument_expression_list_item", URL="\ref argument_expression_list_item", color="#00AAAA" ];
+ *     node_assignment_expression [ label="assignment_expression", URL="\ref assignment_expression", color="#00AAAA"];
+ *     node_argument_expression_list_item ->  node_assignment_expression [label="_p_assignment_expression" style=solid];
+ * }
+ * \enddot
+ */
 class argument_expression_list_item
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-	assignment_expression *_p_assignment_expression;                // assignment_expression
-public:
-	argument_expression_list_item
-		(
-			std::string _arg_s_matchedPattern,
-			assignment_expression *_arg__p_assignment_expression
-		);
-	argument_expression_list_item(const argument_expression_list_item &);
-	virtual std::string name()const{return "argument_expression_list_item";}			//returns the class name, here "argument_expression_list"
-	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual Properties getProperties()const;
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const assignment_expression* get_p_assignment_expression()const{return _p_assignment_expression;}							//returns const pointer to _p_assignment_expression
-	      assignment_expression* get_p_assignment_expression()     {return _p_assignment_expression;}							//returns const pointer to _p_assignment_expression
-	virtual ~argument_expression_list_item();
-	
-	
-};
-/*------------------------------------------------------------*\
- 							        
-  main class argument_expression_list                         
-                                                                
-\*------------------------------------------------------------*/
+	private:
+		ReferenceCountedAutoPointer<assignment_expression> _p_assignment_expression;	  ///< A pointer to assignment_expression.
+	public:
+		/** 
+		 * \brief Constructor of argument_expression_list_item
+		 *
+		 * This function handles the argument_expression_list_item
+                 */
+		argument_expression_list_item	
+				(
+					ReferenceCountedAutoPointer<assignment_expression> _arg_assignment_expression  ///< A pointer to assignment_expression.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"argument_expression_list_item"</b>
+		 * \returns <b>"argument_expression_list_item"</b>
+                 */
+		virtual std::string name()const		{return std::string("argument_expression_list_item");}
 
-class argument_expression_list
-	:public CAst 
-{
-private:
-	typedef std::deque<argument_expression_list_item> ItemsListType;
-	typedef ItemsListType::iterator ItemsListIter;
-	typedef ItemsListType::const_iterator CItemsListIter;
-	ItemsListType _items;
-public:
-//ASDFG
-	
-	argument_expression_list
-		(
-			std::string _arg_s_matchedPattern,
-			assignment_expression *_arg__p_assignment_expression
-		);
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_ARGUMENT_EXPRESSION_LIST_ITEM
+		 * \returns  ID_ARGUMENT_EXPRESSION_LIST_ITEM
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_ARGUMENT_EXPRESSION_LIST_ITEM;}
 
-	void append
-		(
-			std::string _arg_s_matchedPattern,
-			assignment_expression *_arg__p_assignment_expression
-		);
-
-	virtual std::string name()const;							//returns the class name, here "argument_expression_list"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_ARGUMENT_EXPRESSION_LIST
-	virtual std::string pattern()const;							//returns the pattern, here "[argument_expression_list,',',assignment_expression]"
-	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
-	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
-	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
-	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
-	virtual int size()const{return _items.size();}						//returns the size of the container
-	virtual argument_expression_list_item& operator[](int i){return _items[i];}
-	virtual ~argument_expression_list ();
-
-};
-
-typedef std::deque<argument_expression_list_item>::iterator argument_expression_list_iterator;
-typedef std::deque<argument_expression_list_item>::const_iterator argument_expression_list_const_iterator;
-
-
-			
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE direct_abstract_declarator BASE CLASS                                                                    
-                                                                                                                 
-\*=============================================================================================================*/  
-
-
-class direct_abstract_declarator :public CAst
-{
-public:
-	virtual std::string name()const=0;
-	virtual std::ostream& codeStream(std::ostream&)const=0;
-	virtual CAstType typeId()const=0;
-	virtual std::string pattern()const=0;
-	virtual bool isList()const=0;
-	virtual Properties getProperties()const=0;
-	virtual PropertiesList getPropertiesList()const=0;
-	virtual ~direct_abstract_declarator (){};
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~argument_expression_list_item()
+		{}
 };
 
 
 
 
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE direct_abstract_declarator1 CLASS                                                                                 
- 	FOR PATTERN : [direct_abstract_declarator,'[',constant_expression,']']		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
 
-
-
-// FORWARD DECLARATION
-class direct_abstract_declarator;
-class constant_expression;
-
-
-class direct_abstract_declarator1 
-	:public direct_abstract_declarator 
+/**
+ * \brief The basic class to handle argument_expression_list
+ *
+ * Since the rule contains itself, this rule will be implemented in the form of a list
+ */
+class argument_expression_list:public CAst
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		direct_abstract_declarator *_p_direct_abstract_declarator;      // direct_abstract_declarator
-		constant_expression *_p_constant_expression;                    // constant_expression
-public:
-	direct_abstract_declarator1	                                 // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				direct_abstract_declarator *_arg__p_direct_abstract_declarator,
-				constant_expression *_arg__p_constant_expression			
-		);
-	direct_abstract_declarator1(const direct_abstract_declarator1& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "direct_abstract_declarator1"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_DIRECT_ABSTRACT_DECLARATOR1
-	virtual std::string pattern()const;							//returns the pattern, here "[direct_abstract_declarator,'[',constant_expression,']']"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const direct_abstract_declarator* get_p_direct_abstract_declarator()const{return _p_direct_abstract_declarator;}							//returns const pointer to _p_direct_abstract_declarator
-	      direct_abstract_declarator* get_p_direct_abstract_declarator()     {return _p_direct_abstract_declarator;}							//returns       pointer to _p_direct_abstract_declarator
-	const constant_expression* get_p_constant_expression()const{return _p_constant_expression;}							//returns const pointer to _p_constant_expression
-	      constant_expression* get_p_constant_expression()     {return _p_constant_expression;}							//returns       pointer to _p_constant_expression
-	virtual ~direct_abstract_declarator1 ();
+	public:
+		typedef std::list<ReferenceCountedAutoPointer<argument_expression_list_item> > argument_expression_listListType;	///< This defines the list type which will store the argument_expression_list_item
+		typedef argument_expression_listListType::iterator argument_expression_listIterType;				///< This defines the iterator over argument_expression_listListType
+		typedef argument_expression_listListType::const_iterator Cargument_expression_listIterType;				///< This defines the constant iterator over argument_expression_listListType
 
-	
+	private:
+		argument_expression_listListType _itemList;									///< The list of items
+	public:
+		/**
+		 * \brief The default constructor calls the parent constructor
+		 *
+		 */
+		argument_expression_list():CAst()
+		{}
+
+		/**
+		 * \brief Append an item to the list
+		 *
+		 */
+		void append( ReferenceCountedAutoPointer<argument_expression_list_item> item)
+		{
+			_itemList.push_back(item);
+		}
 		
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"argument_expression_list"</b>
+		 * \returns <b>"argument_expression_list"</b>
+                 */
+		virtual std::string name()const {return "argument_expression_list";}
+		
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_ARGUMENT_EXPRESSION_LIST
+		 * \returns  ID_ARGUMENT_EXPRESSION_LIST
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_ARGUMENT_EXPRESSION_LIST;}
+
 };
 
 
-			
 
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE direct_abstract_declarator2 CLASS                                                                                 
- 	FOR PATTERN : [direct_abstract_declarator,'(',parameter_type_list,')']		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
-// FORWARD DECLARATION
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:direct_abstract_declarator
+//////////////////////////////////////////
+
+
+/**
+ * \brief Implements direct_abstract_declarator
+ * 
+ * This is the interface class. This implements the patterns
+ *  - ((, abstract_declarator, ))
+ *  - ([, ])
+ *  - ([, constant_expression, ])
+ *  - (direct_abstract_declarator, [, ])
+ *  - (direct_abstract_declarator, [, constant_expression, ])
+ *  - ((, ))
+ *  - ((, parameter_type_list, ))
+ *  - (direct_abstract_declarator, (, ))
+ *  - (direct_abstract_declarator, (, parameter_type_list, ))
+ * 
+ **/
+class direct_abstract_declarator:public CAst
+{
+	public:
+		/**
+                 * \brief Interface for the child classes to return the name
+                 *
+                 */
+		virtual std::string name()const=0;
+
+		/**
+                 *  \brief Interface for the child classes to return the class ID
+                 *
+                 */
+		virtual CAST_CLASS_ID classId()const=0;
+};
+
+
+
+
 class direct_abstract_declarator;
 class parameter_type_list;
 
 
-class direct_abstract_declarator2 
-	:public direct_abstract_declarator 
-{
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		direct_abstract_declarator *_p_direct_abstract_declarator;      // direct_abstract_declarator
-		parameter_type_list *_p_parameter_type_list;                    // parameter_type_list
-public:
-	direct_abstract_declarator2	                                 // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				direct_abstract_declarator *_arg__p_direct_abstract_declarator,
-				parameter_type_list *_arg__p_parameter_type_list			
-		);
-	direct_abstract_declarator2(const direct_abstract_declarator2& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "direct_abstract_declarator2"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_DIRECT_ABSTRACT_DECLARATOR2
-	virtual std::string pattern()const;							//returns the pattern, here "[direct_abstract_declarator,'(',parameter_type_list,')']"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const direct_abstract_declarator* get_p_direct_abstract_declarator()const{return _p_direct_abstract_declarator;}							//returns const pointer to _p_direct_abstract_declarator
-	      direct_abstract_declarator* get_p_direct_abstract_declarator()     {return _p_direct_abstract_declarator;}							//returns       pointer to _p_direct_abstract_declarator
-	const parameter_type_list* get_p_parameter_type_list()const{return _p_parameter_type_list;}							//returns const pointer to _p_parameter_type_list
-	      parameter_type_list* get_p_parameter_type_list()     {return _p_parameter_type_list;}							//returns       pointer to _p_parameter_type_list
-	virtual ~direct_abstract_declarator2 ();
 
-	
-		
+
+/**
+ * \brief direct_abstract_declarator_1 implements the pattern: <b>(direct_abstract_declarator, (, parameter_type_list, ))</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_direct_abstract_declarator_1 [ label="direct_abstract_declarator_1", URL="\ref direct_abstract_declarator_1", color="#00AAAA" ];
+ *     node_direct_abstract_declarator [ label="direct_abstract_declarator", URL="\ref direct_abstract_declarator", color="#00AAAA"];
+ *     node_parameter_type_list [ label="parameter_type_list", URL="\ref parameter_type_list", color="#00AAAA"];
+ *     node_direct_abstract_declarator_1 ->  node_direct_abstract_declarator [label="_p_direct_abstract_declarator" style=dotted];
+ *     node_direct_abstract_declarator_1 ->  node_parameter_type_list [label="_p_parameter_type_list" style=dotted];
+ * }
+ * \enddot
+ */
+class direct_abstract_declarator_1:public direct_abstract_declarator
+{
+	private:
+		ReferenceCountedAutoPointer<direct_abstract_declarator> _p_direct_abstract_declarator;	  ///< A pointer to direct_abstract_declarator. This parameter can be <b>Null</b>
+		ReferenceCountedAutoPointer<parameter_type_list> _p_parameter_type_list;	  ///< A pointer to parameter_type_list. This parameter can be <b>Null</b>
+	public:
+		/** 
+		 * \brief Constructor of direct_abstract_declarator_1
+		 *
+		 * This function handles the direct_abstract_declarator_1
+                 */
+		direct_abstract_declarator_1	
+				(
+					ReferenceCountedAutoPointer<direct_abstract_declarator> _arg_direct_abstract_declarator,   ///< A pointer to direct_abstract_declarator. This parameter can be <b>Null</b>
+					ReferenceCountedAutoPointer<parameter_type_list> _arg_parameter_type_list  ///< A pointer to parameter_type_list. This parameter can be <b>Null</b>
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"direct_abstract_declarator_1"</b>
+		 * \returns <b>"direct_abstract_declarator_1"</b>
+                 */
+		virtual std::string name()const		{return std::string("direct_abstract_declarator_1");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_DIRECT_ABSTRACT_DECLARATOR_1
+		 * \returns  ID_DIRECT_ABSTRACT_DECLARATOR_1
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_DIRECT_ABSTRACT_DECLARATOR_1;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~direct_abstract_declarator_1()
+		{}
 };
 
 
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE direct_abstract_declarator3 CLASS                                                                                 
- 	FOR PATTERN : ['(',abstract_declarator,')']		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
 class abstract_declarator;
 
 
-class direct_abstract_declarator3 
-	:public direct_abstract_declarator 
-{
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		abstract_declarator *_p_abstract_declarator;                    // abstract_declarator
-public:
-	direct_abstract_declarator3	                                 // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				abstract_declarator *_arg__p_abstract_declarator			
-		);
-	direct_abstract_declarator3(const direct_abstract_declarator3& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "direct_abstract_declarator3"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_DIRECT_ABSTRACT_DECLARATOR3
-	virtual std::string pattern()const;							//returns the pattern, here "['(',abstract_declarator,')']"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const abstract_declarator* get_p_abstract_declarator()const{return _p_abstract_declarator;}							//returns const pointer to _p_abstract_declarator
-	      abstract_declarator* get_p_abstract_declarator()     {return _p_abstract_declarator;}							//returns       pointer to _p_abstract_declarator
-	virtual ~direct_abstract_declarator3 ();
 
-	
-		
+/**
+ * \brief direct_abstract_declarator_2 implements the pattern: <b>((, abstract_declarator, ))</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_direct_abstract_declarator_2 [ label="direct_abstract_declarator_2", URL="\ref direct_abstract_declarator_2", color="#00AAAA" ];
+ *     node_abstract_declarator [ label="abstract_declarator", URL="\ref abstract_declarator", color="#00AAAA"];
+ *     node_direct_abstract_declarator_2 ->  node_abstract_declarator [label="_p_abstract_declarator" style=solid];
+ * }
+ * \enddot
+ */
+class direct_abstract_declarator_2:public direct_abstract_declarator
+{
+	private:
+		ReferenceCountedAutoPointer<abstract_declarator> _p_abstract_declarator;	  ///< A pointer to abstract_declarator.
+	public:
+		/** 
+		 * \brief Constructor of direct_abstract_declarator_2
+		 *
+		 * This function handles the direct_abstract_declarator_2
+                 */
+		direct_abstract_declarator_2	
+				(
+					ReferenceCountedAutoPointer<abstract_declarator> _arg_abstract_declarator  ///< A pointer to abstract_declarator.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"direct_abstract_declarator_2"</b>
+		 * \returns <b>"direct_abstract_declarator_2"</b>
+                 */
+		virtual std::string name()const		{return std::string("direct_abstract_declarator_2");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_DIRECT_ABSTRACT_DECLARATOR_2
+		 * \returns  ID_DIRECT_ABSTRACT_DECLARATOR_2
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_DIRECT_ABSTRACT_DECLARATOR_2;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~direct_abstract_declarator_2()
+		{}
 };
 
 
-			
-/*=============================================================================================================*\
-                                                                                                                 
-        THE equality_expression CLASS                                                                                 
-        FOR PATTERN : [equality_expression,EQ_OP,relational_expression]		                                                                 
- 														 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
-class Token;
+class direct_abstract_declarator;
+class constant_expression;
+
+
+
+
+/**
+ * \brief direct_abstract_declarator_3 implements the pattern: <b>(direct_abstract_declarator, [, constant_expression, ])</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_direct_abstract_declarator_3 [ label="direct_abstract_declarator_3", URL="\ref direct_abstract_declarator_3", color="#00AAAA" ];
+ *     node_direct_abstract_declarator [ label="direct_abstract_declarator", URL="\ref direct_abstract_declarator", color="#00AAAA"];
+ *     node_constant_expression [ label="constant_expression", URL="\ref constant_expression", color="#00AAAA"];
+ *     node_direct_abstract_declarator_3 ->  node_direct_abstract_declarator [label="_p_direct_abstract_declarator" style=dotted];
+ *     node_direct_abstract_declarator_3 ->  node_constant_expression [label="_p_constant_expression" style=dotted];
+ * }
+ * \enddot
+ */
+class direct_abstract_declarator_3:public direct_abstract_declarator
+{
+	private:
+		ReferenceCountedAutoPointer<direct_abstract_declarator> _p_direct_abstract_declarator;	  ///< A pointer to direct_abstract_declarator. This parameter can be <b>Null</b>
+		ReferenceCountedAutoPointer<constant_expression> _p_constant_expression;	  ///< A pointer to constant_expression. This parameter can be <b>Null</b>
+	public:
+		/** 
+		 * \brief Constructor of direct_abstract_declarator_3
+		 *
+		 * This function handles the direct_abstract_declarator_3
+                 */
+		direct_abstract_declarator_3	
+				(
+					ReferenceCountedAutoPointer<direct_abstract_declarator> _arg_direct_abstract_declarator,   ///< A pointer to direct_abstract_declarator. This parameter can be <b>Null</b>
+					ReferenceCountedAutoPointer<constant_expression> _arg_constant_expression  ///< A pointer to constant_expression. This parameter can be <b>Null</b>
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"direct_abstract_declarator_3"</b>
+		 * \returns <b>"direct_abstract_declarator_3"</b>
+                 */
+		virtual std::string name()const		{return std::string("direct_abstract_declarator_3");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_DIRECT_ABSTRACT_DECLARATOR_3
+		 * \returns  ID_DIRECT_ABSTRACT_DECLARATOR_3
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_DIRECT_ABSTRACT_DECLARATOR_3;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~direct_abstract_declarator_3()
+		{}
+};
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:equality_expression
+//////////////////////////////////////////
+
+
+
+
+
+class token;
 class relational_expression;
 
-/*------------------------------------------------------------*\
- 							        
-  item class equality_expression_item                              
-                                                                
-\*------------------------------------------------------------*/
+
+
+
+
+/**
+ * \brief equality_expression_item implements the pattern: <b>(equality_expression, ==, relational_expression)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_equality_expression_item [ label="equality_expression_item", URL="\ref equality_expression_item", color="#00AAAA" ];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_relational_expression [ label="relational_expression", URL="\ref relational_expression", color="#00AAAA"];
+ *     node_equality_expression_item ->  node_token [label="_p_token" style=dotted];
+ *     node_equality_expression_item ->  node_relational_expression [label="_p_relational_expression" style=solid];
+ * }
+ * \enddot
+ */
 class equality_expression_item
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-	Token *_p_token1;                                               // EQ_OP
-	relational_expression *_p_relational_expression;                // relational_expression
-public:
-	equality_expression_item
-		(
-			std::string _arg_s_matchedPattern,
-			Token *_arg__p_token1,
-			relational_expression *_arg__p_relational_expression
-		);
-	equality_expression_item(const equality_expression_item &);
-	virtual std::string name()const{return "equality_expression_item";}			//returns the class name, here "equality_expression"
-	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual Properties getProperties()const;
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
-	      Token* get_p_token1()     {return _p_token1;}							//returns const pointer to _p_token1
-	const relational_expression* get_p_relational_expression()const{return _p_relational_expression;}							//returns const pointer to _p_relational_expression
-	      relational_expression* get_p_relational_expression()     {return _p_relational_expression;}							//returns const pointer to _p_relational_expression
-	virtual ~equality_expression_item();
-	
-	
-};
-/*------------------------------------------------------------*\
- 							        
-  main class equality_expression                         
-                                                                
-\*------------------------------------------------------------*/
+	private:
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>==</b>, <b>!=</b>, <b>None</b>
+		ReferenceCountedAutoPointer<relational_expression> _p_relational_expression;	  ///< A pointer to relational_expression.
+	public:
+		/** 
+		 * \brief Constructor of equality_expression_item
+		 *
+		 * This function handles the equality_expression_item
+                 */
+		equality_expression_item	
+				(
+					ReferenceCountedAutoPointer<token> _arg_token,   ///< A pointer to a token, accepts <b>==</b>, <b>!=</b>, <b>None</b>
+					ReferenceCountedAutoPointer<relational_expression> _arg_relational_expression  ///< A pointer to relational_expression.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"equality_expression_item"</b>
+		 * \returns <b>"equality_expression_item"</b>
+                 */
+		virtual std::string name()const		{return std::string("equality_expression_item");}
 
-class equality_expression
-	:public CAst 
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_EQUALITY_EXPRESSION_ITEM
+		 * \returns  ID_EQUALITY_EXPRESSION_ITEM
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_EQUALITY_EXPRESSION_ITEM;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~equality_expression_item()
+		{}
+};
+
+
+
+
+
+/**
+ * \brief The basic class to handle equality_expression
+ *
+ * Since the rule contains itself, this rule will be implemented in the form of a list
+ */
+class equality_expression:public CAst
 {
-private:
-	typedef std::deque<equality_expression_item> ItemsListType;
-	typedef ItemsListType::iterator ItemsListIter;
-	typedef ItemsListType::const_iterator CItemsListIter;
-	ItemsListType _items;
-public:
-//ASDFG
-	
-	equality_expression
-		(
-			std::string _arg_s_matchedPattern,
-			Token *_arg__p_token1,
-			relational_expression *_arg__p_relational_expression
-		);
+	public:
+		typedef std::list<ReferenceCountedAutoPointer<equality_expression_item> > equality_expressionListType;	///< This defines the list type which will store the equality_expression_item
+		typedef equality_expressionListType::iterator equality_expressionIterType;				///< This defines the iterator over equality_expressionListType
+		typedef equality_expressionListType::const_iterator Cequality_expressionIterType;				///< This defines the constant iterator over equality_expressionListType
 
-	void append
-		(
-			std::string _arg_s_matchedPattern,
-			Token *_arg__p_token1,
-			relational_expression *_arg__p_relational_expression
-		);
+	private:
+		equality_expressionListType _itemList;									///< The list of items
+	public:
+		/**
+		 * \brief The default constructor calls the parent constructor
+		 *
+		 */
+		equality_expression():CAst()
+		{}
 
-	virtual std::string name()const;							//returns the class name, here "equality_expression"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_EQUALITY_EXPRESSION
-	virtual std::string pattern()const;							//returns the pattern, here "[equality_expression,EQ_OP,relational_expression]"
-	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
-	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
-	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
-	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
-	virtual int size()const{return _items.size();}						//returns the size of the container
-	virtual equality_expression_item& operator[](int i){return _items[i];}
-	virtual ~equality_expression ();
+		/**
+		 * \brief Append an item to the list
+		 *
+		 */
+		void append( ReferenceCountedAutoPointer<equality_expression_item> item)
+		{
+			_itemList.push_back(item);
+		}
+		
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"equality_expression"</b>
+		 * \returns <b>"equality_expression"</b>
+                 */
+		virtual std::string name()const {return "equality_expression";}
+		
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_EQUALITY_EXPRESSION
+		 * \returns  ID_EQUALITY_EXPRESSION
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_EQUALITY_EXPRESSION;}
 
 };
 
-typedef std::deque<equality_expression_item>::iterator equality_expression_iterator;
-typedef std::deque<equality_expression_item>::const_iterator equality_expression_const_iterator;
 
 
-			
-			
 
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE primary_expression BASE CLASS                                                                    
-                                                                                                                 
-\*=============================================================================================================*/  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-class primary_expression :public CAst
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:primary_expression
+//////////////////////////////////////////
+
+
+/**
+ * \brief Implements primary_expression
+ * 
+ * This is the interface class. This implements the patterns
+ *  - ([IDENTIFIER],)
+ *  - ([CONSTANT],)
+ *  - ([STRING_LITERAL],)
+ *  - ((, expression, ))
+ * 
+ **/
+class primary_expression:public CAst
 {
-public:
-	virtual std::string name()const=0;
-	virtual std::ostream& codeStream(std::ostream&)const=0;
-	virtual CAstType typeId()const=0;
-	virtual std::string pattern()const=0;
-	virtual bool isList()const=0;
-	virtual Properties getProperties()const=0;
-	virtual PropertiesList getPropertiesList()const=0;
-	virtual ~primary_expression (){};
+	public:
+		/**
+                 * \brief Interface for the child classes to return the name
+                 *
+                 */
+		virtual std::string name()const=0;
+
+		/**
+                 *  \brief Interface for the child classes to return the class ID
+                 *
+                 */
+		virtual CAST_CLASS_ID classId()const=0;
 };
 
 
 
 
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE primary_expression1 CLASS                                                                                 
- 	FOR PATTERN : ['(',expression,')']		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
+class token;
 
 
 
-// FORWARD DECLARATION
+
+/**
+ * \brief primary_expression_1 implements the pattern: <b>([IDENTIFIER],)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_primary_expression_1 [ label="primary_expression_1", URL="\ref primary_expression_1", color="#00AAAA" ];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_primary_expression_1 ->  node_token [label="_p_token" style=solid];
+ * }
+ * \enddot
+ */
+class primary_expression_1:public primary_expression
+{
+	private:
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>[STRING_LITERAL]</b>, <b>[IDENTIFIER]</b>, <b>[CONSTANT]</b>
+	public:
+		/** 
+		 * \brief Constructor of primary_expression_1
+		 *
+		 * This function handles the primary_expression_1
+                 */
+		primary_expression_1	
+				(
+					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>[STRING_LITERAL]</b>, <b>[IDENTIFIER]</b>, <b>[CONSTANT]</b>
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"primary_expression_1"</b>
+		 * \returns <b>"primary_expression_1"</b>
+                 */
+		virtual std::string name()const		{return std::string("primary_expression_1");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_PRIMARY_EXPRESSION_1
+		 * \returns  ID_PRIMARY_EXPRESSION_1
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_PRIMARY_EXPRESSION_1;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~primary_expression_1()
+		{}
+};
+
+
+
+
+
 class expression;
 
 
-class primary_expression1 
-	:public primary_expression 
-{
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		expression *_p_expression;                                      // expression
-public:
-	primary_expression1	                                         // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				expression *_arg__p_expression			
-		);
-	primary_expression1(const primary_expression1& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "primary_expression1"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_PRIMARY_EXPRESSION1
-	virtual std::string pattern()const;							//returns the pattern, here "['(',expression,')']"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const expression* get_p_expression()const{return _p_expression;}							//returns const pointer to _p_expression
-	      expression* get_p_expression()     {return _p_expression;}							//returns       pointer to _p_expression
-	virtual ~primary_expression1 ();
 
+/**
+ * \brief primary_expression_2 implements the pattern: <b>((, expression, ))</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_primary_expression_2 [ label="primary_expression_2", URL="\ref primary_expression_2", color="#00AAAA" ];
+ *     node_expression [ label="expression", URL="\ref expression", color="#00AAAA"];
+ *     node_primary_expression_2 ->  node_expression [label="_p_expression" style=solid];
+ * }
+ * \enddot
+ */
+class primary_expression_2:public primary_expression
+{
+	private:
+		ReferenceCountedAutoPointer<expression> _p_expression;	  ///< A pointer to expression.
+	public:
+		/** 
+		 * \brief Constructor of primary_expression_2
+		 *
+		 * This function handles the primary_expression_2
+                 */
+		primary_expression_2	
+				(
+					ReferenceCountedAutoPointer<expression> _arg_expression  ///< A pointer to expression.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"primary_expression_2"</b>
+		 * \returns <b>"primary_expression_2"</b>
+                 */
+		virtual std::string name()const		{return std::string("primary_expression_2");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_PRIMARY_EXPRESSION_2
+		 * \returns  ID_PRIMARY_EXPRESSION_2
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_PRIMARY_EXPRESSION_2;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~primary_expression_2()
+		{}
+};
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:declaration_specifiers
+//////////////////////////////////////////
+
+
+
+
+
+class declaration_specifiers_item
+{
 	
+	public:
+		/**
+                 * \brief Interface for the child classes to return the name
+                 *
+                 */
+		virtual std::string name()const=0;
+
+		/**
+                 *  \brief Interface for the child classes to return the class ID
+                 *
+                 */
+		virtual CAST_CLASS_ID classId()const=0;
+};
+
+class storage_class_specifier;
+
+
+
+/**
+ * \brief declaration_specifiers_item_1 implements the pattern: <b>(storage_class_specifier, declaration_specifiers)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_declaration_specifiers_item_1 [ label="declaration_specifiers_item_1", URL="\ref declaration_specifiers_item_1", color="#00AAAA" ];
+ *     node_storage_class_specifier [ label="storage_class_specifier", URL="\ref storage_class_specifier", color="#00AAAA"];
+ *     node_declaration_specifiers_item_1 ->  node_storage_class_specifier [label="_p_storage_class_specifier" style=solid];
+ * }
+ * \enddot
+ */
+class declaration_specifiers_item_1:public declaration_specifiers_item
+{
+	private:
+		ReferenceCountedAutoPointer<storage_class_specifier> _p_storage_class_specifier;	  ///< A pointer to storage_class_specifier.
+	public:
+		/** 
+		 * \brief Constructor of declaration_specifiers_item_1
+		 *
+		 * This function handles the declaration_specifiers_item_1
+                 */
+		declaration_specifiers_item_1	
+				(
+					ReferenceCountedAutoPointer<storage_class_specifier> _arg_storage_class_specifier  ///< A pointer to storage_class_specifier.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"declaration_specifiers_item_1"</b>
+		 * \returns <b>"declaration_specifiers_item_1"</b>
+                 */
+		virtual std::string name()const		{return std::string("declaration_specifiers_item_1");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_DECLARATION_SPECIFIERS_ITEM_1
+		 * \returns  ID_DECLARATION_SPECIFIERS_ITEM_1
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_DECLARATION_SPECIFIERS_ITEM_1;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~declaration_specifiers_item_1()
+		{}
+};
+
+
+
+
+
+class type_qualifier;
+
+
+
+/**
+ * \brief declaration_specifiers_item_2 implements the pattern: <b>(type_qualifier, declaration_specifiers)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_declaration_specifiers_item_2 [ label="declaration_specifiers_item_2", URL="\ref declaration_specifiers_item_2", color="#00AAAA" ];
+ *     node_type_qualifier [ label="type_qualifier", URL="\ref type_qualifier", color="#00AAAA"];
+ *     node_declaration_specifiers_item_2 ->  node_type_qualifier [label="_p_type_qualifier" style=solid];
+ * }
+ * \enddot
+ */
+class declaration_specifiers_item_2:public declaration_specifiers_item
+{
+	private:
+		ReferenceCountedAutoPointer<type_qualifier> _p_type_qualifier;	  ///< A pointer to type_qualifier.
+	public:
+		/** 
+		 * \brief Constructor of declaration_specifiers_item_2
+		 *
+		 * This function handles the declaration_specifiers_item_2
+                 */
+		declaration_specifiers_item_2	
+				(
+					ReferenceCountedAutoPointer<type_qualifier> _arg_type_qualifier  ///< A pointer to type_qualifier.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"declaration_specifiers_item_2"</b>
+		 * \returns <b>"declaration_specifiers_item_2"</b>
+                 */
+		virtual std::string name()const		{return std::string("declaration_specifiers_item_2");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_DECLARATION_SPECIFIERS_ITEM_2
+		 * \returns  ID_DECLARATION_SPECIFIERS_ITEM_2
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_DECLARATION_SPECIFIERS_ITEM_2;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~declaration_specifiers_item_2()
+		{}
+};
+
+
+
+
+
+class type_specifier;
+
+
+
+/**
+ * \brief declaration_specifiers_item_3 implements the pattern: <b>(type_specifier, declaration_specifiers)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_declaration_specifiers_item_3 [ label="declaration_specifiers_item_3", URL="\ref declaration_specifiers_item_3", color="#00AAAA" ];
+ *     node_type_specifier [ label="type_specifier", URL="\ref type_specifier", color="#00AAAA"];
+ *     node_declaration_specifiers_item_3 ->  node_type_specifier [label="_p_type_specifier" style=solid];
+ * }
+ * \enddot
+ */
+class declaration_specifiers_item_3:public declaration_specifiers_item
+{
+	private:
+		ReferenceCountedAutoPointer<type_specifier> _p_type_specifier;	  ///< A pointer to type_specifier.
+	public:
+		/** 
+		 * \brief Constructor of declaration_specifiers_item_3
+		 *
+		 * This function handles the declaration_specifiers_item_3
+                 */
+		declaration_specifiers_item_3	
+				(
+					ReferenceCountedAutoPointer<type_specifier> _arg_type_specifier  ///< A pointer to type_specifier.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"declaration_specifiers_item_3"</b>
+		 * \returns <b>"declaration_specifiers_item_3"</b>
+                 */
+		virtual std::string name()const		{return std::string("declaration_specifiers_item_3");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_DECLARATION_SPECIFIERS_ITEM_3
+		 * \returns  ID_DECLARATION_SPECIFIERS_ITEM_3
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_DECLARATION_SPECIFIERS_ITEM_3;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~declaration_specifiers_item_3()
+		{}
+};
+
+
+
+
+
+/**
+ * \brief The basic class to handle declaration_specifiers
+ *
+ * Since the rule contains itself, this rule will be implemented in the form of a list
+ */
+class declaration_specifiers:public CAst
+{
+	public:
+		typedef std::list<ReferenceCountedAutoPointer<declaration_specifiers_item> > declaration_specifiersListType;	///< This defines the list type which will store the declaration_specifiers_item
+		typedef declaration_specifiersListType::iterator declaration_specifiersIterType;				///< This defines the iterator over declaration_specifiersListType
+		typedef declaration_specifiersListType::const_iterator Cdeclaration_specifiersIterType;				///< This defines the constant iterator over declaration_specifiersListType
+
+	private:
+		declaration_specifiersListType _itemList;									///< The list of items
+	public:
+		/**
+		 * \brief The default constructor calls the parent constructor
+		 *
+		 */
+		declaration_specifiers():CAst()
+		{}
+
+		/**
+		 * \brief Append an item to the list
+		 *
+		 */
+		void append( ReferenceCountedAutoPointer<declaration_specifiers_item> item)
+		{
+			_itemList.push_back(item);
+		}
 		
-};
-
-
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE primary_expression2 CLASS                                                                                 
- 	FOR PATTERN : [IDENTIFIER]		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
-
-
-
-// FORWARD DECLARATION
-class Token;
-
-
-class primary_expression2 
-	:public primary_expression 
-{
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		Token *_p_token1;                                               // IDENTIFIER
-public:
-	primary_expression2	                                         // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				Token *_arg__p_token1			
-		);
-	primary_expression2(const primary_expression2& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "primary_expression2"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_PRIMARY_EXPRESSION2
-	virtual std::string pattern()const;							//returns the pattern, here "[IDENTIFIER]"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
-	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
-	virtual ~primary_expression2 ();
-
-	
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"declaration_specifiers"</b>
+		 * \returns <b>"declaration_specifiers"</b>
+                 */
+		virtual std::string name()const {return "declaration_specifiers";}
 		
-};
-
-
-			
-/*=============================================================================================================*\
-                                                                                                                 
-        THE declaration_specifiers3 CLASS                                                                                 
-        FOR PATTERN : [storage_class_specifier,declaration_specifiers]		                                                                 
- 														 
-\*=============================================================================================================*/  
-
-
-
-// FORWARD DECLARATION
-class storage_class_specifier;
-
-//QWERTY
-/*------------------------------------------------------------*\
- 							        
-  main class declaration_specifiers3                         
-                                                                
-\*------------------------------------------------------------*/
-
-class declaration_specifiers3
-	:public declaration_specifiers 
-{
-private:
-	typedef std::deque<declaration_specifiers3_item> ItemsListType;
-	typedef ItemsListType::iterator ItemsListIter;
-	typedef ItemsListType::const_iterator CItemsListIter;
-	ItemsListType _items;
-public:
-//ASDFG
-	
-	declaration_specifiers3
-		(
-			std::string _arg_s_matchedPattern,
-			storage_class_specifier *_arg__p_storage_class_specifier
-		);
-
-	void append
-		(
-			std::string _arg_s_matchedPattern,
-			storage_class_specifier *_arg__p_storage_class_specifier
-		);
-
-	virtual std::string name()const;							//returns the class name, here "declaration_specifiers3"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_DECLARATION_SPECIFIERS3
-	virtual std::string pattern()const;							//returns the pattern, here "[storage_class_specifier,declaration_specifiers]"
-	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
-	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
-	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
-	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
-	virtual int size()const{return _items.size();}						//returns the size of the container
-	virtual declaration_specifiers3_item& operator[](int i){return _items[i];}
-	virtual ~declaration_specifiers3 ();
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_DECLARATION_SPECIFIERS
+		 * \returns  ID_DECLARATION_SPECIFIERS
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_DECLARATION_SPECIFIERS;}
 
 };
 
-typedef std::deque<declaration_specifiers3_item>::iterator declaration_specifiers3_iterator;
-typedef std::deque<declaration_specifiers3_item>::const_iterator declaration_specifiers3_const_iterator;
-
-
-			
-			
-/*=============================================================================================================*\
-                                                                                                                 
-        THE declaration_specifiers3 CLASS                                                                                 
-        FOR PATTERN : [storage_class_specifier,declaration_specifiers]		                                                                 
- 														 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
-class storage_class_specifier;
-
-//QWERTY
-/*------------------------------------------------------------*\
- 							        
-  main class declaration_specifiers3                         
-                                                                
-\*------------------------------------------------------------*/
-
-class declaration_specifiers3
-	:public declaration_specifiers 
-{
-private:
-	typedef std::deque<declaration_specifiers3_item> ItemsListType;
-	typedef ItemsListType::iterator ItemsListIter;
-	typedef ItemsListType::const_iterator CItemsListIter;
-	ItemsListType _items;
-public:
-//ASDFG
-	
-	declaration_specifiers3
-		(
-			std::string _arg_s_matchedPattern,
-			storage_class_specifier *_arg__p_storage_class_specifier
-		);
-
-	void append
-		(
-			std::string _arg_s_matchedPattern,
-			storage_class_specifier *_arg__p_storage_class_specifier
-		);
-
-	virtual std::string name()const;							//returns the class name, here "declaration_specifiers3"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_DECLARATION_SPECIFIERS3
-	virtual std::string pattern()const;							//returns the pattern, here "[storage_class_specifier,declaration_specifiers]"
-	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
-	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
-	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
-	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
-	virtual int size()const{return _items.size();}						//returns the size of the container
-	virtual declaration_specifiers3_item& operator[](int i){return _items[i];}
-	virtual ~declaration_specifiers3 ();
-
-};
-
-typedef std::deque<declaration_specifiers3_item>::iterator declaration_specifiers3_iterator;
-typedef std::deque<declaration_specifiers3_item>::const_iterator declaration_specifiers3_const_iterator;
-
-
-			
-			
-/*=============================================================================================================*\
-                                                                                                                 
-        THE declaration_specifiers3 CLASS                                                                                 
-        FOR PATTERN : [storage_class_specifier,declaration_specifiers]		                                                                 
- 														 
-\*=============================================================================================================*/  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
-// FORWARD DECLARATION
-class storage_class_specifier;
-
-//QWERTY
-/*------------------------------------------------------------*\
- 							        
-  main class declaration_specifiers3                         
-                                                                
-\*------------------------------------------------------------*/
-
-class declaration_specifiers3
-	:public declaration_specifiers 
-{
-private:
-	typedef std::deque<declaration_specifiers3_item> ItemsListType;
-	typedef ItemsListType::iterator ItemsListIter;
-	typedef ItemsListType::const_iterator CItemsListIter;
-	ItemsListType _items;
-public:
-//ASDFG
-	
-	declaration_specifiers3
-		(
-			std::string _arg_s_matchedPattern,
-			storage_class_specifier *_arg__p_storage_class_specifier
-		);
-
-	void append
-		(
-			std::string _arg_s_matchedPattern,
-			storage_class_specifier *_arg__p_storage_class_specifier
-		);
-
-	virtual std::string name()const;							//returns the class name, here "declaration_specifiers3"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_DECLARATION_SPECIFIERS3
-	virtual std::string pattern()const;							//returns the pattern, here "[storage_class_specifier,declaration_specifiers]"
-	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
-	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
-	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
-	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
-	virtual int size()const{return _items.size();}						//returns the size of the container
-	virtual declaration_specifiers3_item& operator[](int i){return _items[i];}
-	virtual ~declaration_specifiers3 ();
-
-};
-
-typedef std::deque<declaration_specifiers3_item>::iterator declaration_specifiers3_iterator;
-typedef std::deque<declaration_specifiers3_item>::const_iterator declaration_specifiers3_const_iterator;
-
-
-			
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE declaration CLASS                                                                                 
- 	FOR PATTERN : [declaration_specifiers,init_declarator_list,';']		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:declaration
+//////////////////////////////////////////
+
+
+
+
+
 class declaration_specifiers;
 class init_declarator_list;
 
 
-class declaration 
-	:public CAst 
-{
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		declaration_specifiers *_p_declaration_specifiers;              // declaration_specifiers
-		init_declarator_list *_p_init_declarator_list;                  // init_declarator_list
-public:
-	declaration	                                                 // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				declaration_specifiers *_arg__p_declaration_specifiers,
-				init_declarator_list *_arg__p_init_declarator_list			
-		);
-	declaration(const declaration& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "declaration"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_DECLARATION
-	virtual std::string pattern()const;							//returns the pattern, here "[declaration_specifiers,init_declarator_list,';']"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const declaration_specifiers* get_p_declaration_specifiers()const{return _p_declaration_specifiers;}							//returns const pointer to _p_declaration_specifiers
-	      declaration_specifiers* get_p_declaration_specifiers()     {return _p_declaration_specifiers;}							//returns       pointer to _p_declaration_specifiers
-	const init_declarator_list* get_p_init_declarator_list()const{return _p_init_declarator_list;}							//returns const pointer to _p_init_declarator_list
-	      init_declarator_list* get_p_init_declarator_list()     {return _p_init_declarator_list;}							//returns       pointer to _p_init_declarator_list
-	virtual ~declaration ();
 
-	
-		
+
+/**
+ * \brief declaration implements the pattern: <b>(declaration_specifiers, init_declarator_list, ;)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_declaration [ label="declaration", URL="\ref declaration", color="#00AAAA" ];
+ *     node_declaration_specifiers [ label="declaration_specifiers", URL="\ref declaration_specifiers", color="#00AAAA"];
+ *     node_init_declarator_list [ label="init_declarator_list", URL="\ref init_declarator_list", color="#00AAAA"];
+ *     node_declaration ->  node_declaration_specifiers [label="_p_declaration_specifiers" style=solid];
+ *     node_declaration ->  node_init_declarator_list [label="_p_init_declarator_list" style=dotted];
+ * }
+ * \enddot
+ */
+class declaration:public CAst
+{
+	private:
+		ReferenceCountedAutoPointer<declaration_specifiers> _p_declaration_specifiers;	  ///< A pointer to declaration_specifiers.
+		ReferenceCountedAutoPointer<init_declarator_list> _p_init_declarator_list;	  ///< A pointer to init_declarator_list. This parameter can be <b>Null</b>
+	public:
+		/** 
+		 * \brief Constructor of declaration
+		 *
+		 * This function handles the declaration
+                 */
+		declaration	
+				(
+					ReferenceCountedAutoPointer<declaration_specifiers> _arg_declaration_specifiers,   ///< A pointer to declaration_specifiers.
+					ReferenceCountedAutoPointer<init_declarator_list> _arg_init_declarator_list  ///< A pointer to init_declarator_list. This parameter can be <b>Null</b>
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"declaration"</b>
+		 * \returns <b>"declaration"</b>
+                 */
+		virtual std::string name()const		{return std::string("declaration");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_DECLARATION
+		 * \returns  ID_DECLARATION
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_DECLARATION;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~declaration()
+		{}
 };
 
 
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE direct_declarator BASE CLASS                                                                    
-                                                                                                                 
-\*=============================================================================================================*/  
 
 
-class direct_declarator :public CAst
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:direct_declarator
+//////////////////////////////////////////
+
+
+/**
+ * \brief Implements direct_declarator
+ * 
+ * This is the interface class. This implements the patterns
+ *  - ([IDENTIFIER],)
+ *  - ((, declarator, ))
+ *  - (direct_declarator, [, constant_expression, ])
+ *  - (direct_declarator, [, ])
+ *  - (direct_declarator, (, parameter_type_list, ))
+ *  - (direct_declarator, (, identifier_list, ))
+ *  - (direct_declarator, (, ))
+ * 
+ **/
+class direct_declarator:public CAst
 {
-public:
-	virtual std::string name()const=0;
-	virtual std::ostream& codeStream(std::ostream&)const=0;
-	virtual CAstType typeId()const=0;
-	virtual std::string pattern()const=0;
-	virtual bool isList()const=0;
-	virtual Properties getProperties()const=0;
-	virtual PropertiesList getPropertiesList()const=0;
-	virtual ~direct_declarator (){};
+	public:
+		/**
+                 * \brief Interface for the child classes to return the name
+                 *
+                 */
+		virtual std::string name()const=0;
+
+		/**
+                 *  \brief Interface for the child classes to return the class ID
+                 *
+                 */
+		virtual CAST_CLASS_ID classId()const=0;
 };
 
 
 
 
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE direct_declarator1 CLASS                                                                                 
- 	FOR PATTERN : [direct_declarator,'[',constant_expression,']']		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
+class declarator;
 
 
 
-// FORWARD DECLARATION
+/**
+ * \brief direct_declarator_1 implements the pattern: <b>((, declarator, ))</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_direct_declarator_1 [ label="direct_declarator_1", URL="\ref direct_declarator_1", color="#00AAAA" ];
+ *     node_declarator [ label="declarator", URL="\ref declarator", color="#00AAAA"];
+ *     node_direct_declarator_1 ->  node_declarator [label="_p_declarator" style=solid];
+ * }
+ * \enddot
+ */
+class direct_declarator_1:public direct_declarator
+{
+	private:
+		ReferenceCountedAutoPointer<declarator> _p_declarator;	  ///< A pointer to declarator.
+	public:
+		/** 
+		 * \brief Constructor of direct_declarator_1
+		 *
+		 * This function handles the direct_declarator_1
+                 */
+		direct_declarator_1	
+				(
+					ReferenceCountedAutoPointer<declarator> _arg_declarator  ///< A pointer to declarator.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"direct_declarator_1"</b>
+		 * \returns <b>"direct_declarator_1"</b>
+                 */
+		virtual std::string name()const		{return std::string("direct_declarator_1");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_DIRECT_DECLARATOR_1
+		 * \returns  ID_DIRECT_DECLARATOR_1
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_DIRECT_DECLARATOR_1;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~direct_declarator_1()
+		{}
+};
+
+
+
+
+
 class direct_declarator;
 class constant_expression;
 
 
-class direct_declarator1 
-	:public direct_declarator 
-{
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		direct_declarator *_p_direct_declarator;                        // direct_declarator
-		constant_expression *_p_constant_expression;                    // constant_expression
-public:
-	direct_declarator1	                                          // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				direct_declarator *_arg__p_direct_declarator,
-				constant_expression *_arg__p_constant_expression			
-		);
-	direct_declarator1(const direct_declarator1& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "direct_declarator1"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_DIRECT_DECLARATOR1
-	virtual std::string pattern()const;							//returns the pattern, here "[direct_declarator,'[',constant_expression,']']"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const direct_declarator* get_p_direct_declarator()const{return _p_direct_declarator;}							//returns const pointer to _p_direct_declarator
-	      direct_declarator* get_p_direct_declarator()     {return _p_direct_declarator;}							//returns       pointer to _p_direct_declarator
-	const constant_expression* get_p_constant_expression()const{return _p_constant_expression;}							//returns const pointer to _p_constant_expression
-	      constant_expression* get_p_constant_expression()     {return _p_constant_expression;}							//returns       pointer to _p_constant_expression
-	virtual ~direct_declarator1 ();
 
-	
-		
+
+/**
+ * \brief direct_declarator_2 implements the pattern: <b>(direct_declarator, [, constant_expression, ])</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_direct_declarator_2 [ label="direct_declarator_2", URL="\ref direct_declarator_2", color="#00AAAA" ];
+ *     node_direct_declarator [ label="direct_declarator", URL="\ref direct_declarator", color="#00AAAA"];
+ *     node_constant_expression [ label="constant_expression", URL="\ref constant_expression", color="#00AAAA"];
+ *     node_direct_declarator_2 ->  node_direct_declarator [label="_p_direct_declarator" style=solid];
+ *     node_direct_declarator_2 ->  node_constant_expression [label="_p_constant_expression" style=dotted];
+ * }
+ * \enddot
+ */
+class direct_declarator_2:public direct_declarator
+{
+	private:
+		ReferenceCountedAutoPointer<direct_declarator> _p_direct_declarator;	  ///< A pointer to direct_declarator.
+		ReferenceCountedAutoPointer<constant_expression> _p_constant_expression;	  ///< A pointer to constant_expression. This parameter can be <b>Null</b>
+	public:
+		/** 
+		 * \brief Constructor of direct_declarator_2
+		 *
+		 * This function handles the direct_declarator_2
+                 */
+		direct_declarator_2	
+				(
+					ReferenceCountedAutoPointer<direct_declarator> _arg_direct_declarator,   ///< A pointer to direct_declarator.
+					ReferenceCountedAutoPointer<constant_expression> _arg_constant_expression  ///< A pointer to constant_expression. This parameter can be <b>Null</b>
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"direct_declarator_2"</b>
+		 * \returns <b>"direct_declarator_2"</b>
+                 */
+		virtual std::string name()const		{return std::string("direct_declarator_2");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_DIRECT_DECLARATOR_2
+		 * \returns  ID_DIRECT_DECLARATOR_2
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_DIRECT_DECLARATOR_2;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~direct_declarator_2()
+		{}
 };
 
 
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE direct_declarator2 CLASS                                                                                 
- 	FOR PATTERN : [direct_declarator,'(',parameter_type_list,')']		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
-class direct_declarator;
 class parameter_type_list;
+class direct_declarator;
 
 
-class direct_declarator2 
-	:public direct_declarator 
+
+
+/**
+ * \brief direct_declarator_3 implements the pattern: <b>(direct_declarator, (, parameter_type_list, ))</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_direct_declarator_3 [ label="direct_declarator_3", URL="\ref direct_declarator_3", color="#00AAAA" ];
+ *     node_direct_declarator [ label="direct_declarator", URL="\ref direct_declarator", color="#00AAAA"];
+ *     node_parameter_type_list [ label="parameter_type_list", URL="\ref parameter_type_list", color="#00AAAA"];
+ *     node_direct_declarator_3 ->  node_direct_declarator [label="_p_direct_declarator" style=solid];
+ *     node_direct_declarator_3 ->  node_parameter_type_list [label="_p_parameter_type_list" style=dotted];
+ * }
+ * \enddot
+ */
+class direct_declarator_3:public direct_declarator
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		direct_declarator *_p_direct_declarator;                        // direct_declarator
-		parameter_type_list *_p_parameter_type_list;                    // parameter_type_list
-public:
-	direct_declarator2	                                          // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				direct_declarator *_arg__p_direct_declarator,
-				parameter_type_list *_arg__p_parameter_type_list			
-		);
-	direct_declarator2(const direct_declarator2& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "direct_declarator2"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_DIRECT_DECLARATOR2
-	virtual std::string pattern()const;							//returns the pattern, here "[direct_declarator,'(',parameter_type_list,')']"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const direct_declarator* get_p_direct_declarator()const{return _p_direct_declarator;}							//returns const pointer to _p_direct_declarator
-	      direct_declarator* get_p_direct_declarator()     {return _p_direct_declarator;}							//returns       pointer to _p_direct_declarator
-	const parameter_type_list* get_p_parameter_type_list()const{return _p_parameter_type_list;}							//returns const pointer to _p_parameter_type_list
-	      parameter_type_list* get_p_parameter_type_list()     {return _p_parameter_type_list;}							//returns       pointer to _p_parameter_type_list
-	virtual ~direct_declarator2 ();
+	private:
+		ReferenceCountedAutoPointer<direct_declarator> _p_direct_declarator;	  ///< A pointer to direct_declarator.
+		ReferenceCountedAutoPointer<parameter_type_list> _p_parameter_type_list;	  ///< A pointer to parameter_type_list. This parameter can be <b>Null</b>
+	public:
+		/** 
+		 * \brief Constructor of direct_declarator_3
+		 *
+		 * This function handles the direct_declarator_3
+                 */
+		direct_declarator_3	
+				(
+					ReferenceCountedAutoPointer<direct_declarator> _arg_direct_declarator,   ///< A pointer to direct_declarator.
+					ReferenceCountedAutoPointer<parameter_type_list> _arg_parameter_type_list  ///< A pointer to parameter_type_list. This parameter can be <b>Null</b>
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"direct_declarator_3"</b>
+		 * \returns <b>"direct_declarator_3"</b>
+                 */
+		virtual std::string name()const		{return std::string("direct_declarator_3");}
 
-	
-		
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_DIRECT_DECLARATOR_3
+		 * \returns  ID_DIRECT_DECLARATOR_3
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_DIRECT_DECLARATOR_3;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~direct_declarator_3()
+		{}
 };
 
 
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE direct_declarator3 CLASS                                                                                 
- 	FOR PATTERN : [direct_declarator,'(',identifier_list,')']		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
 class direct_declarator;
 class identifier_list;
 
 
-class direct_declarator3 
-	:public direct_declarator 
-{
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		direct_declarator *_p_direct_declarator;                        // direct_declarator
-		identifier_list *_p_identifier_list;                            // identifier_list
-public:
-	direct_declarator3	                                          // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				direct_declarator *_arg__p_direct_declarator,
-				identifier_list *_arg__p_identifier_list			
-		);
-	direct_declarator3(const direct_declarator3& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "direct_declarator3"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_DIRECT_DECLARATOR3
-	virtual std::string pattern()const;							//returns the pattern, here "[direct_declarator,'(',identifier_list,')']"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const direct_declarator* get_p_direct_declarator()const{return _p_direct_declarator;}							//returns const pointer to _p_direct_declarator
-	      direct_declarator* get_p_direct_declarator()     {return _p_direct_declarator;}							//returns       pointer to _p_direct_declarator
-	const identifier_list* get_p_identifier_list()const{return _p_identifier_list;}							//returns const pointer to _p_identifier_list
-	      identifier_list* get_p_identifier_list()     {return _p_identifier_list;}							//returns       pointer to _p_identifier_list
-	virtual ~direct_declarator3 ();
 
-	
-		
+
+/**
+ * \brief direct_declarator_4 implements the pattern: <b>(direct_declarator, (, identifier_list, ))</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_direct_declarator_4 [ label="direct_declarator_4", URL="\ref direct_declarator_4", color="#00AAAA" ];
+ *     node_direct_declarator [ label="direct_declarator", URL="\ref direct_declarator", color="#00AAAA"];
+ *     node_identifier_list [ label="identifier_list", URL="\ref identifier_list", color="#00AAAA"];
+ *     node_direct_declarator_4 ->  node_direct_declarator [label="_p_direct_declarator" style=solid];
+ *     node_direct_declarator_4 ->  node_identifier_list [label="_p_identifier_list" style=solid];
+ * }
+ * \enddot
+ */
+class direct_declarator_4:public direct_declarator
+{
+	private:
+		ReferenceCountedAutoPointer<direct_declarator> _p_direct_declarator;	  ///< A pointer to direct_declarator.
+		ReferenceCountedAutoPointer<identifier_list> _p_identifier_list;	  ///< A pointer to identifier_list.
+	public:
+		/** 
+		 * \brief Constructor of direct_declarator_4
+		 *
+		 * This function handles the direct_declarator_4
+                 */
+		direct_declarator_4	
+				(
+					ReferenceCountedAutoPointer<direct_declarator> _arg_direct_declarator,   ///< A pointer to direct_declarator.
+					ReferenceCountedAutoPointer<identifier_list> _arg_identifier_list  ///< A pointer to identifier_list.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"direct_declarator_4"</b>
+		 * \returns <b>"direct_declarator_4"</b>
+                 */
+		virtual std::string name()const		{return std::string("direct_declarator_4");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_DIRECT_DECLARATOR_4
+		 * \returns  ID_DIRECT_DECLARATOR_4
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_DIRECT_DECLARATOR_4;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~direct_declarator_4()
+		{}
 };
 
 
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE direct_declarator4 CLASS                                                                                 
- 	FOR PATTERN : ['(',declarator,')']		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
-class declarator;
+class token;
 
 
-class direct_declarator4 
-	:public direct_declarator 
+
+
+/**
+ * \brief direct_declarator_5 implements the pattern: <b>([IDENTIFIER],)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_direct_declarator_5 [ label="direct_declarator_5", URL="\ref direct_declarator_5", color="#00AAAA" ];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_direct_declarator_5 ->  node_token [label="_p_token" style=solid];
+ * }
+ * \enddot
+ */
+class direct_declarator_5:public direct_declarator
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		declarator *_p_declarator;                                      // declarator
-public:
-	direct_declarator4	                                          // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				declarator *_arg__p_declarator			
-		);
-	direct_declarator4(const direct_declarator4& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "direct_declarator4"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_DIRECT_DECLARATOR4
-	virtual std::string pattern()const;							//returns the pattern, here "['(',declarator,')']"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const declarator* get_p_declarator()const{return _p_declarator;}							//returns const pointer to _p_declarator
-	      declarator* get_p_declarator()     {return _p_declarator;}							//returns       pointer to _p_declarator
-	virtual ~direct_declarator4 ();
+	private:
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>[IDENTIFIER]</b>
+	public:
+		/** 
+		 * \brief Constructor of direct_declarator_5
+		 *
+		 * This function handles the direct_declarator_5
+                 */
+		direct_declarator_5	
+				(
+					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>[IDENTIFIER]</b>
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"direct_declarator_5"</b>
+		 * \returns <b>"direct_declarator_5"</b>
+                 */
+		virtual std::string name()const		{return std::string("direct_declarator_5");}
 
-	
-		
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_DIRECT_DECLARATOR_5
+		 * \returns  ID_DIRECT_DECLARATOR_5
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_DIRECT_DECLARATOR_5;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~direct_declarator_5()
+		{}
 };
 
 
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE direct_declarator5 CLASS                                                                                 
- 	FOR PATTERN : [IDENTIFIER]		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
-class Token;
 
-
-class direct_declarator5 
-	:public direct_declarator 
-{
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		Token *_p_token1;                                               // IDENTIFIER
-public:
-	direct_declarator5	                                          // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				Token *_arg__p_token1			
-		);
-	direct_declarator5(const direct_declarator5& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "direct_declarator5"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_DIRECT_DECLARATOR5
-	virtual std::string pattern()const;							//returns the pattern, here "[IDENTIFIER]"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
-	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
-	virtual ~direct_declarator5 ();
-
-	
-		
-};
-
-
-			
-/*=============================================================================================================*\
-                                                                                                                 
-        THE logical_and_expression CLASS                                                                                 
-        FOR PATTERN : [logical_and_expression,AND_OP,inclusive_or_expression]		                                                                 
- 														 
-\*=============================================================================================================*/  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
-// FORWARD DECLARATION
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:logical_and_expression
+//////////////////////////////////////////
+
+
+
+
+
 class inclusive_or_expression;
 
-/*------------------------------------------------------------*\
- 							        
-  item class logical_and_expression_item                              
-                                                                
-\*------------------------------------------------------------*/
+
+
+/**
+ * \brief logical_and_expression_item implements the pattern: <b>(logical_and_expression, &&, inclusive_or_expression)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_logical_and_expression_item [ label="logical_and_expression_item", URL="\ref logical_and_expression_item", color="#00AAAA" ];
+ *     node_inclusive_or_expression [ label="inclusive_or_expression", URL="\ref inclusive_or_expression", color="#00AAAA"];
+ *     node_logical_and_expression_item ->  node_inclusive_or_expression [label="_p_inclusive_or_expression" style=solid];
+ * }
+ * \enddot
+ */
 class logical_and_expression_item
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-	inclusive_or_expression *_p_inclusive_or_expression;            // inclusive_or_expression
-public:
-	logical_and_expression_item
-		(
-			std::string _arg_s_matchedPattern,
-			inclusive_or_expression *_arg__p_inclusive_or_expression
-		);
-	logical_and_expression_item(const logical_and_expression_item &);
-	virtual std::string name()const{return "logical_and_expression_item";}			//returns the class name, here "logical_and_expression"
-	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual Properties getProperties()const;
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const inclusive_or_expression* get_p_inclusive_or_expression()const{return _p_inclusive_or_expression;}							//returns const pointer to _p_inclusive_or_expression
-	      inclusive_or_expression* get_p_inclusive_or_expression()     {return _p_inclusive_or_expression;}							//returns const pointer to _p_inclusive_or_expression
-	virtual ~logical_and_expression_item();
-	
-	
-};
-/*------------------------------------------------------------*\
- 							        
-  main class logical_and_expression                         
-                                                                
-\*------------------------------------------------------------*/
+	private:
+		ReferenceCountedAutoPointer<inclusive_or_expression> _p_inclusive_or_expression;	  ///< A pointer to inclusive_or_expression.
+	public:
+		/** 
+		 * \brief Constructor of logical_and_expression_item
+		 *
+		 * This function handles the logical_and_expression_item
+                 */
+		logical_and_expression_item	
+				(
+					ReferenceCountedAutoPointer<inclusive_or_expression> _arg_inclusive_or_expression  ///< A pointer to inclusive_or_expression.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"logical_and_expression_item"</b>
+		 * \returns <b>"logical_and_expression_item"</b>
+                 */
+		virtual std::string name()const		{return std::string("logical_and_expression_item");}
 
-class logical_and_expression
-	:public CAst 
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_LOGICAL_AND_EXPRESSION_ITEM
+		 * \returns  ID_LOGICAL_AND_EXPRESSION_ITEM
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_LOGICAL_AND_EXPRESSION_ITEM;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~logical_and_expression_item()
+		{}
+};
+
+
+
+
+
+/**
+ * \brief The basic class to handle logical_and_expression
+ *
+ * Since the rule contains itself, this rule will be implemented in the form of a list
+ */
+class logical_and_expression:public CAst
 {
-private:
-	typedef std::deque<logical_and_expression_item> ItemsListType;
-	typedef ItemsListType::iterator ItemsListIter;
-	typedef ItemsListType::const_iterator CItemsListIter;
-	ItemsListType _items;
-public:
-//ASDFG
-	
-	logical_and_expression
-		(
-			std::string _arg_s_matchedPattern,
-			inclusive_or_expression *_arg__p_inclusive_or_expression
-		);
+	public:
+		typedef std::list<ReferenceCountedAutoPointer<logical_and_expression_item> > logical_and_expressionListType;	///< This defines the list type which will store the logical_and_expression_item
+		typedef logical_and_expressionListType::iterator logical_and_expressionIterType;				///< This defines the iterator over logical_and_expressionListType
+		typedef logical_and_expressionListType::const_iterator Clogical_and_expressionIterType;				///< This defines the constant iterator over logical_and_expressionListType
 
-	void append
-		(
-			std::string _arg_s_matchedPattern,
-			inclusive_or_expression *_arg__p_inclusive_or_expression
-		);
+	private:
+		logical_and_expressionListType _itemList;									///< The list of items
+	public:
+		/**
+		 * \brief The default constructor calls the parent constructor
+		 *
+		 */
+		logical_and_expression():CAst()
+		{}
 
-	virtual std::string name()const;							//returns the class name, here "logical_and_expression"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_LOGICAL_AND_EXPRESSION
-	virtual std::string pattern()const;							//returns the pattern, here "[logical_and_expression,AND_OP,inclusive_or_expression]"
-	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
-	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
-	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
-	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
-	virtual int size()const{return _items.size();}						//returns the size of the container
-	virtual logical_and_expression_item& operator[](int i){return _items[i];}
-	virtual ~logical_and_expression ();
+		/**
+		 * \brief Append an item to the list
+		 *
+		 */
+		void append( ReferenceCountedAutoPointer<logical_and_expression_item> item)
+		{
+			_itemList.push_back(item);
+		}
+		
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"logical_and_expression"</b>
+		 * \returns <b>"logical_and_expression"</b>
+                 */
+		virtual std::string name()const {return "logical_and_expression";}
+		
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_LOGICAL_AND_EXPRESSION
+		 * \returns  ID_LOGICAL_AND_EXPRESSION
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_LOGICAL_AND_EXPRESSION;}
 
 };
 
-typedef std::deque<logical_and_expression_item>::iterator logical_and_expression_iterator;
-typedef std::deque<logical_and_expression_item>::const_iterator logical_and_expression_const_iterator;
-
-
-			
-			
-/*=============================================================================================================*\
-                                                                                                                 
-        THE init_declarator_list CLASS                                                                                 
-        FOR PATTERN : [init_declarator_list,',',init_declarator]		                                                                 
- 														 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:init_declarator_list
+//////////////////////////////////////////
+
+
+
+
+
 class init_declarator;
 
-/*------------------------------------------------------------*\
- 							        
-  item class init_declarator_list_item                              
-                                                                
-\*------------------------------------------------------------*/
+
+
+/**
+ * \brief init_declarator_list_item implements the pattern: <b>(init_declarator_list, ,, init_declarator)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_init_declarator_list_item [ label="init_declarator_list_item", URL="\ref init_declarator_list_item", color="#00AAAA" ];
+ *     node_init_declarator [ label="init_declarator", URL="\ref init_declarator", color="#00AAAA"];
+ *     node_init_declarator_list_item ->  node_init_declarator [label="_p_init_declarator" style=solid];
+ * }
+ * \enddot
+ */
 class init_declarator_list_item
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-	init_declarator *_p_init_declarator;                            // init_declarator
-public:
-	init_declarator_list_item
-		(
-			std::string _arg_s_matchedPattern,
-			init_declarator *_arg__p_init_declarator
-		);
-	init_declarator_list_item(const init_declarator_list_item &);
-	virtual std::string name()const{return "init_declarator_list_item";}			//returns the class name, here "init_declarator_list"
-	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual Properties getProperties()const;
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const init_declarator* get_p_init_declarator()const{return _p_init_declarator;}							//returns const pointer to _p_init_declarator
-	      init_declarator* get_p_init_declarator()     {return _p_init_declarator;}							//returns const pointer to _p_init_declarator
-	virtual ~init_declarator_list_item();
-	
-	
-};
-/*------------------------------------------------------------*\
- 							        
-  main class init_declarator_list                         
-                                                                
-\*------------------------------------------------------------*/
+	private:
+		ReferenceCountedAutoPointer<init_declarator> _p_init_declarator;	  ///< A pointer to init_declarator.
+	public:
+		/** 
+		 * \brief Constructor of init_declarator_list_item
+		 *
+		 * This function handles the init_declarator_list_item
+                 */
+		init_declarator_list_item	
+				(
+					ReferenceCountedAutoPointer<init_declarator> _arg_init_declarator  ///< A pointer to init_declarator.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"init_declarator_list_item"</b>
+		 * \returns <b>"init_declarator_list_item"</b>
+                 */
+		virtual std::string name()const		{return std::string("init_declarator_list_item");}
 
-class init_declarator_list
-	:public CAst 
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_INIT_DECLARATOR_LIST_ITEM
+		 * \returns  ID_INIT_DECLARATOR_LIST_ITEM
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_INIT_DECLARATOR_LIST_ITEM;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~init_declarator_list_item()
+		{}
+};
+
+
+
+
+
+/**
+ * \brief The basic class to handle init_declarator_list
+ *
+ * Since the rule contains itself, this rule will be implemented in the form of a list
+ */
+class init_declarator_list:public CAst
 {
-private:
-	typedef std::deque<init_declarator_list_item> ItemsListType;
-	typedef ItemsListType::iterator ItemsListIter;
-	typedef ItemsListType::const_iterator CItemsListIter;
-	ItemsListType _items;
-public:
-//ASDFG
-	
-	init_declarator_list
-		(
-			std::string _arg_s_matchedPattern,
-			init_declarator *_arg__p_init_declarator
-		);
+	public:
+		typedef std::list<ReferenceCountedAutoPointer<init_declarator_list_item> > init_declarator_listListType;	///< This defines the list type which will store the init_declarator_list_item
+		typedef init_declarator_listListType::iterator init_declarator_listIterType;				///< This defines the iterator over init_declarator_listListType
+		typedef init_declarator_listListType::const_iterator Cinit_declarator_listIterType;				///< This defines the constant iterator over init_declarator_listListType
 
-	void append
-		(
-			std::string _arg_s_matchedPattern,
-			init_declarator *_arg__p_init_declarator
-		);
+	private:
+		init_declarator_listListType _itemList;									///< The list of items
+	public:
+		/**
+		 * \brief The default constructor calls the parent constructor
+		 *
+		 */
+		init_declarator_list():CAst()
+		{}
 
-	virtual std::string name()const;							//returns the class name, here "init_declarator_list"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_INIT_DECLARATOR_LIST
-	virtual std::string pattern()const;							//returns the pattern, here "[init_declarator_list,',',init_declarator]"
-	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
-	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
-	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
-	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
-	virtual int size()const{return _items.size();}						//returns the size of the container
-	virtual init_declarator_list_item& operator[](int i){return _items[i];}
-	virtual ~init_declarator_list ();
+		/**
+		 * \brief Append an item to the list
+		 *
+		 */
+		void append( ReferenceCountedAutoPointer<init_declarator_list_item> item)
+		{
+			_itemList.push_back(item);
+		}
+		
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"init_declarator_list"</b>
+		 * \returns <b>"init_declarator_list"</b>
+                 */
+		virtual std::string name()const {return "init_declarator_list";}
+		
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_INIT_DECLARATOR_LIST
+		 * \returns  ID_INIT_DECLARATOR_LIST
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_INIT_DECLARATOR_LIST;}
 
 };
 
-typedef std::deque<init_declarator_list_item>::iterator init_declarator_list_iterator;
-typedef std::deque<init_declarator_list_item>::const_iterator init_declarator_list_const_iterator;
-
-
-			
-			
-/*=============================================================================================================*\
-                                                                                                                 
-        THE shift_expression CLASS                                                                                 
-        FOR PATTERN : [shift_expression,LEFT_OP,additive_expression]		                                                                 
- 														 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
-class Token;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:shift_expression
+//////////////////////////////////////////
+
+
+
+
+
+class token;
 class additive_expression;
 
-/*------------------------------------------------------------*\
- 							        
-  item class shift_expression_item                              
-                                                                
-\*------------------------------------------------------------*/
+
+
+
+
+/**
+ * \brief shift_expression_item implements the pattern: <b>(shift_expression, <<, additive_expression)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_shift_expression_item [ label="shift_expression_item", URL="\ref shift_expression_item", color="#00AAAA" ];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_additive_expression [ label="additive_expression", URL="\ref additive_expression", color="#00AAAA"];
+ *     node_shift_expression_item ->  node_token [label="_p_token" style=dotted];
+ *     node_shift_expression_item ->  node_additive_expression [label="_p_additive_expression" style=solid];
+ * }
+ * \enddot
+ */
 class shift_expression_item
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-	Token *_p_token1;                                               // LEFT_OP
-	additive_expression *_p_additive_expression;                    // additive_expression
-public:
-	shift_expression_item
-		(
-			std::string _arg_s_matchedPattern,
-			Token *_arg__p_token1,
-			additive_expression *_arg__p_additive_expression
-		);
-	shift_expression_item(const shift_expression_item &);
-	virtual std::string name()const{return "shift_expression_item";}			//returns the class name, here "shift_expression"
-	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual Properties getProperties()const;
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
-	      Token* get_p_token1()     {return _p_token1;}							//returns const pointer to _p_token1
-	const additive_expression* get_p_additive_expression()const{return _p_additive_expression;}							//returns const pointer to _p_additive_expression
-	      additive_expression* get_p_additive_expression()     {return _p_additive_expression;}							//returns const pointer to _p_additive_expression
-	virtual ~shift_expression_item();
-	
-	
-};
-/*------------------------------------------------------------*\
- 							        
-  main class shift_expression                         
-                                                                
-\*------------------------------------------------------------*/
+	private:
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b><<</b>, <b>>></b>, <b>None</b>
+		ReferenceCountedAutoPointer<additive_expression> _p_additive_expression;	  ///< A pointer to additive_expression.
+	public:
+		/** 
+		 * \brief Constructor of shift_expression_item
+		 *
+		 * This function handles the shift_expression_item
+                 */
+		shift_expression_item	
+				(
+					ReferenceCountedAutoPointer<token> _arg_token,   ///< A pointer to a token, accepts <b><<</b>, <b>>></b>, <b>None</b>
+					ReferenceCountedAutoPointer<additive_expression> _arg_additive_expression  ///< A pointer to additive_expression.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"shift_expression_item"</b>
+		 * \returns <b>"shift_expression_item"</b>
+                 */
+		virtual std::string name()const		{return std::string("shift_expression_item");}
 
-class shift_expression
-	:public CAst 
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_SHIFT_EXPRESSION_ITEM
+		 * \returns  ID_SHIFT_EXPRESSION_ITEM
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_SHIFT_EXPRESSION_ITEM;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~shift_expression_item()
+		{}
+};
+
+
+
+
+
+/**
+ * \brief The basic class to handle shift_expression
+ *
+ * Since the rule contains itself, this rule will be implemented in the form of a list
+ */
+class shift_expression:public CAst
 {
-private:
-	typedef std::deque<shift_expression_item> ItemsListType;
-	typedef ItemsListType::iterator ItemsListIter;
-	typedef ItemsListType::const_iterator CItemsListIter;
-	ItemsListType _items;
-public:
-//ASDFG
-	
-	shift_expression
-		(
-			std::string _arg_s_matchedPattern,
-			Token *_arg__p_token1,
-			additive_expression *_arg__p_additive_expression
-		);
+	public:
+		typedef std::list<ReferenceCountedAutoPointer<shift_expression_item> > shift_expressionListType;	///< This defines the list type which will store the shift_expression_item
+		typedef shift_expressionListType::iterator shift_expressionIterType;				///< This defines the iterator over shift_expressionListType
+		typedef shift_expressionListType::const_iterator Cshift_expressionIterType;				///< This defines the constant iterator over shift_expressionListType
 
-	void append
-		(
-			std::string _arg_s_matchedPattern,
-			Token *_arg__p_token1,
-			additive_expression *_arg__p_additive_expression
-		);
+	private:
+		shift_expressionListType _itemList;									///< The list of items
+	public:
+		/**
+		 * \brief The default constructor calls the parent constructor
+		 *
+		 */
+		shift_expression():CAst()
+		{}
 
-	virtual std::string name()const;							//returns the class name, here "shift_expression"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_SHIFT_EXPRESSION
-	virtual std::string pattern()const;							//returns the pattern, here "[shift_expression,LEFT_OP,additive_expression]"
-	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
-	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
-	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
-	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
-	virtual int size()const{return _items.size();}						//returns the size of the container
-	virtual shift_expression_item& operator[](int i){return _items[i];}
-	virtual ~shift_expression ();
+		/**
+		 * \brief Append an item to the list
+		 *
+		 */
+		void append( ReferenceCountedAutoPointer<shift_expression_item> item)
+		{
+			_itemList.push_back(item);
+		}
+		
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"shift_expression"</b>
+		 * \returns <b>"shift_expression"</b>
+                 */
+		virtual std::string name()const {return "shift_expression";}
+		
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_SHIFT_EXPRESSION
+		 * \returns  ID_SHIFT_EXPRESSION
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_SHIFT_EXPRESSION;}
 
 };
 
-typedef std::deque<shift_expression_item>::iterator shift_expression_iterator;
-typedef std::deque<shift_expression_item>::const_iterator shift_expression_const_iterator;
-
-
-			
-			
-/*=============================================================================================================*\
-                                                                                                                 
-        THE identifier_list CLASS                                                                                 
-        FOR PATTERN : [identifier_list,',',IDENTIFIER]		                                                                 
- 														 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
-class Token;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/*------------------------------------------------------------*\
- 							        
-  item class identifier_list_item                              
-                                                                
-\*------------------------------------------------------------*/
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:identifier_list
+//////////////////////////////////////////
+
+
+
+
+
+class token;
+
+
+
+
+/**
+ * \brief identifier_list_item implements the pattern: <b>(identifier_list, ,, [IDENTIFIER])</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_identifier_list_item [ label="identifier_list_item", URL="\ref identifier_list_item", color="#00AAAA" ];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_identifier_list_item ->  node_token [label="_p_token" style=solid];
+ * }
+ * \enddot
+ */
 class identifier_list_item
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-	Token *_p_token1;                                               // IDENTIFIER
-public:
-	identifier_list_item
-		(
-			std::string _arg_s_matchedPattern,
-			Token *_arg__p_token1
-		);
-	identifier_list_item(const identifier_list_item &);
-	virtual std::string name()const{return "identifier_list_item";}			//returns the class name, here "identifier_list"
-	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual Properties getProperties()const;
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
-	      Token* get_p_token1()     {return _p_token1;}							//returns const pointer to _p_token1
-	virtual ~identifier_list_item();
-	
-	
-};
-/*------------------------------------------------------------*\
- 							        
-  main class identifier_list                         
-                                                                
-\*------------------------------------------------------------*/
+	private:
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>[IDENTIFIER]</b>
+	public:
+		/** 
+		 * \brief Constructor of identifier_list_item
+		 *
+		 * This function handles the identifier_list_item
+                 */
+		identifier_list_item	
+				(
+					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>[IDENTIFIER]</b>
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"identifier_list_item"</b>
+		 * \returns <b>"identifier_list_item"</b>
+                 */
+		virtual std::string name()const		{return std::string("identifier_list_item");}
 
-class identifier_list
-	:public CAst 
-{
-private:
-	typedef std::deque<identifier_list_item> ItemsListType;
-	typedef ItemsListType::iterator ItemsListIter;
-	typedef ItemsListType::const_iterator CItemsListIter;
-	ItemsListType _items;
-public:
-//ASDFG
-	
-	identifier_list
-		(
-			std::string _arg_s_matchedPattern,
-			Token *_arg__p_token1
-		);
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_IDENTIFIER_LIST_ITEM
+		 * \returns  ID_IDENTIFIER_LIST_ITEM
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_IDENTIFIER_LIST_ITEM;}
 
-	void append
-		(
-			std::string _arg_s_matchedPattern,
-			Token *_arg__p_token1
-		);
-
-	virtual std::string name()const;							//returns the class name, here "identifier_list"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_IDENTIFIER_LIST
-	virtual std::string pattern()const;							//returns the pattern, here "[identifier_list,',',IDENTIFIER]"
-	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
-	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
-	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
-	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
-	virtual int size()const{return _items.size();}						//returns the size of the container
-	virtual identifier_list_item& operator[](int i){return _items[i];}
-	virtual ~identifier_list ();
-
-};
-
-typedef std::deque<identifier_list_item>::iterator identifier_list_iterator;
-typedef std::deque<identifier_list_item>::const_iterator identifier_list_const_iterator;
-
-
-			
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE jump_statement BASE CLASS                                                                    
-                                                                                                                 
-\*=============================================================================================================*/  
-
-
-class jump_statement :public CAst
-{
-public:
-	virtual std::string name()const=0;
-	virtual std::ostream& codeStream(std::ostream&)const=0;
-	virtual CAstType typeId()const=0;
-	virtual std::string pattern()const=0;
-	virtual bool isList()const=0;
-	virtual Properties getProperties()const=0;
-	virtual PropertiesList getPropertiesList()const=0;
-	virtual ~jump_statement (){};
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~identifier_list_item()
+		{}
 };
 
 
 
 
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE jump_statement1 CLASS                                                                                 
- 	FOR PATTERN : [GOTO,IDENTIFIER,';']		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
 
-
-
-// FORWARD DECLARATION
-class Token;
-
-
-class jump_statement1 
-	:public jump_statement 
+/**
+ * \brief The basic class to handle identifier_list
+ *
+ * Since the rule contains itself, this rule will be implemented in the form of a list
+ */
+class identifier_list:public CAst
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		Token *_p_token1;                                               // IDENTIFIER
-public:
-	jump_statement1	                                             // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				Token *_arg__p_token1			
-		);
-	jump_statement1(const jump_statement1& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "jump_statement1"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_JUMP_STATEMENT1
-	virtual std::string pattern()const;							//returns the pattern, here "[GOTO,IDENTIFIER,';']"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
-	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
-	virtual ~jump_statement1 ();
+	public:
+		typedef std::list<ReferenceCountedAutoPointer<identifier_list_item> > identifier_listListType;	///< This defines the list type which will store the identifier_list_item
+		typedef identifier_listListType::iterator identifier_listIterType;				///< This defines the iterator over identifier_listListType
+		typedef identifier_listListType::const_iterator Cidentifier_listIterType;				///< This defines the constant iterator over identifier_listListType
 
-	
+	private:
+		identifier_listListType _itemList;									///< The list of items
+	public:
+		/**
+		 * \brief The default constructor calls the parent constructor
+		 *
+		 */
+		identifier_list():CAst()
+		{}
+
+		/**
+		 * \brief Append an item to the list
+		 *
+		 */
+		void append( ReferenceCountedAutoPointer<identifier_list_item> item)
+		{
+			_itemList.push_back(item);
+		}
 		
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"identifier_list"</b>
+		 * \returns <b>"identifier_list"</b>
+                 */
+		virtual std::string name()const {return "identifier_list";}
+		
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_IDENTIFIER_LIST
+		 * \returns  ID_IDENTIFIER_LIST
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_IDENTIFIER_LIST;}
+
 };
 
 
-			
 
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE jump_statement2 CLASS                                                                                 
- 	FOR PATTERN : [RETURN,expression,';']		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
-// FORWARD DECLARATION
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:jump_statement
+//////////////////////////////////////////
+
+
+/**
+ * \brief Implements jump_statement
+ * 
+ * This is the interface class. This implements the patterns
+ *  - (goto, [IDENTIFIER], ;)
+ *  - (continue, ;)
+ *  - (break, ;)
+ *  - (return, ;)
+ *  - (return, expression, ;)
+ * 
+ **/
+class jump_statement:public CAst
+{
+	public:
+		/**
+                 * \brief Interface for the child classes to return the name
+                 *
+                 */
+		virtual std::string name()const=0;
+
+		/**
+                 *  \brief Interface for the child classes to return the class ID
+                 *
+                 */
+		virtual CAST_CLASS_ID classId()const=0;
+};
+
+
+
+
+class token;
+
+
+
+
+/**
+ * \brief jump_statement_1 implements the pattern: <b>(goto, [IDENTIFIER], ;)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_jump_statement_1 [ label="jump_statement_1", URL="\ref jump_statement_1", color="#00AAAA" ];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_jump_statement_1 ->  node_token [label="_p_token" style=solid];
+ * }
+ * \enddot
+ */
+class jump_statement_1:public jump_statement
+{
+	private:
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>[IDENTIFIER]</b>
+	public:
+		/** 
+		 * \brief Constructor of jump_statement_1
+		 *
+		 * This function handles the jump_statement_1
+                 */
+		jump_statement_1	
+				(
+					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>[IDENTIFIER]</b>
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"jump_statement_1"</b>
+		 * \returns <b>"jump_statement_1"</b>
+                 */
+		virtual std::string name()const		{return std::string("jump_statement_1");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_JUMP_STATEMENT_1
+		 * \returns  ID_JUMP_STATEMENT_1
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_JUMP_STATEMENT_1;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~jump_statement_1()
+		{}
+};
+
+
+
+
+
 class expression;
 
 
-class jump_statement2 
-	:public jump_statement 
-{
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		expression *_p_expression;                                      // expression
-public:
-	jump_statement2	                                             // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				expression *_arg__p_expression			
-		);
-	jump_statement2(const jump_statement2& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "jump_statement2"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_JUMP_STATEMENT2
-	virtual std::string pattern()const;							//returns the pattern, here "[RETURN,expression,';']"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const expression* get_p_expression()const{return _p_expression;}							//returns const pointer to _p_expression
-	      expression* get_p_expression()     {return _p_expression;}							//returns       pointer to _p_expression
-	virtual ~jump_statement2 ();
 
-	
-		
+/**
+ * \brief jump_statement_2 implements the pattern: <b>(return, expression, ;)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_jump_statement_2 [ label="jump_statement_2", URL="\ref jump_statement_2", color="#00AAAA" ];
+ *     node_expression [ label="expression", URL="\ref expression", color="#00AAAA"];
+ *     node_jump_statement_2 ->  node_expression [label="_p_expression" style=dotted];
+ * }
+ * \enddot
+ */
+class jump_statement_2:public jump_statement
+{
+	private:
+		ReferenceCountedAutoPointer<expression> _p_expression;	  ///< A pointer to expression. This parameter can be <b>Null</b>
+	public:
+		/** 
+		 * \brief Constructor of jump_statement_2
+		 *
+		 * This function handles the jump_statement_2
+                 */
+		jump_statement_2	
+				(
+					ReferenceCountedAutoPointer<expression> _arg_expression  ///< A pointer to expression. This parameter can be <b>Null</b>
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"jump_statement_2"</b>
+		 * \returns <b>"jump_statement_2"</b>
+                 */
+		virtual std::string name()const		{return std::string("jump_statement_2");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_JUMP_STATEMENT_2
+		 * \returns  ID_JUMP_STATEMENT_2
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_JUMP_STATEMENT_2;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~jump_statement_2()
+		{}
 };
 
 
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE jump_statement3 CLASS                                                                                 
- 	FOR PATTERN : [CONTINUE,';']		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
-class Token;
+class token;
 
 
-class jump_statement3 
-	:public jump_statement 
+
+
+/**
+ * \brief jump_statement_3 implements the pattern: <b>(continue, ;)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_jump_statement_3 [ label="jump_statement_3", URL="\ref jump_statement_3", color="#00AAAA" ];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_jump_statement_3 ->  node_token [label="_p_token" style=solid];
+ * }
+ * \enddot
+ */
+class jump_statement_3:public jump_statement
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		Token *_p_token1;                                               // CONTINUE
-public:
-	jump_statement3	                                             // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				Token *_arg__p_token1			
-		);
-	jump_statement3(const jump_statement3& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "jump_statement3"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_JUMP_STATEMENT3
-	virtual std::string pattern()const;							//returns the pattern, here "[CONTINUE,';']"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
-	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
-	virtual ~jump_statement3 ();
+	private:
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>continue</b>, <b>break</b>
+	public:
+		/** 
+		 * \brief Constructor of jump_statement_3
+		 *
+		 * This function handles the jump_statement_3
+                 */
+		jump_statement_3	
+				(
+					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>continue</b>, <b>break</b>
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"jump_statement_3"</b>
+		 * \returns <b>"jump_statement_3"</b>
+                 */
+		virtual std::string name()const		{return std::string("jump_statement_3");}
 
-	
-		
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_JUMP_STATEMENT_3
+		 * \returns  ID_JUMP_STATEMENT_3
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_JUMP_STATEMENT_3;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~jump_statement_3()
+		{}
 };
 
 
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE struct_declarator CLASS                                                                                 
- 	FOR PATTERN : [declarator,':',constant_expression]		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
-class declarator;
-class Token;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:struct_declarator
+//////////////////////////////////////////
+
+
+
+
+
+class token;
 class constant_expression;
+class declarator;
 
 
-class struct_declarator 
-	:public CAst 
+
+
+
+
+/**
+ * \brief struct_declarator implements the pattern: <b>(declarator, :, constant_expression)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_struct_declarator [ label="struct_declarator", URL="\ref struct_declarator", color="#00AAAA" ];
+ *     node_declarator [ label="declarator", URL="\ref declarator", color="#00AAAA"];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_constant_expression [ label="constant_expression", URL="\ref constant_expression", color="#00AAAA"];
+ *     node_struct_declarator ->  node_declarator [label="_p_declarator" style=dotted];
+ *     node_struct_declarator ->  node_token [label="_p_token" style=dotted];
+ *     node_struct_declarator ->  node_constant_expression [label="_p_constant_expression" style=dotted];
+ * }
+ * \enddot
+ */
+class struct_declarator:public CAst
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		declarator *_p_declarator;                                      // declarator
-		Token *_p_token1;                                               // ':'
-		constant_expression *_p_constant_expression;                    // constant_expression
-public:
-	struct_declarator	                                           // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				declarator *_arg__p_declarator,
-				Token *_arg__p_token1,
-				constant_expression *_arg__p_constant_expression			
-		);
-	struct_declarator(const struct_declarator& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "struct_declarator"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_STRUCT_DECLARATOR
-	virtual std::string pattern()const;							//returns the pattern, here "[declarator,':',constant_expression]"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const declarator* get_p_declarator()const{return _p_declarator;}							//returns const pointer to _p_declarator
-	      declarator* get_p_declarator()     {return _p_declarator;}							//returns       pointer to _p_declarator
-	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
-	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
-	const constant_expression* get_p_constant_expression()const{return _p_constant_expression;}							//returns const pointer to _p_constant_expression
-	      constant_expression* get_p_constant_expression()     {return _p_constant_expression;}							//returns       pointer to _p_constant_expression
-	virtual ~struct_declarator ();
+	private:
+		ReferenceCountedAutoPointer<declarator> _p_declarator;	  ///< A pointer to declarator. This parameter can be <b>Null</b>
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>:</b>, <b>None</b>
+		ReferenceCountedAutoPointer<constant_expression> _p_constant_expression;	  ///< A pointer to constant_expression. This parameter can be <b>Null</b>
+	public:
+		/** 
+		 * \brief Constructor of struct_declarator
+		 *
+		 * This function handles the struct_declarator
+                 */
+		struct_declarator	
+				(
+					ReferenceCountedAutoPointer<declarator> _arg_declarator,   ///< A pointer to declarator. This parameter can be <b>Null</b>
+					ReferenceCountedAutoPointer<token> _arg_token,   ///< A pointer to a token, accepts <b>:</b>, <b>None</b>
+					ReferenceCountedAutoPointer<constant_expression> _arg_constant_expression  ///< A pointer to constant_expression. This parameter can be <b>Null</b>
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"struct_declarator"</b>
+		 * \returns <b>"struct_declarator"</b>
+                 */
+		virtual std::string name()const		{return std::string("struct_declarator");}
 
-	
-		
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_STRUCT_DECLARATOR
+		 * \returns  ID_STRUCT_DECLARATOR
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_STRUCT_DECLARATOR;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~struct_declarator()
+		{}
 };
 
 
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE function_definition CLASS                                                                                 
- 	FOR PATTERN : [declaration_specifiers,declarator,declaration_list,compound_statement]		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
-class declaration_specifiers;
-class declarator;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:function_definition
+//////////////////////////////////////////
+
+
+
+
+
 class declaration_list;
 class compound_statement;
+class declaration_specifiers;
+class declarator;
 
 
-class function_definition 
-	:public CAst 
+
+
+
+
+/**
+ * \brief function_definition implements the pattern: <b>(declaration_specifiers, declarator, declaration_list, compound_statement)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_function_definition [ label="function_definition", URL="\ref function_definition", color="#00AAAA" ];
+ *     node_declaration_specifiers [ label="declaration_specifiers", URL="\ref declaration_specifiers", color="#00AAAA"];
+ *     node_declarator [ label="declarator", URL="\ref declarator", color="#00AAAA"];
+ *     node_declaration_list [ label="declaration_list", URL="\ref declaration_list", color="#00AAAA"];
+ *     node_compound_statement [ label="compound_statement", URL="\ref compound_statement", color="#00AAAA"];
+ *     node_function_definition ->  node_declaration_specifiers [label="_p_declaration_specifiers" style=dotted];
+ *     node_function_definition ->  node_declarator [label="_p_declarator" style=solid];
+ *     node_function_definition ->  node_declaration_list [label="_p_declaration_list" style=dotted];
+ *     node_function_definition ->  node_compound_statement [label="_p_compound_statement" style=solid];
+ * }
+ * \enddot
+ */
+class function_definition:public CAst
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		declaration_specifiers *_p_declaration_specifiers;              // declaration_specifiers
-		declarator *_p_declarator;                                      // declarator
-		declaration_list *_p_declaration_list;                          // declaration_list
-		compound_statement *_p_compound_statement;                      // compound_statement
-public:
-	function_definition	                                         // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				declaration_specifiers *_arg__p_declaration_specifiers,
-				declarator *_arg__p_declarator,
-				declaration_list *_arg__p_declaration_list,
-				compound_statement *_arg__p_compound_statement			
-		);
-	function_definition(const function_definition& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "function_definition"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_FUNCTION_DEFINITION
-	virtual std::string pattern()const;							//returns the pattern, here "[declaration_specifiers,declarator,declaration_list,compound_statement]"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const declaration_specifiers* get_p_declaration_specifiers()const{return _p_declaration_specifiers;}							//returns const pointer to _p_declaration_specifiers
-	      declaration_specifiers* get_p_declaration_specifiers()     {return _p_declaration_specifiers;}							//returns       pointer to _p_declaration_specifiers
-	const declarator* get_p_declarator()const{return _p_declarator;}							//returns const pointer to _p_declarator
-	      declarator* get_p_declarator()     {return _p_declarator;}							//returns       pointer to _p_declarator
-	const declaration_list* get_p_declaration_list()const{return _p_declaration_list;}							//returns const pointer to _p_declaration_list
-	      declaration_list* get_p_declaration_list()     {return _p_declaration_list;}							//returns       pointer to _p_declaration_list
-	const compound_statement* get_p_compound_statement()const{return _p_compound_statement;}							//returns const pointer to _p_compound_statement
-	      compound_statement* get_p_compound_statement()     {return _p_compound_statement;}							//returns       pointer to _p_compound_statement
-	virtual ~function_definition ();
+	private:
+		ReferenceCountedAutoPointer<declaration_specifiers> _p_declaration_specifiers;	  ///< A pointer to declaration_specifiers. This parameter can be <b>Null</b>
+		ReferenceCountedAutoPointer<declarator> _p_declarator;	  ///< A pointer to declarator.
+		ReferenceCountedAutoPointer<declaration_list> _p_declaration_list;	  ///< A pointer to declaration_list. This parameter can be <b>Null</b>
+		ReferenceCountedAutoPointer<compound_statement> _p_compound_statement;	  ///< A pointer to compound_statement.
+	public:
+		/** 
+		 * \brief Constructor of function_definition
+		 *
+		 * This function handles the function_definition
+                 */
+		function_definition	
+				(
+					ReferenceCountedAutoPointer<declaration_specifiers> _arg_declaration_specifiers,   ///< A pointer to declaration_specifiers. This parameter can be <b>Null</b>
+					ReferenceCountedAutoPointer<declarator> _arg_declarator,   ///< A pointer to declarator.
+					ReferenceCountedAutoPointer<declaration_list> _arg_declaration_list,   ///< A pointer to declaration_list. This parameter can be <b>Null</b>
+					ReferenceCountedAutoPointer<compound_statement> _arg_compound_statement  ///< A pointer to compound_statement.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"function_definition"</b>
+		 * \returns <b>"function_definition"</b>
+                 */
+		virtual std::string name()const		{return std::string("function_definition");}
 
-	
-		
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_FUNCTION_DEFINITION
+		 * \returns  ID_FUNCTION_DEFINITION
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_FUNCTION_DEFINITION;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~function_definition()
+		{}
 };
 
 
-			
-/*=============================================================================================================*\
-                                                                                                                 
-        THE parameter_list CLASS                                                                                 
-        FOR PATTERN : [parameter_list,',',parameter_declaration]		                                                                 
- 														 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:parameter_list
+//////////////////////////////////////////
+
+
+
+
+
 class parameter_declaration;
 
-/*------------------------------------------------------------*\
- 							        
-  item class parameter_list_item                              
-                                                                
-\*------------------------------------------------------------*/
+
+
+/**
+ * \brief parameter_list_item implements the pattern: <b>(parameter_list, ,, parameter_declaration)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_parameter_list_item [ label="parameter_list_item", URL="\ref parameter_list_item", color="#00AAAA" ];
+ *     node_parameter_declaration [ label="parameter_declaration", URL="\ref parameter_declaration", color="#00AAAA"];
+ *     node_parameter_list_item ->  node_parameter_declaration [label="_p_parameter_declaration" style=solid];
+ * }
+ * \enddot
+ */
 class parameter_list_item
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-	parameter_declaration *_p_parameter_declaration;                // parameter_declaration
-public:
-	parameter_list_item
-		(
-			std::string _arg_s_matchedPattern,
-			parameter_declaration *_arg__p_parameter_declaration
-		);
-	parameter_list_item(const parameter_list_item &);
-	virtual std::string name()const{return "parameter_list_item";}			//returns the class name, here "parameter_list"
-	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual Properties getProperties()const;
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const parameter_declaration* get_p_parameter_declaration()const{return _p_parameter_declaration;}							//returns const pointer to _p_parameter_declaration
-	      parameter_declaration* get_p_parameter_declaration()     {return _p_parameter_declaration;}							//returns const pointer to _p_parameter_declaration
-	virtual ~parameter_list_item();
-	
-	
-};
-/*------------------------------------------------------------*\
- 							        
-  main class parameter_list                         
-                                                                
-\*------------------------------------------------------------*/
+	private:
+		ReferenceCountedAutoPointer<parameter_declaration> _p_parameter_declaration;	  ///< A pointer to parameter_declaration.
+	public:
+		/** 
+		 * \brief Constructor of parameter_list_item
+		 *
+		 * This function handles the parameter_list_item
+                 */
+		parameter_list_item	
+				(
+					ReferenceCountedAutoPointer<parameter_declaration> _arg_parameter_declaration  ///< A pointer to parameter_declaration.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"parameter_list_item"</b>
+		 * \returns <b>"parameter_list_item"</b>
+                 */
+		virtual std::string name()const		{return std::string("parameter_list_item");}
 
-class parameter_list
-	:public CAst 
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_PARAMETER_LIST_ITEM
+		 * \returns  ID_PARAMETER_LIST_ITEM
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_PARAMETER_LIST_ITEM;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~parameter_list_item()
+		{}
+};
+
+
+
+
+
+/**
+ * \brief The basic class to handle parameter_list
+ *
+ * Since the rule contains itself, this rule will be implemented in the form of a list
+ */
+class parameter_list:public CAst
 {
-private:
-	typedef std::deque<parameter_list_item> ItemsListType;
-	typedef ItemsListType::iterator ItemsListIter;
-	typedef ItemsListType::const_iterator CItemsListIter;
-	ItemsListType _items;
-public:
-//ASDFG
-	
-	parameter_list
-		(
-			std::string _arg_s_matchedPattern,
-			parameter_declaration *_arg__p_parameter_declaration
-		);
+	public:
+		typedef std::list<ReferenceCountedAutoPointer<parameter_list_item> > parameter_listListType;	///< This defines the list type which will store the parameter_list_item
+		typedef parameter_listListType::iterator parameter_listIterType;				///< This defines the iterator over parameter_listListType
+		typedef parameter_listListType::const_iterator Cparameter_listIterType;				///< This defines the constant iterator over parameter_listListType
 
-	void append
-		(
-			std::string _arg_s_matchedPattern,
-			parameter_declaration *_arg__p_parameter_declaration
-		);
+	private:
+		parameter_listListType _itemList;									///< The list of items
+	public:
+		/**
+		 * \brief The default constructor calls the parent constructor
+		 *
+		 */
+		parameter_list():CAst()
+		{}
 
-	virtual std::string name()const;							//returns the class name, here "parameter_list"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_PARAMETER_LIST
-	virtual std::string pattern()const;							//returns the pattern, here "[parameter_list,',',parameter_declaration]"
-	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
-	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
-	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
-	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
-	virtual int size()const{return _items.size();}						//returns the size of the container
-	virtual parameter_list_item& operator[](int i){return _items[i];}
-	virtual ~parameter_list ();
+		/**
+		 * \brief Append an item to the list
+		 *
+		 */
+		void append( ReferenceCountedAutoPointer<parameter_list_item> item)
+		{
+			_itemList.push_back(item);
+		}
+		
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"parameter_list"</b>
+		 * \returns <b>"parameter_list"</b>
+                 */
+		virtual std::string name()const {return "parameter_list";}
+		
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_PARAMETER_LIST
+		 * \returns  ID_PARAMETER_LIST
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_PARAMETER_LIST;}
 
 };
 
-typedef std::deque<parameter_list_item>::iterator parameter_list_iterator;
-typedef std::deque<parameter_list_item>::const_iterator parameter_list_const_iterator;
-
-
-			
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE enum_specifier CLASS                                                                                 
- 	FOR PATTERN : [ENUM,IDENTIFIER,'{',enumerator_list,'}']		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
-class Token;
-class Token;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:enum_specifier
+//////////////////////////////////////////
+
+
+
+
+
+class token;
 class enumerator_list;
-class Token;
 
 
-class enum_specifier 
-	:public CAst 
+
+
+
+
+
+
+
+/**
+ * \brief enum_specifier implements the pattern: <b>(enum, [IDENTIFIER], {, enumerator_list, })</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_enum_specifier [ label="enum_specifier", URL="\ref enum_specifier", color="#00AAAA" ];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_enumerator_list [ label="enumerator_list", URL="\ref enumerator_list", color="#00AAAA"];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_enum_specifier ->  node_token [label="_p_token1" style=dotted];
+ *     node_enum_specifier ->  node_token [label="_p_token2" style=dotted];
+ *     node_enum_specifier ->  node_enumerator_list [label="_p_enumerator_list" style=dotted];
+ *     node_enum_specifier ->  node_token [label="_p_token3" style=dotted];
+ * }
+ * \enddot
+ */
+class enum_specifier:public CAst
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		Token *_p_token1;                                               // IDENTIFIER
-		Token *_p_token2;                                               // '{'
-		enumerator_list *_p_enumerator_list;                            // enumerator_list
-		Token *_p_token3;                                               // '}'
-public:
-	enum_specifier	                                              // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				Token *_arg__p_token1,
-				Token *_arg__p_token2,
-				enumerator_list *_arg__p_enumerator_list,
-				Token *_arg__p_token3			
-		);
-	enum_specifier(const enum_specifier& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "enum_specifier"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_ENUM_SPECIFIER
-	virtual std::string pattern()const;							//returns the pattern, here "[ENUM,IDENTIFIER,'{',enumerator_list,'}']"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
-	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
-	const Token* get_p_token2()const{return _p_token2;}							//returns const pointer to _p_token2
-	      Token* get_p_token2()     {return _p_token2;}							//returns       pointer to _p_token2
-	const enumerator_list* get_p_enumerator_list()const{return _p_enumerator_list;}							//returns const pointer to _p_enumerator_list
-	      enumerator_list* get_p_enumerator_list()     {return _p_enumerator_list;}							//returns       pointer to _p_enumerator_list
-	const Token* get_p_token3()const{return _p_token3;}							//returns const pointer to _p_token3
-	      Token* get_p_token3()     {return _p_token3;}							//returns       pointer to _p_token3
-	virtual ~enum_specifier ();
+	private:
+		ReferenceCountedAutoPointer<token> _p_token1;	  ///< A pointer to a token, accepts <b>[IDENTIFIER]</b>, <b>None</b>
+		ReferenceCountedAutoPointer<token> _p_token2;	  ///< A pointer to a token, accepts <b>{</b>, <b>None</b>
+		ReferenceCountedAutoPointer<enumerator_list> _p_enumerator_list;	  ///< A pointer to enumerator_list. This parameter can be <b>Null</b>
+		ReferenceCountedAutoPointer<token> _p_token3;	  ///< A pointer to a token, accepts <b>}</b>, <b>None</b>
+	public:
+		/** 
+		 * \brief Constructor of enum_specifier
+		 *
+		 * This function handles the enum_specifier
+                 */
+		enum_specifier	
+				(
+					ReferenceCountedAutoPointer<token> _arg_token1,   ///< A pointer to a token, accepts <b>[IDENTIFIER]</b>, <b>None</b>
+					ReferenceCountedAutoPointer<token> _arg_token2,   ///< A pointer to a token, accepts <b>{</b>, <b>None</b>
+					ReferenceCountedAutoPointer<enumerator_list> _arg_enumerator_list,   ///< A pointer to enumerator_list. This parameter can be <b>Null</b>
+					ReferenceCountedAutoPointer<token> _arg_token3  ///< A pointer to a token, accepts <b>}</b>, <b>None</b>
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"enum_specifier"</b>
+		 * \returns <b>"enum_specifier"</b>
+                 */
+		virtual std::string name()const		{return std::string("enum_specifier");}
 
-	
-		
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_ENUM_SPECIFIER
+		 * \returns  ID_ENUM_SPECIFIER
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_ENUM_SPECIFIER;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~enum_specifier()
+		{}
 };
 
 
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE type_qualifier CLASS                                                                                 
- 	FOR PATTERN : [CONST]		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
-class Token;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-class type_qualifier 
-	:public CAst 
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:type_qualifier
+//////////////////////////////////////////
+
+
+
+
+
+class token;
+
+
+
+
+/**
+ * \brief type_qualifier implements the pattern: <b>(const,)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_type_qualifier [ label="type_qualifier", URL="\ref type_qualifier", color="#00AAAA" ];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_type_qualifier ->  node_token [label="_p_token" style=solid];
+ * }
+ * \enddot
+ */
+class type_qualifier:public CAst
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		Token *_p_token1;                                               // CONST
-public:
-	type_qualifier	                                              // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				Token *_arg__p_token1			
-		);
-	type_qualifier(const type_qualifier& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "type_qualifier"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_TYPE_QUALIFIER
-	virtual std::string pattern()const;							//returns the pattern, here "[CONST]"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
-	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
-	virtual ~type_qualifier ();
+	private:
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>const</b>, <b>volatile</b>
+	public:
+		/** 
+		 * \brief Constructor of type_qualifier
+		 *
+		 * This function handles the type_qualifier
+                 */
+		type_qualifier	
+				(
+					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>const</b>, <b>volatile</b>
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"type_qualifier"</b>
+		 * \returns <b>"type_qualifier"</b>
+                 */
+		virtual std::string name()const		{return std::string("type_qualifier");}
 
-	
-		
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_TYPE_QUALIFIER
+		 * \returns  ID_TYPE_QUALIFIER
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_TYPE_QUALIFIER;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~type_qualifier()
+		{}
 };
 
 
-			
-/*=============================================================================================================*\
-                                                                                                                 
-        THE enumerator_list CLASS                                                                                 
-        FOR PATTERN : [enumerator_list,',',enumerator]		                                                                 
- 														 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:enumerator_list
+//////////////////////////////////////////
+
+
+
+
+
 class enumerator;
 
-/*------------------------------------------------------------*\
- 							        
-  item class enumerator_list_item                              
-                                                                
-\*------------------------------------------------------------*/
+
+
+/**
+ * \brief enumerator_list_item implements the pattern: <b>(enumerator_list, ,, enumerator)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_enumerator_list_item [ label="enumerator_list_item", URL="\ref enumerator_list_item", color="#00AAAA" ];
+ *     node_enumerator [ label="enumerator", URL="\ref enumerator", color="#00AAAA"];
+ *     node_enumerator_list_item ->  node_enumerator [label="_p_enumerator" style=solid];
+ * }
+ * \enddot
+ */
 class enumerator_list_item
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-	enumerator *_p_enumerator;                                      // enumerator
-public:
-	enumerator_list_item
-		(
-			std::string _arg_s_matchedPattern,
-			enumerator *_arg__p_enumerator
-		);
-	enumerator_list_item(const enumerator_list_item &);
-	virtual std::string name()const{return "enumerator_list_item";}			//returns the class name, here "enumerator_list"
-	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual Properties getProperties()const;
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const enumerator* get_p_enumerator()const{return _p_enumerator;}							//returns const pointer to _p_enumerator
-	      enumerator* get_p_enumerator()     {return _p_enumerator;}							//returns const pointer to _p_enumerator
-	virtual ~enumerator_list_item();
-	
-	
-};
-/*------------------------------------------------------------*\
- 							        
-  main class enumerator_list                         
-                                                                
-\*------------------------------------------------------------*/
+	private:
+		ReferenceCountedAutoPointer<enumerator> _p_enumerator;	  ///< A pointer to enumerator.
+	public:
+		/** 
+		 * \brief Constructor of enumerator_list_item
+		 *
+		 * This function handles the enumerator_list_item
+                 */
+		enumerator_list_item	
+				(
+					ReferenceCountedAutoPointer<enumerator> _arg_enumerator  ///< A pointer to enumerator.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"enumerator_list_item"</b>
+		 * \returns <b>"enumerator_list_item"</b>
+                 */
+		virtual std::string name()const		{return std::string("enumerator_list_item");}
 
-class enumerator_list
-	:public CAst 
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_ENUMERATOR_LIST_ITEM
+		 * \returns  ID_ENUMERATOR_LIST_ITEM
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_ENUMERATOR_LIST_ITEM;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~enumerator_list_item()
+		{}
+};
+
+
+
+
+
+/**
+ * \brief The basic class to handle enumerator_list
+ *
+ * Since the rule contains itself, this rule will be implemented in the form of a list
+ */
+class enumerator_list:public CAst
 {
-private:
-	typedef std::deque<enumerator_list_item> ItemsListType;
-	typedef ItemsListType::iterator ItemsListIter;
-	typedef ItemsListType::const_iterator CItemsListIter;
-	ItemsListType _items;
-public:
-//ASDFG
-	
-	enumerator_list
-		(
-			std::string _arg_s_matchedPattern,
-			enumerator *_arg__p_enumerator
-		);
+	public:
+		typedef std::list<ReferenceCountedAutoPointer<enumerator_list_item> > enumerator_listListType;	///< This defines the list type which will store the enumerator_list_item
+		typedef enumerator_listListType::iterator enumerator_listIterType;				///< This defines the iterator over enumerator_listListType
+		typedef enumerator_listListType::const_iterator Cenumerator_listIterType;				///< This defines the constant iterator over enumerator_listListType
 
-	void append
-		(
-			std::string _arg_s_matchedPattern,
-			enumerator *_arg__p_enumerator
-		);
+	private:
+		enumerator_listListType _itemList;									///< The list of items
+	public:
+		/**
+		 * \brief The default constructor calls the parent constructor
+		 *
+		 */
+		enumerator_list():CAst()
+		{}
 
-	virtual std::string name()const;							//returns the class name, here "enumerator_list"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_ENUMERATOR_LIST
-	virtual std::string pattern()const;							//returns the pattern, here "[enumerator_list,',',enumerator]"
-	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
-	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
-	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
-	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
-	virtual int size()const{return _items.size();}						//returns the size of the container
-	virtual enumerator_list_item& operator[](int i){return _items[i];}
-	virtual ~enumerator_list ();
+		/**
+		 * \brief Append an item to the list
+		 *
+		 */
+		void append( ReferenceCountedAutoPointer<enumerator_list_item> item)
+		{
+			_itemList.push_back(item);
+		}
+		
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"enumerator_list"</b>
+		 * \returns <b>"enumerator_list"</b>
+                 */
+		virtual std::string name()const {return "enumerator_list";}
+		
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_ENUMERATOR_LIST
+		 * \returns  ID_ENUMERATOR_LIST
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_ENUMERATOR_LIST;}
 
 };
 
-typedef std::deque<enumerator_list_item>::iterator enumerator_list_iterator;
-typedef std::deque<enumerator_list_item>::const_iterator enumerator_list_const_iterator;
 
 
-			
-			
 
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE labeled_statement BASE CLASS                                                                    
-                                                                                                                 
-\*=============================================================================================================*/  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-class labeled_statement :public CAst
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:labeled_statement
+//////////////////////////////////////////
+
+
+/**
+ * \brief Implements labeled_statement
+ * 
+ * This is the interface class. This implements the patterns
+ *  - ([IDENTIFIER], :, statement)
+ *  - (case, constant_expression, :, statement)
+ *  - (default, :, statement)
+ * 
+ **/
+class labeled_statement:public CAst
 {
-public:
-	virtual std::string name()const=0;
-	virtual std::ostream& codeStream(std::ostream&)const=0;
-	virtual CAstType typeId()const=0;
-	virtual std::string pattern()const=0;
-	virtual bool isList()const=0;
-	virtual Properties getProperties()const=0;
-	virtual PropertiesList getPropertiesList()const=0;
-	virtual ~labeled_statement (){};
+	public:
+		/**
+                 * \brief Interface for the child classes to return the name
+                 *
+                 */
+		virtual std::string name()const=0;
+
+		/**
+                 *  \brief Interface for the child classes to return the class ID
+                 *
+                 */
+		virtual CAST_CLASS_ID classId()const=0;
 };
 
 
 
 
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE labeled_statement1 CLASS                                                                                 
- 	FOR PATTERN : [CASE,constant_expression,':',statement]		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
-
-
-
-// FORWARD DECLARATION
+class statement;
 class constant_expression;
-class statement;
 
 
-class labeled_statement1 
-	:public labeled_statement 
+
+
+/**
+ * \brief labeled_statement_1 implements the pattern: <b>(case, constant_expression, :, statement)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_labeled_statement_1 [ label="labeled_statement_1", URL="\ref labeled_statement_1", color="#00AAAA" ];
+ *     node_constant_expression [ label="constant_expression", URL="\ref constant_expression", color="#00AAAA"];
+ *     node_statement [ label="statement", URL="\ref statement", color="#00AAAA"];
+ *     node_labeled_statement_1 ->  node_constant_expression [label="_p_constant_expression" style=solid];
+ *     node_labeled_statement_1 ->  node_statement [label="_p_statement" style=solid];
+ * }
+ * \enddot
+ */
+class labeled_statement_1:public labeled_statement
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		constant_expression *_p_constant_expression;                    // constant_expression
-		statement *_p_statement;                                        // statement
-public:
-	labeled_statement1	                                          // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				constant_expression *_arg__p_constant_expression,
-				statement *_arg__p_statement			
-		);
-	labeled_statement1(const labeled_statement1& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "labeled_statement1"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_LABELED_STATEMENT1
-	virtual std::string pattern()const;							//returns the pattern, here "[CASE,constant_expression,':',statement]"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const constant_expression* get_p_constant_expression()const{return _p_constant_expression;}							//returns const pointer to _p_constant_expression
-	      constant_expression* get_p_constant_expression()     {return _p_constant_expression;}							//returns       pointer to _p_constant_expression
-	const statement* get_p_statement()const{return _p_statement;}							//returns const pointer to _p_statement
-	      statement* get_p_statement()     {return _p_statement;}							//returns       pointer to _p_statement
-	virtual ~labeled_statement1 ();
+	private:
+		ReferenceCountedAutoPointer<constant_expression> _p_constant_expression;	  ///< A pointer to constant_expression.
+		ReferenceCountedAutoPointer<statement> _p_statement;	  ///< A pointer to statement.
+	public:
+		/** 
+		 * \brief Constructor of labeled_statement_1
+		 *
+		 * This function handles the labeled_statement_1
+                 */
+		labeled_statement_1	
+				(
+					ReferenceCountedAutoPointer<constant_expression> _arg_constant_expression,   ///< A pointer to constant_expression.
+					ReferenceCountedAutoPointer<statement> _arg_statement  ///< A pointer to statement.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"labeled_statement_1"</b>
+		 * \returns <b>"labeled_statement_1"</b>
+                 */
+		virtual std::string name()const		{return std::string("labeled_statement_1");}
 
-	
-		
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_LABELED_STATEMENT_1
+		 * \returns  ID_LABELED_STATEMENT_1
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_LABELED_STATEMENT_1;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~labeled_statement_1()
+		{}
 };
 
 
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE labeled_statement2 CLASS                                                                                 
- 	FOR PATTERN : [IDENTIFIER,':',statement]		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
-class Token;
+class token;
 class statement;
 
 
-class labeled_statement2 
-	:public labeled_statement 
-{
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		Token *_p_token1;                                               // IDENTIFIER
-		statement *_p_statement;                                        // statement
-public:
-	labeled_statement2	                                          // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				Token *_arg__p_token1,
-				statement *_arg__p_statement			
-		);
-	labeled_statement2(const labeled_statement2& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "labeled_statement2"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_LABELED_STATEMENT2
-	virtual std::string pattern()const;							//returns the pattern, here "[IDENTIFIER,':',statement]"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const Token* get_p_token1()const{return _p_token1;}							//returns const pointer to _p_token1
-	      Token* get_p_token1()     {return _p_token1;}							//returns       pointer to _p_token1
-	const statement* get_p_statement()const{return _p_statement;}							//returns const pointer to _p_statement
-	      statement* get_p_statement()     {return _p_statement;}							//returns       pointer to _p_statement
-	virtual ~labeled_statement2 ();
 
-	
-		
+
+
+/**
+ * \brief labeled_statement_2 implements the pattern: <b>([IDENTIFIER], :, statement)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_labeled_statement_2 [ label="labeled_statement_2", URL="\ref labeled_statement_2", color="#00AAAA" ];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_statement [ label="statement", URL="\ref statement", color="#00AAAA"];
+ *     node_labeled_statement_2 ->  node_token [label="_p_token" style=solid];
+ *     node_labeled_statement_2 ->  node_statement [label="_p_statement" style=solid];
+ * }
+ * \enddot
+ */
+class labeled_statement_2:public labeled_statement
+{
+	private:
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>default</b>, <b>[IDENTIFIER]</b>
+		ReferenceCountedAutoPointer<statement> _p_statement;	  ///< A pointer to statement.
+	public:
+		/** 
+		 * \brief Constructor of labeled_statement_2
+		 *
+		 * This function handles the labeled_statement_2
+                 */
+		labeled_statement_2	
+				(
+					ReferenceCountedAutoPointer<token> _arg_token,   ///< A pointer to a token, accepts <b>default</b>, <b>[IDENTIFIER]</b>
+					ReferenceCountedAutoPointer<statement> _arg_statement  ///< A pointer to statement.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"labeled_statement_2"</b>
+		 * \returns <b>"labeled_statement_2"</b>
+                 */
+		virtual std::string name()const		{return std::string("labeled_statement_2");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_LABELED_STATEMENT_2
+		 * \returns  ID_LABELED_STATEMENT_2
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_LABELED_STATEMENT_2;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~labeled_statement_2()
+		{}
 };
 
 
-			
-/*=============================================================================================================*\
-                                                                                                                 
-        THE declaration_list CLASS                                                                                 
-        FOR PATTERN : [declaration_list,declaration]		                                                                 
- 														 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:declaration_list
+//////////////////////////////////////////
+
+
+
+
+
 class declaration;
 
-/*------------------------------------------------------------*\
- 							        
-  item class declaration_list_item                              
-                                                                
-\*------------------------------------------------------------*/
+
+
+/**
+ * \brief declaration_list_item implements the pattern: <b>(declaration_list, declaration)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_declaration_list_item [ label="declaration_list_item", URL="\ref declaration_list_item", color="#00AAAA" ];
+ *     node_declaration [ label="declaration", URL="\ref declaration", color="#00AAAA"];
+ *     node_declaration_list_item ->  node_declaration [label="_p_declaration" style=solid];
+ * }
+ * \enddot
+ */
 class declaration_list_item
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-	declaration *_p_declaration;                                    // declaration
-public:
-	declaration_list_item
-		(
-			std::string _arg_s_matchedPattern,
-			declaration *_arg__p_declaration
-		);
-	declaration_list_item(const declaration_list_item &);
-	virtual std::string name()const{return "declaration_list_item";}			//returns the class name, here "declaration_list"
-	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual Properties getProperties()const;
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const declaration* get_p_declaration()const{return _p_declaration;}							//returns const pointer to _p_declaration
-	      declaration* get_p_declaration()     {return _p_declaration;}							//returns const pointer to _p_declaration
-	virtual ~declaration_list_item();
-	
-	
-};
-/*------------------------------------------------------------*\
- 							        
-  main class declaration_list                         
-                                                                
-\*------------------------------------------------------------*/
+	private:
+		ReferenceCountedAutoPointer<declaration> _p_declaration;	  ///< A pointer to declaration.
+	public:
+		/** 
+		 * \brief Constructor of declaration_list_item
+		 *
+		 * This function handles the declaration_list_item
+                 */
+		declaration_list_item	
+				(
+					ReferenceCountedAutoPointer<declaration> _arg_declaration  ///< A pointer to declaration.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"declaration_list_item"</b>
+		 * \returns <b>"declaration_list_item"</b>
+                 */
+		virtual std::string name()const		{return std::string("declaration_list_item");}
 
-class declaration_list
-	:public CAst 
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_DECLARATION_LIST_ITEM
+		 * \returns  ID_DECLARATION_LIST_ITEM
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_DECLARATION_LIST_ITEM;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~declaration_list_item()
+		{}
+};
+
+
+
+
+
+/**
+ * \brief The basic class to handle declaration_list
+ *
+ * Since the rule contains itself, this rule will be implemented in the form of a list
+ */
+class declaration_list:public CAst
 {
-private:
-	typedef std::deque<declaration_list_item> ItemsListType;
-	typedef ItemsListType::iterator ItemsListIter;
-	typedef ItemsListType::const_iterator CItemsListIter;
-	ItemsListType _items;
-public:
-//ASDFG
-	
-	declaration_list
-		(
-			std::string _arg_s_matchedPattern,
-			declaration *_arg__p_declaration
-		);
+	public:
+		typedef std::list<ReferenceCountedAutoPointer<declaration_list_item> > declaration_listListType;	///< This defines the list type which will store the declaration_list_item
+		typedef declaration_listListType::iterator declaration_listIterType;				///< This defines the iterator over declaration_listListType
+		typedef declaration_listListType::const_iterator Cdeclaration_listIterType;				///< This defines the constant iterator over declaration_listListType
 
-	void append
-		(
-			std::string _arg_s_matchedPattern,
-			declaration *_arg__p_declaration
-		);
+	private:
+		declaration_listListType _itemList;									///< The list of items
+	public:
+		/**
+		 * \brief The default constructor calls the parent constructor
+		 *
+		 */
+		declaration_list():CAst()
+		{}
 
-	virtual std::string name()const;							//returns the class name, here "declaration_list"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_DECLARATION_LIST
-	virtual std::string pattern()const;							//returns the pattern, here "[declaration_list,declaration]"
-	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
-	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
-	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
-	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
-	virtual int size()const{return _items.size();}						//returns the size of the container
-	virtual declaration_list_item& operator[](int i){return _items[i];}
-	virtual ~declaration_list ();
+		/**
+		 * \brief Append an item to the list
+		 *
+		 */
+		void append( ReferenceCountedAutoPointer<declaration_list_item> item)
+		{
+			_itemList.push_back(item);
+		}
+		
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"declaration_list"</b>
+		 * \returns <b>"declaration_list"</b>
+                 */
+		virtual std::string name()const {return "declaration_list";}
+		
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_DECLARATION_LIST
+		 * \returns  ID_DECLARATION_LIST
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_DECLARATION_LIST;}
 
 };
 
-typedef std::deque<declaration_list_item>::iterator declaration_list_iterator;
-typedef std::deque<declaration_list_item>::const_iterator declaration_list_const_iterator;
-
-
-			
-			
-/*=============================================================================================================*\
-                                                                                                                 
-        THE specifier_qualifier_list2 CLASS                                                                                 
-        FOR PATTERN : [type_specifier,specifier_qualifier_list]		                                                                 
- 														 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:specifier_qualifier_list
+//////////////////////////////////////////
+
+
+
+
+
+class specifier_qualifier_list_item
+{
+	
+	public:
+		/**
+                 * \brief Interface for the child classes to return the name
+                 *
+                 */
+		virtual std::string name()const=0;
+
+		/**
+                 *  \brief Interface for the child classes to return the class ID
+                 *
+                 */
+		virtual CAST_CLASS_ID classId()const=0;
+};
+
+class type_qualifier;
+
+
+
+/**
+ * \brief specifier_qualifier_list_item_1 implements the pattern: <b>(type_qualifier, specifier_qualifier_list)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_specifier_qualifier_list_item_1 [ label="specifier_qualifier_list_item_1", URL="\ref specifier_qualifier_list_item_1", color="#00AAAA" ];
+ *     node_type_qualifier [ label="type_qualifier", URL="\ref type_qualifier", color="#00AAAA"];
+ *     node_specifier_qualifier_list_item_1 ->  node_type_qualifier [label="_p_type_qualifier" style=solid];
+ * }
+ * \enddot
+ */
+class specifier_qualifier_list_item_1:public specifier_qualifier_list_item
+{
+	private:
+		ReferenceCountedAutoPointer<type_qualifier> _p_type_qualifier;	  ///< A pointer to type_qualifier.
+	public:
+		/** 
+		 * \brief Constructor of specifier_qualifier_list_item_1
+		 *
+		 * This function handles the specifier_qualifier_list_item_1
+                 */
+		specifier_qualifier_list_item_1	
+				(
+					ReferenceCountedAutoPointer<type_qualifier> _arg_type_qualifier  ///< A pointer to type_qualifier.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"specifier_qualifier_list_item_1"</b>
+		 * \returns <b>"specifier_qualifier_list_item_1"</b>
+                 */
+		virtual std::string name()const		{return std::string("specifier_qualifier_list_item_1");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_SPECIFIER_QUALIFIER_LIST_ITEM_1
+		 * \returns  ID_SPECIFIER_QUALIFIER_LIST_ITEM_1
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_SPECIFIER_QUALIFIER_LIST_ITEM_1;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~specifier_qualifier_list_item_1()
+		{}
+};
+
+
+
+
+
 class type_specifier;
 
-//QWERTY
-/*------------------------------------------------------------*\
- 							        
-  main class specifier_qualifier_list2                         
-                                                                
-\*------------------------------------------------------------*/
 
-class specifier_qualifier_list2
-	:public specifier_qualifier_list 
+
+/**
+ * \brief specifier_qualifier_list_item_2 implements the pattern: <b>(type_specifier, specifier_qualifier_list)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_specifier_qualifier_list_item_2 [ label="specifier_qualifier_list_item_2", URL="\ref specifier_qualifier_list_item_2", color="#00AAAA" ];
+ *     node_type_specifier [ label="type_specifier", URL="\ref type_specifier", color="#00AAAA"];
+ *     node_specifier_qualifier_list_item_2 ->  node_type_specifier [label="_p_type_specifier" style=solid];
+ * }
+ * \enddot
+ */
+class specifier_qualifier_list_item_2:public specifier_qualifier_list_item
 {
-private:
-	typedef std::deque<specifier_qualifier_list2_item> ItemsListType;
-	typedef ItemsListType::iterator ItemsListIter;
-	typedef ItemsListType::const_iterator CItemsListIter;
-	ItemsListType _items;
-public:
-//ASDFG
-	
-	specifier_qualifier_list2
-		(
-			std::string _arg_s_matchedPattern,
-			type_specifier *_arg__p_type_specifier
-		);
+	private:
+		ReferenceCountedAutoPointer<type_specifier> _p_type_specifier;	  ///< A pointer to type_specifier.
+	public:
+		/** 
+		 * \brief Constructor of specifier_qualifier_list_item_2
+		 *
+		 * This function handles the specifier_qualifier_list_item_2
+                 */
+		specifier_qualifier_list_item_2	
+				(
+					ReferenceCountedAutoPointer<type_specifier> _arg_type_specifier  ///< A pointer to type_specifier.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"specifier_qualifier_list_item_2"</b>
+		 * \returns <b>"specifier_qualifier_list_item_2"</b>
+                 */
+		virtual std::string name()const		{return std::string("specifier_qualifier_list_item_2");}
 
-	void append
-		(
-			std::string _arg_s_matchedPattern,
-			type_specifier *_arg__p_type_specifier
-		);
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_SPECIFIER_QUALIFIER_LIST_ITEM_2
+		 * \returns  ID_SPECIFIER_QUALIFIER_LIST_ITEM_2
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_SPECIFIER_QUALIFIER_LIST_ITEM_2;}
 
-	virtual std::string name()const;							//returns the class name, here "specifier_qualifier_list2"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_SPECIFIER_QUALIFIER_LIST2
-	virtual std::string pattern()const;							//returns the pattern, here "[type_specifier,specifier_qualifier_list]"
-	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
-	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
-	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
-	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
-	virtual int size()const{return _items.size();}						//returns the size of the container
-	virtual specifier_qualifier_list2_item& operator[](int i){return _items[i];}
-	virtual ~specifier_qualifier_list2 ();
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~specifier_qualifier_list_item_2()
+		{}
+};
+
+
+
+
+
+/**
+ * \brief The basic class to handle specifier_qualifier_list
+ *
+ * Since the rule contains itself, this rule will be implemented in the form of a list
+ */
+class specifier_qualifier_list:public CAst
+{
+	public:
+		typedef std::list<ReferenceCountedAutoPointer<specifier_qualifier_list_item> > specifier_qualifier_listListType;	///< This defines the list type which will store the specifier_qualifier_list_item
+		typedef specifier_qualifier_listListType::iterator specifier_qualifier_listIterType;				///< This defines the iterator over specifier_qualifier_listListType
+		typedef specifier_qualifier_listListType::const_iterator Cspecifier_qualifier_listIterType;				///< This defines the constant iterator over specifier_qualifier_listListType
+
+	private:
+		specifier_qualifier_listListType _itemList;									///< The list of items
+	public:
+		/**
+		 * \brief The default constructor calls the parent constructor
+		 *
+		 */
+		specifier_qualifier_list():CAst()
+		{}
+
+		/**
+		 * \brief Append an item to the list
+		 *
+		 */
+		void append( ReferenceCountedAutoPointer<specifier_qualifier_list_item> item)
+		{
+			_itemList.push_back(item);
+		}
+		
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"specifier_qualifier_list"</b>
+		 * \returns <b>"specifier_qualifier_list"</b>
+                 */
+		virtual std::string name()const {return "specifier_qualifier_list";}
+		
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_SPECIFIER_QUALIFIER_LIST
+		 * \returns  ID_SPECIFIER_QUALIFIER_LIST
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_SPECIFIER_QUALIFIER_LIST;}
 
 };
 
-typedef std::deque<specifier_qualifier_list2_item>::iterator specifier_qualifier_list2_iterator;
-typedef std::deque<specifier_qualifier_list2_item>::const_iterator specifier_qualifier_list2_const_iterator;
-
-
-			
-			
-/*=============================================================================================================*\
-                                                                                                                 
-        THE specifier_qualifier_list2 CLASS                                                                                 
-        FOR PATTERN : [type_specifier,specifier_qualifier_list]		                                                                 
- 														 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
-class type_specifier;
-
-//QWERTY
-/*------------------------------------------------------------*\
- 							        
-  main class specifier_qualifier_list2                         
-                                                                
-\*------------------------------------------------------------*/
-
-class specifier_qualifier_list2
-	:public specifier_qualifier_list 
-{
-private:
-	typedef std::deque<specifier_qualifier_list2_item> ItemsListType;
-	typedef ItemsListType::iterator ItemsListIter;
-	typedef ItemsListType::const_iterator CItemsListIter;
-	ItemsListType _items;
-public:
-//ASDFG
-	
-	specifier_qualifier_list2
-		(
-			std::string _arg_s_matchedPattern,
-			type_specifier *_arg__p_type_specifier
-		);
-
-	void append
-		(
-			std::string _arg_s_matchedPattern,
-			type_specifier *_arg__p_type_specifier
-		);
-
-	virtual std::string name()const;							//returns the class name, here "specifier_qualifier_list2"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_SPECIFIER_QUALIFIER_LIST2
-	virtual std::string pattern()const;							//returns the pattern, here "[type_specifier,specifier_qualifier_list]"
-	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
-	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
-	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
-	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
-	virtual int size()const{return _items.size();}						//returns the size of the container
-	virtual specifier_qualifier_list2_item& operator[](int i){return _items[i];}
-	virtual ~specifier_qualifier_list2 ();
-
-};
-
-typedef std::deque<specifier_qualifier_list2_item>::iterator specifier_qualifier_list2_iterator;
-typedef std::deque<specifier_qualifier_list2_item>::const_iterator specifier_qualifier_list2_const_iterator;
-
-
-			
-			
-/*=============================================================================================================*\
-                                                                                                                 
-        THE translation_unit CLASS                                                                                 
-        FOR PATTERN : [translation_unit,external_declaration]		                                                                 
- 														 
-\*=============================================================================================================*/  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
-// FORWARD DECLARATION
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:translation_unit
+//////////////////////////////////////////
+
+
+
+
+
 class external_declaration;
 
-/*------------------------------------------------------------*\
- 							        
-  item class translation_unit_item                              
-                                                                
-\*------------------------------------------------------------*/
+
+
+/**
+ * \brief translation_unit_item implements the pattern: <b>(translation_unit, external_declaration)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_translation_unit_item [ label="translation_unit_item", URL="\ref translation_unit_item", color="#00AAAA" ];
+ *     node_external_declaration [ label="external_declaration", URL="\ref external_declaration", color="#00AAAA"];
+ *     node_translation_unit_item ->  node_external_declaration [label="_p_external_declaration" style=solid];
+ * }
+ * \enddot
+ */
 class translation_unit_item
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-	external_declaration *_p_external_declaration;                  // external_declaration
-public:
-	translation_unit_item
-		(
-			std::string _arg_s_matchedPattern,
-			external_declaration *_arg__p_external_declaration
-		);
-	translation_unit_item(const translation_unit_item &);
-	virtual std::string name()const{return "translation_unit_item";}			//returns the class name, here "translation_unit"
-	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual Properties getProperties()const;
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const external_declaration* get_p_external_declaration()const{return _p_external_declaration;}							//returns const pointer to _p_external_declaration
-	      external_declaration* get_p_external_declaration()     {return _p_external_declaration;}							//returns const pointer to _p_external_declaration
-	virtual ~translation_unit_item();
-	
-	
-};
-/*------------------------------------------------------------*\
- 							        
-  main class translation_unit                         
-                                                                
-\*------------------------------------------------------------*/
+	private:
+		ReferenceCountedAutoPointer<external_declaration> _p_external_declaration;	  ///< A pointer to external_declaration.
+	public:
+		/** 
+		 * \brief Constructor of translation_unit_item
+		 *
+		 * This function handles the translation_unit_item
+                 */
+		translation_unit_item	
+				(
+					ReferenceCountedAutoPointer<external_declaration> _arg_external_declaration  ///< A pointer to external_declaration.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"translation_unit_item"</b>
+		 * \returns <b>"translation_unit_item"</b>
+                 */
+		virtual std::string name()const		{return std::string("translation_unit_item");}
 
-class translation_unit
-	:public CAst 
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_TRANSLATION_UNIT_ITEM
+		 * \returns  ID_TRANSLATION_UNIT_ITEM
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_TRANSLATION_UNIT_ITEM;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~translation_unit_item()
+		{}
+};
+
+
+
+
+
+/**
+ * \brief The basic class to handle translation_unit
+ *
+ * Since the rule contains itself, this rule will be implemented in the form of a list
+ */
+class translation_unit:public CAst
 {
-private:
-	typedef std::deque<translation_unit_item> ItemsListType;
-	typedef ItemsListType::iterator ItemsListIter;
-	typedef ItemsListType::const_iterator CItemsListIter;
-	ItemsListType _items;
-public:
-//ASDFG
-	
-	translation_unit
-		(
-			std::string _arg_s_matchedPattern,
-			external_declaration *_arg__p_external_declaration
-		);
+	public:
+		typedef std::list<ReferenceCountedAutoPointer<translation_unit_item> > translation_unitListType;	///< This defines the list type which will store the translation_unit_item
+		typedef translation_unitListType::iterator translation_unitIterType;				///< This defines the iterator over translation_unitListType
+		typedef translation_unitListType::const_iterator Ctranslation_unitIterType;				///< This defines the constant iterator over translation_unitListType
 
-	void append
-		(
-			std::string _arg_s_matchedPattern,
-			external_declaration *_arg__p_external_declaration
-		);
+	private:
+		translation_unitListType _itemList;									///< The list of items
+	public:
+		/**
+		 * \brief The default constructor calls the parent constructor
+		 *
+		 */
+		translation_unit():CAst()
+		{}
 
-	virtual std::string name()const;							//returns the class name, here "translation_unit"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_TRANSLATION_UNIT
-	virtual std::string pattern()const;							//returns the pattern, here "[translation_unit,external_declaration]"
-	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
-	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
-	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
-	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
-	virtual int size()const{return _items.size();}						//returns the size of the container
-	virtual translation_unit_item& operator[](int i){return _items[i];}
-	virtual ~translation_unit ();
+		/**
+		 * \brief Append an item to the list
+		 *
+		 */
+		void append( ReferenceCountedAutoPointer<translation_unit_item> item)
+		{
+			_itemList.push_back(item);
+		}
+		
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"translation_unit"</b>
+		 * \returns <b>"translation_unit"</b>
+                 */
+		virtual std::string name()const {return "translation_unit";}
+		
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_TRANSLATION_UNIT
+		 * \returns  ID_TRANSLATION_UNIT
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_TRANSLATION_UNIT;}
 
 };
 
-typedef std::deque<translation_unit_item>::iterator translation_unit_iterator;
-typedef std::deque<translation_unit_item>::const_iterator translation_unit_const_iterator;
-
-
-			
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE constant_expression CLASS                                                                                 
- 	FOR PATTERN : [conditional_expression]		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:constant_expression
+//////////////////////////////////////////
+
+
+
+
+
 class conditional_expression;
 
 
-class constant_expression 
-	:public CAst 
-{
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		conditional_expression *_p_conditional_expression;              // conditional_expression
-public:
-	constant_expression	                                         // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				conditional_expression *_arg__p_conditional_expression			
-		);
-	constant_expression(const constant_expression& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "constant_expression"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_CONSTANT_EXPRESSION
-	virtual std::string pattern()const;							//returns the pattern, here "[conditional_expression]"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const conditional_expression* get_p_conditional_expression()const{return _p_conditional_expression;}							//returns const pointer to _p_conditional_expression
-	      conditional_expression* get_p_conditional_expression()     {return _p_conditional_expression;}							//returns       pointer to _p_conditional_expression
-	virtual ~constant_expression ();
 
-	
-		
+/**
+ * \brief constant_expression implements the pattern: <b>(conditional_expression,)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_constant_expression [ label="constant_expression", URL="\ref constant_expression", color="#00AAAA" ];
+ *     node_conditional_expression [ label="conditional_expression", URL="\ref conditional_expression", color="#00AAAA"];
+ *     node_constant_expression ->  node_conditional_expression [label="_p_conditional_expression" style=solid];
+ * }
+ * \enddot
+ */
+class constant_expression:public CAst
+{
+	private:
+		ReferenceCountedAutoPointer<conditional_expression> _p_conditional_expression;	  ///< A pointer to conditional_expression.
+	public:
+		/** 
+		 * \brief Constructor of constant_expression
+		 *
+		 * This function handles the constant_expression
+                 */
+		constant_expression	
+				(
+					ReferenceCountedAutoPointer<conditional_expression> _arg_conditional_expression  ///< A pointer to conditional_expression.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"constant_expression"</b>
+		 * \returns <b>"constant_expression"</b>
+                 */
+		virtual std::string name()const		{return std::string("constant_expression");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_CONSTANT_EXPRESSION
+		 * \returns  ID_CONSTANT_EXPRESSION
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_CONSTANT_EXPRESSION;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~constant_expression()
+		{}
 };
 
 
-			
-/*=============================================================================================================*\
-                                                                                                                 
-        THE initializer_list CLASS                                                                                 
-        FOR PATTERN : [initializer_list,',',initializer]		                                                                 
- 														 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:initializer_list
+//////////////////////////////////////////
+
+
+
+
+
 class initializer;
 
-/*------------------------------------------------------------*\
- 							        
-  item class initializer_list_item                              
-                                                                
-\*------------------------------------------------------------*/
+
+
+/**
+ * \brief initializer_list_item implements the pattern: <b>(initializer_list, ,, initializer)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_initializer_list_item [ label="initializer_list_item", URL="\ref initializer_list_item", color="#00AAAA" ];
+ *     node_initializer [ label="initializer", URL="\ref initializer", color="#00AAAA"];
+ *     node_initializer_list_item ->  node_initializer [label="_p_initializer" style=solid];
+ * }
+ * \enddot
+ */
 class initializer_list_item
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-	initializer *_p_initializer;                                    // initializer
-public:
-	initializer_list_item
-		(
-			std::string _arg_s_matchedPattern,
-			initializer *_arg__p_initializer
-		);
-	initializer_list_item(const initializer_list_item &);
-	virtual std::string name()const{return "initializer_list_item";}			//returns the class name, here "initializer_list"
-	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual Properties getProperties()const;
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const initializer* get_p_initializer()const{return _p_initializer;}							//returns const pointer to _p_initializer
-	      initializer* get_p_initializer()     {return _p_initializer;}							//returns const pointer to _p_initializer
-	virtual ~initializer_list_item();
-	
-	
-};
-/*------------------------------------------------------------*\
- 							        
-  main class initializer_list                         
-                                                                
-\*------------------------------------------------------------*/
+	private:
+		ReferenceCountedAutoPointer<initializer> _p_initializer;	  ///< A pointer to initializer.
+	public:
+		/** 
+		 * \brief Constructor of initializer_list_item
+		 *
+		 * This function handles the initializer_list_item
+                 */
+		initializer_list_item	
+				(
+					ReferenceCountedAutoPointer<initializer> _arg_initializer  ///< A pointer to initializer.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"initializer_list_item"</b>
+		 * \returns <b>"initializer_list_item"</b>
+                 */
+		virtual std::string name()const		{return std::string("initializer_list_item");}
 
-class initializer_list
-	:public CAst 
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_INITIALIZER_LIST_ITEM
+		 * \returns  ID_INITIALIZER_LIST_ITEM
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_INITIALIZER_LIST_ITEM;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~initializer_list_item()
+		{}
+};
+
+
+
+
+
+/**
+ * \brief The basic class to handle initializer_list
+ *
+ * Since the rule contains itself, this rule will be implemented in the form of a list
+ */
+class initializer_list:public CAst
 {
-private:
-	typedef std::deque<initializer_list_item> ItemsListType;
-	typedef ItemsListType::iterator ItemsListIter;
-	typedef ItemsListType::const_iterator CItemsListIter;
-	ItemsListType _items;
-public:
-//ASDFG
-	
-	initializer_list
-		(
-			std::string _arg_s_matchedPattern,
-			initializer *_arg__p_initializer
-		);
+	public:
+		typedef std::list<ReferenceCountedAutoPointer<initializer_list_item> > initializer_listListType;	///< This defines the list type which will store the initializer_list_item
+		typedef initializer_listListType::iterator initializer_listIterType;				///< This defines the iterator over initializer_listListType
+		typedef initializer_listListType::const_iterator Cinitializer_listIterType;				///< This defines the constant iterator over initializer_listListType
 
-	void append
-		(
-			std::string _arg_s_matchedPattern,
-			initializer *_arg__p_initializer
-		);
+	private:
+		initializer_listListType _itemList;									///< The list of items
+	public:
+		/**
+		 * \brief The default constructor calls the parent constructor
+		 *
+		 */
+		initializer_list():CAst()
+		{}
 
-	virtual std::string name()const;							//returns the class name, here "initializer_list"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_INITIALIZER_LIST
-	virtual std::string pattern()const;							//returns the pattern, here "[initializer_list,',',initializer]"
-	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
-	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
-	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
-	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
-	virtual int size()const{return _items.size();}						//returns the size of the container
-	virtual initializer_list_item& operator[](int i){return _items[i];}
-	virtual ~initializer_list ();
+		/**
+		 * \brief Append an item to the list
+		 *
+		 */
+		void append( ReferenceCountedAutoPointer<initializer_list_item> item)
+		{
+			_itemList.push_back(item);
+		}
+		
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"initializer_list"</b>
+		 * \returns <b>"initializer_list"</b>
+                 */
+		virtual std::string name()const {return "initializer_list";}
+		
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_INITIALIZER_LIST
+		 * \returns  ID_INITIALIZER_LIST
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_INITIALIZER_LIST;}
 
 };
 
-typedef std::deque<initializer_list_item>::iterator initializer_list_iterator;
-typedef std::deque<initializer_list_item>::const_iterator initializer_list_const_iterator;
-
-
-			
-			
-/*=============================================================================================================*\
-                                                                                                                 
-        THE statement_list CLASS                                                                                 
-        FOR PATTERN : [statement_list,statement]		                                                                 
- 														 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:statement_list
+//////////////////////////////////////////
+
+
+
+
+
 class statement;
 
-/*------------------------------------------------------------*\
- 							        
-  item class statement_list_item                              
-                                                                
-\*------------------------------------------------------------*/
+
+
+/**
+ * \brief statement_list_item implements the pattern: <b>(statement_list, statement)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_statement_list_item [ label="statement_list_item", URL="\ref statement_list_item", color="#00AAAA" ];
+ *     node_statement [ label="statement", URL="\ref statement", color="#00AAAA"];
+ *     node_statement_list_item ->  node_statement [label="_p_statement" style=solid];
+ * }
+ * \enddot
+ */
 class statement_list_item
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-	statement *_p_statement;                                        // statement
-public:
-	statement_list_item
-		(
-			std::string _arg_s_matchedPattern,
-			statement *_arg__p_statement
-		);
-	statement_list_item(const statement_list_item &);
-	virtual std::string name()const{return "statement_list_item";}			//returns the class name, here "statement_list"
-	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual Properties getProperties()const;
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const statement* get_p_statement()const{return _p_statement;}							//returns const pointer to _p_statement
-	      statement* get_p_statement()     {return _p_statement;}							//returns const pointer to _p_statement
-	virtual ~statement_list_item();
-	
-	
-};
-/*------------------------------------------------------------*\
- 							        
-  main class statement_list                         
-                                                                
-\*------------------------------------------------------------*/
+	private:
+		ReferenceCountedAutoPointer<statement> _p_statement;	  ///< A pointer to statement.
+	public:
+		/** 
+		 * \brief Constructor of statement_list_item
+		 *
+		 * This function handles the statement_list_item
+                 */
+		statement_list_item	
+				(
+					ReferenceCountedAutoPointer<statement> _arg_statement  ///< A pointer to statement.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"statement_list_item"</b>
+		 * \returns <b>"statement_list_item"</b>
+                 */
+		virtual std::string name()const		{return std::string("statement_list_item");}
 
-class statement_list
-	:public CAst 
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_STATEMENT_LIST_ITEM
+		 * \returns  ID_STATEMENT_LIST_ITEM
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_STATEMENT_LIST_ITEM;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~statement_list_item()
+		{}
+};
+
+
+
+
+
+/**
+ * \brief The basic class to handle statement_list
+ *
+ * Since the rule contains itself, this rule will be implemented in the form of a list
+ */
+class statement_list:public CAst
 {
-private:
-	typedef std::deque<statement_list_item> ItemsListType;
-	typedef ItemsListType::iterator ItemsListIter;
-	typedef ItemsListType::const_iterator CItemsListIter;
-	ItemsListType _items;
-public:
-//ASDFG
-	
-	statement_list
-		(
-			std::string _arg_s_matchedPattern,
-			statement *_arg__p_statement
-		);
+	public:
+		typedef std::list<ReferenceCountedAutoPointer<statement_list_item> > statement_listListType;	///< This defines the list type which will store the statement_list_item
+		typedef statement_listListType::iterator statement_listIterType;				///< This defines the iterator over statement_listListType
+		typedef statement_listListType::const_iterator Cstatement_listIterType;				///< This defines the constant iterator over statement_listListType
 
-	void append
-		(
-			std::string _arg_s_matchedPattern,
-			statement *_arg__p_statement
-		);
+	private:
+		statement_listListType _itemList;									///< The list of items
+	public:
+		/**
+		 * \brief The default constructor calls the parent constructor
+		 *
+		 */
+		statement_list():CAst()
+		{}
 
-	virtual std::string name()const;							//returns the class name, here "statement_list"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_STATEMENT_LIST
-	virtual std::string pattern()const;							//returns the pattern, here "[statement_list,statement]"
-	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
-	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
-	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
-	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
-	virtual int size()const{return _items.size();}						//returns the size of the container
-	virtual statement_list_item& operator[](int i){return _items[i];}
-	virtual ~statement_list ();
+		/**
+		 * \brief Append an item to the list
+		 *
+		 */
+		void append( ReferenceCountedAutoPointer<statement_list_item> item)
+		{
+			_itemList.push_back(item);
+		}
+		
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"statement_list"</b>
+		 * \returns <b>"statement_list"</b>
+                 */
+		virtual std::string name()const {return "statement_list";}
+		
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_STATEMENT_LIST
+		 * \returns  ID_STATEMENT_LIST
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_STATEMENT_LIST;}
 
 };
 
-typedef std::deque<statement_list_item>::iterator statement_list_iterator;
-typedef std::deque<statement_list_item>::const_iterator statement_list_const_iterator;
-
-
-			
-			
-/*=============================================================================================================*\
-                                                                                                                 
-        THE expression CLASS                                                                                 
-        FOR PATTERN : [expression,',',assignment_expression]		                                                                 
- 														 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:expression
+//////////////////////////////////////////
+
+
+
+
+
 class assignment_expression;
 
-/*------------------------------------------------------------*\
- 							        
-  item class expression_item                              
-                                                                
-\*------------------------------------------------------------*/
+
+
+/**
+ * \brief expression_item implements the pattern: <b>(expression, ,, assignment_expression)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_expression_item [ label="expression_item", URL="\ref expression_item", color="#00AAAA" ];
+ *     node_assignment_expression [ label="assignment_expression", URL="\ref assignment_expression", color="#00AAAA"];
+ *     node_expression_item ->  node_assignment_expression [label="_p_assignment_expression" style=solid];
+ * }
+ * \enddot
+ */
 class expression_item
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-	assignment_expression *_p_assignment_expression;                // assignment_expression
-public:
-	expression_item
-		(
-			std::string _arg_s_matchedPattern,
-			assignment_expression *_arg__p_assignment_expression
-		);
-	expression_item(const expression_item &);
-	virtual std::string name()const{return "expression_item";}			//returns the class name, here "expression"
-	virtual std::ostream& codeStream(std::ostream&,bool initFlag=false)const;		//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual Properties getProperties()const;
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const assignment_expression* get_p_assignment_expression()const{return _p_assignment_expression;}							//returns const pointer to _p_assignment_expression
-	      assignment_expression* get_p_assignment_expression()     {return _p_assignment_expression;}							//returns const pointer to _p_assignment_expression
-	virtual ~expression_item();
-	
-	
-};
-/*------------------------------------------------------------*\
- 							        
-  main class expression                         
-                                                                
-\*------------------------------------------------------------*/
+	private:
+		ReferenceCountedAutoPointer<assignment_expression> _p_assignment_expression;	  ///< A pointer to assignment_expression.
+	public:
+		/** 
+		 * \brief Constructor of expression_item
+		 *
+		 * This function handles the expression_item
+                 */
+		expression_item	
+				(
+					ReferenceCountedAutoPointer<assignment_expression> _arg_assignment_expression  ///< A pointer to assignment_expression.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"expression_item"</b>
+		 * \returns <b>"expression_item"</b>
+                 */
+		virtual std::string name()const		{return std::string("expression_item");}
 
-class expression
-	:public CAst 
-{
-private:
-	typedef std::deque<expression_item> ItemsListType;
-	typedef ItemsListType::iterator ItemsListIter;
-	typedef ItemsListType::const_iterator CItemsListIter;
-	ItemsListType _items;
-public:
-//ASDFG
-	
-	expression
-		(
-			std::string _arg_s_matchedPattern,
-			assignment_expression *_arg__p_assignment_expression
-		);
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_EXPRESSION_ITEM
+		 * \returns  ID_EXPRESSION_ITEM
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_EXPRESSION_ITEM;}
 
-	void append
-		(
-			std::string _arg_s_matchedPattern,
-			assignment_expression *_arg__p_assignment_expression
-		);
-
-	virtual std::string name()const;							//returns the class name, here "expression"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_EXPRESSION
-	virtual std::string pattern()const;							//returns the pattern, here "[expression,',',assignment_expression]"
-	virtual bool isList()const {return true;}						//returns if this is a list based class, which it is hence here it returns "true"
-	virtual Properties getProperties()const {return Properties(name());}			//returns empty properties map
-	virtual PropertiesList getPropertiesList()const;					//returns a properties list		
-	virtual ItemsListIter begin(){return _items.begin();}					//returns the being iterator
-	virtual ItemsListIter end(){return _items.end();}					//returns the being iterator
-	virtual int size()const{return _items.size();}						//returns the size of the container
-	virtual expression_item& operator[](int i){return _items[i];}
-	virtual ~expression ();
-
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~expression_item()
+		{}
 };
 
-typedef std::deque<expression_item>::iterator expression_iterator;
-typedef std::deque<expression_item>::const_iterator expression_const_iterator;
-
-
-			
-			
-
-/*=============================================================================================================*\
-                                                                                                                 
- 	THE declarator CLASS                                                                                 
- 	FOR PATTERN : [pointer,direct_declarator]		                                                                 
-                                                                                                                 
-\*=============================================================================================================*/  
 
 
 
-// FORWARD DECLARATION
-class pointer;
-class direct_declarator;
 
-
-class declarator 
-	:public CAst 
+/**
+ * \brief The basic class to handle expression
+ *
+ * Since the rule contains itself, this rule will be implemented in the form of a list
+ */
+class expression:public CAst
 {
-private:
-	int *_refCount; 
-	std::string _s_matchedPattern;
-		pointer *_p_pointer;                                            // pointer
-		direct_declarator *_p_direct_declarator;                        // direct_declarator
-public:
-	declarator	                                                  // constructor
-		( 
-			std::string _arg_s_matchedPattern,
-				pointer *_arg__p_pointer,
-				direct_declarator *_arg__p_direct_declarator			
-		);
-	declarator(const declarator& other);						//copy constructor
-	virtual std::string name()const;							//returns the class name, here "declarator"
-	virtual std::ostream& codeStream(std::ostream&)const;					//returns the code for the AST-node
-	virtual std::string code()const{std::stringstream stream;codeStream(stream);return stream.str();}
-	virtual CAstType typeId()const;								//here returns CAST_TYPE_DECLARATOR
-	virtual std::string pattern()const;							//returns the pattern, here "[pointer,direct_declarator]"
-	virtual bool isList()const {return false;}						//returns if this is a list based class, which it is not hence here it returns "false"
-	virtual Properties getProperties()const;						//returns the properties map
-	virtual PropertiesList getPropertiesList()const {return PropertiesList(name());}	//returns a null list
-	const pointer* get_p_pointer()const{return _p_pointer;}							//returns const pointer to _p_pointer
-	      pointer* get_p_pointer()     {return _p_pointer;}							//returns       pointer to _p_pointer
-	const direct_declarator* get_p_direct_declarator()const{return _p_direct_declarator;}							//returns const pointer to _p_direct_declarator
-	      direct_declarator* get_p_direct_declarator()     {return _p_direct_declarator;}							//returns       pointer to _p_direct_declarator
-	virtual ~declarator ();
+	public:
+		typedef std::list<ReferenceCountedAutoPointer<expression_item> > expressionListType;	///< This defines the list type which will store the expression_item
+		typedef expressionListType::iterator expressionIterType;				///< This defines the iterator over expressionListType
+		typedef expressionListType::const_iterator CexpressionIterType;				///< This defines the constant iterator over expressionListType
 
-	
+	private:
+		expressionListType _itemList;									///< The list of items
+	public:
+		/**
+		 * \brief The default constructor calls the parent constructor
+		 *
+		 */
+		expression():CAst()
+		{}
+
+		/**
+		 * \brief Append an item to the list
+		 *
+		 */
+		void append( ReferenceCountedAutoPointer<expression_item> item)
+		{
+			_itemList.push_back(item);
+		}
 		
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"expression"</b>
+		 * \returns <b>"expression"</b>
+                 */
+		virtual std::string name()const {return "expression";}
+		
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_EXPRESSION
+		 * \returns  ID_EXPRESSION
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_EXPRESSION;}
+
 };
 
 
 
-translation_unit* parseFile(const char *fileName);
 
-}//namespace CAST		
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include "cYacc.hpp"
-extern CAst::translation_unit* root;
-#endif //CAST_HEADER_INCLUDED
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//RULE:declarator
+//////////////////////////////////////////
+
+
+
+
+
+class direct_declarator;
+class pointer;
+
+
+
+
+/**
+ * \brief declarator implements the pattern: <b>(pointer, direct_declarator)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_declarator [ label="declarator", URL="\ref declarator", color="#00AAAA" ];
+ *     node_pointer [ label="pointer", URL="\ref pointer", color="#00AAAA"];
+ *     node_direct_declarator [ label="direct_declarator", URL="\ref direct_declarator", color="#00AAAA"];
+ *     node_declarator ->  node_pointer [label="_p_pointer" style=dotted];
+ *     node_declarator ->  node_direct_declarator [label="_p_direct_declarator" style=solid];
+ * }
+ * \enddot
+ */
+class declarator:public CAst
+{
+	private:
+		ReferenceCountedAutoPointer<pointer> _p_pointer;	  ///< A pointer to pointer. This parameter can be <b>Null</b>
+		ReferenceCountedAutoPointer<direct_declarator> _p_direct_declarator;	  ///< A pointer to direct_declarator.
+	public:
+		/** 
+		 * \brief Constructor of declarator
+		 *
+		 * This function handles the declarator
+                 */
+		declarator	
+				(
+					ReferenceCountedAutoPointer<pointer> _arg_pointer,   ///< A pointer to pointer. This parameter can be <b>Null</b>
+					ReferenceCountedAutoPointer<direct_declarator> _arg_direct_declarator  ///< A pointer to direct_declarator.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"declarator"</b>
+		 * \returns <b>"declarator"</b>
+                 */
+		virtual std::string name()const		{return std::string("declarator");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_DECLARATOR
+		 * \returns  ID_DECLARATOR
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_DECLARATOR;}
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~declarator()
+		{}
+};
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+}
+#endif

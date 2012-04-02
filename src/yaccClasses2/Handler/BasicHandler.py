@@ -1,18 +1,31 @@
 from .. import Token
 from .. import Rule
 import difflib
-from Parameter import Parameter
+from Parameter import Parameter,ParameterList
+from ..Template import TemplateFill
 
 class BasicHandlerGroup(object):
-	def __init__(self,handlers,ruleName):
+	def __init__(self,handlers,rule):
+		self.rule=rule
 		self.handlers=handlers
-		self.ruleName=ruleName
+		self.ruleName=self.rule.name
 		if len(self.handlers)>1 :
 			for i,h in enumerate(self.handlers):
-				h.className=self.ruleName+"_"+str(i)
+				h.className=self.ruleName+"_"+str(i+1)
+				h.parameters.finalize()
+				#h.classId=self.rule.classId+(i+1)
 		else:
 			for i,h in enumerate(self.handlers):
 				h.className=self.ruleName
+				h.parameters.finalize()
+				#h.classId=self.rule.classId
+
+	def dump(self,s):
+		if(len(self.handlers)==1):
+			return TemplateFill(self,"RuleBook","Rule","Handler","BasicHandlerGroup","Single",s)
+		else:
+			return TemplateFill(self,"RuleBook","Rule","Handler","BasicHandlerGroup","Multiple",s)
+
 
 		
 		
@@ -20,7 +33,7 @@ class BasicHandlerGroup(object):
 class BasicHandler(object):
 	def __init__(self,pattern):
 		self.masterPattern=pattern
-		self.parameters=[Parameter(i,p,pattern) for i,p in enumerate(pattern)]
+		self.parameters=ParameterList([Parameter(i,p,pattern) for i,p in enumerate(pattern)])
 		self.className="<noname>"
 
 	def strOut(self,pattern):
@@ -84,4 +97,4 @@ def Check(rule):
 		if p.handler is None:
 			p.handler=BasicHandler(p)
 
-	return BasicHandlerGroup(set([p.handler for p in patterns]),rule.ruleName)
+	return BasicHandlerGroup(set([p.handler for p in patterns]),rule)
