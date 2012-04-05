@@ -71,7 +71,7 @@ class ListHandler(object):
 	def getParameterMap(self,pattern):
 		mp=pattern
 		ops=[o for o in difflib.SequenceMatcher(None,self.masterPattern,mp).get_opcodes()]
-		print id(self),repr(self.masterPattern),repr(pattern),ops
+		#print id(self),repr(self.masterPattern),repr(pattern),ops
 		paramMap=[]
 		for o,i1,i2,j1,j2 in ops:
 			if o=='equal':

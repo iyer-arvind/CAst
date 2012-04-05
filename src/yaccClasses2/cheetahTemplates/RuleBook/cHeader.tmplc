@@ -3,6 +3,9 @@
 \#include <string>
 \#include <list>
 \#include <assert.h>
+\#include <iostream>
+
+\#define LOG(TXT) {std::cerr<<__FILE__<<" "<<__LINE__<<" :"<<TXT<<"\n";std::cerr.flush();}
 
 namespace CAst
 {
@@ -30,10 +33,15 @@ class ReferenceCountedAutoPointer
 		{
 			if(!__refCount)return;
 			__refCountDown();
+			LOG("Deleing "<<__data<<"? refCount:"<<*__refCount)
 			if((*__refCount)==0)
 			{
+				std::string name=__data->name();
+				DataType *add=__data;
+				LOG("Deleting "<<"("<<name<<") "<<__data)
 				delete __refCount;
 				delete __data;
+				LOG("Deleted "<<"("<<name<<") "<<add)
 			}
 			__refCount=0;
 			__data=0;
@@ -41,13 +49,13 @@ class ReferenceCountedAutoPointer
 		/**
 		 * \brief Increments the reference count
 		 */
-		void __refCountUp(){(*__refCount)++;}
+		void __refCountUp(){if(__refCount)(*__refCount)++;}
 
 		
 		/**
 		 * \brief Decrements the reference count
 		 */
-		void __refCountDown(){(*__refCount)--;}
+		void __refCountDown(){if(__refCount)(*__refCount)--;}
 	public:
 		/**
 		 * \brief Default constructor
@@ -58,7 +66,9 @@ class ReferenceCountedAutoPointer
 		ReferenceCountedAutoPointer():
 				__data(0),
 				__refCount(0)
-		{}
+		{
+			LOG("NULL DATA")
+		}
 
 		/** 
 		 * \brief Constructor with data
@@ -70,11 +80,13 @@ class ReferenceCountedAutoPointer
 		{
 			if(data)
 			{
+				LOG("ADOPTING "<<data<<"("<<data->name()<<")")
 				__data=data;
 				__refCount=new int(1);
 			}
 			else
 			{
+				LOG("NULL DATA "<<data)
 				__data=0;
 				__refCount=0;
 			}
@@ -91,7 +103,26 @@ class ReferenceCountedAutoPointer
 				__data(other.__data)
 		{
 			__refCountUp();
+
+			if(__data)
+				LOG("SHARING "<<__data<<" refcount:"<<*__refCount<<"("<<__data->name()<<")")
+			else
+				LOG("NULL AP ")
+		
 		}
+
+		//template<typename Y>
+		//friend class ReferenceCountedAutoPointer<Y>;
+
+		//template<typename Y>
+		//ReferenceCountedAutoPointer(const ReferenceCountedAutoPointer<Y>&other ):
+		//		__data(0),
+		//		__refCount(0)
+		//{
+		//	__data=dynamic_cast<DataType*>(other.__data);
+		//	__refCount=other.__refCount;
+		//	__refCountUp();
+		//}
 
 		/**
 		 * \brief Assignment operator
@@ -226,4 +257,19 @@ $object[$i].dump("cHeader")
 
 #end for
 }
+
+
+\#define CAP(TYPE,OBJ) CAst::ReferenceCountedAutoPointer<CAst::TYPE>(obj)
+\#include <cstdio>
+extern "C"
+{
+        int yylex(void);  
+	int yyerror(const char *s);
+	int yylex_destroy();
+        int yyparse();  
+}
+
+extern CAst::$object.yaccFile.start *root;
+CAst::ReferenceCountedAutoPointer<CAst::$object.yaccFile.start> parseFile(const char* fileName);
+
 \#endif

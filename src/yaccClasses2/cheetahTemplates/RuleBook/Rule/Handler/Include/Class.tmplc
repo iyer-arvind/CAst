@@ -107,14 +107,28 @@ ${h.className}::${h.className}
 #for p in $h.parameters:
 #if $p.isIncluded:
 #if $p.parameterType.name == "token":
-#set cText=" || ".join([("(" + $p.memName + "->text() == \"" + repr($pv) + "\" )" ) if ($pv is not None) else $p.memName+".isNull()" for $pv in $p.possibleValues])
-	AssertTokenType($cText)
-#else
+#set checkList=[]
+#for $pv in $p.possibleValues:
+	#if $pv.__class__.__name__=="ValuedToken":
+		#set checkList=[]
+		#break
+	#end if
+	#if $pv is None:
+		#echo checkList.insert(0,$p.memName+".isNull()")
+		#continue
+	#end if
+	#echo $checkList.append($p.memName+"->text()==\""+$pv.code+"\"")
+#end for
+#if len($checkList):
+	#set checkStr="||".join($checkList)
+	AssertTokenType($checkStr)
+#end if
 #if None not in $p.possibleValues
 	AssertNotNullRule($p.memName)
 #end if
 #end if
 #end if
 #end for
+	LOG("Created object of $h.className: "<<this)
 }
 #end def

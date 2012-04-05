@@ -38,7 +38,7 @@ class BasicHandler(object):
 
 	def strOut(self,pattern):
 		st="\033[36m"+self.className+"\033[0m("
-		params=self.getParameterMap(pattern)
+		params,junk=self.getParameterMap(pattern)
 		st=st+", ".join([ str(p)+( "=\033[1;38;5;240mNull\033[0m" if j is None else "=$"+str(j) ) for i,j,p in params])
 		st=st+")"
 		return st
@@ -72,7 +72,7 @@ class BasicHandler(object):
 					paramMap.append((i,j,arg))
 					arg.possibleValues.add(pattern[j])
 		
-		return paramMap
+		return paramMap,None
 
 
 def Check(rule):

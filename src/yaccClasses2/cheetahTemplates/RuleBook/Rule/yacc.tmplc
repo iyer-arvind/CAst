@@ -1,0 +1,48 @@
+$object.ruleName 
+#for $i,$p in enumerate($object.patterns):
+	#set $patStr=" ".join([ $repr($pp) for $pp in $p])
+	${ ":" if $i==0 else "|" } ${patStr.ljust(100)} #slurp
+	{ #slurp
+LOG("$object.ruleName:" #slurp
+#for j,pp in enumerate($p):
+#set typ="$<_t_"+$pp.name+">"+str($j+1) if ($pp.name!="token") else  "$<_t_string>"+str($j+1)
+<<"$repr($pp)("<< $typ <<")" #slurp
+#end for
+<<")") #slurp
+CAst::${p.handler.className} *obj=new CAst::${p.handler.className}(#slurp
+	#set params,selfIndex = $p.handler.getParameterMap($p)
+	#set args=[]
+	#for $pi,$pj,$pp in $params:
+	#if $pj is None:
+		#echo args.append("NULL")
+	#elif $pp.parameterType.name=="token"
+		#echo args.append("new CAst::token($<_t_string>"+str($pj+1)+")")
+	#else
+		#echo args.append("$<_t_"+$pp.parameterType.name+">"+str($pj+1))
+	#end if 
+	#end for
+	#set paramStr=",".join(args)
+	##echo paramStr = ", ".join([ "$<_t_"+$pp.parameterType.name+">"+str($pj+1) if ($pj is not None) else "NULL" for $pi,$pj,$pp in $params])
+	$paramStr #slurp
+); #slurp
+LOG("Created ${p.handler.className}: "<<obj)#slurp
+	#if($p.handler.__class__.__name__=="ListHandler"):
+		#if($selfIndex is not None):
+$<_t_$object.ruleName>${selfIndex+1} ->append(obj);$<_t_$object.ruleName>$=$<_t_$object.ruleName>${selfIndex+1}; #slurp
+LOG("Appended to $object.ruleName") #slurp
+		#else
+CAst::${object.ruleName} *lst=new CAst::${object.ruleName};lst->append(obj);$<_t_$object.ruleName>$=lst; #slurp
+LOG("Created List ${object.ruleName}: "<<lst)#slurp
+#if $object.isStart
+root=$<_t_$object.ruleName>$; #slurp
+#end if
+		#end if
+	#else
+$<_t_$object.ruleName>$=obj; #slurp
+	#end if
+LOG("Returning :"<<$<_t_$object.ruleName>$) #slurp
+	}
+#end for
+	;
+
+

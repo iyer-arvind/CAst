@@ -23,3 +23,17 @@ $object[$i].dump("cSource")
 
 #end for
 }
+
+
+extern "C"
+{
+        int yylex(void);  
+}
+extern FILE *yyin;
+CAst::$object.yaccFile.start *root;
+CAst::ReferenceCountedAutoPointer<CAst::$object.yaccFile.start> parseFile(const char* fileName)
+{
+	yyin=fopen(fileName,"r");
+	yyparse();
+	return root;	
+}

@@ -20,8 +20,12 @@ class $object.ruleName:public CAst
 		 * \brief The default constructor calls the parent constructor
 		 *
 		 */
-		${object.ruleName}():CAst()
-		{}
+		${object.ruleName}():
+				CAst(),
+				_itemList()
+		{
+			LOG("Created List object of $object.ruleName: "<<this)
+		}
 
 		/**
 		 * \brief Append an item to the list
@@ -29,6 +33,7 @@ class $object.ruleName:public CAst
 		 */
 		void append( ReferenceCountedAutoPointer<${object.ruleName}_item> item)
 		{
+			LOG("Appending to $object.ruleName: "<<this)
 			_itemList.push_back(item);
 		}
 		
@@ -48,6 +53,8 @@ class $object.ruleName:public CAst
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_$object.ruleName.upper();}
 
+
+		virtual ~${object.ruleName}(){}
 };
 
 #end def

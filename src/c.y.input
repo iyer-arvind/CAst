@@ -424,13 +424,11 @@ extern int column;
 
 
 extern "C" {
-        int yylex(void);  
 	int yyerror(const char *s)
 	{
 		fflush(stdout);
 		printf("\n%*s\n%*s\n", column, "^", column, s);
 	}
-	int yylex_destroy();
 }
 
 

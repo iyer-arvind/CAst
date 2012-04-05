@@ -32,6 +32,9 @@ class RuleBook(dict):
 		for r in self.yaccFile.rules:
 			patterns=[Pattern(p,self) for p in self.yaccFile.rules[r]]
 			self[r].patterns=patterns
+			self[r].isStart=False
+		self[self.yaccFile.start].isStart=True
+			
 
 	def graph(self,fn):
 		graph = pydot.Dot(graph_type='digraph')

@@ -51,6 +51,8 @@ class YaccFile(object):
 		
 		self.rules=rules
 		self.tokens=tokens
+		self.codeLines=codeLines
+		self.start=start
 		#ruleMap=dict([(i,Rule(i)) for i in rules.keys()])
 		#
 		#for r in rules:

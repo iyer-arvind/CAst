@@ -1,0 +1,28 @@
+#for i,t in enumerate($object.yaccFile.tokens):
+#if i%5==0
+#if i
+
+#end if
+%token #slurp
+#end if
+${"%20s"%$t} #slurp
+#end for
+
+
+%union{
+${"%50s"%"const char*"} _t_string;
+#for i in tuple($object.keys()):
+	#set t="CAst::%s*"%i
+${"%50s"%t} _t_${i};
+#end for
+}
+
+%start $object.yaccFile.start
+%%
+#for rn in $object
+$object[$rn].dump("yacc")
+#end for
+%%
+#for l in $object.yaccFile.codeLines:
+$l
+#end for

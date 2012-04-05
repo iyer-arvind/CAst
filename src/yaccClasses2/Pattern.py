@@ -53,3 +53,10 @@ class _Pattern(tuple):
 					repList.append(i)
 			return True,repList
 		return False,None
+	
+
+
+
+
+
+

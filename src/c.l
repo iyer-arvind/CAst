@@ -11,6 +11,8 @@ IS			(u|U|l|L)*
 #include <list>
 #include <string>
 #include "cYacc.hpp"
+#include <CAst.h>
+#include <iostream>
 void count();
 void comment();
 int check_type();
@@ -124,7 +126,10 @@ L?\"(\\.|[^\\"])*\"	{ count(); return(STRING_LITERAL); }
 %%
 
 
-
+extern "C"
+{
+	int yylex();
+}
 
 int yywrap()
 {
@@ -155,23 +160,11 @@ int column = 0;
 
 void count()
 {
-/*
-	int i;
-
-	for (i = 0; yytext[i] != '\0'; i++)
-		if (yytext[i] == '\n')
-			column = 0;
-		else if (yytext[i] == '\t')
-			column += 8 - (column % 8);
-		else
-			column++;
-*/	
-	
 
 	if(yytext)
 	{
 		if(strcmp(yytext,"\n"))
-			std::cerr<<"reading: \033[37;41;1m"<<yytext<<"\033[0m\n";
+			LOG("reading:"<<yytext);
 
 		std::string s;
 		for(register int i=0;i<strlen(yytext);i++)
@@ -181,30 +174,15 @@ void count()
 			else
 				s=s+yytext[i];
 		}
+		
 		toks.push_back(s);
-		yylval._t_str=toks.back().c_str();
+		yylval._t_string=toks.back().c_str();
 	}
-	//delete[] yylval._t_str;
-	//yylval._t_str=0;
-	
 }
 
 
 int check_type()
 {
-/*
-* pseudo code --- this is what it should check
-*
-*	if (yytext == type_name)
-*		return(TYPE_NAME);
-*
-*	return(IDENTIFIER);
-*/
-
-/*
-*	it actually will only return IDENTIFIER
-*/
-
 	return(IDENTIFIER);
 }
 

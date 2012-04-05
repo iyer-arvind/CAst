@@ -16,6 +16,8 @@ class ${object.ruleName}_item
                  *
                  */
 		virtual CAST_CLASS_ID classId()const=0;
+
+		virtual ~${object.ruleName}_item(){};
 };
 #for $h in $object.handlers:
 #set $h.parent=$object.ruleName+"_item"

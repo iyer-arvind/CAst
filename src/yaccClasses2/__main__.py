@@ -16,3 +16,6 @@ with open(Arguments.cFile+".h","w") as chFile:
 
 with open(Arguments.cFile+".cpp","w") as chFile:
 	chFile.write(ruleBook.dump("cSource"))
+
+with open(Arguments.out+".y","w") as chFile:
+	chFile.write(ruleBook.dump("yacc"))
