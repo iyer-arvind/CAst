@@ -1,0 +1,6 @@
+#for $h in $object.handlers:
+$utils.pyClassCreator.stdClassHeader($h)
+#end for
+
+#set h={"className":$object.ruleName}
+$utils.pyClassCreator.stdClassHeader($h)

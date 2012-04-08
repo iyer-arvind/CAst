@@ -33,7 +33,7 @@ class $object.ruleName:public CAst
 		 */
 		void append( ReferenceCountedAutoPointer<${object.ruleName}_item> item)
 		{
-			LOG("Appending to $object.ruleName: "<<this)
+			LOG(COL_FG_GREEN<<"Appending to $object.ruleName: "<<this)
 			_itemList.push_back(item);
 		}
 		

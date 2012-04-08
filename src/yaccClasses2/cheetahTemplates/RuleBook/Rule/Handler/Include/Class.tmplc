@@ -129,6 +129,6 @@ ${h.className}::${h.className}
 #end if
 #end if
 #end for
-	LOG("Created object of $h.className: "<<this)
+	LOG(COL_FG_GREEN<<"Created object of $h.className: "<<this)
 }
 #end def

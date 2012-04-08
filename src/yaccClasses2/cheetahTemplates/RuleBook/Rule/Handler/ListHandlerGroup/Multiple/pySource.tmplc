@@ -1,0 +1,6 @@
+#for $h in $object.handlers:
+$utils.pyClassCreator.stdClassSource($h)
+#end for
+
+#set listCls={"className":$object.ruleName,"parameters":[]}
+$utils.pyClassCreator.stdClassSource($listCls)

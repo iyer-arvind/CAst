@@ -1,0 +1,37 @@
+\#include "CAst.py.h"
+
+
+    
+\#define CHECK_PYTHON_ARG_TYPE(NUM,ARG,TYP) {if(ARG->ob_type!=PyCAst_type_\#\#TYP)PyErr_SetString(PyExc_TypeError,"test");}
+
+#set tokObj={"className":"token"}
+$utils.pyClassCreator.newSource($tokObj)
+$utils.pyClassCreator.deallocSource($tokObj)
+##$utils.pyClassCreator.initSource($tokObj)
+
+static int PyCAst_init_token(PyCAst_object_token *self, PyObject *args, PyObject *kwds)
+{
+    const char *s;
+    LOG(COL_FG_CYAN<<"initializing PyCAst::token");
+    if(! PyArg_ParseTuple(args, "s", &s))  
+	return -1;
+    LOG(COL_FG_CYAN<<"text:"<<s);
+    PyObject *text=NULL;
+    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::token>(new CAst::token(s));
+    return 0;
+}
+$utils.pyClassCreator.stdAttributeSource($tokObj)
+
+
+
+
+#for rn in $object:
+$object[$rn].dump("pySource")
+#end for
+
+static PyMethodDef module_methods[] = {	NULL };
+
+
+
+$utils.pyClassCreator.moduleInit()
+

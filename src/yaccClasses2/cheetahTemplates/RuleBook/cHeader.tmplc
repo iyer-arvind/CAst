@@ -5,7 +5,18 @@
 \#include <assert.h>
 \#include <iostream>
 
-\#define LOG(TXT) {std::cerr<<__FILE__<<" "<<__LINE__<<" :"<<TXT<<"\n";std::cerr.flush();}
+\#define COL_CLEAR 	"\033[0m"
+\#define COL_FG_RED 	"\033[31m"
+\#define COL_FG_GREEN 	"\033[32m"
+\#define COL_FG_YELLOW 	"\033[33m"
+\#define COL_FG_BLUE 	"\033[34m"
+\#define COL_FG_MAGENTA "\033[35m"
+\#define COL_FG_CYAN	"\033[36m"
+\#define COL_FG_WHITE 	"\033[37m"
+
+
+
+\#define LOG(TXT) {std::cerr<<__FILE__<<" "<<__LINE__<<" :"<<TXT<<COL_CLEAR<<"\n";std::cerr.flush();}
 
 namespace CAst
 {
@@ -33,15 +44,15 @@ class ReferenceCountedAutoPointer
 		{
 			if(!__refCount)return;
 			__refCountDown();
-			LOG("Deleing "<<__data<<"? refCount:"<<*__refCount)
+			LOG(COL_FG_RED<<"Deleting "<<__data<<"? refCount:"<<*__refCount)
 			if((*__refCount)==0)
 			{
 				std::string name=__data->name();
 				DataType *add=__data;
-				LOG("Deleting "<<"("<<name<<") "<<__data)
+				LOG(COL_FG_YELLOW<<"Deleting "<<"("<<name<<") "<<__data)
 				delete __refCount;
 				delete __data;
-				LOG("Deleted "<<"("<<name<<") "<<add)
+				LOG(COL_FG_RED<<"Deleted "<<"("<<name<<") "<<add)
 			}
 			__refCount=0;
 			__data=0;
@@ -67,7 +78,7 @@ class ReferenceCountedAutoPointer
 				__data(0),
 				__refCount(0)
 		{
-			LOG("NULL DATA")
+			LOG(COL_FG_RED<<"NULL DATA")
 		}
 
 		/** 
@@ -80,7 +91,7 @@ class ReferenceCountedAutoPointer
 		{
 			if(data)
 			{
-				LOG("ADOPTING "<<data<<"("<<data->name()<<")")
+				LOG(COL_FG_YELLOW<<"ADOPTING "<<data<<"("<<data->name()<<")")
 				__data=data;
 				__refCount=new int(1);
 			}
@@ -105,9 +116,9 @@ class ReferenceCountedAutoPointer
 			__refCountUp();
 
 			if(__data)
-				LOG("SHARING "<<__data<<" refcount:"<<*__refCount<<"("<<__data->name()<<")")
+				LOG(COL_FG_YELLOW<<"SHARING "<<__data<<" refcount:"<<*__refCount<<"("<<__data->name()<<")")
 			else
-				LOG("NULL AP ")
+				LOG(COL_FG_RED<<"NULL AP ")
 		
 		}
 
@@ -152,6 +163,10 @@ class ReferenceCountedAutoPointer
 			return __data;
 		}
 
+		void clear()
+		{
+			__clear();
+		}
 		/**
 		 * \brief Calls __clear();
 		 */

@@ -5,7 +5,7 @@ from .. import Rule
 class Parameter(object):
 	def __init__(self,index,parameterType,pattern):
 		self.parameterType=parameterType
-		self.index=index
+		self.argIndex=index
 
 		if(type(parameterType) is Token.ValuedToken):
 			self.isIncluded=True

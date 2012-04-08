@@ -1,0 +1,6 @@
+#set h={"className":$object.ruleName}
+$utils.pyClassCreator.stdClassSource($h,["noInit"])
+
+#for $h in $object.handlers:
+$utils.pyClassCreator.stdClassSource($h)
+#end for

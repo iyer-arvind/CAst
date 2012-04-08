@@ -1,0 +1,11 @@
+\#include "Python.h"
+\#include <structmember.h>
+
+
+#set tokObj={"className":"token"}
+$utils.pyClassCreator.stdClassHeader($tokObj)
+
+
+#for rn in $object:
+$object[$rn].dump("pyHeader")
+#end for

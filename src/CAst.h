@@ -5,7 +5,18 @@
 #include <assert.h>
 #include <iostream>
 
-#define LOG(TXT) {std::cerr<<__FILE__<<" "<<__LINE__<<" :"<<TXT<<"\n";std::cerr.flush();}
+#define COL_CLEAR 	"\033[0m"
+#define COL_FG_RED 	"\033[31m"
+#define COL_FG_GREEN 	"\033[32m"
+#define COL_FG_YELLOW 	"\033[33m"
+#define COL_FG_BLUE 	"\033[34m"
+#define COL_FG_MAGENTA "\033[35m"
+#define COL_FG_CYAN	"\033[36m"
+#define COL_FG_WHITE 	"\033[37m"
+
+
+
+#define LOG(TXT) {std::cerr<<__FILE__<<" "<<__LINE__<<" :"<<TXT<<COL_CLEAR<<"\n";std::cerr.flush();}
 
 namespace CAst
 {
@@ -33,15 +44,15 @@ class ReferenceCountedAutoPointer
 		{
 			if(!__refCount)return;
 			__refCountDown();
-			LOG("Deleing "<<__data<<"? refCount:"<<*__refCount)
+			LOG(COL_FG_RED<<"Deleting "<<__data<<"? refCount:"<<*__refCount)
 			if((*__refCount)==0)
 			{
 				std::string name=__data->name();
 				DataType *add=__data;
-				LOG("Deleting "<<"("<<name<<") "<<__data)
+				LOG(COL_FG_YELLOW<<"Deleting "<<"("<<name<<") "<<__data)
 				delete __refCount;
 				delete __data;
-				LOG("Deleted "<<"("<<name<<") "<<add)
+				LOG(COL_FG_RED<<"Deleted "<<"("<<name<<") "<<add)
 			}
 			__refCount=0;
 			__data=0;
@@ -67,7 +78,7 @@ class ReferenceCountedAutoPointer
 				__data(0),
 				__refCount(0)
 		{
-			LOG("NULL DATA")
+			LOG(COL_FG_RED<<"NULL DATA")
 		}
 
 		/** 
@@ -80,7 +91,7 @@ class ReferenceCountedAutoPointer
 		{
 			if(data)
 			{
-				LOG("ADOPTING "<<data<<"("<<data->name()<<")")
+				LOG(COL_FG_YELLOW<<"ADOPTING "<<data<<"("<<data->name()<<")")
 				__data=data;
 				__refCount=new int(1);
 			}
@@ -105,9 +116,9 @@ class ReferenceCountedAutoPointer
 			__refCountUp();
 
 			if(__data)
-				LOG("SHARING "<<__data<<" refcount:"<<*__refCount<<"("<<__data->name()<<")")
+				LOG(COL_FG_YELLOW<<"SHARING "<<__data<<" refcount:"<<*__refCount<<"("<<__data->name()<<")")
 			else
-				LOG("NULL AP ")
+				LOG(COL_FG_RED<<"NULL AP ")
 		
 		}
 
@@ -152,6 +163,10 @@ class ReferenceCountedAutoPointer
 			return __data;
 		}
 
+		void clear()
+		{
+			__clear();
+		}
 		/**
 		 * \brief Calls __clear();
 		 */
@@ -388,7 +403,7 @@ class token;
 class storage_class_specifier:public CAst
 {
 	private:
-		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>AUTO</b>, <b>TYPEDEF</b>, <b>EXTERN</b>, <b>REGISTER</b>, <b>STATIC</b>
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>STATIC</b>, <b>REGISTER</b>, <b>AUTO</b>, <b>TYPEDEF</b>, <b>EXTERN</b>
 	public:
 		/** 
 		 * \brief Constructor of storage_class_specifier
@@ -397,7 +412,7 @@ class storage_class_specifier:public CAst
                  */
 		storage_class_specifier	
 				(
-					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>AUTO</b>, <b>TYPEDEF</b>, <b>EXTERN</b>, <b>REGISTER</b>, <b>STATIC</b>
+					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>STATIC</b>, <b>REGISTER</b>, <b>AUTO</b>, <b>TYPEDEF</b>, <b>EXTERN</b>
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -643,14 +658,15 @@ class unary_expression:public CAst
 
 
 
-class cast_expression;
-class unary_operator;
+class token;
+class unary_expression;
+
 
 
 
 
 /**
- * \brief unary_expression_1 implements the pattern: <b>(unary_operator, cast_expression)</b>
+ * \brief unary_expression_1 implements the pattern: <b>(INC_OP, unary_expression)</b>
 
 
  * \dot
@@ -658,18 +674,18 @@ class unary_operator;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_unary_expression_1 [ label="unary_expression_1", URL="\ref unary_expression_1", color="#00AAAA" ];
- *     node_unary_operator [ label="unary_operator", URL="\ref unary_operator", color="#00AAAA"];
- *     node_cast_expression [ label="cast_expression", URL="\ref cast_expression", color="#00AAAA"];
- *     node_unary_expression_1 ->  node_unary_operator [label="_p_unary_operator" style=solid];
- *     node_unary_expression_1 ->  node_cast_expression [label="_p_cast_expression" style=solid];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_unary_expression [ label="unary_expression", URL="\ref unary_expression", color="#00AAAA"];
+ *     node_unary_expression_1 ->  node_token [label="_p_token" style=solid];
+ *     node_unary_expression_1 ->  node_unary_expression [label="_p_unary_expression" style=solid];
  * }
  * \enddot
  */
 class unary_expression_1:public unary_expression
 {
 	private:
-		ReferenceCountedAutoPointer<unary_operator> _p_unary_operator;	  ///< A pointer to unary_operator.
-		ReferenceCountedAutoPointer<cast_expression> _p_cast_expression;	  ///< A pointer to cast_expression.
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>INC_OP</b>, <b>DEC_OP</b>, <b>SIZEOF</b>
+		ReferenceCountedAutoPointer<unary_expression> _p_unary_expression;	  ///< A pointer to unary_expression.
 	public:
 		/** 
 		 * \brief Constructor of unary_expression_1
@@ -678,8 +694,8 @@ class unary_expression_1:public unary_expression
                  */
 		unary_expression_1	
 				(
-					ReferenceCountedAutoPointer<unary_operator> _arg_unary_operator,   ///< A pointer to unary_operator.
-					ReferenceCountedAutoPointer<cast_expression> _arg_cast_expression  ///< A pointer to cast_expression.
+					ReferenceCountedAutoPointer<token> _arg_token,   ///< A pointer to a token, accepts <b>INC_OP</b>, <b>DEC_OP</b>, <b>SIZEOF</b>
+					ReferenceCountedAutoPointer<unary_expression> _arg_unary_expression  ///< A pointer to unary_expression.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -708,12 +724,12 @@ class unary_expression_1:public unary_expression
 
 
 
-class type_name;
+class postfix_expression;
 
 
 
 /**
- * \brief unary_expression_2 implements the pattern: <b>(SIZEOF, '(', type_name, ')')</b>
+ * \brief unary_expression_2 implements the pattern: <b>(postfix_expression,)</b>
 
 
  * \dot
@@ -721,15 +737,15 @@ class type_name;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_unary_expression_2 [ label="unary_expression_2", URL="\ref unary_expression_2", color="#00AAAA" ];
- *     node_type_name [ label="type_name", URL="\ref type_name", color="#00AAAA"];
- *     node_unary_expression_2 ->  node_type_name [label="_p_type_name" style=solid];
+ *     node_postfix_expression [ label="postfix_expression", URL="\ref postfix_expression", color="#00AAAA"];
+ *     node_unary_expression_2 ->  node_postfix_expression [label="_p_postfix_expression" style=solid];
  * }
  * \enddot
  */
 class unary_expression_2:public unary_expression
 {
 	private:
-		ReferenceCountedAutoPointer<type_name> _p_type_name;	  ///< A pointer to type_name.
+		ReferenceCountedAutoPointer<postfix_expression> _p_postfix_expression;	  ///< A pointer to postfix_expression.
 	public:
 		/** 
 		 * \brief Constructor of unary_expression_2
@@ -738,7 +754,7 @@ class unary_expression_2:public unary_expression
                  */
 		unary_expression_2	
 				(
-					ReferenceCountedAutoPointer<type_name> _arg_type_name  ///< A pointer to type_name.
+					ReferenceCountedAutoPointer<postfix_expression> _arg_postfix_expression  ///< A pointer to postfix_expression.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -767,12 +783,14 @@ class unary_expression_2:public unary_expression
 
 
 
-class postfix_expression;
+class cast_expression;
+class unary_operator;
+
 
 
 
 /**
- * \brief unary_expression_3 implements the pattern: <b>(postfix_expression,)</b>
+ * \brief unary_expression_3 implements the pattern: <b>(unary_operator, cast_expression)</b>
 
 
  * \dot
@@ -780,15 +798,18 @@ class postfix_expression;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_unary_expression_3 [ label="unary_expression_3", URL="\ref unary_expression_3", color="#00AAAA" ];
- *     node_postfix_expression [ label="postfix_expression", URL="\ref postfix_expression", color="#00AAAA"];
- *     node_unary_expression_3 ->  node_postfix_expression [label="_p_postfix_expression" style=solid];
+ *     node_unary_operator [ label="unary_operator", URL="\ref unary_operator", color="#00AAAA"];
+ *     node_cast_expression [ label="cast_expression", URL="\ref cast_expression", color="#00AAAA"];
+ *     node_unary_expression_3 ->  node_unary_operator [label="_p_unary_operator" style=solid];
+ *     node_unary_expression_3 ->  node_cast_expression [label="_p_cast_expression" style=solid];
  * }
  * \enddot
  */
 class unary_expression_3:public unary_expression
 {
 	private:
-		ReferenceCountedAutoPointer<postfix_expression> _p_postfix_expression;	  ///< A pointer to postfix_expression.
+		ReferenceCountedAutoPointer<unary_operator> _p_unary_operator;	  ///< A pointer to unary_operator.
+		ReferenceCountedAutoPointer<cast_expression> _p_cast_expression;	  ///< A pointer to cast_expression.
 	public:
 		/** 
 		 * \brief Constructor of unary_expression_3
@@ -797,7 +818,8 @@ class unary_expression_3:public unary_expression
                  */
 		unary_expression_3	
 				(
-					ReferenceCountedAutoPointer<postfix_expression> _arg_postfix_expression  ///< A pointer to postfix_expression.
+					ReferenceCountedAutoPointer<unary_operator> _arg_unary_operator,   ///< A pointer to unary_operator.
+					ReferenceCountedAutoPointer<cast_expression> _arg_cast_expression  ///< A pointer to cast_expression.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -826,15 +848,12 @@ class unary_expression_3:public unary_expression
 
 
 
-class token;
-class unary_expression;
-
-
+class type_name;
 
 
 
 /**
- * \brief unary_expression_4 implements the pattern: <b>(INC_OP, unary_expression)</b>
+ * \brief unary_expression_4 implements the pattern: <b>(SIZEOF, '(', type_name, ')')</b>
 
 
  * \dot
@@ -842,18 +861,15 @@ class unary_expression;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_unary_expression_4 [ label="unary_expression_4", URL="\ref unary_expression_4", color="#00AAAA" ];
- *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
- *     node_unary_expression [ label="unary_expression", URL="\ref unary_expression", color="#00AAAA"];
- *     node_unary_expression_4 ->  node_token [label="_p_token" style=solid];
- *     node_unary_expression_4 ->  node_unary_expression [label="_p_unary_expression" style=solid];
+ *     node_type_name [ label="type_name", URL="\ref type_name", color="#00AAAA"];
+ *     node_unary_expression_4 ->  node_type_name [label="_p_type_name" style=solid];
  * }
  * \enddot
  */
 class unary_expression_4:public unary_expression
 {
 	private:
-		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>INC_OP</b>, <b>DEC_OP</b>, <b>SIZEOF</b>
-		ReferenceCountedAutoPointer<unary_expression> _p_unary_expression;	  ///< A pointer to unary_expression.
+		ReferenceCountedAutoPointer<type_name> _p_type_name;	  ///< A pointer to type_name.
 	public:
 		/** 
 		 * \brief Constructor of unary_expression_4
@@ -862,8 +878,7 @@ class unary_expression_4:public unary_expression
                  */
 		unary_expression_4	
 				(
-					ReferenceCountedAutoPointer<token> _arg_token,   ///< A pointer to a token, accepts <b>INC_OP</b>, <b>DEC_OP</b>, <b>SIZEOF</b>
-					ReferenceCountedAutoPointer<unary_expression> _arg_unary_expression  ///< A pointer to unary_expression.
+					ReferenceCountedAutoPointer<type_name> _arg_type_name  ///< A pointer to type_name.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -1010,7 +1025,7 @@ class conditional_expression:public CAst
 		 */
 		void append( ReferenceCountedAutoPointer<conditional_expression_item> item)
 		{
-			LOG("Appending to conditional_expression: "<<this)
+			LOG(COL_FG_GREEN<<"Appending to conditional_expression: "<<this)
 			_itemList.push_back(item);
 		}
 		
@@ -1096,7 +1111,7 @@ class struct_or_union_specifier:public CAst
 {
 	private:
 		ReferenceCountedAutoPointer<struct_or_union> _p_struct_or_union;	  ///< A pointer to struct_or_union.
-		ReferenceCountedAutoPointer<token> _p_token1;	  ///< A pointer to a token, accepts <b>None</b>, <b>IDENTIFIER</b>
+		ReferenceCountedAutoPointer<token> _p_token1;	  ///< A pointer to a token, accepts <b>IDENTIFIER</b>, <b>None</b>
 		ReferenceCountedAutoPointer<token> _p_token2;	  ///< A pointer to a token, accepts <b>None</b>, <b>'{'</b>
 		ReferenceCountedAutoPointer<struct_declaration_list> _p_struct_declaration_list;	  ///< A pointer to struct_declaration_list. This parameter can be <b>Null</b>
 		ReferenceCountedAutoPointer<token> _p_token3;	  ///< A pointer to a token, accepts <b>'}'</b>, <b>None</b>
@@ -1109,7 +1124,7 @@ class struct_or_union_specifier:public CAst
 		struct_or_union_specifier	
 				(
 					ReferenceCountedAutoPointer<struct_or_union> _arg_struct_or_union,   ///< A pointer to struct_or_union.
-					ReferenceCountedAutoPointer<token> _arg_token1,   ///< A pointer to a token, accepts <b>None</b>, <b>IDENTIFIER</b>
+					ReferenceCountedAutoPointer<token> _arg_token1,   ///< A pointer to a token, accepts <b>IDENTIFIER</b>, <b>None</b>
 					ReferenceCountedAutoPointer<token> _arg_token2,   ///< A pointer to a token, accepts <b>None</b>, <b>'{'</b>
 					ReferenceCountedAutoPointer<struct_declaration_list> _arg_struct_declaration_list,   ///< A pointer to struct_declaration_list. This parameter can be <b>Null</b>
 					ReferenceCountedAutoPointer<token> _arg_token3  ///< A pointer to a token, accepts <b>'}'</b>, <b>None</b>
@@ -1253,7 +1268,7 @@ class exclusive_or_expression:public CAst
 		 */
 		void append( ReferenceCountedAutoPointer<exclusive_or_expression_item> item)
 		{
-			LOG("Appending to exclusive_or_expression: "<<this)
+			LOG(COL_FG_GREEN<<"Appending to exclusive_or_expression: "<<this)
 			_itemList.push_back(item);
 		}
 		
@@ -1564,7 +1579,7 @@ class struct_declaration_list:public CAst
 		 */
 		void append( ReferenceCountedAutoPointer<struct_declaration_list_item> item)
 		{
-			LOG("Appending to struct_declaration_list: "<<this)
+			LOG(COL_FG_GREEN<<"Appending to struct_declaration_list: "<<this)
 			_itemList.push_back(item);
 		}
 		
@@ -1633,7 +1648,7 @@ class token;
 class assignment_operator:public CAst
 {
 	private:
-		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>RIGHT_ASSIGN</b>, <b>AND_ASSIGN</b>, <b>XOR_ASSIGN</b>, <b>OR_ASSIGN</b>, <b>MUL_ASSIGN</b>, <b>LEFT_ASSIGN</b>, <b>DIV_ASSIGN</b>, <b>MOD_ASSIGN</b>, <b>ADD_ASSIGN</b>, <b>SUB_ASSIGN</b>, <b>'='</b>
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>DIV_ASSIGN</b>, <b>MOD_ASSIGN</b>, <b>ADD_ASSIGN</b>, <b>SUB_ASSIGN</b>, <b>LEFT_ASSIGN</b>, <b>RIGHT_ASSIGN</b>, <b>AND_ASSIGN</b>, <b>XOR_ASSIGN</b>, <b>OR_ASSIGN</b>, <b>'='</b>, <b>MUL_ASSIGN</b>
 	public:
 		/** 
 		 * \brief Constructor of assignment_operator
@@ -1642,7 +1657,7 @@ class assignment_operator:public CAst
                  */
 		assignment_operator	
 				(
-					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>RIGHT_ASSIGN</b>, <b>AND_ASSIGN</b>, <b>XOR_ASSIGN</b>, <b>OR_ASSIGN</b>, <b>MUL_ASSIGN</b>, <b>LEFT_ASSIGN</b>, <b>DIV_ASSIGN</b>, <b>MOD_ASSIGN</b>, <b>ADD_ASSIGN</b>, <b>SUB_ASSIGN</b>, <b>'='</b>
+					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>DIV_ASSIGN</b>, <b>MOD_ASSIGN</b>, <b>ADD_ASSIGN</b>, <b>SUB_ASSIGN</b>, <b>LEFT_ASSIGN</b>, <b>RIGHT_ASSIGN</b>, <b>AND_ASSIGN</b>, <b>XOR_ASSIGN</b>, <b>OR_ASSIGN</b>, <b>'='</b>, <b>MUL_ASSIGN</b>
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -1892,14 +1907,17 @@ class iteration_statement:public CAst
 
 
 
+class expression_statement;
 class expression;
 class statement;
 
 
 
 
+
+
 /**
- * \brief iteration_statement_1 implements the pattern: <b>(DO, statement, WHILE, '(', expression, ')', ';')</b>
+ * \brief iteration_statement_1 implements the pattern: <b>(FOR, '(', expression_statement, expression_statement, expression, ')', statement)</b>
 
 
  * \dot
@@ -1907,18 +1925,24 @@ class statement;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_iteration_statement_1 [ label="iteration_statement_1", URL="\ref iteration_statement_1", color="#00AAAA" ];
- *     node_statement [ label="statement", URL="\ref statement", color="#00AAAA"];
+ *     node_expression_statement [ label="expression_statement", URL="\ref expression_statement", color="#00AAAA"];
+ *     node_expression_statement [ label="expression_statement", URL="\ref expression_statement", color="#00AAAA"];
  *     node_expression [ label="expression", URL="\ref expression", color="#00AAAA"];
+ *     node_statement [ label="statement", URL="\ref statement", color="#00AAAA"];
+ *     node_iteration_statement_1 ->  node_expression_statement [label="_p_expression_statement1" style=solid];
+ *     node_iteration_statement_1 ->  node_expression_statement [label="_p_expression_statement2" style=solid];
+ *     node_iteration_statement_1 ->  node_expression [label="_p_expression" style=dotted];
  *     node_iteration_statement_1 ->  node_statement [label="_p_statement" style=solid];
- *     node_iteration_statement_1 ->  node_expression [label="_p_expression" style=solid];
  * }
  * \enddot
  */
 class iteration_statement_1:public iteration_statement
 {
 	private:
+		ReferenceCountedAutoPointer<expression_statement> _p_expression_statement1;	  ///< A pointer to expression_statement.
+		ReferenceCountedAutoPointer<expression_statement> _p_expression_statement2;	  ///< A pointer to expression_statement.
+		ReferenceCountedAutoPointer<expression> _p_expression;	  ///< A pointer to expression. This parameter can be <b>Null</b>
 		ReferenceCountedAutoPointer<statement> _p_statement;	  ///< A pointer to statement.
-		ReferenceCountedAutoPointer<expression> _p_expression;	  ///< A pointer to expression.
 	public:
 		/** 
 		 * \brief Constructor of iteration_statement_1
@@ -1927,8 +1951,10 @@ class iteration_statement_1:public iteration_statement
                  */
 		iteration_statement_1	
 				(
-					ReferenceCountedAutoPointer<statement> _arg_statement,   ///< A pointer to statement.
-					ReferenceCountedAutoPointer<expression> _arg_expression  ///< A pointer to expression.
+					ReferenceCountedAutoPointer<expression_statement> _arg_expression_statement1,   ///< A pointer to expression_statement.
+					ReferenceCountedAutoPointer<expression_statement> _arg_expression_statement2,   ///< A pointer to expression_statement.
+					ReferenceCountedAutoPointer<expression> _arg_expression,   ///< A pointer to expression. This parameter can be <b>Null</b>
+					ReferenceCountedAutoPointer<statement> _arg_statement  ///< A pointer to statement.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -1957,17 +1983,14 @@ class iteration_statement_1:public iteration_statement
 
 
 
-class expression_statement;
 class expression;
 class statement;
 
 
 
 
-
-
 /**
- * \brief iteration_statement_2 implements the pattern: <b>(FOR, '(', expression_statement, expression_statement, expression, ')', statement)</b>
+ * \brief iteration_statement_2 implements the pattern: <b>(WHILE, '(', expression, ')', statement)</b>
 
 
  * \dot
@@ -1975,13 +1998,9 @@ class statement;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_iteration_statement_2 [ label="iteration_statement_2", URL="\ref iteration_statement_2", color="#00AAAA" ];
- *     node_expression_statement [ label="expression_statement", URL="\ref expression_statement", color="#00AAAA"];
- *     node_expression_statement [ label="expression_statement", URL="\ref expression_statement", color="#00AAAA"];
  *     node_expression [ label="expression", URL="\ref expression", color="#00AAAA"];
  *     node_statement [ label="statement", URL="\ref statement", color="#00AAAA"];
- *     node_iteration_statement_2 ->  node_expression_statement [label="_p_expression_statement1" style=solid];
- *     node_iteration_statement_2 ->  node_expression_statement [label="_p_expression_statement2" style=solid];
- *     node_iteration_statement_2 ->  node_expression [label="_p_expression" style=dotted];
+ *     node_iteration_statement_2 ->  node_expression [label="_p_expression" style=solid];
  *     node_iteration_statement_2 ->  node_statement [label="_p_statement" style=solid];
  * }
  * \enddot
@@ -1989,9 +2008,7 @@ class statement;
 class iteration_statement_2:public iteration_statement
 {
 	private:
-		ReferenceCountedAutoPointer<expression_statement> _p_expression_statement1;	  ///< A pointer to expression_statement.
-		ReferenceCountedAutoPointer<expression_statement> _p_expression_statement2;	  ///< A pointer to expression_statement.
-		ReferenceCountedAutoPointer<expression> _p_expression;	  ///< A pointer to expression. This parameter can be <b>Null</b>
+		ReferenceCountedAutoPointer<expression> _p_expression;	  ///< A pointer to expression.
 		ReferenceCountedAutoPointer<statement> _p_statement;	  ///< A pointer to statement.
 	public:
 		/** 
@@ -2001,9 +2018,7 @@ class iteration_statement_2:public iteration_statement
                  */
 		iteration_statement_2	
 				(
-					ReferenceCountedAutoPointer<expression_statement> _arg_expression_statement1,   ///< A pointer to expression_statement.
-					ReferenceCountedAutoPointer<expression_statement> _arg_expression_statement2,   ///< A pointer to expression_statement.
-					ReferenceCountedAutoPointer<expression> _arg_expression,   ///< A pointer to expression. This parameter can be <b>Null</b>
+					ReferenceCountedAutoPointer<expression> _arg_expression,   ///< A pointer to expression.
 					ReferenceCountedAutoPointer<statement> _arg_statement  ///< A pointer to statement.
 				);
 		/**
@@ -2040,7 +2055,7 @@ class statement;
 
 
 /**
- * \brief iteration_statement_3 implements the pattern: <b>(WHILE, '(', expression, ')', statement)</b>
+ * \brief iteration_statement_3 implements the pattern: <b>(DO, statement, WHILE, '(', expression, ')', ';')</b>
 
 
  * \dot
@@ -2048,18 +2063,18 @@ class statement;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_iteration_statement_3 [ label="iteration_statement_3", URL="\ref iteration_statement_3", color="#00AAAA" ];
- *     node_expression [ label="expression", URL="\ref expression", color="#00AAAA"];
  *     node_statement [ label="statement", URL="\ref statement", color="#00AAAA"];
- *     node_iteration_statement_3 ->  node_expression [label="_p_expression" style=solid];
+ *     node_expression [ label="expression", URL="\ref expression", color="#00AAAA"];
  *     node_iteration_statement_3 ->  node_statement [label="_p_statement" style=solid];
+ *     node_iteration_statement_3 ->  node_expression [label="_p_expression" style=solid];
  * }
  * \enddot
  */
 class iteration_statement_3:public iteration_statement
 {
 	private:
-		ReferenceCountedAutoPointer<expression> _p_expression;	  ///< A pointer to expression.
 		ReferenceCountedAutoPointer<statement> _p_statement;	  ///< A pointer to statement.
+		ReferenceCountedAutoPointer<expression> _p_expression;	  ///< A pointer to expression.
 	public:
 		/** 
 		 * \brief Constructor of iteration_statement_3
@@ -2068,8 +2083,8 @@ class iteration_statement_3:public iteration_statement
                  */
 		iteration_statement_3	
 				(
-					ReferenceCountedAutoPointer<expression> _arg_expression,   ///< A pointer to expression.
-					ReferenceCountedAutoPointer<statement> _arg_statement  ///< A pointer to statement.
+					ReferenceCountedAutoPointer<statement> _arg_statement,   ///< A pointer to statement.
+					ReferenceCountedAutoPointer<expression> _arg_expression  ///< A pointer to expression.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -2217,7 +2232,7 @@ class additive_expression:public CAst
 		 */
 		void append( ReferenceCountedAutoPointer<additive_expression_item> item)
 		{
-			LOG("Appending to additive_expression: "<<this)
+			LOG(COL_FG_GREEN<<"Appending to additive_expression: "<<this)
 			_itemList.push_back(item);
 		}
 		
@@ -2290,12 +2305,12 @@ class external_declaration:public CAst
 
 
 
-class function_definition;
+class declaration;
 
 
 
 /**
- * \brief external_declaration_1 implements the pattern: <b>(function_definition,)</b>
+ * \brief external_declaration_1 implements the pattern: <b>(declaration,)</b>
 
 
  * \dot
@@ -2303,15 +2318,15 @@ class function_definition;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_external_declaration_1 [ label="external_declaration_1", URL="\ref external_declaration_1", color="#00AAAA" ];
- *     node_function_definition [ label="function_definition", URL="\ref function_definition", color="#00AAAA"];
- *     node_external_declaration_1 ->  node_function_definition [label="_p_function_definition" style=solid];
+ *     node_declaration [ label="declaration", URL="\ref declaration", color="#00AAAA"];
+ *     node_external_declaration_1 ->  node_declaration [label="_p_declaration" style=solid];
  * }
  * \enddot
  */
 class external_declaration_1:public external_declaration
 {
 	private:
-		ReferenceCountedAutoPointer<function_definition> _p_function_definition;	  ///< A pointer to function_definition.
+		ReferenceCountedAutoPointer<declaration> _p_declaration;	  ///< A pointer to declaration.
 	public:
 		/** 
 		 * \brief Constructor of external_declaration_1
@@ -2320,7 +2335,7 @@ class external_declaration_1:public external_declaration
                  */
 		external_declaration_1	
 				(
-					ReferenceCountedAutoPointer<function_definition> _arg_function_definition  ///< A pointer to function_definition.
+					ReferenceCountedAutoPointer<declaration> _arg_declaration  ///< A pointer to declaration.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -2349,12 +2364,12 @@ class external_declaration_1:public external_declaration
 
 
 
-class declaration;
+class function_definition;
 
 
 
 /**
- * \brief external_declaration_2 implements the pattern: <b>(declaration,)</b>
+ * \brief external_declaration_2 implements the pattern: <b>(function_definition,)</b>
 
 
  * \dot
@@ -2362,15 +2377,15 @@ class declaration;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_external_declaration_2 [ label="external_declaration_2", URL="\ref external_declaration_2", color="#00AAAA" ];
- *     node_declaration [ label="declaration", URL="\ref declaration", color="#00AAAA"];
- *     node_external_declaration_2 ->  node_declaration [label="_p_declaration" style=solid];
+ *     node_function_definition [ label="function_definition", URL="\ref function_definition", color="#00AAAA"];
+ *     node_external_declaration_2 ->  node_function_definition [label="_p_function_definition" style=solid];
  * }
  * \enddot
  */
 class external_declaration_2:public external_declaration
 {
 	private:
-		ReferenceCountedAutoPointer<declaration> _p_declaration;	  ///< A pointer to declaration.
+		ReferenceCountedAutoPointer<function_definition> _p_function_definition;	  ///< A pointer to function_definition.
 	public:
 		/** 
 		 * \brief Constructor of external_declaration_2
@@ -2379,7 +2394,7 @@ class external_declaration_2:public external_declaration
                  */
 		external_declaration_2	
 				(
-					ReferenceCountedAutoPointer<declaration> _arg_declaration  ///< A pointer to declaration.
+					ReferenceCountedAutoPointer<function_definition> _arg_function_definition  ///< A pointer to function_definition.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -2545,7 +2560,7 @@ class token;
 class type_specifier_2:public type_specifier
 {
 	private:
-		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>FLOAT</b>, <b>DOUBLE</b>, <b>VOID</b>, <b>CHAR</b>, <b>SHORT</b>, <b>INT</b>, <b>LONG</b>, <b>SIGNED</b>, <b>UNSIGNED</b>
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>SHORT</b>, <b>INT</b>, <b>LONG</b>, <b>SIGNED</b>, <b>UNSIGNED</b>, <b>FLOAT</b>, <b>DOUBLE</b>, <b>VOID</b>, <b>CHAR</b>
 	public:
 		/** 
 		 * \brief Constructor of type_specifier_2
@@ -2554,7 +2569,7 @@ class type_specifier_2:public type_specifier
                  */
 		type_specifier_2	
 				(
-					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>FLOAT</b>, <b>DOUBLE</b>, <b>VOID</b>, <b>CHAR</b>, <b>SHORT</b>, <b>INT</b>, <b>LONG</b>, <b>SIGNED</b>, <b>UNSIGNED</b>
+					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>SHORT</b>, <b>INT</b>, <b>LONG</b>, <b>SIGNED</b>, <b>UNSIGNED</b>, <b>FLOAT</b>, <b>DOUBLE</b>, <b>VOID</b>, <b>CHAR</b>
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -2840,7 +2855,7 @@ class inclusive_or_expression:public CAst
 		 */
 		void append( ReferenceCountedAutoPointer<inclusive_or_expression_item> item)
 		{
-			LOG("Appending to inclusive_or_expression: "<<this)
+			LOG(COL_FG_GREEN<<"Appending to inclusive_or_expression: "<<this)
 			_itemList.push_back(item);
 		}
 		
@@ -2906,12 +2921,10 @@ class pointer_item
 		virtual ~pointer_item(){};
 };
 
-class type_qualifier_list;
-
 
 
 /**
- * \brief pointer_item_1 implements the pattern: <b>('*', type_qualifier_list, pointer)</b>
+ * \brief pointer_item_1 implements the pattern: <b>('*', pointer)</b>
 
 
  * \dot
@@ -2919,15 +2932,12 @@ class type_qualifier_list;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_pointer_item_1 [ label="pointer_item_1", URL="\ref pointer_item_1", color="#00AAAA" ];
- *     node_type_qualifier_list [ label="type_qualifier_list", URL="\ref type_qualifier_list", color="#00AAAA"];
- *     node_pointer_item_1 ->  node_type_qualifier_list [label="_p_type_qualifier_list" style=dotted];
  * }
  * \enddot
  */
 class pointer_item_1:public pointer_item
 {
 	private:
-		ReferenceCountedAutoPointer<type_qualifier_list> _p_type_qualifier_list;	  ///< A pointer to type_qualifier_list. This parameter can be <b>Null</b>
 	public:
 		/** 
 		 * \brief Constructor of pointer_item_1
@@ -2936,7 +2946,6 @@ class pointer_item_1:public pointer_item
                  */
 		pointer_item_1	
 				(
-					ReferenceCountedAutoPointer<type_qualifier_list> _arg_type_qualifier_list  ///< A pointer to type_qualifier_list. This parameter can be <b>Null</b>
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -2965,10 +2974,12 @@ class pointer_item_1:public pointer_item
 
 
 
+class type_qualifier_list;
+
 
 
 /**
- * \brief pointer_item_2 implements the pattern: <b>('*', pointer)</b>
+ * \brief pointer_item_2 implements the pattern: <b>('*', type_qualifier_list, pointer)</b>
 
 
  * \dot
@@ -2976,12 +2987,15 @@ class pointer_item_1:public pointer_item
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_pointer_item_2 [ label="pointer_item_2", URL="\ref pointer_item_2", color="#00AAAA" ];
+ *     node_type_qualifier_list [ label="type_qualifier_list", URL="\ref type_qualifier_list", color="#00AAAA"];
+ *     node_pointer_item_2 ->  node_type_qualifier_list [label="_p_type_qualifier_list" style=dotted];
  * }
  * \enddot
  */
 class pointer_item_2:public pointer_item
 {
 	private:
+		ReferenceCountedAutoPointer<type_qualifier_list> _p_type_qualifier_list;	  ///< A pointer to type_qualifier_list. This parameter can be <b>Null</b>
 	public:
 		/** 
 		 * \brief Constructor of pointer_item_2
@@ -2990,6 +3004,7 @@ class pointer_item_2:public pointer_item
                  */
 		pointer_item_2	
 				(
+					ReferenceCountedAutoPointer<type_qualifier_list> _arg_type_qualifier_list  ///< A pointer to type_qualifier_list. This parameter can be <b>Null</b>
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -3050,7 +3065,7 @@ class pointer:public CAst
 		 */
 		void append( ReferenceCountedAutoPointer<pointer_item> item)
 		{
-			LOG("Appending to pointer: "<<this)
+			LOG(COL_FG_GREEN<<"Appending to pointer: "<<this)
 			_itemList.push_back(item);
 		}
 		
@@ -3134,7 +3149,7 @@ class statement;
 class selection_statement:public CAst
 {
 	private:
-		ReferenceCountedAutoPointer<token> _p_token1;	  ///< A pointer to a token, accepts <b>SWITCH</b>, <b>IF</b>
+		ReferenceCountedAutoPointer<token> _p_token1;	  ///< A pointer to a token, accepts <b>IF</b>, <b>SWITCH</b>
 		ReferenceCountedAutoPointer<expression> _p_expression;	  ///< A pointer to expression.
 		ReferenceCountedAutoPointer<statement> _p_statement1;	  ///< A pointer to statement.
 		ReferenceCountedAutoPointer<token> _p_token2;	  ///< A pointer to a token, accepts <b>ELSE</b>, <b>None</b>
@@ -3147,7 +3162,7 @@ class selection_statement:public CAst
                  */
 		selection_statement	
 				(
-					ReferenceCountedAutoPointer<token> _arg_token1,   ///< A pointer to a token, accepts <b>SWITCH</b>, <b>IF</b>
+					ReferenceCountedAutoPointer<token> _arg_token1,   ///< A pointer to a token, accepts <b>IF</b>, <b>SWITCH</b>
 					ReferenceCountedAutoPointer<expression> _arg_expression,   ///< A pointer to expression.
 					ReferenceCountedAutoPointer<statement> _arg_statement1,   ///< A pointer to statement.
 					ReferenceCountedAutoPointer<token> _arg_token2,   ///< A pointer to a token, accepts <b>ELSE</b>, <b>None</b>
@@ -3233,12 +3248,15 @@ class postfix_expression:public CAst
 
 
 
-class primary_expression;
+class token;
+class postfix_expression;
+
+
 
 
 
 /**
- * \brief postfix_expression_1 implements the pattern: <b>(primary_expression,)</b>
+ * \brief postfix_expression_1 implements the pattern: <b>(postfix_expression, INC_OP)</b>
 
 
  * \dot
@@ -3246,15 +3264,18 @@ class primary_expression;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_postfix_expression_1 [ label="postfix_expression_1", URL="\ref postfix_expression_1", color="#00AAAA" ];
- *     node_primary_expression [ label="primary_expression", URL="\ref primary_expression", color="#00AAAA"];
- *     node_postfix_expression_1 ->  node_primary_expression [label="_p_primary_expression" style=solid];
+ *     node_postfix_expression [ label="postfix_expression", URL="\ref postfix_expression", color="#00AAAA"];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_postfix_expression_1 ->  node_postfix_expression [label="_p_postfix_expression" style=solid];
+ *     node_postfix_expression_1 ->  node_token [label="_p_token" style=solid];
  * }
  * \enddot
  */
 class postfix_expression_1:public postfix_expression
 {
 	private:
-		ReferenceCountedAutoPointer<primary_expression> _p_primary_expression;	  ///< A pointer to primary_expression.
+		ReferenceCountedAutoPointer<postfix_expression> _p_postfix_expression;	  ///< A pointer to postfix_expression.
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>INC_OP</b>, <b>DEC_OP</b>
 	public:
 		/** 
 		 * \brief Constructor of postfix_expression_1
@@ -3263,7 +3284,8 @@ class postfix_expression_1:public postfix_expression
                  */
 		postfix_expression_1	
 				(
-					ReferenceCountedAutoPointer<primary_expression> _arg_primary_expression  ///< A pointer to primary_expression.
+					ReferenceCountedAutoPointer<postfix_expression> _arg_postfix_expression,   ///< A pointer to postfix_expression.
+					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>INC_OP</b>, <b>DEC_OP</b>
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -3292,15 +3314,12 @@ class postfix_expression_1:public postfix_expression
 
 
 
-class token;
-class postfix_expression;
-
-
+class primary_expression;
 
 
 
 /**
- * \brief postfix_expression_2 implements the pattern: <b>(postfix_expression, INC_OP)</b>
+ * \brief postfix_expression_2 implements the pattern: <b>(primary_expression,)</b>
 
 
  * \dot
@@ -3308,18 +3327,15 @@ class postfix_expression;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_postfix_expression_2 [ label="postfix_expression_2", URL="\ref postfix_expression_2", color="#00AAAA" ];
- *     node_postfix_expression [ label="postfix_expression", URL="\ref postfix_expression", color="#00AAAA"];
- *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
- *     node_postfix_expression_2 ->  node_postfix_expression [label="_p_postfix_expression" style=solid];
- *     node_postfix_expression_2 ->  node_token [label="_p_token" style=solid];
+ *     node_primary_expression [ label="primary_expression", URL="\ref primary_expression", color="#00AAAA"];
+ *     node_postfix_expression_2 ->  node_primary_expression [label="_p_primary_expression" style=solid];
  * }
  * \enddot
  */
 class postfix_expression_2:public postfix_expression
 {
 	private:
-		ReferenceCountedAutoPointer<postfix_expression> _p_postfix_expression;	  ///< A pointer to postfix_expression.
-		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>INC_OP</b>, <b>DEC_OP</b>
+		ReferenceCountedAutoPointer<primary_expression> _p_primary_expression;	  ///< A pointer to primary_expression.
 	public:
 		/** 
 		 * \brief Constructor of postfix_expression_2
@@ -3328,8 +3344,7 @@ class postfix_expression_2:public postfix_expression
                  */
 		postfix_expression_2	
 				(
-					ReferenceCountedAutoPointer<postfix_expression> _arg_postfix_expression,   ///< A pointer to postfix_expression.
-					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>INC_OP</b>, <b>DEC_OP</b>
+					ReferenceCountedAutoPointer<primary_expression> _arg_primary_expression  ///< A pointer to primary_expression.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -3358,14 +3373,17 @@ class postfix_expression_2:public postfix_expression
 
 
 
-class expression;
+class token;
+class argument_expression_list;
 class postfix_expression;
 
 
 
 
+
+
 /**
- * \brief postfix_expression_3 implements the pattern: <b>(postfix_expression, '[', expression, ']')</b>
+ * \brief postfix_expression_3 implements the pattern: <b>(postfix_expression, '(', argument_expression_list, ')')</b>
 
 
  * \dot
@@ -3374,9 +3392,11 @@ class postfix_expression;
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_postfix_expression_3 [ label="postfix_expression_3", URL="\ref postfix_expression_3", color="#00AAAA" ];
  *     node_postfix_expression [ label="postfix_expression", URL="\ref postfix_expression", color="#00AAAA"];
- *     node_expression [ label="expression", URL="\ref expression", color="#00AAAA"];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_argument_expression_list [ label="argument_expression_list", URL="\ref argument_expression_list", color="#00AAAA"];
  *     node_postfix_expression_3 ->  node_postfix_expression [label="_p_postfix_expression" style=solid];
- *     node_postfix_expression_3 ->  node_expression [label="_p_expression" style=solid];
+ *     node_postfix_expression_3 ->  node_token [label="_p_token" style=solid];
+ *     node_postfix_expression_3 ->  node_argument_expression_list [label="_p_argument_expression_list" style=dotted];
  * }
  * \enddot
  */
@@ -3384,7 +3404,8 @@ class postfix_expression_3:public postfix_expression
 {
 	private:
 		ReferenceCountedAutoPointer<postfix_expression> _p_postfix_expression;	  ///< A pointer to postfix_expression.
-		ReferenceCountedAutoPointer<expression> _p_expression;	  ///< A pointer to expression.
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>PTR_OP</b>, <b>'('</b>, <b>'.'</b>
+		ReferenceCountedAutoPointer<argument_expression_list> _p_argument_expression_list;	  ///< A pointer to argument_expression_list. This parameter can be <b>Null</b>
 	public:
 		/** 
 		 * \brief Constructor of postfix_expression_3
@@ -3394,7 +3415,8 @@ class postfix_expression_3:public postfix_expression
 		postfix_expression_3	
 				(
 					ReferenceCountedAutoPointer<postfix_expression> _arg_postfix_expression,   ///< A pointer to postfix_expression.
-					ReferenceCountedAutoPointer<expression> _arg_expression  ///< A pointer to expression.
+					ReferenceCountedAutoPointer<token> _arg_token,   ///< A pointer to a token, accepts <b>PTR_OP</b>, <b>'('</b>, <b>'.'</b>
+					ReferenceCountedAutoPointer<argument_expression_list> _arg_argument_expression_list  ///< A pointer to argument_expression_list. This parameter can be <b>Null</b>
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -3423,17 +3445,14 @@ class postfix_expression_3:public postfix_expression
 
 
 
-class token;
-class argument_expression_list;
+class expression;
 class postfix_expression;
 
 
 
 
-
-
 /**
- * \brief postfix_expression_4 implements the pattern: <b>(postfix_expression, '(', argument_expression_list, ')')</b>
+ * \brief postfix_expression_4 implements the pattern: <b>(postfix_expression, '[', expression, ']')</b>
 
 
  * \dot
@@ -3442,11 +3461,9 @@ class postfix_expression;
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_postfix_expression_4 [ label="postfix_expression_4", URL="\ref postfix_expression_4", color="#00AAAA" ];
  *     node_postfix_expression [ label="postfix_expression", URL="\ref postfix_expression", color="#00AAAA"];
- *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
- *     node_argument_expression_list [ label="argument_expression_list", URL="\ref argument_expression_list", color="#00AAAA"];
+ *     node_expression [ label="expression", URL="\ref expression", color="#00AAAA"];
  *     node_postfix_expression_4 ->  node_postfix_expression [label="_p_postfix_expression" style=solid];
- *     node_postfix_expression_4 ->  node_token [label="_p_token" style=solid];
- *     node_postfix_expression_4 ->  node_argument_expression_list [label="_p_argument_expression_list" style=dotted];
+ *     node_postfix_expression_4 ->  node_expression [label="_p_expression" style=solid];
  * }
  * \enddot
  */
@@ -3454,8 +3471,7 @@ class postfix_expression_4:public postfix_expression
 {
 	private:
 		ReferenceCountedAutoPointer<postfix_expression> _p_postfix_expression;	  ///< A pointer to postfix_expression.
-		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>'('</b>, <b>'.'</b>, <b>PTR_OP</b>
-		ReferenceCountedAutoPointer<argument_expression_list> _p_argument_expression_list;	  ///< A pointer to argument_expression_list. This parameter can be <b>Null</b>
+		ReferenceCountedAutoPointer<expression> _p_expression;	  ///< A pointer to expression.
 	public:
 		/** 
 		 * \brief Constructor of postfix_expression_4
@@ -3465,8 +3481,7 @@ class postfix_expression_4:public postfix_expression
 		postfix_expression_4	
 				(
 					ReferenceCountedAutoPointer<postfix_expression> _arg_postfix_expression,   ///< A pointer to postfix_expression.
-					ReferenceCountedAutoPointer<token> _arg_token,   ///< A pointer to a token, accepts <b>'('</b>, <b>'.'</b>, <b>PTR_OP</b>
-					ReferenceCountedAutoPointer<argument_expression_list> _arg_argument_expression_list  ///< A pointer to argument_expression_list. This parameter can be <b>Null</b>
+					ReferenceCountedAutoPointer<expression> _arg_expression  ///< A pointer to expression.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -3607,7 +3622,7 @@ class and_expression:public CAst
 		 */
 		void append( ReferenceCountedAutoPointer<and_expression_item> item)
 		{
-			LOG("Appending to and_expression: "<<this)
+			LOG(COL_FG_GREEN<<"Appending to and_expression: "<<this)
 			_itemList.push_back(item);
 		}
 		
@@ -3684,12 +3699,12 @@ class statement:public CAst
 
 
 
-class compound_statement;
+class jump_statement;
 
 
 
 /**
- * \brief statement_1 implements the pattern: <b>(compound_statement,)</b>
+ * \brief statement_1 implements the pattern: <b>(jump_statement,)</b>
 
 
  * \dot
@@ -3697,15 +3712,15 @@ class compound_statement;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_statement_1 [ label="statement_1", URL="\ref statement_1", color="#00AAAA" ];
- *     node_compound_statement [ label="compound_statement", URL="\ref compound_statement", color="#00AAAA"];
- *     node_statement_1 ->  node_compound_statement [label="_p_compound_statement" style=solid];
+ *     node_jump_statement [ label="jump_statement", URL="\ref jump_statement", color="#00AAAA"];
+ *     node_statement_1 ->  node_jump_statement [label="_p_jump_statement" style=solid];
  * }
  * \enddot
  */
 class statement_1:public statement
 {
 	private:
-		ReferenceCountedAutoPointer<compound_statement> _p_compound_statement;	  ///< A pointer to compound_statement.
+		ReferenceCountedAutoPointer<jump_statement> _p_jump_statement;	  ///< A pointer to jump_statement.
 	public:
 		/** 
 		 * \brief Constructor of statement_1
@@ -3714,7 +3729,7 @@ class statement_1:public statement
                  */
 		statement_1	
 				(
-					ReferenceCountedAutoPointer<compound_statement> _arg_compound_statement  ///< A pointer to compound_statement.
+					ReferenceCountedAutoPointer<jump_statement> _arg_jump_statement  ///< A pointer to jump_statement.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -3743,12 +3758,12 @@ class statement_1:public statement
 
 
 
-class expression_statement;
+class labeled_statement;
 
 
 
 /**
- * \brief statement_2 implements the pattern: <b>(expression_statement,)</b>
+ * \brief statement_2 implements the pattern: <b>(labeled_statement,)</b>
 
 
  * \dot
@@ -3756,15 +3771,15 @@ class expression_statement;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_statement_2 [ label="statement_2", URL="\ref statement_2", color="#00AAAA" ];
- *     node_expression_statement [ label="expression_statement", URL="\ref expression_statement", color="#00AAAA"];
- *     node_statement_2 ->  node_expression_statement [label="_p_expression_statement" style=solid];
+ *     node_labeled_statement [ label="labeled_statement", URL="\ref labeled_statement", color="#00AAAA"];
+ *     node_statement_2 ->  node_labeled_statement [label="_p_labeled_statement" style=solid];
  * }
  * \enddot
  */
 class statement_2:public statement
 {
 	private:
-		ReferenceCountedAutoPointer<expression_statement> _p_expression_statement;	  ///< A pointer to expression_statement.
+		ReferenceCountedAutoPointer<labeled_statement> _p_labeled_statement;	  ///< A pointer to labeled_statement.
 	public:
 		/** 
 		 * \brief Constructor of statement_2
@@ -3773,7 +3788,7 @@ class statement_2:public statement
                  */
 		statement_2	
 				(
-					ReferenceCountedAutoPointer<expression_statement> _arg_expression_statement  ///< A pointer to expression_statement.
+					ReferenceCountedAutoPointer<labeled_statement> _arg_labeled_statement  ///< A pointer to labeled_statement.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -3802,12 +3817,12 @@ class statement_2:public statement
 
 
 
-class selection_statement;
+class compound_statement;
 
 
 
 /**
- * \brief statement_3 implements the pattern: <b>(selection_statement,)</b>
+ * \brief statement_3 implements the pattern: <b>(compound_statement,)</b>
 
 
  * \dot
@@ -3815,15 +3830,15 @@ class selection_statement;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_statement_3 [ label="statement_3", URL="\ref statement_3", color="#00AAAA" ];
- *     node_selection_statement [ label="selection_statement", URL="\ref selection_statement", color="#00AAAA"];
- *     node_statement_3 ->  node_selection_statement [label="_p_selection_statement" style=solid];
+ *     node_compound_statement [ label="compound_statement", URL="\ref compound_statement", color="#00AAAA"];
+ *     node_statement_3 ->  node_compound_statement [label="_p_compound_statement" style=solid];
  * }
  * \enddot
  */
 class statement_3:public statement
 {
 	private:
-		ReferenceCountedAutoPointer<selection_statement> _p_selection_statement;	  ///< A pointer to selection_statement.
+		ReferenceCountedAutoPointer<compound_statement> _p_compound_statement;	  ///< A pointer to compound_statement.
 	public:
 		/** 
 		 * \brief Constructor of statement_3
@@ -3832,7 +3847,7 @@ class statement_3:public statement
                  */
 		statement_3	
 				(
-					ReferenceCountedAutoPointer<selection_statement> _arg_selection_statement  ///< A pointer to selection_statement.
+					ReferenceCountedAutoPointer<compound_statement> _arg_compound_statement  ///< A pointer to compound_statement.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -3861,12 +3876,12 @@ class statement_3:public statement
 
 
 
-class iteration_statement;
+class expression_statement;
 
 
 
 /**
- * \brief statement_4 implements the pattern: <b>(iteration_statement,)</b>
+ * \brief statement_4 implements the pattern: <b>(expression_statement,)</b>
 
 
  * \dot
@@ -3874,15 +3889,15 @@ class iteration_statement;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_statement_4 [ label="statement_4", URL="\ref statement_4", color="#00AAAA" ];
- *     node_iteration_statement [ label="iteration_statement", URL="\ref iteration_statement", color="#00AAAA"];
- *     node_statement_4 ->  node_iteration_statement [label="_p_iteration_statement" style=solid];
+ *     node_expression_statement [ label="expression_statement", URL="\ref expression_statement", color="#00AAAA"];
+ *     node_statement_4 ->  node_expression_statement [label="_p_expression_statement" style=solid];
  * }
  * \enddot
  */
 class statement_4:public statement
 {
 	private:
-		ReferenceCountedAutoPointer<iteration_statement> _p_iteration_statement;	  ///< A pointer to iteration_statement.
+		ReferenceCountedAutoPointer<expression_statement> _p_expression_statement;	  ///< A pointer to expression_statement.
 	public:
 		/** 
 		 * \brief Constructor of statement_4
@@ -3891,7 +3906,7 @@ class statement_4:public statement
                  */
 		statement_4	
 				(
-					ReferenceCountedAutoPointer<iteration_statement> _arg_iteration_statement  ///< A pointer to iteration_statement.
+					ReferenceCountedAutoPointer<expression_statement> _arg_expression_statement  ///< A pointer to expression_statement.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -3920,12 +3935,12 @@ class statement_4:public statement
 
 
 
-class jump_statement;
+class selection_statement;
 
 
 
 /**
- * \brief statement_5 implements the pattern: <b>(jump_statement,)</b>
+ * \brief statement_5 implements the pattern: <b>(selection_statement,)</b>
 
 
  * \dot
@@ -3933,15 +3948,15 @@ class jump_statement;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_statement_5 [ label="statement_5", URL="\ref statement_5", color="#00AAAA" ];
- *     node_jump_statement [ label="jump_statement", URL="\ref jump_statement", color="#00AAAA"];
- *     node_statement_5 ->  node_jump_statement [label="_p_jump_statement" style=solid];
+ *     node_selection_statement [ label="selection_statement", URL="\ref selection_statement", color="#00AAAA"];
+ *     node_statement_5 ->  node_selection_statement [label="_p_selection_statement" style=solid];
  * }
  * \enddot
  */
 class statement_5:public statement
 {
 	private:
-		ReferenceCountedAutoPointer<jump_statement> _p_jump_statement;	  ///< A pointer to jump_statement.
+		ReferenceCountedAutoPointer<selection_statement> _p_selection_statement;	  ///< A pointer to selection_statement.
 	public:
 		/** 
 		 * \brief Constructor of statement_5
@@ -3950,7 +3965,7 @@ class statement_5:public statement
                  */
 		statement_5	
 				(
-					ReferenceCountedAutoPointer<jump_statement> _arg_jump_statement  ///< A pointer to jump_statement.
+					ReferenceCountedAutoPointer<selection_statement> _arg_selection_statement  ///< A pointer to selection_statement.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -3979,12 +3994,12 @@ class statement_5:public statement
 
 
 
-class labeled_statement;
+class iteration_statement;
 
 
 
 /**
- * \brief statement_6 implements the pattern: <b>(labeled_statement,)</b>
+ * \brief statement_6 implements the pattern: <b>(iteration_statement,)</b>
 
 
  * \dot
@@ -3992,15 +4007,15 @@ class labeled_statement;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_statement_6 [ label="statement_6", URL="\ref statement_6", color="#00AAAA" ];
- *     node_labeled_statement [ label="labeled_statement", URL="\ref labeled_statement", color="#00AAAA"];
- *     node_statement_6 ->  node_labeled_statement [label="_p_labeled_statement" style=solid];
+ *     node_iteration_statement [ label="iteration_statement", URL="\ref iteration_statement", color="#00AAAA"];
+ *     node_statement_6 ->  node_iteration_statement [label="_p_iteration_statement" style=solid];
  * }
  * \enddot
  */
 class statement_6:public statement
 {
 	private:
-		ReferenceCountedAutoPointer<labeled_statement> _p_labeled_statement;	  ///< A pointer to labeled_statement.
+		ReferenceCountedAutoPointer<iteration_statement> _p_iteration_statement;	  ///< A pointer to iteration_statement.
 	public:
 		/** 
 		 * \brief Constructor of statement_6
@@ -4009,7 +4024,7 @@ class statement_6:public statement
                  */
 		statement_6	
 				(
-					ReferenceCountedAutoPointer<labeled_statement> _arg_labeled_statement  ///< A pointer to labeled_statement.
+					ReferenceCountedAutoPointer<iteration_statement> _arg_iteration_statement  ///< A pointer to iteration_statement.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -4414,7 +4429,7 @@ class struct_declarator_list:public CAst
 		 */
 		void append( ReferenceCountedAutoPointer<struct_declarator_list_item> item)
 		{
-			LOG("Appending to struct_declarator_list: "<<this)
+			LOG(COL_FG_GREEN<<"Appending to struct_declarator_list: "<<this)
 			_itemList.push_back(item);
 		}
 		
@@ -4552,7 +4567,7 @@ class logical_or_expression:public CAst
 		 */
 		void append( ReferenceCountedAutoPointer<logical_or_expression_item> item)
 		{
-			LOG("Appending to logical_or_expression: "<<this)
+			LOG(COL_FG_GREEN<<"Appending to logical_or_expression: "<<this)
 			_itemList.push_back(item);
 		}
 		
@@ -4706,7 +4721,7 @@ class shift_expression;
 class relational_expression_item
 {
 	private:
-		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>LE_OP</b>, <b>GE_OP</b>, <b>'<'</b>, <b>'>'</b>, <b>None</b>
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>GE_OP</b>, <b>LE_OP</b>, <b>'<'</b>, <b>'>'</b>, <b>None</b>
 		ReferenceCountedAutoPointer<shift_expression> _p_shift_expression;	  ///< A pointer to shift_expression.
 	public:
 		/** 
@@ -4716,7 +4731,7 @@ class relational_expression_item
                  */
 		relational_expression_item	
 				(
-					ReferenceCountedAutoPointer<token> _arg_token,   ///< A pointer to a token, accepts <b>LE_OP</b>, <b>GE_OP</b>, <b>'<'</b>, <b>'>'</b>, <b>None</b>
+					ReferenceCountedAutoPointer<token> _arg_token,   ///< A pointer to a token, accepts <b>GE_OP</b>, <b>LE_OP</b>, <b>'<'</b>, <b>'>'</b>, <b>None</b>
 					ReferenceCountedAutoPointer<shift_expression> _arg_shift_expression  ///< A pointer to shift_expression.
 				);
 		/**
@@ -4778,7 +4793,7 @@ class relational_expression:public CAst
 		 */
 		void append( ReferenceCountedAutoPointer<relational_expression_item> item)
 		{
-			LOG("Appending to relational_expression: "<<this)
+			LOG(COL_FG_GREEN<<"Appending to relational_expression: "<<this)
 			_itemList.push_back(item);
 		}
 		
@@ -5025,12 +5040,16 @@ class assignment_expression:public CAst
 
 
 
-class conditional_expression;
+class assignment_operator;
+class unary_expression;
+class assignment_expression;
+
+
 
 
 
 /**
- * \brief assignment_expression_1 implements the pattern: <b>(conditional_expression,)</b>
+ * \brief assignment_expression_1 implements the pattern: <b>(unary_expression, assignment_operator, assignment_expression)</b>
 
 
  * \dot
@@ -5038,15 +5057,21 @@ class conditional_expression;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_assignment_expression_1 [ label="assignment_expression_1", URL="\ref assignment_expression_1", color="#00AAAA" ];
- *     node_conditional_expression [ label="conditional_expression", URL="\ref conditional_expression", color="#00AAAA"];
- *     node_assignment_expression_1 ->  node_conditional_expression [label="_p_conditional_expression" style=solid];
+ *     node_unary_expression [ label="unary_expression", URL="\ref unary_expression", color="#00AAAA"];
+ *     node_assignment_operator [ label="assignment_operator", URL="\ref assignment_operator", color="#00AAAA"];
+ *     node_assignment_expression [ label="assignment_expression", URL="\ref assignment_expression", color="#00AAAA"];
+ *     node_assignment_expression_1 ->  node_unary_expression [label="_p_unary_expression" style=solid];
+ *     node_assignment_expression_1 ->  node_assignment_operator [label="_p_assignment_operator" style=solid];
+ *     node_assignment_expression_1 ->  node_assignment_expression [label="_p_assignment_expression" style=solid];
  * }
  * \enddot
  */
 class assignment_expression_1:public assignment_expression
 {
 	private:
-		ReferenceCountedAutoPointer<conditional_expression> _p_conditional_expression;	  ///< A pointer to conditional_expression.
+		ReferenceCountedAutoPointer<unary_expression> _p_unary_expression;	  ///< A pointer to unary_expression.
+		ReferenceCountedAutoPointer<assignment_operator> _p_assignment_operator;	  ///< A pointer to assignment_operator.
+		ReferenceCountedAutoPointer<assignment_expression> _p_assignment_expression;	  ///< A pointer to assignment_expression.
 	public:
 		/** 
 		 * \brief Constructor of assignment_expression_1
@@ -5055,7 +5080,9 @@ class assignment_expression_1:public assignment_expression
                  */
 		assignment_expression_1	
 				(
-					ReferenceCountedAutoPointer<conditional_expression> _arg_conditional_expression  ///< A pointer to conditional_expression.
+					ReferenceCountedAutoPointer<unary_expression> _arg_unary_expression,   ///< A pointer to unary_expression.
+					ReferenceCountedAutoPointer<assignment_operator> _arg_assignment_operator,   ///< A pointer to assignment_operator.
+					ReferenceCountedAutoPointer<assignment_expression> _arg_assignment_expression  ///< A pointer to assignment_expression.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -5084,16 +5111,12 @@ class assignment_expression_1:public assignment_expression
 
 
 
-class assignment_operator;
-class unary_expression;
-class assignment_expression;
-
-
+class conditional_expression;
 
 
 
 /**
- * \brief assignment_expression_2 implements the pattern: <b>(unary_expression, assignment_operator, assignment_expression)</b>
+ * \brief assignment_expression_2 implements the pattern: <b>(conditional_expression,)</b>
 
 
  * \dot
@@ -5101,21 +5124,15 @@ class assignment_expression;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_assignment_expression_2 [ label="assignment_expression_2", URL="\ref assignment_expression_2", color="#00AAAA" ];
- *     node_unary_expression [ label="unary_expression", URL="\ref unary_expression", color="#00AAAA"];
- *     node_assignment_operator [ label="assignment_operator", URL="\ref assignment_operator", color="#00AAAA"];
- *     node_assignment_expression [ label="assignment_expression", URL="\ref assignment_expression", color="#00AAAA"];
- *     node_assignment_expression_2 ->  node_unary_expression [label="_p_unary_expression" style=solid];
- *     node_assignment_expression_2 ->  node_assignment_operator [label="_p_assignment_operator" style=solid];
- *     node_assignment_expression_2 ->  node_assignment_expression [label="_p_assignment_expression" style=solid];
+ *     node_conditional_expression [ label="conditional_expression", URL="\ref conditional_expression", color="#00AAAA"];
+ *     node_assignment_expression_2 ->  node_conditional_expression [label="_p_conditional_expression" style=solid];
  * }
  * \enddot
  */
 class assignment_expression_2:public assignment_expression
 {
 	private:
-		ReferenceCountedAutoPointer<unary_expression> _p_unary_expression;	  ///< A pointer to unary_expression.
-		ReferenceCountedAutoPointer<assignment_operator> _p_assignment_operator;	  ///< A pointer to assignment_operator.
-		ReferenceCountedAutoPointer<assignment_expression> _p_assignment_expression;	  ///< A pointer to assignment_expression.
+		ReferenceCountedAutoPointer<conditional_expression> _p_conditional_expression;	  ///< A pointer to conditional_expression.
 	public:
 		/** 
 		 * \brief Constructor of assignment_expression_2
@@ -5124,9 +5141,7 @@ class assignment_expression_2:public assignment_expression
                  */
 		assignment_expression_2	
 				(
-					ReferenceCountedAutoPointer<unary_expression> _arg_unary_expression,   ///< A pointer to unary_expression.
-					ReferenceCountedAutoPointer<assignment_operator> _arg_assignment_operator,   ///< A pointer to assignment_operator.
-					ReferenceCountedAutoPointer<assignment_expression> _arg_assignment_expression  ///< A pointer to assignment_expression.
+					ReferenceCountedAutoPointer<conditional_expression> _arg_conditional_expression  ///< A pointer to conditional_expression.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -5545,7 +5560,7 @@ class multiplicative_expression:public CAst
 		 */
 		void append( ReferenceCountedAutoPointer<multiplicative_expression_item> item)
 		{
-			LOG("Appending to multiplicative_expression: "<<this)
+			LOG(COL_FG_GREEN<<"Appending to multiplicative_expression: "<<this)
 			_itemList.push_back(item);
 		}
 		
@@ -5683,7 +5698,7 @@ class type_qualifier_list:public CAst
 		 */
 		void append( ReferenceCountedAutoPointer<type_qualifier_list_item> item)
 		{
-			LOG("Appending to type_qualifier_list: "<<this)
+			LOG(COL_FG_GREEN<<"Appending to type_qualifier_list: "<<this)
 			_itemList.push_back(item);
 		}
 		
@@ -5821,7 +5836,7 @@ class argument_expression_list:public CAst
 		 */
 		void append( ReferenceCountedAutoPointer<argument_expression_list_item> item)
 		{
-			LOG("Appending to argument_expression_list: "<<this)
+			LOG(COL_FG_GREEN<<"Appending to argument_expression_list: "<<this)
 			_itemList.push_back(item);
 		}
 		
@@ -5966,14 +5981,12 @@ class direct_abstract_declarator_1:public direct_abstract_declarator
 
 
 
-class direct_abstract_declarator;
-class constant_expression;
-
+class abstract_declarator;
 
 
 
 /**
- * \brief direct_abstract_declarator_2 implements the pattern: <b>(direct_abstract_declarator, '[', constant_expression, ']')</b>
+ * \brief direct_abstract_declarator_2 implements the pattern: <b>('(', abstract_declarator, ')')</b>
 
 
  * \dot
@@ -5981,18 +5994,15 @@ class constant_expression;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_direct_abstract_declarator_2 [ label="direct_abstract_declarator_2", URL="\ref direct_abstract_declarator_2", color="#00AAAA" ];
- *     node_direct_abstract_declarator [ label="direct_abstract_declarator", URL="\ref direct_abstract_declarator", color="#00AAAA"];
- *     node_constant_expression [ label="constant_expression", URL="\ref constant_expression", color="#00AAAA"];
- *     node_direct_abstract_declarator_2 ->  node_direct_abstract_declarator [label="_p_direct_abstract_declarator" style=dotted];
- *     node_direct_abstract_declarator_2 ->  node_constant_expression [label="_p_constant_expression" style=dotted];
+ *     node_abstract_declarator [ label="abstract_declarator", URL="\ref abstract_declarator", color="#00AAAA"];
+ *     node_direct_abstract_declarator_2 ->  node_abstract_declarator [label="_p_abstract_declarator" style=solid];
  * }
  * \enddot
  */
 class direct_abstract_declarator_2:public direct_abstract_declarator
 {
 	private:
-		ReferenceCountedAutoPointer<direct_abstract_declarator> _p_direct_abstract_declarator;	  ///< A pointer to direct_abstract_declarator. This parameter can be <b>Null</b>
-		ReferenceCountedAutoPointer<constant_expression> _p_constant_expression;	  ///< A pointer to constant_expression. This parameter can be <b>Null</b>
+		ReferenceCountedAutoPointer<abstract_declarator> _p_abstract_declarator;	  ///< A pointer to abstract_declarator.
 	public:
 		/** 
 		 * \brief Constructor of direct_abstract_declarator_2
@@ -6001,8 +6011,7 @@ class direct_abstract_declarator_2:public direct_abstract_declarator
                  */
 		direct_abstract_declarator_2	
 				(
-					ReferenceCountedAutoPointer<direct_abstract_declarator> _arg_direct_abstract_declarator,   ///< A pointer to direct_abstract_declarator. This parameter can be <b>Null</b>
-					ReferenceCountedAutoPointer<constant_expression> _arg_constant_expression  ///< A pointer to constant_expression. This parameter can be <b>Null</b>
+					ReferenceCountedAutoPointer<abstract_declarator> _arg_abstract_declarator  ///< A pointer to abstract_declarator.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -6031,12 +6040,14 @@ class direct_abstract_declarator_2:public direct_abstract_declarator
 
 
 
-class abstract_declarator;
+class direct_abstract_declarator;
+class constant_expression;
+
 
 
 
 /**
- * \brief direct_abstract_declarator_3 implements the pattern: <b>('(', abstract_declarator, ')')</b>
+ * \brief direct_abstract_declarator_3 implements the pattern: <b>(direct_abstract_declarator, '[', constant_expression, ']')</b>
 
 
  * \dot
@@ -6044,15 +6055,18 @@ class abstract_declarator;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_direct_abstract_declarator_3 [ label="direct_abstract_declarator_3", URL="\ref direct_abstract_declarator_3", color="#00AAAA" ];
- *     node_abstract_declarator [ label="abstract_declarator", URL="\ref abstract_declarator", color="#00AAAA"];
- *     node_direct_abstract_declarator_3 ->  node_abstract_declarator [label="_p_abstract_declarator" style=solid];
+ *     node_direct_abstract_declarator [ label="direct_abstract_declarator", URL="\ref direct_abstract_declarator", color="#00AAAA"];
+ *     node_constant_expression [ label="constant_expression", URL="\ref constant_expression", color="#00AAAA"];
+ *     node_direct_abstract_declarator_3 ->  node_direct_abstract_declarator [label="_p_direct_abstract_declarator" style=dotted];
+ *     node_direct_abstract_declarator_3 ->  node_constant_expression [label="_p_constant_expression" style=dotted];
  * }
  * \enddot
  */
 class direct_abstract_declarator_3:public direct_abstract_declarator
 {
 	private:
-		ReferenceCountedAutoPointer<abstract_declarator> _p_abstract_declarator;	  ///< A pointer to abstract_declarator.
+		ReferenceCountedAutoPointer<direct_abstract_declarator> _p_direct_abstract_declarator;	  ///< A pointer to direct_abstract_declarator. This parameter can be <b>Null</b>
+		ReferenceCountedAutoPointer<constant_expression> _p_constant_expression;	  ///< A pointer to constant_expression. This parameter can be <b>Null</b>
 	public:
 		/** 
 		 * \brief Constructor of direct_abstract_declarator_3
@@ -6061,7 +6075,8 @@ class direct_abstract_declarator_3:public direct_abstract_declarator
                  */
 		direct_abstract_declarator_3	
 				(
-					ReferenceCountedAutoPointer<abstract_declarator> _arg_abstract_declarator  ///< A pointer to abstract_declarator.
+					ReferenceCountedAutoPointer<direct_abstract_declarator> _arg_direct_abstract_declarator,   ///< A pointer to direct_abstract_declarator. This parameter can be <b>Null</b>
+					ReferenceCountedAutoPointer<constant_expression> _arg_constant_expression  ///< A pointer to constant_expression. This parameter can be <b>Null</b>
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -6137,7 +6152,7 @@ class relational_expression;
 class equality_expression_item
 {
 	private:
-		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>EQ_OP</b>, <b>NE_OP</b>, <b>None</b>
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>NE_OP</b>, <b>EQ_OP</b>, <b>None</b>
 		ReferenceCountedAutoPointer<relational_expression> _p_relational_expression;	  ///< A pointer to relational_expression.
 	public:
 		/** 
@@ -6147,7 +6162,7 @@ class equality_expression_item
                  */
 		equality_expression_item	
 				(
-					ReferenceCountedAutoPointer<token> _arg_token,   ///< A pointer to a token, accepts <b>EQ_OP</b>, <b>NE_OP</b>, <b>None</b>
+					ReferenceCountedAutoPointer<token> _arg_token,   ///< A pointer to a token, accepts <b>NE_OP</b>, <b>EQ_OP</b>, <b>None</b>
 					ReferenceCountedAutoPointer<relational_expression> _arg_relational_expression  ///< A pointer to relational_expression.
 				);
 		/**
@@ -6209,7 +6224,7 @@ class equality_expression:public CAst
 		 */
 		void append( ReferenceCountedAutoPointer<equality_expression_item> item)
 		{
-			LOG("Appending to equality_expression: "<<this)
+			LOG(COL_FG_GREEN<<"Appending to equality_expression: "<<this)
 			_itemList.push_back(item);
 		}
 		
@@ -6284,12 +6299,13 @@ class primary_expression:public CAst
 
 
 
-class expression;
+class token;
+
 
 
 
 /**
- * \brief primary_expression_1 implements the pattern: <b>('(', expression, ')')</b>
+ * \brief primary_expression_1 implements the pattern: <b>(IDENTIFIER,)</b>
 
 
  * \dot
@@ -6297,15 +6313,15 @@ class expression;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_primary_expression_1 [ label="primary_expression_1", URL="\ref primary_expression_1", color="#00AAAA" ];
- *     node_expression [ label="expression", URL="\ref expression", color="#00AAAA"];
- *     node_primary_expression_1 ->  node_expression [label="_p_expression" style=solid];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_primary_expression_1 ->  node_token [label="_p_token" style=solid];
  * }
  * \enddot
  */
 class primary_expression_1:public primary_expression
 {
 	private:
-		ReferenceCountedAutoPointer<expression> _p_expression;	  ///< A pointer to expression.
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>IDENTIFIER</b>, <b>CONSTANT</b>, <b>STRING_LITERAL</b>
 	public:
 		/** 
 		 * \brief Constructor of primary_expression_1
@@ -6314,7 +6330,7 @@ class primary_expression_1:public primary_expression
                  */
 		primary_expression_1	
 				(
-					ReferenceCountedAutoPointer<expression> _arg_expression  ///< A pointer to expression.
+					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>IDENTIFIER</b>, <b>CONSTANT</b>, <b>STRING_LITERAL</b>
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -6343,13 +6359,12 @@ class primary_expression_1:public primary_expression
 
 
 
-class token;
-
+class expression;
 
 
 
 /**
- * \brief primary_expression_2 implements the pattern: <b>(IDENTIFIER,)</b>
+ * \brief primary_expression_2 implements the pattern: <b>('(', expression, ')')</b>
 
 
  * \dot
@@ -6357,15 +6372,15 @@ class token;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_primary_expression_2 [ label="primary_expression_2", URL="\ref primary_expression_2", color="#00AAAA" ];
- *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
- *     node_primary_expression_2 ->  node_token [label="_p_token" style=solid];
+ *     node_expression [ label="expression", URL="\ref expression", color="#00AAAA"];
+ *     node_primary_expression_2 ->  node_expression [label="_p_expression" style=solid];
  * }
  * \enddot
  */
 class primary_expression_2:public primary_expression
 {
 	private:
-		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>CONSTANT</b>, <b>STRING_LITERAL</b>, <b>IDENTIFIER</b>
+		ReferenceCountedAutoPointer<expression> _p_expression;	  ///< A pointer to expression.
 	public:
 		/** 
 		 * \brief Constructor of primary_expression_2
@@ -6374,7 +6389,7 @@ class primary_expression_2:public primary_expression
                  */
 		primary_expression_2	
 				(
-					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>CONSTANT</b>, <b>STRING_LITERAL</b>, <b>IDENTIFIER</b>
+					ReferenceCountedAutoPointer<expression> _arg_expression  ///< A pointer to expression.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -6443,12 +6458,12 @@ class declaration_specifiers_item
 		virtual ~declaration_specifiers_item(){};
 };
 
-class type_qualifier;
+class storage_class_specifier;
 
 
 
 /**
- * \brief declaration_specifiers_item_1 implements the pattern: <b>(type_qualifier, declaration_specifiers)</b>
+ * \brief declaration_specifiers_item_1 implements the pattern: <b>(storage_class_specifier, declaration_specifiers)</b>
 
 
  * \dot
@@ -6456,15 +6471,15 @@ class type_qualifier;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_declaration_specifiers_item_1 [ label="declaration_specifiers_item_1", URL="\ref declaration_specifiers_item_1", color="#00AAAA" ];
- *     node_type_qualifier [ label="type_qualifier", URL="\ref type_qualifier", color="#00AAAA"];
- *     node_declaration_specifiers_item_1 ->  node_type_qualifier [label="_p_type_qualifier" style=solid];
+ *     node_storage_class_specifier [ label="storage_class_specifier", URL="\ref storage_class_specifier", color="#00AAAA"];
+ *     node_declaration_specifiers_item_1 ->  node_storage_class_specifier [label="_p_storage_class_specifier" style=solid];
  * }
  * \enddot
  */
 class declaration_specifiers_item_1:public declaration_specifiers_item
 {
 	private:
-		ReferenceCountedAutoPointer<type_qualifier> _p_type_qualifier;	  ///< A pointer to type_qualifier.
+		ReferenceCountedAutoPointer<storage_class_specifier> _p_storage_class_specifier;	  ///< A pointer to storage_class_specifier.
 	public:
 		/** 
 		 * \brief Constructor of declaration_specifiers_item_1
@@ -6473,7 +6488,7 @@ class declaration_specifiers_item_1:public declaration_specifiers_item
                  */
 		declaration_specifiers_item_1	
 				(
-					ReferenceCountedAutoPointer<type_qualifier> _arg_type_qualifier  ///< A pointer to type_qualifier.
+					ReferenceCountedAutoPointer<storage_class_specifier> _arg_storage_class_specifier  ///< A pointer to storage_class_specifier.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -6561,12 +6576,12 @@ class declaration_specifiers_item_2:public declaration_specifiers_item
 
 
 
-class storage_class_specifier;
+class type_qualifier;
 
 
 
 /**
- * \brief declaration_specifiers_item_3 implements the pattern: <b>(storage_class_specifier, declaration_specifiers)</b>
+ * \brief declaration_specifiers_item_3 implements the pattern: <b>(type_qualifier, declaration_specifiers)</b>
 
 
  * \dot
@@ -6574,15 +6589,15 @@ class storage_class_specifier;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_declaration_specifiers_item_3 [ label="declaration_specifiers_item_3", URL="\ref declaration_specifiers_item_3", color="#00AAAA" ];
- *     node_storage_class_specifier [ label="storage_class_specifier", URL="\ref storage_class_specifier", color="#00AAAA"];
- *     node_declaration_specifiers_item_3 ->  node_storage_class_specifier [label="_p_storage_class_specifier" style=solid];
+ *     node_type_qualifier [ label="type_qualifier", URL="\ref type_qualifier", color="#00AAAA"];
+ *     node_declaration_specifiers_item_3 ->  node_type_qualifier [label="_p_type_qualifier" style=solid];
  * }
  * \enddot
  */
 class declaration_specifiers_item_3:public declaration_specifiers_item
 {
 	private:
-		ReferenceCountedAutoPointer<storage_class_specifier> _p_storage_class_specifier;	  ///< A pointer to storage_class_specifier.
+		ReferenceCountedAutoPointer<type_qualifier> _p_type_qualifier;	  ///< A pointer to type_qualifier.
 	public:
 		/** 
 		 * \brief Constructor of declaration_specifiers_item_3
@@ -6591,7 +6606,7 @@ class declaration_specifiers_item_3:public declaration_specifiers_item
                  */
 		declaration_specifiers_item_3	
 				(
-					ReferenceCountedAutoPointer<storage_class_specifier> _arg_storage_class_specifier  ///< A pointer to storage_class_specifier.
+					ReferenceCountedAutoPointer<type_qualifier> _arg_type_qualifier  ///< A pointer to type_qualifier.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -6652,7 +6667,7 @@ class declaration_specifiers:public CAst
 		 */
 		void append( ReferenceCountedAutoPointer<declaration_specifiers_item> item)
 		{
-			LOG("Appending to declaration_specifiers: "<<this)
+			LOG(COL_FG_GREEN<<"Appending to declaration_specifiers: "<<this)
 			_itemList.push_back(item);
 		}
 		
@@ -6816,14 +6831,14 @@ class direct_declarator:public CAst
 
 
 
-class parameter_type_list;
 class direct_declarator;
+class constant_expression;
 
 
 
 
 /**
- * \brief direct_declarator_1 implements the pattern: <b>(direct_declarator, '(', parameter_type_list, ')')</b>
+ * \brief direct_declarator_1 implements the pattern: <b>(direct_declarator, '[', constant_expression, ']')</b>
 
 
  * \dot
@@ -6832,9 +6847,9 @@ class direct_declarator;
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_direct_declarator_1 [ label="direct_declarator_1", URL="\ref direct_declarator_1", color="#00AAAA" ];
  *     node_direct_declarator [ label="direct_declarator", URL="\ref direct_declarator", color="#00AAAA"];
- *     node_parameter_type_list [ label="parameter_type_list", URL="\ref parameter_type_list", color="#00AAAA"];
+ *     node_constant_expression [ label="constant_expression", URL="\ref constant_expression", color="#00AAAA"];
  *     node_direct_declarator_1 ->  node_direct_declarator [label="_p_direct_declarator" style=solid];
- *     node_direct_declarator_1 ->  node_parameter_type_list [label="_p_parameter_type_list" style=dotted];
+ *     node_direct_declarator_1 ->  node_constant_expression [label="_p_constant_expression" style=dotted];
  * }
  * \enddot
  */
@@ -6842,7 +6857,7 @@ class direct_declarator_1:public direct_declarator
 {
 	private:
 		ReferenceCountedAutoPointer<direct_declarator> _p_direct_declarator;	  ///< A pointer to direct_declarator.
-		ReferenceCountedAutoPointer<parameter_type_list> _p_parameter_type_list;	  ///< A pointer to parameter_type_list. This parameter can be <b>Null</b>
+		ReferenceCountedAutoPointer<constant_expression> _p_constant_expression;	  ///< A pointer to constant_expression. This parameter can be <b>Null</b>
 	public:
 		/** 
 		 * \brief Constructor of direct_declarator_1
@@ -6852,7 +6867,7 @@ class direct_declarator_1:public direct_declarator
 		direct_declarator_1	
 				(
 					ReferenceCountedAutoPointer<direct_declarator> _arg_direct_declarator,   ///< A pointer to direct_declarator.
-					ReferenceCountedAutoPointer<parameter_type_list> _arg_parameter_type_list  ///< A pointer to parameter_type_list. This parameter can be <b>Null</b>
+					ReferenceCountedAutoPointer<constant_expression> _arg_constant_expression  ///< A pointer to constant_expression. This parameter can be <b>Null</b>
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -6881,13 +6896,14 @@ class direct_declarator_1:public direct_declarator
 
 
 
-class token;
+class direct_declarator;
+class identifier_list;
 
 
 
 
 /**
- * \brief direct_declarator_2 implements the pattern: <b>(IDENTIFIER,)</b>
+ * \brief direct_declarator_2 implements the pattern: <b>(direct_declarator, '(', identifier_list, ')')</b>
 
 
  * \dot
@@ -6895,15 +6911,18 @@ class token;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_direct_declarator_2 [ label="direct_declarator_2", URL="\ref direct_declarator_2", color="#00AAAA" ];
- *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
- *     node_direct_declarator_2 ->  node_token [label="_p_token" style=solid];
+ *     node_direct_declarator [ label="direct_declarator", URL="\ref direct_declarator", color="#00AAAA"];
+ *     node_identifier_list [ label="identifier_list", URL="\ref identifier_list", color="#00AAAA"];
+ *     node_direct_declarator_2 ->  node_direct_declarator [label="_p_direct_declarator" style=solid];
+ *     node_direct_declarator_2 ->  node_identifier_list [label="_p_identifier_list" style=solid];
  * }
  * \enddot
  */
 class direct_declarator_2:public direct_declarator
 {
 	private:
-		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>IDENTIFIER</b>
+		ReferenceCountedAutoPointer<direct_declarator> _p_direct_declarator;	  ///< A pointer to direct_declarator.
+		ReferenceCountedAutoPointer<identifier_list> _p_identifier_list;	  ///< A pointer to identifier_list.
 	public:
 		/** 
 		 * \brief Constructor of direct_declarator_2
@@ -6912,7 +6931,8 @@ class direct_declarator_2:public direct_declarator
                  */
 		direct_declarator_2	
 				(
-					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>IDENTIFIER</b>
+					ReferenceCountedAutoPointer<direct_declarator> _arg_direct_declarator,   ///< A pointer to direct_declarator.
+					ReferenceCountedAutoPointer<identifier_list> _arg_identifier_list  ///< A pointer to identifier_list.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -6941,12 +6961,14 @@ class direct_declarator_2:public direct_declarator
 
 
 
-class declarator;
+class parameter_type_list;
+class direct_declarator;
+
 
 
 
 /**
- * \brief direct_declarator_3 implements the pattern: <b>('(', declarator, ')')</b>
+ * \brief direct_declarator_3 implements the pattern: <b>(direct_declarator, '(', parameter_type_list, ')')</b>
 
 
  * \dot
@@ -6954,15 +6976,18 @@ class declarator;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_direct_declarator_3 [ label="direct_declarator_3", URL="\ref direct_declarator_3", color="#00AAAA" ];
- *     node_declarator [ label="declarator", URL="\ref declarator", color="#00AAAA"];
- *     node_direct_declarator_3 ->  node_declarator [label="_p_declarator" style=solid];
+ *     node_direct_declarator [ label="direct_declarator", URL="\ref direct_declarator", color="#00AAAA"];
+ *     node_parameter_type_list [ label="parameter_type_list", URL="\ref parameter_type_list", color="#00AAAA"];
+ *     node_direct_declarator_3 ->  node_direct_declarator [label="_p_direct_declarator" style=solid];
+ *     node_direct_declarator_3 ->  node_parameter_type_list [label="_p_parameter_type_list" style=dotted];
  * }
  * \enddot
  */
 class direct_declarator_3:public direct_declarator
 {
 	private:
-		ReferenceCountedAutoPointer<declarator> _p_declarator;	  ///< A pointer to declarator.
+		ReferenceCountedAutoPointer<direct_declarator> _p_direct_declarator;	  ///< A pointer to direct_declarator.
+		ReferenceCountedAutoPointer<parameter_type_list> _p_parameter_type_list;	  ///< A pointer to parameter_type_list. This parameter can be <b>Null</b>
 	public:
 		/** 
 		 * \brief Constructor of direct_declarator_3
@@ -6971,7 +6996,8 @@ class direct_declarator_3:public direct_declarator
                  */
 		direct_declarator_3	
 				(
-					ReferenceCountedAutoPointer<declarator> _arg_declarator  ///< A pointer to declarator.
+					ReferenceCountedAutoPointer<direct_declarator> _arg_direct_declarator,   ///< A pointer to direct_declarator.
+					ReferenceCountedAutoPointer<parameter_type_list> _arg_parameter_type_list  ///< A pointer to parameter_type_list. This parameter can be <b>Null</b>
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -7000,14 +7026,13 @@ class direct_declarator_3:public direct_declarator
 
 
 
-class direct_declarator;
-class identifier_list;
+class token;
 
 
 
 
 /**
- * \brief direct_declarator_4 implements the pattern: <b>(direct_declarator, '(', identifier_list, ')')</b>
+ * \brief direct_declarator_4 implements the pattern: <b>(IDENTIFIER,)</b>
 
 
  * \dot
@@ -7015,18 +7040,15 @@ class identifier_list;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_direct_declarator_4 [ label="direct_declarator_4", URL="\ref direct_declarator_4", color="#00AAAA" ];
- *     node_direct_declarator [ label="direct_declarator", URL="\ref direct_declarator", color="#00AAAA"];
- *     node_identifier_list [ label="identifier_list", URL="\ref identifier_list", color="#00AAAA"];
- *     node_direct_declarator_4 ->  node_direct_declarator [label="_p_direct_declarator" style=solid];
- *     node_direct_declarator_4 ->  node_identifier_list [label="_p_identifier_list" style=solid];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_direct_declarator_4 ->  node_token [label="_p_token" style=solid];
  * }
  * \enddot
  */
 class direct_declarator_4:public direct_declarator
 {
 	private:
-		ReferenceCountedAutoPointer<direct_declarator> _p_direct_declarator;	  ///< A pointer to direct_declarator.
-		ReferenceCountedAutoPointer<identifier_list> _p_identifier_list;	  ///< A pointer to identifier_list.
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>IDENTIFIER</b>
 	public:
 		/** 
 		 * \brief Constructor of direct_declarator_4
@@ -7035,8 +7057,7 @@ class direct_declarator_4:public direct_declarator
                  */
 		direct_declarator_4	
 				(
-					ReferenceCountedAutoPointer<direct_declarator> _arg_direct_declarator,   ///< A pointer to direct_declarator.
-					ReferenceCountedAutoPointer<identifier_list> _arg_identifier_list  ///< A pointer to identifier_list.
+					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>IDENTIFIER</b>
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -7065,14 +7086,12 @@ class direct_declarator_4:public direct_declarator
 
 
 
-class direct_declarator;
-class constant_expression;
-
+class declarator;
 
 
 
 /**
- * \brief direct_declarator_5 implements the pattern: <b>(direct_declarator, '[', constant_expression, ']')</b>
+ * \brief direct_declarator_5 implements the pattern: <b>('(', declarator, ')')</b>
 
 
  * \dot
@@ -7080,18 +7099,15 @@ class constant_expression;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_direct_declarator_5 [ label="direct_declarator_5", URL="\ref direct_declarator_5", color="#00AAAA" ];
- *     node_direct_declarator [ label="direct_declarator", URL="\ref direct_declarator", color="#00AAAA"];
- *     node_constant_expression [ label="constant_expression", URL="\ref constant_expression", color="#00AAAA"];
- *     node_direct_declarator_5 ->  node_direct_declarator [label="_p_direct_declarator" style=solid];
- *     node_direct_declarator_5 ->  node_constant_expression [label="_p_constant_expression" style=dotted];
+ *     node_declarator [ label="declarator", URL="\ref declarator", color="#00AAAA"];
+ *     node_direct_declarator_5 ->  node_declarator [label="_p_declarator" style=solid];
  * }
  * \enddot
  */
 class direct_declarator_5:public direct_declarator
 {
 	private:
-		ReferenceCountedAutoPointer<direct_declarator> _p_direct_declarator;	  ///< A pointer to direct_declarator.
-		ReferenceCountedAutoPointer<constant_expression> _p_constant_expression;	  ///< A pointer to constant_expression. This parameter can be <b>Null</b>
+		ReferenceCountedAutoPointer<declarator> _p_declarator;	  ///< A pointer to declarator.
 	public:
 		/** 
 		 * \brief Constructor of direct_declarator_5
@@ -7100,8 +7116,7 @@ class direct_declarator_5:public direct_declarator
                  */
 		direct_declarator_5	
 				(
-					ReferenceCountedAutoPointer<direct_declarator> _arg_direct_declarator,   ///< A pointer to direct_declarator.
-					ReferenceCountedAutoPointer<constant_expression> _arg_constant_expression  ///< A pointer to constant_expression. This parameter can be <b>Null</b>
+					ReferenceCountedAutoPointer<declarator> _arg_declarator  ///< A pointer to declarator.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -7242,7 +7257,7 @@ class logical_and_expression:public CAst
 		 */
 		void append( ReferenceCountedAutoPointer<logical_and_expression_item> item)
 		{
-			LOG("Appending to logical_and_expression: "<<this)
+			LOG(COL_FG_GREEN<<"Appending to logical_and_expression: "<<this)
 			_itemList.push_back(item);
 		}
 		
@@ -7380,7 +7395,7 @@ class init_declarator_list:public CAst
 		 */
 		void append( ReferenceCountedAutoPointer<init_declarator_list_item> item)
 		{
-			LOG("Appending to init_declarator_list: "<<this)
+			LOG(COL_FG_GREEN<<"Appending to init_declarator_list: "<<this)
 			_itemList.push_back(item);
 		}
 		
@@ -7453,7 +7468,7 @@ class additive_expression;
 class shift_expression_item
 {
 	private:
-		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>LEFT_OP</b>, <b>RIGHT_OP</b>, <b>None</b>
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>RIGHT_OP</b>, <b>LEFT_OP</b>, <b>None</b>
 		ReferenceCountedAutoPointer<additive_expression> _p_additive_expression;	  ///< A pointer to additive_expression.
 	public:
 		/** 
@@ -7463,7 +7478,7 @@ class shift_expression_item
                  */
 		shift_expression_item	
 				(
-					ReferenceCountedAutoPointer<token> _arg_token,   ///< A pointer to a token, accepts <b>LEFT_OP</b>, <b>RIGHT_OP</b>, <b>None</b>
+					ReferenceCountedAutoPointer<token> _arg_token,   ///< A pointer to a token, accepts <b>RIGHT_OP</b>, <b>LEFT_OP</b>, <b>None</b>
 					ReferenceCountedAutoPointer<additive_expression> _arg_additive_expression  ///< A pointer to additive_expression.
 				);
 		/**
@@ -7525,7 +7540,7 @@ class shift_expression:public CAst
 		 */
 		void append( ReferenceCountedAutoPointer<shift_expression_item> item)
 		{
-			LOG("Appending to shift_expression: "<<this)
+			LOG(COL_FG_GREEN<<"Appending to shift_expression: "<<this)
 			_itemList.push_back(item);
 		}
 		
@@ -7664,7 +7679,7 @@ class identifier_list:public CAst
 		 */
 		void append( ReferenceCountedAutoPointer<identifier_list_item> item)
 		{
-			LOG("Appending to identifier_list: "<<this)
+			LOG(COL_FG_GREEN<<"Appending to identifier_list: "<<this)
 			_itemList.push_back(item);
 		}
 		
@@ -7746,7 +7761,7 @@ class token;
 
 
 /**
- * \brief jump_statement_1 implements the pattern: <b>(CONTINUE, ';')</b>
+ * \brief jump_statement_1 implements the pattern: <b>(GOTO, IDENTIFIER, ';')</b>
 
 
  * \dot
@@ -7762,7 +7777,7 @@ class token;
 class jump_statement_1:public jump_statement
 {
 	private:
-		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>CONTINUE</b>, <b>BREAK</b>
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>IDENTIFIER</b>
 	public:
 		/** 
 		 * \brief Constructor of jump_statement_1
@@ -7771,7 +7786,7 @@ class jump_statement_1:public jump_statement
                  */
 		jump_statement_1	
 				(
-					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>CONTINUE</b>, <b>BREAK</b>
+					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>IDENTIFIER</b>
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -7800,13 +7815,12 @@ class jump_statement_1:public jump_statement
 
 
 
-class token;
-
+class expression;
 
 
 
 /**
- * \brief jump_statement_2 implements the pattern: <b>(GOTO, IDENTIFIER, ';')</b>
+ * \brief jump_statement_2 implements the pattern: <b>(RETURN, expression, ';')</b>
 
 
  * \dot
@@ -7814,15 +7828,15 @@ class token;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_jump_statement_2 [ label="jump_statement_2", URL="\ref jump_statement_2", color="#00AAAA" ];
- *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
- *     node_jump_statement_2 ->  node_token [label="_p_token" style=solid];
+ *     node_expression [ label="expression", URL="\ref expression", color="#00AAAA"];
+ *     node_jump_statement_2 ->  node_expression [label="_p_expression" style=dotted];
  * }
  * \enddot
  */
 class jump_statement_2:public jump_statement
 {
 	private:
-		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>IDENTIFIER</b>
+		ReferenceCountedAutoPointer<expression> _p_expression;	  ///< A pointer to expression. This parameter can be <b>Null</b>
 	public:
 		/** 
 		 * \brief Constructor of jump_statement_2
@@ -7831,7 +7845,7 @@ class jump_statement_2:public jump_statement
                  */
 		jump_statement_2	
 				(
-					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>IDENTIFIER</b>
+					ReferenceCountedAutoPointer<expression> _arg_expression  ///< A pointer to expression. This parameter can be <b>Null</b>
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -7860,12 +7874,13 @@ class jump_statement_2:public jump_statement
 
 
 
-class expression;
+class token;
+
 
 
 
 /**
- * \brief jump_statement_3 implements the pattern: <b>(RETURN, expression, ';')</b>
+ * \brief jump_statement_3 implements the pattern: <b>(CONTINUE, ';')</b>
 
 
  * \dot
@@ -7873,15 +7888,15 @@ class expression;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_jump_statement_3 [ label="jump_statement_3", URL="\ref jump_statement_3", color="#00AAAA" ];
- *     node_expression [ label="expression", URL="\ref expression", color="#00AAAA"];
- *     node_jump_statement_3 ->  node_expression [label="_p_expression" style=dotted];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_jump_statement_3 ->  node_token [label="_p_token" style=solid];
  * }
  * \enddot
  */
 class jump_statement_3:public jump_statement
 {
 	private:
-		ReferenceCountedAutoPointer<expression> _p_expression;	  ///< A pointer to expression. This parameter can be <b>Null</b>
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>BREAK</b>, <b>CONTINUE</b>
 	public:
 		/** 
 		 * \brief Constructor of jump_statement_3
@@ -7890,7 +7905,7 @@ class jump_statement_3:public jump_statement
                  */
 		jump_statement_3	
 				(
-					ReferenceCountedAutoPointer<expression> _arg_expression  ///< A pointer to expression. This parameter can be <b>Null</b>
+					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>BREAK</b>, <b>CONTINUE</b>
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -8222,7 +8237,7 @@ class parameter_list:public CAst
 		 */
 		void append( ReferenceCountedAutoPointer<parameter_list_item> item)
 		{
-			LOG("Appending to parameter_list: "<<this)
+			LOG(COL_FG_GREEN<<"Appending to parameter_list: "<<this)
 			_itemList.push_back(item);
 		}
 		
@@ -8390,7 +8405,7 @@ class token;
 class type_qualifier:public CAst
 {
 	private:
-		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>CONST</b>, <b>VOLATILE</b>
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>VOLATILE</b>, <b>CONST</b>
 	public:
 		/** 
 		 * \brief Constructor of type_qualifier
@@ -8399,7 +8414,7 @@ class type_qualifier:public CAst
                  */
 		type_qualifier	
 				(
-					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>CONST</b>, <b>VOLATILE</b>
+					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>VOLATILE</b>, <b>CONST</b>
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -8540,7 +8555,7 @@ class enumerator_list:public CAst
 		 */
 		void append( ReferenceCountedAutoPointer<enumerator_list_item> item)
 		{
-			LOG("Appending to enumerator_list: "<<this)
+			LOG(COL_FG_GREEN<<"Appending to enumerator_list: "<<this)
 			_itemList.push_back(item);
 		}
 		
@@ -8705,7 +8720,7 @@ class statement;
 class labeled_statement_2:public labeled_statement
 {
 	private:
-		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>DEFAULT</b>, <b>IDENTIFIER</b>
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>IDENTIFIER</b>, <b>DEFAULT</b>
 		ReferenceCountedAutoPointer<statement> _p_statement;	  ///< A pointer to statement.
 	public:
 		/** 
@@ -8715,7 +8730,7 @@ class labeled_statement_2:public labeled_statement
                  */
 		labeled_statement_2	
 				(
-					ReferenceCountedAutoPointer<token> _arg_token,   ///< A pointer to a token, accepts <b>DEFAULT</b>, <b>IDENTIFIER</b>
+					ReferenceCountedAutoPointer<token> _arg_token,   ///< A pointer to a token, accepts <b>IDENTIFIER</b>, <b>DEFAULT</b>
 					ReferenceCountedAutoPointer<statement> _arg_statement  ///< A pointer to statement.
 				);
 		/**
@@ -8857,7 +8872,7 @@ class declaration_list:public CAst
 		 */
 		void append( ReferenceCountedAutoPointer<declaration_list_item> item)
 		{
-			LOG("Appending to declaration_list: "<<this)
+			LOG(COL_FG_GREEN<<"Appending to declaration_list: "<<this)
 			_itemList.push_back(item);
 		}
 		
@@ -9073,7 +9088,7 @@ class specifier_qualifier_list:public CAst
 		 */
 		void append( ReferenceCountedAutoPointer<specifier_qualifier_list_item> item)
 		{
-			LOG("Appending to specifier_qualifier_list: "<<this)
+			LOG(COL_FG_GREEN<<"Appending to specifier_qualifier_list: "<<this)
 			_itemList.push_back(item);
 		}
 		
@@ -9211,7 +9226,7 @@ class translation_unit:public CAst
 		 */
 		void append( ReferenceCountedAutoPointer<translation_unit_item> item)
 		{
-			LOG("Appending to translation_unit: "<<this)
+			LOG(COL_FG_GREEN<<"Appending to translation_unit: "<<this)
 			_itemList.push_back(item);
 		}
 		
@@ -9429,7 +9444,7 @@ class initializer_list:public CAst
 		 */
 		void append( ReferenceCountedAutoPointer<initializer_list_item> item)
 		{
-			LOG("Appending to initializer_list: "<<this)
+			LOG(COL_FG_GREEN<<"Appending to initializer_list: "<<this)
 			_itemList.push_back(item);
 		}
 		
@@ -9567,7 +9582,7 @@ class statement_list:public CAst
 		 */
 		void append( ReferenceCountedAutoPointer<statement_list_item> item)
 		{
-			LOG("Appending to statement_list: "<<this)
+			LOG(COL_FG_GREEN<<"Appending to statement_list: "<<this)
 			_itemList.push_back(item);
 		}
 		
@@ -9705,7 +9720,7 @@ class expression:public CAst
 		 */
 		void append( ReferenceCountedAutoPointer<expression_item> item)
 		{
-			LOG("Appending to expression: "<<this)
+			LOG(COL_FG_GREEN<<"Appending to expression: "<<this)
 			_itemList.push_back(item);
 		}
 		

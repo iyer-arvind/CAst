@@ -8,9 +8,9 @@ parser=argparse.ArgumentParser()
 
 parser.add_argument("-i",'--input',dest="inp",type=str,help="Input Yacc file",required=True)
 parser.add_argument("-t",'--tokMap',dest="tokMap",type=str,help="Token Map",required=True)
-parser.add_argument("-o",'--output',dest="out",type=str,help="Output Yacc file",required=True)
-parser.add_argument("-c",'--cppFile',dest="cFile",type=str,help="CPP file name Without extension, .h and .cpp will be generated",required=True)
-parser.add_argument("-py",'--python',dest="pyFile",type=str,help="Python file name Without extension, .py will be added",required=False)
+parser.add_argument("-o",'--output',dest="out",type=str,help="Output Yacc file")
+parser.add_argument("-c",'--cppFile',dest="cFile",type=str,help="CPP file name Without extension, .h and .cpp will be generated")
+parser.add_argument("-py",'--python',dest="pyFile",type=str,help="Python file name Without extension, .py will be added")
 
 
 args=parser.parse_args()
@@ -23,3 +23,4 @@ import YaccFile
 yaccFile=YaccFile.YaccFile(args.inp)
 cFile=args.cFile
 out=args.out
+pyFile=args.pyFile
