@@ -21,6 +21,41 @@
 namespace CAst
 {
 
+//! This is the enumeration of the class ids 
+#set ID_LIST=[("ID_CAST",0),("ID_TOKEN",1)]
+#for r in $object:
+#set h=$object[$r].handler
+#if $len($h.handlers)>1 
+#echo ID_LIST.append(("ID_"+$r.upper(),$object[$r].classId))
+	#if $h.__class__.__name__=="ListHandlerGroup":
+#echo ID_LIST.append(("ID_"+$r.upper()+"_ITEM",$object[$r].classId+1))
+	#end if
+#else
+	#if $h.__class__.__name__=="ListHandlerGroup":
+#echo ID_LIST.append(("ID_"+$r.upper(),$object[$r].classId))
+	#end if
+#end if
+#for i,hh in enumerate($h.handlers)
+#set nn="ID_"+$hh.className.upper()
+#set n=$object[$r].classId+$i+(1 if $len($h.handlers)>1 else 0)+(1 if $h.__class__.__name__=="ListHandlerGroup" else 0)
+#echo ID_LIST.append(($nn,$n))
+#end for
+#end for
+
+enum CAST_CLASS_ID
+{
+#for n,i in sorted(ID_LIST,key=lambda x:x[1])
+	#set nn="%40s"%$n
+	$nn = $i,
+#end for
+};
+
+
+
+
+
+
+
 
 /**
  *  \brief Simple Reference Counting class
@@ -44,7 +79,7 @@ class ReferenceCountedAutoPointer
 		{
 			if(!__refCount)return;
 			__refCountDown();
-			LOG(COL_FG_RED<<"Deleting "<<__data<<"? refCount:"<<*__refCount)
+			LOG(COL_FG_RED<<"Deleting "<<__data<<"("<<__data->name()<<")"<<"? refCount:"<<*__refCount)
 			if((*__refCount)==0)
 			{
 				std::string name=__data->name();
@@ -67,6 +102,8 @@ class ReferenceCountedAutoPointer
 		 * \brief Decrements the reference count
 		 */
 		void __refCountDown(){if(__refCount)(*__refCount)--;}
+	public:
+		static CAST_CLASS_ID DATA_ID;
 	public:
 		/**
 		 * \brief Default constructor
@@ -158,11 +195,26 @@ class ReferenceCountedAutoPointer
 		 */		
 		const bool isNull()const{return __data==0;}
 
+
+		
 		DataType* operator->()
 		{
 			return __data;
 		}
 
+		const DataType* operator->()const
+		{
+			return __data;
+		}
+
+		DataType& operator*()
+		{
+			return *__data;
+		}
+		const DataType& operator*()const
+		{
+			return *__data;
+		}
 		void clear()
 		{
 			__clear();
@@ -177,34 +229,10 @@ class ReferenceCountedAutoPointer
 			
 };
 
-//! This is the enumeration of the class ids 
-#set ID_LIST=[("ID_CAST",0),("ID_TOKEN",1)]
-#for r in $object:
-#set h=$object[$r].handler
-#if $len($h.handlers)>1 
-#echo ID_LIST.append(("ID_"+$r.upper(),$object[$r].classId))
-	#if $h.__class__.__name__=="ListHandlerGroup":
-#echo ID_LIST.append(("ID_"+$r.upper()+"_ITEM",$object[$r].classId+1))
-	#end if
-#else
-	#if $h.__class__.__name__=="ListHandlerGroup":
-#echo ID_LIST.append(("ID_"+$r.upper(),$object[$r].classId))
-	#end if
-#end if
-#for i,hh in enumerate($h.handlers)
-#set nn="ID_"+$hh.className.upper()
-#set n=$object[$r].classId+$i+(1 if $len($h.handlers)>1 else 0)+(1 if $h.__class__.__name__=="ListHandlerGroup" else 0)
-#echo ID_LIST.append(($nn,$n))
-#end for
-#end for
 
-enum CAST_CLASS_ID
-{
-#for n,i in sorted(ID_LIST,key=lambda x:x[1])
-	#set nn="%40s"%$n
-	$nn = $i,
-#end for
-};
+template<typename DataType>
+CAST_CLASS_ID ReferenceCountedAutoPointer<DataType>::DATA_ID=DataType::ID;
+
 
 /**
  *
@@ -230,6 +258,8 @@ class token:public CAst
 	private:
 		std::string _text;
 	public:
+		static CAST_CLASS_ID ID;
+	public:
 		/** The constructor takes the string*/
 		token(std::string text):
 			_text(text)
@@ -243,6 +273,8 @@ class token:public CAst
 		/** Returns the class ID of the class */
 		virtual CAST_CLASS_ID classId()const{return ID_TOKEN;};
 
+	
+		std::ostream& codeStream(std::ostream& stream)const{return stream<<_text<<" ";}
 		/** The destructor */
 		virtual ~token()
 		{}

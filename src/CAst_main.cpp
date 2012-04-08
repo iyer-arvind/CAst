@@ -22,6 +22,7 @@ int main(int argc,char **argv)
 //	root=0;
 ////	std::cout<<"deleted\n\n";
 	std::cout<<"\n"<<root.refCount()<<"\n";
+	root->codeStream(std::cout);
 	return 0;
 }
 

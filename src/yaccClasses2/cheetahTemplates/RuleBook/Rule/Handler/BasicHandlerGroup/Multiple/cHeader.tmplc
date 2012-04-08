@@ -23,6 +23,8 @@ class ${object.ruleName}:public CAst
 		virtual CAST_CLASS_ID classId()const=0;
 		
 		virtual ~${object.ruleName}(){};
+
+		virtual std::ostream& codeStream(std::ostream& stream)const=0;
 };
 
 

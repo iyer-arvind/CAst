@@ -13,11 +13,13 @@ class BasicHandlerGroup(object):
 			for i,h in enumerate(self.handlers):
 				h.className=self.ruleName+"_"+str(i+1)
 				h.parameters.finalize()
+				h.parentClassName=self.ruleName
 				#h.classId=self.rule.classId+(i+1)
 		else:
 			for i,h in enumerate(self.handlers):
 				h.className=self.ruleName
 				h.parameters.finalize()
+				h.parentClassName=self.ruleName
 				#h.classId=self.rule.classId
 
 	def dump(self,s):

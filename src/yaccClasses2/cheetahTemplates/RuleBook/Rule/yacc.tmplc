@@ -28,7 +28,11 @@ CAst::${p.handler.className} *obj=new CAst::${p.handler.className}(#slurp
 LOG("Created ${p.handler.className}: "<<obj)#slurp
 	#if($p.handler.__class__.__name__=="ListHandler"):
 		#if($selfIndex is not None):
+#if($selfIndex==0)
 $<_t_$object.ruleName>${selfIndex+1} ->append(obj);$<_t_$object.ruleName>$=$<_t_$object.ruleName>${selfIndex+1}; #slurp
+#else
+$<_t_$object.ruleName>${selfIndex+1} ->prepend(obj);$<_t_$object.ruleName>$=$<_t_$object.ruleName>${selfIndex+1}; #slurp
+#end if
 LOG("Appended to $object.ruleName") #slurp
 		#else
 CAst::${object.ruleName} *lst=new CAst::${object.ruleName};lst->append(obj);$<_t_$object.ruleName>$=lst; #slurp

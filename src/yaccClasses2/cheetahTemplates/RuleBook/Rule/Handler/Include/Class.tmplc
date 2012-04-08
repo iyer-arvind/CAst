@@ -52,6 +52,8 @@ class ${h.className}#echo ":public "+$h.parent if $h.parent else ""
 		ReferenceCountedAutoPointer<$p.parameterType.name> $p.memName;	$c
 #end for
 	public:
+		static CAST_CLASS_ID ID;
+	public:
 		/** 
 		 * \brief Constructor of ${h.className}
 		 *
@@ -80,6 +82,12 @@ class ${h.className}#echo ":public "+$h.parent if $h.parent else ""
 		virtual CAST_CLASS_ID classId()const		{return ID_$h.className.upper();}
 
 		/**
+		 * \brief 
+		 *
+		 *
+		 */
+		virtual std::ostream& codeStream(std::ostream&)const;
+		/**
 		 * \brief Default destructor. 
 		 */
 		virtual ~${h.className}()
@@ -92,6 +100,8 @@ class ${h.className}#echo ":public "+$h.parent if $h.parent else ""
 
 
 #def defineClass($h)
+
+CAST_CLASS_ID ${h.className}::ID=ID_$h.className.upper();
 
 #set pText=",\n\t\t".join(["ReferenceCountedAutoPointer<"+p.parameterType.name+"> "+p.argName for p in $h.parameters if $p.isIncluded])
 #set iText=",\n\t\t".join([$p.memName+"("+$p.argName+")" for p in $h.parameters if $p.isIncluded])
@@ -130,5 +140,24 @@ ${h.className}::${h.className}
 #end if
 #end for
 	LOG(COL_FG_GREEN<<"Created object of $h.className: "<<this)
+}
+
+
+std::ostream& $h.className::codeStream(std::ostream& stream)const
+{
+#for $p in $h.parameters
+#if($p.isIncluded)
+	if( ! ${p.memName}.isNull()){$p.memName->codeStream(stream);}
+#else
+	#if($p.parameterType.name=='token')
+		#set token=$list($p.possibleValues)[0]
+	stream<<"$token.code ";
+	#else
+	
+	#end if
+#end if
+
+#end for
+	return stream;
 }
 #end def

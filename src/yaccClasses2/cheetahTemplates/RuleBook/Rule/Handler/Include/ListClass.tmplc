@@ -16,6 +16,9 @@ class $object.ruleName:public CAst
 	private:
 		${object.ruleName}ListType _itemList;									///< The list of items
 	public:
+		static CAST_CLASS_ID ID;
+		
+	public:
 		/**
 		 * \brief The default constructor calls the parent constructor
 		 *
@@ -28,13 +31,23 @@ class $object.ruleName:public CAst
 		}
 
 		/**
-		 * \brief Append an item to the list
+		 * \brief Append an item to the back of the list
 		 *
 		 */
 		void append( ReferenceCountedAutoPointer<${object.ruleName}_item> item)
 		{
 			LOG(COL_FG_GREEN<<"Appending to $object.ruleName: "<<this)
 			_itemList.push_back(item);
+		}
+
+		/**
+		 * \brief Prepend an item to the front of the list
+		 *
+		 */
+		void prepend( ReferenceCountedAutoPointer<${object.ruleName}_item> item)
+		{
+			LOG(COL_FG_GREEN<<"Prepending to $object.ruleName: "<<this)
+			_itemList.push_front(item);
 		}
 		
 		/**
@@ -54,7 +67,17 @@ class $object.ruleName:public CAst
 		virtual CAST_CLASS_ID classId()const		{return ID_$object.ruleName.upper();}
 
 
+		virtual std::ostream& codeStream(std::ostream& stream)const
+		{
+			for(C${object.ruleName}IterType i=_itemList.begin();i!=_itemList.end();i++)
+			{
+				(*i)->codeStream(stream);
+			}
+			return stream;
+		}
+
 		virtual ~${object.ruleName}(){}
 };
+
 
 #end def

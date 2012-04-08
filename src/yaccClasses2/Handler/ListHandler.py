@@ -16,10 +16,12 @@ class ListHandlerGroup(object):
 			for i,h in enumerate(self.handlers):
 				h.className=self.ruleName+"_item_"+str(i+1)
 				h.parameters.finalize()
+				h.parentClassName=self.ruleName
 		else:
 			for i,h in enumerate(self.handlers):
 				h.className=self.ruleName+"_item"
 				h.parameters.finalize()
+				h.parentClassName=self.ruleName
 	def dump(self,s):
 		if(len(self.handlers)==1):
 			return TemplateFill(self,"RuleBook","Rule","Handler","ListHandlerGroup","Single",s)
@@ -124,6 +126,9 @@ def Check(rule):
 				if iss:
 					print "A subset"
 					p.handler=pp.handler
+					for i in absent:
+						if pp[i]!=rule:
+							pp.handler.includeParameter(i)
 					pp.handler.addInitializer(p)
 					break	
 			else:

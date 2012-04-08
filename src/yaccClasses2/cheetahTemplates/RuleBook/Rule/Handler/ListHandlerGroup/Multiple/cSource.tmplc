@@ -3,3 +3,5 @@
 #set $h.parent=$object.ruleName+"_item"
 $utils.simpleClassCreator.defineClass($h)
 #end for
+
+CAST_CLASS_ID ${object.ruleName}::ID=ID_$object.ruleName.upper();
