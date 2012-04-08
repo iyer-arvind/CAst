@@ -103,6 +103,7 @@ class ListHandler(object):
 		
 
 def Check(rule):
+	print "\n\n\n",repr(rule)
 	patterns=sorted(rule.patterns,key=lambda x:-len(x))
 	flag=True
 	accumulators=[]

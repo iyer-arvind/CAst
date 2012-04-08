@@ -87,6 +87,15 @@ class ${h.className}#echo ":public "+$h.parent if $h.parent else ""
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
+#if $h.parent is None
+		std::string code()const
+		{
+			std::stringstream stream;
+			codeStream(stream);
+			return stream.str();
+		}
+#end if 
 		/**
 		 * \brief Default destructor. 
 		 */

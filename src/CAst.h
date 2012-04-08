@@ -4,6 +4,7 @@
 #include <list>
 #include <assert.h>
 #include <iostream>
+#include <sstream>
 
 #define COL_CLEAR 	"\033[0m"
 #define COL_FG_RED 	"\033[31m"
@@ -30,6 +31,8 @@ enum CAST_CLASS_ID
 	              ID_STORAGE_CLASS_SPECIFIER = 16,
 	                 ID_EXPRESSION_STATEMENT = 32,
 	                  ID_SELECTION_STATEMENT = 48,
+	                ID_SELECTION_STATEMENT_1 = 49,
+	                ID_SELECTION_STATEMENT_2 = 50,
 	                     ID_UNARY_EXPRESSION = 64,
 	                   ID_UNARY_EXPRESSION_1 = 65,
 	                   ID_UNARY_EXPRESSION_2 = 66,
@@ -76,6 +79,7 @@ enum CAST_CLASS_ID
 	                 ID_POSTFIX_EXPRESSION_2 = 338,
 	                 ID_POSTFIX_EXPRESSION_3 = 339,
 	                 ID_POSTFIX_EXPRESSION_4 = 340,
+	                 ID_POSTFIX_EXPRESSION_5 = 341,
 	                  ID_ADDITIVE_EXPRESSION = 352,
 	             ID_ADDITIVE_EXPRESSION_ITEM = 353,
 	                            ID_STATEMENT = 368,
@@ -372,6 +376,16 @@ class CAst
 		/** The destructor */
 		virtual ~CAst()
 		{}
+
+		virtual std::ostream& codeStream(std::ostream& stream)const=0;
+
+		std::string code()const
+		{
+			std::stringstream stream;
+			codeStream(stream);
+			return stream.str();
+		}
+
 };
 
 class token:public CAst
@@ -470,6 +484,7 @@ class storage_class_specifier:public CAst
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -558,6 +573,7 @@ class expression_statement:public CAst
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -652,6 +668,7 @@ class type_name:public CAst
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -716,12 +733,14 @@ class unary_expression:public CAst
 
 
 
-class type_name;
+class cast_expression;
+class unary_operator;
+
 
 
 
 /**
- * \brief unary_expression_1 implements the pattern: <b>(SIZEOF, '(', type_name, ')')</b>
+ * \brief unary_expression_1 implements the pattern: <b>(unary_operator, cast_expression)</b>
 
 
  * \dot
@@ -729,15 +748,18 @@ class type_name;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_unary_expression_1 [ label="unary_expression_1", URL="\ref unary_expression_1", color="#00AAAA" ];
- *     node_type_name [ label="type_name", URL="\ref type_name", color="#00AAAA"];
- *     node_unary_expression_1 ->  node_type_name [label="_p_type_name" style=solid];
+ *     node_unary_operator [ label="unary_operator", URL="\ref unary_operator", color="#00AAAA"];
+ *     node_cast_expression [ label="cast_expression", URL="\ref cast_expression", color="#00AAAA"];
+ *     node_unary_expression_1 ->  node_unary_operator [label="_p_unary_operator" style=solid];
+ *     node_unary_expression_1 ->  node_cast_expression [label="_p_cast_expression" style=solid];
  * }
  * \enddot
  */
 class unary_expression_1:public unary_expression
 {
 	private:
-		ReferenceCountedAutoPointer<type_name> _p_type_name;	  ///< A pointer to type_name.
+		ReferenceCountedAutoPointer<unary_operator> _p_unary_operator;	  ///< A pointer to unary_operator.
+		ReferenceCountedAutoPointer<cast_expression> _p_cast_expression;	  ///< A pointer to cast_expression.
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -748,7 +770,8 @@ class unary_expression_1:public unary_expression
                  */
 		unary_expression_1	
 				(
-					ReferenceCountedAutoPointer<type_name> _arg_type_name  ///< A pointer to type_name.
+					ReferenceCountedAutoPointer<unary_operator> _arg_unary_operator,   ///< A pointer to unary_operator.
+					ReferenceCountedAutoPointer<cast_expression> _arg_cast_expression  ///< A pointer to cast_expression.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -772,6 +795,7 @@ class unary_expression_1:public unary_expression
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -783,14 +807,12 @@ class unary_expression_1:public unary_expression
 
 
 
-class cast_expression;
-class unary_operator;
-
+class type_name;
 
 
 
 /**
- * \brief unary_expression_2 implements the pattern: <b>(unary_operator, cast_expression)</b>
+ * \brief unary_expression_2 implements the pattern: <b>(SIZEOF, '(', type_name, ')')</b>
 
 
  * \dot
@@ -798,18 +820,15 @@ class unary_operator;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_unary_expression_2 [ label="unary_expression_2", URL="\ref unary_expression_2", color="#00AAAA" ];
- *     node_unary_operator [ label="unary_operator", URL="\ref unary_operator", color="#00AAAA"];
- *     node_cast_expression [ label="cast_expression", URL="\ref cast_expression", color="#00AAAA"];
- *     node_unary_expression_2 ->  node_unary_operator [label="_p_unary_operator" style=solid];
- *     node_unary_expression_2 ->  node_cast_expression [label="_p_cast_expression" style=solid];
+ *     node_type_name [ label="type_name", URL="\ref type_name", color="#00AAAA"];
+ *     node_unary_expression_2 ->  node_type_name [label="_p_type_name" style=solid];
  * }
  * \enddot
  */
 class unary_expression_2:public unary_expression
 {
 	private:
-		ReferenceCountedAutoPointer<unary_operator> _p_unary_operator;	  ///< A pointer to unary_operator.
-		ReferenceCountedAutoPointer<cast_expression> _p_cast_expression;	  ///< A pointer to cast_expression.
+		ReferenceCountedAutoPointer<type_name> _p_type_name;	  ///< A pointer to type_name.
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -820,8 +839,7 @@ class unary_expression_2:public unary_expression
                  */
 		unary_expression_2	
 				(
-					ReferenceCountedAutoPointer<unary_operator> _arg_unary_operator,   ///< A pointer to unary_operator.
-					ReferenceCountedAutoPointer<cast_expression> _arg_cast_expression  ///< A pointer to cast_expression.
+					ReferenceCountedAutoPointer<type_name> _arg_type_name  ///< A pointer to type_name.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -845,6 +863,7 @@ class unary_expression_2:public unary_expression
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -856,15 +875,12 @@ class unary_expression_2:public unary_expression
 
 
 
-class token;
-class unary_expression;
-
-
+class postfix_expression;
 
 
 
 /**
- * \brief unary_expression_3 implements the pattern: <b>(INC_OP, unary_expression)</b>
+ * \brief unary_expression_3 implements the pattern: <b>(postfix_expression,)</b>
 
 
  * \dot
@@ -872,18 +888,15 @@ class unary_expression;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_unary_expression_3 [ label="unary_expression_3", URL="\ref unary_expression_3", color="#00AAAA" ];
- *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
- *     node_unary_expression [ label="unary_expression", URL="\ref unary_expression", color="#00AAAA"];
- *     node_unary_expression_3 ->  node_token [label="_p_token" style=solid];
- *     node_unary_expression_3 ->  node_unary_expression [label="_p_unary_expression" style=solid];
+ *     node_postfix_expression [ label="postfix_expression", URL="\ref postfix_expression", color="#00AAAA"];
+ *     node_unary_expression_3 ->  node_postfix_expression [label="_p_postfix_expression" style=solid];
  * }
  * \enddot
  */
 class unary_expression_3:public unary_expression
 {
 	private:
-		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>INC_OP</b>, <b>DEC_OP</b>, <b>SIZEOF</b>
-		ReferenceCountedAutoPointer<unary_expression> _p_unary_expression;	  ///< A pointer to unary_expression.
+		ReferenceCountedAutoPointer<postfix_expression> _p_postfix_expression;	  ///< A pointer to postfix_expression.
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -894,8 +907,7 @@ class unary_expression_3:public unary_expression
                  */
 		unary_expression_3	
 				(
-					ReferenceCountedAutoPointer<token> _arg_token,   ///< A pointer to a token, accepts <b>INC_OP</b>, <b>DEC_OP</b>, <b>SIZEOF</b>
-					ReferenceCountedAutoPointer<unary_expression> _arg_unary_expression  ///< A pointer to unary_expression.
+					ReferenceCountedAutoPointer<postfix_expression> _arg_postfix_expression  ///< A pointer to postfix_expression.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -919,6 +931,7 @@ class unary_expression_3:public unary_expression
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -930,12 +943,15 @@ class unary_expression_3:public unary_expression
 
 
 
-class postfix_expression;
+class token;
+class unary_expression;
+
+
 
 
 
 /**
- * \brief unary_expression_4 implements the pattern: <b>(postfix_expression,)</b>
+ * \brief unary_expression_4 implements the pattern: <b>(INC_OP, unary_expression)</b>
 
 
  * \dot
@@ -943,15 +959,18 @@ class postfix_expression;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_unary_expression_4 [ label="unary_expression_4", URL="\ref unary_expression_4", color="#00AAAA" ];
- *     node_postfix_expression [ label="postfix_expression", URL="\ref postfix_expression", color="#00AAAA"];
- *     node_unary_expression_4 ->  node_postfix_expression [label="_p_postfix_expression" style=solid];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_unary_expression [ label="unary_expression", URL="\ref unary_expression", color="#00AAAA"];
+ *     node_unary_expression_4 ->  node_token [label="_p_token" style=solid];
+ *     node_unary_expression_4 ->  node_unary_expression [label="_p_unary_expression" style=solid];
  * }
  * \enddot
  */
 class unary_expression_4:public unary_expression
 {
 	private:
-		ReferenceCountedAutoPointer<postfix_expression> _p_postfix_expression;	  ///< A pointer to postfix_expression.
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>INC_OP</b>, <b>DEC_OP</b>, <b>SIZEOF</b>
+		ReferenceCountedAutoPointer<unary_expression> _p_unary_expression;	  ///< A pointer to unary_expression.
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -962,7 +981,8 @@ class unary_expression_4:public unary_expression
                  */
 		unary_expression_4	
 				(
-					ReferenceCountedAutoPointer<postfix_expression> _arg_postfix_expression  ///< A pointer to postfix_expression.
+					ReferenceCountedAutoPointer<token> _arg_token,   ///< A pointer to a token, accepts <b>INC_OP</b>, <b>DEC_OP</b>, <b>SIZEOF</b>
+					ReferenceCountedAutoPointer<unary_expression> _arg_unary_expression  ///< A pointer to unary_expression.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -986,6 +1006,7 @@ class unary_expression_4:public unary_expression
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -1093,6 +1114,13 @@ class conditional_expression_item
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
+		std::string code()const
+		{
+			std::stringstream stream;
+			codeStream(stream);
+			return stream.str();
+		}
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -1287,6 +1315,7 @@ class struct_or_union_specifier:public CAst
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -1382,6 +1411,13 @@ class exclusive_or_expression_item
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
+		std::string code()const
+		{
+			std::stringstream stream;
+			codeStream(stream);
+			return stream.str();
+		}
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -1524,15 +1560,12 @@ class initializer:public CAst
 
 
 
-class token;
-class initializer_list;
-
-
+class assignment_expression;
 
 
 
 /**
- * \brief initializer_1 implements the pattern: <b>('{', initializer_list, ',', '}')</b>
+ * \brief initializer_1 implements the pattern: <b>(assignment_expression,)</b>
 
 
  * \dot
@@ -1540,18 +1573,15 @@ class initializer_list;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_initializer_1 [ label="initializer_1", URL="\ref initializer_1", color="#00AAAA" ];
- *     node_initializer_list [ label="initializer_list", URL="\ref initializer_list", color="#00AAAA"];
- *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
- *     node_initializer_1 ->  node_initializer_list [label="_p_initializer_list" style=solid];
- *     node_initializer_1 ->  node_token [label="_p_token" style=dotted];
+ *     node_assignment_expression [ label="assignment_expression", URL="\ref assignment_expression", color="#00AAAA"];
+ *     node_initializer_1 ->  node_assignment_expression [label="_p_assignment_expression" style=solid];
  * }
  * \enddot
  */
 class initializer_1:public initializer
 {
 	private:
-		ReferenceCountedAutoPointer<initializer_list> _p_initializer_list;	  ///< A pointer to initializer_list.
-		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>','</b>, <b>None</b>
+		ReferenceCountedAutoPointer<assignment_expression> _p_assignment_expression;	  ///< A pointer to assignment_expression.
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -1562,8 +1592,7 @@ class initializer_1:public initializer
                  */
 		initializer_1	
 				(
-					ReferenceCountedAutoPointer<initializer_list> _arg_initializer_list,   ///< A pointer to initializer_list.
-					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>','</b>, <b>None</b>
+					ReferenceCountedAutoPointer<assignment_expression> _arg_assignment_expression  ///< A pointer to assignment_expression.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -1587,6 +1616,7 @@ class initializer_1:public initializer
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -1598,12 +1628,15 @@ class initializer_1:public initializer
 
 
 
-class assignment_expression;
+class token;
+class initializer_list;
+
+
 
 
 
 /**
- * \brief initializer_2 implements the pattern: <b>(assignment_expression,)</b>
+ * \brief initializer_2 implements the pattern: <b>('{', initializer_list, ',', '}')</b>
 
 
  * \dot
@@ -1611,15 +1644,18 @@ class assignment_expression;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_initializer_2 [ label="initializer_2", URL="\ref initializer_2", color="#00AAAA" ];
- *     node_assignment_expression [ label="assignment_expression", URL="\ref assignment_expression", color="#00AAAA"];
- *     node_initializer_2 ->  node_assignment_expression [label="_p_assignment_expression" style=solid];
+ *     node_initializer_list [ label="initializer_list", URL="\ref initializer_list", color="#00AAAA"];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_initializer_2 ->  node_initializer_list [label="_p_initializer_list" style=solid];
+ *     node_initializer_2 ->  node_token [label="_p_token" style=dotted];
  * }
  * \enddot
  */
 class initializer_2:public initializer
 {
 	private:
-		ReferenceCountedAutoPointer<assignment_expression> _p_assignment_expression;	  ///< A pointer to assignment_expression.
+		ReferenceCountedAutoPointer<initializer_list> _p_initializer_list;	  ///< A pointer to initializer_list.
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>','</b>, <b>None</b>
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -1630,7 +1666,8 @@ class initializer_2:public initializer
                  */
 		initializer_2	
 				(
-					ReferenceCountedAutoPointer<assignment_expression> _arg_assignment_expression  ///< A pointer to assignment_expression.
+					ReferenceCountedAutoPointer<initializer_list> _arg_initializer_list,   ///< A pointer to initializer_list.
+					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>','</b>, <b>None</b>
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -1654,6 +1691,7 @@ class initializer_2:public initializer
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -1742,6 +1780,13 @@ class struct_declaration_list_item
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
+		std::string code()const
+		{
+			std::stringstream stream;
+			codeStream(stream);
+			return stream.str();
+		}
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -1877,7 +1922,7 @@ class token;
 class assignment_operator:public CAst
 {
 	private:
-		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>'='</b>, <b>DIV_ASSIGN</b>, <b>MOD_ASSIGN</b>, <b>ADD_ASSIGN</b>, <b>SUB_ASSIGN</b>, <b>LEFT_ASSIGN</b>, <b>RIGHT_ASSIGN</b>, <b>AND_ASSIGN</b>, <b>XOR_ASSIGN</b>, <b>OR_ASSIGN</b>, <b>MUL_ASSIGN</b>
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>'='</b>, <b>MOD_ASSIGN</b>, <b>ADD_ASSIGN</b>, <b>SUB_ASSIGN</b>, <b>LEFT_ASSIGN</b>, <b>RIGHT_ASSIGN</b>, <b>DIV_ASSIGN</b>, <b>AND_ASSIGN</b>, <b>XOR_ASSIGN</b>, <b>OR_ASSIGN</b>, <b>MUL_ASSIGN</b>
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -1888,7 +1933,7 @@ class assignment_operator:public CAst
                  */
 		assignment_operator	
 				(
-					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>'='</b>, <b>DIV_ASSIGN</b>, <b>MOD_ASSIGN</b>, <b>ADD_ASSIGN</b>, <b>SUB_ASSIGN</b>, <b>LEFT_ASSIGN</b>, <b>RIGHT_ASSIGN</b>, <b>AND_ASSIGN</b>, <b>XOR_ASSIGN</b>, <b>OR_ASSIGN</b>, <b>MUL_ASSIGN</b>
+					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>'='</b>, <b>MOD_ASSIGN</b>, <b>ADD_ASSIGN</b>, <b>SUB_ASSIGN</b>, <b>LEFT_ASSIGN</b>, <b>RIGHT_ASSIGN</b>, <b>DIV_ASSIGN</b>, <b>AND_ASSIGN</b>, <b>XOR_ASSIGN</b>, <b>OR_ASSIGN</b>, <b>MUL_ASSIGN</b>
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -1912,6 +1957,7 @@ class assignment_operator:public CAst
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -2006,6 +2052,7 @@ class struct_declaration:public CAst
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -2100,6 +2147,7 @@ class abstract_declarator:public CAst
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -2169,7 +2217,7 @@ class statement;
 
 
 /**
- * \brief iteration_statement_1 implements the pattern: <b>(DO, statement, WHILE, '(', expression, ')', ';')</b>
+ * \brief iteration_statement_1 implements the pattern: <b>(WHILE, '(', expression, ')', statement)</b>
 
 
  * \dot
@@ -2177,18 +2225,18 @@ class statement;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_iteration_statement_1 [ label="iteration_statement_1", URL="\ref iteration_statement_1", color="#00AAAA" ];
- *     node_statement [ label="statement", URL="\ref statement", color="#00AAAA"];
  *     node_expression [ label="expression", URL="\ref expression", color="#00AAAA"];
- *     node_iteration_statement_1 ->  node_statement [label="_p_statement" style=solid];
+ *     node_statement [ label="statement", URL="\ref statement", color="#00AAAA"];
  *     node_iteration_statement_1 ->  node_expression [label="_p_expression" style=solid];
+ *     node_iteration_statement_1 ->  node_statement [label="_p_statement" style=solid];
  * }
  * \enddot
  */
 class iteration_statement_1:public iteration_statement
 {
 	private:
-		ReferenceCountedAutoPointer<statement> _p_statement;	  ///< A pointer to statement.
 		ReferenceCountedAutoPointer<expression> _p_expression;	  ///< A pointer to expression.
+		ReferenceCountedAutoPointer<statement> _p_statement;	  ///< A pointer to statement.
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -2199,8 +2247,8 @@ class iteration_statement_1:public iteration_statement
                  */
 		iteration_statement_1	
 				(
-					ReferenceCountedAutoPointer<statement> _arg_statement,   ///< A pointer to statement.
-					ReferenceCountedAutoPointer<expression> _arg_expression  ///< A pointer to expression.
+					ReferenceCountedAutoPointer<expression> _arg_expression,   ///< A pointer to expression.
+					ReferenceCountedAutoPointer<statement> _arg_statement  ///< A pointer to statement.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -2224,6 +2272,7 @@ class iteration_statement_1:public iteration_statement
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -2242,7 +2291,7 @@ class statement;
 
 
 /**
- * \brief iteration_statement_2 implements the pattern: <b>(WHILE, '(', expression, ')', statement)</b>
+ * \brief iteration_statement_2 implements the pattern: <b>(DO, statement, WHILE, '(', expression, ')', ';')</b>
 
 
  * \dot
@@ -2250,18 +2299,18 @@ class statement;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_iteration_statement_2 [ label="iteration_statement_2", URL="\ref iteration_statement_2", color="#00AAAA" ];
- *     node_expression [ label="expression", URL="\ref expression", color="#00AAAA"];
  *     node_statement [ label="statement", URL="\ref statement", color="#00AAAA"];
- *     node_iteration_statement_2 ->  node_expression [label="_p_expression" style=solid];
+ *     node_expression [ label="expression", URL="\ref expression", color="#00AAAA"];
  *     node_iteration_statement_2 ->  node_statement [label="_p_statement" style=solid];
+ *     node_iteration_statement_2 ->  node_expression [label="_p_expression" style=solid];
  * }
  * \enddot
  */
 class iteration_statement_2:public iteration_statement
 {
 	private:
-		ReferenceCountedAutoPointer<expression> _p_expression;	  ///< A pointer to expression.
 		ReferenceCountedAutoPointer<statement> _p_statement;	  ///< A pointer to statement.
+		ReferenceCountedAutoPointer<expression> _p_expression;	  ///< A pointer to expression.
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -2272,8 +2321,8 @@ class iteration_statement_2:public iteration_statement
                  */
 		iteration_statement_2	
 				(
-					ReferenceCountedAutoPointer<expression> _arg_expression,   ///< A pointer to expression.
-					ReferenceCountedAutoPointer<statement> _arg_statement  ///< A pointer to statement.
+					ReferenceCountedAutoPointer<statement> _arg_statement,   ///< A pointer to statement.
+					ReferenceCountedAutoPointer<expression> _arg_expression  ///< A pointer to expression.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -2297,6 +2346,7 @@ class iteration_statement_2:public iteration_statement
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -2381,6 +2431,7 @@ class iteration_statement_3:public iteration_statement
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -2439,7 +2490,7 @@ class multiplicative_expression;
 class additive_expression_item
 {
 	private:
-		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>'-'</b>, <b>'+'</b>, <b>None</b>
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>'+'</b>, <b>'-'</b>, <b>None</b>
 		ReferenceCountedAutoPointer<multiplicative_expression> _p_multiplicative_expression;	  ///< A pointer to multiplicative_expression.
 	public:
 		static CAST_CLASS_ID ID;
@@ -2451,7 +2502,7 @@ class additive_expression_item
                  */
 		additive_expression_item	
 				(
-					ReferenceCountedAutoPointer<token> _arg_token,   ///< A pointer to a token, accepts <b>'-'</b>, <b>'+'</b>, <b>None</b>
+					ReferenceCountedAutoPointer<token> _arg_token,   ///< A pointer to a token, accepts <b>'+'</b>, <b>'-'</b>, <b>None</b>
 					ReferenceCountedAutoPointer<multiplicative_expression> _arg_multiplicative_expression  ///< A pointer to multiplicative_expression.
 				);
 		/**
@@ -2476,6 +2527,13 @@ class additive_expression_item
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
+		std::string code()const
+		{
+			std::stringstream stream;
+			codeStream(stream);
+			return stream.str();
+		}
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -2617,12 +2675,12 @@ class external_declaration:public CAst
 
 
 
-class declaration;
+class function_definition;
 
 
 
 /**
- * \brief external_declaration_1 implements the pattern: <b>(declaration,)</b>
+ * \brief external_declaration_1 implements the pattern: <b>(function_definition,)</b>
 
 
  * \dot
@@ -2630,15 +2688,15 @@ class declaration;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_external_declaration_1 [ label="external_declaration_1", URL="\ref external_declaration_1", color="#00AAAA" ];
- *     node_declaration [ label="declaration", URL="\ref declaration", color="#00AAAA"];
- *     node_external_declaration_1 ->  node_declaration [label="_p_declaration" style=solid];
+ *     node_function_definition [ label="function_definition", URL="\ref function_definition", color="#00AAAA"];
+ *     node_external_declaration_1 ->  node_function_definition [label="_p_function_definition" style=solid];
  * }
  * \enddot
  */
 class external_declaration_1:public external_declaration
 {
 	private:
-		ReferenceCountedAutoPointer<declaration> _p_declaration;	  ///< A pointer to declaration.
+		ReferenceCountedAutoPointer<function_definition> _p_function_definition;	  ///< A pointer to function_definition.
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -2649,7 +2707,7 @@ class external_declaration_1:public external_declaration
                  */
 		external_declaration_1	
 				(
-					ReferenceCountedAutoPointer<declaration> _arg_declaration  ///< A pointer to declaration.
+					ReferenceCountedAutoPointer<function_definition> _arg_function_definition  ///< A pointer to function_definition.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -2673,6 +2731,7 @@ class external_declaration_1:public external_declaration
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -2684,12 +2743,12 @@ class external_declaration_1:public external_declaration
 
 
 
-class function_definition;
+class declaration;
 
 
 
 /**
- * \brief external_declaration_2 implements the pattern: <b>(function_definition,)</b>
+ * \brief external_declaration_2 implements the pattern: <b>(declaration,)</b>
 
 
  * \dot
@@ -2697,15 +2756,15 @@ class function_definition;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_external_declaration_2 [ label="external_declaration_2", URL="\ref external_declaration_2", color="#00AAAA" ];
- *     node_function_definition [ label="function_definition", URL="\ref function_definition", color="#00AAAA"];
- *     node_external_declaration_2 ->  node_function_definition [label="_p_function_definition" style=solid];
+ *     node_declaration [ label="declaration", URL="\ref declaration", color="#00AAAA"];
+ *     node_external_declaration_2 ->  node_declaration [label="_p_declaration" style=solid];
  * }
  * \enddot
  */
 class external_declaration_2:public external_declaration
 {
 	private:
-		ReferenceCountedAutoPointer<function_definition> _p_function_definition;	  ///< A pointer to function_definition.
+		ReferenceCountedAutoPointer<declaration> _p_declaration;	  ///< A pointer to declaration.
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -2716,7 +2775,7 @@ class external_declaration_2:public external_declaration
                  */
 		external_declaration_2	
 				(
-					ReferenceCountedAutoPointer<function_definition> _arg_function_definition  ///< A pointer to function_definition.
+					ReferenceCountedAutoPointer<declaration> _arg_declaration  ///< A pointer to declaration.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -2740,6 +2799,7 @@ class external_declaration_2:public external_declaration
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -2809,12 +2869,12 @@ class type_specifier:public CAst
 
 
 
-class struct_or_union_specifier;
+class enum_specifier;
 
 
 
 /**
- * \brief type_specifier_1 implements the pattern: <b>(struct_or_union_specifier,)</b>
+ * \brief type_specifier_1 implements the pattern: <b>(enum_specifier,)</b>
 
 
  * \dot
@@ -2822,15 +2882,15 @@ class struct_or_union_specifier;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_type_specifier_1 [ label="type_specifier_1", URL="\ref type_specifier_1", color="#00AAAA" ];
- *     node_struct_or_union_specifier [ label="struct_or_union_specifier", URL="\ref struct_or_union_specifier", color="#00AAAA"];
- *     node_type_specifier_1 ->  node_struct_or_union_specifier [label="_p_struct_or_union_specifier" style=solid];
+ *     node_enum_specifier [ label="enum_specifier", URL="\ref enum_specifier", color="#00AAAA"];
+ *     node_type_specifier_1 ->  node_enum_specifier [label="_p_enum_specifier" style=solid];
  * }
  * \enddot
  */
 class type_specifier_1:public type_specifier
 {
 	private:
-		ReferenceCountedAutoPointer<struct_or_union_specifier> _p_struct_or_union_specifier;	  ///< A pointer to struct_or_union_specifier.
+		ReferenceCountedAutoPointer<enum_specifier> _p_enum_specifier;	  ///< A pointer to enum_specifier.
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -2841,7 +2901,7 @@ class type_specifier_1:public type_specifier
                  */
 		type_specifier_1	
 				(
-					ReferenceCountedAutoPointer<struct_or_union_specifier> _arg_struct_or_union_specifier  ///< A pointer to struct_or_union_specifier.
+					ReferenceCountedAutoPointer<enum_specifier> _arg_enum_specifier  ///< A pointer to enum_specifier.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -2865,6 +2925,7 @@ class type_specifier_1:public type_specifier
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -2876,12 +2937,13 @@ class type_specifier_1:public type_specifier
 
 
 
-class enum_specifier;
+class token;
+
 
 
 
 /**
- * \brief type_specifier_2 implements the pattern: <b>(enum_specifier,)</b>
+ * \brief type_specifier_2 implements the pattern: <b>(VOID,)</b>
 
 
  * \dot
@@ -2889,15 +2951,15 @@ class enum_specifier;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_type_specifier_2 [ label="type_specifier_2", URL="\ref type_specifier_2", color="#00AAAA" ];
- *     node_enum_specifier [ label="enum_specifier", URL="\ref enum_specifier", color="#00AAAA"];
- *     node_type_specifier_2 ->  node_enum_specifier [label="_p_enum_specifier" style=solid];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_type_specifier_2 ->  node_token [label="_p_token" style=solid];
  * }
  * \enddot
  */
 class type_specifier_2:public type_specifier
 {
 	private:
-		ReferenceCountedAutoPointer<enum_specifier> _p_enum_specifier;	  ///< A pointer to enum_specifier.
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>SHORT</b>, <b>INT</b>, <b>LONG</b>, <b>SIGNED</b>, <b>UNSIGNED</b>, <b>FLOAT</b>, <b>DOUBLE</b>, <b>VOID</b>, <b>CHAR</b>
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -2908,7 +2970,7 @@ class type_specifier_2:public type_specifier
                  */
 		type_specifier_2	
 				(
-					ReferenceCountedAutoPointer<enum_specifier> _arg_enum_specifier  ///< A pointer to enum_specifier.
+					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>SHORT</b>, <b>INT</b>, <b>LONG</b>, <b>SIGNED</b>, <b>UNSIGNED</b>, <b>FLOAT</b>, <b>DOUBLE</b>, <b>VOID</b>, <b>CHAR</b>
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -2932,6 +2994,7 @@ class type_specifier_2:public type_specifier
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -2943,13 +3006,12 @@ class type_specifier_2:public type_specifier
 
 
 
-class token;
-
+class struct_or_union_specifier;
 
 
 
 /**
- * \brief type_specifier_3 implements the pattern: <b>(VOID,)</b>
+ * \brief type_specifier_3 implements the pattern: <b>(struct_or_union_specifier,)</b>
 
 
  * \dot
@@ -2957,15 +3019,15 @@ class token;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_type_specifier_3 [ label="type_specifier_3", URL="\ref type_specifier_3", color="#00AAAA" ];
- *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
- *     node_type_specifier_3 ->  node_token [label="_p_token" style=solid];
+ *     node_struct_or_union_specifier [ label="struct_or_union_specifier", URL="\ref struct_or_union_specifier", color="#00AAAA"];
+ *     node_type_specifier_3 ->  node_struct_or_union_specifier [label="_p_struct_or_union_specifier" style=solid];
  * }
  * \enddot
  */
 class type_specifier_3:public type_specifier
 {
 	private:
-		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>SHORT</b>, <b>INT</b>, <b>LONG</b>, <b>SIGNED</b>, <b>UNSIGNED</b>, <b>FLOAT</b>, <b>DOUBLE</b>, <b>VOID</b>, <b>CHAR</b>
+		ReferenceCountedAutoPointer<struct_or_union_specifier> _p_struct_or_union_specifier;	  ///< A pointer to struct_or_union_specifier.
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -2976,7 +3038,7 @@ class type_specifier_3:public type_specifier
                  */
 		type_specifier_3	
 				(
-					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>SHORT</b>, <b>INT</b>, <b>LONG</b>, <b>SIGNED</b>, <b>UNSIGNED</b>, <b>FLOAT</b>, <b>DOUBLE</b>, <b>VOID</b>, <b>CHAR</b>
+					ReferenceCountedAutoPointer<struct_or_union_specifier> _arg_struct_or_union_specifier  ///< A pointer to struct_or_union_specifier.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -3000,6 +3062,7 @@ class type_specifier_3:public type_specifier
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -3094,6 +3157,7 @@ class compound_statement:public CAst
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -3189,6 +3253,13 @@ class inclusive_or_expression_item
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
+		std::string code()const
+		{
+			std::stringstream stream;
+			codeStream(stream);
+			return stream.str();
+		}
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -3321,6 +3392,14 @@ class pointer_item
 		virtual ~pointer_item(){};
 
 		virtual std::ostream& codeStream(std::ostream& stream)const=0;
+
+		std::string code()const
+		{
+			std::stringstream stream;
+			codeStream(stream);
+			return stream.str();
+		}
+
 };
 
 class type_qualifier_list;
@@ -3379,6 +3458,7 @@ class pointer_item_1:public pointer_item
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -3440,6 +3520,7 @@ class pointer_item_2:public pointer_item
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -3550,6 +3631,109 @@ class pointer:public CAst
 //////////////////////////////////////////
 
 
+/**
+ * \brief Implements selection_statement
+ * 
+ * This is the interface class. This implements the patterns
+ *  - (IF, '(', expression, ')', statement)
+ *  - (IF, '(', expression, ')', statement, ELSE, statement)
+ *  - (SWITCH, '(', expression, ')', statement)
+ * 
+ **/
+class selection_statement:public CAst
+{
+	public:
+		/**
+                 * \brief Interface for the child classes to return the name
+                 *
+                 */
+		virtual std::string name()const=0;
+
+		/**
+                 *  \brief Interface for the child classes to return the class ID
+                 *
+                 */
+		virtual CAST_CLASS_ID classId()const=0;
+		
+		virtual ~selection_statement(){};
+
+		virtual std::ostream& codeStream(std::ostream& stream)const=0;
+};
+
+
+
+
+class expression;
+class statement;
+
+
+
+
+/**
+ * \brief selection_statement_1 implements the pattern: <b>(SWITCH, '(', expression, ')', statement)</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_selection_statement_1 [ label="selection_statement_1", URL="\ref selection_statement_1", color="#00AAAA" ];
+ *     node_expression [ label="expression", URL="\ref expression", color="#00AAAA"];
+ *     node_statement [ label="statement", URL="\ref statement", color="#00AAAA"];
+ *     node_selection_statement_1 ->  node_expression [label="_p_expression" style=solid];
+ *     node_selection_statement_1 ->  node_statement [label="_p_statement" style=solid];
+ * }
+ * \enddot
+ */
+class selection_statement_1:public selection_statement
+{
+	private:
+		ReferenceCountedAutoPointer<expression> _p_expression;	  ///< A pointer to expression.
+		ReferenceCountedAutoPointer<statement> _p_statement;	  ///< A pointer to statement.
+	public:
+		static CAST_CLASS_ID ID;
+	public:
+		/** 
+		 * \brief Constructor of selection_statement_1
+		 *
+		 * This function handles the selection_statement_1
+                 */
+		selection_statement_1	
+				(
+					ReferenceCountedAutoPointer<expression> _arg_expression,   ///< A pointer to expression.
+					ReferenceCountedAutoPointer<statement> _arg_statement  ///< A pointer to statement.
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"selection_statement_1"</b>
+		 * \returns <b>"selection_statement_1"</b>
+                 */
+		virtual std::string name()const		{return std::string("selection_statement_1");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_SELECTION_STATEMENT_1
+		 * \returns  ID_SELECTION_STATEMENT_1
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_SELECTION_STATEMENT_1;}
+
+		/**
+		 * \brief 
+		 *
+		 *
+		 */
+		virtual std::ostream& codeStream(std::ostream&)const;
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~selection_statement_1()
+		{}
+};
+
+
 
 
 
@@ -3563,69 +3747,63 @@ class statement;
 
 
 
-
-
 /**
- * \brief selection_statement implements the pattern: <b>(IF, '(', expression, ')', statement, ELSE, statement)</b>
+ * \brief selection_statement_2 implements the pattern: <b>(IF, '(', expression, ')', statement, ELSE, statement)</b>
 
 
  * \dot
  * digraph AST {
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
- *     node_selection_statement [ label="selection_statement", URL="\ref selection_statement", color="#00AAAA" ];
- *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_selection_statement_2 [ label="selection_statement_2", URL="\ref selection_statement_2", color="#00AAAA" ];
  *     node_expression [ label="expression", URL="\ref expression", color="#00AAAA"];
  *     node_statement [ label="statement", URL="\ref statement", color="#00AAAA"];
  *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
  *     node_statement [ label="statement", URL="\ref statement", color="#00AAAA"];
- *     node_selection_statement ->  node_token [label="_p_token1" style=solid];
- *     node_selection_statement ->  node_expression [label="_p_expression" style=solid];
- *     node_selection_statement ->  node_statement [label="_p_statement1" style=solid];
- *     node_selection_statement ->  node_token [label="_p_token2" style=dotted];
- *     node_selection_statement ->  node_statement [label="_p_statement2" style=dotted];
+ *     node_selection_statement_2 ->  node_expression [label="_p_expression" style=solid];
+ *     node_selection_statement_2 ->  node_statement [label="_p_statement1" style=solid];
+ *     node_selection_statement_2 ->  node_token [label="_p_token" style=dotted];
+ *     node_selection_statement_2 ->  node_statement [label="_p_statement2" style=dotted];
  * }
  * \enddot
  */
-class selection_statement:public CAst
+class selection_statement_2:public selection_statement
 {
 	private:
-		ReferenceCountedAutoPointer<token> _p_token1;	  ///< A pointer to a token, accepts <b>IF</b>, <b>SWITCH</b>
 		ReferenceCountedAutoPointer<expression> _p_expression;	  ///< A pointer to expression.
 		ReferenceCountedAutoPointer<statement> _p_statement1;	  ///< A pointer to statement.
-		ReferenceCountedAutoPointer<token> _p_token2;	  ///< A pointer to a token, accepts <b>ELSE</b>, <b>None</b>
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>ELSE</b>, <b>None</b>
 		ReferenceCountedAutoPointer<statement> _p_statement2;	  ///< A pointer to statement. This parameter can be <b>Null</b>
 	public:
 		static CAST_CLASS_ID ID;
 	public:
 		/** 
-		 * \brief Constructor of selection_statement
+		 * \brief Constructor of selection_statement_2
 		 *
-		 * This function handles the selection_statement
+		 * This function handles the selection_statement_2
                  */
-		selection_statement	
+		selection_statement_2	
 				(
-					ReferenceCountedAutoPointer<token> _arg_token1,   ///< A pointer to a token, accepts <b>IF</b>, <b>SWITCH</b>
 					ReferenceCountedAutoPointer<expression> _arg_expression,   ///< A pointer to expression.
 					ReferenceCountedAutoPointer<statement> _arg_statement1,   ///< A pointer to statement.
-					ReferenceCountedAutoPointer<token> _arg_token2,   ///< A pointer to a token, accepts <b>ELSE</b>, <b>None</b>
+					ReferenceCountedAutoPointer<token> _arg_token,   ///< A pointer to a token, accepts <b>ELSE</b>, <b>None</b>
 					ReferenceCountedAutoPointer<statement> _arg_statement2  ///< A pointer to statement. This parameter can be <b>Null</b>
 				);
 		/**
                  * \brief Returns the name of the class.
                  *
-                 * Returns the name of the class. Here, returns <b>"selection_statement"</b>
-		 * \returns <b>"selection_statement"</b>
+                 * Returns the name of the class. Here, returns <b>"selection_statement_2"</b>
+		 * \returns <b>"selection_statement_2"</b>
                  */
-		virtual std::string name()const		{return std::string("selection_statement");}
+		virtual std::string name()const		{return std::string("selection_statement_2");}
 
 		/**
                  * \brief Returns the ID of the class
                  *
-                 * Returns the ID of the class. Here, returns ID_SELECTION_STATEMENT
-		 * \returns  ID_SELECTION_STATEMENT
+                 * Returns the ID of the class. Here, returns ID_SELECTION_STATEMENT_2
+		 * \returns  ID_SELECTION_STATEMENT_2
                  */
-		virtual CAST_CLASS_ID classId()const		{return ID_SELECTION_STATEMENT;}
+		virtual CAST_CLASS_ID classId()const		{return ID_SELECTION_STATEMENT_2;}
 
 		/**
 		 * \brief 
@@ -3633,10 +3811,11 @@ class selection_statement:public CAst
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
-		virtual ~selection_statement()
+		virtual ~selection_statement_2()
 		{}
 };
 
@@ -3699,14 +3878,12 @@ class postfix_expression:public CAst
 
 
 
-class expression;
-class postfix_expression;
-
+class primary_expression;
 
 
 
 /**
- * \brief postfix_expression_1 implements the pattern: <b>(postfix_expression, '[', expression, ']')</b>
+ * \brief postfix_expression_1 implements the pattern: <b>(primary_expression,)</b>
 
 
  * \dot
@@ -3714,18 +3891,15 @@ class postfix_expression;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_postfix_expression_1 [ label="postfix_expression_1", URL="\ref postfix_expression_1", color="#00AAAA" ];
- *     node_postfix_expression [ label="postfix_expression", URL="\ref postfix_expression", color="#00AAAA"];
- *     node_expression [ label="expression", URL="\ref expression", color="#00AAAA"];
- *     node_postfix_expression_1 ->  node_postfix_expression [label="_p_postfix_expression" style=solid];
- *     node_postfix_expression_1 ->  node_expression [label="_p_expression" style=solid];
+ *     node_primary_expression [ label="primary_expression", URL="\ref primary_expression", color="#00AAAA"];
+ *     node_postfix_expression_1 ->  node_primary_expression [label="_p_primary_expression" style=solid];
  * }
  * \enddot
  */
 class postfix_expression_1:public postfix_expression
 {
 	private:
-		ReferenceCountedAutoPointer<postfix_expression> _p_postfix_expression;	  ///< A pointer to postfix_expression.
-		ReferenceCountedAutoPointer<expression> _p_expression;	  ///< A pointer to expression.
+		ReferenceCountedAutoPointer<primary_expression> _p_primary_expression;	  ///< A pointer to primary_expression.
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -3736,8 +3910,7 @@ class postfix_expression_1:public postfix_expression
                  */
 		postfix_expression_1	
 				(
-					ReferenceCountedAutoPointer<postfix_expression> _arg_postfix_expression,   ///< A pointer to postfix_expression.
-					ReferenceCountedAutoPointer<expression> _arg_expression  ///< A pointer to expression.
+					ReferenceCountedAutoPointer<primary_expression> _arg_primary_expression  ///< A pointer to primary_expression.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -3761,6 +3934,7 @@ class postfix_expression_1:public postfix_expression
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -3772,12 +3946,15 @@ class postfix_expression_1:public postfix_expression
 
 
 
-class primary_expression;
+class token;
+class postfix_expression;
+
+
 
 
 
 /**
- * \brief postfix_expression_2 implements the pattern: <b>(primary_expression,)</b>
+ * \brief postfix_expression_2 implements the pattern: <b>(postfix_expression, INC_OP)</b>
 
 
  * \dot
@@ -3785,15 +3962,18 @@ class primary_expression;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_postfix_expression_2 [ label="postfix_expression_2", URL="\ref postfix_expression_2", color="#00AAAA" ];
- *     node_primary_expression [ label="primary_expression", URL="\ref primary_expression", color="#00AAAA"];
- *     node_postfix_expression_2 ->  node_primary_expression [label="_p_primary_expression" style=solid];
+ *     node_postfix_expression [ label="postfix_expression", URL="\ref postfix_expression", color="#00AAAA"];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_postfix_expression_2 ->  node_postfix_expression [label="_p_postfix_expression" style=solid];
+ *     node_postfix_expression_2 ->  node_token [label="_p_token" style=solid];
  * }
  * \enddot
  */
 class postfix_expression_2:public postfix_expression
 {
 	private:
-		ReferenceCountedAutoPointer<primary_expression> _p_primary_expression;	  ///< A pointer to primary_expression.
+		ReferenceCountedAutoPointer<postfix_expression> _p_postfix_expression;	  ///< A pointer to postfix_expression.
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>INC_OP</b>, <b>DEC_OP</b>
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -3804,7 +3984,8 @@ class postfix_expression_2:public postfix_expression
                  */
 		postfix_expression_2	
 				(
-					ReferenceCountedAutoPointer<primary_expression> _arg_primary_expression  ///< A pointer to primary_expression.
+					ReferenceCountedAutoPointer<postfix_expression> _arg_postfix_expression,   ///< A pointer to postfix_expression.
+					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>INC_OP</b>, <b>DEC_OP</b>
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -3828,6 +4009,7 @@ class postfix_expression_2:public postfix_expression
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -3839,15 +4021,14 @@ class postfix_expression_2:public postfix_expression
 
 
 
-class token;
+class expression;
 class postfix_expression;
 
 
 
 
-
 /**
- * \brief postfix_expression_3 implements the pattern: <b>(postfix_expression, INC_OP)</b>
+ * \brief postfix_expression_3 implements the pattern: <b>(postfix_expression, '[', expression, ']')</b>
 
 
  * \dot
@@ -3856,9 +4037,9 @@ class postfix_expression;
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_postfix_expression_3 [ label="postfix_expression_3", URL="\ref postfix_expression_3", color="#00AAAA" ];
  *     node_postfix_expression [ label="postfix_expression", URL="\ref postfix_expression", color="#00AAAA"];
- *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_expression [ label="expression", URL="\ref expression", color="#00AAAA"];
  *     node_postfix_expression_3 ->  node_postfix_expression [label="_p_postfix_expression" style=solid];
- *     node_postfix_expression_3 ->  node_token [label="_p_token" style=solid];
+ *     node_postfix_expression_3 ->  node_expression [label="_p_expression" style=solid];
  * }
  * \enddot
  */
@@ -3866,7 +4047,7 @@ class postfix_expression_3:public postfix_expression
 {
 	private:
 		ReferenceCountedAutoPointer<postfix_expression> _p_postfix_expression;	  ///< A pointer to postfix_expression.
-		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>INC_OP</b>, <b>DEC_OP</b>
+		ReferenceCountedAutoPointer<expression> _p_expression;	  ///< A pointer to expression.
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -3878,7 +4059,7 @@ class postfix_expression_3:public postfix_expression
 		postfix_expression_3	
 				(
 					ReferenceCountedAutoPointer<postfix_expression> _arg_postfix_expression,   ///< A pointer to postfix_expression.
-					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>INC_OP</b>, <b>DEC_OP</b>
+					ReferenceCountedAutoPointer<expression> _arg_expression  ///< A pointer to expression.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -3902,6 +4083,7 @@ class postfix_expression_3:public postfix_expression
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -3914,7 +4096,6 @@ class postfix_expression_3:public postfix_expression
 
 
 class token;
-class argument_expression_list;
 class postfix_expression;
 
 
@@ -3922,8 +4103,9 @@ class postfix_expression;
 
 
 
+
 /**
- * \brief postfix_expression_4 implements the pattern: <b>(postfix_expression, '(', argument_expression_list, ')')</b>
+ * \brief postfix_expression_4 implements the pattern: <b>(postfix_expression, '.', IDENTIFIER)</b>
 
 
  * \dot
@@ -3933,10 +4115,10 @@ class postfix_expression;
  *     node_postfix_expression_4 [ label="postfix_expression_4", URL="\ref postfix_expression_4", color="#00AAAA" ];
  *     node_postfix_expression [ label="postfix_expression", URL="\ref postfix_expression", color="#00AAAA"];
  *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
- *     node_argument_expression_list [ label="argument_expression_list", URL="\ref argument_expression_list", color="#00AAAA"];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
  *     node_postfix_expression_4 ->  node_postfix_expression [label="_p_postfix_expression" style=solid];
- *     node_postfix_expression_4 ->  node_token [label="_p_token" style=solid];
- *     node_postfix_expression_4 ->  node_argument_expression_list [label="_p_argument_expression_list" style=dotted];
+ *     node_postfix_expression_4 ->  node_token [label="_p_token1" style=solid];
+ *     node_postfix_expression_4 ->  node_token [label="_p_token2" style=solid];
  * }
  * \enddot
  */
@@ -3944,8 +4126,8 @@ class postfix_expression_4:public postfix_expression
 {
 	private:
 		ReferenceCountedAutoPointer<postfix_expression> _p_postfix_expression;	  ///< A pointer to postfix_expression.
-		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>PTR_OP</b>, <b>'.'</b>, <b>'('</b>
-		ReferenceCountedAutoPointer<argument_expression_list> _p_argument_expression_list;	  ///< A pointer to argument_expression_list. This parameter can be <b>Null</b>
+		ReferenceCountedAutoPointer<token> _p_token1;	  ///< A pointer to a token, accepts <b>PTR_OP</b>, <b>'.'</b>
+		ReferenceCountedAutoPointer<token> _p_token2;	  ///< A pointer to a token, accepts <b>IDENTIFIER</b>
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -3957,8 +4139,8 @@ class postfix_expression_4:public postfix_expression
 		postfix_expression_4	
 				(
 					ReferenceCountedAutoPointer<postfix_expression> _arg_postfix_expression,   ///< A pointer to postfix_expression.
-					ReferenceCountedAutoPointer<token> _arg_token,   ///< A pointer to a token, accepts <b>PTR_OP</b>, <b>'.'</b>, <b>'('</b>
-					ReferenceCountedAutoPointer<argument_expression_list> _arg_argument_expression_list  ///< A pointer to argument_expression_list. This parameter can be <b>Null</b>
+					ReferenceCountedAutoPointer<token> _arg_token1,   ///< A pointer to a token, accepts <b>PTR_OP</b>, <b>'.'</b>
+					ReferenceCountedAutoPointer<token> _arg_token2  ///< A pointer to a token, accepts <b>IDENTIFIER</b>
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -3982,10 +4164,85 @@ class postfix_expression_4:public postfix_expression
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
 		virtual ~postfix_expression_4()
+		{}
+};
+
+
+
+
+
+class argument_expression_list;
+class postfix_expression;
+
+
+
+
+/**
+ * \brief postfix_expression_5 implements the pattern: <b>(postfix_expression, '(', argument_expression_list, ')')</b>
+
+
+ * \dot
+ * digraph AST {
+ *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
+ *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
+ *     node_postfix_expression_5 [ label="postfix_expression_5", URL="\ref postfix_expression_5", color="#00AAAA" ];
+ *     node_postfix_expression [ label="postfix_expression", URL="\ref postfix_expression", color="#00AAAA"];
+ *     node_argument_expression_list [ label="argument_expression_list", URL="\ref argument_expression_list", color="#00AAAA"];
+ *     node_postfix_expression_5 ->  node_postfix_expression [label="_p_postfix_expression" style=solid];
+ *     node_postfix_expression_5 ->  node_argument_expression_list [label="_p_argument_expression_list" style=dotted];
+ * }
+ * \enddot
+ */
+class postfix_expression_5:public postfix_expression
+{
+	private:
+		ReferenceCountedAutoPointer<postfix_expression> _p_postfix_expression;	  ///< A pointer to postfix_expression.
+		ReferenceCountedAutoPointer<argument_expression_list> _p_argument_expression_list;	  ///< A pointer to argument_expression_list. This parameter can be <b>Null</b>
+	public:
+		static CAST_CLASS_ID ID;
+	public:
+		/** 
+		 * \brief Constructor of postfix_expression_5
+		 *
+		 * This function handles the postfix_expression_5
+                 */
+		postfix_expression_5	
+				(
+					ReferenceCountedAutoPointer<postfix_expression> _arg_postfix_expression,   ///< A pointer to postfix_expression.
+					ReferenceCountedAutoPointer<argument_expression_list> _arg_argument_expression_list  ///< A pointer to argument_expression_list. This parameter can be <b>Null</b>
+				);
+		/**
+                 * \brief Returns the name of the class.
+                 *
+                 * Returns the name of the class. Here, returns <b>"postfix_expression_5"</b>
+		 * \returns <b>"postfix_expression_5"</b>
+                 */
+		virtual std::string name()const		{return std::string("postfix_expression_5");}
+
+		/**
+                 * \brief Returns the ID of the class
+                 *
+                 * Returns the ID of the class. Here, returns ID_POSTFIX_EXPRESSION_5
+		 * \returns  ID_POSTFIX_EXPRESSION_5
+                 */
+		virtual CAST_CLASS_ID classId()const		{return ID_POSTFIX_EXPRESSION_5;}
+
+		/**
+		 * \brief 
+		 *
+		 *
+		 */
+		virtual std::ostream& codeStream(std::ostream&)const;
+
+		/**
+		 * \brief Default destructor. 
+		 */
+		virtual ~postfix_expression_5()
 		{}
 };
 
@@ -4077,6 +4334,13 @@ class and_expression_item
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
+		std::string code()const
+		{
+			std::stringstream stream;
+			codeStream(stream);
+			return stream.str();
+		}
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -4278,6 +4542,7 @@ class statement_1:public statement
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -4345,6 +4610,7 @@ class statement_2:public statement
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -4412,6 +4678,7 @@ class statement_3:public statement
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -4479,6 +4746,7 @@ class statement_4:public statement
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -4546,6 +4814,7 @@ class statement_5:public statement
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -4613,6 +4882,7 @@ class statement_6:public statement
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -4673,12 +4943,14 @@ class cast_expression:public CAst
 
 
 
-class unary_expression;
+class cast_expression;
+class type_name;
+
 
 
 
 /**
- * \brief cast_expression_1 implements the pattern: <b>(unary_expression,)</b>
+ * \brief cast_expression_1 implements the pattern: <b>('(', type_name, ')', cast_expression)</b>
 
 
  * \dot
@@ -4686,15 +4958,18 @@ class unary_expression;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_cast_expression_1 [ label="cast_expression_1", URL="\ref cast_expression_1", color="#00AAAA" ];
- *     node_unary_expression [ label="unary_expression", URL="\ref unary_expression", color="#00AAAA"];
- *     node_cast_expression_1 ->  node_unary_expression [label="_p_unary_expression" style=solid];
+ *     node_type_name [ label="type_name", URL="\ref type_name", color="#00AAAA"];
+ *     node_cast_expression [ label="cast_expression", URL="\ref cast_expression", color="#00AAAA"];
+ *     node_cast_expression_1 ->  node_type_name [label="_p_type_name" style=solid];
+ *     node_cast_expression_1 ->  node_cast_expression [label="_p_cast_expression" style=solid];
  * }
  * \enddot
  */
 class cast_expression_1:public cast_expression
 {
 	private:
-		ReferenceCountedAutoPointer<unary_expression> _p_unary_expression;	  ///< A pointer to unary_expression.
+		ReferenceCountedAutoPointer<type_name> _p_type_name;	  ///< A pointer to type_name.
+		ReferenceCountedAutoPointer<cast_expression> _p_cast_expression;	  ///< A pointer to cast_expression.
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -4705,7 +4980,8 @@ class cast_expression_1:public cast_expression
                  */
 		cast_expression_1	
 				(
-					ReferenceCountedAutoPointer<unary_expression> _arg_unary_expression  ///< A pointer to unary_expression.
+					ReferenceCountedAutoPointer<type_name> _arg_type_name,   ///< A pointer to type_name.
+					ReferenceCountedAutoPointer<cast_expression> _arg_cast_expression  ///< A pointer to cast_expression.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -4729,6 +5005,7 @@ class cast_expression_1:public cast_expression
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -4740,14 +5017,12 @@ class cast_expression_1:public cast_expression
 
 
 
-class cast_expression;
-class type_name;
-
+class unary_expression;
 
 
 
 /**
- * \brief cast_expression_2 implements the pattern: <b>('(', type_name, ')', cast_expression)</b>
+ * \brief cast_expression_2 implements the pattern: <b>(unary_expression,)</b>
 
 
  * \dot
@@ -4755,18 +5030,15 @@ class type_name;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_cast_expression_2 [ label="cast_expression_2", URL="\ref cast_expression_2", color="#00AAAA" ];
- *     node_type_name [ label="type_name", URL="\ref type_name", color="#00AAAA"];
- *     node_cast_expression [ label="cast_expression", URL="\ref cast_expression", color="#00AAAA"];
- *     node_cast_expression_2 ->  node_type_name [label="_p_type_name" style=solid];
- *     node_cast_expression_2 ->  node_cast_expression [label="_p_cast_expression" style=solid];
+ *     node_unary_expression [ label="unary_expression", URL="\ref unary_expression", color="#00AAAA"];
+ *     node_cast_expression_2 ->  node_unary_expression [label="_p_unary_expression" style=solid];
  * }
  * \enddot
  */
 class cast_expression_2:public cast_expression
 {
 	private:
-		ReferenceCountedAutoPointer<type_name> _p_type_name;	  ///< A pointer to type_name.
-		ReferenceCountedAutoPointer<cast_expression> _p_cast_expression;	  ///< A pointer to cast_expression.
+		ReferenceCountedAutoPointer<unary_expression> _p_unary_expression;	  ///< A pointer to unary_expression.
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -4777,8 +5049,7 @@ class cast_expression_2:public cast_expression
                  */
 		cast_expression_2	
 				(
-					ReferenceCountedAutoPointer<type_name> _arg_type_name,   ///< A pointer to type_name.
-					ReferenceCountedAutoPointer<cast_expression> _arg_cast_expression  ///< A pointer to cast_expression.
+					ReferenceCountedAutoPointer<unary_expression> _arg_unary_expression  ///< A pointer to unary_expression.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -4802,6 +5073,7 @@ class cast_expression_2:public cast_expression
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -4903,6 +5175,7 @@ class init_declarator:public CAst
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -4998,6 +5271,13 @@ class struct_declarator_list_item
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
+		std::string code()const
+		{
+			std::stringstream stream;
+			codeStream(stream);
+			return stream.str();
+		}
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -5174,6 +5454,13 @@ class logical_or_expression_item
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
+		std::string code()const
+		{
+			std::stringstream stream;
+			codeStream(stream);
+			return stream.str();
+		}
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -5344,6 +5631,7 @@ class unary_operator:public CAst
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -5402,7 +5690,7 @@ class shift_expression;
 class relational_expression_item
 {
 	private:
-		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>'>'</b>, <b>LE_OP</b>, <b>GE_OP</b>, <b>'<'</b>, <b>None</b>
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>'<'</b>, <b>'>'</b>, <b>GE_OP</b>, <b>LE_OP</b>, <b>None</b>
 		ReferenceCountedAutoPointer<shift_expression> _p_shift_expression;	  ///< A pointer to shift_expression.
 	public:
 		static CAST_CLASS_ID ID;
@@ -5414,7 +5702,7 @@ class relational_expression_item
                  */
 		relational_expression_item	
 				(
-					ReferenceCountedAutoPointer<token> _arg_token,   ///< A pointer to a token, accepts <b>'>'</b>, <b>LE_OP</b>, <b>GE_OP</b>, <b>'<'</b>, <b>None</b>
+					ReferenceCountedAutoPointer<token> _arg_token,   ///< A pointer to a token, accepts <b>'<'</b>, <b>'>'</b>, <b>GE_OP</b>, <b>LE_OP</b>, <b>None</b>
 					ReferenceCountedAutoPointer<shift_expression> _arg_shift_expression  ///< A pointer to shift_expression.
 				);
 		/**
@@ -5439,6 +5727,13 @@ class relational_expression_item
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
+		std::string code()const
+		{
+			std::stringstream stream;
+			codeStream(stream);
+			return stream.str();
+		}
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -5609,6 +5904,7 @@ class struct_or_union:public CAst
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -5710,6 +6006,7 @@ class enumerator:public CAst
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -5770,12 +6067,16 @@ class assignment_expression:public CAst
 
 
 
-class conditional_expression;
+class assignment_operator;
+class unary_expression;
+class assignment_expression;
+
+
 
 
 
 /**
- * \brief assignment_expression_1 implements the pattern: <b>(conditional_expression,)</b>
+ * \brief assignment_expression_1 implements the pattern: <b>(unary_expression, assignment_operator, assignment_expression)</b>
 
 
  * \dot
@@ -5783,15 +6084,21 @@ class conditional_expression;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_assignment_expression_1 [ label="assignment_expression_1", URL="\ref assignment_expression_1", color="#00AAAA" ];
- *     node_conditional_expression [ label="conditional_expression", URL="\ref conditional_expression", color="#00AAAA"];
- *     node_assignment_expression_1 ->  node_conditional_expression [label="_p_conditional_expression" style=solid];
+ *     node_unary_expression [ label="unary_expression", URL="\ref unary_expression", color="#00AAAA"];
+ *     node_assignment_operator [ label="assignment_operator", URL="\ref assignment_operator", color="#00AAAA"];
+ *     node_assignment_expression [ label="assignment_expression", URL="\ref assignment_expression", color="#00AAAA"];
+ *     node_assignment_expression_1 ->  node_unary_expression [label="_p_unary_expression" style=solid];
+ *     node_assignment_expression_1 ->  node_assignment_operator [label="_p_assignment_operator" style=solid];
+ *     node_assignment_expression_1 ->  node_assignment_expression [label="_p_assignment_expression" style=solid];
  * }
  * \enddot
  */
 class assignment_expression_1:public assignment_expression
 {
 	private:
-		ReferenceCountedAutoPointer<conditional_expression> _p_conditional_expression;	  ///< A pointer to conditional_expression.
+		ReferenceCountedAutoPointer<unary_expression> _p_unary_expression;	  ///< A pointer to unary_expression.
+		ReferenceCountedAutoPointer<assignment_operator> _p_assignment_operator;	  ///< A pointer to assignment_operator.
+		ReferenceCountedAutoPointer<assignment_expression> _p_assignment_expression;	  ///< A pointer to assignment_expression.
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -5802,7 +6109,9 @@ class assignment_expression_1:public assignment_expression
                  */
 		assignment_expression_1	
 				(
-					ReferenceCountedAutoPointer<conditional_expression> _arg_conditional_expression  ///< A pointer to conditional_expression.
+					ReferenceCountedAutoPointer<unary_expression> _arg_unary_expression,   ///< A pointer to unary_expression.
+					ReferenceCountedAutoPointer<assignment_operator> _arg_assignment_operator,   ///< A pointer to assignment_operator.
+					ReferenceCountedAutoPointer<assignment_expression> _arg_assignment_expression  ///< A pointer to assignment_expression.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -5826,6 +6135,7 @@ class assignment_expression_1:public assignment_expression
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -5837,16 +6147,12 @@ class assignment_expression_1:public assignment_expression
 
 
 
-class assignment_operator;
-class unary_expression;
-class assignment_expression;
-
-
+class conditional_expression;
 
 
 
 /**
- * \brief assignment_expression_2 implements the pattern: <b>(unary_expression, assignment_operator, assignment_expression)</b>
+ * \brief assignment_expression_2 implements the pattern: <b>(conditional_expression,)</b>
 
 
  * \dot
@@ -5854,21 +6160,15 @@ class assignment_expression;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_assignment_expression_2 [ label="assignment_expression_2", URL="\ref assignment_expression_2", color="#00AAAA" ];
- *     node_unary_expression [ label="unary_expression", URL="\ref unary_expression", color="#00AAAA"];
- *     node_assignment_operator [ label="assignment_operator", URL="\ref assignment_operator", color="#00AAAA"];
- *     node_assignment_expression [ label="assignment_expression", URL="\ref assignment_expression", color="#00AAAA"];
- *     node_assignment_expression_2 ->  node_unary_expression [label="_p_unary_expression" style=solid];
- *     node_assignment_expression_2 ->  node_assignment_operator [label="_p_assignment_operator" style=solid];
- *     node_assignment_expression_2 ->  node_assignment_expression [label="_p_assignment_expression" style=solid];
+ *     node_conditional_expression [ label="conditional_expression", URL="\ref conditional_expression", color="#00AAAA"];
+ *     node_assignment_expression_2 ->  node_conditional_expression [label="_p_conditional_expression" style=solid];
  * }
  * \enddot
  */
 class assignment_expression_2:public assignment_expression
 {
 	private:
-		ReferenceCountedAutoPointer<unary_expression> _p_unary_expression;	  ///< A pointer to unary_expression.
-		ReferenceCountedAutoPointer<assignment_operator> _p_assignment_operator;	  ///< A pointer to assignment_operator.
-		ReferenceCountedAutoPointer<assignment_expression> _p_assignment_expression;	  ///< A pointer to assignment_expression.
+		ReferenceCountedAutoPointer<conditional_expression> _p_conditional_expression;	  ///< A pointer to conditional_expression.
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -5879,9 +6179,7 @@ class assignment_expression_2:public assignment_expression
                  */
 		assignment_expression_2	
 				(
-					ReferenceCountedAutoPointer<unary_expression> _arg_unary_expression,   ///< A pointer to unary_expression.
-					ReferenceCountedAutoPointer<assignment_operator> _arg_assignment_operator,   ///< A pointer to assignment_operator.
-					ReferenceCountedAutoPointer<assignment_expression> _arg_assignment_expression  ///< A pointer to assignment_expression.
+					ReferenceCountedAutoPointer<conditional_expression> _arg_conditional_expression  ///< A pointer to conditional_expression.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -5905,6 +6203,7 @@ class assignment_expression_2:public assignment_expression
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -6006,6 +6305,7 @@ class parameter_type_list:public CAst
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -6068,13 +6368,13 @@ class parameter_declaration:public CAst
 
 
 class declaration_specifiers;
-class abstract_declarator;
+class declarator;
 
 
 
 
 /**
- * \brief parameter_declaration_1 implements the pattern: <b>(declaration_specifiers, abstract_declarator)</b>
+ * \brief parameter_declaration_1 implements the pattern: <b>(declaration_specifiers, declarator)</b>
 
 
  * \dot
@@ -6083,9 +6383,9 @@ class abstract_declarator;
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_parameter_declaration_1 [ label="parameter_declaration_1", URL="\ref parameter_declaration_1", color="#00AAAA" ];
  *     node_declaration_specifiers [ label="declaration_specifiers", URL="\ref declaration_specifiers", color="#00AAAA"];
- *     node_abstract_declarator [ label="abstract_declarator", URL="\ref abstract_declarator", color="#00AAAA"];
+ *     node_declarator [ label="declarator", URL="\ref declarator", color="#00AAAA"];
  *     node_parameter_declaration_1 ->  node_declaration_specifiers [label="_p_declaration_specifiers" style=solid];
- *     node_parameter_declaration_1 ->  node_abstract_declarator [label="_p_abstract_declarator" style=solid];
+ *     node_parameter_declaration_1 ->  node_declarator [label="_p_declarator" style=dotted];
  * }
  * \enddot
  */
@@ -6093,7 +6393,7 @@ class parameter_declaration_1:public parameter_declaration
 {
 	private:
 		ReferenceCountedAutoPointer<declaration_specifiers> _p_declaration_specifiers;	  ///< A pointer to declaration_specifiers.
-		ReferenceCountedAutoPointer<abstract_declarator> _p_abstract_declarator;	  ///< A pointer to abstract_declarator.
+		ReferenceCountedAutoPointer<declarator> _p_declarator;	  ///< A pointer to declarator. This parameter can be <b>Null</b>
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -6105,7 +6405,7 @@ class parameter_declaration_1:public parameter_declaration
 		parameter_declaration_1	
 				(
 					ReferenceCountedAutoPointer<declaration_specifiers> _arg_declaration_specifiers,   ///< A pointer to declaration_specifiers.
-					ReferenceCountedAutoPointer<abstract_declarator> _arg_abstract_declarator  ///< A pointer to abstract_declarator.
+					ReferenceCountedAutoPointer<declarator> _arg_declarator  ///< A pointer to declarator. This parameter can be <b>Null</b>
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -6129,6 +6429,7 @@ class parameter_declaration_1:public parameter_declaration
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -6141,13 +6442,13 @@ class parameter_declaration_1:public parameter_declaration
 
 
 class declaration_specifiers;
-class declarator;
+class abstract_declarator;
 
 
 
 
 /**
- * \brief parameter_declaration_2 implements the pattern: <b>(declaration_specifiers, declarator)</b>
+ * \brief parameter_declaration_2 implements the pattern: <b>(declaration_specifiers, abstract_declarator)</b>
 
 
  * \dot
@@ -6156,9 +6457,9 @@ class declarator;
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_parameter_declaration_2 [ label="parameter_declaration_2", URL="\ref parameter_declaration_2", color="#00AAAA" ];
  *     node_declaration_specifiers [ label="declaration_specifiers", URL="\ref declaration_specifiers", color="#00AAAA"];
- *     node_declarator [ label="declarator", URL="\ref declarator", color="#00AAAA"];
+ *     node_abstract_declarator [ label="abstract_declarator", URL="\ref abstract_declarator", color="#00AAAA"];
  *     node_parameter_declaration_2 ->  node_declaration_specifiers [label="_p_declaration_specifiers" style=solid];
- *     node_parameter_declaration_2 ->  node_declarator [label="_p_declarator" style=dotted];
+ *     node_parameter_declaration_2 ->  node_abstract_declarator [label="_p_abstract_declarator" style=solid];
  * }
  * \enddot
  */
@@ -6166,7 +6467,7 @@ class parameter_declaration_2:public parameter_declaration
 {
 	private:
 		ReferenceCountedAutoPointer<declaration_specifiers> _p_declaration_specifiers;	  ///< A pointer to declaration_specifiers.
-		ReferenceCountedAutoPointer<declarator> _p_declarator;	  ///< A pointer to declarator. This parameter can be <b>Null</b>
+		ReferenceCountedAutoPointer<abstract_declarator> _p_abstract_declarator;	  ///< A pointer to abstract_declarator.
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -6178,7 +6479,7 @@ class parameter_declaration_2:public parameter_declaration
 		parameter_declaration_2	
 				(
 					ReferenceCountedAutoPointer<declaration_specifiers> _arg_declaration_specifiers,   ///< A pointer to declaration_specifiers.
-					ReferenceCountedAutoPointer<declarator> _arg_declarator  ///< A pointer to declarator. This parameter can be <b>Null</b>
+					ReferenceCountedAutoPointer<abstract_declarator> _arg_abstract_declarator  ///< A pointer to abstract_declarator.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -6202,6 +6503,7 @@ class parameter_declaration_2:public parameter_declaration
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -6260,7 +6562,7 @@ class token;
 class multiplicative_expression_item
 {
 	private:
-		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>'*'</b>, <b>'%'</b>, <b>'/'</b>, <b>None</b>
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>'/'</b>, <b>'*'</b>, <b>'%'</b>, <b>None</b>
 		ReferenceCountedAutoPointer<cast_expression> _p_cast_expression;	  ///< A pointer to cast_expression.
 	public:
 		static CAST_CLASS_ID ID;
@@ -6272,7 +6574,7 @@ class multiplicative_expression_item
                  */
 		multiplicative_expression_item	
 				(
-					ReferenceCountedAutoPointer<token> _arg_token,   ///< A pointer to a token, accepts <b>'*'</b>, <b>'%'</b>, <b>'/'</b>, <b>None</b>
+					ReferenceCountedAutoPointer<token> _arg_token,   ///< A pointer to a token, accepts <b>'/'</b>, <b>'*'</b>, <b>'%'</b>, <b>None</b>
 					ReferenceCountedAutoPointer<cast_expression> _arg_cast_expression  ///< A pointer to cast_expression.
 				);
 		/**
@@ -6297,6 +6599,13 @@ class multiplicative_expression_item
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
+		std::string code()const
+		{
+			std::stringstream stream;
+			codeStream(stream);
+			return stream.str();
+		}
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -6466,6 +6775,13 @@ class type_qualifier_list_item
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
+		std::string code()const
+		{
+			std::stringstream stream;
+			codeStream(stream);
+			return stream.str();
+		}
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -6642,6 +6958,13 @@ class argument_expression_list_item
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
+		std::string code()const
+		{
+			std::stringstream stream;
+			codeStream(stream);
+			return stream.str();
+		}
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -6790,14 +7113,12 @@ class direct_abstract_declarator:public CAst
 
 
 
-class direct_abstract_declarator;
-class constant_expression;
-
+class abstract_declarator;
 
 
 
 /**
- * \brief direct_abstract_declarator_1 implements the pattern: <b>(direct_abstract_declarator, '[', constant_expression, ']')</b>
+ * \brief direct_abstract_declarator_1 implements the pattern: <b>('(', abstract_declarator, ')')</b>
 
 
  * \dot
@@ -6805,18 +7126,15 @@ class constant_expression;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_direct_abstract_declarator_1 [ label="direct_abstract_declarator_1", URL="\ref direct_abstract_declarator_1", color="#00AAAA" ];
- *     node_direct_abstract_declarator [ label="direct_abstract_declarator", URL="\ref direct_abstract_declarator", color="#00AAAA"];
- *     node_constant_expression [ label="constant_expression", URL="\ref constant_expression", color="#00AAAA"];
- *     node_direct_abstract_declarator_1 ->  node_direct_abstract_declarator [label="_p_direct_abstract_declarator" style=dotted];
- *     node_direct_abstract_declarator_1 ->  node_constant_expression [label="_p_constant_expression" style=dotted];
+ *     node_abstract_declarator [ label="abstract_declarator", URL="\ref abstract_declarator", color="#00AAAA"];
+ *     node_direct_abstract_declarator_1 ->  node_abstract_declarator [label="_p_abstract_declarator" style=solid];
  * }
  * \enddot
  */
 class direct_abstract_declarator_1:public direct_abstract_declarator
 {
 	private:
-		ReferenceCountedAutoPointer<direct_abstract_declarator> _p_direct_abstract_declarator;	  ///< A pointer to direct_abstract_declarator. This parameter can be <b>Null</b>
-		ReferenceCountedAutoPointer<constant_expression> _p_constant_expression;	  ///< A pointer to constant_expression. This parameter can be <b>Null</b>
+		ReferenceCountedAutoPointer<abstract_declarator> _p_abstract_declarator;	  ///< A pointer to abstract_declarator.
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -6827,8 +7145,7 @@ class direct_abstract_declarator_1:public direct_abstract_declarator
                  */
 		direct_abstract_declarator_1	
 				(
-					ReferenceCountedAutoPointer<direct_abstract_declarator> _arg_direct_abstract_declarator,   ///< A pointer to direct_abstract_declarator. This parameter can be <b>Null</b>
-					ReferenceCountedAutoPointer<constant_expression> _arg_constant_expression  ///< A pointer to constant_expression. This parameter can be <b>Null</b>
+					ReferenceCountedAutoPointer<abstract_declarator> _arg_abstract_declarator  ///< A pointer to abstract_declarator.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -6852,6 +7169,7 @@ class direct_abstract_declarator_1:public direct_abstract_declarator
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -6925,6 +7243,7 @@ class direct_abstract_declarator_2:public direct_abstract_declarator
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -6936,12 +7255,14 @@ class direct_abstract_declarator_2:public direct_abstract_declarator
 
 
 
-class abstract_declarator;
+class direct_abstract_declarator;
+class constant_expression;
+
 
 
 
 /**
- * \brief direct_abstract_declarator_3 implements the pattern: <b>('(', abstract_declarator, ')')</b>
+ * \brief direct_abstract_declarator_3 implements the pattern: <b>(direct_abstract_declarator, '[', constant_expression, ']')</b>
 
 
  * \dot
@@ -6949,15 +7270,18 @@ class abstract_declarator;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_direct_abstract_declarator_3 [ label="direct_abstract_declarator_3", URL="\ref direct_abstract_declarator_3", color="#00AAAA" ];
- *     node_abstract_declarator [ label="abstract_declarator", URL="\ref abstract_declarator", color="#00AAAA"];
- *     node_direct_abstract_declarator_3 ->  node_abstract_declarator [label="_p_abstract_declarator" style=solid];
+ *     node_direct_abstract_declarator [ label="direct_abstract_declarator", URL="\ref direct_abstract_declarator", color="#00AAAA"];
+ *     node_constant_expression [ label="constant_expression", URL="\ref constant_expression", color="#00AAAA"];
+ *     node_direct_abstract_declarator_3 ->  node_direct_abstract_declarator [label="_p_direct_abstract_declarator" style=dotted];
+ *     node_direct_abstract_declarator_3 ->  node_constant_expression [label="_p_constant_expression" style=dotted];
  * }
  * \enddot
  */
 class direct_abstract_declarator_3:public direct_abstract_declarator
 {
 	private:
-		ReferenceCountedAutoPointer<abstract_declarator> _p_abstract_declarator;	  ///< A pointer to abstract_declarator.
+		ReferenceCountedAutoPointer<direct_abstract_declarator> _p_direct_abstract_declarator;	  ///< A pointer to direct_abstract_declarator. This parameter can be <b>Null</b>
+		ReferenceCountedAutoPointer<constant_expression> _p_constant_expression;	  ///< A pointer to constant_expression. This parameter can be <b>Null</b>
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -6968,7 +7292,8 @@ class direct_abstract_declarator_3:public direct_abstract_declarator
                  */
 		direct_abstract_declarator_3	
 				(
-					ReferenceCountedAutoPointer<abstract_declarator> _arg_abstract_declarator  ///< A pointer to abstract_declarator.
+					ReferenceCountedAutoPointer<direct_abstract_declarator> _arg_direct_abstract_declarator,   ///< A pointer to direct_abstract_declarator. This parameter can be <b>Null</b>
+					ReferenceCountedAutoPointer<constant_expression> _arg_constant_expression  ///< A pointer to constant_expression. This parameter can be <b>Null</b>
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -6992,6 +7317,7 @@ class direct_abstract_declarator_3:public direct_abstract_declarator
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -7087,6 +7413,13 @@ class equality_expression_item
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
+		std::string code()const
+		{
+			std::stringstream stream;
+			codeStream(stream);
+			return stream.str();
+		}
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -7286,6 +7619,7 @@ class primary_expression_1:public primary_expression
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -7354,6 +7688,7 @@ class primary_expression_2:public primary_expression
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -7405,6 +7740,14 @@ class declaration_specifiers_item
 		virtual ~declaration_specifiers_item(){};
 
 		virtual std::ostream& codeStream(std::ostream& stream)const=0;
+
+		std::string code()const
+		{
+			std::stringstream stream;
+			codeStream(stream);
+			return stream.str();
+		}
+
 };
 
 class type_qualifier;
@@ -7463,6 +7806,7 @@ class declaration_specifiers_item_1:public declaration_specifiers_item
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -7474,12 +7818,12 @@ class declaration_specifiers_item_1:public declaration_specifiers_item
 
 
 
-class storage_class_specifier;
+class type_specifier;
 
 
 
 /**
- * \brief declaration_specifiers_item_2 implements the pattern: <b>(storage_class_specifier, declaration_specifiers)</b>
+ * \brief declaration_specifiers_item_2 implements the pattern: <b>(type_specifier, declaration_specifiers)</b>
 
 
  * \dot
@@ -7487,15 +7831,15 @@ class storage_class_specifier;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_declaration_specifiers_item_2 [ label="declaration_specifiers_item_2", URL="\ref declaration_specifiers_item_2", color="#00AAAA" ];
- *     node_storage_class_specifier [ label="storage_class_specifier", URL="\ref storage_class_specifier", color="#00AAAA"];
- *     node_declaration_specifiers_item_2 ->  node_storage_class_specifier [label="_p_storage_class_specifier" style=solid];
+ *     node_type_specifier [ label="type_specifier", URL="\ref type_specifier", color="#00AAAA"];
+ *     node_declaration_specifiers_item_2 ->  node_type_specifier [label="_p_type_specifier" style=solid];
  * }
  * \enddot
  */
 class declaration_specifiers_item_2:public declaration_specifiers_item
 {
 	private:
-		ReferenceCountedAutoPointer<storage_class_specifier> _p_storage_class_specifier;	  ///< A pointer to storage_class_specifier.
+		ReferenceCountedAutoPointer<type_specifier> _p_type_specifier;	  ///< A pointer to type_specifier.
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -7506,7 +7850,7 @@ class declaration_specifiers_item_2:public declaration_specifiers_item
                  */
 		declaration_specifiers_item_2	
 				(
-					ReferenceCountedAutoPointer<storage_class_specifier> _arg_storage_class_specifier  ///< A pointer to storage_class_specifier.
+					ReferenceCountedAutoPointer<type_specifier> _arg_type_specifier  ///< A pointer to type_specifier.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -7530,6 +7874,7 @@ class declaration_specifiers_item_2:public declaration_specifiers_item
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -7541,12 +7886,12 @@ class declaration_specifiers_item_2:public declaration_specifiers_item
 
 
 
-class type_specifier;
+class storage_class_specifier;
 
 
 
 /**
- * \brief declaration_specifiers_item_3 implements the pattern: <b>(type_specifier, declaration_specifiers)</b>
+ * \brief declaration_specifiers_item_3 implements the pattern: <b>(storage_class_specifier, declaration_specifiers)</b>
 
 
  * \dot
@@ -7554,15 +7899,15 @@ class type_specifier;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_declaration_specifiers_item_3 [ label="declaration_specifiers_item_3", URL="\ref declaration_specifiers_item_3", color="#00AAAA" ];
- *     node_type_specifier [ label="type_specifier", URL="\ref type_specifier", color="#00AAAA"];
- *     node_declaration_specifiers_item_3 ->  node_type_specifier [label="_p_type_specifier" style=solid];
+ *     node_storage_class_specifier [ label="storage_class_specifier", URL="\ref storage_class_specifier", color="#00AAAA"];
+ *     node_declaration_specifiers_item_3 ->  node_storage_class_specifier [label="_p_storage_class_specifier" style=solid];
  * }
  * \enddot
  */
 class declaration_specifiers_item_3:public declaration_specifiers_item
 {
 	private:
-		ReferenceCountedAutoPointer<type_specifier> _p_type_specifier;	  ///< A pointer to type_specifier.
+		ReferenceCountedAutoPointer<storage_class_specifier> _p_storage_class_specifier;	  ///< A pointer to storage_class_specifier.
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -7573,7 +7918,7 @@ class declaration_specifiers_item_3:public declaration_specifiers_item
                  */
 		declaration_specifiers_item_3	
 				(
-					ReferenceCountedAutoPointer<type_specifier> _arg_type_specifier  ///< A pointer to type_specifier.
+					ReferenceCountedAutoPointer<storage_class_specifier> _arg_storage_class_specifier  ///< A pointer to storage_class_specifier.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -7597,6 +7942,7 @@ class declaration_specifiers_item_3:public declaration_specifiers_item
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -7772,6 +8118,7 @@ class declaration:public CAst
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -7837,12 +8184,14 @@ class direct_declarator:public CAst
 
 
 
-class declarator;
+class direct_declarator;
+class constant_expression;
+
 
 
 
 /**
- * \brief direct_declarator_1 implements the pattern: <b>('(', declarator, ')')</b>
+ * \brief direct_declarator_1 implements the pattern: <b>(direct_declarator, '[', constant_expression, ']')</b>
 
 
  * \dot
@@ -7850,15 +8199,18 @@ class declarator;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_direct_declarator_1 [ label="direct_declarator_1", URL="\ref direct_declarator_1", color="#00AAAA" ];
- *     node_declarator [ label="declarator", URL="\ref declarator", color="#00AAAA"];
- *     node_direct_declarator_1 ->  node_declarator [label="_p_declarator" style=solid];
+ *     node_direct_declarator [ label="direct_declarator", URL="\ref direct_declarator", color="#00AAAA"];
+ *     node_constant_expression [ label="constant_expression", URL="\ref constant_expression", color="#00AAAA"];
+ *     node_direct_declarator_1 ->  node_direct_declarator [label="_p_direct_declarator" style=solid];
+ *     node_direct_declarator_1 ->  node_constant_expression [label="_p_constant_expression" style=dotted];
  * }
  * \enddot
  */
 class direct_declarator_1:public direct_declarator
 {
 	private:
-		ReferenceCountedAutoPointer<declarator> _p_declarator;	  ///< A pointer to declarator.
+		ReferenceCountedAutoPointer<direct_declarator> _p_direct_declarator;	  ///< A pointer to direct_declarator.
+		ReferenceCountedAutoPointer<constant_expression> _p_constant_expression;	  ///< A pointer to constant_expression. This parameter can be <b>Null</b>
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -7869,7 +8221,8 @@ class direct_declarator_1:public direct_declarator
                  */
 		direct_declarator_1	
 				(
-					ReferenceCountedAutoPointer<declarator> _arg_declarator  ///< A pointer to declarator.
+					ReferenceCountedAutoPointer<direct_declarator> _arg_direct_declarator,   ///< A pointer to direct_declarator.
+					ReferenceCountedAutoPointer<constant_expression> _arg_constant_expression  ///< A pointer to constant_expression. This parameter can be <b>Null</b>
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -7893,6 +8246,7 @@ class direct_declarator_1:public direct_declarator
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -7904,14 +8258,13 @@ class direct_declarator_1:public direct_declarator
 
 
 
-class direct_declarator;
-class constant_expression;
+class token;
 
 
 
 
 /**
- * \brief direct_declarator_2 implements the pattern: <b>(direct_declarator, '[', constant_expression, ']')</b>
+ * \brief direct_declarator_2 implements the pattern: <b>(IDENTIFIER,)</b>
 
 
  * \dot
@@ -7919,18 +8272,15 @@ class constant_expression;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_direct_declarator_2 [ label="direct_declarator_2", URL="\ref direct_declarator_2", color="#00AAAA" ];
- *     node_direct_declarator [ label="direct_declarator", URL="\ref direct_declarator", color="#00AAAA"];
- *     node_constant_expression [ label="constant_expression", URL="\ref constant_expression", color="#00AAAA"];
- *     node_direct_declarator_2 ->  node_direct_declarator [label="_p_direct_declarator" style=solid];
- *     node_direct_declarator_2 ->  node_constant_expression [label="_p_constant_expression" style=dotted];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_direct_declarator_2 ->  node_token [label="_p_token" style=solid];
  * }
  * \enddot
  */
 class direct_declarator_2:public direct_declarator
 {
 	private:
-		ReferenceCountedAutoPointer<direct_declarator> _p_direct_declarator;	  ///< A pointer to direct_declarator.
-		ReferenceCountedAutoPointer<constant_expression> _p_constant_expression;	  ///< A pointer to constant_expression. This parameter can be <b>Null</b>
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>IDENTIFIER</b>
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -7941,8 +8291,7 @@ class direct_declarator_2:public direct_declarator
                  */
 		direct_declarator_2	
 				(
-					ReferenceCountedAutoPointer<direct_declarator> _arg_direct_declarator,   ///< A pointer to direct_declarator.
-					ReferenceCountedAutoPointer<constant_expression> _arg_constant_expression  ///< A pointer to constant_expression. This parameter can be <b>Null</b>
+					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>IDENTIFIER</b>
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -7966,6 +8315,7 @@ class direct_declarator_2:public direct_declarator
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -8039,6 +8389,7 @@ class direct_declarator_3:public direct_declarator
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -8050,14 +8401,12 @@ class direct_declarator_3:public direct_declarator
 
 
 
-class direct_declarator;
-class identifier_list;
-
+class declarator;
 
 
 
 /**
- * \brief direct_declarator_4 implements the pattern: <b>(direct_declarator, '(', identifier_list, ')')</b>
+ * \brief direct_declarator_4 implements the pattern: <b>('(', declarator, ')')</b>
 
 
  * \dot
@@ -8065,18 +8414,15 @@ class identifier_list;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_direct_declarator_4 [ label="direct_declarator_4", URL="\ref direct_declarator_4", color="#00AAAA" ];
- *     node_direct_declarator [ label="direct_declarator", URL="\ref direct_declarator", color="#00AAAA"];
- *     node_identifier_list [ label="identifier_list", URL="\ref identifier_list", color="#00AAAA"];
- *     node_direct_declarator_4 ->  node_direct_declarator [label="_p_direct_declarator" style=solid];
- *     node_direct_declarator_4 ->  node_identifier_list [label="_p_identifier_list" style=solid];
+ *     node_declarator [ label="declarator", URL="\ref declarator", color="#00AAAA"];
+ *     node_direct_declarator_4 ->  node_declarator [label="_p_declarator" style=solid];
  * }
  * \enddot
  */
 class direct_declarator_4:public direct_declarator
 {
 	private:
-		ReferenceCountedAutoPointer<direct_declarator> _p_direct_declarator;	  ///< A pointer to direct_declarator.
-		ReferenceCountedAutoPointer<identifier_list> _p_identifier_list;	  ///< A pointer to identifier_list.
+		ReferenceCountedAutoPointer<declarator> _p_declarator;	  ///< A pointer to declarator.
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -8087,8 +8433,7 @@ class direct_declarator_4:public direct_declarator
                  */
 		direct_declarator_4	
 				(
-					ReferenceCountedAutoPointer<direct_declarator> _arg_direct_declarator,   ///< A pointer to direct_declarator.
-					ReferenceCountedAutoPointer<identifier_list> _arg_identifier_list  ///< A pointer to identifier_list.
+					ReferenceCountedAutoPointer<declarator> _arg_declarator  ///< A pointer to declarator.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -8112,6 +8457,7 @@ class direct_declarator_4:public direct_declarator
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -8123,13 +8469,14 @@ class direct_declarator_4:public direct_declarator
 
 
 
-class token;
+class direct_declarator;
+class identifier_list;
 
 
 
 
 /**
- * \brief direct_declarator_5 implements the pattern: <b>(IDENTIFIER,)</b>
+ * \brief direct_declarator_5 implements the pattern: <b>(direct_declarator, '(', identifier_list, ')')</b>
 
 
  * \dot
@@ -8137,15 +8484,18 @@ class token;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_direct_declarator_5 [ label="direct_declarator_5", URL="\ref direct_declarator_5", color="#00AAAA" ];
- *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
- *     node_direct_declarator_5 ->  node_token [label="_p_token" style=solid];
+ *     node_direct_declarator [ label="direct_declarator", URL="\ref direct_declarator", color="#00AAAA"];
+ *     node_identifier_list [ label="identifier_list", URL="\ref identifier_list", color="#00AAAA"];
+ *     node_direct_declarator_5 ->  node_direct_declarator [label="_p_direct_declarator" style=solid];
+ *     node_direct_declarator_5 ->  node_identifier_list [label="_p_identifier_list" style=solid];
  * }
  * \enddot
  */
 class direct_declarator_5:public direct_declarator
 {
 	private:
-		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>IDENTIFIER</b>
+		ReferenceCountedAutoPointer<direct_declarator> _p_direct_declarator;	  ///< A pointer to direct_declarator.
+		ReferenceCountedAutoPointer<identifier_list> _p_identifier_list;	  ///< A pointer to identifier_list.
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -8156,7 +8506,8 @@ class direct_declarator_5:public direct_declarator
                  */
 		direct_declarator_5	
 				(
-					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>IDENTIFIER</b>
+					ReferenceCountedAutoPointer<direct_declarator> _arg_direct_declarator,   ///< A pointer to direct_declarator.
+					ReferenceCountedAutoPointer<identifier_list> _arg_identifier_list  ///< A pointer to identifier_list.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -8180,6 +8531,7 @@ class direct_declarator_5:public direct_declarator
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -8275,6 +8627,13 @@ class logical_and_expression_item
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
+		std::string code()const
+		{
+			std::stringstream stream;
+			codeStream(stream);
+			return stream.str();
+		}
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -8451,6 +8810,13 @@ class init_declarator_list_item
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
+		std::string code()const
+		{
+			std::stringstream stream;
+			codeStream(stream);
+			return stream.str();
+		}
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -8627,6 +8993,13 @@ class shift_expression_item
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
+		std::string code()const
+		{
+			std::stringstream stream;
+			codeStream(stream);
+			return stream.str();
+		}
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -8803,6 +9176,13 @@ class identifier_list_item
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
+		std::string code()const
+		{
+			std::stringstream stream;
+			codeStream(stream);
+			return stream.str();
+		}
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -8947,13 +9327,12 @@ class jump_statement:public CAst
 
 
 
-class token;
-
+class expression;
 
 
 
 /**
- * \brief jump_statement_1 implements the pattern: <b>(CONTINUE, ';')</b>
+ * \brief jump_statement_1 implements the pattern: <b>(RETURN, expression, ';')</b>
 
 
  * \dot
@@ -8961,15 +9340,15 @@ class token;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_jump_statement_1 [ label="jump_statement_1", URL="\ref jump_statement_1", color="#00AAAA" ];
- *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
- *     node_jump_statement_1 ->  node_token [label="_p_token" style=solid];
+ *     node_expression [ label="expression", URL="\ref expression", color="#00AAAA"];
+ *     node_jump_statement_1 ->  node_expression [label="_p_expression" style=dotted];
  * }
  * \enddot
  */
 class jump_statement_1:public jump_statement
 {
 	private:
-		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>BREAK</b>, <b>CONTINUE</b>
+		ReferenceCountedAutoPointer<expression> _p_expression;	  ///< A pointer to expression. This parameter can be <b>Null</b>
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -8980,7 +9359,7 @@ class jump_statement_1:public jump_statement
                  */
 		jump_statement_1	
 				(
-					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>BREAK</b>, <b>CONTINUE</b>
+					ReferenceCountedAutoPointer<expression> _arg_expression  ///< A pointer to expression. This parameter can be <b>Null</b>
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -9004,6 +9383,7 @@ class jump_statement_1:public jump_statement
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -9015,12 +9395,13 @@ class jump_statement_1:public jump_statement
 
 
 
-class expression;
+class token;
+
 
 
 
 /**
- * \brief jump_statement_2 implements the pattern: <b>(RETURN, expression, ';')</b>
+ * \brief jump_statement_2 implements the pattern: <b>(GOTO, IDENTIFIER, ';')</b>
 
 
  * \dot
@@ -9028,15 +9409,15 @@ class expression;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_jump_statement_2 [ label="jump_statement_2", URL="\ref jump_statement_2", color="#00AAAA" ];
- *     node_expression [ label="expression", URL="\ref expression", color="#00AAAA"];
- *     node_jump_statement_2 ->  node_expression [label="_p_expression" style=dotted];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_jump_statement_2 ->  node_token [label="_p_token" style=solid];
  * }
  * \enddot
  */
 class jump_statement_2:public jump_statement
 {
 	private:
-		ReferenceCountedAutoPointer<expression> _p_expression;	  ///< A pointer to expression. This parameter can be <b>Null</b>
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>IDENTIFIER</b>
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -9047,7 +9428,7 @@ class jump_statement_2:public jump_statement
                  */
 		jump_statement_2	
 				(
-					ReferenceCountedAutoPointer<expression> _arg_expression  ///< A pointer to expression. This parameter can be <b>Null</b>
+					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>IDENTIFIER</b>
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -9071,6 +9452,7 @@ class jump_statement_2:public jump_statement
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -9088,7 +9470,7 @@ class token;
 
 
 /**
- * \brief jump_statement_3 implements the pattern: <b>(GOTO, IDENTIFIER, ';')</b>
+ * \brief jump_statement_3 implements the pattern: <b>(CONTINUE, ';')</b>
 
 
  * \dot
@@ -9104,7 +9486,7 @@ class token;
 class jump_statement_3:public jump_statement
 {
 	private:
-		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>IDENTIFIER</b>
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>BREAK</b>, <b>CONTINUE</b>
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -9115,7 +9497,7 @@ class jump_statement_3:public jump_statement
                  */
 		jump_statement_3	
 				(
-					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>IDENTIFIER</b>
+					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>BREAK</b>, <b>CONTINUE</b>
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -9139,6 +9521,7 @@ class jump_statement_3:public jump_statement
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -9240,6 +9623,7 @@ class struct_declarator:public CAst
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -9346,6 +9730,7 @@ class function_definition:public CAst
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -9441,6 +9826,13 @@ class parameter_list_item
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
+		std::string code()const
+		{
+			std::stringstream stream;
+			codeStream(stream);
+			return stream.str();
+		}
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -9629,6 +10021,7 @@ class enum_specifier:public CAst
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -9718,6 +10111,7 @@ class type_qualifier:public CAst
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -9813,6 +10207,13 @@ class enumerator_list_item
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
+		std::string code()const
+		{
+			std::stringstream stream;
+			codeStream(stream);
+			return stream.str();
+		}
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -10017,6 +10418,7 @@ class labeled_statement_1:public labeled_statement
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -10091,6 +10493,7 @@ class labeled_statement_2:public labeled_statement
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -10179,6 +10582,13 @@ class declaration_list_item
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
+		std::string code()const
+		{
+			std::stringstream stream;
+			codeStream(stream);
+			return stream.str();
+		}
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -10311,14 +10721,22 @@ class specifier_qualifier_list_item
 		virtual ~specifier_qualifier_list_item(){};
 
 		virtual std::ostream& codeStream(std::ostream& stream)const=0;
+
+		std::string code()const
+		{
+			std::stringstream stream;
+			codeStream(stream);
+			return stream.str();
+		}
+
 };
 
-class type_qualifier;
+class type_specifier;
 
 
 
 /**
- * \brief specifier_qualifier_list_item_1 implements the pattern: <b>(type_qualifier, specifier_qualifier_list)</b>
+ * \brief specifier_qualifier_list_item_1 implements the pattern: <b>(type_specifier, specifier_qualifier_list)</b>
 
 
  * \dot
@@ -10326,15 +10744,15 @@ class type_qualifier;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_specifier_qualifier_list_item_1 [ label="specifier_qualifier_list_item_1", URL="\ref specifier_qualifier_list_item_1", color="#00AAAA" ];
- *     node_type_qualifier [ label="type_qualifier", URL="\ref type_qualifier", color="#00AAAA"];
- *     node_specifier_qualifier_list_item_1 ->  node_type_qualifier [label="_p_type_qualifier" style=solid];
+ *     node_type_specifier [ label="type_specifier", URL="\ref type_specifier", color="#00AAAA"];
+ *     node_specifier_qualifier_list_item_1 ->  node_type_specifier [label="_p_type_specifier" style=solid];
  * }
  * \enddot
  */
 class specifier_qualifier_list_item_1:public specifier_qualifier_list_item
 {
 	private:
-		ReferenceCountedAutoPointer<type_qualifier> _p_type_qualifier;	  ///< A pointer to type_qualifier.
+		ReferenceCountedAutoPointer<type_specifier> _p_type_specifier;	  ///< A pointer to type_specifier.
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -10345,7 +10763,7 @@ class specifier_qualifier_list_item_1:public specifier_qualifier_list_item
                  */
 		specifier_qualifier_list_item_1	
 				(
-					ReferenceCountedAutoPointer<type_qualifier> _arg_type_qualifier  ///< A pointer to type_qualifier.
+					ReferenceCountedAutoPointer<type_specifier> _arg_type_specifier  ///< A pointer to type_specifier.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -10369,6 +10787,7 @@ class specifier_qualifier_list_item_1:public specifier_qualifier_list_item
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -10380,12 +10799,12 @@ class specifier_qualifier_list_item_1:public specifier_qualifier_list_item
 
 
 
-class type_specifier;
+class type_qualifier;
 
 
 
 /**
- * \brief specifier_qualifier_list_item_2 implements the pattern: <b>(type_specifier, specifier_qualifier_list)</b>
+ * \brief specifier_qualifier_list_item_2 implements the pattern: <b>(type_qualifier, specifier_qualifier_list)</b>
 
 
  * \dot
@@ -10393,15 +10812,15 @@ class type_specifier;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_specifier_qualifier_list_item_2 [ label="specifier_qualifier_list_item_2", URL="\ref specifier_qualifier_list_item_2", color="#00AAAA" ];
- *     node_type_specifier [ label="type_specifier", URL="\ref type_specifier", color="#00AAAA"];
- *     node_specifier_qualifier_list_item_2 ->  node_type_specifier [label="_p_type_specifier" style=solid];
+ *     node_type_qualifier [ label="type_qualifier", URL="\ref type_qualifier", color="#00AAAA"];
+ *     node_specifier_qualifier_list_item_2 ->  node_type_qualifier [label="_p_type_qualifier" style=solid];
  * }
  * \enddot
  */
 class specifier_qualifier_list_item_2:public specifier_qualifier_list_item
 {
 	private:
-		ReferenceCountedAutoPointer<type_specifier> _p_type_specifier;	  ///< A pointer to type_specifier.
+		ReferenceCountedAutoPointer<type_qualifier> _p_type_qualifier;	  ///< A pointer to type_qualifier.
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -10412,7 +10831,7 @@ class specifier_qualifier_list_item_2:public specifier_qualifier_list_item
                  */
 		specifier_qualifier_list_item_2	
 				(
-					ReferenceCountedAutoPointer<type_specifier> _arg_type_specifier  ///< A pointer to type_specifier.
+					ReferenceCountedAutoPointer<type_qualifier> _arg_type_qualifier  ///< A pointer to type_qualifier.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -10436,6 +10855,7 @@ class specifier_qualifier_list_item_2:public specifier_qualifier_list_item
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -10605,6 +11025,13 @@ class translation_unit_item
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
+		std::string code()const
+		{
+			std::stringstream stream;
+			codeStream(stream);
+			return stream.str();
+		}
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -10774,6 +11201,7 @@ class constant_expression:public CAst
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -10869,6 +11297,13 @@ class initializer_list_item
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
+		std::string code()const
+		{
+			std::stringstream stream;
+			codeStream(stream);
+			return stream.str();
+		}
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -11038,6 +11473,13 @@ class statement_list_item
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
+		std::string code()const
+		{
+			std::stringstream stream;
+			codeStream(stream);
+			return stream.str();
+		}
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -11214,6 +11656,13 @@ class expression_item
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
+		std::string code()const
+		{
+			std::stringstream stream;
+			codeStream(stream);
+			return stream.str();
+		}
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -11389,6 +11838,7 @@ class declarator:public CAst
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
+
 		/**
 		 * \brief Default destructor. 
 		 */

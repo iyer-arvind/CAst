@@ -78,22 +78,34 @@ class BasicHandler(object):
 
 
 def Check(rule):
+	print "\n\n\n",repr(rule)
 	patterns=sorted(rule.patterns,key=lambda x:-len(x))
+	subs=set()
 	for i1,p1 in enumerate(patterns):
-		for p2 in patterns[i1+1:]:
+		if(i1 in subs):continue
+		for ii2,p2 in enumerate(patterns[i1+1:]):
+			i2=i1+1+ii2
 			if p2.handler is not None:
 				continue
 			if p1.handler is None: p1.handler=BasicHandler(p1)
 			iss,absent=p2.isSubset(p1)
+			print repr(p1),repr(p2)
 			if iss:
+				print "p2 is subset of p1"
 				p2.handler=p1.handler
 				for a in absent:
 					p1.handler.includeParameter(a)
+				subs.add(i2)	
+				continue
 			itr,indices=p2.isTokenReplaced(p1)
 			if itr:
+				print "p2 is token replacement of p1"
+				
 				for i in indices:
 					p1.handler.includeParameter(i)
 				p2.handler=p1.handler
+				subs.add(i2)	
+				continue
 
 	for p in patterns:
 		if p.handler is None:

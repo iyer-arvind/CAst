@@ -20,6 +20,14 @@ class ${object.ruleName}_item
 		virtual ~${object.ruleName}_item(){};
 
 		virtual std::ostream& codeStream(std::ostream& stream)const=0;
+
+		std::string code()const
+		{
+			std::stringstream stream;
+			codeStream(stream);
+			return stream.str();
+		}
+
 };
 #for $h in $object.handlers:
 #set $h.parent=$object.ruleName+"_item"

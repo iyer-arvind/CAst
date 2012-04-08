@@ -4,6 +4,7 @@
 \#include <list>
 \#include <assert.h>
 \#include <iostream>
+\#include <sstream>
 
 \#define COL_CLEAR 	"\033[0m"
 \#define COL_FG_RED 	"\033[31m"
@@ -251,6 +252,16 @@ class CAst
 		/** The destructor */
 		virtual ~CAst()
 		{}
+
+		virtual std::ostream& codeStream(std::ostream& stream)const=0;
+
+		std::string code()const
+		{
+			std::stringstream stream;
+			codeStream(stream);
+			return stream.str();
+		}
+
 };
 
 class token:public CAst

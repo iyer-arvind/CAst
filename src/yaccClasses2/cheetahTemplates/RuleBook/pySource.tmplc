@@ -29,7 +29,33 @@ $utils.pyClassCreator.stdAttributeSource($tokObj)
 $object[$rn].dump("pySource")
 #end for
 
-static PyMethodDef module_methods[] = {	NULL };
+
+static PyObject * parseFile(PyObject *self, PyObject *args)
+{
+	if(PyTuple_Size(args)!=1)
+	{
+		LOG("Detected insufficient/excessive arguments")
+		PyErr_SetString(PyExc_TypeError,"Insufficient number of arguments. Expecting 1 argument.");
+		Py_RETURN_NONE;
+	}
+	LOG("Parsing Arguments")
+	PyObject *fn=PyTuple_GetItem(args,0);
+	if(!PyString_Check(fn))
+	{
+		LOG("Detected incorrect argument")
+		PyErr_SetString(PyExc_TypeError,"Expecting a string");
+		Py_RETURN_NONE;
+	}
+	const char* fileName=PyString_AsString(fn);
+
+	CAst::ReferenceCountedAutoPointer<CAst::translation_unit> root=parseFile(fileName);
+
+	PyCAst_object_translation_unit *pyRoot=(PyCAst_object_translation_unit*)PyCAst_new_translation_unit(&PyCAst_type_translation_unit, NULL, NULL);
+	pyRoot->_p_cast_object=root;
+	return (PyObject*)pyRoot;
+}
+
+static PyMethodDef module_methods[] = {	{"parseFile",parseFile, METH_VARARGS,"Parses a File for C AST"},{ NULL,NULL,0,NULL }};
 
 
 
