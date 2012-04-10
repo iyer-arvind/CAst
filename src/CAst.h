@@ -1,7 +1,8 @@
 #ifndef CAST_HEADER_INCLUDED
 #define CAST_HEADER_INCLUDED
 #include <string>
-#include <list>
+#include <vector>
+#include <exception>
 #include <assert.h>
 #include <iostream>
 #include <sstream>
@@ -21,6 +22,15 @@
 
 namespace CAst
 {
+
+class IndexError: public std::exception
+{
+  virtual const char* what() const throw()
+  {
+    return "Index out of range";
+  }
+};
+
 
 //! This is the enumeration of the class ids 
 
@@ -284,18 +294,18 @@ class ReferenceCountedAutoPointer
 		
 		}
 
-		//template<typename Y>
-		//friend class ReferenceCountedAutoPointer<Y>;
+		template<typename Y>
+		friend class ReferenceCountedAutoPointer;
 
-		//template<typename Y>
-		//ReferenceCountedAutoPointer(const ReferenceCountedAutoPointer<Y>&other ):
-		//		__data(0),
-		//		__refCount(0)
-		//{
-		//	__data=dynamic_cast<DataType*>(other.__data);
-		//	__refCount=other.__refCount;
-		//	__refCountUp();
-		//}
+		template<typename Y>
+		ReferenceCountedAutoPointer(const ReferenceCountedAutoPointer<Y>&other ):
+				__data(0),
+				__refCount(0)
+		{
+			__data=dynamic_cast<DataType*>(other.__data);
+			__refCount=other.__refCount;
+			__refCountUp();
+		}
 
 		/**
 		 * \brief Assignment operator
@@ -309,7 +319,14 @@ class ReferenceCountedAutoPointer
 			__data=other.__data;
 			__refCountUp();
 		}
-
+		template<typename Y>
+		ReferenceCountedAutoPointer& operator=(const ReferenceCountedAutoPointer<Y>&other)
+		{
+			__clear();
+			__refCount=other.__refCount;
+			__data=dynamic_cast<DataType*>(other.__data);
+			__refCountUp();
+		}
 		/**
 		 * \brief Returns the reference count
 		 */
@@ -468,7 +485,7 @@ class storage_class_specifier:public CAst
                  * Returns the name of the class. Here, returns <b>"storage_class_specifier"</b>
 		 * \returns <b>"storage_class_specifier"</b>
                  */
-		virtual std::string name()const		{return std::string("storage_class_specifier");}
+		virtual std::string name()const			{return std::string("storage_class_specifier");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -478,8 +495,20 @@ class storage_class_specifier:public CAst
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_STORAGE_CLASS_SPECIFIER;}
 
+
+
+		ReferenceCountedAutoPointer<token>& p_token()
+		{
+			return _p_token;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token()const
+		{
+			return _p_token;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -557,7 +586,7 @@ class expression_statement:public CAst
                  * Returns the name of the class. Here, returns <b>"expression_statement"</b>
 		 * \returns <b>"expression_statement"</b>
                  */
-		virtual std::string name()const		{return std::string("expression_statement");}
+		virtual std::string name()const			{return std::string("expression_statement");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -567,8 +596,20 @@ class expression_statement:public CAst
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_EXPRESSION_STATEMENT;}
 
+
+
+		ReferenceCountedAutoPointer<expression>& p_expression()
+		{
+			return _p_expression;
+		}
+
+		const ReferenceCountedAutoPointer<expression>& p_expression()const
+		{
+			return _p_expression;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -652,7 +693,7 @@ class type_name:public CAst
                  * Returns the name of the class. Here, returns <b>"type_name"</b>
 		 * \returns <b>"type_name"</b>
                  */
-		virtual std::string name()const		{return std::string("type_name");}
+		virtual std::string name()const			{return std::string("type_name");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -662,8 +703,29 @@ class type_name:public CAst
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_TYPE_NAME;}
 
+
+
+		ReferenceCountedAutoPointer<specifier_qualifier_list>& p_specifier_qualifier_list()
+		{
+			return _p_specifier_qualifier_list;
+		}
+
+		const ReferenceCountedAutoPointer<specifier_qualifier_list>& p_specifier_qualifier_list()const
+		{
+			return _p_specifier_qualifier_list;
+		}
+		ReferenceCountedAutoPointer<abstract_declarator>& p_abstract_declarator()
+		{
+			return _p_abstract_declarator;
+		}
+
+		const ReferenceCountedAutoPointer<abstract_declarator>& p_abstract_declarator()const
+		{
+			return _p_abstract_declarator;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -733,14 +795,15 @@ class unary_expression:public CAst
 
 
 
-class cast_expression;
-class unary_operator;
+class token;
+class unary_expression;
+
 
 
 
 
 /**
- * \brief unary_expression_1 implements the pattern: <b>(unary_operator, cast_expression)</b>
+ * \brief unary_expression_1 implements the pattern: <b>(INC_OP, unary_expression)</b>
 
 
  * \dot
@@ -748,18 +811,18 @@ class unary_operator;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_unary_expression_1 [ label="unary_expression_1", URL="\ref unary_expression_1", color="#00AAAA" ];
- *     node_unary_operator [ label="unary_operator", URL="\ref unary_operator", color="#00AAAA"];
- *     node_cast_expression [ label="cast_expression", URL="\ref cast_expression", color="#00AAAA"];
- *     node_unary_expression_1 ->  node_unary_operator [label="_p_unary_operator" style=solid];
- *     node_unary_expression_1 ->  node_cast_expression [label="_p_cast_expression" style=solid];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_unary_expression [ label="unary_expression", URL="\ref unary_expression", color="#00AAAA"];
+ *     node_unary_expression_1 ->  node_token [label="_p_token" style=solid];
+ *     node_unary_expression_1 ->  node_unary_expression [label="_p_unary_expression" style=solid];
  * }
  * \enddot
  */
 class unary_expression_1:public unary_expression
 {
 	private:
-		ReferenceCountedAutoPointer<unary_operator> _p_unary_operator;	  ///< A pointer to unary_operator.
-		ReferenceCountedAutoPointer<cast_expression> _p_cast_expression;	  ///< A pointer to cast_expression.
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>INC_OP</b>, <b>DEC_OP</b>, <b>SIZEOF</b>
+		ReferenceCountedAutoPointer<unary_expression> _p_unary_expression;	  ///< A pointer to unary_expression.
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -770,8 +833,8 @@ class unary_expression_1:public unary_expression
                  */
 		unary_expression_1	
 				(
-					ReferenceCountedAutoPointer<unary_operator> _arg_unary_operator,   ///< A pointer to unary_operator.
-					ReferenceCountedAutoPointer<cast_expression> _arg_cast_expression  ///< A pointer to cast_expression.
+					ReferenceCountedAutoPointer<token> _arg_token,   ///< A pointer to a token, accepts <b>INC_OP</b>, <b>DEC_OP</b>, <b>SIZEOF</b>
+					ReferenceCountedAutoPointer<unary_expression> _arg_unary_expression  ///< A pointer to unary_expression.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -779,7 +842,7 @@ class unary_expression_1:public unary_expression
                  * Returns the name of the class. Here, returns <b>"unary_expression_1"</b>
 		 * \returns <b>"unary_expression_1"</b>
                  */
-		virtual std::string name()const		{return std::string("unary_expression_1");}
+		virtual std::string name()const			{return std::string("unary_expression_1");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -789,8 +852,29 @@ class unary_expression_1:public unary_expression
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_UNARY_EXPRESSION_1;}
 
+
+
+		ReferenceCountedAutoPointer<token>& p_token()
+		{
+			return _p_token;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token()const
+		{
+			return _p_token;
+		}
+		ReferenceCountedAutoPointer<unary_expression>& p_unary_expression()
+		{
+			return _p_unary_expression;
+		}
+
+		const ReferenceCountedAutoPointer<unary_expression>& p_unary_expression()const
+		{
+			return _p_unary_expression;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -807,12 +891,12 @@ class unary_expression_1:public unary_expression
 
 
 
-class type_name;
+class postfix_expression;
 
 
 
 /**
- * \brief unary_expression_2 implements the pattern: <b>(SIZEOF, '(', type_name, ')')</b>
+ * \brief unary_expression_2 implements the pattern: <b>(postfix_expression,)</b>
 
 
  * \dot
@@ -820,15 +904,15 @@ class type_name;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_unary_expression_2 [ label="unary_expression_2", URL="\ref unary_expression_2", color="#00AAAA" ];
- *     node_type_name [ label="type_name", URL="\ref type_name", color="#00AAAA"];
- *     node_unary_expression_2 ->  node_type_name [label="_p_type_name" style=solid];
+ *     node_postfix_expression [ label="postfix_expression", URL="\ref postfix_expression", color="#00AAAA"];
+ *     node_unary_expression_2 ->  node_postfix_expression [label="_p_postfix_expression" style=solid];
  * }
  * \enddot
  */
 class unary_expression_2:public unary_expression
 {
 	private:
-		ReferenceCountedAutoPointer<type_name> _p_type_name;	  ///< A pointer to type_name.
+		ReferenceCountedAutoPointer<postfix_expression> _p_postfix_expression;	  ///< A pointer to postfix_expression.
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -839,7 +923,7 @@ class unary_expression_2:public unary_expression
                  */
 		unary_expression_2	
 				(
-					ReferenceCountedAutoPointer<type_name> _arg_type_name  ///< A pointer to type_name.
+					ReferenceCountedAutoPointer<postfix_expression> _arg_postfix_expression  ///< A pointer to postfix_expression.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -847,7 +931,7 @@ class unary_expression_2:public unary_expression
                  * Returns the name of the class. Here, returns <b>"unary_expression_2"</b>
 		 * \returns <b>"unary_expression_2"</b>
                  */
-		virtual std::string name()const		{return std::string("unary_expression_2");}
+		virtual std::string name()const			{return std::string("unary_expression_2");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -857,8 +941,20 @@ class unary_expression_2:public unary_expression
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_UNARY_EXPRESSION_2;}
 
+
+
+		ReferenceCountedAutoPointer<postfix_expression>& p_postfix_expression()
+		{
+			return _p_postfix_expression;
+		}
+
+		const ReferenceCountedAutoPointer<postfix_expression>& p_postfix_expression()const
+		{
+			return _p_postfix_expression;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -875,12 +971,14 @@ class unary_expression_2:public unary_expression
 
 
 
-class postfix_expression;
+class cast_expression;
+class unary_operator;
+
 
 
 
 /**
- * \brief unary_expression_3 implements the pattern: <b>(postfix_expression,)</b>
+ * \brief unary_expression_3 implements the pattern: <b>(unary_operator, cast_expression)</b>
 
 
  * \dot
@@ -888,15 +986,18 @@ class postfix_expression;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_unary_expression_3 [ label="unary_expression_3", URL="\ref unary_expression_3", color="#00AAAA" ];
- *     node_postfix_expression [ label="postfix_expression", URL="\ref postfix_expression", color="#00AAAA"];
- *     node_unary_expression_3 ->  node_postfix_expression [label="_p_postfix_expression" style=solid];
+ *     node_unary_operator [ label="unary_operator", URL="\ref unary_operator", color="#00AAAA"];
+ *     node_cast_expression [ label="cast_expression", URL="\ref cast_expression", color="#00AAAA"];
+ *     node_unary_expression_3 ->  node_unary_operator [label="_p_unary_operator" style=solid];
+ *     node_unary_expression_3 ->  node_cast_expression [label="_p_cast_expression" style=solid];
  * }
  * \enddot
  */
 class unary_expression_3:public unary_expression
 {
 	private:
-		ReferenceCountedAutoPointer<postfix_expression> _p_postfix_expression;	  ///< A pointer to postfix_expression.
+		ReferenceCountedAutoPointer<unary_operator> _p_unary_operator;	  ///< A pointer to unary_operator.
+		ReferenceCountedAutoPointer<cast_expression> _p_cast_expression;	  ///< A pointer to cast_expression.
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -907,7 +1008,8 @@ class unary_expression_3:public unary_expression
                  */
 		unary_expression_3	
 				(
-					ReferenceCountedAutoPointer<postfix_expression> _arg_postfix_expression  ///< A pointer to postfix_expression.
+					ReferenceCountedAutoPointer<unary_operator> _arg_unary_operator,   ///< A pointer to unary_operator.
+					ReferenceCountedAutoPointer<cast_expression> _arg_cast_expression  ///< A pointer to cast_expression.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -915,7 +1017,7 @@ class unary_expression_3:public unary_expression
                  * Returns the name of the class. Here, returns <b>"unary_expression_3"</b>
 		 * \returns <b>"unary_expression_3"</b>
                  */
-		virtual std::string name()const		{return std::string("unary_expression_3");}
+		virtual std::string name()const			{return std::string("unary_expression_3");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -925,8 +1027,29 @@ class unary_expression_3:public unary_expression
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_UNARY_EXPRESSION_3;}
 
+
+
+		ReferenceCountedAutoPointer<unary_operator>& p_unary_operator()
+		{
+			return _p_unary_operator;
+		}
+
+		const ReferenceCountedAutoPointer<unary_operator>& p_unary_operator()const
+		{
+			return _p_unary_operator;
+		}
+		ReferenceCountedAutoPointer<cast_expression>& p_cast_expression()
+		{
+			return _p_cast_expression;
+		}
+
+		const ReferenceCountedAutoPointer<cast_expression>& p_cast_expression()const
+		{
+			return _p_cast_expression;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -943,15 +1066,12 @@ class unary_expression_3:public unary_expression
 
 
 
-class token;
-class unary_expression;
-
-
+class type_name;
 
 
 
 /**
- * \brief unary_expression_4 implements the pattern: <b>(INC_OP, unary_expression)</b>
+ * \brief unary_expression_4 implements the pattern: <b>(SIZEOF, '(', type_name, ')')</b>
 
 
  * \dot
@@ -959,18 +1079,15 @@ class unary_expression;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_unary_expression_4 [ label="unary_expression_4", URL="\ref unary_expression_4", color="#00AAAA" ];
- *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
- *     node_unary_expression [ label="unary_expression", URL="\ref unary_expression", color="#00AAAA"];
- *     node_unary_expression_4 ->  node_token [label="_p_token" style=solid];
- *     node_unary_expression_4 ->  node_unary_expression [label="_p_unary_expression" style=solid];
+ *     node_type_name [ label="type_name", URL="\ref type_name", color="#00AAAA"];
+ *     node_unary_expression_4 ->  node_type_name [label="_p_type_name" style=solid];
  * }
  * \enddot
  */
 class unary_expression_4:public unary_expression
 {
 	private:
-		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>INC_OP</b>, <b>DEC_OP</b>, <b>SIZEOF</b>
-		ReferenceCountedAutoPointer<unary_expression> _p_unary_expression;	  ///< A pointer to unary_expression.
+		ReferenceCountedAutoPointer<type_name> _p_type_name;	  ///< A pointer to type_name.
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -981,8 +1098,7 @@ class unary_expression_4:public unary_expression
                  */
 		unary_expression_4	
 				(
-					ReferenceCountedAutoPointer<token> _arg_token,   ///< A pointer to a token, accepts <b>INC_OP</b>, <b>DEC_OP</b>, <b>SIZEOF</b>
-					ReferenceCountedAutoPointer<unary_expression> _arg_unary_expression  ///< A pointer to unary_expression.
+					ReferenceCountedAutoPointer<type_name> _arg_type_name  ///< A pointer to type_name.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -990,7 +1106,7 @@ class unary_expression_4:public unary_expression
                  * Returns the name of the class. Here, returns <b>"unary_expression_4"</b>
 		 * \returns <b>"unary_expression_4"</b>
                  */
-		virtual std::string name()const		{return std::string("unary_expression_4");}
+		virtual std::string name()const			{return std::string("unary_expression_4");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -1000,8 +1116,20 @@ class unary_expression_4:public unary_expression
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_UNARY_EXPRESSION_4;}
 
+
+
+		ReferenceCountedAutoPointer<type_name>& p_type_name()
+		{
+			return _p_type_name;
+		}
+
+		const ReferenceCountedAutoPointer<type_name>& p_type_name()const
+		{
+			return _p_type_name;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -1070,7 +1198,7 @@ class logical_or_expression;
  * }
  * \enddot
  */
-class conditional_expression_item
+class conditional_expression_item:public CAst
 {
 	private:
 		ReferenceCountedAutoPointer<logical_or_expression> _p_logical_or_expression;	  ///< A pointer to logical_or_expression.
@@ -1098,7 +1226,7 @@ class conditional_expression_item
                  * Returns the name of the class. Here, returns <b>"conditional_expression_item"</b>
 		 * \returns <b>"conditional_expression_item"</b>
                  */
-		virtual std::string name()const		{return std::string("conditional_expression_item");}
+		virtual std::string name()const			{return std::string("conditional_expression_item");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -1108,19 +1236,52 @@ class conditional_expression_item
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_CONDITIONAL_EXPRESSION_ITEM;}
 
+
+
+		ReferenceCountedAutoPointer<logical_or_expression>& p_logical_or_expression()
+		{
+			return _p_logical_or_expression;
+		}
+
+		const ReferenceCountedAutoPointer<logical_or_expression>& p_logical_or_expression()const
+		{
+			return _p_logical_or_expression;
+		}
+		ReferenceCountedAutoPointer<token>& p_token1()
+		{
+			return _p_token1;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token1()const
+		{
+			return _p_token1;
+		}
+		ReferenceCountedAutoPointer<expression>& p_expression()
+		{
+			return _p_expression;
+		}
+
+		const ReferenceCountedAutoPointer<expression>& p_expression()const
+		{
+			return _p_expression;
+		}
+		ReferenceCountedAutoPointer<token>& p_token2()
+		{
+			return _p_token2;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token2()const
+		{
+			return _p_token2;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
 
-		std::string code()const
-		{
-			std::stringstream stream;
-			codeStream(stream);
-			return stream.str();
-		}
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -1140,7 +1301,8 @@ class conditional_expression_item
 class conditional_expression:public CAst
 {
 	public:
-		typedef std::list<ReferenceCountedAutoPointer<conditional_expression_item> > conditional_expressionListType;	///< This defines the list type which will store the conditional_expression_item
+		typedef conditional_expression_item ItemType;
+		typedef std::vector<ReferenceCountedAutoPointer< ItemType > > conditional_expressionListType;	///< This defines the list type which will store the conditional_expression_item
 		typedef conditional_expressionListType::iterator conditional_expressionIterType;				///< This defines the iterator over conditional_expressionListType
 		typedef conditional_expressionListType::const_iterator Cconditional_expressionIterType;				///< This defines the constant iterator over conditional_expressionListType
 
@@ -1178,9 +1340,13 @@ class conditional_expression:public CAst
 		void prepend( ReferenceCountedAutoPointer<conditional_expression_item> item)
 		{
 			LOG(COL_FG_GREEN<<"Prepending to conditional_expression: "<<this)
-			_itemList.push_front(item);
+			_itemList.insert(_itemList.begin(),item);
 		}
 		
+		int size()const
+		{
+			return _itemList.size();
+		}
 		/**
                  * \brief Returns the name of the class.
                  *
@@ -1198,6 +1364,29 @@ class conditional_expression:public CAst
 		virtual CAST_CLASS_ID classId()const		{return ID_CONDITIONAL_EXPRESSION;}
 
 
+		ReferenceCountedAutoPointer<ItemType>& operator[](int i)
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+		const ReferenceCountedAutoPointer<ItemType>& operator[](int i)const
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+
+
+		/**
+		 * \brief Writes code to the code stream
+		 *
+		 *
+		 */
 		virtual std::ostream& codeStream(std::ostream& stream)const
 		{
 			for(Cconditional_expressionIterType i=_itemList.begin();i!=_itemList.end();i++)
@@ -1274,7 +1463,7 @@ class struct_or_union_specifier:public CAst
 	private:
 		ReferenceCountedAutoPointer<struct_or_union> _p_struct_or_union;	  ///< A pointer to struct_or_union.
 		ReferenceCountedAutoPointer<token> _p_token1;	  ///< A pointer to a token, accepts <b>IDENTIFIER</b>, <b>None</b>
-		ReferenceCountedAutoPointer<token> _p_token2;	  ///< A pointer to a token, accepts <b>'{'</b>, <b>None</b>
+		ReferenceCountedAutoPointer<token> _p_token2;	  ///< A pointer to a token, accepts <b>None</b>, <b>'{'</b>
 		ReferenceCountedAutoPointer<struct_declaration_list> _p_struct_declaration_list;	  ///< A pointer to struct_declaration_list. This parameter can be <b>Null</b>
 		ReferenceCountedAutoPointer<token> _p_token3;	  ///< A pointer to a token, accepts <b>'}'</b>, <b>None</b>
 	public:
@@ -1289,7 +1478,7 @@ class struct_or_union_specifier:public CAst
 				(
 					ReferenceCountedAutoPointer<struct_or_union> _arg_struct_or_union,   ///< A pointer to struct_or_union.
 					ReferenceCountedAutoPointer<token> _arg_token1,   ///< A pointer to a token, accepts <b>IDENTIFIER</b>, <b>None</b>
-					ReferenceCountedAutoPointer<token> _arg_token2,   ///< A pointer to a token, accepts <b>'{'</b>, <b>None</b>
+					ReferenceCountedAutoPointer<token> _arg_token2,   ///< A pointer to a token, accepts <b>None</b>, <b>'{'</b>
 					ReferenceCountedAutoPointer<struct_declaration_list> _arg_struct_declaration_list,   ///< A pointer to struct_declaration_list. This parameter can be <b>Null</b>
 					ReferenceCountedAutoPointer<token> _arg_token3  ///< A pointer to a token, accepts <b>'}'</b>, <b>None</b>
 				);
@@ -1299,7 +1488,7 @@ class struct_or_union_specifier:public CAst
                  * Returns the name of the class. Here, returns <b>"struct_or_union_specifier"</b>
 		 * \returns <b>"struct_or_union_specifier"</b>
                  */
-		virtual std::string name()const		{return std::string("struct_or_union_specifier");}
+		virtual std::string name()const			{return std::string("struct_or_union_specifier");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -1309,8 +1498,56 @@ class struct_or_union_specifier:public CAst
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_STRUCT_OR_UNION_SPECIFIER;}
 
+
+
+		ReferenceCountedAutoPointer<struct_or_union>& p_struct_or_union()
+		{
+			return _p_struct_or_union;
+		}
+
+		const ReferenceCountedAutoPointer<struct_or_union>& p_struct_or_union()const
+		{
+			return _p_struct_or_union;
+		}
+		ReferenceCountedAutoPointer<token>& p_token1()
+		{
+			return _p_token1;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token1()const
+		{
+			return _p_token1;
+		}
+		ReferenceCountedAutoPointer<token>& p_token2()
+		{
+			return _p_token2;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token2()const
+		{
+			return _p_token2;
+		}
+		ReferenceCountedAutoPointer<struct_declaration_list>& p_struct_declaration_list()
+		{
+			return _p_struct_declaration_list;
+		}
+
+		const ReferenceCountedAutoPointer<struct_declaration_list>& p_struct_declaration_list()const
+		{
+			return _p_struct_declaration_list;
+		}
+		ReferenceCountedAutoPointer<token>& p_token3()
+		{
+			return _p_token3;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token3()const
+		{
+			return _p_token3;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -1371,7 +1608,7 @@ class and_expression;
  * }
  * \enddot
  */
-class exclusive_or_expression_item
+class exclusive_or_expression_item:public CAst
 {
 	private:
 		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>'^'</b>, <b>None</b>
@@ -1395,7 +1632,7 @@ class exclusive_or_expression_item
                  * Returns the name of the class. Here, returns <b>"exclusive_or_expression_item"</b>
 		 * \returns <b>"exclusive_or_expression_item"</b>
                  */
-		virtual std::string name()const		{return std::string("exclusive_or_expression_item");}
+		virtual std::string name()const			{return std::string("exclusive_or_expression_item");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -1405,19 +1642,34 @@ class exclusive_or_expression_item
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_EXCLUSIVE_OR_EXPRESSION_ITEM;}
 
+
+
+		ReferenceCountedAutoPointer<token>& p_token()
+		{
+			return _p_token;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token()const
+		{
+			return _p_token;
+		}
+		ReferenceCountedAutoPointer<and_expression>& p_and_expression()
+		{
+			return _p_and_expression;
+		}
+
+		const ReferenceCountedAutoPointer<and_expression>& p_and_expression()const
+		{
+			return _p_and_expression;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
 
-		std::string code()const
-		{
-			std::stringstream stream;
-			codeStream(stream);
-			return stream.str();
-		}
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -1437,7 +1689,8 @@ class exclusive_or_expression_item
 class exclusive_or_expression:public CAst
 {
 	public:
-		typedef std::list<ReferenceCountedAutoPointer<exclusive_or_expression_item> > exclusive_or_expressionListType;	///< This defines the list type which will store the exclusive_or_expression_item
+		typedef exclusive_or_expression_item ItemType;
+		typedef std::vector<ReferenceCountedAutoPointer< ItemType > > exclusive_or_expressionListType;	///< This defines the list type which will store the exclusive_or_expression_item
 		typedef exclusive_or_expressionListType::iterator exclusive_or_expressionIterType;				///< This defines the iterator over exclusive_or_expressionListType
 		typedef exclusive_or_expressionListType::const_iterator Cexclusive_or_expressionIterType;				///< This defines the constant iterator over exclusive_or_expressionListType
 
@@ -1475,9 +1728,13 @@ class exclusive_or_expression:public CAst
 		void prepend( ReferenceCountedAutoPointer<exclusive_or_expression_item> item)
 		{
 			LOG(COL_FG_GREEN<<"Prepending to exclusive_or_expression: "<<this)
-			_itemList.push_front(item);
+			_itemList.insert(_itemList.begin(),item);
 		}
 		
+		int size()const
+		{
+			return _itemList.size();
+		}
 		/**
                  * \brief Returns the name of the class.
                  *
@@ -1495,6 +1752,29 @@ class exclusive_or_expression:public CAst
 		virtual CAST_CLASS_ID classId()const		{return ID_EXCLUSIVE_OR_EXPRESSION;}
 
 
+		ReferenceCountedAutoPointer<ItemType>& operator[](int i)
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+		const ReferenceCountedAutoPointer<ItemType>& operator[](int i)const
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+
+
+		/**
+		 * \brief Writes code to the code stream
+		 *
+		 *
+		 */
 		virtual std::ostream& codeStream(std::ostream& stream)const
 		{
 			for(Cexclusive_or_expressionIterType i=_itemList.begin();i!=_itemList.end();i++)
@@ -1560,12 +1840,15 @@ class initializer:public CAst
 
 
 
-class assignment_expression;
+class token;
+class initializer_list;
+
+
 
 
 
 /**
- * \brief initializer_1 implements the pattern: <b>(assignment_expression,)</b>
+ * \brief initializer_1 implements the pattern: <b>('{', initializer_list, ',', '}')</b>
 
 
  * \dot
@@ -1573,15 +1856,18 @@ class assignment_expression;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_initializer_1 [ label="initializer_1", URL="\ref initializer_1", color="#00AAAA" ];
- *     node_assignment_expression [ label="assignment_expression", URL="\ref assignment_expression", color="#00AAAA"];
- *     node_initializer_1 ->  node_assignment_expression [label="_p_assignment_expression" style=solid];
+ *     node_initializer_list [ label="initializer_list", URL="\ref initializer_list", color="#00AAAA"];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_initializer_1 ->  node_initializer_list [label="_p_initializer_list" style=solid];
+ *     node_initializer_1 ->  node_token [label="_p_token" style=dotted];
  * }
  * \enddot
  */
 class initializer_1:public initializer
 {
 	private:
-		ReferenceCountedAutoPointer<assignment_expression> _p_assignment_expression;	  ///< A pointer to assignment_expression.
+		ReferenceCountedAutoPointer<initializer_list> _p_initializer_list;	  ///< A pointer to initializer_list.
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>','</b>, <b>None</b>
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -1592,7 +1878,8 @@ class initializer_1:public initializer
                  */
 		initializer_1	
 				(
-					ReferenceCountedAutoPointer<assignment_expression> _arg_assignment_expression  ///< A pointer to assignment_expression.
+					ReferenceCountedAutoPointer<initializer_list> _arg_initializer_list,   ///< A pointer to initializer_list.
+					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>','</b>, <b>None</b>
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -1600,7 +1887,7 @@ class initializer_1:public initializer
                  * Returns the name of the class. Here, returns <b>"initializer_1"</b>
 		 * \returns <b>"initializer_1"</b>
                  */
-		virtual std::string name()const		{return std::string("initializer_1");}
+		virtual std::string name()const			{return std::string("initializer_1");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -1610,8 +1897,29 @@ class initializer_1:public initializer
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_INITIALIZER_1;}
 
+
+
+		ReferenceCountedAutoPointer<initializer_list>& p_initializer_list()
+		{
+			return _p_initializer_list;
+		}
+
+		const ReferenceCountedAutoPointer<initializer_list>& p_initializer_list()const
+		{
+			return _p_initializer_list;
+		}
+		ReferenceCountedAutoPointer<token>& p_token()
+		{
+			return _p_token;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token()const
+		{
+			return _p_token;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -1628,15 +1936,12 @@ class initializer_1:public initializer
 
 
 
-class token;
-class initializer_list;
-
-
+class assignment_expression;
 
 
 
 /**
- * \brief initializer_2 implements the pattern: <b>('{', initializer_list, ',', '}')</b>
+ * \brief initializer_2 implements the pattern: <b>(assignment_expression,)</b>
 
 
  * \dot
@@ -1644,18 +1949,15 @@ class initializer_list;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_initializer_2 [ label="initializer_2", URL="\ref initializer_2", color="#00AAAA" ];
- *     node_initializer_list [ label="initializer_list", URL="\ref initializer_list", color="#00AAAA"];
- *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
- *     node_initializer_2 ->  node_initializer_list [label="_p_initializer_list" style=solid];
- *     node_initializer_2 ->  node_token [label="_p_token" style=dotted];
+ *     node_assignment_expression [ label="assignment_expression", URL="\ref assignment_expression", color="#00AAAA"];
+ *     node_initializer_2 ->  node_assignment_expression [label="_p_assignment_expression" style=solid];
  * }
  * \enddot
  */
 class initializer_2:public initializer
 {
 	private:
-		ReferenceCountedAutoPointer<initializer_list> _p_initializer_list;	  ///< A pointer to initializer_list.
-		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>','</b>, <b>None</b>
+		ReferenceCountedAutoPointer<assignment_expression> _p_assignment_expression;	  ///< A pointer to assignment_expression.
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -1666,8 +1968,7 @@ class initializer_2:public initializer
                  */
 		initializer_2	
 				(
-					ReferenceCountedAutoPointer<initializer_list> _arg_initializer_list,   ///< A pointer to initializer_list.
-					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>','</b>, <b>None</b>
+					ReferenceCountedAutoPointer<assignment_expression> _arg_assignment_expression  ///< A pointer to assignment_expression.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -1675,7 +1976,7 @@ class initializer_2:public initializer
                  * Returns the name of the class. Here, returns <b>"initializer_2"</b>
 		 * \returns <b>"initializer_2"</b>
                  */
-		virtual std::string name()const		{return std::string("initializer_2");}
+		virtual std::string name()const			{return std::string("initializer_2");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -1685,8 +1986,20 @@ class initializer_2:public initializer
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_INITIALIZER_2;}
 
+
+
+		ReferenceCountedAutoPointer<assignment_expression>& p_assignment_expression()
+		{
+			return _p_assignment_expression;
+		}
+
+		const ReferenceCountedAutoPointer<assignment_expression>& p_assignment_expression()const
+		{
+			return _p_assignment_expression;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -1742,7 +2055,7 @@ class struct_declaration;
  * }
  * \enddot
  */
-class struct_declaration_list_item
+class struct_declaration_list_item:public CAst
 {
 	private:
 		ReferenceCountedAutoPointer<struct_declaration> _p_struct_declaration;	  ///< A pointer to struct_declaration.
@@ -1764,7 +2077,7 @@ class struct_declaration_list_item
                  * Returns the name of the class. Here, returns <b>"struct_declaration_list_item"</b>
 		 * \returns <b>"struct_declaration_list_item"</b>
                  */
-		virtual std::string name()const		{return std::string("struct_declaration_list_item");}
+		virtual std::string name()const			{return std::string("struct_declaration_list_item");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -1774,19 +2087,25 @@ class struct_declaration_list_item
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_STRUCT_DECLARATION_LIST_ITEM;}
 
+
+
+		ReferenceCountedAutoPointer<struct_declaration>& p_struct_declaration()
+		{
+			return _p_struct_declaration;
+		}
+
+		const ReferenceCountedAutoPointer<struct_declaration>& p_struct_declaration()const
+		{
+			return _p_struct_declaration;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
 
-		std::string code()const
-		{
-			std::stringstream stream;
-			codeStream(stream);
-			return stream.str();
-		}
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -1806,7 +2125,8 @@ class struct_declaration_list_item
 class struct_declaration_list:public CAst
 {
 	public:
-		typedef std::list<ReferenceCountedAutoPointer<struct_declaration_list_item> > struct_declaration_listListType;	///< This defines the list type which will store the struct_declaration_list_item
+		typedef struct_declaration_list_item ItemType;
+		typedef std::vector<ReferenceCountedAutoPointer< ItemType > > struct_declaration_listListType;	///< This defines the list type which will store the struct_declaration_list_item
 		typedef struct_declaration_listListType::iterator struct_declaration_listIterType;				///< This defines the iterator over struct_declaration_listListType
 		typedef struct_declaration_listListType::const_iterator Cstruct_declaration_listIterType;				///< This defines the constant iterator over struct_declaration_listListType
 
@@ -1844,9 +2164,13 @@ class struct_declaration_list:public CAst
 		void prepend( ReferenceCountedAutoPointer<struct_declaration_list_item> item)
 		{
 			LOG(COL_FG_GREEN<<"Prepending to struct_declaration_list: "<<this)
-			_itemList.push_front(item);
+			_itemList.insert(_itemList.begin(),item);
 		}
 		
+		int size()const
+		{
+			return _itemList.size();
+		}
 		/**
                  * \brief Returns the name of the class.
                  *
@@ -1864,6 +2188,29 @@ class struct_declaration_list:public CAst
 		virtual CAST_CLASS_ID classId()const		{return ID_STRUCT_DECLARATION_LIST;}
 
 
+		ReferenceCountedAutoPointer<ItemType>& operator[](int i)
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+		const ReferenceCountedAutoPointer<ItemType>& operator[](int i)const
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+
+
+		/**
+		 * \brief Writes code to the code stream
+		 *
+		 *
+		 */
 		virtual std::ostream& codeStream(std::ostream& stream)const
 		{
 			for(Cstruct_declaration_listIterType i=_itemList.begin();i!=_itemList.end();i++)
@@ -1922,7 +2269,7 @@ class token;
 class assignment_operator:public CAst
 {
 	private:
-		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>'='</b>, <b>MOD_ASSIGN</b>, <b>ADD_ASSIGN</b>, <b>SUB_ASSIGN</b>, <b>LEFT_ASSIGN</b>, <b>RIGHT_ASSIGN</b>, <b>DIV_ASSIGN</b>, <b>AND_ASSIGN</b>, <b>XOR_ASSIGN</b>, <b>OR_ASSIGN</b>, <b>MUL_ASSIGN</b>
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>DIV_ASSIGN</b>, <b>MOD_ASSIGN</b>, <b>ADD_ASSIGN</b>, <b>SUB_ASSIGN</b>, <b>LEFT_ASSIGN</b>, <b>RIGHT_ASSIGN</b>, <b>AND_ASSIGN</b>, <b>XOR_ASSIGN</b>, <b>OR_ASSIGN</b>, <b>'='</b>, <b>MUL_ASSIGN</b>
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -1933,7 +2280,7 @@ class assignment_operator:public CAst
                  */
 		assignment_operator	
 				(
-					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>'='</b>, <b>MOD_ASSIGN</b>, <b>ADD_ASSIGN</b>, <b>SUB_ASSIGN</b>, <b>LEFT_ASSIGN</b>, <b>RIGHT_ASSIGN</b>, <b>DIV_ASSIGN</b>, <b>AND_ASSIGN</b>, <b>XOR_ASSIGN</b>, <b>OR_ASSIGN</b>, <b>MUL_ASSIGN</b>
+					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>DIV_ASSIGN</b>, <b>MOD_ASSIGN</b>, <b>ADD_ASSIGN</b>, <b>SUB_ASSIGN</b>, <b>LEFT_ASSIGN</b>, <b>RIGHT_ASSIGN</b>, <b>AND_ASSIGN</b>, <b>XOR_ASSIGN</b>, <b>OR_ASSIGN</b>, <b>'='</b>, <b>MUL_ASSIGN</b>
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -1941,7 +2288,7 @@ class assignment_operator:public CAst
                  * Returns the name of the class. Here, returns <b>"assignment_operator"</b>
 		 * \returns <b>"assignment_operator"</b>
                  */
-		virtual std::string name()const		{return std::string("assignment_operator");}
+		virtual std::string name()const			{return std::string("assignment_operator");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -1951,8 +2298,20 @@ class assignment_operator:public CAst
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_ASSIGNMENT_OPERATOR;}
 
+
+
+		ReferenceCountedAutoPointer<token>& p_token()
+		{
+			return _p_token;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token()const
+		{
+			return _p_token;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -2036,7 +2395,7 @@ class struct_declaration:public CAst
                  * Returns the name of the class. Here, returns <b>"struct_declaration"</b>
 		 * \returns <b>"struct_declaration"</b>
                  */
-		virtual std::string name()const		{return std::string("struct_declaration");}
+		virtual std::string name()const			{return std::string("struct_declaration");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -2046,8 +2405,29 @@ class struct_declaration:public CAst
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_STRUCT_DECLARATION;}
 
+
+
+		ReferenceCountedAutoPointer<specifier_qualifier_list>& p_specifier_qualifier_list()
+		{
+			return _p_specifier_qualifier_list;
+		}
+
+		const ReferenceCountedAutoPointer<specifier_qualifier_list>& p_specifier_qualifier_list()const
+		{
+			return _p_specifier_qualifier_list;
+		}
+		ReferenceCountedAutoPointer<struct_declarator_list>& p_struct_declarator_list()
+		{
+			return _p_struct_declarator_list;
+		}
+
+		const ReferenceCountedAutoPointer<struct_declarator_list>& p_struct_declarator_list()const
+		{
+			return _p_struct_declarator_list;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -2131,7 +2511,7 @@ class abstract_declarator:public CAst
                  * Returns the name of the class. Here, returns <b>"abstract_declarator"</b>
 		 * \returns <b>"abstract_declarator"</b>
                  */
-		virtual std::string name()const		{return std::string("abstract_declarator");}
+		virtual std::string name()const			{return std::string("abstract_declarator");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -2141,8 +2521,29 @@ class abstract_declarator:public CAst
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_ABSTRACT_DECLARATOR;}
 
+
+
+		ReferenceCountedAutoPointer<pointer>& p_pointer()
+		{
+			return _p_pointer;
+		}
+
+		const ReferenceCountedAutoPointer<pointer>& p_pointer()const
+		{
+			return _p_pointer;
+		}
+		ReferenceCountedAutoPointer<direct_abstract_declarator>& p_direct_abstract_declarator()
+		{
+			return _p_direct_abstract_declarator;
+		}
+
+		const ReferenceCountedAutoPointer<direct_abstract_declarator>& p_direct_abstract_declarator()const
+		{
+			return _p_direct_abstract_declarator;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -2210,14 +2611,17 @@ class iteration_statement:public CAst
 
 
 
+class expression_statement;
 class expression;
 class statement;
 
 
 
 
+
+
 /**
- * \brief iteration_statement_1 implements the pattern: <b>(WHILE, '(', expression, ')', statement)</b>
+ * \brief iteration_statement_1 implements the pattern: <b>(FOR, '(', expression_statement, expression_statement, expression, ')', statement)</b>
 
 
  * \dot
@@ -2225,9 +2629,13 @@ class statement;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_iteration_statement_1 [ label="iteration_statement_1", URL="\ref iteration_statement_1", color="#00AAAA" ];
+ *     node_expression_statement [ label="expression_statement", URL="\ref expression_statement", color="#00AAAA"];
+ *     node_expression_statement [ label="expression_statement", URL="\ref expression_statement", color="#00AAAA"];
  *     node_expression [ label="expression", URL="\ref expression", color="#00AAAA"];
  *     node_statement [ label="statement", URL="\ref statement", color="#00AAAA"];
- *     node_iteration_statement_1 ->  node_expression [label="_p_expression" style=solid];
+ *     node_iteration_statement_1 ->  node_expression_statement [label="_p_expression_statement1" style=solid];
+ *     node_iteration_statement_1 ->  node_expression_statement [label="_p_expression_statement2" style=solid];
+ *     node_iteration_statement_1 ->  node_expression [label="_p_expression" style=dotted];
  *     node_iteration_statement_1 ->  node_statement [label="_p_statement" style=solid];
  * }
  * \enddot
@@ -2235,7 +2643,9 @@ class statement;
 class iteration_statement_1:public iteration_statement
 {
 	private:
-		ReferenceCountedAutoPointer<expression> _p_expression;	  ///< A pointer to expression.
+		ReferenceCountedAutoPointer<expression_statement> _p_expression_statement1;	  ///< A pointer to expression_statement.
+		ReferenceCountedAutoPointer<expression_statement> _p_expression_statement2;	  ///< A pointer to expression_statement.
+		ReferenceCountedAutoPointer<expression> _p_expression;	  ///< A pointer to expression. This parameter can be <b>Null</b>
 		ReferenceCountedAutoPointer<statement> _p_statement;	  ///< A pointer to statement.
 	public:
 		static CAST_CLASS_ID ID;
@@ -2247,7 +2657,9 @@ class iteration_statement_1:public iteration_statement
                  */
 		iteration_statement_1	
 				(
-					ReferenceCountedAutoPointer<expression> _arg_expression,   ///< A pointer to expression.
+					ReferenceCountedAutoPointer<expression_statement> _arg_expression_statement1,   ///< A pointer to expression_statement.
+					ReferenceCountedAutoPointer<expression_statement> _arg_expression_statement2,   ///< A pointer to expression_statement.
+					ReferenceCountedAutoPointer<expression> _arg_expression,   ///< A pointer to expression. This parameter can be <b>Null</b>
 					ReferenceCountedAutoPointer<statement> _arg_statement  ///< A pointer to statement.
 				);
 		/**
@@ -2256,7 +2668,7 @@ class iteration_statement_1:public iteration_statement
                  * Returns the name of the class. Here, returns <b>"iteration_statement_1"</b>
 		 * \returns <b>"iteration_statement_1"</b>
                  */
-		virtual std::string name()const		{return std::string("iteration_statement_1");}
+		virtual std::string name()const			{return std::string("iteration_statement_1");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -2266,8 +2678,47 @@ class iteration_statement_1:public iteration_statement
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_ITERATION_STATEMENT_1;}
 
+
+
+		ReferenceCountedAutoPointer<expression_statement>& p_expression_statement1()
+		{
+			return _p_expression_statement1;
+		}
+
+		const ReferenceCountedAutoPointer<expression_statement>& p_expression_statement1()const
+		{
+			return _p_expression_statement1;
+		}
+		ReferenceCountedAutoPointer<expression_statement>& p_expression_statement2()
+		{
+			return _p_expression_statement2;
+		}
+
+		const ReferenceCountedAutoPointer<expression_statement>& p_expression_statement2()const
+		{
+			return _p_expression_statement2;
+		}
+		ReferenceCountedAutoPointer<expression>& p_expression()
+		{
+			return _p_expression;
+		}
+
+		const ReferenceCountedAutoPointer<expression>& p_expression()const
+		{
+			return _p_expression;
+		}
+		ReferenceCountedAutoPointer<statement>& p_statement()
+		{
+			return _p_statement;
+		}
+
+		const ReferenceCountedAutoPointer<statement>& p_statement()const
+		{
+			return _p_statement;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -2291,7 +2742,7 @@ class statement;
 
 
 /**
- * \brief iteration_statement_2 implements the pattern: <b>(DO, statement, WHILE, '(', expression, ')', ';')</b>
+ * \brief iteration_statement_2 implements the pattern: <b>(WHILE, '(', expression, ')', statement)</b>
 
 
  * \dot
@@ -2299,18 +2750,18 @@ class statement;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_iteration_statement_2 [ label="iteration_statement_2", URL="\ref iteration_statement_2", color="#00AAAA" ];
- *     node_statement [ label="statement", URL="\ref statement", color="#00AAAA"];
  *     node_expression [ label="expression", URL="\ref expression", color="#00AAAA"];
- *     node_iteration_statement_2 ->  node_statement [label="_p_statement" style=solid];
+ *     node_statement [ label="statement", URL="\ref statement", color="#00AAAA"];
  *     node_iteration_statement_2 ->  node_expression [label="_p_expression" style=solid];
+ *     node_iteration_statement_2 ->  node_statement [label="_p_statement" style=solid];
  * }
  * \enddot
  */
 class iteration_statement_2:public iteration_statement
 {
 	private:
-		ReferenceCountedAutoPointer<statement> _p_statement;	  ///< A pointer to statement.
 		ReferenceCountedAutoPointer<expression> _p_expression;	  ///< A pointer to expression.
+		ReferenceCountedAutoPointer<statement> _p_statement;	  ///< A pointer to statement.
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -2321,8 +2772,8 @@ class iteration_statement_2:public iteration_statement
                  */
 		iteration_statement_2	
 				(
-					ReferenceCountedAutoPointer<statement> _arg_statement,   ///< A pointer to statement.
-					ReferenceCountedAutoPointer<expression> _arg_expression  ///< A pointer to expression.
+					ReferenceCountedAutoPointer<expression> _arg_expression,   ///< A pointer to expression.
+					ReferenceCountedAutoPointer<statement> _arg_statement  ///< A pointer to statement.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -2330,7 +2781,7 @@ class iteration_statement_2:public iteration_statement
                  * Returns the name of the class. Here, returns <b>"iteration_statement_2"</b>
 		 * \returns <b>"iteration_statement_2"</b>
                  */
-		virtual std::string name()const		{return std::string("iteration_statement_2");}
+		virtual std::string name()const			{return std::string("iteration_statement_2");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -2340,8 +2791,29 @@ class iteration_statement_2:public iteration_statement
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_ITERATION_STATEMENT_2;}
 
+
+
+		ReferenceCountedAutoPointer<expression>& p_expression()
+		{
+			return _p_expression;
+		}
+
+		const ReferenceCountedAutoPointer<expression>& p_expression()const
+		{
+			return _p_expression;
+		}
+		ReferenceCountedAutoPointer<statement>& p_statement()
+		{
+			return _p_statement;
+		}
+
+		const ReferenceCountedAutoPointer<statement>& p_statement()const
+		{
+			return _p_statement;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -2358,17 +2830,14 @@ class iteration_statement_2:public iteration_statement
 
 
 
-class expression_statement;
 class expression;
 class statement;
 
 
 
 
-
-
 /**
- * \brief iteration_statement_3 implements the pattern: <b>(FOR, '(', expression_statement, expression_statement, expression, ')', statement)</b>
+ * \brief iteration_statement_3 implements the pattern: <b>(DO, statement, WHILE, '(', expression, ')', ';')</b>
 
 
  * \dot
@@ -2376,24 +2845,18 @@ class statement;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_iteration_statement_3 [ label="iteration_statement_3", URL="\ref iteration_statement_3", color="#00AAAA" ];
- *     node_expression_statement [ label="expression_statement", URL="\ref expression_statement", color="#00AAAA"];
- *     node_expression_statement [ label="expression_statement", URL="\ref expression_statement", color="#00AAAA"];
- *     node_expression [ label="expression", URL="\ref expression", color="#00AAAA"];
  *     node_statement [ label="statement", URL="\ref statement", color="#00AAAA"];
- *     node_iteration_statement_3 ->  node_expression_statement [label="_p_expression_statement1" style=solid];
- *     node_iteration_statement_3 ->  node_expression_statement [label="_p_expression_statement2" style=solid];
- *     node_iteration_statement_3 ->  node_expression [label="_p_expression" style=dotted];
+ *     node_expression [ label="expression", URL="\ref expression", color="#00AAAA"];
  *     node_iteration_statement_3 ->  node_statement [label="_p_statement" style=solid];
+ *     node_iteration_statement_3 ->  node_expression [label="_p_expression" style=solid];
  * }
  * \enddot
  */
 class iteration_statement_3:public iteration_statement
 {
 	private:
-		ReferenceCountedAutoPointer<expression_statement> _p_expression_statement1;	  ///< A pointer to expression_statement.
-		ReferenceCountedAutoPointer<expression_statement> _p_expression_statement2;	  ///< A pointer to expression_statement.
-		ReferenceCountedAutoPointer<expression> _p_expression;	  ///< A pointer to expression. This parameter can be <b>Null</b>
 		ReferenceCountedAutoPointer<statement> _p_statement;	  ///< A pointer to statement.
+		ReferenceCountedAutoPointer<expression> _p_expression;	  ///< A pointer to expression.
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -2404,10 +2867,8 @@ class iteration_statement_3:public iteration_statement
                  */
 		iteration_statement_3	
 				(
-					ReferenceCountedAutoPointer<expression_statement> _arg_expression_statement1,   ///< A pointer to expression_statement.
-					ReferenceCountedAutoPointer<expression_statement> _arg_expression_statement2,   ///< A pointer to expression_statement.
-					ReferenceCountedAutoPointer<expression> _arg_expression,   ///< A pointer to expression. This parameter can be <b>Null</b>
-					ReferenceCountedAutoPointer<statement> _arg_statement  ///< A pointer to statement.
+					ReferenceCountedAutoPointer<statement> _arg_statement,   ///< A pointer to statement.
+					ReferenceCountedAutoPointer<expression> _arg_expression  ///< A pointer to expression.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -2415,7 +2876,7 @@ class iteration_statement_3:public iteration_statement
                  * Returns the name of the class. Here, returns <b>"iteration_statement_3"</b>
 		 * \returns <b>"iteration_statement_3"</b>
                  */
-		virtual std::string name()const		{return std::string("iteration_statement_3");}
+		virtual std::string name()const			{return std::string("iteration_statement_3");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -2425,8 +2886,29 @@ class iteration_statement_3:public iteration_statement
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_ITERATION_STATEMENT_3;}
 
+
+
+		ReferenceCountedAutoPointer<statement>& p_statement()
+		{
+			return _p_statement;
+		}
+
+		const ReferenceCountedAutoPointer<statement>& p_statement()const
+		{
+			return _p_statement;
+		}
+		ReferenceCountedAutoPointer<expression>& p_expression()
+		{
+			return _p_expression;
+		}
+
+		const ReferenceCountedAutoPointer<expression>& p_expression()const
+		{
+			return _p_expression;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -2487,7 +2969,7 @@ class multiplicative_expression;
  * }
  * \enddot
  */
-class additive_expression_item
+class additive_expression_item:public CAst
 {
 	private:
 		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>'+'</b>, <b>'-'</b>, <b>None</b>
@@ -2511,7 +2993,7 @@ class additive_expression_item
                  * Returns the name of the class. Here, returns <b>"additive_expression_item"</b>
 		 * \returns <b>"additive_expression_item"</b>
                  */
-		virtual std::string name()const		{return std::string("additive_expression_item");}
+		virtual std::string name()const			{return std::string("additive_expression_item");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -2521,19 +3003,34 @@ class additive_expression_item
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_ADDITIVE_EXPRESSION_ITEM;}
 
+
+
+		ReferenceCountedAutoPointer<token>& p_token()
+		{
+			return _p_token;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token()const
+		{
+			return _p_token;
+		}
+		ReferenceCountedAutoPointer<multiplicative_expression>& p_multiplicative_expression()
+		{
+			return _p_multiplicative_expression;
+		}
+
+		const ReferenceCountedAutoPointer<multiplicative_expression>& p_multiplicative_expression()const
+		{
+			return _p_multiplicative_expression;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
 
-		std::string code()const
-		{
-			std::stringstream stream;
-			codeStream(stream);
-			return stream.str();
-		}
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -2553,7 +3050,8 @@ class additive_expression_item
 class additive_expression:public CAst
 {
 	public:
-		typedef std::list<ReferenceCountedAutoPointer<additive_expression_item> > additive_expressionListType;	///< This defines the list type which will store the additive_expression_item
+		typedef additive_expression_item ItemType;
+		typedef std::vector<ReferenceCountedAutoPointer< ItemType > > additive_expressionListType;	///< This defines the list type which will store the additive_expression_item
 		typedef additive_expressionListType::iterator additive_expressionIterType;				///< This defines the iterator over additive_expressionListType
 		typedef additive_expressionListType::const_iterator Cadditive_expressionIterType;				///< This defines the constant iterator over additive_expressionListType
 
@@ -2591,9 +3089,13 @@ class additive_expression:public CAst
 		void prepend( ReferenceCountedAutoPointer<additive_expression_item> item)
 		{
 			LOG(COL_FG_GREEN<<"Prepending to additive_expression: "<<this)
-			_itemList.push_front(item);
+			_itemList.insert(_itemList.begin(),item);
 		}
 		
+		int size()const
+		{
+			return _itemList.size();
+		}
 		/**
                  * \brief Returns the name of the class.
                  *
@@ -2611,6 +3113,29 @@ class additive_expression:public CAst
 		virtual CAST_CLASS_ID classId()const		{return ID_ADDITIVE_EXPRESSION;}
 
 
+		ReferenceCountedAutoPointer<ItemType>& operator[](int i)
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+		const ReferenceCountedAutoPointer<ItemType>& operator[](int i)const
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+
+
+		/**
+		 * \brief Writes code to the code stream
+		 *
+		 *
+		 */
 		virtual std::ostream& codeStream(std::ostream& stream)const
 		{
 			for(Cadditive_expressionIterType i=_itemList.begin();i!=_itemList.end();i++)
@@ -2675,12 +3200,12 @@ class external_declaration:public CAst
 
 
 
-class function_definition;
+class declaration;
 
 
 
 /**
- * \brief external_declaration_1 implements the pattern: <b>(function_definition,)</b>
+ * \brief external_declaration_1 implements the pattern: <b>(declaration,)</b>
 
 
  * \dot
@@ -2688,15 +3213,15 @@ class function_definition;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_external_declaration_1 [ label="external_declaration_1", URL="\ref external_declaration_1", color="#00AAAA" ];
- *     node_function_definition [ label="function_definition", URL="\ref function_definition", color="#00AAAA"];
- *     node_external_declaration_1 ->  node_function_definition [label="_p_function_definition" style=solid];
+ *     node_declaration [ label="declaration", URL="\ref declaration", color="#00AAAA"];
+ *     node_external_declaration_1 ->  node_declaration [label="_p_declaration" style=solid];
  * }
  * \enddot
  */
 class external_declaration_1:public external_declaration
 {
 	private:
-		ReferenceCountedAutoPointer<function_definition> _p_function_definition;	  ///< A pointer to function_definition.
+		ReferenceCountedAutoPointer<declaration> _p_declaration;	  ///< A pointer to declaration.
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -2707,7 +3232,7 @@ class external_declaration_1:public external_declaration
                  */
 		external_declaration_1	
 				(
-					ReferenceCountedAutoPointer<function_definition> _arg_function_definition  ///< A pointer to function_definition.
+					ReferenceCountedAutoPointer<declaration> _arg_declaration  ///< A pointer to declaration.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -2715,7 +3240,7 @@ class external_declaration_1:public external_declaration
                  * Returns the name of the class. Here, returns <b>"external_declaration_1"</b>
 		 * \returns <b>"external_declaration_1"</b>
                  */
-		virtual std::string name()const		{return std::string("external_declaration_1");}
+		virtual std::string name()const			{return std::string("external_declaration_1");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -2725,8 +3250,20 @@ class external_declaration_1:public external_declaration
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_EXTERNAL_DECLARATION_1;}
 
+
+
+		ReferenceCountedAutoPointer<declaration>& p_declaration()
+		{
+			return _p_declaration;
+		}
+
+		const ReferenceCountedAutoPointer<declaration>& p_declaration()const
+		{
+			return _p_declaration;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -2743,12 +3280,12 @@ class external_declaration_1:public external_declaration
 
 
 
-class declaration;
+class function_definition;
 
 
 
 /**
- * \brief external_declaration_2 implements the pattern: <b>(declaration,)</b>
+ * \brief external_declaration_2 implements the pattern: <b>(function_definition,)</b>
 
 
  * \dot
@@ -2756,15 +3293,15 @@ class declaration;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_external_declaration_2 [ label="external_declaration_2", URL="\ref external_declaration_2", color="#00AAAA" ];
- *     node_declaration [ label="declaration", URL="\ref declaration", color="#00AAAA"];
- *     node_external_declaration_2 ->  node_declaration [label="_p_declaration" style=solid];
+ *     node_function_definition [ label="function_definition", URL="\ref function_definition", color="#00AAAA"];
+ *     node_external_declaration_2 ->  node_function_definition [label="_p_function_definition" style=solid];
  * }
  * \enddot
  */
 class external_declaration_2:public external_declaration
 {
 	private:
-		ReferenceCountedAutoPointer<declaration> _p_declaration;	  ///< A pointer to declaration.
+		ReferenceCountedAutoPointer<function_definition> _p_function_definition;	  ///< A pointer to function_definition.
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -2775,7 +3312,7 @@ class external_declaration_2:public external_declaration
                  */
 		external_declaration_2	
 				(
-					ReferenceCountedAutoPointer<declaration> _arg_declaration  ///< A pointer to declaration.
+					ReferenceCountedAutoPointer<function_definition> _arg_function_definition  ///< A pointer to function_definition.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -2783,7 +3320,7 @@ class external_declaration_2:public external_declaration
                  * Returns the name of the class. Here, returns <b>"external_declaration_2"</b>
 		 * \returns <b>"external_declaration_2"</b>
                  */
-		virtual std::string name()const		{return std::string("external_declaration_2");}
+		virtual std::string name()const			{return std::string("external_declaration_2");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -2793,8 +3330,20 @@ class external_declaration_2:public external_declaration
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_EXTERNAL_DECLARATION_2;}
 
+
+
+		ReferenceCountedAutoPointer<function_definition>& p_function_definition()
+		{
+			return _p_function_definition;
+		}
+
+		const ReferenceCountedAutoPointer<function_definition>& p_function_definition()const
+		{
+			return _p_function_definition;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -2909,7 +3458,7 @@ class type_specifier_1:public type_specifier
                  * Returns the name of the class. Here, returns <b>"type_specifier_1"</b>
 		 * \returns <b>"type_specifier_1"</b>
                  */
-		virtual std::string name()const		{return std::string("type_specifier_1");}
+		virtual std::string name()const			{return std::string("type_specifier_1");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -2919,8 +3468,20 @@ class type_specifier_1:public type_specifier
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_TYPE_SPECIFIER_1;}
 
+
+
+		ReferenceCountedAutoPointer<enum_specifier>& p_enum_specifier()
+		{
+			return _p_enum_specifier;
+		}
+
+		const ReferenceCountedAutoPointer<enum_specifier>& p_enum_specifier()const
+		{
+			return _p_enum_specifier;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -2978,7 +3539,7 @@ class type_specifier_2:public type_specifier
                  * Returns the name of the class. Here, returns <b>"type_specifier_2"</b>
 		 * \returns <b>"type_specifier_2"</b>
                  */
-		virtual std::string name()const		{return std::string("type_specifier_2");}
+		virtual std::string name()const			{return std::string("type_specifier_2");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -2988,8 +3549,20 @@ class type_specifier_2:public type_specifier
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_TYPE_SPECIFIER_2;}
 
+
+
+		ReferenceCountedAutoPointer<token>& p_token()
+		{
+			return _p_token;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token()const
+		{
+			return _p_token;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -3046,7 +3619,7 @@ class type_specifier_3:public type_specifier
                  * Returns the name of the class. Here, returns <b>"type_specifier_3"</b>
 		 * \returns <b>"type_specifier_3"</b>
                  */
-		virtual std::string name()const		{return std::string("type_specifier_3");}
+		virtual std::string name()const			{return std::string("type_specifier_3");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -3056,8 +3629,20 @@ class type_specifier_3:public type_specifier
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_TYPE_SPECIFIER_3;}
 
+
+
+		ReferenceCountedAutoPointer<struct_or_union_specifier>& p_struct_or_union_specifier()
+		{
+			return _p_struct_or_union_specifier;
+		}
+
+		const ReferenceCountedAutoPointer<struct_or_union_specifier>& p_struct_or_union_specifier()const
+		{
+			return _p_struct_or_union_specifier;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -3141,7 +3726,7 @@ class compound_statement:public CAst
                  * Returns the name of the class. Here, returns <b>"compound_statement"</b>
 		 * \returns <b>"compound_statement"</b>
                  */
-		virtual std::string name()const		{return std::string("compound_statement");}
+		virtual std::string name()const			{return std::string("compound_statement");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -3151,8 +3736,29 @@ class compound_statement:public CAst
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_COMPOUND_STATEMENT;}
 
+
+
+		ReferenceCountedAutoPointer<declaration_list>& p_declaration_list()
+		{
+			return _p_declaration_list;
+		}
+
+		const ReferenceCountedAutoPointer<declaration_list>& p_declaration_list()const
+		{
+			return _p_declaration_list;
+		}
+		ReferenceCountedAutoPointer<statement_list>& p_statement_list()
+		{
+			return _p_statement_list;
+		}
+
+		const ReferenceCountedAutoPointer<statement_list>& p_statement_list()const
+		{
+			return _p_statement_list;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -3213,7 +3819,7 @@ class exclusive_or_expression;
  * }
  * \enddot
  */
-class inclusive_or_expression_item
+class inclusive_or_expression_item:public CAst
 {
 	private:
 		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>'|'</b>, <b>None</b>
@@ -3237,7 +3843,7 @@ class inclusive_or_expression_item
                  * Returns the name of the class. Here, returns <b>"inclusive_or_expression_item"</b>
 		 * \returns <b>"inclusive_or_expression_item"</b>
                  */
-		virtual std::string name()const		{return std::string("inclusive_or_expression_item");}
+		virtual std::string name()const			{return std::string("inclusive_or_expression_item");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -3247,19 +3853,34 @@ class inclusive_or_expression_item
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_INCLUSIVE_OR_EXPRESSION_ITEM;}
 
+
+
+		ReferenceCountedAutoPointer<token>& p_token()
+		{
+			return _p_token;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token()const
+		{
+			return _p_token;
+		}
+		ReferenceCountedAutoPointer<exclusive_or_expression>& p_exclusive_or_expression()
+		{
+			return _p_exclusive_or_expression;
+		}
+
+		const ReferenceCountedAutoPointer<exclusive_or_expression>& p_exclusive_or_expression()const
+		{
+			return _p_exclusive_or_expression;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
 
-		std::string code()const
-		{
-			std::stringstream stream;
-			codeStream(stream);
-			return stream.str();
-		}
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -3279,7 +3900,8 @@ class inclusive_or_expression_item
 class inclusive_or_expression:public CAst
 {
 	public:
-		typedef std::list<ReferenceCountedAutoPointer<inclusive_or_expression_item> > inclusive_or_expressionListType;	///< This defines the list type which will store the inclusive_or_expression_item
+		typedef inclusive_or_expression_item ItemType;
+		typedef std::vector<ReferenceCountedAutoPointer< ItemType > > inclusive_or_expressionListType;	///< This defines the list type which will store the inclusive_or_expression_item
 		typedef inclusive_or_expressionListType::iterator inclusive_or_expressionIterType;				///< This defines the iterator over inclusive_or_expressionListType
 		typedef inclusive_or_expressionListType::const_iterator Cinclusive_or_expressionIterType;				///< This defines the constant iterator over inclusive_or_expressionListType
 
@@ -3317,9 +3939,13 @@ class inclusive_or_expression:public CAst
 		void prepend( ReferenceCountedAutoPointer<inclusive_or_expression_item> item)
 		{
 			LOG(COL_FG_GREEN<<"Prepending to inclusive_or_expression: "<<this)
-			_itemList.push_front(item);
+			_itemList.insert(_itemList.begin(),item);
 		}
 		
+		int size()const
+		{
+			return _itemList.size();
+		}
 		/**
                  * \brief Returns the name of the class.
                  *
@@ -3337,6 +3963,29 @@ class inclusive_or_expression:public CAst
 		virtual CAST_CLASS_ID classId()const		{return ID_INCLUSIVE_OR_EXPRESSION;}
 
 
+		ReferenceCountedAutoPointer<ItemType>& operator[](int i)
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+		const ReferenceCountedAutoPointer<ItemType>& operator[](int i)const
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+
+
+		/**
+		 * \brief Writes code to the code stream
+		 *
+		 *
+		 */
 		virtual std::ostream& codeStream(std::ostream& stream)const
 		{
 			for(Cinclusive_or_expressionIterType i=_itemList.begin();i!=_itemList.end();i++)
@@ -3373,7 +4022,7 @@ class inclusive_or_expression:public CAst
 
 
 
-class pointer_item
+class pointer_item:public CAst
 {
 	
 	public:
@@ -3402,12 +4051,10 @@ class pointer_item
 
 };
 
-class type_qualifier_list;
-
 
 
 /**
- * \brief pointer_item_1 implements the pattern: <b>('*', type_qualifier_list, pointer)</b>
+ * \brief pointer_item_1 implements the pattern: <b>('*', pointer)</b>
 
 
  * \dot
@@ -3415,15 +4062,12 @@ class type_qualifier_list;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_pointer_item_1 [ label="pointer_item_1", URL="\ref pointer_item_1", color="#00AAAA" ];
- *     node_type_qualifier_list [ label="type_qualifier_list", URL="\ref type_qualifier_list", color="#00AAAA"];
- *     node_pointer_item_1 ->  node_type_qualifier_list [label="_p_type_qualifier_list" style=dotted];
  * }
  * \enddot
  */
 class pointer_item_1:public pointer_item
 {
 	private:
-		ReferenceCountedAutoPointer<type_qualifier_list> _p_type_qualifier_list;	  ///< A pointer to type_qualifier_list. This parameter can be <b>Null</b>
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -3434,7 +4078,6 @@ class pointer_item_1:public pointer_item
                  */
 		pointer_item_1	
 				(
-					ReferenceCountedAutoPointer<type_qualifier_list> _arg_type_qualifier_list  ///< A pointer to type_qualifier_list. This parameter can be <b>Null</b>
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -3442,7 +4085,7 @@ class pointer_item_1:public pointer_item
                  * Returns the name of the class. Here, returns <b>"pointer_item_1"</b>
 		 * \returns <b>"pointer_item_1"</b>
                  */
-		virtual std::string name()const		{return std::string("pointer_item_1");}
+		virtual std::string name()const			{return std::string("pointer_item_1");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -3452,8 +4095,11 @@ class pointer_item_1:public pointer_item
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_POINTER_ITEM_1;}
 
+
+
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -3470,10 +4116,12 @@ class pointer_item_1:public pointer_item
 
 
 
+class type_qualifier_list;
+
 
 
 /**
- * \brief pointer_item_2 implements the pattern: <b>('*', pointer)</b>
+ * \brief pointer_item_2 implements the pattern: <b>('*', type_qualifier_list, pointer)</b>
 
 
  * \dot
@@ -3481,12 +4129,15 @@ class pointer_item_1:public pointer_item
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_pointer_item_2 [ label="pointer_item_2", URL="\ref pointer_item_2", color="#00AAAA" ];
+ *     node_type_qualifier_list [ label="type_qualifier_list", URL="\ref type_qualifier_list", color="#00AAAA"];
+ *     node_pointer_item_2 ->  node_type_qualifier_list [label="_p_type_qualifier_list" style=dotted];
  * }
  * \enddot
  */
 class pointer_item_2:public pointer_item
 {
 	private:
+		ReferenceCountedAutoPointer<type_qualifier_list> _p_type_qualifier_list;	  ///< A pointer to type_qualifier_list. This parameter can be <b>Null</b>
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -3497,6 +4148,7 @@ class pointer_item_2:public pointer_item
                  */
 		pointer_item_2	
 				(
+					ReferenceCountedAutoPointer<type_qualifier_list> _arg_type_qualifier_list  ///< A pointer to type_qualifier_list. This parameter can be <b>Null</b>
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -3504,7 +4156,7 @@ class pointer_item_2:public pointer_item
                  * Returns the name of the class. Here, returns <b>"pointer_item_2"</b>
 		 * \returns <b>"pointer_item_2"</b>
                  */
-		virtual std::string name()const		{return std::string("pointer_item_2");}
+		virtual std::string name()const			{return std::string("pointer_item_2");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -3514,8 +4166,20 @@ class pointer_item_2:public pointer_item
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_POINTER_ITEM_2;}
 
+
+
+		ReferenceCountedAutoPointer<type_qualifier_list>& p_type_qualifier_list()
+		{
+			return _p_type_qualifier_list;
+		}
+
+		const ReferenceCountedAutoPointer<type_qualifier_list>& p_type_qualifier_list()const
+		{
+			return _p_type_qualifier_list;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -3540,7 +4204,8 @@ class pointer_item_2:public pointer_item
 class pointer:public CAst
 {
 	public:
-		typedef std::list<ReferenceCountedAutoPointer<pointer_item> > pointerListType;	///< This defines the list type which will store the pointer_item
+		typedef pointer_item ItemType;
+		typedef std::vector<ReferenceCountedAutoPointer< ItemType > > pointerListType;	///< This defines the list type which will store the pointer_item
 		typedef pointerListType::iterator pointerIterType;				///< This defines the iterator over pointerListType
 		typedef pointerListType::const_iterator CpointerIterType;				///< This defines the constant iterator over pointerListType
 
@@ -3578,9 +4243,13 @@ class pointer:public CAst
 		void prepend( ReferenceCountedAutoPointer<pointer_item> item)
 		{
 			LOG(COL_FG_GREEN<<"Prepending to pointer: "<<this)
-			_itemList.push_front(item);
+			_itemList.insert(_itemList.begin(),item);
 		}
 		
+		int size()const
+		{
+			return _itemList.size();
+		}
 		/**
                  * \brief Returns the name of the class.
                  *
@@ -3598,6 +4267,29 @@ class pointer:public CAst
 		virtual CAST_CLASS_ID classId()const		{return ID_POINTER;}
 
 
+		ReferenceCountedAutoPointer<ItemType>& operator[](int i)
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+		const ReferenceCountedAutoPointer<ItemType>& operator[](int i)const
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+
+
+		/**
+		 * \brief Writes code to the code stream
+		 *
+		 *
+		 */
 		virtual std::ostream& codeStream(std::ostream& stream)const
 		{
 			for(CpointerIterType i=_itemList.begin();i!=_itemList.end();i++)
@@ -3709,7 +4401,7 @@ class selection_statement_1:public selection_statement
                  * Returns the name of the class. Here, returns <b>"selection_statement_1"</b>
 		 * \returns <b>"selection_statement_1"</b>
                  */
-		virtual std::string name()const		{return std::string("selection_statement_1");}
+		virtual std::string name()const			{return std::string("selection_statement_1");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -3719,8 +4411,29 @@ class selection_statement_1:public selection_statement
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_SELECTION_STATEMENT_1;}
 
+
+
+		ReferenceCountedAutoPointer<expression>& p_expression()
+		{
+			return _p_expression;
+		}
+
+		const ReferenceCountedAutoPointer<expression>& p_expression()const
+		{
+			return _p_expression;
+		}
+		ReferenceCountedAutoPointer<statement>& p_statement()
+		{
+			return _p_statement;
+		}
+
+		const ReferenceCountedAutoPointer<statement>& p_statement()const
+		{
+			return _p_statement;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -3795,7 +4508,7 @@ class selection_statement_2:public selection_statement
                  * Returns the name of the class. Here, returns <b>"selection_statement_2"</b>
 		 * \returns <b>"selection_statement_2"</b>
                  */
-		virtual std::string name()const		{return std::string("selection_statement_2");}
+		virtual std::string name()const			{return std::string("selection_statement_2");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -3805,8 +4518,47 @@ class selection_statement_2:public selection_statement
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_SELECTION_STATEMENT_2;}
 
+
+
+		ReferenceCountedAutoPointer<expression>& p_expression()
+		{
+			return _p_expression;
+		}
+
+		const ReferenceCountedAutoPointer<expression>& p_expression()const
+		{
+			return _p_expression;
+		}
+		ReferenceCountedAutoPointer<statement>& p_statement1()
+		{
+			return _p_statement1;
+		}
+
+		const ReferenceCountedAutoPointer<statement>& p_statement1()const
+		{
+			return _p_statement1;
+		}
+		ReferenceCountedAutoPointer<token>& p_token()
+		{
+			return _p_token;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token()const
+		{
+			return _p_token;
+		}
+		ReferenceCountedAutoPointer<statement>& p_statement2()
+		{
+			return _p_statement2;
+		}
+
+		const ReferenceCountedAutoPointer<statement>& p_statement2()const
+		{
+			return _p_statement2;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -3878,12 +4630,14 @@ class postfix_expression:public CAst
 
 
 
-class primary_expression;
+class argument_expression_list;
+class postfix_expression;
+
 
 
 
 /**
- * \brief postfix_expression_1 implements the pattern: <b>(primary_expression,)</b>
+ * \brief postfix_expression_1 implements the pattern: <b>(postfix_expression, '(', argument_expression_list, ')')</b>
 
 
  * \dot
@@ -3891,15 +4645,18 @@ class primary_expression;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_postfix_expression_1 [ label="postfix_expression_1", URL="\ref postfix_expression_1", color="#00AAAA" ];
- *     node_primary_expression [ label="primary_expression", URL="\ref primary_expression", color="#00AAAA"];
- *     node_postfix_expression_1 ->  node_primary_expression [label="_p_primary_expression" style=solid];
+ *     node_postfix_expression [ label="postfix_expression", URL="\ref postfix_expression", color="#00AAAA"];
+ *     node_argument_expression_list [ label="argument_expression_list", URL="\ref argument_expression_list", color="#00AAAA"];
+ *     node_postfix_expression_1 ->  node_postfix_expression [label="_p_postfix_expression" style=solid];
+ *     node_postfix_expression_1 ->  node_argument_expression_list [label="_p_argument_expression_list" style=dotted];
  * }
  * \enddot
  */
 class postfix_expression_1:public postfix_expression
 {
 	private:
-		ReferenceCountedAutoPointer<primary_expression> _p_primary_expression;	  ///< A pointer to primary_expression.
+		ReferenceCountedAutoPointer<postfix_expression> _p_postfix_expression;	  ///< A pointer to postfix_expression.
+		ReferenceCountedAutoPointer<argument_expression_list> _p_argument_expression_list;	  ///< A pointer to argument_expression_list. This parameter can be <b>Null</b>
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -3910,7 +4667,8 @@ class postfix_expression_1:public postfix_expression
                  */
 		postfix_expression_1	
 				(
-					ReferenceCountedAutoPointer<primary_expression> _arg_primary_expression  ///< A pointer to primary_expression.
+					ReferenceCountedAutoPointer<postfix_expression> _arg_postfix_expression,   ///< A pointer to postfix_expression.
+					ReferenceCountedAutoPointer<argument_expression_list> _arg_argument_expression_list  ///< A pointer to argument_expression_list. This parameter can be <b>Null</b>
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -3918,7 +4676,7 @@ class postfix_expression_1:public postfix_expression
                  * Returns the name of the class. Here, returns <b>"postfix_expression_1"</b>
 		 * \returns <b>"postfix_expression_1"</b>
                  */
-		virtual std::string name()const		{return std::string("postfix_expression_1");}
+		virtual std::string name()const			{return std::string("postfix_expression_1");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -3928,8 +4686,29 @@ class postfix_expression_1:public postfix_expression
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_POSTFIX_EXPRESSION_1;}
 
+
+
+		ReferenceCountedAutoPointer<postfix_expression>& p_postfix_expression()
+		{
+			return _p_postfix_expression;
+		}
+
+		const ReferenceCountedAutoPointer<postfix_expression>& p_postfix_expression()const
+		{
+			return _p_postfix_expression;
+		}
+		ReferenceCountedAutoPointer<argument_expression_list>& p_argument_expression_list()
+		{
+			return _p_argument_expression_list;
+		}
+
+		const ReferenceCountedAutoPointer<argument_expression_list>& p_argument_expression_list()const
+		{
+			return _p_argument_expression_list;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -3953,8 +4732,10 @@ class postfix_expression;
 
 
 
+
+
 /**
- * \brief postfix_expression_2 implements the pattern: <b>(postfix_expression, INC_OP)</b>
+ * \brief postfix_expression_2 implements the pattern: <b>(postfix_expression, '.', IDENTIFIER)</b>
 
 
  * \dot
@@ -3964,8 +4745,10 @@ class postfix_expression;
  *     node_postfix_expression_2 [ label="postfix_expression_2", URL="\ref postfix_expression_2", color="#00AAAA" ];
  *     node_postfix_expression [ label="postfix_expression", URL="\ref postfix_expression", color="#00AAAA"];
  *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
  *     node_postfix_expression_2 ->  node_postfix_expression [label="_p_postfix_expression" style=solid];
- *     node_postfix_expression_2 ->  node_token [label="_p_token" style=solid];
+ *     node_postfix_expression_2 ->  node_token [label="_p_token1" style=solid];
+ *     node_postfix_expression_2 ->  node_token [label="_p_token2" style=solid];
  * }
  * \enddot
  */
@@ -3973,7 +4756,8 @@ class postfix_expression_2:public postfix_expression
 {
 	private:
 		ReferenceCountedAutoPointer<postfix_expression> _p_postfix_expression;	  ///< A pointer to postfix_expression.
-		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>INC_OP</b>, <b>DEC_OP</b>
+		ReferenceCountedAutoPointer<token> _p_token1;	  ///< A pointer to a token, accepts <b>PTR_OP</b>, <b>'.'</b>
+		ReferenceCountedAutoPointer<token> _p_token2;	  ///< A pointer to a token, accepts <b>IDENTIFIER</b>
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -3985,7 +4769,8 @@ class postfix_expression_2:public postfix_expression
 		postfix_expression_2	
 				(
 					ReferenceCountedAutoPointer<postfix_expression> _arg_postfix_expression,   ///< A pointer to postfix_expression.
-					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>INC_OP</b>, <b>DEC_OP</b>
+					ReferenceCountedAutoPointer<token> _arg_token1,   ///< A pointer to a token, accepts <b>PTR_OP</b>, <b>'.'</b>
+					ReferenceCountedAutoPointer<token> _arg_token2  ///< A pointer to a token, accepts <b>IDENTIFIER</b>
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -3993,7 +4778,7 @@ class postfix_expression_2:public postfix_expression
                  * Returns the name of the class. Here, returns <b>"postfix_expression_2"</b>
 		 * \returns <b>"postfix_expression_2"</b>
                  */
-		virtual std::string name()const		{return std::string("postfix_expression_2");}
+		virtual std::string name()const			{return std::string("postfix_expression_2");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -4003,8 +4788,38 @@ class postfix_expression_2:public postfix_expression
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_POSTFIX_EXPRESSION_2;}
 
+
+
+		ReferenceCountedAutoPointer<postfix_expression>& p_postfix_expression()
+		{
+			return _p_postfix_expression;
+		}
+
+		const ReferenceCountedAutoPointer<postfix_expression>& p_postfix_expression()const
+		{
+			return _p_postfix_expression;
+		}
+		ReferenceCountedAutoPointer<token>& p_token1()
+		{
+			return _p_token1;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token1()const
+		{
+			return _p_token1;
+		}
+		ReferenceCountedAutoPointer<token>& p_token2()
+		{
+			return _p_token2;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token2()const
+		{
+			return _p_token2;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -4021,14 +4836,12 @@ class postfix_expression_2:public postfix_expression
 
 
 
-class expression;
-class postfix_expression;
-
+class primary_expression;
 
 
 
 /**
- * \brief postfix_expression_3 implements the pattern: <b>(postfix_expression, '[', expression, ']')</b>
+ * \brief postfix_expression_3 implements the pattern: <b>(primary_expression,)</b>
 
 
  * \dot
@@ -4036,18 +4849,15 @@ class postfix_expression;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_postfix_expression_3 [ label="postfix_expression_3", URL="\ref postfix_expression_3", color="#00AAAA" ];
- *     node_postfix_expression [ label="postfix_expression", URL="\ref postfix_expression", color="#00AAAA"];
- *     node_expression [ label="expression", URL="\ref expression", color="#00AAAA"];
- *     node_postfix_expression_3 ->  node_postfix_expression [label="_p_postfix_expression" style=solid];
- *     node_postfix_expression_3 ->  node_expression [label="_p_expression" style=solid];
+ *     node_primary_expression [ label="primary_expression", URL="\ref primary_expression", color="#00AAAA"];
+ *     node_postfix_expression_3 ->  node_primary_expression [label="_p_primary_expression" style=solid];
  * }
  * \enddot
  */
 class postfix_expression_3:public postfix_expression
 {
 	private:
-		ReferenceCountedAutoPointer<postfix_expression> _p_postfix_expression;	  ///< A pointer to postfix_expression.
-		ReferenceCountedAutoPointer<expression> _p_expression;	  ///< A pointer to expression.
+		ReferenceCountedAutoPointer<primary_expression> _p_primary_expression;	  ///< A pointer to primary_expression.
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -4058,8 +4868,7 @@ class postfix_expression_3:public postfix_expression
                  */
 		postfix_expression_3	
 				(
-					ReferenceCountedAutoPointer<postfix_expression> _arg_postfix_expression,   ///< A pointer to postfix_expression.
-					ReferenceCountedAutoPointer<expression> _arg_expression  ///< A pointer to expression.
+					ReferenceCountedAutoPointer<primary_expression> _arg_primary_expression  ///< A pointer to primary_expression.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -4067,7 +4876,7 @@ class postfix_expression_3:public postfix_expression
                  * Returns the name of the class. Here, returns <b>"postfix_expression_3"</b>
 		 * \returns <b>"postfix_expression_3"</b>
                  */
-		virtual std::string name()const		{return std::string("postfix_expression_3");}
+		virtual std::string name()const			{return std::string("postfix_expression_3");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -4077,8 +4886,20 @@ class postfix_expression_3:public postfix_expression
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_POSTFIX_EXPRESSION_3;}
 
+
+
+		ReferenceCountedAutoPointer<primary_expression>& p_primary_expression()
+		{
+			return _p_primary_expression;
+		}
+
+		const ReferenceCountedAutoPointer<primary_expression>& p_primary_expression()const
+		{
+			return _p_primary_expression;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -4102,10 +4923,8 @@ class postfix_expression;
 
 
 
-
-
 /**
- * \brief postfix_expression_4 implements the pattern: <b>(postfix_expression, '.', IDENTIFIER)</b>
+ * \brief postfix_expression_4 implements the pattern: <b>(postfix_expression, INC_OP)</b>
 
 
  * \dot
@@ -4115,10 +4934,8 @@ class postfix_expression;
  *     node_postfix_expression_4 [ label="postfix_expression_4", URL="\ref postfix_expression_4", color="#00AAAA" ];
  *     node_postfix_expression [ label="postfix_expression", URL="\ref postfix_expression", color="#00AAAA"];
  *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
- *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
  *     node_postfix_expression_4 ->  node_postfix_expression [label="_p_postfix_expression" style=solid];
- *     node_postfix_expression_4 ->  node_token [label="_p_token1" style=solid];
- *     node_postfix_expression_4 ->  node_token [label="_p_token2" style=solid];
+ *     node_postfix_expression_4 ->  node_token [label="_p_token" style=solid];
  * }
  * \enddot
  */
@@ -4126,8 +4943,7 @@ class postfix_expression_4:public postfix_expression
 {
 	private:
 		ReferenceCountedAutoPointer<postfix_expression> _p_postfix_expression;	  ///< A pointer to postfix_expression.
-		ReferenceCountedAutoPointer<token> _p_token1;	  ///< A pointer to a token, accepts <b>PTR_OP</b>, <b>'.'</b>
-		ReferenceCountedAutoPointer<token> _p_token2;	  ///< A pointer to a token, accepts <b>IDENTIFIER</b>
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>INC_OP</b>, <b>DEC_OP</b>
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -4139,8 +4955,7 @@ class postfix_expression_4:public postfix_expression
 		postfix_expression_4	
 				(
 					ReferenceCountedAutoPointer<postfix_expression> _arg_postfix_expression,   ///< A pointer to postfix_expression.
-					ReferenceCountedAutoPointer<token> _arg_token1,   ///< A pointer to a token, accepts <b>PTR_OP</b>, <b>'.'</b>
-					ReferenceCountedAutoPointer<token> _arg_token2  ///< A pointer to a token, accepts <b>IDENTIFIER</b>
+					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>INC_OP</b>, <b>DEC_OP</b>
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -4148,7 +4963,7 @@ class postfix_expression_4:public postfix_expression
                  * Returns the name of the class. Here, returns <b>"postfix_expression_4"</b>
 		 * \returns <b>"postfix_expression_4"</b>
                  */
-		virtual std::string name()const		{return std::string("postfix_expression_4");}
+		virtual std::string name()const			{return std::string("postfix_expression_4");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -4158,8 +4973,29 @@ class postfix_expression_4:public postfix_expression
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_POSTFIX_EXPRESSION_4;}
 
+
+
+		ReferenceCountedAutoPointer<postfix_expression>& p_postfix_expression()
+		{
+			return _p_postfix_expression;
+		}
+
+		const ReferenceCountedAutoPointer<postfix_expression>& p_postfix_expression()const
+		{
+			return _p_postfix_expression;
+		}
+		ReferenceCountedAutoPointer<token>& p_token()
+		{
+			return _p_token;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token()const
+		{
+			return _p_token;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -4176,14 +5012,14 @@ class postfix_expression_4:public postfix_expression
 
 
 
-class argument_expression_list;
+class expression;
 class postfix_expression;
 
 
 
 
 /**
- * \brief postfix_expression_5 implements the pattern: <b>(postfix_expression, '(', argument_expression_list, ')')</b>
+ * \brief postfix_expression_5 implements the pattern: <b>(postfix_expression, '[', expression, ']')</b>
 
 
  * \dot
@@ -4192,9 +5028,9 @@ class postfix_expression;
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_postfix_expression_5 [ label="postfix_expression_5", URL="\ref postfix_expression_5", color="#00AAAA" ];
  *     node_postfix_expression [ label="postfix_expression", URL="\ref postfix_expression", color="#00AAAA"];
- *     node_argument_expression_list [ label="argument_expression_list", URL="\ref argument_expression_list", color="#00AAAA"];
+ *     node_expression [ label="expression", URL="\ref expression", color="#00AAAA"];
  *     node_postfix_expression_5 ->  node_postfix_expression [label="_p_postfix_expression" style=solid];
- *     node_postfix_expression_5 ->  node_argument_expression_list [label="_p_argument_expression_list" style=dotted];
+ *     node_postfix_expression_5 ->  node_expression [label="_p_expression" style=solid];
  * }
  * \enddot
  */
@@ -4202,7 +5038,7 @@ class postfix_expression_5:public postfix_expression
 {
 	private:
 		ReferenceCountedAutoPointer<postfix_expression> _p_postfix_expression;	  ///< A pointer to postfix_expression.
-		ReferenceCountedAutoPointer<argument_expression_list> _p_argument_expression_list;	  ///< A pointer to argument_expression_list. This parameter can be <b>Null</b>
+		ReferenceCountedAutoPointer<expression> _p_expression;	  ///< A pointer to expression.
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -4214,7 +5050,7 @@ class postfix_expression_5:public postfix_expression
 		postfix_expression_5	
 				(
 					ReferenceCountedAutoPointer<postfix_expression> _arg_postfix_expression,   ///< A pointer to postfix_expression.
-					ReferenceCountedAutoPointer<argument_expression_list> _arg_argument_expression_list  ///< A pointer to argument_expression_list. This parameter can be <b>Null</b>
+					ReferenceCountedAutoPointer<expression> _arg_expression  ///< A pointer to expression.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -4222,7 +5058,7 @@ class postfix_expression_5:public postfix_expression
                  * Returns the name of the class. Here, returns <b>"postfix_expression_5"</b>
 		 * \returns <b>"postfix_expression_5"</b>
                  */
-		virtual std::string name()const		{return std::string("postfix_expression_5");}
+		virtual std::string name()const			{return std::string("postfix_expression_5");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -4232,8 +5068,29 @@ class postfix_expression_5:public postfix_expression
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_POSTFIX_EXPRESSION_5;}
 
+
+
+		ReferenceCountedAutoPointer<postfix_expression>& p_postfix_expression()
+		{
+			return _p_postfix_expression;
+		}
+
+		const ReferenceCountedAutoPointer<postfix_expression>& p_postfix_expression()const
+		{
+			return _p_postfix_expression;
+		}
+		ReferenceCountedAutoPointer<expression>& p_expression()
+		{
+			return _p_expression;
+		}
+
+		const ReferenceCountedAutoPointer<expression>& p_expression()const
+		{
+			return _p_expression;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -4294,7 +5151,7 @@ class equality_expression;
  * }
  * \enddot
  */
-class and_expression_item
+class and_expression_item:public CAst
 {
 	private:
 		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>'&'</b>, <b>None</b>
@@ -4318,7 +5175,7 @@ class and_expression_item
                  * Returns the name of the class. Here, returns <b>"and_expression_item"</b>
 		 * \returns <b>"and_expression_item"</b>
                  */
-		virtual std::string name()const		{return std::string("and_expression_item");}
+		virtual std::string name()const			{return std::string("and_expression_item");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -4328,19 +5185,34 @@ class and_expression_item
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_AND_EXPRESSION_ITEM;}
 
+
+
+		ReferenceCountedAutoPointer<token>& p_token()
+		{
+			return _p_token;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token()const
+		{
+			return _p_token;
+		}
+		ReferenceCountedAutoPointer<equality_expression>& p_equality_expression()
+		{
+			return _p_equality_expression;
+		}
+
+		const ReferenceCountedAutoPointer<equality_expression>& p_equality_expression()const
+		{
+			return _p_equality_expression;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
 
-		std::string code()const
-		{
-			std::stringstream stream;
-			codeStream(stream);
-			return stream.str();
-		}
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -4360,7 +5232,8 @@ class and_expression_item
 class and_expression:public CAst
 {
 	public:
-		typedef std::list<ReferenceCountedAutoPointer<and_expression_item> > and_expressionListType;	///< This defines the list type which will store the and_expression_item
+		typedef and_expression_item ItemType;
+		typedef std::vector<ReferenceCountedAutoPointer< ItemType > > and_expressionListType;	///< This defines the list type which will store the and_expression_item
 		typedef and_expressionListType::iterator and_expressionIterType;				///< This defines the iterator over and_expressionListType
 		typedef and_expressionListType::const_iterator Cand_expressionIterType;				///< This defines the constant iterator over and_expressionListType
 
@@ -4398,9 +5271,13 @@ class and_expression:public CAst
 		void prepend( ReferenceCountedAutoPointer<and_expression_item> item)
 		{
 			LOG(COL_FG_GREEN<<"Prepending to and_expression: "<<this)
-			_itemList.push_front(item);
+			_itemList.insert(_itemList.begin(),item);
 		}
 		
+		int size()const
+		{
+			return _itemList.size();
+		}
 		/**
                  * \brief Returns the name of the class.
                  *
@@ -4418,6 +5295,29 @@ class and_expression:public CAst
 		virtual CAST_CLASS_ID classId()const		{return ID_AND_EXPRESSION;}
 
 
+		ReferenceCountedAutoPointer<ItemType>& operator[](int i)
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+		const ReferenceCountedAutoPointer<ItemType>& operator[](int i)const
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+
+
+		/**
+		 * \brief Writes code to the code stream
+		 *
+		 *
+		 */
 		virtual std::ostream& codeStream(std::ostream& stream)const
 		{
 			for(Cand_expressionIterType i=_itemList.begin();i!=_itemList.end();i++)
@@ -4526,7 +5426,7 @@ class statement_1:public statement
                  * Returns the name of the class. Here, returns <b>"statement_1"</b>
 		 * \returns <b>"statement_1"</b>
                  */
-		virtual std::string name()const		{return std::string("statement_1");}
+		virtual std::string name()const			{return std::string("statement_1");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -4536,8 +5436,20 @@ class statement_1:public statement
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_STATEMENT_1;}
 
+
+
+		ReferenceCountedAutoPointer<jump_statement>& p_jump_statement()
+		{
+			return _p_jump_statement;
+		}
+
+		const ReferenceCountedAutoPointer<jump_statement>& p_jump_statement()const
+		{
+			return _p_jump_statement;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -4594,7 +5506,7 @@ class statement_2:public statement
                  * Returns the name of the class. Here, returns <b>"statement_2"</b>
 		 * \returns <b>"statement_2"</b>
                  */
-		virtual std::string name()const		{return std::string("statement_2");}
+		virtual std::string name()const			{return std::string("statement_2");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -4604,8 +5516,20 @@ class statement_2:public statement
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_STATEMENT_2;}
 
+
+
+		ReferenceCountedAutoPointer<labeled_statement>& p_labeled_statement()
+		{
+			return _p_labeled_statement;
+		}
+
+		const ReferenceCountedAutoPointer<labeled_statement>& p_labeled_statement()const
+		{
+			return _p_labeled_statement;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -4662,7 +5586,7 @@ class statement_3:public statement
                  * Returns the name of the class. Here, returns <b>"statement_3"</b>
 		 * \returns <b>"statement_3"</b>
                  */
-		virtual std::string name()const		{return std::string("statement_3");}
+		virtual std::string name()const			{return std::string("statement_3");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -4672,8 +5596,20 @@ class statement_3:public statement
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_STATEMENT_3;}
 
+
+
+		ReferenceCountedAutoPointer<compound_statement>& p_compound_statement()
+		{
+			return _p_compound_statement;
+		}
+
+		const ReferenceCountedAutoPointer<compound_statement>& p_compound_statement()const
+		{
+			return _p_compound_statement;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -4730,7 +5666,7 @@ class statement_4:public statement
                  * Returns the name of the class. Here, returns <b>"statement_4"</b>
 		 * \returns <b>"statement_4"</b>
                  */
-		virtual std::string name()const		{return std::string("statement_4");}
+		virtual std::string name()const			{return std::string("statement_4");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -4740,8 +5676,20 @@ class statement_4:public statement
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_STATEMENT_4;}
 
+
+
+		ReferenceCountedAutoPointer<expression_statement>& p_expression_statement()
+		{
+			return _p_expression_statement;
+		}
+
+		const ReferenceCountedAutoPointer<expression_statement>& p_expression_statement()const
+		{
+			return _p_expression_statement;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -4798,7 +5746,7 @@ class statement_5:public statement
                  * Returns the name of the class. Here, returns <b>"statement_5"</b>
 		 * \returns <b>"statement_5"</b>
                  */
-		virtual std::string name()const		{return std::string("statement_5");}
+		virtual std::string name()const			{return std::string("statement_5");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -4808,8 +5756,20 @@ class statement_5:public statement
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_STATEMENT_5;}
 
+
+
+		ReferenceCountedAutoPointer<selection_statement>& p_selection_statement()
+		{
+			return _p_selection_statement;
+		}
+
+		const ReferenceCountedAutoPointer<selection_statement>& p_selection_statement()const
+		{
+			return _p_selection_statement;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -4866,7 +5826,7 @@ class statement_6:public statement
                  * Returns the name of the class. Here, returns <b>"statement_6"</b>
 		 * \returns <b>"statement_6"</b>
                  */
-		virtual std::string name()const		{return std::string("statement_6");}
+		virtual std::string name()const			{return std::string("statement_6");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -4876,8 +5836,20 @@ class statement_6:public statement
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_STATEMENT_6;}
 
+
+
+		ReferenceCountedAutoPointer<iteration_statement>& p_iteration_statement()
+		{
+			return _p_iteration_statement;
+		}
+
+		const ReferenceCountedAutoPointer<iteration_statement>& p_iteration_statement()const
+		{
+			return _p_iteration_statement;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -4989,7 +5961,7 @@ class cast_expression_1:public cast_expression
                  * Returns the name of the class. Here, returns <b>"cast_expression_1"</b>
 		 * \returns <b>"cast_expression_1"</b>
                  */
-		virtual std::string name()const		{return std::string("cast_expression_1");}
+		virtual std::string name()const			{return std::string("cast_expression_1");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -4999,8 +5971,29 @@ class cast_expression_1:public cast_expression
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_CAST_EXPRESSION_1;}
 
+
+
+		ReferenceCountedAutoPointer<type_name>& p_type_name()
+		{
+			return _p_type_name;
+		}
+
+		const ReferenceCountedAutoPointer<type_name>& p_type_name()const
+		{
+			return _p_type_name;
+		}
+		ReferenceCountedAutoPointer<cast_expression>& p_cast_expression()
+		{
+			return _p_cast_expression;
+		}
+
+		const ReferenceCountedAutoPointer<cast_expression>& p_cast_expression()const
+		{
+			return _p_cast_expression;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -5057,7 +6050,7 @@ class cast_expression_2:public cast_expression
                  * Returns the name of the class. Here, returns <b>"cast_expression_2"</b>
 		 * \returns <b>"cast_expression_2"</b>
                  */
-		virtual std::string name()const		{return std::string("cast_expression_2");}
+		virtual std::string name()const			{return std::string("cast_expression_2");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -5067,8 +6060,20 @@ class cast_expression_2:public cast_expression
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_CAST_EXPRESSION_2;}
 
+
+
+		ReferenceCountedAutoPointer<unary_expression>& p_unary_expression()
+		{
+			return _p_unary_expression;
+		}
+
+		const ReferenceCountedAutoPointer<unary_expression>& p_unary_expression()const
+		{
+			return _p_unary_expression;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -5159,7 +6164,7 @@ class init_declarator:public CAst
                  * Returns the name of the class. Here, returns <b>"init_declarator"</b>
 		 * \returns <b>"init_declarator"</b>
                  */
-		virtual std::string name()const		{return std::string("init_declarator");}
+		virtual std::string name()const			{return std::string("init_declarator");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -5169,8 +6174,38 @@ class init_declarator:public CAst
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_INIT_DECLARATOR;}
 
+
+
+		ReferenceCountedAutoPointer<declarator>& p_declarator()
+		{
+			return _p_declarator;
+		}
+
+		const ReferenceCountedAutoPointer<declarator>& p_declarator()const
+		{
+			return _p_declarator;
+		}
+		ReferenceCountedAutoPointer<token>& p_token()
+		{
+			return _p_token;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token()const
+		{
+			return _p_token;
+		}
+		ReferenceCountedAutoPointer<initializer>& p_initializer()
+		{
+			return _p_initializer;
+		}
+
+		const ReferenceCountedAutoPointer<initializer>& p_initializer()const
+		{
+			return _p_initializer;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -5231,7 +6266,7 @@ class struct_declarator;
  * }
  * \enddot
  */
-class struct_declarator_list_item
+class struct_declarator_list_item:public CAst
 {
 	private:
 		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>','</b>, <b>None</b>
@@ -5255,7 +6290,7 @@ class struct_declarator_list_item
                  * Returns the name of the class. Here, returns <b>"struct_declarator_list_item"</b>
 		 * \returns <b>"struct_declarator_list_item"</b>
                  */
-		virtual std::string name()const		{return std::string("struct_declarator_list_item");}
+		virtual std::string name()const			{return std::string("struct_declarator_list_item");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -5265,19 +6300,34 @@ class struct_declarator_list_item
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_STRUCT_DECLARATOR_LIST_ITEM;}
 
+
+
+		ReferenceCountedAutoPointer<token>& p_token()
+		{
+			return _p_token;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token()const
+		{
+			return _p_token;
+		}
+		ReferenceCountedAutoPointer<struct_declarator>& p_struct_declarator()
+		{
+			return _p_struct_declarator;
+		}
+
+		const ReferenceCountedAutoPointer<struct_declarator>& p_struct_declarator()const
+		{
+			return _p_struct_declarator;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
 
-		std::string code()const
-		{
-			std::stringstream stream;
-			codeStream(stream);
-			return stream.str();
-		}
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -5297,7 +6347,8 @@ class struct_declarator_list_item
 class struct_declarator_list:public CAst
 {
 	public:
-		typedef std::list<ReferenceCountedAutoPointer<struct_declarator_list_item> > struct_declarator_listListType;	///< This defines the list type which will store the struct_declarator_list_item
+		typedef struct_declarator_list_item ItemType;
+		typedef std::vector<ReferenceCountedAutoPointer< ItemType > > struct_declarator_listListType;	///< This defines the list type which will store the struct_declarator_list_item
 		typedef struct_declarator_listListType::iterator struct_declarator_listIterType;				///< This defines the iterator over struct_declarator_listListType
 		typedef struct_declarator_listListType::const_iterator Cstruct_declarator_listIterType;				///< This defines the constant iterator over struct_declarator_listListType
 
@@ -5335,9 +6386,13 @@ class struct_declarator_list:public CAst
 		void prepend( ReferenceCountedAutoPointer<struct_declarator_list_item> item)
 		{
 			LOG(COL_FG_GREEN<<"Prepending to struct_declarator_list: "<<this)
-			_itemList.push_front(item);
+			_itemList.insert(_itemList.begin(),item);
 		}
 		
+		int size()const
+		{
+			return _itemList.size();
+		}
 		/**
                  * \brief Returns the name of the class.
                  *
@@ -5355,6 +6410,29 @@ class struct_declarator_list:public CAst
 		virtual CAST_CLASS_ID classId()const		{return ID_STRUCT_DECLARATOR_LIST;}
 
 
+		ReferenceCountedAutoPointer<ItemType>& operator[](int i)
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+		const ReferenceCountedAutoPointer<ItemType>& operator[](int i)const
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+
+
+		/**
+		 * \brief Writes code to the code stream
+		 *
+		 *
+		 */
 		virtual std::ostream& codeStream(std::ostream& stream)const
 		{
 			for(Cstruct_declarator_listIterType i=_itemList.begin();i!=_itemList.end();i++)
@@ -5414,7 +6492,7 @@ class logical_and_expression;
  * }
  * \enddot
  */
-class logical_or_expression_item
+class logical_or_expression_item:public CAst
 {
 	private:
 		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>OR_OP</b>, <b>None</b>
@@ -5438,7 +6516,7 @@ class logical_or_expression_item
                  * Returns the name of the class. Here, returns <b>"logical_or_expression_item"</b>
 		 * \returns <b>"logical_or_expression_item"</b>
                  */
-		virtual std::string name()const		{return std::string("logical_or_expression_item");}
+		virtual std::string name()const			{return std::string("logical_or_expression_item");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -5448,19 +6526,34 @@ class logical_or_expression_item
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_LOGICAL_OR_EXPRESSION_ITEM;}
 
+
+
+		ReferenceCountedAutoPointer<token>& p_token()
+		{
+			return _p_token;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token()const
+		{
+			return _p_token;
+		}
+		ReferenceCountedAutoPointer<logical_and_expression>& p_logical_and_expression()
+		{
+			return _p_logical_and_expression;
+		}
+
+		const ReferenceCountedAutoPointer<logical_and_expression>& p_logical_and_expression()const
+		{
+			return _p_logical_and_expression;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
 
-		std::string code()const
-		{
-			std::stringstream stream;
-			codeStream(stream);
-			return stream.str();
-		}
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -5480,7 +6573,8 @@ class logical_or_expression_item
 class logical_or_expression:public CAst
 {
 	public:
-		typedef std::list<ReferenceCountedAutoPointer<logical_or_expression_item> > logical_or_expressionListType;	///< This defines the list type which will store the logical_or_expression_item
+		typedef logical_or_expression_item ItemType;
+		typedef std::vector<ReferenceCountedAutoPointer< ItemType > > logical_or_expressionListType;	///< This defines the list type which will store the logical_or_expression_item
 		typedef logical_or_expressionListType::iterator logical_or_expressionIterType;				///< This defines the iterator over logical_or_expressionListType
 		typedef logical_or_expressionListType::const_iterator Clogical_or_expressionIterType;				///< This defines the constant iterator over logical_or_expressionListType
 
@@ -5518,9 +6612,13 @@ class logical_or_expression:public CAst
 		void prepend( ReferenceCountedAutoPointer<logical_or_expression_item> item)
 		{
 			LOG(COL_FG_GREEN<<"Prepending to logical_or_expression: "<<this)
-			_itemList.push_front(item);
+			_itemList.insert(_itemList.begin(),item);
 		}
 		
+		int size()const
+		{
+			return _itemList.size();
+		}
 		/**
                  * \brief Returns the name of the class.
                  *
@@ -5538,6 +6636,29 @@ class logical_or_expression:public CAst
 		virtual CAST_CLASS_ID classId()const		{return ID_LOGICAL_OR_EXPRESSION;}
 
 
+		ReferenceCountedAutoPointer<ItemType>& operator[](int i)
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+		const ReferenceCountedAutoPointer<ItemType>& operator[](int i)const
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+
+
+		/**
+		 * \brief Writes code to the code stream
+		 *
+		 *
+		 */
 		virtual std::ostream& codeStream(std::ostream& stream)const
 		{
 			for(Clogical_or_expressionIterType i=_itemList.begin();i!=_itemList.end();i++)
@@ -5615,7 +6736,7 @@ class unary_operator:public CAst
                  * Returns the name of the class. Here, returns <b>"unary_operator"</b>
 		 * \returns <b>"unary_operator"</b>
                  */
-		virtual std::string name()const		{return std::string("unary_operator");}
+		virtual std::string name()const			{return std::string("unary_operator");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -5625,8 +6746,20 @@ class unary_operator:public CAst
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_UNARY_OPERATOR;}
 
+
+
+		ReferenceCountedAutoPointer<token>& p_token()
+		{
+			return _p_token;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token()const
+		{
+			return _p_token;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -5687,10 +6820,10 @@ class shift_expression;
  * }
  * \enddot
  */
-class relational_expression_item
+class relational_expression_item:public CAst
 {
 	private:
-		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>'<'</b>, <b>'>'</b>, <b>GE_OP</b>, <b>LE_OP</b>, <b>None</b>
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>GE_OP</b>, <b>LE_OP</b>, <b>'<'</b>, <b>'>'</b>, <b>None</b>
 		ReferenceCountedAutoPointer<shift_expression> _p_shift_expression;	  ///< A pointer to shift_expression.
 	public:
 		static CAST_CLASS_ID ID;
@@ -5702,7 +6835,7 @@ class relational_expression_item
                  */
 		relational_expression_item	
 				(
-					ReferenceCountedAutoPointer<token> _arg_token,   ///< A pointer to a token, accepts <b>'<'</b>, <b>'>'</b>, <b>GE_OP</b>, <b>LE_OP</b>, <b>None</b>
+					ReferenceCountedAutoPointer<token> _arg_token,   ///< A pointer to a token, accepts <b>GE_OP</b>, <b>LE_OP</b>, <b>'<'</b>, <b>'>'</b>, <b>None</b>
 					ReferenceCountedAutoPointer<shift_expression> _arg_shift_expression  ///< A pointer to shift_expression.
 				);
 		/**
@@ -5711,7 +6844,7 @@ class relational_expression_item
                  * Returns the name of the class. Here, returns <b>"relational_expression_item"</b>
 		 * \returns <b>"relational_expression_item"</b>
                  */
-		virtual std::string name()const		{return std::string("relational_expression_item");}
+		virtual std::string name()const			{return std::string("relational_expression_item");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -5721,19 +6854,34 @@ class relational_expression_item
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_RELATIONAL_EXPRESSION_ITEM;}
 
+
+
+		ReferenceCountedAutoPointer<token>& p_token()
+		{
+			return _p_token;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token()const
+		{
+			return _p_token;
+		}
+		ReferenceCountedAutoPointer<shift_expression>& p_shift_expression()
+		{
+			return _p_shift_expression;
+		}
+
+		const ReferenceCountedAutoPointer<shift_expression>& p_shift_expression()const
+		{
+			return _p_shift_expression;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
 
-		std::string code()const
-		{
-			std::stringstream stream;
-			codeStream(stream);
-			return stream.str();
-		}
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -5753,7 +6901,8 @@ class relational_expression_item
 class relational_expression:public CAst
 {
 	public:
-		typedef std::list<ReferenceCountedAutoPointer<relational_expression_item> > relational_expressionListType;	///< This defines the list type which will store the relational_expression_item
+		typedef relational_expression_item ItemType;
+		typedef std::vector<ReferenceCountedAutoPointer< ItemType > > relational_expressionListType;	///< This defines the list type which will store the relational_expression_item
 		typedef relational_expressionListType::iterator relational_expressionIterType;				///< This defines the iterator over relational_expressionListType
 		typedef relational_expressionListType::const_iterator Crelational_expressionIterType;				///< This defines the constant iterator over relational_expressionListType
 
@@ -5791,9 +6940,13 @@ class relational_expression:public CAst
 		void prepend( ReferenceCountedAutoPointer<relational_expression_item> item)
 		{
 			LOG(COL_FG_GREEN<<"Prepending to relational_expression: "<<this)
-			_itemList.push_front(item);
+			_itemList.insert(_itemList.begin(),item);
 		}
 		
+		int size()const
+		{
+			return _itemList.size();
+		}
 		/**
                  * \brief Returns the name of the class.
                  *
@@ -5811,6 +6964,29 @@ class relational_expression:public CAst
 		virtual CAST_CLASS_ID classId()const		{return ID_RELATIONAL_EXPRESSION;}
 
 
+		ReferenceCountedAutoPointer<ItemType>& operator[](int i)
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+		const ReferenceCountedAutoPointer<ItemType>& operator[](int i)const
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+
+
+		/**
+		 * \brief Writes code to the code stream
+		 *
+		 *
+		 */
 		virtual std::ostream& codeStream(std::ostream& stream)const
 		{
 			for(Crelational_expressionIterType i=_itemList.begin();i!=_itemList.end();i++)
@@ -5888,7 +7064,7 @@ class struct_or_union:public CAst
                  * Returns the name of the class. Here, returns <b>"struct_or_union"</b>
 		 * \returns <b>"struct_or_union"</b>
                  */
-		virtual std::string name()const		{return std::string("struct_or_union");}
+		virtual std::string name()const			{return std::string("struct_or_union");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -5898,8 +7074,20 @@ class struct_or_union:public CAst
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_STRUCT_OR_UNION;}
 
+
+
+		ReferenceCountedAutoPointer<token>& p_token()
+		{
+			return _p_token;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token()const
+		{
+			return _p_token;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -5990,7 +7178,7 @@ class enumerator:public CAst
                  * Returns the name of the class. Here, returns <b>"enumerator"</b>
 		 * \returns <b>"enumerator"</b>
                  */
-		virtual std::string name()const		{return std::string("enumerator");}
+		virtual std::string name()const			{return std::string("enumerator");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -6000,8 +7188,38 @@ class enumerator:public CAst
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_ENUMERATOR;}
 
+
+
+		ReferenceCountedAutoPointer<token>& p_token1()
+		{
+			return _p_token1;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token1()const
+		{
+			return _p_token1;
+		}
+		ReferenceCountedAutoPointer<token>& p_token2()
+		{
+			return _p_token2;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token2()const
+		{
+			return _p_token2;
+		}
+		ReferenceCountedAutoPointer<constant_expression>& p_constant_expression()
+		{
+			return _p_constant_expression;
+		}
+
+		const ReferenceCountedAutoPointer<constant_expression>& p_constant_expression()const
+		{
+			return _p_constant_expression;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -6067,16 +7285,12 @@ class assignment_expression:public CAst
 
 
 
-class assignment_operator;
-class unary_expression;
-class assignment_expression;
-
-
+class conditional_expression;
 
 
 
 /**
- * \brief assignment_expression_1 implements the pattern: <b>(unary_expression, assignment_operator, assignment_expression)</b>
+ * \brief assignment_expression_1 implements the pattern: <b>(conditional_expression,)</b>
 
 
  * \dot
@@ -6084,21 +7298,15 @@ class assignment_expression;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_assignment_expression_1 [ label="assignment_expression_1", URL="\ref assignment_expression_1", color="#00AAAA" ];
- *     node_unary_expression [ label="unary_expression", URL="\ref unary_expression", color="#00AAAA"];
- *     node_assignment_operator [ label="assignment_operator", URL="\ref assignment_operator", color="#00AAAA"];
- *     node_assignment_expression [ label="assignment_expression", URL="\ref assignment_expression", color="#00AAAA"];
- *     node_assignment_expression_1 ->  node_unary_expression [label="_p_unary_expression" style=solid];
- *     node_assignment_expression_1 ->  node_assignment_operator [label="_p_assignment_operator" style=solid];
- *     node_assignment_expression_1 ->  node_assignment_expression [label="_p_assignment_expression" style=solid];
+ *     node_conditional_expression [ label="conditional_expression", URL="\ref conditional_expression", color="#00AAAA"];
+ *     node_assignment_expression_1 ->  node_conditional_expression [label="_p_conditional_expression" style=solid];
  * }
  * \enddot
  */
 class assignment_expression_1:public assignment_expression
 {
 	private:
-		ReferenceCountedAutoPointer<unary_expression> _p_unary_expression;	  ///< A pointer to unary_expression.
-		ReferenceCountedAutoPointer<assignment_operator> _p_assignment_operator;	  ///< A pointer to assignment_operator.
-		ReferenceCountedAutoPointer<assignment_expression> _p_assignment_expression;	  ///< A pointer to assignment_expression.
+		ReferenceCountedAutoPointer<conditional_expression> _p_conditional_expression;	  ///< A pointer to conditional_expression.
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -6109,9 +7317,7 @@ class assignment_expression_1:public assignment_expression
                  */
 		assignment_expression_1	
 				(
-					ReferenceCountedAutoPointer<unary_expression> _arg_unary_expression,   ///< A pointer to unary_expression.
-					ReferenceCountedAutoPointer<assignment_operator> _arg_assignment_operator,   ///< A pointer to assignment_operator.
-					ReferenceCountedAutoPointer<assignment_expression> _arg_assignment_expression  ///< A pointer to assignment_expression.
+					ReferenceCountedAutoPointer<conditional_expression> _arg_conditional_expression  ///< A pointer to conditional_expression.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -6119,7 +7325,7 @@ class assignment_expression_1:public assignment_expression
                  * Returns the name of the class. Here, returns <b>"assignment_expression_1"</b>
 		 * \returns <b>"assignment_expression_1"</b>
                  */
-		virtual std::string name()const		{return std::string("assignment_expression_1");}
+		virtual std::string name()const			{return std::string("assignment_expression_1");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -6129,8 +7335,20 @@ class assignment_expression_1:public assignment_expression
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_ASSIGNMENT_EXPRESSION_1;}
 
+
+
+		ReferenceCountedAutoPointer<conditional_expression>& p_conditional_expression()
+		{
+			return _p_conditional_expression;
+		}
+
+		const ReferenceCountedAutoPointer<conditional_expression>& p_conditional_expression()const
+		{
+			return _p_conditional_expression;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -6147,12 +7365,16 @@ class assignment_expression_1:public assignment_expression
 
 
 
-class conditional_expression;
+class assignment_operator;
+class unary_expression;
+class assignment_expression;
+
+
 
 
 
 /**
- * \brief assignment_expression_2 implements the pattern: <b>(conditional_expression,)</b>
+ * \brief assignment_expression_2 implements the pattern: <b>(unary_expression, assignment_operator, assignment_expression)</b>
 
 
  * \dot
@@ -6160,15 +7382,21 @@ class conditional_expression;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_assignment_expression_2 [ label="assignment_expression_2", URL="\ref assignment_expression_2", color="#00AAAA" ];
- *     node_conditional_expression [ label="conditional_expression", URL="\ref conditional_expression", color="#00AAAA"];
- *     node_assignment_expression_2 ->  node_conditional_expression [label="_p_conditional_expression" style=solid];
+ *     node_unary_expression [ label="unary_expression", URL="\ref unary_expression", color="#00AAAA"];
+ *     node_assignment_operator [ label="assignment_operator", URL="\ref assignment_operator", color="#00AAAA"];
+ *     node_assignment_expression [ label="assignment_expression", URL="\ref assignment_expression", color="#00AAAA"];
+ *     node_assignment_expression_2 ->  node_unary_expression [label="_p_unary_expression" style=solid];
+ *     node_assignment_expression_2 ->  node_assignment_operator [label="_p_assignment_operator" style=solid];
+ *     node_assignment_expression_2 ->  node_assignment_expression [label="_p_assignment_expression" style=solid];
  * }
  * \enddot
  */
 class assignment_expression_2:public assignment_expression
 {
 	private:
-		ReferenceCountedAutoPointer<conditional_expression> _p_conditional_expression;	  ///< A pointer to conditional_expression.
+		ReferenceCountedAutoPointer<unary_expression> _p_unary_expression;	  ///< A pointer to unary_expression.
+		ReferenceCountedAutoPointer<assignment_operator> _p_assignment_operator;	  ///< A pointer to assignment_operator.
+		ReferenceCountedAutoPointer<assignment_expression> _p_assignment_expression;	  ///< A pointer to assignment_expression.
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -6179,7 +7407,9 @@ class assignment_expression_2:public assignment_expression
                  */
 		assignment_expression_2	
 				(
-					ReferenceCountedAutoPointer<conditional_expression> _arg_conditional_expression  ///< A pointer to conditional_expression.
+					ReferenceCountedAutoPointer<unary_expression> _arg_unary_expression,   ///< A pointer to unary_expression.
+					ReferenceCountedAutoPointer<assignment_operator> _arg_assignment_operator,   ///< A pointer to assignment_operator.
+					ReferenceCountedAutoPointer<assignment_expression> _arg_assignment_expression  ///< A pointer to assignment_expression.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -6187,7 +7417,7 @@ class assignment_expression_2:public assignment_expression
                  * Returns the name of the class. Here, returns <b>"assignment_expression_2"</b>
 		 * \returns <b>"assignment_expression_2"</b>
                  */
-		virtual std::string name()const		{return std::string("assignment_expression_2");}
+		virtual std::string name()const			{return std::string("assignment_expression_2");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -6197,8 +7427,38 @@ class assignment_expression_2:public assignment_expression
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_ASSIGNMENT_EXPRESSION_2;}
 
+
+
+		ReferenceCountedAutoPointer<unary_expression>& p_unary_expression()
+		{
+			return _p_unary_expression;
+		}
+
+		const ReferenceCountedAutoPointer<unary_expression>& p_unary_expression()const
+		{
+			return _p_unary_expression;
+		}
+		ReferenceCountedAutoPointer<assignment_operator>& p_assignment_operator()
+		{
+			return _p_assignment_operator;
+		}
+
+		const ReferenceCountedAutoPointer<assignment_operator>& p_assignment_operator()const
+		{
+			return _p_assignment_operator;
+		}
+		ReferenceCountedAutoPointer<assignment_expression>& p_assignment_expression()
+		{
+			return _p_assignment_expression;
+		}
+
+		const ReferenceCountedAutoPointer<assignment_expression>& p_assignment_expression()const
+		{
+			return _p_assignment_expression;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -6289,7 +7549,7 @@ class parameter_type_list:public CAst
                  * Returns the name of the class. Here, returns <b>"parameter_type_list"</b>
 		 * \returns <b>"parameter_type_list"</b>
                  */
-		virtual std::string name()const		{return std::string("parameter_type_list");}
+		virtual std::string name()const			{return std::string("parameter_type_list");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -6299,8 +7559,38 @@ class parameter_type_list:public CAst
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_PARAMETER_TYPE_LIST;}
 
+
+
+		ReferenceCountedAutoPointer<parameter_list>& p_parameter_list()
+		{
+			return _p_parameter_list;
+		}
+
+		const ReferenceCountedAutoPointer<parameter_list>& p_parameter_list()const
+		{
+			return _p_parameter_list;
+		}
+		ReferenceCountedAutoPointer<token>& p_token1()
+		{
+			return _p_token1;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token1()const
+		{
+			return _p_token1;
+		}
+		ReferenceCountedAutoPointer<token>& p_token2()
+		{
+			return _p_token2;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token2()const
+		{
+			return _p_token2;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -6368,13 +7658,13 @@ class parameter_declaration:public CAst
 
 
 class declaration_specifiers;
-class declarator;
+class abstract_declarator;
 
 
 
 
 /**
- * \brief parameter_declaration_1 implements the pattern: <b>(declaration_specifiers, declarator)</b>
+ * \brief parameter_declaration_1 implements the pattern: <b>(declaration_specifiers, abstract_declarator)</b>
 
 
  * \dot
@@ -6383,9 +7673,9 @@ class declarator;
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_parameter_declaration_1 [ label="parameter_declaration_1", URL="\ref parameter_declaration_1", color="#00AAAA" ];
  *     node_declaration_specifiers [ label="declaration_specifiers", URL="\ref declaration_specifiers", color="#00AAAA"];
- *     node_declarator [ label="declarator", URL="\ref declarator", color="#00AAAA"];
+ *     node_abstract_declarator [ label="abstract_declarator", URL="\ref abstract_declarator", color="#00AAAA"];
  *     node_parameter_declaration_1 ->  node_declaration_specifiers [label="_p_declaration_specifiers" style=solid];
- *     node_parameter_declaration_1 ->  node_declarator [label="_p_declarator" style=dotted];
+ *     node_parameter_declaration_1 ->  node_abstract_declarator [label="_p_abstract_declarator" style=solid];
  * }
  * \enddot
  */
@@ -6393,7 +7683,7 @@ class parameter_declaration_1:public parameter_declaration
 {
 	private:
 		ReferenceCountedAutoPointer<declaration_specifiers> _p_declaration_specifiers;	  ///< A pointer to declaration_specifiers.
-		ReferenceCountedAutoPointer<declarator> _p_declarator;	  ///< A pointer to declarator. This parameter can be <b>Null</b>
+		ReferenceCountedAutoPointer<abstract_declarator> _p_abstract_declarator;	  ///< A pointer to abstract_declarator.
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -6405,7 +7695,7 @@ class parameter_declaration_1:public parameter_declaration
 		parameter_declaration_1	
 				(
 					ReferenceCountedAutoPointer<declaration_specifiers> _arg_declaration_specifiers,   ///< A pointer to declaration_specifiers.
-					ReferenceCountedAutoPointer<declarator> _arg_declarator  ///< A pointer to declarator. This parameter can be <b>Null</b>
+					ReferenceCountedAutoPointer<abstract_declarator> _arg_abstract_declarator  ///< A pointer to abstract_declarator.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -6413,7 +7703,7 @@ class parameter_declaration_1:public parameter_declaration
                  * Returns the name of the class. Here, returns <b>"parameter_declaration_1"</b>
 		 * \returns <b>"parameter_declaration_1"</b>
                  */
-		virtual std::string name()const		{return std::string("parameter_declaration_1");}
+		virtual std::string name()const			{return std::string("parameter_declaration_1");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -6423,8 +7713,29 @@ class parameter_declaration_1:public parameter_declaration
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_PARAMETER_DECLARATION_1;}
 
+
+
+		ReferenceCountedAutoPointer<declaration_specifiers>& p_declaration_specifiers()
+		{
+			return _p_declaration_specifiers;
+		}
+
+		const ReferenceCountedAutoPointer<declaration_specifiers>& p_declaration_specifiers()const
+		{
+			return _p_declaration_specifiers;
+		}
+		ReferenceCountedAutoPointer<abstract_declarator>& p_abstract_declarator()
+		{
+			return _p_abstract_declarator;
+		}
+
+		const ReferenceCountedAutoPointer<abstract_declarator>& p_abstract_declarator()const
+		{
+			return _p_abstract_declarator;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -6442,13 +7753,13 @@ class parameter_declaration_1:public parameter_declaration
 
 
 class declaration_specifiers;
-class abstract_declarator;
+class declarator;
 
 
 
 
 /**
- * \brief parameter_declaration_2 implements the pattern: <b>(declaration_specifiers, abstract_declarator)</b>
+ * \brief parameter_declaration_2 implements the pattern: <b>(declaration_specifiers, declarator)</b>
 
 
  * \dot
@@ -6457,9 +7768,9 @@ class abstract_declarator;
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_parameter_declaration_2 [ label="parameter_declaration_2", URL="\ref parameter_declaration_2", color="#00AAAA" ];
  *     node_declaration_specifiers [ label="declaration_specifiers", URL="\ref declaration_specifiers", color="#00AAAA"];
- *     node_abstract_declarator [ label="abstract_declarator", URL="\ref abstract_declarator", color="#00AAAA"];
+ *     node_declarator [ label="declarator", URL="\ref declarator", color="#00AAAA"];
  *     node_parameter_declaration_2 ->  node_declaration_specifiers [label="_p_declaration_specifiers" style=solid];
- *     node_parameter_declaration_2 ->  node_abstract_declarator [label="_p_abstract_declarator" style=solid];
+ *     node_parameter_declaration_2 ->  node_declarator [label="_p_declarator" style=dotted];
  * }
  * \enddot
  */
@@ -6467,7 +7778,7 @@ class parameter_declaration_2:public parameter_declaration
 {
 	private:
 		ReferenceCountedAutoPointer<declaration_specifiers> _p_declaration_specifiers;	  ///< A pointer to declaration_specifiers.
-		ReferenceCountedAutoPointer<abstract_declarator> _p_abstract_declarator;	  ///< A pointer to abstract_declarator.
+		ReferenceCountedAutoPointer<declarator> _p_declarator;	  ///< A pointer to declarator. This parameter can be <b>Null</b>
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -6479,7 +7790,7 @@ class parameter_declaration_2:public parameter_declaration
 		parameter_declaration_2	
 				(
 					ReferenceCountedAutoPointer<declaration_specifiers> _arg_declaration_specifiers,   ///< A pointer to declaration_specifiers.
-					ReferenceCountedAutoPointer<abstract_declarator> _arg_abstract_declarator  ///< A pointer to abstract_declarator.
+					ReferenceCountedAutoPointer<declarator> _arg_declarator  ///< A pointer to declarator. This parameter can be <b>Null</b>
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -6487,7 +7798,7 @@ class parameter_declaration_2:public parameter_declaration
                  * Returns the name of the class. Here, returns <b>"parameter_declaration_2"</b>
 		 * \returns <b>"parameter_declaration_2"</b>
                  */
-		virtual std::string name()const		{return std::string("parameter_declaration_2");}
+		virtual std::string name()const			{return std::string("parameter_declaration_2");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -6497,8 +7808,29 @@ class parameter_declaration_2:public parameter_declaration
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_PARAMETER_DECLARATION_2;}
 
+
+
+		ReferenceCountedAutoPointer<declaration_specifiers>& p_declaration_specifiers()
+		{
+			return _p_declaration_specifiers;
+		}
+
+		const ReferenceCountedAutoPointer<declaration_specifiers>& p_declaration_specifiers()const
+		{
+			return _p_declaration_specifiers;
+		}
+		ReferenceCountedAutoPointer<declarator>& p_declarator()
+		{
+			return _p_declarator;
+		}
+
+		const ReferenceCountedAutoPointer<declarator>& p_declarator()const
+		{
+			return _p_declarator;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -6559,10 +7891,10 @@ class token;
  * }
  * \enddot
  */
-class multiplicative_expression_item
+class multiplicative_expression_item:public CAst
 {
 	private:
-		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>'/'</b>, <b>'*'</b>, <b>'%'</b>, <b>None</b>
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>'*'</b>, <b>'/'</b>, <b>'%'</b>, <b>None</b>
 		ReferenceCountedAutoPointer<cast_expression> _p_cast_expression;	  ///< A pointer to cast_expression.
 	public:
 		static CAST_CLASS_ID ID;
@@ -6574,7 +7906,7 @@ class multiplicative_expression_item
                  */
 		multiplicative_expression_item	
 				(
-					ReferenceCountedAutoPointer<token> _arg_token,   ///< A pointer to a token, accepts <b>'/'</b>, <b>'*'</b>, <b>'%'</b>, <b>None</b>
+					ReferenceCountedAutoPointer<token> _arg_token,   ///< A pointer to a token, accepts <b>'*'</b>, <b>'/'</b>, <b>'%'</b>, <b>None</b>
 					ReferenceCountedAutoPointer<cast_expression> _arg_cast_expression  ///< A pointer to cast_expression.
 				);
 		/**
@@ -6583,7 +7915,7 @@ class multiplicative_expression_item
                  * Returns the name of the class. Here, returns <b>"multiplicative_expression_item"</b>
 		 * \returns <b>"multiplicative_expression_item"</b>
                  */
-		virtual std::string name()const		{return std::string("multiplicative_expression_item");}
+		virtual std::string name()const			{return std::string("multiplicative_expression_item");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -6593,19 +7925,34 @@ class multiplicative_expression_item
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_MULTIPLICATIVE_EXPRESSION_ITEM;}
 
+
+
+		ReferenceCountedAutoPointer<token>& p_token()
+		{
+			return _p_token;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token()const
+		{
+			return _p_token;
+		}
+		ReferenceCountedAutoPointer<cast_expression>& p_cast_expression()
+		{
+			return _p_cast_expression;
+		}
+
+		const ReferenceCountedAutoPointer<cast_expression>& p_cast_expression()const
+		{
+			return _p_cast_expression;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
 
-		std::string code()const
-		{
-			std::stringstream stream;
-			codeStream(stream);
-			return stream.str();
-		}
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -6625,7 +7972,8 @@ class multiplicative_expression_item
 class multiplicative_expression:public CAst
 {
 	public:
-		typedef std::list<ReferenceCountedAutoPointer<multiplicative_expression_item> > multiplicative_expressionListType;	///< This defines the list type which will store the multiplicative_expression_item
+		typedef multiplicative_expression_item ItemType;
+		typedef std::vector<ReferenceCountedAutoPointer< ItemType > > multiplicative_expressionListType;	///< This defines the list type which will store the multiplicative_expression_item
 		typedef multiplicative_expressionListType::iterator multiplicative_expressionIterType;				///< This defines the iterator over multiplicative_expressionListType
 		typedef multiplicative_expressionListType::const_iterator Cmultiplicative_expressionIterType;				///< This defines the constant iterator over multiplicative_expressionListType
 
@@ -6663,9 +8011,13 @@ class multiplicative_expression:public CAst
 		void prepend( ReferenceCountedAutoPointer<multiplicative_expression_item> item)
 		{
 			LOG(COL_FG_GREEN<<"Prepending to multiplicative_expression: "<<this)
-			_itemList.push_front(item);
+			_itemList.insert(_itemList.begin(),item);
 		}
 		
+		int size()const
+		{
+			return _itemList.size();
+		}
 		/**
                  * \brief Returns the name of the class.
                  *
@@ -6683,6 +8035,29 @@ class multiplicative_expression:public CAst
 		virtual CAST_CLASS_ID classId()const		{return ID_MULTIPLICATIVE_EXPRESSION;}
 
 
+		ReferenceCountedAutoPointer<ItemType>& operator[](int i)
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+		const ReferenceCountedAutoPointer<ItemType>& operator[](int i)const
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+
+
+		/**
+		 * \brief Writes code to the code stream
+		 *
+		 *
+		 */
 		virtual std::ostream& codeStream(std::ostream& stream)const
 		{
 			for(Cmultiplicative_expressionIterType i=_itemList.begin();i!=_itemList.end();i++)
@@ -6737,7 +8112,7 @@ class type_qualifier;
  * }
  * \enddot
  */
-class type_qualifier_list_item
+class type_qualifier_list_item:public CAst
 {
 	private:
 		ReferenceCountedAutoPointer<type_qualifier> _p_type_qualifier;	  ///< A pointer to type_qualifier.
@@ -6759,7 +8134,7 @@ class type_qualifier_list_item
                  * Returns the name of the class. Here, returns <b>"type_qualifier_list_item"</b>
 		 * \returns <b>"type_qualifier_list_item"</b>
                  */
-		virtual std::string name()const		{return std::string("type_qualifier_list_item");}
+		virtual std::string name()const			{return std::string("type_qualifier_list_item");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -6769,19 +8144,25 @@ class type_qualifier_list_item
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_TYPE_QUALIFIER_LIST_ITEM;}
 
+
+
+		ReferenceCountedAutoPointer<type_qualifier>& p_type_qualifier()
+		{
+			return _p_type_qualifier;
+		}
+
+		const ReferenceCountedAutoPointer<type_qualifier>& p_type_qualifier()const
+		{
+			return _p_type_qualifier;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
 
-		std::string code()const
-		{
-			std::stringstream stream;
-			codeStream(stream);
-			return stream.str();
-		}
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -6801,7 +8182,8 @@ class type_qualifier_list_item
 class type_qualifier_list:public CAst
 {
 	public:
-		typedef std::list<ReferenceCountedAutoPointer<type_qualifier_list_item> > type_qualifier_listListType;	///< This defines the list type which will store the type_qualifier_list_item
+		typedef type_qualifier_list_item ItemType;
+		typedef std::vector<ReferenceCountedAutoPointer< ItemType > > type_qualifier_listListType;	///< This defines the list type which will store the type_qualifier_list_item
 		typedef type_qualifier_listListType::iterator type_qualifier_listIterType;				///< This defines the iterator over type_qualifier_listListType
 		typedef type_qualifier_listListType::const_iterator Ctype_qualifier_listIterType;				///< This defines the constant iterator over type_qualifier_listListType
 
@@ -6839,9 +8221,13 @@ class type_qualifier_list:public CAst
 		void prepend( ReferenceCountedAutoPointer<type_qualifier_list_item> item)
 		{
 			LOG(COL_FG_GREEN<<"Prepending to type_qualifier_list: "<<this)
-			_itemList.push_front(item);
+			_itemList.insert(_itemList.begin(),item);
 		}
 		
+		int size()const
+		{
+			return _itemList.size();
+		}
 		/**
                  * \brief Returns the name of the class.
                  *
@@ -6859,6 +8245,29 @@ class type_qualifier_list:public CAst
 		virtual CAST_CLASS_ID classId()const		{return ID_TYPE_QUALIFIER_LIST;}
 
 
+		ReferenceCountedAutoPointer<ItemType>& operator[](int i)
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+		const ReferenceCountedAutoPointer<ItemType>& operator[](int i)const
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+
+
+		/**
+		 * \brief Writes code to the code stream
+		 *
+		 *
+		 */
 		virtual std::ostream& codeStream(std::ostream& stream)const
 		{
 			for(Ctype_qualifier_listIterType i=_itemList.begin();i!=_itemList.end();i++)
@@ -6918,7 +8327,7 @@ class assignment_expression;
  * }
  * \enddot
  */
-class argument_expression_list_item
+class argument_expression_list_item:public CAst
 {
 	private:
 		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>','</b>, <b>None</b>
@@ -6942,7 +8351,7 @@ class argument_expression_list_item
                  * Returns the name of the class. Here, returns <b>"argument_expression_list_item"</b>
 		 * \returns <b>"argument_expression_list_item"</b>
                  */
-		virtual std::string name()const		{return std::string("argument_expression_list_item");}
+		virtual std::string name()const			{return std::string("argument_expression_list_item");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -6952,19 +8361,34 @@ class argument_expression_list_item
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_ARGUMENT_EXPRESSION_LIST_ITEM;}
 
+
+
+		ReferenceCountedAutoPointer<token>& p_token()
+		{
+			return _p_token;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token()const
+		{
+			return _p_token;
+		}
+		ReferenceCountedAutoPointer<assignment_expression>& p_assignment_expression()
+		{
+			return _p_assignment_expression;
+		}
+
+		const ReferenceCountedAutoPointer<assignment_expression>& p_assignment_expression()const
+		{
+			return _p_assignment_expression;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
 
-		std::string code()const
-		{
-			std::stringstream stream;
-			codeStream(stream);
-			return stream.str();
-		}
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -6984,7 +8408,8 @@ class argument_expression_list_item
 class argument_expression_list:public CAst
 {
 	public:
-		typedef std::list<ReferenceCountedAutoPointer<argument_expression_list_item> > argument_expression_listListType;	///< This defines the list type which will store the argument_expression_list_item
+		typedef argument_expression_list_item ItemType;
+		typedef std::vector<ReferenceCountedAutoPointer< ItemType > > argument_expression_listListType;	///< This defines the list type which will store the argument_expression_list_item
 		typedef argument_expression_listListType::iterator argument_expression_listIterType;				///< This defines the iterator over argument_expression_listListType
 		typedef argument_expression_listListType::const_iterator Cargument_expression_listIterType;				///< This defines the constant iterator over argument_expression_listListType
 
@@ -7022,9 +8447,13 @@ class argument_expression_list:public CAst
 		void prepend( ReferenceCountedAutoPointer<argument_expression_list_item> item)
 		{
 			LOG(COL_FG_GREEN<<"Prepending to argument_expression_list: "<<this)
-			_itemList.push_front(item);
+			_itemList.insert(_itemList.begin(),item);
 		}
 		
+		int size()const
+		{
+			return _itemList.size();
+		}
 		/**
                  * \brief Returns the name of the class.
                  *
@@ -7042,6 +8471,29 @@ class argument_expression_list:public CAst
 		virtual CAST_CLASS_ID classId()const		{return ID_ARGUMENT_EXPRESSION_LIST;}
 
 
+		ReferenceCountedAutoPointer<ItemType>& operator[](int i)
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+		const ReferenceCountedAutoPointer<ItemType>& operator[](int i)const
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+
+
+		/**
+		 * \brief Writes code to the code stream
+		 *
+		 *
+		 */
 		virtual std::ostream& codeStream(std::ostream& stream)const
 		{
 			for(Cargument_expression_listIterType i=_itemList.begin();i!=_itemList.end();i++)
@@ -7153,7 +8605,7 @@ class direct_abstract_declarator_1:public direct_abstract_declarator
                  * Returns the name of the class. Here, returns <b>"direct_abstract_declarator_1"</b>
 		 * \returns <b>"direct_abstract_declarator_1"</b>
                  */
-		virtual std::string name()const		{return std::string("direct_abstract_declarator_1");}
+		virtual std::string name()const			{return std::string("direct_abstract_declarator_1");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -7163,8 +8615,20 @@ class direct_abstract_declarator_1:public direct_abstract_declarator
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_DIRECT_ABSTRACT_DECLARATOR_1;}
 
+
+
+		ReferenceCountedAutoPointer<abstract_declarator>& p_abstract_declarator()
+		{
+			return _p_abstract_declarator;
+		}
+
+		const ReferenceCountedAutoPointer<abstract_declarator>& p_abstract_declarator()const
+		{
+			return _p_abstract_declarator;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -7227,7 +8691,7 @@ class direct_abstract_declarator_2:public direct_abstract_declarator
                  * Returns the name of the class. Here, returns <b>"direct_abstract_declarator_2"</b>
 		 * \returns <b>"direct_abstract_declarator_2"</b>
                  */
-		virtual std::string name()const		{return std::string("direct_abstract_declarator_2");}
+		virtual std::string name()const			{return std::string("direct_abstract_declarator_2");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -7237,8 +8701,29 @@ class direct_abstract_declarator_2:public direct_abstract_declarator
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_DIRECT_ABSTRACT_DECLARATOR_2;}
 
+
+
+		ReferenceCountedAutoPointer<direct_abstract_declarator>& p_direct_abstract_declarator()
+		{
+			return _p_direct_abstract_declarator;
+		}
+
+		const ReferenceCountedAutoPointer<direct_abstract_declarator>& p_direct_abstract_declarator()const
+		{
+			return _p_direct_abstract_declarator;
+		}
+		ReferenceCountedAutoPointer<parameter_type_list>& p_parameter_type_list()
+		{
+			return _p_parameter_type_list;
+		}
+
+		const ReferenceCountedAutoPointer<parameter_type_list>& p_parameter_type_list()const
+		{
+			return _p_parameter_type_list;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -7301,7 +8786,7 @@ class direct_abstract_declarator_3:public direct_abstract_declarator
                  * Returns the name of the class. Here, returns <b>"direct_abstract_declarator_3"</b>
 		 * \returns <b>"direct_abstract_declarator_3"</b>
                  */
-		virtual std::string name()const		{return std::string("direct_abstract_declarator_3");}
+		virtual std::string name()const			{return std::string("direct_abstract_declarator_3");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -7311,8 +8796,29 @@ class direct_abstract_declarator_3:public direct_abstract_declarator
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_DIRECT_ABSTRACT_DECLARATOR_3;}
 
+
+
+		ReferenceCountedAutoPointer<direct_abstract_declarator>& p_direct_abstract_declarator()
+		{
+			return _p_direct_abstract_declarator;
+		}
+
+		const ReferenceCountedAutoPointer<direct_abstract_declarator>& p_direct_abstract_declarator()const
+		{
+			return _p_direct_abstract_declarator;
+		}
+		ReferenceCountedAutoPointer<constant_expression>& p_constant_expression()
+		{
+			return _p_constant_expression;
+		}
+
+		const ReferenceCountedAutoPointer<constant_expression>& p_constant_expression()const
+		{
+			return _p_constant_expression;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -7373,7 +8879,7 @@ class relational_expression;
  * }
  * \enddot
  */
-class equality_expression_item
+class equality_expression_item:public CAst
 {
 	private:
 		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>NE_OP</b>, <b>EQ_OP</b>, <b>None</b>
@@ -7397,7 +8903,7 @@ class equality_expression_item
                  * Returns the name of the class. Here, returns <b>"equality_expression_item"</b>
 		 * \returns <b>"equality_expression_item"</b>
                  */
-		virtual std::string name()const		{return std::string("equality_expression_item");}
+		virtual std::string name()const			{return std::string("equality_expression_item");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -7407,19 +8913,34 @@ class equality_expression_item
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_EQUALITY_EXPRESSION_ITEM;}
 
+
+
+		ReferenceCountedAutoPointer<token>& p_token()
+		{
+			return _p_token;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token()const
+		{
+			return _p_token;
+		}
+		ReferenceCountedAutoPointer<relational_expression>& p_relational_expression()
+		{
+			return _p_relational_expression;
+		}
+
+		const ReferenceCountedAutoPointer<relational_expression>& p_relational_expression()const
+		{
+			return _p_relational_expression;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
 
-		std::string code()const
-		{
-			std::stringstream stream;
-			codeStream(stream);
-			return stream.str();
-		}
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -7439,7 +8960,8 @@ class equality_expression_item
 class equality_expression:public CAst
 {
 	public:
-		typedef std::list<ReferenceCountedAutoPointer<equality_expression_item> > equality_expressionListType;	///< This defines the list type which will store the equality_expression_item
+		typedef equality_expression_item ItemType;
+		typedef std::vector<ReferenceCountedAutoPointer< ItemType > > equality_expressionListType;	///< This defines the list type which will store the equality_expression_item
 		typedef equality_expressionListType::iterator equality_expressionIterType;				///< This defines the iterator over equality_expressionListType
 		typedef equality_expressionListType::const_iterator Cequality_expressionIterType;				///< This defines the constant iterator over equality_expressionListType
 
@@ -7477,9 +8999,13 @@ class equality_expression:public CAst
 		void prepend( ReferenceCountedAutoPointer<equality_expression_item> item)
 		{
 			LOG(COL_FG_GREEN<<"Prepending to equality_expression: "<<this)
-			_itemList.push_front(item);
+			_itemList.insert(_itemList.begin(),item);
 		}
 		
+		int size()const
+		{
+			return _itemList.size();
+		}
 		/**
                  * \brief Returns the name of the class.
                  *
@@ -7497,6 +9023,29 @@ class equality_expression:public CAst
 		virtual CAST_CLASS_ID classId()const		{return ID_EQUALITY_EXPRESSION;}
 
 
+		ReferenceCountedAutoPointer<ItemType>& operator[](int i)
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+		const ReferenceCountedAutoPointer<ItemType>& operator[](int i)const
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+
+
+		/**
+		 * \brief Writes code to the code stream
+		 *
+		 *
+		 */
 		virtual std::ostream& codeStream(std::ostream& stream)const
 		{
 			for(Cequality_expressionIterType i=_itemList.begin();i!=_itemList.end();i++)
@@ -7563,12 +9112,13 @@ class primary_expression:public CAst
 
 
 
-class expression;
+class token;
+
 
 
 
 /**
- * \brief primary_expression_1 implements the pattern: <b>('(', expression, ')')</b>
+ * \brief primary_expression_1 implements the pattern: <b>(IDENTIFIER,)</b>
 
 
  * \dot
@@ -7576,15 +9126,15 @@ class expression;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_primary_expression_1 [ label="primary_expression_1", URL="\ref primary_expression_1", color="#00AAAA" ];
- *     node_expression [ label="expression", URL="\ref expression", color="#00AAAA"];
- *     node_primary_expression_1 ->  node_expression [label="_p_expression" style=solid];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_primary_expression_1 ->  node_token [label="_p_token" style=solid];
  * }
  * \enddot
  */
 class primary_expression_1:public primary_expression
 {
 	private:
-		ReferenceCountedAutoPointer<expression> _p_expression;	  ///< A pointer to expression.
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>IDENTIFIER</b>, <b>CONSTANT</b>, <b>STRING_LITERAL</b>
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -7595,7 +9145,7 @@ class primary_expression_1:public primary_expression
                  */
 		primary_expression_1	
 				(
-					ReferenceCountedAutoPointer<expression> _arg_expression  ///< A pointer to expression.
+					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>IDENTIFIER</b>, <b>CONSTANT</b>, <b>STRING_LITERAL</b>
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -7603,7 +9153,7 @@ class primary_expression_1:public primary_expression
                  * Returns the name of the class. Here, returns <b>"primary_expression_1"</b>
 		 * \returns <b>"primary_expression_1"</b>
                  */
-		virtual std::string name()const		{return std::string("primary_expression_1");}
+		virtual std::string name()const			{return std::string("primary_expression_1");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -7613,8 +9163,20 @@ class primary_expression_1:public primary_expression
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_PRIMARY_EXPRESSION_1;}
 
+
+
+		ReferenceCountedAutoPointer<token>& p_token()
+		{
+			return _p_token;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token()const
+		{
+			return _p_token;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -7631,13 +9193,12 @@ class primary_expression_1:public primary_expression
 
 
 
-class token;
-
+class expression;
 
 
 
 /**
- * \brief primary_expression_2 implements the pattern: <b>(IDENTIFIER,)</b>
+ * \brief primary_expression_2 implements the pattern: <b>('(', expression, ')')</b>
 
 
  * \dot
@@ -7645,15 +9206,15 @@ class token;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_primary_expression_2 [ label="primary_expression_2", URL="\ref primary_expression_2", color="#00AAAA" ];
- *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
- *     node_primary_expression_2 ->  node_token [label="_p_token" style=solid];
+ *     node_expression [ label="expression", URL="\ref expression", color="#00AAAA"];
+ *     node_primary_expression_2 ->  node_expression [label="_p_expression" style=solid];
  * }
  * \enddot
  */
 class primary_expression_2:public primary_expression
 {
 	private:
-		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>IDENTIFIER</b>, <b>CONSTANT</b>, <b>STRING_LITERAL</b>
+		ReferenceCountedAutoPointer<expression> _p_expression;	  ///< A pointer to expression.
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -7664,7 +9225,7 @@ class primary_expression_2:public primary_expression
                  */
 		primary_expression_2	
 				(
-					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>IDENTIFIER</b>, <b>CONSTANT</b>, <b>STRING_LITERAL</b>
+					ReferenceCountedAutoPointer<expression> _arg_expression  ///< A pointer to expression.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -7672,7 +9233,7 @@ class primary_expression_2:public primary_expression
                  * Returns the name of the class. Here, returns <b>"primary_expression_2"</b>
 		 * \returns <b>"primary_expression_2"</b>
                  */
-		virtual std::string name()const		{return std::string("primary_expression_2");}
+		virtual std::string name()const			{return std::string("primary_expression_2");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -7682,8 +9243,20 @@ class primary_expression_2:public primary_expression
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_PRIMARY_EXPRESSION_2;}
 
+
+
+		ReferenceCountedAutoPointer<expression>& p_expression()
+		{
+			return _p_expression;
+		}
+
+		const ReferenceCountedAutoPointer<expression>& p_expression()const
+		{
+			return _p_expression;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -7721,7 +9294,7 @@ class primary_expression_2:public primary_expression
 
 
 
-class declaration_specifiers_item
+class declaration_specifiers_item:public CAst
 {
 	
 	public:
@@ -7750,12 +9323,12 @@ class declaration_specifiers_item
 
 };
 
-class type_qualifier;
+class storage_class_specifier;
 
 
 
 /**
- * \brief declaration_specifiers_item_1 implements the pattern: <b>(type_qualifier, declaration_specifiers)</b>
+ * \brief declaration_specifiers_item_1 implements the pattern: <b>(storage_class_specifier, declaration_specifiers)</b>
 
 
  * \dot
@@ -7763,15 +9336,15 @@ class type_qualifier;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_declaration_specifiers_item_1 [ label="declaration_specifiers_item_1", URL="\ref declaration_specifiers_item_1", color="#00AAAA" ];
- *     node_type_qualifier [ label="type_qualifier", URL="\ref type_qualifier", color="#00AAAA"];
- *     node_declaration_specifiers_item_1 ->  node_type_qualifier [label="_p_type_qualifier" style=solid];
+ *     node_storage_class_specifier [ label="storage_class_specifier", URL="\ref storage_class_specifier", color="#00AAAA"];
+ *     node_declaration_specifiers_item_1 ->  node_storage_class_specifier [label="_p_storage_class_specifier" style=solid];
  * }
  * \enddot
  */
 class declaration_specifiers_item_1:public declaration_specifiers_item
 {
 	private:
-		ReferenceCountedAutoPointer<type_qualifier> _p_type_qualifier;	  ///< A pointer to type_qualifier.
+		ReferenceCountedAutoPointer<storage_class_specifier> _p_storage_class_specifier;	  ///< A pointer to storage_class_specifier.
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -7782,7 +9355,7 @@ class declaration_specifiers_item_1:public declaration_specifiers_item
                  */
 		declaration_specifiers_item_1	
 				(
-					ReferenceCountedAutoPointer<type_qualifier> _arg_type_qualifier  ///< A pointer to type_qualifier.
+					ReferenceCountedAutoPointer<storage_class_specifier> _arg_storage_class_specifier  ///< A pointer to storage_class_specifier.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -7790,7 +9363,7 @@ class declaration_specifiers_item_1:public declaration_specifiers_item
                  * Returns the name of the class. Here, returns <b>"declaration_specifiers_item_1"</b>
 		 * \returns <b>"declaration_specifiers_item_1"</b>
                  */
-		virtual std::string name()const		{return std::string("declaration_specifiers_item_1");}
+		virtual std::string name()const			{return std::string("declaration_specifiers_item_1");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -7800,8 +9373,20 @@ class declaration_specifiers_item_1:public declaration_specifiers_item
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_DECLARATION_SPECIFIERS_ITEM_1;}
 
+
+
+		ReferenceCountedAutoPointer<storage_class_specifier>& p_storage_class_specifier()
+		{
+			return _p_storage_class_specifier;
+		}
+
+		const ReferenceCountedAutoPointer<storage_class_specifier>& p_storage_class_specifier()const
+		{
+			return _p_storage_class_specifier;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -7858,7 +9443,7 @@ class declaration_specifiers_item_2:public declaration_specifiers_item
                  * Returns the name of the class. Here, returns <b>"declaration_specifiers_item_2"</b>
 		 * \returns <b>"declaration_specifiers_item_2"</b>
                  */
-		virtual std::string name()const		{return std::string("declaration_specifiers_item_2");}
+		virtual std::string name()const			{return std::string("declaration_specifiers_item_2");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -7868,8 +9453,20 @@ class declaration_specifiers_item_2:public declaration_specifiers_item
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_DECLARATION_SPECIFIERS_ITEM_2;}
 
+
+
+		ReferenceCountedAutoPointer<type_specifier>& p_type_specifier()
+		{
+			return _p_type_specifier;
+		}
+
+		const ReferenceCountedAutoPointer<type_specifier>& p_type_specifier()const
+		{
+			return _p_type_specifier;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -7886,12 +9483,12 @@ class declaration_specifiers_item_2:public declaration_specifiers_item
 
 
 
-class storage_class_specifier;
+class type_qualifier;
 
 
 
 /**
- * \brief declaration_specifiers_item_3 implements the pattern: <b>(storage_class_specifier, declaration_specifiers)</b>
+ * \brief declaration_specifiers_item_3 implements the pattern: <b>(type_qualifier, declaration_specifiers)</b>
 
 
  * \dot
@@ -7899,15 +9496,15 @@ class storage_class_specifier;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_declaration_specifiers_item_3 [ label="declaration_specifiers_item_3", URL="\ref declaration_specifiers_item_3", color="#00AAAA" ];
- *     node_storage_class_specifier [ label="storage_class_specifier", URL="\ref storage_class_specifier", color="#00AAAA"];
- *     node_declaration_specifiers_item_3 ->  node_storage_class_specifier [label="_p_storage_class_specifier" style=solid];
+ *     node_type_qualifier [ label="type_qualifier", URL="\ref type_qualifier", color="#00AAAA"];
+ *     node_declaration_specifiers_item_3 ->  node_type_qualifier [label="_p_type_qualifier" style=solid];
  * }
  * \enddot
  */
 class declaration_specifiers_item_3:public declaration_specifiers_item
 {
 	private:
-		ReferenceCountedAutoPointer<storage_class_specifier> _p_storage_class_specifier;	  ///< A pointer to storage_class_specifier.
+		ReferenceCountedAutoPointer<type_qualifier> _p_type_qualifier;	  ///< A pointer to type_qualifier.
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -7918,7 +9515,7 @@ class declaration_specifiers_item_3:public declaration_specifiers_item
                  */
 		declaration_specifiers_item_3	
 				(
-					ReferenceCountedAutoPointer<storage_class_specifier> _arg_storage_class_specifier  ///< A pointer to storage_class_specifier.
+					ReferenceCountedAutoPointer<type_qualifier> _arg_type_qualifier  ///< A pointer to type_qualifier.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -7926,7 +9523,7 @@ class declaration_specifiers_item_3:public declaration_specifiers_item
                  * Returns the name of the class. Here, returns <b>"declaration_specifiers_item_3"</b>
 		 * \returns <b>"declaration_specifiers_item_3"</b>
                  */
-		virtual std::string name()const		{return std::string("declaration_specifiers_item_3");}
+		virtual std::string name()const			{return std::string("declaration_specifiers_item_3");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -7936,8 +9533,20 @@ class declaration_specifiers_item_3:public declaration_specifiers_item
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_DECLARATION_SPECIFIERS_ITEM_3;}
 
+
+
+		ReferenceCountedAutoPointer<type_qualifier>& p_type_qualifier()
+		{
+			return _p_type_qualifier;
+		}
+
+		const ReferenceCountedAutoPointer<type_qualifier>& p_type_qualifier()const
+		{
+			return _p_type_qualifier;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -7962,7 +9571,8 @@ class declaration_specifiers_item_3:public declaration_specifiers_item
 class declaration_specifiers:public CAst
 {
 	public:
-		typedef std::list<ReferenceCountedAutoPointer<declaration_specifiers_item> > declaration_specifiersListType;	///< This defines the list type which will store the declaration_specifiers_item
+		typedef declaration_specifiers_item ItemType;
+		typedef std::vector<ReferenceCountedAutoPointer< ItemType > > declaration_specifiersListType;	///< This defines the list type which will store the declaration_specifiers_item
 		typedef declaration_specifiersListType::iterator declaration_specifiersIterType;				///< This defines the iterator over declaration_specifiersListType
 		typedef declaration_specifiersListType::const_iterator Cdeclaration_specifiersIterType;				///< This defines the constant iterator over declaration_specifiersListType
 
@@ -8000,9 +9610,13 @@ class declaration_specifiers:public CAst
 		void prepend( ReferenceCountedAutoPointer<declaration_specifiers_item> item)
 		{
 			LOG(COL_FG_GREEN<<"Prepending to declaration_specifiers: "<<this)
-			_itemList.push_front(item);
+			_itemList.insert(_itemList.begin(),item);
 		}
 		
+		int size()const
+		{
+			return _itemList.size();
+		}
 		/**
                  * \brief Returns the name of the class.
                  *
@@ -8020,6 +9634,29 @@ class declaration_specifiers:public CAst
 		virtual CAST_CLASS_ID classId()const		{return ID_DECLARATION_SPECIFIERS;}
 
 
+		ReferenceCountedAutoPointer<ItemType>& operator[](int i)
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+		const ReferenceCountedAutoPointer<ItemType>& operator[](int i)const
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+
+
+		/**
+		 * \brief Writes code to the code stream
+		 *
+		 *
+		 */
 		virtual std::ostream& codeStream(std::ostream& stream)const
 		{
 			for(Cdeclaration_specifiersIterType i=_itemList.begin();i!=_itemList.end();i++)
@@ -8102,7 +9739,7 @@ class declaration:public CAst
                  * Returns the name of the class. Here, returns <b>"declaration"</b>
 		 * \returns <b>"declaration"</b>
                  */
-		virtual std::string name()const		{return std::string("declaration");}
+		virtual std::string name()const			{return std::string("declaration");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -8112,8 +9749,29 @@ class declaration:public CAst
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_DECLARATION;}
 
+
+
+		ReferenceCountedAutoPointer<declaration_specifiers>& p_declaration_specifiers()
+		{
+			return _p_declaration_specifiers;
+		}
+
+		const ReferenceCountedAutoPointer<declaration_specifiers>& p_declaration_specifiers()const
+		{
+			return _p_declaration_specifiers;
+		}
+		ReferenceCountedAutoPointer<init_declarator_list>& p_init_declarator_list()
+		{
+			return _p_init_declarator_list;
+		}
+
+		const ReferenceCountedAutoPointer<init_declarator_list>& p_init_declarator_list()const
+		{
+			return _p_init_declarator_list;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -8184,14 +9842,12 @@ class direct_declarator:public CAst
 
 
 
-class direct_declarator;
-class constant_expression;
-
+class declarator;
 
 
 
 /**
- * \brief direct_declarator_1 implements the pattern: <b>(direct_declarator, '[', constant_expression, ']')</b>
+ * \brief direct_declarator_1 implements the pattern: <b>('(', declarator, ')')</b>
 
 
  * \dot
@@ -8199,18 +9855,15 @@ class constant_expression;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_direct_declarator_1 [ label="direct_declarator_1", URL="\ref direct_declarator_1", color="#00AAAA" ];
- *     node_direct_declarator [ label="direct_declarator", URL="\ref direct_declarator", color="#00AAAA"];
- *     node_constant_expression [ label="constant_expression", URL="\ref constant_expression", color="#00AAAA"];
- *     node_direct_declarator_1 ->  node_direct_declarator [label="_p_direct_declarator" style=solid];
- *     node_direct_declarator_1 ->  node_constant_expression [label="_p_constant_expression" style=dotted];
+ *     node_declarator [ label="declarator", URL="\ref declarator", color="#00AAAA"];
+ *     node_direct_declarator_1 ->  node_declarator [label="_p_declarator" style=solid];
  * }
  * \enddot
  */
 class direct_declarator_1:public direct_declarator
 {
 	private:
-		ReferenceCountedAutoPointer<direct_declarator> _p_direct_declarator;	  ///< A pointer to direct_declarator.
-		ReferenceCountedAutoPointer<constant_expression> _p_constant_expression;	  ///< A pointer to constant_expression. This parameter can be <b>Null</b>
+		ReferenceCountedAutoPointer<declarator> _p_declarator;	  ///< A pointer to declarator.
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -8221,8 +9874,7 @@ class direct_declarator_1:public direct_declarator
                  */
 		direct_declarator_1	
 				(
-					ReferenceCountedAutoPointer<direct_declarator> _arg_direct_declarator,   ///< A pointer to direct_declarator.
-					ReferenceCountedAutoPointer<constant_expression> _arg_constant_expression  ///< A pointer to constant_expression. This parameter can be <b>Null</b>
+					ReferenceCountedAutoPointer<declarator> _arg_declarator  ///< A pointer to declarator.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -8230,7 +9882,7 @@ class direct_declarator_1:public direct_declarator
                  * Returns the name of the class. Here, returns <b>"direct_declarator_1"</b>
 		 * \returns <b>"direct_declarator_1"</b>
                  */
-		virtual std::string name()const		{return std::string("direct_declarator_1");}
+		virtual std::string name()const			{return std::string("direct_declarator_1");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -8240,8 +9892,20 @@ class direct_declarator_1:public direct_declarator
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_DIRECT_DECLARATOR_1;}
 
+
+
+		ReferenceCountedAutoPointer<declarator>& p_declarator()
+		{
+			return _p_declarator;
+		}
+
+		const ReferenceCountedAutoPointer<declarator>& p_declarator()const
+		{
+			return _p_declarator;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -8258,13 +9922,14 @@ class direct_declarator_1:public direct_declarator
 
 
 
-class token;
+class direct_declarator;
+class constant_expression;
 
 
 
 
 /**
- * \brief direct_declarator_2 implements the pattern: <b>(IDENTIFIER,)</b>
+ * \brief direct_declarator_2 implements the pattern: <b>(direct_declarator, '[', constant_expression, ']')</b>
 
 
  * \dot
@@ -8272,15 +9937,18 @@ class token;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_direct_declarator_2 [ label="direct_declarator_2", URL="\ref direct_declarator_2", color="#00AAAA" ];
- *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
- *     node_direct_declarator_2 ->  node_token [label="_p_token" style=solid];
+ *     node_direct_declarator [ label="direct_declarator", URL="\ref direct_declarator", color="#00AAAA"];
+ *     node_constant_expression [ label="constant_expression", URL="\ref constant_expression", color="#00AAAA"];
+ *     node_direct_declarator_2 ->  node_direct_declarator [label="_p_direct_declarator" style=solid];
+ *     node_direct_declarator_2 ->  node_constant_expression [label="_p_constant_expression" style=dotted];
  * }
  * \enddot
  */
 class direct_declarator_2:public direct_declarator
 {
 	private:
-		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>IDENTIFIER</b>
+		ReferenceCountedAutoPointer<direct_declarator> _p_direct_declarator;	  ///< A pointer to direct_declarator.
+		ReferenceCountedAutoPointer<constant_expression> _p_constant_expression;	  ///< A pointer to constant_expression. This parameter can be <b>Null</b>
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -8291,7 +9959,8 @@ class direct_declarator_2:public direct_declarator
                  */
 		direct_declarator_2	
 				(
-					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>IDENTIFIER</b>
+					ReferenceCountedAutoPointer<direct_declarator> _arg_direct_declarator,   ///< A pointer to direct_declarator.
+					ReferenceCountedAutoPointer<constant_expression> _arg_constant_expression  ///< A pointer to constant_expression. This parameter can be <b>Null</b>
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -8299,7 +9968,7 @@ class direct_declarator_2:public direct_declarator
                  * Returns the name of the class. Here, returns <b>"direct_declarator_2"</b>
 		 * \returns <b>"direct_declarator_2"</b>
                  */
-		virtual std::string name()const		{return std::string("direct_declarator_2");}
+		virtual std::string name()const			{return std::string("direct_declarator_2");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -8309,8 +9978,29 @@ class direct_declarator_2:public direct_declarator
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_DIRECT_DECLARATOR_2;}
 
+
+
+		ReferenceCountedAutoPointer<direct_declarator>& p_direct_declarator()
+		{
+			return _p_direct_declarator;
+		}
+
+		const ReferenceCountedAutoPointer<direct_declarator>& p_direct_declarator()const
+		{
+			return _p_direct_declarator;
+		}
+		ReferenceCountedAutoPointer<constant_expression>& p_constant_expression()
+		{
+			return _p_constant_expression;
+		}
+
+		const ReferenceCountedAutoPointer<constant_expression>& p_constant_expression()const
+		{
+			return _p_constant_expression;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -8373,7 +10063,7 @@ class direct_declarator_3:public direct_declarator
                  * Returns the name of the class. Here, returns <b>"direct_declarator_3"</b>
 		 * \returns <b>"direct_declarator_3"</b>
                  */
-		virtual std::string name()const		{return std::string("direct_declarator_3");}
+		virtual std::string name()const			{return std::string("direct_declarator_3");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -8383,8 +10073,29 @@ class direct_declarator_3:public direct_declarator
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_DIRECT_DECLARATOR_3;}
 
+
+
+		ReferenceCountedAutoPointer<direct_declarator>& p_direct_declarator()
+		{
+			return _p_direct_declarator;
+		}
+
+		const ReferenceCountedAutoPointer<direct_declarator>& p_direct_declarator()const
+		{
+			return _p_direct_declarator;
+		}
+		ReferenceCountedAutoPointer<parameter_type_list>& p_parameter_type_list()
+		{
+			return _p_parameter_type_list;
+		}
+
+		const ReferenceCountedAutoPointer<parameter_type_list>& p_parameter_type_list()const
+		{
+			return _p_parameter_type_list;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -8401,12 +10112,14 @@ class direct_declarator_3:public direct_declarator
 
 
 
-class declarator;
+class direct_declarator;
+class identifier_list;
+
 
 
 
 /**
- * \brief direct_declarator_4 implements the pattern: <b>('(', declarator, ')')</b>
+ * \brief direct_declarator_4 implements the pattern: <b>(direct_declarator, '(', identifier_list, ')')</b>
 
 
  * \dot
@@ -8414,15 +10127,18 @@ class declarator;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_direct_declarator_4 [ label="direct_declarator_4", URL="\ref direct_declarator_4", color="#00AAAA" ];
- *     node_declarator [ label="declarator", URL="\ref declarator", color="#00AAAA"];
- *     node_direct_declarator_4 ->  node_declarator [label="_p_declarator" style=solid];
+ *     node_direct_declarator [ label="direct_declarator", URL="\ref direct_declarator", color="#00AAAA"];
+ *     node_identifier_list [ label="identifier_list", URL="\ref identifier_list", color="#00AAAA"];
+ *     node_direct_declarator_4 ->  node_direct_declarator [label="_p_direct_declarator" style=solid];
+ *     node_direct_declarator_4 ->  node_identifier_list [label="_p_identifier_list" style=solid];
  * }
  * \enddot
  */
 class direct_declarator_4:public direct_declarator
 {
 	private:
-		ReferenceCountedAutoPointer<declarator> _p_declarator;	  ///< A pointer to declarator.
+		ReferenceCountedAutoPointer<direct_declarator> _p_direct_declarator;	  ///< A pointer to direct_declarator.
+		ReferenceCountedAutoPointer<identifier_list> _p_identifier_list;	  ///< A pointer to identifier_list.
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -8433,7 +10149,8 @@ class direct_declarator_4:public direct_declarator
                  */
 		direct_declarator_4	
 				(
-					ReferenceCountedAutoPointer<declarator> _arg_declarator  ///< A pointer to declarator.
+					ReferenceCountedAutoPointer<direct_declarator> _arg_direct_declarator,   ///< A pointer to direct_declarator.
+					ReferenceCountedAutoPointer<identifier_list> _arg_identifier_list  ///< A pointer to identifier_list.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -8441,7 +10158,7 @@ class direct_declarator_4:public direct_declarator
                  * Returns the name of the class. Here, returns <b>"direct_declarator_4"</b>
 		 * \returns <b>"direct_declarator_4"</b>
                  */
-		virtual std::string name()const		{return std::string("direct_declarator_4");}
+		virtual std::string name()const			{return std::string("direct_declarator_4");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -8451,8 +10168,29 @@ class direct_declarator_4:public direct_declarator
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_DIRECT_DECLARATOR_4;}
 
+
+
+		ReferenceCountedAutoPointer<direct_declarator>& p_direct_declarator()
+		{
+			return _p_direct_declarator;
+		}
+
+		const ReferenceCountedAutoPointer<direct_declarator>& p_direct_declarator()const
+		{
+			return _p_direct_declarator;
+		}
+		ReferenceCountedAutoPointer<identifier_list>& p_identifier_list()
+		{
+			return _p_identifier_list;
+		}
+
+		const ReferenceCountedAutoPointer<identifier_list>& p_identifier_list()const
+		{
+			return _p_identifier_list;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -8469,14 +10207,13 @@ class direct_declarator_4:public direct_declarator
 
 
 
-class direct_declarator;
-class identifier_list;
+class token;
 
 
 
 
 /**
- * \brief direct_declarator_5 implements the pattern: <b>(direct_declarator, '(', identifier_list, ')')</b>
+ * \brief direct_declarator_5 implements the pattern: <b>(IDENTIFIER,)</b>
 
 
  * \dot
@@ -8484,18 +10221,15 @@ class identifier_list;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_direct_declarator_5 [ label="direct_declarator_5", URL="\ref direct_declarator_5", color="#00AAAA" ];
- *     node_direct_declarator [ label="direct_declarator", URL="\ref direct_declarator", color="#00AAAA"];
- *     node_identifier_list [ label="identifier_list", URL="\ref identifier_list", color="#00AAAA"];
- *     node_direct_declarator_5 ->  node_direct_declarator [label="_p_direct_declarator" style=solid];
- *     node_direct_declarator_5 ->  node_identifier_list [label="_p_identifier_list" style=solid];
+ *     node_token [ label="token", URL="\ref token", color="#FFFF44"];
+ *     node_direct_declarator_5 ->  node_token [label="_p_token" style=solid];
  * }
  * \enddot
  */
 class direct_declarator_5:public direct_declarator
 {
 	private:
-		ReferenceCountedAutoPointer<direct_declarator> _p_direct_declarator;	  ///< A pointer to direct_declarator.
-		ReferenceCountedAutoPointer<identifier_list> _p_identifier_list;	  ///< A pointer to identifier_list.
+		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>IDENTIFIER</b>
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -8506,8 +10240,7 @@ class direct_declarator_5:public direct_declarator
                  */
 		direct_declarator_5	
 				(
-					ReferenceCountedAutoPointer<direct_declarator> _arg_direct_declarator,   ///< A pointer to direct_declarator.
-					ReferenceCountedAutoPointer<identifier_list> _arg_identifier_list  ///< A pointer to identifier_list.
+					ReferenceCountedAutoPointer<token> _arg_token  ///< A pointer to a token, accepts <b>IDENTIFIER</b>
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -8515,7 +10248,7 @@ class direct_declarator_5:public direct_declarator
                  * Returns the name of the class. Here, returns <b>"direct_declarator_5"</b>
 		 * \returns <b>"direct_declarator_5"</b>
                  */
-		virtual std::string name()const		{return std::string("direct_declarator_5");}
+		virtual std::string name()const			{return std::string("direct_declarator_5");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -8525,8 +10258,20 @@ class direct_declarator_5:public direct_declarator
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_DIRECT_DECLARATOR_5;}
 
+
+
+		ReferenceCountedAutoPointer<token>& p_token()
+		{
+			return _p_token;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token()const
+		{
+			return _p_token;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -8587,7 +10332,7 @@ class token;
  * }
  * \enddot
  */
-class logical_and_expression_item
+class logical_and_expression_item:public CAst
 {
 	private:
 		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>AND_OP</b>, <b>None</b>
@@ -8611,7 +10356,7 @@ class logical_and_expression_item
                  * Returns the name of the class. Here, returns <b>"logical_and_expression_item"</b>
 		 * \returns <b>"logical_and_expression_item"</b>
                  */
-		virtual std::string name()const		{return std::string("logical_and_expression_item");}
+		virtual std::string name()const			{return std::string("logical_and_expression_item");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -8621,19 +10366,34 @@ class logical_and_expression_item
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_LOGICAL_AND_EXPRESSION_ITEM;}
 
+
+
+		ReferenceCountedAutoPointer<token>& p_token()
+		{
+			return _p_token;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token()const
+		{
+			return _p_token;
+		}
+		ReferenceCountedAutoPointer<inclusive_or_expression>& p_inclusive_or_expression()
+		{
+			return _p_inclusive_or_expression;
+		}
+
+		const ReferenceCountedAutoPointer<inclusive_or_expression>& p_inclusive_or_expression()const
+		{
+			return _p_inclusive_or_expression;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
 
-		std::string code()const
-		{
-			std::stringstream stream;
-			codeStream(stream);
-			return stream.str();
-		}
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -8653,7 +10413,8 @@ class logical_and_expression_item
 class logical_and_expression:public CAst
 {
 	public:
-		typedef std::list<ReferenceCountedAutoPointer<logical_and_expression_item> > logical_and_expressionListType;	///< This defines the list type which will store the logical_and_expression_item
+		typedef logical_and_expression_item ItemType;
+		typedef std::vector<ReferenceCountedAutoPointer< ItemType > > logical_and_expressionListType;	///< This defines the list type which will store the logical_and_expression_item
 		typedef logical_and_expressionListType::iterator logical_and_expressionIterType;				///< This defines the iterator over logical_and_expressionListType
 		typedef logical_and_expressionListType::const_iterator Clogical_and_expressionIterType;				///< This defines the constant iterator over logical_and_expressionListType
 
@@ -8691,9 +10452,13 @@ class logical_and_expression:public CAst
 		void prepend( ReferenceCountedAutoPointer<logical_and_expression_item> item)
 		{
 			LOG(COL_FG_GREEN<<"Prepending to logical_and_expression: "<<this)
-			_itemList.push_front(item);
+			_itemList.insert(_itemList.begin(),item);
 		}
 		
+		int size()const
+		{
+			return _itemList.size();
+		}
 		/**
                  * \brief Returns the name of the class.
                  *
@@ -8711,6 +10476,29 @@ class logical_and_expression:public CAst
 		virtual CAST_CLASS_ID classId()const		{return ID_LOGICAL_AND_EXPRESSION;}
 
 
+		ReferenceCountedAutoPointer<ItemType>& operator[](int i)
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+		const ReferenceCountedAutoPointer<ItemType>& operator[](int i)const
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+
+
+		/**
+		 * \brief Writes code to the code stream
+		 *
+		 *
+		 */
 		virtual std::ostream& codeStream(std::ostream& stream)const
 		{
 			for(Clogical_and_expressionIterType i=_itemList.begin();i!=_itemList.end();i++)
@@ -8770,7 +10558,7 @@ class init_declarator;
  * }
  * \enddot
  */
-class init_declarator_list_item
+class init_declarator_list_item:public CAst
 {
 	private:
 		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>','</b>, <b>None</b>
@@ -8794,7 +10582,7 @@ class init_declarator_list_item
                  * Returns the name of the class. Here, returns <b>"init_declarator_list_item"</b>
 		 * \returns <b>"init_declarator_list_item"</b>
                  */
-		virtual std::string name()const		{return std::string("init_declarator_list_item");}
+		virtual std::string name()const			{return std::string("init_declarator_list_item");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -8804,19 +10592,34 @@ class init_declarator_list_item
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_INIT_DECLARATOR_LIST_ITEM;}
 
+
+
+		ReferenceCountedAutoPointer<token>& p_token()
+		{
+			return _p_token;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token()const
+		{
+			return _p_token;
+		}
+		ReferenceCountedAutoPointer<init_declarator>& p_init_declarator()
+		{
+			return _p_init_declarator;
+		}
+
+		const ReferenceCountedAutoPointer<init_declarator>& p_init_declarator()const
+		{
+			return _p_init_declarator;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
 
-		std::string code()const
-		{
-			std::stringstream stream;
-			codeStream(stream);
-			return stream.str();
-		}
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -8836,7 +10639,8 @@ class init_declarator_list_item
 class init_declarator_list:public CAst
 {
 	public:
-		typedef std::list<ReferenceCountedAutoPointer<init_declarator_list_item> > init_declarator_listListType;	///< This defines the list type which will store the init_declarator_list_item
+		typedef init_declarator_list_item ItemType;
+		typedef std::vector<ReferenceCountedAutoPointer< ItemType > > init_declarator_listListType;	///< This defines the list type which will store the init_declarator_list_item
 		typedef init_declarator_listListType::iterator init_declarator_listIterType;				///< This defines the iterator over init_declarator_listListType
 		typedef init_declarator_listListType::const_iterator Cinit_declarator_listIterType;				///< This defines the constant iterator over init_declarator_listListType
 
@@ -8874,9 +10678,13 @@ class init_declarator_list:public CAst
 		void prepend( ReferenceCountedAutoPointer<init_declarator_list_item> item)
 		{
 			LOG(COL_FG_GREEN<<"Prepending to init_declarator_list: "<<this)
-			_itemList.push_front(item);
+			_itemList.insert(_itemList.begin(),item);
 		}
 		
+		int size()const
+		{
+			return _itemList.size();
+		}
 		/**
                  * \brief Returns the name of the class.
                  *
@@ -8894,6 +10702,29 @@ class init_declarator_list:public CAst
 		virtual CAST_CLASS_ID classId()const		{return ID_INIT_DECLARATOR_LIST;}
 
 
+		ReferenceCountedAutoPointer<ItemType>& operator[](int i)
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+		const ReferenceCountedAutoPointer<ItemType>& operator[](int i)const
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+
+
+		/**
+		 * \brief Writes code to the code stream
+		 *
+		 *
+		 */
 		virtual std::ostream& codeStream(std::ostream& stream)const
 		{
 			for(Cinit_declarator_listIterType i=_itemList.begin();i!=_itemList.end();i++)
@@ -8953,7 +10784,7 @@ class additive_expression;
  * }
  * \enddot
  */
-class shift_expression_item
+class shift_expression_item:public CAst
 {
 	private:
 		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>RIGHT_OP</b>, <b>LEFT_OP</b>, <b>None</b>
@@ -8977,7 +10808,7 @@ class shift_expression_item
                  * Returns the name of the class. Here, returns <b>"shift_expression_item"</b>
 		 * \returns <b>"shift_expression_item"</b>
                  */
-		virtual std::string name()const		{return std::string("shift_expression_item");}
+		virtual std::string name()const			{return std::string("shift_expression_item");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -8987,19 +10818,34 @@ class shift_expression_item
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_SHIFT_EXPRESSION_ITEM;}
 
+
+
+		ReferenceCountedAutoPointer<token>& p_token()
+		{
+			return _p_token;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token()const
+		{
+			return _p_token;
+		}
+		ReferenceCountedAutoPointer<additive_expression>& p_additive_expression()
+		{
+			return _p_additive_expression;
+		}
+
+		const ReferenceCountedAutoPointer<additive_expression>& p_additive_expression()const
+		{
+			return _p_additive_expression;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
 
-		std::string code()const
-		{
-			std::stringstream stream;
-			codeStream(stream);
-			return stream.str();
-		}
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -9019,7 +10865,8 @@ class shift_expression_item
 class shift_expression:public CAst
 {
 	public:
-		typedef std::list<ReferenceCountedAutoPointer<shift_expression_item> > shift_expressionListType;	///< This defines the list type which will store the shift_expression_item
+		typedef shift_expression_item ItemType;
+		typedef std::vector<ReferenceCountedAutoPointer< ItemType > > shift_expressionListType;	///< This defines the list type which will store the shift_expression_item
 		typedef shift_expressionListType::iterator shift_expressionIterType;				///< This defines the iterator over shift_expressionListType
 		typedef shift_expressionListType::const_iterator Cshift_expressionIterType;				///< This defines the constant iterator over shift_expressionListType
 
@@ -9057,9 +10904,13 @@ class shift_expression:public CAst
 		void prepend( ReferenceCountedAutoPointer<shift_expression_item> item)
 		{
 			LOG(COL_FG_GREEN<<"Prepending to shift_expression: "<<this)
-			_itemList.push_front(item);
+			_itemList.insert(_itemList.begin(),item);
 		}
 		
+		int size()const
+		{
+			return _itemList.size();
+		}
 		/**
                  * \brief Returns the name of the class.
                  *
@@ -9077,6 +10928,29 @@ class shift_expression:public CAst
 		virtual CAST_CLASS_ID classId()const		{return ID_SHIFT_EXPRESSION;}
 
 
+		ReferenceCountedAutoPointer<ItemType>& operator[](int i)
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+		const ReferenceCountedAutoPointer<ItemType>& operator[](int i)const
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+
+
+		/**
+		 * \brief Writes code to the code stream
+		 *
+		 *
+		 */
 		virtual std::ostream& codeStream(std::ostream& stream)const
 		{
 			for(Cshift_expressionIterType i=_itemList.begin();i!=_itemList.end();i++)
@@ -9136,7 +11010,7 @@ class token;
  * }
  * \enddot
  */
-class identifier_list_item
+class identifier_list_item:public CAst
 {
 	private:
 		ReferenceCountedAutoPointer<token> _p_token1;	  ///< A pointer to a token, accepts <b>','</b>, <b>None</b>
@@ -9160,7 +11034,7 @@ class identifier_list_item
                  * Returns the name of the class. Here, returns <b>"identifier_list_item"</b>
 		 * \returns <b>"identifier_list_item"</b>
                  */
-		virtual std::string name()const		{return std::string("identifier_list_item");}
+		virtual std::string name()const			{return std::string("identifier_list_item");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -9170,19 +11044,34 @@ class identifier_list_item
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_IDENTIFIER_LIST_ITEM;}
 
+
+
+		ReferenceCountedAutoPointer<token>& p_token1()
+		{
+			return _p_token1;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token1()const
+		{
+			return _p_token1;
+		}
+		ReferenceCountedAutoPointer<token>& p_token2()
+		{
+			return _p_token2;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token2()const
+		{
+			return _p_token2;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
 
-		std::string code()const
-		{
-			std::stringstream stream;
-			codeStream(stream);
-			return stream.str();
-		}
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -9202,7 +11091,8 @@ class identifier_list_item
 class identifier_list:public CAst
 {
 	public:
-		typedef std::list<ReferenceCountedAutoPointer<identifier_list_item> > identifier_listListType;	///< This defines the list type which will store the identifier_list_item
+		typedef identifier_list_item ItemType;
+		typedef std::vector<ReferenceCountedAutoPointer< ItemType > > identifier_listListType;	///< This defines the list type which will store the identifier_list_item
 		typedef identifier_listListType::iterator identifier_listIterType;				///< This defines the iterator over identifier_listListType
 		typedef identifier_listListType::const_iterator Cidentifier_listIterType;				///< This defines the constant iterator over identifier_listListType
 
@@ -9240,9 +11130,13 @@ class identifier_list:public CAst
 		void prepend( ReferenceCountedAutoPointer<identifier_list_item> item)
 		{
 			LOG(COL_FG_GREEN<<"Prepending to identifier_list: "<<this)
-			_itemList.push_front(item);
+			_itemList.insert(_itemList.begin(),item);
 		}
 		
+		int size()const
+		{
+			return _itemList.size();
+		}
 		/**
                  * \brief Returns the name of the class.
                  *
@@ -9260,6 +11154,29 @@ class identifier_list:public CAst
 		virtual CAST_CLASS_ID classId()const		{return ID_IDENTIFIER_LIST;}
 
 
+		ReferenceCountedAutoPointer<ItemType>& operator[](int i)
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+		const ReferenceCountedAutoPointer<ItemType>& operator[](int i)const
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+
+
+		/**
+		 * \brief Writes code to the code stream
+		 *
+		 *
+		 */
 		virtual std::ostream& codeStream(std::ostream& stream)const
 		{
 			for(Cidentifier_listIterType i=_itemList.begin();i!=_itemList.end();i++)
@@ -9367,7 +11284,7 @@ class jump_statement_1:public jump_statement
                  * Returns the name of the class. Here, returns <b>"jump_statement_1"</b>
 		 * \returns <b>"jump_statement_1"</b>
                  */
-		virtual std::string name()const		{return std::string("jump_statement_1");}
+		virtual std::string name()const			{return std::string("jump_statement_1");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -9377,8 +11294,20 @@ class jump_statement_1:public jump_statement
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_JUMP_STATEMENT_1;}
 
+
+
+		ReferenceCountedAutoPointer<expression>& p_expression()
+		{
+			return _p_expression;
+		}
+
+		const ReferenceCountedAutoPointer<expression>& p_expression()const
+		{
+			return _p_expression;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -9436,7 +11365,7 @@ class jump_statement_2:public jump_statement
                  * Returns the name of the class. Here, returns <b>"jump_statement_2"</b>
 		 * \returns <b>"jump_statement_2"</b>
                  */
-		virtual std::string name()const		{return std::string("jump_statement_2");}
+		virtual std::string name()const			{return std::string("jump_statement_2");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -9446,8 +11375,20 @@ class jump_statement_2:public jump_statement
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_JUMP_STATEMENT_2;}
 
+
+
+		ReferenceCountedAutoPointer<token>& p_token()
+		{
+			return _p_token;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token()const
+		{
+			return _p_token;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -9505,7 +11446,7 @@ class jump_statement_3:public jump_statement
                  * Returns the name of the class. Here, returns <b>"jump_statement_3"</b>
 		 * \returns <b>"jump_statement_3"</b>
                  */
-		virtual std::string name()const		{return std::string("jump_statement_3");}
+		virtual std::string name()const			{return std::string("jump_statement_3");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -9515,8 +11456,20 @@ class jump_statement_3:public jump_statement
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_JUMP_STATEMENT_3;}
 
+
+
+		ReferenceCountedAutoPointer<token>& p_token()
+		{
+			return _p_token;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token()const
+		{
+			return _p_token;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -9607,7 +11560,7 @@ class struct_declarator:public CAst
                  * Returns the name of the class. Here, returns <b>"struct_declarator"</b>
 		 * \returns <b>"struct_declarator"</b>
                  */
-		virtual std::string name()const		{return std::string("struct_declarator");}
+		virtual std::string name()const			{return std::string("struct_declarator");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -9617,8 +11570,38 @@ class struct_declarator:public CAst
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_STRUCT_DECLARATOR;}
 
+
+
+		ReferenceCountedAutoPointer<declarator>& p_declarator()
+		{
+			return _p_declarator;
+		}
+
+		const ReferenceCountedAutoPointer<declarator>& p_declarator()const
+		{
+			return _p_declarator;
+		}
+		ReferenceCountedAutoPointer<token>& p_token()
+		{
+			return _p_token;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token()const
+		{
+			return _p_token;
+		}
+		ReferenceCountedAutoPointer<constant_expression>& p_constant_expression()
+		{
+			return _p_constant_expression;
+		}
+
+		const ReferenceCountedAutoPointer<constant_expression>& p_constant_expression()const
+		{
+			return _p_constant_expression;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -9714,7 +11697,7 @@ class function_definition:public CAst
                  * Returns the name of the class. Here, returns <b>"function_definition"</b>
 		 * \returns <b>"function_definition"</b>
                  */
-		virtual std::string name()const		{return std::string("function_definition");}
+		virtual std::string name()const			{return std::string("function_definition");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -9724,8 +11707,47 @@ class function_definition:public CAst
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_FUNCTION_DEFINITION;}
 
+
+
+		ReferenceCountedAutoPointer<declaration_specifiers>& p_declaration_specifiers()
+		{
+			return _p_declaration_specifiers;
+		}
+
+		const ReferenceCountedAutoPointer<declaration_specifiers>& p_declaration_specifiers()const
+		{
+			return _p_declaration_specifiers;
+		}
+		ReferenceCountedAutoPointer<declarator>& p_declarator()
+		{
+			return _p_declarator;
+		}
+
+		const ReferenceCountedAutoPointer<declarator>& p_declarator()const
+		{
+			return _p_declarator;
+		}
+		ReferenceCountedAutoPointer<declaration_list>& p_declaration_list()
+		{
+			return _p_declaration_list;
+		}
+
+		const ReferenceCountedAutoPointer<declaration_list>& p_declaration_list()const
+		{
+			return _p_declaration_list;
+		}
+		ReferenceCountedAutoPointer<compound_statement>& p_compound_statement()
+		{
+			return _p_compound_statement;
+		}
+
+		const ReferenceCountedAutoPointer<compound_statement>& p_compound_statement()const
+		{
+			return _p_compound_statement;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -9786,7 +11808,7 @@ class token;
  * }
  * \enddot
  */
-class parameter_list_item
+class parameter_list_item:public CAst
 {
 	private:
 		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>','</b>, <b>None</b>
@@ -9810,7 +11832,7 @@ class parameter_list_item
                  * Returns the name of the class. Here, returns <b>"parameter_list_item"</b>
 		 * \returns <b>"parameter_list_item"</b>
                  */
-		virtual std::string name()const		{return std::string("parameter_list_item");}
+		virtual std::string name()const			{return std::string("parameter_list_item");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -9820,19 +11842,34 @@ class parameter_list_item
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_PARAMETER_LIST_ITEM;}
 
+
+
+		ReferenceCountedAutoPointer<token>& p_token()
+		{
+			return _p_token;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token()const
+		{
+			return _p_token;
+		}
+		ReferenceCountedAutoPointer<parameter_declaration>& p_parameter_declaration()
+		{
+			return _p_parameter_declaration;
+		}
+
+		const ReferenceCountedAutoPointer<parameter_declaration>& p_parameter_declaration()const
+		{
+			return _p_parameter_declaration;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
 
-		std::string code()const
-		{
-			std::stringstream stream;
-			codeStream(stream);
-			return stream.str();
-		}
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -9852,7 +11889,8 @@ class parameter_list_item
 class parameter_list:public CAst
 {
 	public:
-		typedef std::list<ReferenceCountedAutoPointer<parameter_list_item> > parameter_listListType;	///< This defines the list type which will store the parameter_list_item
+		typedef parameter_list_item ItemType;
+		typedef std::vector<ReferenceCountedAutoPointer< ItemType > > parameter_listListType;	///< This defines the list type which will store the parameter_list_item
 		typedef parameter_listListType::iterator parameter_listIterType;				///< This defines the iterator over parameter_listListType
 		typedef parameter_listListType::const_iterator Cparameter_listIterType;				///< This defines the constant iterator over parameter_listListType
 
@@ -9890,9 +11928,13 @@ class parameter_list:public CAst
 		void prepend( ReferenceCountedAutoPointer<parameter_list_item> item)
 		{
 			LOG(COL_FG_GREEN<<"Prepending to parameter_list: "<<this)
-			_itemList.push_front(item);
+			_itemList.insert(_itemList.begin(),item);
 		}
 		
+		int size()const
+		{
+			return _itemList.size();
+		}
 		/**
                  * \brief Returns the name of the class.
                  *
@@ -9910,6 +11952,29 @@ class parameter_list:public CAst
 		virtual CAST_CLASS_ID classId()const		{return ID_PARAMETER_LIST;}
 
 
+		ReferenceCountedAutoPointer<ItemType>& operator[](int i)
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+		const ReferenceCountedAutoPointer<ItemType>& operator[](int i)const
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+
+
+		/**
+		 * \brief Writes code to the code stream
+		 *
+		 *
+		 */
 		virtual std::ostream& codeStream(std::ostream& stream)const
 		{
 			for(Cparameter_listIterType i=_itemList.begin();i!=_itemList.end();i++)
@@ -9981,7 +12046,7 @@ class enum_specifier:public CAst
 {
 	private:
 		ReferenceCountedAutoPointer<token> _p_token1;	  ///< A pointer to a token, accepts <b>IDENTIFIER</b>, <b>None</b>
-		ReferenceCountedAutoPointer<token> _p_token2;	  ///< A pointer to a token, accepts <b>'{'</b>, <b>None</b>
+		ReferenceCountedAutoPointer<token> _p_token2;	  ///< A pointer to a token, accepts <b>None</b>, <b>'{'</b>
 		ReferenceCountedAutoPointer<enumerator_list> _p_enumerator_list;	  ///< A pointer to enumerator_list. This parameter can be <b>Null</b>
 		ReferenceCountedAutoPointer<token> _p_token3;	  ///< A pointer to a token, accepts <b>'}'</b>, <b>None</b>
 	public:
@@ -9995,7 +12060,7 @@ class enum_specifier:public CAst
 		enum_specifier	
 				(
 					ReferenceCountedAutoPointer<token> _arg_token1,   ///< A pointer to a token, accepts <b>IDENTIFIER</b>, <b>None</b>
-					ReferenceCountedAutoPointer<token> _arg_token2,   ///< A pointer to a token, accepts <b>'{'</b>, <b>None</b>
+					ReferenceCountedAutoPointer<token> _arg_token2,   ///< A pointer to a token, accepts <b>None</b>, <b>'{'</b>
 					ReferenceCountedAutoPointer<enumerator_list> _arg_enumerator_list,   ///< A pointer to enumerator_list. This parameter can be <b>Null</b>
 					ReferenceCountedAutoPointer<token> _arg_token3  ///< A pointer to a token, accepts <b>'}'</b>, <b>None</b>
 				);
@@ -10005,7 +12070,7 @@ class enum_specifier:public CAst
                  * Returns the name of the class. Here, returns <b>"enum_specifier"</b>
 		 * \returns <b>"enum_specifier"</b>
                  */
-		virtual std::string name()const		{return std::string("enum_specifier");}
+		virtual std::string name()const			{return std::string("enum_specifier");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -10015,8 +12080,47 @@ class enum_specifier:public CAst
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_ENUM_SPECIFIER;}
 
+
+
+		ReferenceCountedAutoPointer<token>& p_token1()
+		{
+			return _p_token1;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token1()const
+		{
+			return _p_token1;
+		}
+		ReferenceCountedAutoPointer<token>& p_token2()
+		{
+			return _p_token2;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token2()const
+		{
+			return _p_token2;
+		}
+		ReferenceCountedAutoPointer<enumerator_list>& p_enumerator_list()
+		{
+			return _p_enumerator_list;
+		}
+
+		const ReferenceCountedAutoPointer<enumerator_list>& p_enumerator_list()const
+		{
+			return _p_enumerator_list;
+		}
+		ReferenceCountedAutoPointer<token>& p_token3()
+		{
+			return _p_token3;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token3()const
+		{
+			return _p_token3;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -10095,7 +12199,7 @@ class type_qualifier:public CAst
                  * Returns the name of the class. Here, returns <b>"type_qualifier"</b>
 		 * \returns <b>"type_qualifier"</b>
                  */
-		virtual std::string name()const		{return std::string("type_qualifier");}
+		virtual std::string name()const			{return std::string("type_qualifier");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -10105,8 +12209,20 @@ class type_qualifier:public CAst
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_TYPE_QUALIFIER;}
 
+
+
+		ReferenceCountedAutoPointer<token>& p_token()
+		{
+			return _p_token;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token()const
+		{
+			return _p_token;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -10167,7 +12283,7 @@ class enumerator;
  * }
  * \enddot
  */
-class enumerator_list_item
+class enumerator_list_item:public CAst
 {
 	private:
 		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>','</b>, <b>None</b>
@@ -10191,7 +12307,7 @@ class enumerator_list_item
                  * Returns the name of the class. Here, returns <b>"enumerator_list_item"</b>
 		 * \returns <b>"enumerator_list_item"</b>
                  */
-		virtual std::string name()const		{return std::string("enumerator_list_item");}
+		virtual std::string name()const			{return std::string("enumerator_list_item");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -10201,19 +12317,34 @@ class enumerator_list_item
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_ENUMERATOR_LIST_ITEM;}
 
+
+
+		ReferenceCountedAutoPointer<token>& p_token()
+		{
+			return _p_token;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token()const
+		{
+			return _p_token;
+		}
+		ReferenceCountedAutoPointer<enumerator>& p_enumerator()
+		{
+			return _p_enumerator;
+		}
+
+		const ReferenceCountedAutoPointer<enumerator>& p_enumerator()const
+		{
+			return _p_enumerator;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
 
-		std::string code()const
-		{
-			std::stringstream stream;
-			codeStream(stream);
-			return stream.str();
-		}
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -10233,7 +12364,8 @@ class enumerator_list_item
 class enumerator_list:public CAst
 {
 	public:
-		typedef std::list<ReferenceCountedAutoPointer<enumerator_list_item> > enumerator_listListType;	///< This defines the list type which will store the enumerator_list_item
+		typedef enumerator_list_item ItemType;
+		typedef std::vector<ReferenceCountedAutoPointer< ItemType > > enumerator_listListType;	///< This defines the list type which will store the enumerator_list_item
 		typedef enumerator_listListType::iterator enumerator_listIterType;				///< This defines the iterator over enumerator_listListType
 		typedef enumerator_listListType::const_iterator Cenumerator_listIterType;				///< This defines the constant iterator over enumerator_listListType
 
@@ -10271,9 +12403,13 @@ class enumerator_list:public CAst
 		void prepend( ReferenceCountedAutoPointer<enumerator_list_item> item)
 		{
 			LOG(COL_FG_GREEN<<"Prepending to enumerator_list: "<<this)
-			_itemList.push_front(item);
+			_itemList.insert(_itemList.begin(),item);
 		}
 		
+		int size()const
+		{
+			return _itemList.size();
+		}
 		/**
                  * \brief Returns the name of the class.
                  *
@@ -10291,6 +12427,29 @@ class enumerator_list:public CAst
 		virtual CAST_CLASS_ID classId()const		{return ID_ENUMERATOR_LIST;}
 
 
+		ReferenceCountedAutoPointer<ItemType>& operator[](int i)
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+		const ReferenceCountedAutoPointer<ItemType>& operator[](int i)const
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+
+
+		/**
+		 * \brief Writes code to the code stream
+		 *
+		 *
+		 */
 		virtual std::ostream& codeStream(std::ostream& stream)const
 		{
 			for(Cenumerator_listIterType i=_itemList.begin();i!=_itemList.end();i++)
@@ -10402,7 +12561,7 @@ class labeled_statement_1:public labeled_statement
                  * Returns the name of the class. Here, returns <b>"labeled_statement_1"</b>
 		 * \returns <b>"labeled_statement_1"</b>
                  */
-		virtual std::string name()const		{return std::string("labeled_statement_1");}
+		virtual std::string name()const			{return std::string("labeled_statement_1");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -10412,8 +12571,29 @@ class labeled_statement_1:public labeled_statement
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_LABELED_STATEMENT_1;}
 
+
+
+		ReferenceCountedAutoPointer<constant_expression>& p_constant_expression()
+		{
+			return _p_constant_expression;
+		}
+
+		const ReferenceCountedAutoPointer<constant_expression>& p_constant_expression()const
+		{
+			return _p_constant_expression;
+		}
+		ReferenceCountedAutoPointer<statement>& p_statement()
+		{
+			return _p_statement;
+		}
+
+		const ReferenceCountedAutoPointer<statement>& p_statement()const
+		{
+			return _p_statement;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -10477,7 +12657,7 @@ class labeled_statement_2:public labeled_statement
                  * Returns the name of the class. Here, returns <b>"labeled_statement_2"</b>
 		 * \returns <b>"labeled_statement_2"</b>
                  */
-		virtual std::string name()const		{return std::string("labeled_statement_2");}
+		virtual std::string name()const			{return std::string("labeled_statement_2");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -10487,8 +12667,29 @@ class labeled_statement_2:public labeled_statement
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_LABELED_STATEMENT_2;}
 
+
+
+		ReferenceCountedAutoPointer<token>& p_token()
+		{
+			return _p_token;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token()const
+		{
+			return _p_token;
+		}
+		ReferenceCountedAutoPointer<statement>& p_statement()
+		{
+			return _p_statement;
+		}
+
+		const ReferenceCountedAutoPointer<statement>& p_statement()const
+		{
+			return _p_statement;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -10544,7 +12745,7 @@ class declaration;
  * }
  * \enddot
  */
-class declaration_list_item
+class declaration_list_item:public CAst
 {
 	private:
 		ReferenceCountedAutoPointer<declaration> _p_declaration;	  ///< A pointer to declaration.
@@ -10566,7 +12767,7 @@ class declaration_list_item
                  * Returns the name of the class. Here, returns <b>"declaration_list_item"</b>
 		 * \returns <b>"declaration_list_item"</b>
                  */
-		virtual std::string name()const		{return std::string("declaration_list_item");}
+		virtual std::string name()const			{return std::string("declaration_list_item");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -10576,19 +12777,25 @@ class declaration_list_item
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_DECLARATION_LIST_ITEM;}
 
+
+
+		ReferenceCountedAutoPointer<declaration>& p_declaration()
+		{
+			return _p_declaration;
+		}
+
+		const ReferenceCountedAutoPointer<declaration>& p_declaration()const
+		{
+			return _p_declaration;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
 
-		std::string code()const
-		{
-			std::stringstream stream;
-			codeStream(stream);
-			return stream.str();
-		}
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -10608,7 +12815,8 @@ class declaration_list_item
 class declaration_list:public CAst
 {
 	public:
-		typedef std::list<ReferenceCountedAutoPointer<declaration_list_item> > declaration_listListType;	///< This defines the list type which will store the declaration_list_item
+		typedef declaration_list_item ItemType;
+		typedef std::vector<ReferenceCountedAutoPointer< ItemType > > declaration_listListType;	///< This defines the list type which will store the declaration_list_item
 		typedef declaration_listListType::iterator declaration_listIterType;				///< This defines the iterator over declaration_listListType
 		typedef declaration_listListType::const_iterator Cdeclaration_listIterType;				///< This defines the constant iterator over declaration_listListType
 
@@ -10646,9 +12854,13 @@ class declaration_list:public CAst
 		void prepend( ReferenceCountedAutoPointer<declaration_list_item> item)
 		{
 			LOG(COL_FG_GREEN<<"Prepending to declaration_list: "<<this)
-			_itemList.push_front(item);
+			_itemList.insert(_itemList.begin(),item);
 		}
 		
+		int size()const
+		{
+			return _itemList.size();
+		}
 		/**
                  * \brief Returns the name of the class.
                  *
@@ -10666,6 +12878,29 @@ class declaration_list:public CAst
 		virtual CAST_CLASS_ID classId()const		{return ID_DECLARATION_LIST;}
 
 
+		ReferenceCountedAutoPointer<ItemType>& operator[](int i)
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+		const ReferenceCountedAutoPointer<ItemType>& operator[](int i)const
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+
+
+		/**
+		 * \brief Writes code to the code stream
+		 *
+		 *
+		 */
 		virtual std::ostream& codeStream(std::ostream& stream)const
 		{
 			for(Cdeclaration_listIterType i=_itemList.begin();i!=_itemList.end();i++)
@@ -10702,7 +12937,7 @@ class declaration_list:public CAst
 
 
 
-class specifier_qualifier_list_item
+class specifier_qualifier_list_item:public CAst
 {
 	
 	public:
@@ -10731,12 +12966,12 @@ class specifier_qualifier_list_item
 
 };
 
-class type_specifier;
+class type_qualifier;
 
 
 
 /**
- * \brief specifier_qualifier_list_item_1 implements the pattern: <b>(type_specifier, specifier_qualifier_list)</b>
+ * \brief specifier_qualifier_list_item_1 implements the pattern: <b>(type_qualifier, specifier_qualifier_list)</b>
 
 
  * \dot
@@ -10744,15 +12979,15 @@ class type_specifier;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_specifier_qualifier_list_item_1 [ label="specifier_qualifier_list_item_1", URL="\ref specifier_qualifier_list_item_1", color="#00AAAA" ];
- *     node_type_specifier [ label="type_specifier", URL="\ref type_specifier", color="#00AAAA"];
- *     node_specifier_qualifier_list_item_1 ->  node_type_specifier [label="_p_type_specifier" style=solid];
+ *     node_type_qualifier [ label="type_qualifier", URL="\ref type_qualifier", color="#00AAAA"];
+ *     node_specifier_qualifier_list_item_1 ->  node_type_qualifier [label="_p_type_qualifier" style=solid];
  * }
  * \enddot
  */
 class specifier_qualifier_list_item_1:public specifier_qualifier_list_item
 {
 	private:
-		ReferenceCountedAutoPointer<type_specifier> _p_type_specifier;	  ///< A pointer to type_specifier.
+		ReferenceCountedAutoPointer<type_qualifier> _p_type_qualifier;	  ///< A pointer to type_qualifier.
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -10763,7 +12998,7 @@ class specifier_qualifier_list_item_1:public specifier_qualifier_list_item
                  */
 		specifier_qualifier_list_item_1	
 				(
-					ReferenceCountedAutoPointer<type_specifier> _arg_type_specifier  ///< A pointer to type_specifier.
+					ReferenceCountedAutoPointer<type_qualifier> _arg_type_qualifier  ///< A pointer to type_qualifier.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -10771,7 +13006,7 @@ class specifier_qualifier_list_item_1:public specifier_qualifier_list_item
                  * Returns the name of the class. Here, returns <b>"specifier_qualifier_list_item_1"</b>
 		 * \returns <b>"specifier_qualifier_list_item_1"</b>
                  */
-		virtual std::string name()const		{return std::string("specifier_qualifier_list_item_1");}
+		virtual std::string name()const			{return std::string("specifier_qualifier_list_item_1");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -10781,8 +13016,20 @@ class specifier_qualifier_list_item_1:public specifier_qualifier_list_item
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_SPECIFIER_QUALIFIER_LIST_ITEM_1;}
 
+
+
+		ReferenceCountedAutoPointer<type_qualifier>& p_type_qualifier()
+		{
+			return _p_type_qualifier;
+		}
+
+		const ReferenceCountedAutoPointer<type_qualifier>& p_type_qualifier()const
+		{
+			return _p_type_qualifier;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -10799,12 +13046,12 @@ class specifier_qualifier_list_item_1:public specifier_qualifier_list_item
 
 
 
-class type_qualifier;
+class type_specifier;
 
 
 
 /**
- * \brief specifier_qualifier_list_item_2 implements the pattern: <b>(type_qualifier, specifier_qualifier_list)</b>
+ * \brief specifier_qualifier_list_item_2 implements the pattern: <b>(type_specifier, specifier_qualifier_list)</b>
 
 
  * \dot
@@ -10812,15 +13059,15 @@ class type_qualifier;
  *     node [shape=polygon,sides=4, fontname=Helvetica, fontsize=10, style=filled,peripheries=2];
  *     edge [fontsize=10, fontname=Helvetica, arrowhead="open"];
  *     node_specifier_qualifier_list_item_2 [ label="specifier_qualifier_list_item_2", URL="\ref specifier_qualifier_list_item_2", color="#00AAAA" ];
- *     node_type_qualifier [ label="type_qualifier", URL="\ref type_qualifier", color="#00AAAA"];
- *     node_specifier_qualifier_list_item_2 ->  node_type_qualifier [label="_p_type_qualifier" style=solid];
+ *     node_type_specifier [ label="type_specifier", URL="\ref type_specifier", color="#00AAAA"];
+ *     node_specifier_qualifier_list_item_2 ->  node_type_specifier [label="_p_type_specifier" style=solid];
  * }
  * \enddot
  */
 class specifier_qualifier_list_item_2:public specifier_qualifier_list_item
 {
 	private:
-		ReferenceCountedAutoPointer<type_qualifier> _p_type_qualifier;	  ///< A pointer to type_qualifier.
+		ReferenceCountedAutoPointer<type_specifier> _p_type_specifier;	  ///< A pointer to type_specifier.
 	public:
 		static CAST_CLASS_ID ID;
 	public:
@@ -10831,7 +13078,7 @@ class specifier_qualifier_list_item_2:public specifier_qualifier_list_item
                  */
 		specifier_qualifier_list_item_2	
 				(
-					ReferenceCountedAutoPointer<type_qualifier> _arg_type_qualifier  ///< A pointer to type_qualifier.
+					ReferenceCountedAutoPointer<type_specifier> _arg_type_specifier  ///< A pointer to type_specifier.
 				);
 		/**
                  * \brief Returns the name of the class.
@@ -10839,7 +13086,7 @@ class specifier_qualifier_list_item_2:public specifier_qualifier_list_item
                  * Returns the name of the class. Here, returns <b>"specifier_qualifier_list_item_2"</b>
 		 * \returns <b>"specifier_qualifier_list_item_2"</b>
                  */
-		virtual std::string name()const		{return std::string("specifier_qualifier_list_item_2");}
+		virtual std::string name()const			{return std::string("specifier_qualifier_list_item_2");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -10849,8 +13096,20 @@ class specifier_qualifier_list_item_2:public specifier_qualifier_list_item
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_SPECIFIER_QUALIFIER_LIST_ITEM_2;}
 
+
+
+		ReferenceCountedAutoPointer<type_specifier>& p_type_specifier()
+		{
+			return _p_type_specifier;
+		}
+
+		const ReferenceCountedAutoPointer<type_specifier>& p_type_specifier()const
+		{
+			return _p_type_specifier;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -10875,7 +13134,8 @@ class specifier_qualifier_list_item_2:public specifier_qualifier_list_item
 class specifier_qualifier_list:public CAst
 {
 	public:
-		typedef std::list<ReferenceCountedAutoPointer<specifier_qualifier_list_item> > specifier_qualifier_listListType;	///< This defines the list type which will store the specifier_qualifier_list_item
+		typedef specifier_qualifier_list_item ItemType;
+		typedef std::vector<ReferenceCountedAutoPointer< ItemType > > specifier_qualifier_listListType;	///< This defines the list type which will store the specifier_qualifier_list_item
 		typedef specifier_qualifier_listListType::iterator specifier_qualifier_listIterType;				///< This defines the iterator over specifier_qualifier_listListType
 		typedef specifier_qualifier_listListType::const_iterator Cspecifier_qualifier_listIterType;				///< This defines the constant iterator over specifier_qualifier_listListType
 
@@ -10913,9 +13173,13 @@ class specifier_qualifier_list:public CAst
 		void prepend( ReferenceCountedAutoPointer<specifier_qualifier_list_item> item)
 		{
 			LOG(COL_FG_GREEN<<"Prepending to specifier_qualifier_list: "<<this)
-			_itemList.push_front(item);
+			_itemList.insert(_itemList.begin(),item);
 		}
 		
+		int size()const
+		{
+			return _itemList.size();
+		}
 		/**
                  * \brief Returns the name of the class.
                  *
@@ -10933,6 +13197,29 @@ class specifier_qualifier_list:public CAst
 		virtual CAST_CLASS_ID classId()const		{return ID_SPECIFIER_QUALIFIER_LIST;}
 
 
+		ReferenceCountedAutoPointer<ItemType>& operator[](int i)
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+		const ReferenceCountedAutoPointer<ItemType>& operator[](int i)const
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+
+
+		/**
+		 * \brief Writes code to the code stream
+		 *
+		 *
+		 */
 		virtual std::ostream& codeStream(std::ostream& stream)const
 		{
 			for(Cspecifier_qualifier_listIterType i=_itemList.begin();i!=_itemList.end();i++)
@@ -10987,7 +13274,7 @@ class external_declaration;
  * }
  * \enddot
  */
-class translation_unit_item
+class translation_unit_item:public CAst
 {
 	private:
 		ReferenceCountedAutoPointer<external_declaration> _p_external_declaration;	  ///< A pointer to external_declaration.
@@ -11009,7 +13296,7 @@ class translation_unit_item
                  * Returns the name of the class. Here, returns <b>"translation_unit_item"</b>
 		 * \returns <b>"translation_unit_item"</b>
                  */
-		virtual std::string name()const		{return std::string("translation_unit_item");}
+		virtual std::string name()const			{return std::string("translation_unit_item");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -11019,19 +13306,25 @@ class translation_unit_item
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_TRANSLATION_UNIT_ITEM;}
 
+
+
+		ReferenceCountedAutoPointer<external_declaration>& p_external_declaration()
+		{
+			return _p_external_declaration;
+		}
+
+		const ReferenceCountedAutoPointer<external_declaration>& p_external_declaration()const
+		{
+			return _p_external_declaration;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
 
-		std::string code()const
-		{
-			std::stringstream stream;
-			codeStream(stream);
-			return stream.str();
-		}
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -11051,7 +13344,8 @@ class translation_unit_item
 class translation_unit:public CAst
 {
 	public:
-		typedef std::list<ReferenceCountedAutoPointer<translation_unit_item> > translation_unitListType;	///< This defines the list type which will store the translation_unit_item
+		typedef translation_unit_item ItemType;
+		typedef std::vector<ReferenceCountedAutoPointer< ItemType > > translation_unitListType;	///< This defines the list type which will store the translation_unit_item
 		typedef translation_unitListType::iterator translation_unitIterType;				///< This defines the iterator over translation_unitListType
 		typedef translation_unitListType::const_iterator Ctranslation_unitIterType;				///< This defines the constant iterator over translation_unitListType
 
@@ -11089,9 +13383,13 @@ class translation_unit:public CAst
 		void prepend( ReferenceCountedAutoPointer<translation_unit_item> item)
 		{
 			LOG(COL_FG_GREEN<<"Prepending to translation_unit: "<<this)
-			_itemList.push_front(item);
+			_itemList.insert(_itemList.begin(),item);
 		}
 		
+		int size()const
+		{
+			return _itemList.size();
+		}
 		/**
                  * \brief Returns the name of the class.
                  *
@@ -11109,6 +13407,29 @@ class translation_unit:public CAst
 		virtual CAST_CLASS_ID classId()const		{return ID_TRANSLATION_UNIT;}
 
 
+		ReferenceCountedAutoPointer<ItemType>& operator[](int i)
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+		const ReferenceCountedAutoPointer<ItemType>& operator[](int i)const
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+
+
+		/**
+		 * \brief Writes code to the code stream
+		 *
+		 *
+		 */
 		virtual std::ostream& codeStream(std::ostream& stream)const
 		{
 			for(Ctranslation_unitIterType i=_itemList.begin();i!=_itemList.end();i++)
@@ -11185,7 +13506,7 @@ class constant_expression:public CAst
                  * Returns the name of the class. Here, returns <b>"constant_expression"</b>
 		 * \returns <b>"constant_expression"</b>
                  */
-		virtual std::string name()const		{return std::string("constant_expression");}
+		virtual std::string name()const			{return std::string("constant_expression");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -11195,8 +13516,20 @@ class constant_expression:public CAst
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_CONSTANT_EXPRESSION;}
 
+
+
+		ReferenceCountedAutoPointer<conditional_expression>& p_conditional_expression()
+		{
+			return _p_conditional_expression;
+		}
+
+		const ReferenceCountedAutoPointer<conditional_expression>& p_conditional_expression()const
+		{
+			return _p_conditional_expression;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
@@ -11257,7 +13590,7 @@ class initializer;
  * }
  * \enddot
  */
-class initializer_list_item
+class initializer_list_item:public CAst
 {
 	private:
 		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>','</b>, <b>None</b>
@@ -11281,7 +13614,7 @@ class initializer_list_item
                  * Returns the name of the class. Here, returns <b>"initializer_list_item"</b>
 		 * \returns <b>"initializer_list_item"</b>
                  */
-		virtual std::string name()const		{return std::string("initializer_list_item");}
+		virtual std::string name()const			{return std::string("initializer_list_item");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -11291,19 +13624,34 @@ class initializer_list_item
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_INITIALIZER_LIST_ITEM;}
 
+
+
+		ReferenceCountedAutoPointer<token>& p_token()
+		{
+			return _p_token;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token()const
+		{
+			return _p_token;
+		}
+		ReferenceCountedAutoPointer<initializer>& p_initializer()
+		{
+			return _p_initializer;
+		}
+
+		const ReferenceCountedAutoPointer<initializer>& p_initializer()const
+		{
+			return _p_initializer;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
 
-		std::string code()const
-		{
-			std::stringstream stream;
-			codeStream(stream);
-			return stream.str();
-		}
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -11323,7 +13671,8 @@ class initializer_list_item
 class initializer_list:public CAst
 {
 	public:
-		typedef std::list<ReferenceCountedAutoPointer<initializer_list_item> > initializer_listListType;	///< This defines the list type which will store the initializer_list_item
+		typedef initializer_list_item ItemType;
+		typedef std::vector<ReferenceCountedAutoPointer< ItemType > > initializer_listListType;	///< This defines the list type which will store the initializer_list_item
 		typedef initializer_listListType::iterator initializer_listIterType;				///< This defines the iterator over initializer_listListType
 		typedef initializer_listListType::const_iterator Cinitializer_listIterType;				///< This defines the constant iterator over initializer_listListType
 
@@ -11361,9 +13710,13 @@ class initializer_list:public CAst
 		void prepend( ReferenceCountedAutoPointer<initializer_list_item> item)
 		{
 			LOG(COL_FG_GREEN<<"Prepending to initializer_list: "<<this)
-			_itemList.push_front(item);
+			_itemList.insert(_itemList.begin(),item);
 		}
 		
+		int size()const
+		{
+			return _itemList.size();
+		}
 		/**
                  * \brief Returns the name of the class.
                  *
@@ -11381,6 +13734,29 @@ class initializer_list:public CAst
 		virtual CAST_CLASS_ID classId()const		{return ID_INITIALIZER_LIST;}
 
 
+		ReferenceCountedAutoPointer<ItemType>& operator[](int i)
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+		const ReferenceCountedAutoPointer<ItemType>& operator[](int i)const
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+
+
+		/**
+		 * \brief Writes code to the code stream
+		 *
+		 *
+		 */
 		virtual std::ostream& codeStream(std::ostream& stream)const
 		{
 			for(Cinitializer_listIterType i=_itemList.begin();i!=_itemList.end();i++)
@@ -11435,7 +13811,7 @@ class statement;
  * }
  * \enddot
  */
-class statement_list_item
+class statement_list_item:public CAst
 {
 	private:
 		ReferenceCountedAutoPointer<statement> _p_statement;	  ///< A pointer to statement.
@@ -11457,7 +13833,7 @@ class statement_list_item
                  * Returns the name of the class. Here, returns <b>"statement_list_item"</b>
 		 * \returns <b>"statement_list_item"</b>
                  */
-		virtual std::string name()const		{return std::string("statement_list_item");}
+		virtual std::string name()const			{return std::string("statement_list_item");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -11467,19 +13843,25 @@ class statement_list_item
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_STATEMENT_LIST_ITEM;}
 
+
+
+		ReferenceCountedAutoPointer<statement>& p_statement()
+		{
+			return _p_statement;
+		}
+
+		const ReferenceCountedAutoPointer<statement>& p_statement()const
+		{
+			return _p_statement;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
 
-		std::string code()const
-		{
-			std::stringstream stream;
-			codeStream(stream);
-			return stream.str();
-		}
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -11499,7 +13881,8 @@ class statement_list_item
 class statement_list:public CAst
 {
 	public:
-		typedef std::list<ReferenceCountedAutoPointer<statement_list_item> > statement_listListType;	///< This defines the list type which will store the statement_list_item
+		typedef statement_list_item ItemType;
+		typedef std::vector<ReferenceCountedAutoPointer< ItemType > > statement_listListType;	///< This defines the list type which will store the statement_list_item
 		typedef statement_listListType::iterator statement_listIterType;				///< This defines the iterator over statement_listListType
 		typedef statement_listListType::const_iterator Cstatement_listIterType;				///< This defines the constant iterator over statement_listListType
 
@@ -11537,9 +13920,13 @@ class statement_list:public CAst
 		void prepend( ReferenceCountedAutoPointer<statement_list_item> item)
 		{
 			LOG(COL_FG_GREEN<<"Prepending to statement_list: "<<this)
-			_itemList.push_front(item);
+			_itemList.insert(_itemList.begin(),item);
 		}
 		
+		int size()const
+		{
+			return _itemList.size();
+		}
 		/**
                  * \brief Returns the name of the class.
                  *
@@ -11557,6 +13944,29 @@ class statement_list:public CAst
 		virtual CAST_CLASS_ID classId()const		{return ID_STATEMENT_LIST;}
 
 
+		ReferenceCountedAutoPointer<ItemType>& operator[](int i)
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+		const ReferenceCountedAutoPointer<ItemType>& operator[](int i)const
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+
+
+		/**
+		 * \brief Writes code to the code stream
+		 *
+		 *
+		 */
 		virtual std::ostream& codeStream(std::ostream& stream)const
 		{
 			for(Cstatement_listIterType i=_itemList.begin();i!=_itemList.end();i++)
@@ -11616,7 +14026,7 @@ class assignment_expression;
  * }
  * \enddot
  */
-class expression_item
+class expression_item:public CAst
 {
 	private:
 		ReferenceCountedAutoPointer<token> _p_token;	  ///< A pointer to a token, accepts <b>','</b>, <b>None</b>
@@ -11640,7 +14050,7 @@ class expression_item
                  * Returns the name of the class. Here, returns <b>"expression_item"</b>
 		 * \returns <b>"expression_item"</b>
                  */
-		virtual std::string name()const		{return std::string("expression_item");}
+		virtual std::string name()const			{return std::string("expression_item");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -11650,19 +14060,34 @@ class expression_item
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_EXPRESSION_ITEM;}
 
+
+
+		ReferenceCountedAutoPointer<token>& p_token()
+		{
+			return _p_token;
+		}
+
+		const ReferenceCountedAutoPointer<token>& p_token()const
+		{
+			return _p_token;
+		}
+		ReferenceCountedAutoPointer<assignment_expression>& p_assignment_expression()
+		{
+			return _p_assignment_expression;
+		}
+
+		const ReferenceCountedAutoPointer<assignment_expression>& p_assignment_expression()const
+		{
+			return _p_assignment_expression;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
 
-		std::string code()const
-		{
-			std::stringstream stream;
-			codeStream(stream);
-			return stream.str();
-		}
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -11682,7 +14107,8 @@ class expression_item
 class expression:public CAst
 {
 	public:
-		typedef std::list<ReferenceCountedAutoPointer<expression_item> > expressionListType;	///< This defines the list type which will store the expression_item
+		typedef expression_item ItemType;
+		typedef std::vector<ReferenceCountedAutoPointer< ItemType > > expressionListType;	///< This defines the list type which will store the expression_item
 		typedef expressionListType::iterator expressionIterType;				///< This defines the iterator over expressionListType
 		typedef expressionListType::const_iterator CexpressionIterType;				///< This defines the constant iterator over expressionListType
 
@@ -11720,9 +14146,13 @@ class expression:public CAst
 		void prepend( ReferenceCountedAutoPointer<expression_item> item)
 		{
 			LOG(COL_FG_GREEN<<"Prepending to expression: "<<this)
-			_itemList.push_front(item);
+			_itemList.insert(_itemList.begin(),item);
 		}
 		
+		int size()const
+		{
+			return _itemList.size();
+		}
 		/**
                  * \brief Returns the name of the class.
                  *
@@ -11740,6 +14170,29 @@ class expression:public CAst
 		virtual CAST_CLASS_ID classId()const		{return ID_EXPRESSION;}
 
 
+		ReferenceCountedAutoPointer<ItemType>& operator[](int i)
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+		const ReferenceCountedAutoPointer<ItemType>& operator[](int i)const
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+
+
+		/**
+		 * \brief Writes code to the code stream
+		 *
+		 *
+		 */
 		virtual std::ostream& codeStream(std::ostream& stream)const
 		{
 			for(CexpressionIterType i=_itemList.begin();i!=_itemList.end();i++)
@@ -11822,7 +14275,7 @@ class declarator:public CAst
                  * Returns the name of the class. Here, returns <b>"declarator"</b>
 		 * \returns <b>"declarator"</b>
                  */
-		virtual std::string name()const		{return std::string("declarator");}
+		virtual std::string name()const			{return std::string("declarator");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -11832,8 +14285,29 @@ class declarator:public CAst
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_DECLARATOR;}
 
+
+
+		ReferenceCountedAutoPointer<pointer>& p_pointer()
+		{
+			return _p_pointer;
+		}
+
+		const ReferenceCountedAutoPointer<pointer>& p_pointer()const
+		{
+			return _p_pointer;
+		}
+		ReferenceCountedAutoPointer<direct_declarator>& p_direct_declarator()
+		{
+			return _p_direct_declarator;
+		}
+
+		const ReferenceCountedAutoPointer<direct_declarator>& p_direct_declarator()const
+		{
+			return _p_direct_declarator;
+		}
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */

@@ -9,3 +9,52 @@ $utils.pyClassCreator.stdClassHeader($tokObj)
 #for rn in $object:
 $object[$rn].dump("pyHeader")
 #end for
+
+
+#set ID_LIST=[("token",1)]
+#for r in $object:
+#set h=$object[$r].handler
+#if $len($h.handlers)>1 
+#echo ID_LIST.append(($r,$object[$r].classId))
+	#if $h.__class__.__name__=="ListHandlerGroup":
+#echo ID_LIST.append(($r+"_item",$object[$r].classId+1))
+	#end if
+#else
+	#if $h.__class__.__name__=="ListHandlerGroup":
+#echo ID_LIST.append(($r,$object[$r].classId))
+	#end if
+#end if
+#for i,hh in enumerate($h.handlers)
+#set nn=$hh.className
+#set n=$object[$r].classId+$i+(1 if $len($h.handlers)>1 else 0)+(1 if $h.__class__.__name__=="ListHandlerGroup" else 0)
+#echo ID_LIST.append(($nn,$n))
+#end for
+#end for
+
+
+
+PyObject * CAstToPyCAst(CAst::ReferenceCountedAutoPointer<CAst::CAst> pointer)
+{
+	if(pointer.isNull())Py_RETURN_NONE;
+	int id=pointer->classId();
+	LOG("Received object with id"<<id)
+	switch(id)
+	{
+#for typ,id in ID_LIST
+		case $id:
+		{
+			LOG(COL_FG_GREEN<<" Casting $typ with id $id to PyCAst_object_${typ}")
+			PyCAst_object_${typ} *pyObj=(PyCAst_object_${typ}*)PyCAst_new_${typ}(&PyCAst_type_${typ},NULL,NULL);
+			pyObj->_p_cast_object=pointer;
+			return (PyObject*)pyObj;
+		}
+#end for
+		default:
+		{
+			LOG(COL_FG_RED<<"INVALID ID")
+			Py_RETURN_NONE;
+		}
+	}
+	
+	
+}

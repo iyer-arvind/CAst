@@ -2,5 +2,5 @@
 $utils.pyClassCreator.stdClassSource($h)
 
 
-#set listCls={"className":$object.ruleName,"parameters":[]}
+#set listCls={"className":$object.ruleName,"parameters":[],"listClass":True}
 $utils.pyClassCreator.stdClassSource($listCls)

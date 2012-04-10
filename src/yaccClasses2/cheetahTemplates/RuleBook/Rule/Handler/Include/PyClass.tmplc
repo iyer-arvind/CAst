@@ -96,6 +96,43 @@ static int PyCAst_init_${name}(PyCAst_object_${name} *self, PyObject *args, PyOb
 #end def
 
 
+
+#def listLengthSource($object)
+#set name=$object.className
+$addToRegister("source",$name,"list.length")
+static Py_ssize_t PyCAst_list_length_${name}(PyObject *_self)
+{
+	PyCAst_object_${name} *self=(PyCAst_object_${name}*)(_self);
+	if(self->_p_cast_object.isNull())return 0;
+	return self->_p_cast_object->size();
+	
+}
+#end def
+
+#def listItemSource($object)
+#set name=$object.className
+$addToRegister("source",$name,"list.item")
+static PyObject* PyCAst_list_item_${name}(PyObject *_self,Py_ssize_t index)
+{
+	PyCAst_object_${name} *self=(PyCAst_object_${name}*)(_self);
+	if(self->_p_cast_object.isNull())Py_RETURN_NONE;
+	if(abs(index)>self->_p_cast_object->size()) PyErr_SetString(PyExc_IndexError,"Index out of range");
+	CAst::ReferenceCountedAutoPointer<CAst::${name}_item> item=self->_p_cast_object->operator[](index);
+	
+	return CAstToPyCAst(item);
+	##PyCAst_object_${name}_item *pyItem=(PyCAst_object_${name}_item *)PyCAst_new_${name}_item(&PyCAst_type_${name}_item,NULL,NULL);
+	##pyItem->_p_cast_object=item;
+	##return (PyObject*)pyItem;
+}
+
+#end def
+
+
+
+
+
+
+
 #def boolGetterSource($object,$propName,$funcName,$checkNull)
 #set name=$object.className
 static PyObject *PyCAst_getter_${name}_${propName}(PyObject *_self)
@@ -147,11 +184,37 @@ static PyObject *PyCAst_getter_${name}_${propName}(PyObject *_self)
 #end def
 
 
+#def castGetterSource($object,$propName,$typeName)
+#set name=$object.className
+static PyObject *PyCAst_getter_${name}_${propName}(PyObject *_self)
+{
+	PyCAst_object_${name} *self=(PyCAst_object_${name}*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_${propName}());
+	##PyCAst_object_${typeName} *pyObj=(PyCAst_object_${typeName}*)PyCAst_new_${typeName}(&PyCAst_type_${typeName},NULL,NULL);
+	##pyObj->_p_cast_object=self->_p_cast_object->p_${propName}();
+	##return (PyObject*)pyObj;
+}
+#end def
+
 #def stdAttributeSource($object)
 ##$stringGetterSource($object,"text","->text()",$True)
-$stringGetterSource($object,"code","->code()",True)
+$stringGetterSource($object,"code","->code()",$True)
 $boolGetterSource($object,"isNull",".isNull()",$False)
 $intGetterSource($object,"refCount",".refCount()",$True)
+#if object.__class__.__name__=="dict" 
+#if $object.has_key("listClass")
+$intGetterSource($object,"size","->size()",$True)
+#end if
+#else
+#for p in $object.parameters
+#if p.isIncluded
+$castGetterSource($object,$p.memName.replace("_p_",""),$p.parameterType.name)
+#end if
+#end for
+#end if 
 #end def
 
 
@@ -161,6 +224,12 @@ $intGetterSource($object,"refCount",".refCount()",$True)
 #if "noDeallocator" not in $noParts: 	$deallocSource($object)
 #if "noInit" not in $noParts: 	$initSource($object)
 #if "noStdAttribute" not in $noParts:	$stdAttributeSource($object)
+#if object.__class__.__name__=="dict" 
+#if $object.has_key("listClass")
+$listLengthSource($object)
+$listItemSource($object)
+#end if
+#end if
 #end def
 
 
@@ -195,6 +264,24 @@ $addToRegister("header",$name,"init")
 static int PyCAst_init_${name}(PyCAst_object_${name} *self, PyObject *args, PyObject *kwds);
 #end def
 
+
+#def listLengthHeader($object)
+#set name=$object.className
+$addToRegister("header",$name,"list.length")
+static Py_ssize_t PyCAst_list_length_${name}(PyObject *_self);
+#end def
+
+#def listItemHeader($object)
+#set name=$object.className
+$addToRegister("header",$name,"list.item")
+static PyObject* PyCAst_list_item_${name}(PyObject *_self,Py_ssize_t index);
+#end def
+
+
+
+
+
+
 #def  objectStructHeader($object)
 #set name=$object.className
 $addToRegister("header",$name,"objectStruct")
@@ -212,8 +299,6 @@ $addToRegister("header",$name,"getter."+$name+"_"+$propName)
 static PyObject *PyCAst_getter_${name}_${propName}(PyObject *_self);
 #end def
 
-
-
 #def stringGetterHeader($object,$propName)
 #set name=$object.className
 $addToRegister("header",$name,"getter."+$name+"_"+$propName)
@@ -226,26 +311,53 @@ $addToRegister("header",$name,"getter."+$name+"_"+$propName)
 static PyObject *PyCAst_getter_${name}_${propName}(PyObject *_self);
 #end def
 
-
-#def stdAttributeHeader($object)
-##$stringGetterHeader($object,"text")
-$stringGetterHeader($object,"code")
-$boolGetterHeader($object,"isNull")
-$intGetterHeader($object,"refCount")
+#def castGetterHeader($object,$propName)
+#set name=$object.className
+$addToRegister("header",$name,"getter."+$name+"_"+$propName)
+static PyObject *PyCAst_getter_${name}_${propName}(PyObject *_self);
 #end def
 
 
 
 
 
-#def stdClassHeader($object,$noParts=[])
-#if "noObjectStruct" 	not in $noParts: $objectStructHeader($object)
-#if "noNew" 		not in $noParts: $newHeader($object)
-#if "noDealloc" 	not in $noParts: $deallocHeader($object)
-#if "noInit" 		not in $noParts: $initHeader($object)
-#if "noStdAttribute" 	not in $noParts: $stdAttributeHeader($object)
-#if "noArrays" 		not in $noParts: $arraysHeader($object)
-#if "noTypeStruct" 	not in $noParts: $typeStructHeader($object)
+
+#def stdAttributeHeader($object)
+##$stringGetterHeader($object,"text")
+$stringGetterHeader($object,"code")
+$boolGetterHeader($object,"isNull")
+$intGetterHeader($object,"refCount")
+#if object.__class__.__name__=="dict" 
+#if $object.has_key("listClass")
+$intGetterHeader($object,"size")
+#end if
+#else
+#for p in $object.parameters
+#if p.isIncluded
+$castGetterHeader($object,$p.memName.replace("_p_",""))
+#end if
+#end for
+#end if 
+#end def
+
+
+
+
+
+#def stdClassHeader($object,$noParts=[],specialAttributes=[])
+#if "noObjectStruct" 		not in $noParts: $objectStructHeader($object)
+#if "noNew" 			not in $noParts: $newHeader($object)
+#if "noDealloc" 		not in $noParts: $deallocHeader($object)
+#if "noInit" 			not in $noParts: $initHeader($object)
+#if object.__class__.__name__=="dict" 
+#if $object.has_key("listClass")
+$listLengthHeader($object)
+$listItemHeader($object)
+#end if
+#end if 
+#if "noStdAttribute" 		not in $noParts: $stdAttributeHeader($object)
+#if "noArrays" 			not in $noParts: $arraysHeader($object)
+#if "noTypeStruct" 		not in $noParts: $typeStructHeader($object)
 #end def
 
 #def  arraysHeader($object)
@@ -270,7 +382,40 @@ static PyMemberDef PyCAst_members_$name [] =
 	};
 #end def
 
+
+
+#def listSuiteStruct($object)
+#set name=$object.className
+#set flags=$registry["header"][$name]
+static PySequenceMethods PyCAst_list_$object.className =
+{
+        /* sq_length        */ (lenfunc) ${ "PyCAst_list_length_"+$name if "list.length" in $flags else 0 },
+        /* sq_concat        */ 0,
+        /* sq_repeat        */ 0,
+        /* sq_item          */ (ssizeargfunc) ${ "PyCAst_list_item_"+$name if "list.item" in $flags else 0 },
+        /* sq_slice         */ 0,
+        /* sq_ass_item      */ 0,
+        /* sq_ass_slice     */ 0,
+        /* sq_contains      */ 0,
+        /* sq_inplace_concat*/ 0,
+        /* sq_inplace_repeat*/ 0
+} ;
+
+#end def
+
+
+
+
+
 #def  typeStructHeader($object)
+#set listSuite = 0
+#if object.__class__.__name__=="dict" 
+#if $object.has_key("listClass")
+$listSuiteStruct($object)
+#set listSuite = "&PyCAst_list_"+$object.className
+#end if
+#end if
+
 #set name=$object.className
 #set flags=$registry["header"][$name]
 #set new="PyCAst_new_"+$name if "new" in $flags else 0
@@ -293,7 +438,7 @@ static PyTypeObject  PyCAst_type_${name} =
 	/* tp_compare-----------*/      0,
 	/* tp_repr--------------*/      0,
 	/* tp_as_number---------*/      0,
-	/* tp_as_sequence-------*/      0,
+	/* tp_as_sequence-------*/      $listSuite,
 	/* tp_as_mapping--------*/      0,
 	/* tp_hash--------------*/      0,
 	/* tp_call--------------*/      0,

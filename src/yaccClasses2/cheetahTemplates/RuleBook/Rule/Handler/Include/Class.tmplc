@@ -71,7 +71,7 @@ class ${h.className}#echo ":public "+$h.parent if $h.parent else ""
                  * Returns the name of the class. Here, returns <b>"${h.className}"</b>
 		 * \returns <b>"${h.className}"</b>
                  */
-		virtual std::string name()const		{return std::string("${h.className}");}
+		virtual std::string name()const			{return std::string("${h.className}");}
 
 		/**
                  * \brief Returns the ID of the class
@@ -81,14 +81,34 @@ class ${h.className}#echo ":public "+$h.parent if $h.parent else ""
                  */
 		virtual CAST_CLASS_ID classId()const		{return ID_$h.className.upper();}
 
+
+
+#for p in $h.parameters:
+#if $p.isIncluded:
+		ReferenceCountedAutoPointer<$p.parameterType.name>& p_$p.memName.replace("_p_","")()
+		{
+			return $p.memName;
+		}
+
+		const ReferenceCountedAutoPointer<$p.parameterType.name>& p_$p.memName.replace("_p_","")()const
+		{
+			return $p.memName;
+		}
+#end if
+#end for
+
 		/**
-		 * \brief 
+		 * \brief Writes code to the code stream
 		 *
 		 *
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
 
 #if $h.parent is None
+		/** 
+                 * \brief Returns the code as a string
+		 *
+		 */
 		std::string code()const
 		{
 			std::stringstream stream;

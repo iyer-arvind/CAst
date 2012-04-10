@@ -9,7 +9,8 @@
 class $object.ruleName:public CAst
 {
 	public:
-		typedef std::list<ReferenceCountedAutoPointer<${object.ruleName}_item> > ${object.ruleName}ListType;	///< This defines the list type which will store the ${object.ruleName}_item
+		typedef ${object.ruleName}_item ItemType;
+		typedef std::vector<ReferenceCountedAutoPointer< ItemType > > ${object.ruleName}ListType;	///< This defines the list type which will store the ${object.ruleName}_item
 		typedef ${object.ruleName}ListType::iterator ${object.ruleName}IterType;				///< This defines the iterator over ${object.ruleName}ListType
 		typedef ${object.ruleName}ListType::const_iterator C${object.ruleName}IterType;				///< This defines the constant iterator over ${object.ruleName}ListType
 
@@ -47,9 +48,13 @@ class $object.ruleName:public CAst
 		void prepend( ReferenceCountedAutoPointer<${object.ruleName}_item> item)
 		{
 			LOG(COL_FG_GREEN<<"Prepending to $object.ruleName: "<<this)
-			_itemList.push_front(item);
+			_itemList.insert(_itemList.begin(),item);
 		}
 		
+		int size()const
+		{
+			return _itemList.size();
+		}
 		/**
                  * \brief Returns the name of the class.
                  *
@@ -67,6 +72,29 @@ class $object.ruleName:public CAst
 		virtual CAST_CLASS_ID classId()const		{return ID_$object.ruleName.upper();}
 
 
+		ReferenceCountedAutoPointer<ItemType>& operator[](int i)
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+		const ReferenceCountedAutoPointer<ItemType>& operator[](int i)const
+		{
+			if(i<0)i+=_itemList.size(); 
+			if(i<0 or i>=_itemList.size()) 
+				throw IndexError(); 
+			return _itemList[i];
+		}
+
+
+
+		/**
+		 * \brief Writes code to the code stream
+		 *
+		 *
+		 */
 		virtual std::ostream& codeStream(std::ostream& stream)const
 		{
 			for(C${object.ruleName}IterType i=_itemList.begin();i!=_itemList.end();i++)

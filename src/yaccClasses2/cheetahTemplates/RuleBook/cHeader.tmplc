@@ -1,7 +1,8 @@
 \#ifndef CAST_HEADER_INCLUDED
 \#define CAST_HEADER_INCLUDED
 \#include <string>
-\#include <list>
+\#include <vector>
+\#include <exception>
 \#include <assert.h>
 \#include <iostream>
 \#include <sstream>
@@ -21,6 +22,15 @@
 
 namespace CAst
 {
+
+class IndexError: public std::exception
+{
+  virtual const char* what() const throw()
+  {
+    return "Index out of range";
+  }
+};
+
 
 //! This is the enumeration of the class ids 
 #set ID_LIST=[("ID_CAST",0),("ID_TOKEN",1)]
@@ -160,18 +170,18 @@ class ReferenceCountedAutoPointer
 		
 		}
 
-		//template<typename Y>
-		//friend class ReferenceCountedAutoPointer<Y>;
+		template<typename Y>
+		friend class ReferenceCountedAutoPointer;
 
-		//template<typename Y>
-		//ReferenceCountedAutoPointer(const ReferenceCountedAutoPointer<Y>&other ):
-		//		__data(0),
-		//		__refCount(0)
-		//{
-		//	__data=dynamic_cast<DataType*>(other.__data);
-		//	__refCount=other.__refCount;
-		//	__refCountUp();
-		//}
+		template<typename Y>
+		ReferenceCountedAutoPointer(const ReferenceCountedAutoPointer<Y>&other ):
+				__data(0),
+				__refCount(0)
+		{
+			__data=dynamic_cast<DataType*>(other.__data);
+			__refCount=other.__refCount;
+			__refCountUp();
+		}
 
 		/**
 		 * \brief Assignment operator
@@ -185,7 +195,14 @@ class ReferenceCountedAutoPointer
 			__data=other.__data;
 			__refCountUp();
 		}
-
+		template<typename Y>
+		ReferenceCountedAutoPointer& operator=(const ReferenceCountedAutoPointer<Y>&other)
+		{
+			__clear();
+			__refCount=other.__refCount;
+			__data=dynamic_cast<DataType*>(other.__data);
+			__refCountUp();
+		}
 		/**
 		 * \brief Returns the reference count
 		 */

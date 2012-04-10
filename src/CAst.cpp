@@ -142,79 +142,6 @@ CAST_CLASS_ID unary_expression_1::ID=ID_UNARY_EXPRESSION_1;
 
 unary_expression_1::unary_expression_1
 	(
-		ReferenceCountedAutoPointer<unary_operator> _arg_unary_operator,
-		ReferenceCountedAutoPointer<cast_expression> _arg_cast_expression
-	):
-		unary_expression() ,
-		_p_unary_operator(_arg_unary_operator),
-		_p_cast_expression(_arg_cast_expression)
-{
-	LOG(COL_FG_GREEN<<"Created object of unary_expression_1: "<<this)
-}
-
-
-std::ostream& unary_expression_1::codeStream(std::ostream& stream)const
-{
-	if( ! _p_unary_operator.isNull()){_p_unary_operator->codeStream(stream);}
-
-	if( ! _p_cast_expression.isNull()){_p_cast_expression->codeStream(stream);}
-
-	return stream;
-}
-
-
-CAST_CLASS_ID unary_expression_2::ID=ID_UNARY_EXPRESSION_2;
-
-unary_expression_2::unary_expression_2
-	(
-		ReferenceCountedAutoPointer<type_name> _arg_type_name
-	):
-		unary_expression() ,
-		_p_type_name(_arg_type_name)
-{
-	LOG(COL_FG_GREEN<<"Created object of unary_expression_2: "<<this)
-}
-
-
-std::ostream& unary_expression_2::codeStream(std::ostream& stream)const
-{
-	stream<<"sizeof ";
-
-	stream<<"( ";
-
-	if( ! _p_type_name.isNull()){_p_type_name->codeStream(stream);}
-
-	stream<<") ";
-
-	return stream;
-}
-
-
-CAST_CLASS_ID unary_expression_3::ID=ID_UNARY_EXPRESSION_3;
-
-unary_expression_3::unary_expression_3
-	(
-		ReferenceCountedAutoPointer<postfix_expression> _arg_postfix_expression
-	):
-		unary_expression() ,
-		_p_postfix_expression(_arg_postfix_expression)
-{
-	LOG(COL_FG_GREEN<<"Created object of unary_expression_3: "<<this)
-}
-
-
-std::ostream& unary_expression_3::codeStream(std::ostream& stream)const
-{
-	if( ! _p_postfix_expression.isNull()){_p_postfix_expression->codeStream(stream);}
-
-	return stream;
-}
-
-
-CAST_CLASS_ID unary_expression_4::ID=ID_UNARY_EXPRESSION_4;
-
-unary_expression_4::unary_expression_4
-	(
 		ReferenceCountedAutoPointer<token> _arg_token,
 		ReferenceCountedAutoPointer<unary_expression> _arg_unary_expression
 	):
@@ -224,15 +151,88 @@ unary_expression_4::unary_expression_4
 {
 	AssertTokenType(_p_token->text()=="++"||_p_token->text()=="--"||_p_token->text()=="sizeof")
 	AssertNotNullRule(_p_token)
+	LOG(COL_FG_GREEN<<"Created object of unary_expression_1: "<<this)
+}
+
+
+std::ostream& unary_expression_1::codeStream(std::ostream& stream)const
+{
+	if( ! _p_token.isNull()){_p_token->codeStream(stream);}
+
+	if( ! _p_unary_expression.isNull()){_p_unary_expression->codeStream(stream);}
+
+	return stream;
+}
+
+
+CAST_CLASS_ID unary_expression_2::ID=ID_UNARY_EXPRESSION_2;
+
+unary_expression_2::unary_expression_2
+	(
+		ReferenceCountedAutoPointer<postfix_expression> _arg_postfix_expression
+	):
+		unary_expression() ,
+		_p_postfix_expression(_arg_postfix_expression)
+{
+	LOG(COL_FG_GREEN<<"Created object of unary_expression_2: "<<this)
+}
+
+
+std::ostream& unary_expression_2::codeStream(std::ostream& stream)const
+{
+	if( ! _p_postfix_expression.isNull()){_p_postfix_expression->codeStream(stream);}
+
+	return stream;
+}
+
+
+CAST_CLASS_ID unary_expression_3::ID=ID_UNARY_EXPRESSION_3;
+
+unary_expression_3::unary_expression_3
+	(
+		ReferenceCountedAutoPointer<unary_operator> _arg_unary_operator,
+		ReferenceCountedAutoPointer<cast_expression> _arg_cast_expression
+	):
+		unary_expression() ,
+		_p_unary_operator(_arg_unary_operator),
+		_p_cast_expression(_arg_cast_expression)
+{
+	LOG(COL_FG_GREEN<<"Created object of unary_expression_3: "<<this)
+}
+
+
+std::ostream& unary_expression_3::codeStream(std::ostream& stream)const
+{
+	if( ! _p_unary_operator.isNull()){_p_unary_operator->codeStream(stream);}
+
+	if( ! _p_cast_expression.isNull()){_p_cast_expression->codeStream(stream);}
+
+	return stream;
+}
+
+
+CAST_CLASS_ID unary_expression_4::ID=ID_UNARY_EXPRESSION_4;
+
+unary_expression_4::unary_expression_4
+	(
+		ReferenceCountedAutoPointer<type_name> _arg_type_name
+	):
+		unary_expression() ,
+		_p_type_name(_arg_type_name)
+{
 	LOG(COL_FG_GREEN<<"Created object of unary_expression_4: "<<this)
 }
 
 
 std::ostream& unary_expression_4::codeStream(std::ostream& stream)const
 {
-	if( ! _p_token.isNull()){_p_token->codeStream(stream);}
+	stream<<"sizeof ";
 
-	if( ! _p_unary_expression.isNull()){_p_unary_expression->codeStream(stream);}
+	stream<<"( ";
+
+	if( ! _p_type_name.isNull()){_p_type_name->codeStream(stream);}
+
+	stream<<") ";
 
 	return stream;
 }
@@ -429,18 +429,27 @@ CAST_CLASS_ID initializer_1::ID=ID_INITIALIZER_1;
 
 initializer_1::initializer_1
 	(
-		ReferenceCountedAutoPointer<assignment_expression> _arg_assignment_expression
+		ReferenceCountedAutoPointer<initializer_list> _arg_initializer_list,
+		ReferenceCountedAutoPointer<token> _arg_token
 	):
 		initializer() ,
-		_p_assignment_expression(_arg_assignment_expression)
+		_p_initializer_list(_arg_initializer_list),
+		_p_token(_arg_token)
 {
+	AssertTokenType(_p_token.isNull()||_p_token->text()==",")
 	LOG(COL_FG_GREEN<<"Created object of initializer_1: "<<this)
 }
 
 
 std::ostream& initializer_1::codeStream(std::ostream& stream)const
 {
-	if( ! _p_assignment_expression.isNull()){_p_assignment_expression->codeStream(stream);}
+	stream<<"{ ";
+
+	if( ! _p_initializer_list.isNull()){_p_initializer_list->codeStream(stream);}
+
+	if( ! _p_token.isNull()){_p_token->codeStream(stream);}
+
+	stream<<"} ";
 
 	return stream;
 }
@@ -450,27 +459,18 @@ CAST_CLASS_ID initializer_2::ID=ID_INITIALIZER_2;
 
 initializer_2::initializer_2
 	(
-		ReferenceCountedAutoPointer<initializer_list> _arg_initializer_list,
-		ReferenceCountedAutoPointer<token> _arg_token
+		ReferenceCountedAutoPointer<assignment_expression> _arg_assignment_expression
 	):
 		initializer() ,
-		_p_initializer_list(_arg_initializer_list),
-		_p_token(_arg_token)
+		_p_assignment_expression(_arg_assignment_expression)
 {
-	AssertTokenType(_p_token.isNull()||_p_token->text()==",")
 	LOG(COL_FG_GREEN<<"Created object of initializer_2: "<<this)
 }
 
 
 std::ostream& initializer_2::codeStream(std::ostream& stream)const
 {
-	stream<<"{ ";
-
-	if( ! _p_initializer_list.isNull()){_p_initializer_list->codeStream(stream);}
-
-	if( ! _p_token.isNull()){_p_token->codeStream(stream);}
-
-	stream<<"} ";
+	if( ! _p_assignment_expression.isNull()){_p_assignment_expression->codeStream(stream);}
 
 	return stream;
 }
@@ -549,7 +549,7 @@ assignment_operator::assignment_operator
 		CAst() ,
 		_p_token(_arg_token)
 {
-	AssertTokenType(_p_token->text()=="="||_p_token->text()=="%="||_p_token->text()=="+="||_p_token->text()=="-="||_p_token->text()=="<<="||_p_token->text()==">>="||_p_token->text()=="/="||_p_token->text()=="&="||_p_token->text()=="^="||_p_token->text()=="|="||_p_token->text()=="*=")
+	AssertTokenType(_p_token->text()=="/="||_p_token->text()=="%="||_p_token->text()=="+="||_p_token->text()=="-="||_p_token->text()=="<<="||_p_token->text()==">>="||_p_token->text()=="&="||_p_token->text()=="^="||_p_token->text()=="|="||_p_token->text()=="="||_p_token->text()=="*=")
 	AssertNotNullRule(_p_token)
 	LOG(COL_FG_GREEN<<"Created object of assignment_operator: "<<this)
 }
@@ -677,10 +677,14 @@ CAST_CLASS_ID iteration_statement_1::ID=ID_ITERATION_STATEMENT_1;
 
 iteration_statement_1::iteration_statement_1
 	(
+		ReferenceCountedAutoPointer<expression_statement> _arg_expression_statement1,
+		ReferenceCountedAutoPointer<expression_statement> _arg_expression_statement2,
 		ReferenceCountedAutoPointer<expression> _arg_expression,
 		ReferenceCountedAutoPointer<statement> _arg_statement
 	):
 		iteration_statement() ,
+		_p_expression_statement1(_arg_expression_statement1),
+		_p_expression_statement2(_arg_expression_statement2),
 		_p_expression(_arg_expression),
 		_p_statement(_arg_statement)
 {
@@ -690,9 +694,13 @@ iteration_statement_1::iteration_statement_1
 
 std::ostream& iteration_statement_1::codeStream(std::ostream& stream)const
 {
-	stream<<"while ";
+	stream<<"for ";
 
 	stream<<"( ";
+
+	if( ! _p_expression_statement1.isNull()){_p_expression_statement1->codeStream(stream);}
+
+	if( ! _p_expression_statement2.isNull()){_p_expression_statement2->codeStream(stream);}
 
 	if( ! _p_expression.isNull()){_p_expression->codeStream(stream);}
 
@@ -708,6 +716,37 @@ CAST_CLASS_ID iteration_statement_2::ID=ID_ITERATION_STATEMENT_2;
 
 iteration_statement_2::iteration_statement_2
 	(
+		ReferenceCountedAutoPointer<expression> _arg_expression,
+		ReferenceCountedAutoPointer<statement> _arg_statement
+	):
+		iteration_statement() ,
+		_p_expression(_arg_expression),
+		_p_statement(_arg_statement)
+{
+	LOG(COL_FG_GREEN<<"Created object of iteration_statement_2: "<<this)
+}
+
+
+std::ostream& iteration_statement_2::codeStream(std::ostream& stream)const
+{
+	stream<<"while ";
+
+	stream<<"( ";
+
+	if( ! _p_expression.isNull()){_p_expression->codeStream(stream);}
+
+	stream<<") ";
+
+	if( ! _p_statement.isNull()){_p_statement->codeStream(stream);}
+
+	return stream;
+}
+
+
+CAST_CLASS_ID iteration_statement_3::ID=ID_ITERATION_STATEMENT_3;
+
+iteration_statement_3::iteration_statement_3
+	(
 		ReferenceCountedAutoPointer<statement> _arg_statement,
 		ReferenceCountedAutoPointer<expression> _arg_expression
 	):
@@ -715,11 +754,11 @@ iteration_statement_2::iteration_statement_2
 		_p_statement(_arg_statement),
 		_p_expression(_arg_expression)
 {
-	LOG(COL_FG_GREEN<<"Created object of iteration_statement_2: "<<this)
+	LOG(COL_FG_GREEN<<"Created object of iteration_statement_3: "<<this)
 }
 
 
-std::ostream& iteration_statement_2::codeStream(std::ostream& stream)const
+std::ostream& iteration_statement_3::codeStream(std::ostream& stream)const
 {
 	stream<<"do ";
 
@@ -734,45 +773,6 @@ std::ostream& iteration_statement_2::codeStream(std::ostream& stream)const
 	stream<<") ";
 
 	stream<<"; ";
-
-	return stream;
-}
-
-
-CAST_CLASS_ID iteration_statement_3::ID=ID_ITERATION_STATEMENT_3;
-
-iteration_statement_3::iteration_statement_3
-	(
-		ReferenceCountedAutoPointer<expression_statement> _arg_expression_statement1,
-		ReferenceCountedAutoPointer<expression_statement> _arg_expression_statement2,
-		ReferenceCountedAutoPointer<expression> _arg_expression,
-		ReferenceCountedAutoPointer<statement> _arg_statement
-	):
-		iteration_statement() ,
-		_p_expression_statement1(_arg_expression_statement1),
-		_p_expression_statement2(_arg_expression_statement2),
-		_p_expression(_arg_expression),
-		_p_statement(_arg_statement)
-{
-	LOG(COL_FG_GREEN<<"Created object of iteration_statement_3: "<<this)
-}
-
-
-std::ostream& iteration_statement_3::codeStream(std::ostream& stream)const
-{
-	stream<<"for ";
-
-	stream<<"( ";
-
-	if( ! _p_expression_statement1.isNull()){_p_expression_statement1->codeStream(stream);}
-
-	if( ! _p_expression_statement2.isNull()){_p_expression_statement2->codeStream(stream);}
-
-	if( ! _p_expression.isNull()){_p_expression->codeStream(stream);}
-
-	stream<<") ";
-
-	if( ! _p_statement.isNull()){_p_statement->codeStream(stream);}
 
 	return stream;
 }
@@ -852,10 +852,10 @@ CAST_CLASS_ID external_declaration_1::ID=ID_EXTERNAL_DECLARATION_1;
 
 external_declaration_1::external_declaration_1
 	(
-		ReferenceCountedAutoPointer<function_definition> _arg_function_definition
+		ReferenceCountedAutoPointer<declaration> _arg_declaration
 	):
 		external_declaration() ,
-		_p_function_definition(_arg_function_definition)
+		_p_declaration(_arg_declaration)
 {
 	LOG(COL_FG_GREEN<<"Created object of external_declaration_1: "<<this)
 }
@@ -863,7 +863,7 @@ external_declaration_1::external_declaration_1
 
 std::ostream& external_declaration_1::codeStream(std::ostream& stream)const
 {
-	if( ! _p_function_definition.isNull()){_p_function_definition->codeStream(stream);}
+	if( ! _p_declaration.isNull()){_p_declaration->codeStream(stream);}
 
 	return stream;
 }
@@ -873,10 +873,10 @@ CAST_CLASS_ID external_declaration_2::ID=ID_EXTERNAL_DECLARATION_2;
 
 external_declaration_2::external_declaration_2
 	(
-		ReferenceCountedAutoPointer<declaration> _arg_declaration
+		ReferenceCountedAutoPointer<function_definition> _arg_function_definition
 	):
 		external_declaration() ,
-		_p_declaration(_arg_declaration)
+		_p_function_definition(_arg_function_definition)
 {
 	LOG(COL_FG_GREEN<<"Created object of external_declaration_2: "<<this)
 }
@@ -884,7 +884,7 @@ external_declaration_2::external_declaration_2
 
 std::ostream& external_declaration_2::codeStream(std::ostream& stream)const
 {
-	if( ! _p_declaration.isNull()){_p_declaration->codeStream(stream);}
+	if( ! _p_function_definition.isNull()){_p_function_definition->codeStream(stream);}
 
 	return stream;
 }
@@ -1097,10 +1097,10 @@ CAST_CLASS_ID pointer_item_1::ID=ID_POINTER_ITEM_1;
 
 pointer_item_1::pointer_item_1
 	(
-		ReferenceCountedAutoPointer<type_qualifier_list> _arg_type_qualifier_list
+		
 	):
-		pointer_item() ,
-		_p_type_qualifier_list(_arg_type_qualifier_list)
+		pointer_item() 
+		
 {
 	LOG(COL_FG_GREEN<<"Created object of pointer_item_1: "<<this)
 }
@@ -1109,8 +1109,6 @@ pointer_item_1::pointer_item_1
 std::ostream& pointer_item_1::codeStream(std::ostream& stream)const
 {
 	stream<<"* ";
-
-	if( ! _p_type_qualifier_list.isNull()){_p_type_qualifier_list->codeStream(stream);}
 
 	
 
@@ -1122,10 +1120,10 @@ CAST_CLASS_ID pointer_item_2::ID=ID_POINTER_ITEM_2;
 
 pointer_item_2::pointer_item_2
 	(
-		
+		ReferenceCountedAutoPointer<type_qualifier_list> _arg_type_qualifier_list
 	):
-		pointer_item() 
-		
+		pointer_item() ,
+		_p_type_qualifier_list(_arg_type_qualifier_list)
 {
 	LOG(COL_FG_GREEN<<"Created object of pointer_item_2: "<<this)
 }
@@ -1134,6 +1132,8 @@ pointer_item_2::pointer_item_2
 std::ostream& pointer_item_2::codeStream(std::ostream& stream)const
 {
 	stream<<"* ";
+
+	if( ! _p_type_qualifier_list.isNull()){_p_type_qualifier_list->codeStream(stream);}
 
 	
 
@@ -1258,10 +1258,12 @@ CAST_CLASS_ID postfix_expression_1::ID=ID_POSTFIX_EXPRESSION_1;
 
 postfix_expression_1::postfix_expression_1
 	(
-		ReferenceCountedAutoPointer<primary_expression> _arg_primary_expression
+		ReferenceCountedAutoPointer<postfix_expression> _arg_postfix_expression,
+		ReferenceCountedAutoPointer<argument_expression_list> _arg_argument_expression_list
 	):
 		postfix_expression() ,
-		_p_primary_expression(_arg_primary_expression)
+		_p_postfix_expression(_arg_postfix_expression),
+		_p_argument_expression_list(_arg_argument_expression_list)
 {
 	LOG(COL_FG_GREEN<<"Created object of postfix_expression_1: "<<this)
 }
@@ -1269,7 +1271,13 @@ postfix_expression_1::postfix_expression_1
 
 std::ostream& postfix_expression_1::codeStream(std::ostream& stream)const
 {
-	if( ! _p_primary_expression.isNull()){_p_primary_expression->codeStream(stream);}
+	if( ! _p_postfix_expression.isNull()){_p_postfix_expression->codeStream(stream);}
+
+	stream<<"( ";
+
+	if( ! _p_argument_expression_list.isNull()){_p_argument_expression_list->codeStream(stream);}
+
+	stream<<") ";
 
 	return stream;
 }
@@ -1278,62 +1286,6 @@ std::ostream& postfix_expression_1::codeStream(std::ostream& stream)const
 CAST_CLASS_ID postfix_expression_2::ID=ID_POSTFIX_EXPRESSION_2;
 
 postfix_expression_2::postfix_expression_2
-	(
-		ReferenceCountedAutoPointer<postfix_expression> _arg_postfix_expression,
-		ReferenceCountedAutoPointer<token> _arg_token
-	):
-		postfix_expression() ,
-		_p_postfix_expression(_arg_postfix_expression),
-		_p_token(_arg_token)
-{
-	AssertTokenType(_p_token->text()=="++"||_p_token->text()=="--")
-	AssertNotNullRule(_p_token)
-	LOG(COL_FG_GREEN<<"Created object of postfix_expression_2: "<<this)
-}
-
-
-std::ostream& postfix_expression_2::codeStream(std::ostream& stream)const
-{
-	if( ! _p_postfix_expression.isNull()){_p_postfix_expression->codeStream(stream);}
-
-	if( ! _p_token.isNull()){_p_token->codeStream(stream);}
-
-	return stream;
-}
-
-
-CAST_CLASS_ID postfix_expression_3::ID=ID_POSTFIX_EXPRESSION_3;
-
-postfix_expression_3::postfix_expression_3
-	(
-		ReferenceCountedAutoPointer<postfix_expression> _arg_postfix_expression,
-		ReferenceCountedAutoPointer<expression> _arg_expression
-	):
-		postfix_expression() ,
-		_p_postfix_expression(_arg_postfix_expression),
-		_p_expression(_arg_expression)
-{
-	LOG(COL_FG_GREEN<<"Created object of postfix_expression_3: "<<this)
-}
-
-
-std::ostream& postfix_expression_3::codeStream(std::ostream& stream)const
-{
-	if( ! _p_postfix_expression.isNull()){_p_postfix_expression->codeStream(stream);}
-
-	stream<<"[ ";
-
-	if( ! _p_expression.isNull()){_p_expression->codeStream(stream);}
-
-	stream<<"] ";
-
-	return stream;
-}
-
-
-CAST_CLASS_ID postfix_expression_4::ID=ID_POSTFIX_EXPRESSION_4;
-
-postfix_expression_4::postfix_expression_4
 	(
 		ReferenceCountedAutoPointer<postfix_expression> _arg_postfix_expression,
 		ReferenceCountedAutoPointer<token> _arg_token1,
@@ -1347,11 +1299,11 @@ postfix_expression_4::postfix_expression_4
 	AssertTokenType(_p_token1->text()=="->"||_p_token1->text()==".")
 	AssertNotNullRule(_p_token1)
 	AssertNotNullRule(_p_token2)
-	LOG(COL_FG_GREEN<<"Created object of postfix_expression_4: "<<this)
+	LOG(COL_FG_GREEN<<"Created object of postfix_expression_2: "<<this)
 }
 
 
-std::ostream& postfix_expression_4::codeStream(std::ostream& stream)const
+std::ostream& postfix_expression_2::codeStream(std::ostream& stream)const
 {
 	if( ! _p_postfix_expression.isNull()){_p_postfix_expression->codeStream(stream);}
 
@@ -1363,16 +1315,64 @@ std::ostream& postfix_expression_4::codeStream(std::ostream& stream)const
 }
 
 
+CAST_CLASS_ID postfix_expression_3::ID=ID_POSTFIX_EXPRESSION_3;
+
+postfix_expression_3::postfix_expression_3
+	(
+		ReferenceCountedAutoPointer<primary_expression> _arg_primary_expression
+	):
+		postfix_expression() ,
+		_p_primary_expression(_arg_primary_expression)
+{
+	LOG(COL_FG_GREEN<<"Created object of postfix_expression_3: "<<this)
+}
+
+
+std::ostream& postfix_expression_3::codeStream(std::ostream& stream)const
+{
+	if( ! _p_primary_expression.isNull()){_p_primary_expression->codeStream(stream);}
+
+	return stream;
+}
+
+
+CAST_CLASS_ID postfix_expression_4::ID=ID_POSTFIX_EXPRESSION_4;
+
+postfix_expression_4::postfix_expression_4
+	(
+		ReferenceCountedAutoPointer<postfix_expression> _arg_postfix_expression,
+		ReferenceCountedAutoPointer<token> _arg_token
+	):
+		postfix_expression() ,
+		_p_postfix_expression(_arg_postfix_expression),
+		_p_token(_arg_token)
+{
+	AssertTokenType(_p_token->text()=="++"||_p_token->text()=="--")
+	AssertNotNullRule(_p_token)
+	LOG(COL_FG_GREEN<<"Created object of postfix_expression_4: "<<this)
+}
+
+
+std::ostream& postfix_expression_4::codeStream(std::ostream& stream)const
+{
+	if( ! _p_postfix_expression.isNull()){_p_postfix_expression->codeStream(stream);}
+
+	if( ! _p_token.isNull()){_p_token->codeStream(stream);}
+
+	return stream;
+}
+
+
 CAST_CLASS_ID postfix_expression_5::ID=ID_POSTFIX_EXPRESSION_5;
 
 postfix_expression_5::postfix_expression_5
 	(
 		ReferenceCountedAutoPointer<postfix_expression> _arg_postfix_expression,
-		ReferenceCountedAutoPointer<argument_expression_list> _arg_argument_expression_list
+		ReferenceCountedAutoPointer<expression> _arg_expression
 	):
 		postfix_expression() ,
 		_p_postfix_expression(_arg_postfix_expression),
-		_p_argument_expression_list(_arg_argument_expression_list)
+		_p_expression(_arg_expression)
 {
 	LOG(COL_FG_GREEN<<"Created object of postfix_expression_5: "<<this)
 }
@@ -1382,11 +1382,11 @@ std::ostream& postfix_expression_5::codeStream(std::ostream& stream)const
 {
 	if( ! _p_postfix_expression.isNull()){_p_postfix_expression->codeStream(stream);}
 
-	stream<<"( ";
+	stream<<"[ ";
 
-	if( ! _p_argument_expression_list.isNull()){_p_argument_expression_list->codeStream(stream);}
+	if( ! _p_expression.isNull()){_p_expression->codeStream(stream);}
 
-	stream<<") ";
+	stream<<"] ";
 
 	return stream;
 }
@@ -1880,7 +1880,7 @@ relational_expression_item::relational_expression_item
 		_p_token(_arg_token),
 		_p_shift_expression(_arg_shift_expression)
 {
-	AssertTokenType(_p_token.isNull()||_p_token->text()=="<"||_p_token->text()==">"||_p_token->text()==">="||_p_token->text()=="<=")
+	AssertTokenType(_p_token.isNull()||_p_token->text()==">="||_p_token->text()=="<="||_p_token->text()=="<"||_p_token->text()==">")
 	LOG(COL_FG_GREEN<<"Created object of relational_expression_item: "<<this)
 }
 
@@ -2015,14 +2015,10 @@ CAST_CLASS_ID assignment_expression_1::ID=ID_ASSIGNMENT_EXPRESSION_1;
 
 assignment_expression_1::assignment_expression_1
 	(
-		ReferenceCountedAutoPointer<unary_expression> _arg_unary_expression,
-		ReferenceCountedAutoPointer<assignment_operator> _arg_assignment_operator,
-		ReferenceCountedAutoPointer<assignment_expression> _arg_assignment_expression
+		ReferenceCountedAutoPointer<conditional_expression> _arg_conditional_expression
 	):
 		assignment_expression() ,
-		_p_unary_expression(_arg_unary_expression),
-		_p_assignment_operator(_arg_assignment_operator),
-		_p_assignment_expression(_arg_assignment_expression)
+		_p_conditional_expression(_arg_conditional_expression)
 {
 	LOG(COL_FG_GREEN<<"Created object of assignment_expression_1: "<<this)
 }
@@ -2030,11 +2026,7 @@ assignment_expression_1::assignment_expression_1
 
 std::ostream& assignment_expression_1::codeStream(std::ostream& stream)const
 {
-	if( ! _p_unary_expression.isNull()){_p_unary_expression->codeStream(stream);}
-
-	if( ! _p_assignment_operator.isNull()){_p_assignment_operator->codeStream(stream);}
-
-	if( ! _p_assignment_expression.isNull()){_p_assignment_expression->codeStream(stream);}
+	if( ! _p_conditional_expression.isNull()){_p_conditional_expression->codeStream(stream);}
 
 	return stream;
 }
@@ -2044,10 +2036,14 @@ CAST_CLASS_ID assignment_expression_2::ID=ID_ASSIGNMENT_EXPRESSION_2;
 
 assignment_expression_2::assignment_expression_2
 	(
-		ReferenceCountedAutoPointer<conditional_expression> _arg_conditional_expression
+		ReferenceCountedAutoPointer<unary_expression> _arg_unary_expression,
+		ReferenceCountedAutoPointer<assignment_operator> _arg_assignment_operator,
+		ReferenceCountedAutoPointer<assignment_expression> _arg_assignment_expression
 	):
 		assignment_expression() ,
-		_p_conditional_expression(_arg_conditional_expression)
+		_p_unary_expression(_arg_unary_expression),
+		_p_assignment_operator(_arg_assignment_operator),
+		_p_assignment_expression(_arg_assignment_expression)
 {
 	LOG(COL_FG_GREEN<<"Created object of assignment_expression_2: "<<this)
 }
@@ -2055,7 +2051,11 @@ assignment_expression_2::assignment_expression_2
 
 std::ostream& assignment_expression_2::codeStream(std::ostream& stream)const
 {
-	if( ! _p_conditional_expression.isNull()){_p_conditional_expression->codeStream(stream);}
+	if( ! _p_unary_expression.isNull()){_p_unary_expression->codeStream(stream);}
+
+	if( ! _p_assignment_operator.isNull()){_p_assignment_operator->codeStream(stream);}
+
+	if( ! _p_assignment_expression.isNull()){_p_assignment_expression->codeStream(stream);}
 
 	return stream;
 }
@@ -2136,11 +2136,11 @@ CAST_CLASS_ID parameter_declaration_1::ID=ID_PARAMETER_DECLARATION_1;
 parameter_declaration_1::parameter_declaration_1
 	(
 		ReferenceCountedAutoPointer<declaration_specifiers> _arg_declaration_specifiers,
-		ReferenceCountedAutoPointer<declarator> _arg_declarator
+		ReferenceCountedAutoPointer<abstract_declarator> _arg_abstract_declarator
 	):
 		parameter_declaration() ,
 		_p_declaration_specifiers(_arg_declaration_specifiers),
-		_p_declarator(_arg_declarator)
+		_p_abstract_declarator(_arg_abstract_declarator)
 {
 	LOG(COL_FG_GREEN<<"Created object of parameter_declaration_1: "<<this)
 }
@@ -2150,7 +2150,7 @@ std::ostream& parameter_declaration_1::codeStream(std::ostream& stream)const
 {
 	if( ! _p_declaration_specifiers.isNull()){_p_declaration_specifiers->codeStream(stream);}
 
-	if( ! _p_declarator.isNull()){_p_declarator->codeStream(stream);}
+	if( ! _p_abstract_declarator.isNull()){_p_abstract_declarator->codeStream(stream);}
 
 	return stream;
 }
@@ -2161,11 +2161,11 @@ CAST_CLASS_ID parameter_declaration_2::ID=ID_PARAMETER_DECLARATION_2;
 parameter_declaration_2::parameter_declaration_2
 	(
 		ReferenceCountedAutoPointer<declaration_specifiers> _arg_declaration_specifiers,
-		ReferenceCountedAutoPointer<abstract_declarator> _arg_abstract_declarator
+		ReferenceCountedAutoPointer<declarator> _arg_declarator
 	):
 		parameter_declaration() ,
 		_p_declaration_specifiers(_arg_declaration_specifiers),
-		_p_abstract_declarator(_arg_abstract_declarator)
+		_p_declarator(_arg_declarator)
 {
 	LOG(COL_FG_GREEN<<"Created object of parameter_declaration_2: "<<this)
 }
@@ -2175,7 +2175,7 @@ std::ostream& parameter_declaration_2::codeStream(std::ostream& stream)const
 {
 	if( ! _p_declaration_specifiers.isNull()){_p_declaration_specifiers->codeStream(stream);}
 
-	if( ! _p_abstract_declarator.isNull()){_p_abstract_declarator->codeStream(stream);}
+	if( ! _p_declarator.isNull()){_p_declarator->codeStream(stream);}
 
 	return stream;
 }
@@ -2212,7 +2212,7 @@ multiplicative_expression_item::multiplicative_expression_item
 		_p_token(_arg_token),
 		_p_cast_expression(_arg_cast_expression)
 {
-	AssertTokenType(_p_token.isNull()||_p_token->text()=="/"||_p_token->text()=="*"||_p_token->text()=="%")
+	AssertTokenType(_p_token.isNull()||_p_token->text()=="*"||_p_token->text()=="/"||_p_token->text()=="%")
 	LOG(COL_FG_GREEN<<"Created object of multiplicative_expression_item: "<<this)
 }
 
@@ -2503,22 +2503,19 @@ CAST_CLASS_ID primary_expression_1::ID=ID_PRIMARY_EXPRESSION_1;
 
 primary_expression_1::primary_expression_1
 	(
-		ReferenceCountedAutoPointer<expression> _arg_expression
+		ReferenceCountedAutoPointer<token> _arg_token
 	):
 		primary_expression() ,
-		_p_expression(_arg_expression)
+		_p_token(_arg_token)
 {
+	AssertNotNullRule(_p_token)
 	LOG(COL_FG_GREEN<<"Created object of primary_expression_1: "<<this)
 }
 
 
 std::ostream& primary_expression_1::codeStream(std::ostream& stream)const
 {
-	stream<<"( ";
-
-	if( ! _p_expression.isNull()){_p_expression->codeStream(stream);}
-
-	stream<<") ";
+	if( ! _p_token.isNull()){_p_token->codeStream(stream);}
 
 	return stream;
 }
@@ -2528,19 +2525,22 @@ CAST_CLASS_ID primary_expression_2::ID=ID_PRIMARY_EXPRESSION_2;
 
 primary_expression_2::primary_expression_2
 	(
-		ReferenceCountedAutoPointer<token> _arg_token
+		ReferenceCountedAutoPointer<expression> _arg_expression
 	):
 		primary_expression() ,
-		_p_token(_arg_token)
+		_p_expression(_arg_expression)
 {
-	AssertNotNullRule(_p_token)
 	LOG(COL_FG_GREEN<<"Created object of primary_expression_2: "<<this)
 }
 
 
 std::ostream& primary_expression_2::codeStream(std::ostream& stream)const
 {
-	if( ! _p_token.isNull()){_p_token->codeStream(stream);}
+	stream<<"( ";
+
+	if( ! _p_expression.isNull()){_p_expression->codeStream(stream);}
+
+	stream<<") ";
 
 	return stream;
 }
@@ -2570,10 +2570,10 @@ CAST_CLASS_ID declaration_specifiers_item_1::ID=ID_DECLARATION_SPECIFIERS_ITEM_1
 
 declaration_specifiers_item_1::declaration_specifiers_item_1
 	(
-		ReferenceCountedAutoPointer<type_qualifier> _arg_type_qualifier
+		ReferenceCountedAutoPointer<storage_class_specifier> _arg_storage_class_specifier
 	):
 		declaration_specifiers_item() ,
-		_p_type_qualifier(_arg_type_qualifier)
+		_p_storage_class_specifier(_arg_storage_class_specifier)
 {
 	LOG(COL_FG_GREEN<<"Created object of declaration_specifiers_item_1: "<<this)
 }
@@ -2581,7 +2581,7 @@ declaration_specifiers_item_1::declaration_specifiers_item_1
 
 std::ostream& declaration_specifiers_item_1::codeStream(std::ostream& stream)const
 {
-	if( ! _p_type_qualifier.isNull()){_p_type_qualifier->codeStream(stream);}
+	if( ! _p_storage_class_specifier.isNull()){_p_storage_class_specifier->codeStream(stream);}
 
 	
 
@@ -2616,10 +2616,10 @@ CAST_CLASS_ID declaration_specifiers_item_3::ID=ID_DECLARATION_SPECIFIERS_ITEM_3
 
 declaration_specifiers_item_3::declaration_specifiers_item_3
 	(
-		ReferenceCountedAutoPointer<storage_class_specifier> _arg_storage_class_specifier
+		ReferenceCountedAutoPointer<type_qualifier> _arg_type_qualifier
 	):
 		declaration_specifiers_item() ,
-		_p_storage_class_specifier(_arg_storage_class_specifier)
+		_p_type_qualifier(_arg_type_qualifier)
 {
 	LOG(COL_FG_GREEN<<"Created object of declaration_specifiers_item_3: "<<this)
 }
@@ -2627,7 +2627,7 @@ declaration_specifiers_item_3::declaration_specifiers_item_3
 
 std::ostream& declaration_specifiers_item_3::codeStream(std::ostream& stream)const
 {
-	if( ! _p_storage_class_specifier.isNull()){_p_storage_class_specifier->codeStream(stream);}
+	if( ! _p_type_qualifier.isNull()){_p_type_qualifier->codeStream(stream);}
 
 	
 
@@ -2707,12 +2707,10 @@ CAST_CLASS_ID direct_declarator_1::ID=ID_DIRECT_DECLARATOR_1;
 
 direct_declarator_1::direct_declarator_1
 	(
-		ReferenceCountedAutoPointer<direct_declarator> _arg_direct_declarator,
-		ReferenceCountedAutoPointer<constant_expression> _arg_constant_expression
+		ReferenceCountedAutoPointer<declarator> _arg_declarator
 	):
 		direct_declarator() ,
-		_p_direct_declarator(_arg_direct_declarator),
-		_p_constant_expression(_arg_constant_expression)
+		_p_declarator(_arg_declarator)
 {
 	LOG(COL_FG_GREEN<<"Created object of direct_declarator_1: "<<this)
 }
@@ -2720,13 +2718,11 @@ direct_declarator_1::direct_declarator_1
 
 std::ostream& direct_declarator_1::codeStream(std::ostream& stream)const
 {
-	if( ! _p_direct_declarator.isNull()){_p_direct_declarator->codeStream(stream);}
+	stream<<"( ";
 
-	stream<<"[ ";
+	if( ! _p_declarator.isNull()){_p_declarator->codeStream(stream);}
 
-	if( ! _p_constant_expression.isNull()){_p_constant_expression->codeStream(stream);}
-
-	stream<<"] ";
+	stream<<") ";
 
 	return stream;
 }
@@ -2736,19 +2732,26 @@ CAST_CLASS_ID direct_declarator_2::ID=ID_DIRECT_DECLARATOR_2;
 
 direct_declarator_2::direct_declarator_2
 	(
-		ReferenceCountedAutoPointer<token> _arg_token
+		ReferenceCountedAutoPointer<direct_declarator> _arg_direct_declarator,
+		ReferenceCountedAutoPointer<constant_expression> _arg_constant_expression
 	):
 		direct_declarator() ,
-		_p_token(_arg_token)
+		_p_direct_declarator(_arg_direct_declarator),
+		_p_constant_expression(_arg_constant_expression)
 {
-	AssertNotNullRule(_p_token)
 	LOG(COL_FG_GREEN<<"Created object of direct_declarator_2: "<<this)
 }
 
 
 std::ostream& direct_declarator_2::codeStream(std::ostream& stream)const
 {
-	if( ! _p_token.isNull()){_p_token->codeStream(stream);}
+	if( ! _p_direct_declarator.isNull()){_p_direct_declarator->codeStream(stream);}
+
+	stream<<"[ ";
+
+	if( ! _p_constant_expression.isNull()){_p_constant_expression->codeStream(stream);}
+
+	stream<<"] ";
 
 	return stream;
 }
@@ -2787,10 +2790,12 @@ CAST_CLASS_ID direct_declarator_4::ID=ID_DIRECT_DECLARATOR_4;
 
 direct_declarator_4::direct_declarator_4
 	(
-		ReferenceCountedAutoPointer<declarator> _arg_declarator
+		ReferenceCountedAutoPointer<direct_declarator> _arg_direct_declarator,
+		ReferenceCountedAutoPointer<identifier_list> _arg_identifier_list
 	):
 		direct_declarator() ,
-		_p_declarator(_arg_declarator)
+		_p_direct_declarator(_arg_direct_declarator),
+		_p_identifier_list(_arg_identifier_list)
 {
 	LOG(COL_FG_GREEN<<"Created object of direct_declarator_4: "<<this)
 }
@@ -2798,9 +2803,11 @@ direct_declarator_4::direct_declarator_4
 
 std::ostream& direct_declarator_4::codeStream(std::ostream& stream)const
 {
+	if( ! _p_direct_declarator.isNull()){_p_direct_declarator->codeStream(stream);}
+
 	stream<<"( ";
 
-	if( ! _p_declarator.isNull()){_p_declarator->codeStream(stream);}
+	if( ! _p_identifier_list.isNull()){_p_identifier_list->codeStream(stream);}
 
 	stream<<") ";
 
@@ -2812,26 +2819,19 @@ CAST_CLASS_ID direct_declarator_5::ID=ID_DIRECT_DECLARATOR_5;
 
 direct_declarator_5::direct_declarator_5
 	(
-		ReferenceCountedAutoPointer<direct_declarator> _arg_direct_declarator,
-		ReferenceCountedAutoPointer<identifier_list> _arg_identifier_list
+		ReferenceCountedAutoPointer<token> _arg_token
 	):
 		direct_declarator() ,
-		_p_direct_declarator(_arg_direct_declarator),
-		_p_identifier_list(_arg_identifier_list)
+		_p_token(_arg_token)
 {
+	AssertNotNullRule(_p_token)
 	LOG(COL_FG_GREEN<<"Created object of direct_declarator_5: "<<this)
 }
 
 
 std::ostream& direct_declarator_5::codeStream(std::ostream& stream)const
 {
-	if( ! _p_direct_declarator.isNull()){_p_direct_declarator->codeStream(stream);}
-
-	stream<<"( ";
-
-	if( ! _p_identifier_list.isNull()){_p_identifier_list->codeStream(stream);}
-
-	stream<<") ";
+	if( ! _p_token.isNull()){_p_token->codeStream(stream);}
 
 	return stream;
 }
@@ -3579,10 +3579,10 @@ CAST_CLASS_ID specifier_qualifier_list_item_1::ID=ID_SPECIFIER_QUALIFIER_LIST_IT
 
 specifier_qualifier_list_item_1::specifier_qualifier_list_item_1
 	(
-		ReferenceCountedAutoPointer<type_specifier> _arg_type_specifier
+		ReferenceCountedAutoPointer<type_qualifier> _arg_type_qualifier
 	):
 		specifier_qualifier_list_item() ,
-		_p_type_specifier(_arg_type_specifier)
+		_p_type_qualifier(_arg_type_qualifier)
 {
 	LOG(COL_FG_GREEN<<"Created object of specifier_qualifier_list_item_1: "<<this)
 }
@@ -3590,7 +3590,7 @@ specifier_qualifier_list_item_1::specifier_qualifier_list_item_1
 
 std::ostream& specifier_qualifier_list_item_1::codeStream(std::ostream& stream)const
 {
-	if( ! _p_type_specifier.isNull()){_p_type_specifier->codeStream(stream);}
+	if( ! _p_type_qualifier.isNull()){_p_type_qualifier->codeStream(stream);}
 
 	
 
@@ -3602,10 +3602,10 @@ CAST_CLASS_ID specifier_qualifier_list_item_2::ID=ID_SPECIFIER_QUALIFIER_LIST_IT
 
 specifier_qualifier_list_item_2::specifier_qualifier_list_item_2
 	(
-		ReferenceCountedAutoPointer<type_qualifier> _arg_type_qualifier
+		ReferenceCountedAutoPointer<type_specifier> _arg_type_specifier
 	):
 		specifier_qualifier_list_item() ,
-		_p_type_qualifier(_arg_type_qualifier)
+		_p_type_specifier(_arg_type_specifier)
 {
 	LOG(COL_FG_GREEN<<"Created object of specifier_qualifier_list_item_2: "<<this)
 }
@@ -3613,7 +3613,7 @@ specifier_qualifier_list_item_2::specifier_qualifier_list_item_2
 
 std::ostream& specifier_qualifier_list_item_2::codeStream(std::ostream& stream)const
 {
-	if( ! _p_type_qualifier.isNull()){_p_type_qualifier->codeStream(stream);}
+	if( ! _p_type_specifier.isNull()){_p_type_specifier->codeStream(stream);}
 
 	
 

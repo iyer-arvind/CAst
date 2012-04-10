@@ -1,7 +1,7 @@
 
 
 
-class ${object.ruleName}_item
+class ${object.ruleName}_item:public CAst
 {
 	
 	public:

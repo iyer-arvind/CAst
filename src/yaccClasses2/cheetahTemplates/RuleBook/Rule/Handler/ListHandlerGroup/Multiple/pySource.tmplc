@@ -2,5 +2,9 @@
 $utils.pyClassCreator.stdClassSource($h)
 #end for
 
-#set listCls={"className":$object.ruleName,"parameters":[]}
+#set listCls={"className":$object.ruleName,"parameters":[],"listClass":True}
 $utils.pyClassCreator.stdClassSource($listCls)
+
+
+#set listCls={"className":$object.ruleName+"_item","parameters":[]}
+$utils.pyClassCreator.stdClassSource($listCls,["noInit"])

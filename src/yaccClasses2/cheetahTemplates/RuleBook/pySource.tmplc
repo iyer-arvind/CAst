@@ -49,10 +49,11 @@ static PyObject * parseFile(PyObject *self, PyObject *args)
 	const char* fileName=PyString_AsString(fn);
 
 	CAst::ReferenceCountedAutoPointer<CAst::translation_unit> root=parseFile(fileName);
+	return CAstToPyCAst(root);
 
-	PyCAst_object_translation_unit *pyRoot=(PyCAst_object_translation_unit*)PyCAst_new_translation_unit(&PyCAst_type_translation_unit, NULL, NULL);
-	pyRoot->_p_cast_object=root;
-	return (PyObject*)pyRoot;
+	##PyCAst_object_translation_unit *pyRoot=(PyCAst_object_translation_unit*)PyCAst_new_translation_unit(&PyCAst_type_translation_unit, NULL, NULL);
+	##pyRoot->_p_cast_object=root;
+	##return (PyObject*)pyRoot;
 }
 
 static PyMethodDef module_methods[] = {	{"parseFile",parseFile, METH_VARARGS,"Parses a File for C AST"},{ NULL,NULL,0,NULL }};

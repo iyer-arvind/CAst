@@ -149,6 +149,15 @@ static PyObject *PyCAst_getter_storage_class_specifier_refCount(PyObject *_self)
 	);
 }
 
+static PyObject *PyCAst_getter_storage_class_specifier_token(PyObject *_self)
+{
+	PyCAst_object_storage_class_specifier *self=(PyCAst_object_storage_class_specifier*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token());
+}
+
 
 
 
@@ -227,6 +236,15 @@ static PyObject *PyCAst_getter_expression_statement_refCount(PyObject *_self)
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_expression_statement_expression(PyObject *_self)
+{
+	PyCAst_object_expression_statement *self=(PyCAst_object_expression_statement*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_expression());
 }
 
 
@@ -314,6 +332,24 @@ static PyObject *PyCAst_getter_type_name_refCount(PyObject *_self)
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_type_name_specifier_qualifier_list(PyObject *_self)
+{
+	PyCAst_object_type_name *self=(PyCAst_object_type_name*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_specifier_qualifier_list());
+}
+
+static PyObject *PyCAst_getter_type_name_abstract_declarator(PyObject *_self)
+{
+	PyCAst_object_type_name *self=(PyCAst_object_type_name*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_abstract_declarator());
 }
 
 
@@ -406,22 +442,22 @@ static int PyCAst_init_unary_expression_1(PyCAst_object_unary_expression_1 *self
 	LOG("Parsing Arguments")
 
 
-    	PyCAst_object_unary_operator* _arg_unary_operator=(PyCAst_object_unary_operator*)PyTuple_GetItem(args,0);
-	if((PyObject*)_arg_unary_operator==Py_None)
+    	PyCAst_object_token* _arg_token=(PyCAst_object_token*)PyTuple_GetItem(args,0);
+	if((PyObject*)_arg_token==Py_None)
 	{
-		Py_DECREF(_arg_unary_operator);
+		Py_DECREF(_arg_token);
 		PyErr_SetString(PyExc_TypeError,"Parameter 1 cannot be None");
 		return -1;
 	}
-    	PyCAst_object_cast_expression* _arg_cast_expression=(PyCAst_object_cast_expression*)PyTuple_GetItem(args,1);
-	if((PyObject*)_arg_cast_expression==Py_None)
+    	PyCAst_object_unary_expression* _arg_unary_expression=(PyCAst_object_unary_expression*)PyTuple_GetItem(args,1);
+	if((PyObject*)_arg_unary_expression==Py_None)
 	{
-		Py_DECREF(_arg_cast_expression);
+		Py_DECREF(_arg_unary_expression);
 		PyErr_SetString(PyExc_TypeError,"Parameter 2 cannot be None");
 		return -1;
 	}
 
-    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::unary_expression_1>(new CAst::unary_expression_1(_arg_unary_operator->_p_cast_object,_arg_cast_expression->_p_cast_object));
+    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::unary_expression_1>(new CAst::unary_expression_1(_arg_token->_p_cast_object,_arg_unary_expression->_p_cast_object));
     return 0;
 }
 
@@ -458,6 +494,24 @@ static PyObject *PyCAst_getter_unary_expression_1_refCount(PyObject *_self)
 	);
 }
 
+static PyObject *PyCAst_getter_unary_expression_1_token(PyObject *_self)
+{
+	PyCAst_object_unary_expression_1 *self=(PyCAst_object_unary_expression_1*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token());
+}
+
+static PyObject *PyCAst_getter_unary_expression_1_unary_expression(PyObject *_self)
+{
+	PyCAst_object_unary_expression_1 *self=(PyCAst_object_unary_expression_1*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_unary_expression());
+}
+
 
 
 	
@@ -492,15 +546,15 @@ static int PyCAst_init_unary_expression_2(PyCAst_object_unary_expression_2 *self
 	LOG("Parsing Arguments")
 
 
-    	PyCAst_object_type_name* _arg_type_name=(PyCAst_object_type_name*)PyTuple_GetItem(args,0);
-	if((PyObject*)_arg_type_name==Py_None)
+    	PyCAst_object_postfix_expression* _arg_postfix_expression=(PyCAst_object_postfix_expression*)PyTuple_GetItem(args,0);
+	if((PyObject*)_arg_postfix_expression==Py_None)
 	{
-		Py_DECREF(_arg_type_name);
+		Py_DECREF(_arg_postfix_expression);
 		PyErr_SetString(PyExc_TypeError,"Parameter 1 cannot be None");
 		return -1;
 	}
 
-    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::unary_expression_2>(new CAst::unary_expression_2(_arg_type_name->_p_cast_object));
+    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::unary_expression_2>(new CAst::unary_expression_2(_arg_postfix_expression->_p_cast_object));
     return 0;
 }
 
@@ -537,6 +591,15 @@ static PyObject *PyCAst_getter_unary_expression_2_refCount(PyObject *_self)
 	);
 }
 
+static PyObject *PyCAst_getter_unary_expression_2_postfix_expression(PyObject *_self)
+{
+	PyCAst_object_unary_expression_2 *self=(PyCAst_object_unary_expression_2*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_postfix_expression());
+}
+
 
 
 	
@@ -562,24 +625,31 @@ static int PyCAst_init_unary_expression_3(PyCAst_object_unary_expression_3 *self
 {
     LOG(COL_FG_CYAN<<"initializing PyCAst::unary_expression_3 with "<<PyTuple_Size(args)<<" arguments");
 	
-	if(PyTuple_Size(args)!=1)
+	if(PyTuple_Size(args)!=2)
 	{
 		LOG("Detected insufficient arguments")
-		PyErr_SetString(PyExc_TypeError,"Insufficient number of arguments. Expecting 1 argument(s).");
+		PyErr_SetString(PyExc_TypeError,"Insufficient number of arguments. Expecting 2 argument(s).");
 		return -1;
 	}
 	LOG("Parsing Arguments")
 
 
-    	PyCAst_object_postfix_expression* _arg_postfix_expression=(PyCAst_object_postfix_expression*)PyTuple_GetItem(args,0);
-	if((PyObject*)_arg_postfix_expression==Py_None)
+    	PyCAst_object_unary_operator* _arg_unary_operator=(PyCAst_object_unary_operator*)PyTuple_GetItem(args,0);
+	if((PyObject*)_arg_unary_operator==Py_None)
 	{
-		Py_DECREF(_arg_postfix_expression);
+		Py_DECREF(_arg_unary_operator);
 		PyErr_SetString(PyExc_TypeError,"Parameter 1 cannot be None");
 		return -1;
 	}
+    	PyCAst_object_cast_expression* _arg_cast_expression=(PyCAst_object_cast_expression*)PyTuple_GetItem(args,1);
+	if((PyObject*)_arg_cast_expression==Py_None)
+	{
+		Py_DECREF(_arg_cast_expression);
+		PyErr_SetString(PyExc_TypeError,"Parameter 2 cannot be None");
+		return -1;
+	}
 
-    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::unary_expression_3>(new CAst::unary_expression_3(_arg_postfix_expression->_p_cast_object));
+    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::unary_expression_3>(new CAst::unary_expression_3(_arg_unary_operator->_p_cast_object,_arg_cast_expression->_p_cast_object));
     return 0;
 }
 
@@ -616,6 +686,24 @@ static PyObject *PyCAst_getter_unary_expression_3_refCount(PyObject *_self)
 	);
 }
 
+static PyObject *PyCAst_getter_unary_expression_3_unary_operator(PyObject *_self)
+{
+	PyCAst_object_unary_expression_3 *self=(PyCAst_object_unary_expression_3*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_unary_operator());
+}
+
+static PyObject *PyCAst_getter_unary_expression_3_cast_expression(PyObject *_self)
+{
+	PyCAst_object_unary_expression_3 *self=(PyCAst_object_unary_expression_3*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_cast_expression());
+}
+
 
 
 	
@@ -641,31 +729,24 @@ static int PyCAst_init_unary_expression_4(PyCAst_object_unary_expression_4 *self
 {
     LOG(COL_FG_CYAN<<"initializing PyCAst::unary_expression_4 with "<<PyTuple_Size(args)<<" arguments");
 	
-	if(PyTuple_Size(args)!=2)
+	if(PyTuple_Size(args)!=1)
 	{
 		LOG("Detected insufficient arguments")
-		PyErr_SetString(PyExc_TypeError,"Insufficient number of arguments. Expecting 2 argument(s).");
+		PyErr_SetString(PyExc_TypeError,"Insufficient number of arguments. Expecting 1 argument(s).");
 		return -1;
 	}
 	LOG("Parsing Arguments")
 
 
-    	PyCAst_object_token* _arg_token=(PyCAst_object_token*)PyTuple_GetItem(args,0);
-	if((PyObject*)_arg_token==Py_None)
+    	PyCAst_object_type_name* _arg_type_name=(PyCAst_object_type_name*)PyTuple_GetItem(args,0);
+	if((PyObject*)_arg_type_name==Py_None)
 	{
-		Py_DECREF(_arg_token);
+		Py_DECREF(_arg_type_name);
 		PyErr_SetString(PyExc_TypeError,"Parameter 1 cannot be None");
 		return -1;
 	}
-    	PyCAst_object_unary_expression* _arg_unary_expression=(PyCAst_object_unary_expression*)PyTuple_GetItem(args,1);
-	if((PyObject*)_arg_unary_expression==Py_None)
-	{
-		Py_DECREF(_arg_unary_expression);
-		PyErr_SetString(PyExc_TypeError,"Parameter 2 cannot be None");
-		return -1;
-	}
 
-    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::unary_expression_4>(new CAst::unary_expression_4(_arg_token->_p_cast_object,_arg_unary_expression->_p_cast_object));
+    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::unary_expression_4>(new CAst::unary_expression_4(_arg_type_name->_p_cast_object));
     return 0;
 }
 
@@ -700,6 +781,15 @@ static PyObject *PyCAst_getter_unary_expression_4_refCount(PyObject *_self)
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_unary_expression_4_type_name(PyObject *_self)
+{
+	PyCAst_object_unary_expression_4 *self=(PyCAst_object_unary_expression_4*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_type_name());
 }
 
 
@@ -801,6 +891,42 @@ static PyObject *PyCAst_getter_conditional_expression_item_refCount(PyObject *_s
 	);
 }
 
+static PyObject *PyCAst_getter_conditional_expression_item_logical_or_expression(PyObject *_self)
+{
+	PyCAst_object_conditional_expression_item *self=(PyCAst_object_conditional_expression_item*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_logical_or_expression());
+}
+
+static PyObject *PyCAst_getter_conditional_expression_item_token1(PyObject *_self)
+{
+	PyCAst_object_conditional_expression_item *self=(PyCAst_object_conditional_expression_item*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token1());
+}
+
+static PyObject *PyCAst_getter_conditional_expression_item_expression(PyObject *_self)
+{
+	PyCAst_object_conditional_expression_item *self=(PyCAst_object_conditional_expression_item*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_expression());
+}
+
+static PyObject *PyCAst_getter_conditional_expression_item_token2(PyObject *_self)
+{
+	PyCAst_object_conditional_expression_item *self=(PyCAst_object_conditional_expression_item*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token2());
+}
+
 
 
 
@@ -873,6 +999,39 @@ static PyObject *PyCAst_getter_conditional_expression_refCount(PyObject *_self)
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_conditional_expression_size(PyObject *_self)
+{
+	PyCAst_object_conditional_expression *self=(PyCAst_object_conditional_expression*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return PyInt_FromLong
+	(
+		self->_p_cast_object->size()
+	);
+}
+
+
+
+static Py_ssize_t PyCAst_list_length_conditional_expression(PyObject *_self)
+{
+	PyCAst_object_conditional_expression *self=(PyCAst_object_conditional_expression*)(_self);
+	if(self->_p_cast_object.isNull())return 0;
+	return self->_p_cast_object->size();
+	
+}
+
+
+static PyObject* PyCAst_list_item_conditional_expression(PyObject *_self,Py_ssize_t index)
+{
+	PyCAst_object_conditional_expression *self=(PyCAst_object_conditional_expression*)(_self);
+	if(self->_p_cast_object.isNull())Py_RETURN_NONE;
+	if(abs(index)>self->_p_cast_object->size()) PyErr_SetString(PyExc_IndexError,"Index out of range");
+	CAst::ReferenceCountedAutoPointer<CAst::conditional_expression_item> item=self->_p_cast_object->operator[](index);
+	
+	return CAstToPyCAst(item);
 }
 
 
@@ -980,6 +1139,51 @@ static PyObject *PyCAst_getter_struct_or_union_specifier_refCount(PyObject *_sel
 	);
 }
 
+static PyObject *PyCAst_getter_struct_or_union_specifier_struct_or_union(PyObject *_self)
+{
+	PyCAst_object_struct_or_union_specifier *self=(PyCAst_object_struct_or_union_specifier*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_struct_or_union());
+}
+
+static PyObject *PyCAst_getter_struct_or_union_specifier_token1(PyObject *_self)
+{
+	PyCAst_object_struct_or_union_specifier *self=(PyCAst_object_struct_or_union_specifier*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token1());
+}
+
+static PyObject *PyCAst_getter_struct_or_union_specifier_token2(PyObject *_self)
+{
+	PyCAst_object_struct_or_union_specifier *self=(PyCAst_object_struct_or_union_specifier*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token2());
+}
+
+static PyObject *PyCAst_getter_struct_or_union_specifier_struct_declaration_list(PyObject *_self)
+{
+	PyCAst_object_struct_or_union_specifier *self=(PyCAst_object_struct_or_union_specifier*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_struct_declaration_list());
+}
+
+static PyObject *PyCAst_getter_struct_or_union_specifier_token3(PyObject *_self)
+{
+	PyCAst_object_struct_or_union_specifier *self=(PyCAst_object_struct_or_union_specifier*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token3());
+}
+
 
 
 
@@ -1067,6 +1271,24 @@ static PyObject *PyCAst_getter_exclusive_or_expression_item_refCount(PyObject *_
 	);
 }
 
+static PyObject *PyCAst_getter_exclusive_or_expression_item_token(PyObject *_self)
+{
+	PyCAst_object_exclusive_or_expression_item *self=(PyCAst_object_exclusive_or_expression_item*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token());
+}
+
+static PyObject *PyCAst_getter_exclusive_or_expression_item_and_expression(PyObject *_self)
+{
+	PyCAst_object_exclusive_or_expression_item *self=(PyCAst_object_exclusive_or_expression_item*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_and_expression());
+}
+
 
 
 
@@ -1139,6 +1361,39 @@ static PyObject *PyCAst_getter_exclusive_or_expression_refCount(PyObject *_self)
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_exclusive_or_expression_size(PyObject *_self)
+{
+	PyCAst_object_exclusive_or_expression *self=(PyCAst_object_exclusive_or_expression*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return PyInt_FromLong
+	(
+		self->_p_cast_object->size()
+	);
+}
+
+
+
+static Py_ssize_t PyCAst_list_length_exclusive_or_expression(PyObject *_self)
+{
+	PyCAst_object_exclusive_or_expression *self=(PyCAst_object_exclusive_or_expression*)(_self);
+	if(self->_p_cast_object.isNull())return 0;
+	return self->_p_cast_object->size();
+	
+}
+
+
+static PyObject* PyCAst_list_item_exclusive_or_expression(PyObject *_self,Py_ssize_t index)
+{
+	PyCAst_object_exclusive_or_expression *self=(PyCAst_object_exclusive_or_expression*)(_self);
+	if(self->_p_cast_object.isNull())Py_RETURN_NONE;
+	if(abs(index)>self->_p_cast_object->size()) PyErr_SetString(PyExc_IndexError,"Index out of range");
+	CAst::ReferenceCountedAutoPointer<CAst::exclusive_or_expression_item> item=self->_p_cast_object->operator[](index);
+	
+	return CAstToPyCAst(item);
 }
 
 
@@ -1222,24 +1477,30 @@ static int PyCAst_init_initializer_1(PyCAst_object_initializer_1 *self, PyObject
 {
     LOG(COL_FG_CYAN<<"initializing PyCAst::initializer_1 with "<<PyTuple_Size(args)<<" arguments");
 	
-	if(PyTuple_Size(args)!=1)
+	if(PyTuple_Size(args)!=2)
 	{
 		LOG("Detected insufficient arguments")
-		PyErr_SetString(PyExc_TypeError,"Insufficient number of arguments. Expecting 1 argument(s).");
+		PyErr_SetString(PyExc_TypeError,"Insufficient number of arguments. Expecting 2 argument(s).");
 		return -1;
 	}
 	LOG("Parsing Arguments")
 
 
-    	PyCAst_object_assignment_expression* _arg_assignment_expression=(PyCAst_object_assignment_expression*)PyTuple_GetItem(args,0);
-	if((PyObject*)_arg_assignment_expression==Py_None)
+    	PyCAst_object_initializer_list* _arg_initializer_list=(PyCAst_object_initializer_list*)PyTuple_GetItem(args,0);
+	if((PyObject*)_arg_initializer_list==Py_None)
 	{
-		Py_DECREF(_arg_assignment_expression);
+		Py_DECREF(_arg_initializer_list);
 		PyErr_SetString(PyExc_TypeError,"Parameter 1 cannot be None");
 		return -1;
 	}
+    	PyCAst_object_token* _arg_token=(PyCAst_object_token*)PyTuple_GetItem(args,1);
+	if((PyObject*)_arg_token==Py_None)
+	{
+		Py_DECREF(_arg_token);
+		_arg_token=(PyCAst_object_token*)PyCAst_new_token(&PyCAst_type_token,NULL,NULL);
+	}
 
-    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::initializer_1>(new CAst::initializer_1(_arg_assignment_expression->_p_cast_object));
+    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::initializer_1>(new CAst::initializer_1(_arg_initializer_list->_p_cast_object,_arg_token->_p_cast_object));
     return 0;
 }
 
@@ -1276,6 +1537,24 @@ static PyObject *PyCAst_getter_initializer_1_refCount(PyObject *_self)
 	);
 }
 
+static PyObject *PyCAst_getter_initializer_1_initializer_list(PyObject *_self)
+{
+	PyCAst_object_initializer_1 *self=(PyCAst_object_initializer_1*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_initializer_list());
+}
+
+static PyObject *PyCAst_getter_initializer_1_token(PyObject *_self)
+{
+	PyCAst_object_initializer_1 *self=(PyCAst_object_initializer_1*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token());
+}
+
 
 
 	
@@ -1301,30 +1580,24 @@ static int PyCAst_init_initializer_2(PyCAst_object_initializer_2 *self, PyObject
 {
     LOG(COL_FG_CYAN<<"initializing PyCAst::initializer_2 with "<<PyTuple_Size(args)<<" arguments");
 	
-	if(PyTuple_Size(args)!=2)
+	if(PyTuple_Size(args)!=1)
 	{
 		LOG("Detected insufficient arguments")
-		PyErr_SetString(PyExc_TypeError,"Insufficient number of arguments. Expecting 2 argument(s).");
+		PyErr_SetString(PyExc_TypeError,"Insufficient number of arguments. Expecting 1 argument(s).");
 		return -1;
 	}
 	LOG("Parsing Arguments")
 
 
-    	PyCAst_object_initializer_list* _arg_initializer_list=(PyCAst_object_initializer_list*)PyTuple_GetItem(args,0);
-	if((PyObject*)_arg_initializer_list==Py_None)
+    	PyCAst_object_assignment_expression* _arg_assignment_expression=(PyCAst_object_assignment_expression*)PyTuple_GetItem(args,0);
+	if((PyObject*)_arg_assignment_expression==Py_None)
 	{
-		Py_DECREF(_arg_initializer_list);
+		Py_DECREF(_arg_assignment_expression);
 		PyErr_SetString(PyExc_TypeError,"Parameter 1 cannot be None");
 		return -1;
 	}
-    	PyCAst_object_token* _arg_token=(PyCAst_object_token*)PyTuple_GetItem(args,1);
-	if((PyObject*)_arg_token==Py_None)
-	{
-		Py_DECREF(_arg_token);
-		_arg_token=(PyCAst_object_token*)PyCAst_new_token(&PyCAst_type_token,NULL,NULL);
-	}
 
-    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::initializer_2>(new CAst::initializer_2(_arg_initializer_list->_p_cast_object,_arg_token->_p_cast_object));
+    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::initializer_2>(new CAst::initializer_2(_arg_assignment_expression->_p_cast_object));
     return 0;
 }
 
@@ -1359,6 +1632,15 @@ static PyObject *PyCAst_getter_initializer_2_refCount(PyObject *_self)
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_initializer_2_assignment_expression(PyObject *_self)
+{
+	PyCAst_object_initializer_2 *self=(PyCAst_object_initializer_2*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_assignment_expression());
 }
 
 
@@ -1442,6 +1724,15 @@ static PyObject *PyCAst_getter_struct_declaration_list_item_refCount(PyObject *_
 	);
 }
 
+static PyObject *PyCAst_getter_struct_declaration_list_item_struct_declaration(PyObject *_self)
+{
+	PyCAst_object_struct_declaration_list_item *self=(PyCAst_object_struct_declaration_list_item*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_struct_declaration());
+}
+
 
 
 
@@ -1514,6 +1805,39 @@ static PyObject *PyCAst_getter_struct_declaration_list_refCount(PyObject *_self)
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_struct_declaration_list_size(PyObject *_self)
+{
+	PyCAst_object_struct_declaration_list *self=(PyCAst_object_struct_declaration_list*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return PyInt_FromLong
+	(
+		self->_p_cast_object->size()
+	);
+}
+
+
+
+static Py_ssize_t PyCAst_list_length_struct_declaration_list(PyObject *_self)
+{
+	PyCAst_object_struct_declaration_list *self=(PyCAst_object_struct_declaration_list*)(_self);
+	if(self->_p_cast_object.isNull())return 0;
+	return self->_p_cast_object->size();
+	
+}
+
+
+static PyObject* PyCAst_list_item_struct_declaration_list(PyObject *_self,Py_ssize_t index)
+{
+	PyCAst_object_struct_declaration_list *self=(PyCAst_object_struct_declaration_list*)(_self);
+	if(self->_p_cast_object.isNull())Py_RETURN_NONE;
+	if(abs(index)>self->_p_cast_object->size()) PyErr_SetString(PyExc_IndexError,"Index out of range");
+	CAst::ReferenceCountedAutoPointer<CAst::struct_declaration_list_item> item=self->_p_cast_object->operator[](index);
+	
+	return CAstToPyCAst(item);
 }
 
 
@@ -1595,6 +1919,15 @@ static PyObject *PyCAst_getter_assignment_operator_refCount(PyObject *_self)
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_assignment_operator_token(PyObject *_self)
+{
+	PyCAst_object_assignment_operator *self=(PyCAst_object_assignment_operator*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token());
 }
 
 
@@ -1685,6 +2018,24 @@ static PyObject *PyCAst_getter_struct_declaration_refCount(PyObject *_self)
 	);
 }
 
+static PyObject *PyCAst_getter_struct_declaration_specifier_qualifier_list(PyObject *_self)
+{
+	PyCAst_object_struct_declaration *self=(PyCAst_object_struct_declaration*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_specifier_qualifier_list());
+}
+
+static PyObject *PyCAst_getter_struct_declaration_struct_declarator_list(PyObject *_self)
+{
+	PyCAst_object_struct_declaration *self=(PyCAst_object_struct_declaration*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_struct_declarator_list());
+}
+
 
 
 
@@ -1771,6 +2122,24 @@ static PyObject *PyCAst_getter_abstract_declarator_refCount(PyObject *_self)
 	);
 }
 
+static PyObject *PyCAst_getter_abstract_declarator_pointer(PyObject *_self)
+{
+	PyCAst_object_abstract_declarator *self=(PyCAst_object_abstract_declarator*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_pointer());
+}
+
+static PyObject *PyCAst_getter_abstract_declarator_direct_abstract_declarator(PyObject *_self)
+{
+	PyCAst_object_abstract_declarator *self=(PyCAst_object_abstract_declarator*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_direct_abstract_declarator());
+}
+
 
 
 
@@ -1852,178 +2221,6 @@ static int PyCAst_init_iteration_statement_1(PyCAst_object_iteration_statement_1
 {
     LOG(COL_FG_CYAN<<"initializing PyCAst::iteration_statement_1 with "<<PyTuple_Size(args)<<" arguments");
 	
-	if(PyTuple_Size(args)!=2)
-	{
-		LOG("Detected insufficient arguments")
-		PyErr_SetString(PyExc_TypeError,"Insufficient number of arguments. Expecting 2 argument(s).");
-		return -1;
-	}
-	LOG("Parsing Arguments")
-
-
-    	PyCAst_object_expression* _arg_expression=(PyCAst_object_expression*)PyTuple_GetItem(args,0);
-	if((PyObject*)_arg_expression==Py_None)
-	{
-		Py_DECREF(_arg_expression);
-		PyErr_SetString(PyExc_TypeError,"Parameter 1 cannot be None");
-		return -1;
-	}
-    	PyCAst_object_statement* _arg_statement=(PyCAst_object_statement*)PyTuple_GetItem(args,1);
-	if((PyObject*)_arg_statement==Py_None)
-	{
-		Py_DECREF(_arg_statement);
-		PyErr_SetString(PyExc_TypeError,"Parameter 2 cannot be None");
-		return -1;
-	}
-
-    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::iteration_statement_1>(new CAst::iteration_statement_1(_arg_expression->_p_cast_object,_arg_statement->_p_cast_object));
-    return 0;
-}
-
-static PyObject *PyCAst_getter_iteration_statement_1_code(PyObject *_self)
-{
-	PyCAst_object_iteration_statement_1 *self=(PyCAst_object_iteration_statement_1*)(_self);
-	if(self->_p_cast_object.isNull())
-		Py_RETURN_NONE;
-	
-	return PyString_FromString
-	(
-		self->_p_cast_object->code().c_str()
-	);
-}
-
-static PyObject *PyCAst_getter_iteration_statement_1_isNull(PyObject *_self)
-{
-	PyCAst_object_iteration_statement_1 *self=(PyCAst_object_iteration_statement_1*)(_self);
-
-	
-	if(self->_p_cast_object.isNull())	{Py_RETURN_TRUE;}
-	else					{Py_RETURN_FALSE;}
-}
-
-static PyObject *PyCAst_getter_iteration_statement_1_refCount(PyObject *_self)
-{
-	PyCAst_object_iteration_statement_1 *self=(PyCAst_object_iteration_statement_1*)(_self);
-	if(self->_p_cast_object.isNull())
-		Py_RETURN_NONE;
-	
-	return PyInt_FromLong
-	(
-		self->_p_cast_object.refCount()
-	);
-}
-
-
-
-	
-static PyObject * PyCAst_new_iteration_statement_2(PyTypeObject *type, PyObject *args, PyObject *kwds)
-{
-    LOG(COL_FG_CYAN<<"new PyCAst::iteration_statement_2");
-    PyCAst_object_iteration_statement_2 *self;
-    self = (PyCAst_object_iteration_statement_2*)type->tp_alloc(type, 0);
-    return (PyObject *)self;
-}
-
-	
-static void PyCAst_dealloc_iteration_statement_2(PyObject *_self)
-{
-    LOG(COL_FG_MAGENTA<<"Deallocating PyCAst::iteration_statement_2");
-    PyCAst_object_iteration_statement_2 *self=(PyCAst_object_iteration_statement_2*)_self;
-    self->_p_cast_object.clear();
-    self->ob_type->tp_free((PyObject*)self);
-}
-
-	
-static int PyCAst_init_iteration_statement_2(PyCAst_object_iteration_statement_2 *self, PyObject *args, PyObject *kwds)
-{
-    LOG(COL_FG_CYAN<<"initializing PyCAst::iteration_statement_2 with "<<PyTuple_Size(args)<<" arguments");
-	
-	if(PyTuple_Size(args)!=2)
-	{
-		LOG("Detected insufficient arguments")
-		PyErr_SetString(PyExc_TypeError,"Insufficient number of arguments. Expecting 2 argument(s).");
-		return -1;
-	}
-	LOG("Parsing Arguments")
-
-
-    	PyCAst_object_statement* _arg_statement=(PyCAst_object_statement*)PyTuple_GetItem(args,0);
-	if((PyObject*)_arg_statement==Py_None)
-	{
-		Py_DECREF(_arg_statement);
-		PyErr_SetString(PyExc_TypeError,"Parameter 1 cannot be None");
-		return -1;
-	}
-    	PyCAst_object_expression* _arg_expression=(PyCAst_object_expression*)PyTuple_GetItem(args,1);
-	if((PyObject*)_arg_expression==Py_None)
-	{
-		Py_DECREF(_arg_expression);
-		PyErr_SetString(PyExc_TypeError,"Parameter 2 cannot be None");
-		return -1;
-	}
-
-    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::iteration_statement_2>(new CAst::iteration_statement_2(_arg_statement->_p_cast_object,_arg_expression->_p_cast_object));
-    return 0;
-}
-
-static PyObject *PyCAst_getter_iteration_statement_2_code(PyObject *_self)
-{
-	PyCAst_object_iteration_statement_2 *self=(PyCAst_object_iteration_statement_2*)(_self);
-	if(self->_p_cast_object.isNull())
-		Py_RETURN_NONE;
-	
-	return PyString_FromString
-	(
-		self->_p_cast_object->code().c_str()
-	);
-}
-
-static PyObject *PyCAst_getter_iteration_statement_2_isNull(PyObject *_self)
-{
-	PyCAst_object_iteration_statement_2 *self=(PyCAst_object_iteration_statement_2*)(_self);
-
-	
-	if(self->_p_cast_object.isNull())	{Py_RETURN_TRUE;}
-	else					{Py_RETURN_FALSE;}
-}
-
-static PyObject *PyCAst_getter_iteration_statement_2_refCount(PyObject *_self)
-{
-	PyCAst_object_iteration_statement_2 *self=(PyCAst_object_iteration_statement_2*)(_self);
-	if(self->_p_cast_object.isNull())
-		Py_RETURN_NONE;
-	
-	return PyInt_FromLong
-	(
-		self->_p_cast_object.refCount()
-	);
-}
-
-
-
-	
-static PyObject * PyCAst_new_iteration_statement_3(PyTypeObject *type, PyObject *args, PyObject *kwds)
-{
-    LOG(COL_FG_CYAN<<"new PyCAst::iteration_statement_3");
-    PyCAst_object_iteration_statement_3 *self;
-    self = (PyCAst_object_iteration_statement_3*)type->tp_alloc(type, 0);
-    return (PyObject *)self;
-}
-
-	
-static void PyCAst_dealloc_iteration_statement_3(PyObject *_self)
-{
-    LOG(COL_FG_MAGENTA<<"Deallocating PyCAst::iteration_statement_3");
-    PyCAst_object_iteration_statement_3 *self=(PyCAst_object_iteration_statement_3*)_self;
-    self->_p_cast_object.clear();
-    self->ob_type->tp_free((PyObject*)self);
-}
-
-	
-static int PyCAst_init_iteration_statement_3(PyCAst_object_iteration_statement_3 *self, PyObject *args, PyObject *kwds)
-{
-    LOG(COL_FG_CYAN<<"initializing PyCAst::iteration_statement_3 with "<<PyTuple_Size(args)<<" arguments");
-	
 	if(PyTuple_Size(args)!=4)
 	{
 		LOG("Detected insufficient arguments")
@@ -2061,7 +2258,233 @@ static int PyCAst_init_iteration_statement_3(PyCAst_object_iteration_statement_3
 		return -1;
 	}
 
-    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::iteration_statement_3>(new CAst::iteration_statement_3(_arg_expression_statement1->_p_cast_object,_arg_expression_statement2->_p_cast_object,_arg_expression->_p_cast_object,_arg_statement->_p_cast_object));
+    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::iteration_statement_1>(new CAst::iteration_statement_1(_arg_expression_statement1->_p_cast_object,_arg_expression_statement2->_p_cast_object,_arg_expression->_p_cast_object,_arg_statement->_p_cast_object));
+    return 0;
+}
+
+static PyObject *PyCAst_getter_iteration_statement_1_code(PyObject *_self)
+{
+	PyCAst_object_iteration_statement_1 *self=(PyCAst_object_iteration_statement_1*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+}
+
+static PyObject *PyCAst_getter_iteration_statement_1_isNull(PyObject *_self)
+{
+	PyCAst_object_iteration_statement_1 *self=(PyCAst_object_iteration_statement_1*)(_self);
+
+	
+	if(self->_p_cast_object.isNull())	{Py_RETURN_TRUE;}
+	else					{Py_RETURN_FALSE;}
+}
+
+static PyObject *PyCAst_getter_iteration_statement_1_refCount(PyObject *_self)
+{
+	PyCAst_object_iteration_statement_1 *self=(PyCAst_object_iteration_statement_1*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return PyInt_FromLong
+	(
+		self->_p_cast_object.refCount()
+	);
+}
+
+static PyObject *PyCAst_getter_iteration_statement_1_expression_statement1(PyObject *_self)
+{
+	PyCAst_object_iteration_statement_1 *self=(PyCAst_object_iteration_statement_1*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_expression_statement1());
+}
+
+static PyObject *PyCAst_getter_iteration_statement_1_expression_statement2(PyObject *_self)
+{
+	PyCAst_object_iteration_statement_1 *self=(PyCAst_object_iteration_statement_1*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_expression_statement2());
+}
+
+static PyObject *PyCAst_getter_iteration_statement_1_expression(PyObject *_self)
+{
+	PyCAst_object_iteration_statement_1 *self=(PyCAst_object_iteration_statement_1*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_expression());
+}
+
+static PyObject *PyCAst_getter_iteration_statement_1_statement(PyObject *_self)
+{
+	PyCAst_object_iteration_statement_1 *self=(PyCAst_object_iteration_statement_1*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_statement());
+}
+
+
+
+	
+static PyObject * PyCAst_new_iteration_statement_2(PyTypeObject *type, PyObject *args, PyObject *kwds)
+{
+    LOG(COL_FG_CYAN<<"new PyCAst::iteration_statement_2");
+    PyCAst_object_iteration_statement_2 *self;
+    self = (PyCAst_object_iteration_statement_2*)type->tp_alloc(type, 0);
+    return (PyObject *)self;
+}
+
+	
+static void PyCAst_dealloc_iteration_statement_2(PyObject *_self)
+{
+    LOG(COL_FG_MAGENTA<<"Deallocating PyCAst::iteration_statement_2");
+    PyCAst_object_iteration_statement_2 *self=(PyCAst_object_iteration_statement_2*)_self;
+    self->_p_cast_object.clear();
+    self->ob_type->tp_free((PyObject*)self);
+}
+
+	
+static int PyCAst_init_iteration_statement_2(PyCAst_object_iteration_statement_2 *self, PyObject *args, PyObject *kwds)
+{
+    LOG(COL_FG_CYAN<<"initializing PyCAst::iteration_statement_2 with "<<PyTuple_Size(args)<<" arguments");
+	
+	if(PyTuple_Size(args)!=2)
+	{
+		LOG("Detected insufficient arguments")
+		PyErr_SetString(PyExc_TypeError,"Insufficient number of arguments. Expecting 2 argument(s).");
+		return -1;
+	}
+	LOG("Parsing Arguments")
+
+
+    	PyCAst_object_expression* _arg_expression=(PyCAst_object_expression*)PyTuple_GetItem(args,0);
+	if((PyObject*)_arg_expression==Py_None)
+	{
+		Py_DECREF(_arg_expression);
+		PyErr_SetString(PyExc_TypeError,"Parameter 1 cannot be None");
+		return -1;
+	}
+    	PyCAst_object_statement* _arg_statement=(PyCAst_object_statement*)PyTuple_GetItem(args,1);
+	if((PyObject*)_arg_statement==Py_None)
+	{
+		Py_DECREF(_arg_statement);
+		PyErr_SetString(PyExc_TypeError,"Parameter 2 cannot be None");
+		return -1;
+	}
+
+    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::iteration_statement_2>(new CAst::iteration_statement_2(_arg_expression->_p_cast_object,_arg_statement->_p_cast_object));
+    return 0;
+}
+
+static PyObject *PyCAst_getter_iteration_statement_2_code(PyObject *_self)
+{
+	PyCAst_object_iteration_statement_2 *self=(PyCAst_object_iteration_statement_2*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+}
+
+static PyObject *PyCAst_getter_iteration_statement_2_isNull(PyObject *_self)
+{
+	PyCAst_object_iteration_statement_2 *self=(PyCAst_object_iteration_statement_2*)(_self);
+
+	
+	if(self->_p_cast_object.isNull())	{Py_RETURN_TRUE;}
+	else					{Py_RETURN_FALSE;}
+}
+
+static PyObject *PyCAst_getter_iteration_statement_2_refCount(PyObject *_self)
+{
+	PyCAst_object_iteration_statement_2 *self=(PyCAst_object_iteration_statement_2*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return PyInt_FromLong
+	(
+		self->_p_cast_object.refCount()
+	);
+}
+
+static PyObject *PyCAst_getter_iteration_statement_2_expression(PyObject *_self)
+{
+	PyCAst_object_iteration_statement_2 *self=(PyCAst_object_iteration_statement_2*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_expression());
+}
+
+static PyObject *PyCAst_getter_iteration_statement_2_statement(PyObject *_self)
+{
+	PyCAst_object_iteration_statement_2 *self=(PyCAst_object_iteration_statement_2*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_statement());
+}
+
+
+
+	
+static PyObject * PyCAst_new_iteration_statement_3(PyTypeObject *type, PyObject *args, PyObject *kwds)
+{
+    LOG(COL_FG_CYAN<<"new PyCAst::iteration_statement_3");
+    PyCAst_object_iteration_statement_3 *self;
+    self = (PyCAst_object_iteration_statement_3*)type->tp_alloc(type, 0);
+    return (PyObject *)self;
+}
+
+	
+static void PyCAst_dealloc_iteration_statement_3(PyObject *_self)
+{
+    LOG(COL_FG_MAGENTA<<"Deallocating PyCAst::iteration_statement_3");
+    PyCAst_object_iteration_statement_3 *self=(PyCAst_object_iteration_statement_3*)_self;
+    self->_p_cast_object.clear();
+    self->ob_type->tp_free((PyObject*)self);
+}
+
+	
+static int PyCAst_init_iteration_statement_3(PyCAst_object_iteration_statement_3 *self, PyObject *args, PyObject *kwds)
+{
+    LOG(COL_FG_CYAN<<"initializing PyCAst::iteration_statement_3 with "<<PyTuple_Size(args)<<" arguments");
+	
+	if(PyTuple_Size(args)!=2)
+	{
+		LOG("Detected insufficient arguments")
+		PyErr_SetString(PyExc_TypeError,"Insufficient number of arguments. Expecting 2 argument(s).");
+		return -1;
+	}
+	LOG("Parsing Arguments")
+
+
+    	PyCAst_object_statement* _arg_statement=(PyCAst_object_statement*)PyTuple_GetItem(args,0);
+	if((PyObject*)_arg_statement==Py_None)
+	{
+		Py_DECREF(_arg_statement);
+		PyErr_SetString(PyExc_TypeError,"Parameter 1 cannot be None");
+		return -1;
+	}
+    	PyCAst_object_expression* _arg_expression=(PyCAst_object_expression*)PyTuple_GetItem(args,1);
+	if((PyObject*)_arg_expression==Py_None)
+	{
+		Py_DECREF(_arg_expression);
+		PyErr_SetString(PyExc_TypeError,"Parameter 2 cannot be None");
+		return -1;
+	}
+
+    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::iteration_statement_3>(new CAst::iteration_statement_3(_arg_statement->_p_cast_object,_arg_expression->_p_cast_object));
     return 0;
 }
 
@@ -2096,6 +2519,24 @@ static PyObject *PyCAst_getter_iteration_statement_3_refCount(PyObject *_self)
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_iteration_statement_3_statement(PyObject *_self)
+{
+	PyCAst_object_iteration_statement_3 *self=(PyCAst_object_iteration_statement_3*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_statement());
+}
+
+static PyObject *PyCAst_getter_iteration_statement_3_expression(PyObject *_self)
+{
+	PyCAst_object_iteration_statement_3 *self=(PyCAst_object_iteration_statement_3*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_expression());
 }
 
 
@@ -2185,6 +2626,24 @@ static PyObject *PyCAst_getter_additive_expression_item_refCount(PyObject *_self
 	);
 }
 
+static PyObject *PyCAst_getter_additive_expression_item_token(PyObject *_self)
+{
+	PyCAst_object_additive_expression_item *self=(PyCAst_object_additive_expression_item*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token());
+}
+
+static PyObject *PyCAst_getter_additive_expression_item_multiplicative_expression(PyObject *_self)
+{
+	PyCAst_object_additive_expression_item *self=(PyCAst_object_additive_expression_item*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_multiplicative_expression());
+}
+
 
 
 
@@ -2257,6 +2716,39 @@ static PyObject *PyCAst_getter_additive_expression_refCount(PyObject *_self)
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_additive_expression_size(PyObject *_self)
+{
+	PyCAst_object_additive_expression *self=(PyCAst_object_additive_expression*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return PyInt_FromLong
+	(
+		self->_p_cast_object->size()
+	);
+}
+
+
+
+static Py_ssize_t PyCAst_list_length_additive_expression(PyObject *_self)
+{
+	PyCAst_object_additive_expression *self=(PyCAst_object_additive_expression*)(_self);
+	if(self->_p_cast_object.isNull())return 0;
+	return self->_p_cast_object->size();
+	
+}
+
+
+static PyObject* PyCAst_list_item_additive_expression(PyObject *_self,Py_ssize_t index)
+{
+	PyCAst_object_additive_expression *self=(PyCAst_object_additive_expression*)(_self);
+	if(self->_p_cast_object.isNull())Py_RETURN_NONE;
+	if(abs(index)>self->_p_cast_object->size()) PyErr_SetString(PyExc_IndexError,"Index out of range");
+	CAst::ReferenceCountedAutoPointer<CAst::additive_expression_item> item=self->_p_cast_object->operator[](index);
+	
+	return CAstToPyCAst(item);
 }
 
 
@@ -2349,15 +2841,15 @@ static int PyCAst_init_external_declaration_1(PyCAst_object_external_declaration
 	LOG("Parsing Arguments")
 
 
-    	PyCAst_object_function_definition* _arg_function_definition=(PyCAst_object_function_definition*)PyTuple_GetItem(args,0);
-	if((PyObject*)_arg_function_definition==Py_None)
+    	PyCAst_object_declaration* _arg_declaration=(PyCAst_object_declaration*)PyTuple_GetItem(args,0);
+	if((PyObject*)_arg_declaration==Py_None)
 	{
-		Py_DECREF(_arg_function_definition);
+		Py_DECREF(_arg_declaration);
 		PyErr_SetString(PyExc_TypeError,"Parameter 1 cannot be None");
 		return -1;
 	}
 
-    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::external_declaration_1>(new CAst::external_declaration_1(_arg_function_definition->_p_cast_object));
+    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::external_declaration_1>(new CAst::external_declaration_1(_arg_declaration->_p_cast_object));
     return 0;
 }
 
@@ -2394,6 +2886,15 @@ static PyObject *PyCAst_getter_external_declaration_1_refCount(PyObject *_self)
 	);
 }
 
+static PyObject *PyCAst_getter_external_declaration_1_declaration(PyObject *_self)
+{
+	PyCAst_object_external_declaration_1 *self=(PyCAst_object_external_declaration_1*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_declaration());
+}
+
 
 
 	
@@ -2428,15 +2929,15 @@ static int PyCAst_init_external_declaration_2(PyCAst_object_external_declaration
 	LOG("Parsing Arguments")
 
 
-    	PyCAst_object_declaration* _arg_declaration=(PyCAst_object_declaration*)PyTuple_GetItem(args,0);
-	if((PyObject*)_arg_declaration==Py_None)
+    	PyCAst_object_function_definition* _arg_function_definition=(PyCAst_object_function_definition*)PyTuple_GetItem(args,0);
+	if((PyObject*)_arg_function_definition==Py_None)
 	{
-		Py_DECREF(_arg_declaration);
+		Py_DECREF(_arg_function_definition);
 		PyErr_SetString(PyExc_TypeError,"Parameter 1 cannot be None");
 		return -1;
 	}
 
-    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::external_declaration_2>(new CAst::external_declaration_2(_arg_declaration->_p_cast_object));
+    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::external_declaration_2>(new CAst::external_declaration_2(_arg_function_definition->_p_cast_object));
     return 0;
 }
 
@@ -2471,6 +2972,15 @@ static PyObject *PyCAst_getter_external_declaration_2_refCount(PyObject *_self)
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_external_declaration_2_function_definition(PyObject *_self)
+{
+	PyCAst_object_external_declaration_2 *self=(PyCAst_object_external_declaration_2*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_function_definition());
 }
 
 
@@ -2608,6 +3118,15 @@ static PyObject *PyCAst_getter_type_specifier_1_refCount(PyObject *_self)
 	);
 }
 
+static PyObject *PyCAst_getter_type_specifier_1_enum_specifier(PyObject *_self)
+{
+	PyCAst_object_type_specifier_1 *self=(PyCAst_object_type_specifier_1*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_enum_specifier());
+}
+
 
 
 	
@@ -2687,6 +3206,15 @@ static PyObject *PyCAst_getter_type_specifier_2_refCount(PyObject *_self)
 	);
 }
 
+static PyObject *PyCAst_getter_type_specifier_2_token(PyObject *_self)
+{
+	PyCAst_object_type_specifier_2 *self=(PyCAst_object_type_specifier_2*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token());
+}
+
 
 
 	
@@ -2764,6 +3292,15 @@ static PyObject *PyCAst_getter_type_specifier_3_refCount(PyObject *_self)
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_type_specifier_3_struct_or_union_specifier(PyObject *_self)
+{
+	PyCAst_object_type_specifier_3 *self=(PyCAst_object_type_specifier_3*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_struct_or_union_specifier());
 }
 
 
@@ -2850,6 +3387,24 @@ static PyObject *PyCAst_getter_compound_statement_refCount(PyObject *_self)
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_compound_statement_declaration_list(PyObject *_self)
+{
+	PyCAst_object_compound_statement *self=(PyCAst_object_compound_statement*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_declaration_list());
+}
+
+static PyObject *PyCAst_getter_compound_statement_statement_list(PyObject *_self)
+{
+	PyCAst_object_compound_statement *self=(PyCAst_object_compound_statement*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_statement_list());
 }
 
 
@@ -2939,6 +3494,24 @@ static PyObject *PyCAst_getter_inclusive_or_expression_item_refCount(PyObject *_
 	);
 }
 
+static PyObject *PyCAst_getter_inclusive_or_expression_item_token(PyObject *_self)
+{
+	PyCAst_object_inclusive_or_expression_item *self=(PyCAst_object_inclusive_or_expression_item*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token());
+}
+
+static PyObject *PyCAst_getter_inclusive_or_expression_item_exclusive_or_expression(PyObject *_self)
+{
+	PyCAst_object_inclusive_or_expression_item *self=(PyCAst_object_inclusive_or_expression_item*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_exclusive_or_expression());
+}
+
 
 
 
@@ -3013,6 +3586,39 @@ static PyObject *PyCAst_getter_inclusive_or_expression_refCount(PyObject *_self)
 	);
 }
 
+static PyObject *PyCAst_getter_inclusive_or_expression_size(PyObject *_self)
+{
+	PyCAst_object_inclusive_or_expression *self=(PyCAst_object_inclusive_or_expression*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return PyInt_FromLong
+	(
+		self->_p_cast_object->size()
+	);
+}
+
+
+
+static Py_ssize_t PyCAst_list_length_inclusive_or_expression(PyObject *_self)
+{
+	PyCAst_object_inclusive_or_expression *self=(PyCAst_object_inclusive_or_expression*)(_self);
+	if(self->_p_cast_object.isNull())return 0;
+	return self->_p_cast_object->size();
+	
+}
+
+
+static PyObject* PyCAst_list_item_inclusive_or_expression(PyObject *_self,Py_ssize_t index)
+{
+	PyCAst_object_inclusive_or_expression *self=(PyCAst_object_inclusive_or_expression*)(_self);
+	if(self->_p_cast_object.isNull())Py_RETURN_NONE;
+	if(abs(index)>self->_p_cast_object->size()) PyErr_SetString(PyExc_IndexError,"Index out of range");
+	CAst::ReferenceCountedAutoPointer<CAst::inclusive_or_expression_item> item=self->_p_cast_object->operator[](index);
+	
+	return CAstToPyCAst(item);
+}
+
 
 
 
@@ -3040,23 +3646,17 @@ static int PyCAst_init_pointer_item_1(PyCAst_object_pointer_item_1 *self, PyObje
 {
     LOG(COL_FG_CYAN<<"initializing PyCAst::pointer_item_1 with "<<PyTuple_Size(args)<<" arguments");
 	
-	if(PyTuple_Size(args)!=1)
+	if(PyTuple_Size(args)!=0)
 	{
 		LOG("Detected insufficient arguments")
-		PyErr_SetString(PyExc_TypeError,"Insufficient number of arguments. Expecting 1 argument(s).");
+		PyErr_SetString(PyExc_TypeError,"Insufficient number of arguments. Expecting 0 argument(s).");
 		return -1;
 	}
 	LOG("Parsing Arguments")
 
 
-    	PyCAst_object_type_qualifier_list* _arg_type_qualifier_list=(PyCAst_object_type_qualifier_list*)PyTuple_GetItem(args,0);
-	if((PyObject*)_arg_type_qualifier_list==Py_None)
-	{
-		Py_DECREF(_arg_type_qualifier_list);
-		_arg_type_qualifier_list=(PyCAst_object_type_qualifier_list*)PyCAst_new_type_qualifier_list(&PyCAst_type_type_qualifier_list,NULL,NULL);
-	}
 
-    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::pointer_item_1>(new CAst::pointer_item_1(_arg_type_qualifier_list->_p_cast_object));
+    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::pointer_item_1>(new CAst::pointer_item_1());
     return 0;
 }
 
@@ -3118,17 +3718,23 @@ static int PyCAst_init_pointer_item_2(PyCAst_object_pointer_item_2 *self, PyObje
 {
     LOG(COL_FG_CYAN<<"initializing PyCAst::pointer_item_2 with "<<PyTuple_Size(args)<<" arguments");
 	
-	if(PyTuple_Size(args)!=0)
+	if(PyTuple_Size(args)!=1)
 	{
 		LOG("Detected insufficient arguments")
-		PyErr_SetString(PyExc_TypeError,"Insufficient number of arguments. Expecting 0 argument(s).");
+		PyErr_SetString(PyExc_TypeError,"Insufficient number of arguments. Expecting 1 argument(s).");
 		return -1;
 	}
 	LOG("Parsing Arguments")
 
 
+    	PyCAst_object_type_qualifier_list* _arg_type_qualifier_list=(PyCAst_object_type_qualifier_list*)PyTuple_GetItem(args,0);
+	if((PyObject*)_arg_type_qualifier_list==Py_None)
+	{
+		Py_DECREF(_arg_type_qualifier_list);
+		_arg_type_qualifier_list=(PyCAst_object_type_qualifier_list*)PyCAst_new_type_qualifier_list(&PyCAst_type_type_qualifier_list,NULL,NULL);
+	}
 
-    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::pointer_item_2>(new CAst::pointer_item_2());
+    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::pointer_item_2>(new CAst::pointer_item_2(_arg_type_qualifier_list->_p_cast_object));
     return 0;
 }
 
@@ -3163,6 +3769,15 @@ static PyObject *PyCAst_getter_pointer_item_2_refCount(PyObject *_self)
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_pointer_item_2_type_qualifier_list(PyObject *_self)
+{
+	PyCAst_object_pointer_item_2 *self=(PyCAst_object_pointer_item_2*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_type_qualifier_list());
 }
 
 
@@ -3229,6 +3844,94 @@ static PyObject *PyCAst_getter_pointer_isNull(PyObject *_self)
 static PyObject *PyCAst_getter_pointer_refCount(PyObject *_self)
 {
 	PyCAst_object_pointer *self=(PyCAst_object_pointer*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return PyInt_FromLong
+	(
+		self->_p_cast_object.refCount()
+	);
+}
+
+static PyObject *PyCAst_getter_pointer_size(PyObject *_self)
+{
+	PyCAst_object_pointer *self=(PyCAst_object_pointer*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return PyInt_FromLong
+	(
+		self->_p_cast_object->size()
+	);
+}
+
+
+
+static Py_ssize_t PyCAst_list_length_pointer(PyObject *_self)
+{
+	PyCAst_object_pointer *self=(PyCAst_object_pointer*)(_self);
+	if(self->_p_cast_object.isNull())return 0;
+	return self->_p_cast_object->size();
+	
+}
+
+
+static PyObject* PyCAst_list_item_pointer(PyObject *_self,Py_ssize_t index)
+{
+	PyCAst_object_pointer *self=(PyCAst_object_pointer*)(_self);
+	if(self->_p_cast_object.isNull())Py_RETURN_NONE;
+	if(abs(index)>self->_p_cast_object->size()) PyErr_SetString(PyExc_IndexError,"Index out of range");
+	CAst::ReferenceCountedAutoPointer<CAst::pointer_item> item=self->_p_cast_object->operator[](index);
+	
+	return CAstToPyCAst(item);
+}
+
+
+
+
+
+	
+static PyObject * PyCAst_new_pointer_item(PyTypeObject *type, PyObject *args, PyObject *kwds)
+{
+    LOG(COL_FG_CYAN<<"new PyCAst::pointer_item");
+    PyCAst_object_pointer_item *self;
+    self = (PyCAst_object_pointer_item*)type->tp_alloc(type, 0);
+    return (PyObject *)self;
+}
+
+	
+static void PyCAst_dealloc_pointer_item(PyObject *_self)
+{
+    LOG(COL_FG_MAGENTA<<"Deallocating PyCAst::pointer_item");
+    PyCAst_object_pointer_item *self=(PyCAst_object_pointer_item*)_self;
+    self->_p_cast_object.clear();
+    self->ob_type->tp_free((PyObject*)self);
+}
+
+static PyObject *PyCAst_getter_pointer_item_code(PyObject *_self)
+{
+	PyCAst_object_pointer_item *self=(PyCAst_object_pointer_item*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+}
+
+static PyObject *PyCAst_getter_pointer_item_isNull(PyObject *_self)
+{
+	PyCAst_object_pointer_item *self=(PyCAst_object_pointer_item*)(_self);
+
+	
+	if(self->_p_cast_object.isNull())	{Py_RETURN_TRUE;}
+	else					{Py_RETURN_FALSE;}
+}
+
+static PyObject *PyCAst_getter_pointer_item_refCount(PyObject *_self)
+{
+	PyCAst_object_pointer_item *self=(PyCAst_object_pointer_item*)(_self);
 	if(self->_p_cast_object.isNull())
 		Py_RETURN_NONE;
 	
@@ -3380,6 +4083,24 @@ static PyObject *PyCAst_getter_selection_statement_1_refCount(PyObject *_self)
 	);
 }
 
+static PyObject *PyCAst_getter_selection_statement_1_expression(PyObject *_self)
+{
+	PyCAst_object_selection_statement_1 *self=(PyCAst_object_selection_statement_1*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_expression());
+}
+
+static PyObject *PyCAst_getter_selection_statement_1_statement(PyObject *_self)
+{
+	PyCAst_object_selection_statement_1 *self=(PyCAst_object_selection_statement_1*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_statement());
+}
+
 
 
 	
@@ -3478,6 +4199,42 @@ static PyObject *PyCAst_getter_selection_statement_2_refCount(PyObject *_self)
 	);
 }
 
+static PyObject *PyCAst_getter_selection_statement_2_expression(PyObject *_self)
+{
+	PyCAst_object_selection_statement_2 *self=(PyCAst_object_selection_statement_2*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_expression());
+}
+
+static PyObject *PyCAst_getter_selection_statement_2_statement1(PyObject *_self)
+{
+	PyCAst_object_selection_statement_2 *self=(PyCAst_object_selection_statement_2*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_statement1());
+}
+
+static PyObject *PyCAst_getter_selection_statement_2_token(PyObject *_self)
+{
+	PyCAst_object_selection_statement_2 *self=(PyCAst_object_selection_statement_2*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token());
+}
+
+static PyObject *PyCAst_getter_selection_statement_2_statement2(PyObject *_self)
+{
+	PyCAst_object_selection_statement_2 *self=(PyCAst_object_selection_statement_2*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_statement2());
+}
+
 
 
 
@@ -3559,24 +4316,30 @@ static int PyCAst_init_postfix_expression_1(PyCAst_object_postfix_expression_1 *
 {
     LOG(COL_FG_CYAN<<"initializing PyCAst::postfix_expression_1 with "<<PyTuple_Size(args)<<" arguments");
 	
-	if(PyTuple_Size(args)!=1)
+	if(PyTuple_Size(args)!=2)
 	{
 		LOG("Detected insufficient arguments")
-		PyErr_SetString(PyExc_TypeError,"Insufficient number of arguments. Expecting 1 argument(s).");
+		PyErr_SetString(PyExc_TypeError,"Insufficient number of arguments. Expecting 2 argument(s).");
 		return -1;
 	}
 	LOG("Parsing Arguments")
 
 
-    	PyCAst_object_primary_expression* _arg_primary_expression=(PyCAst_object_primary_expression*)PyTuple_GetItem(args,0);
-	if((PyObject*)_arg_primary_expression==Py_None)
+    	PyCAst_object_postfix_expression* _arg_postfix_expression=(PyCAst_object_postfix_expression*)PyTuple_GetItem(args,0);
+	if((PyObject*)_arg_postfix_expression==Py_None)
 	{
-		Py_DECREF(_arg_primary_expression);
+		Py_DECREF(_arg_postfix_expression);
 		PyErr_SetString(PyExc_TypeError,"Parameter 1 cannot be None");
 		return -1;
 	}
+    	PyCAst_object_argument_expression_list* _arg_argument_expression_list=(PyCAst_object_argument_expression_list*)PyTuple_GetItem(args,1);
+	if((PyObject*)_arg_argument_expression_list==Py_None)
+	{
+		Py_DECREF(_arg_argument_expression_list);
+		_arg_argument_expression_list=(PyCAst_object_argument_expression_list*)PyCAst_new_argument_expression_list(&PyCAst_type_argument_expression_list,NULL,NULL);
+	}
 
-    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::postfix_expression_1>(new CAst::postfix_expression_1(_arg_primary_expression->_p_cast_object));
+    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::postfix_expression_1>(new CAst::postfix_expression_1(_arg_postfix_expression->_p_cast_object,_arg_argument_expression_list->_p_cast_object));
     return 0;
 }
 
@@ -3613,6 +4376,24 @@ static PyObject *PyCAst_getter_postfix_expression_1_refCount(PyObject *_self)
 	);
 }
 
+static PyObject *PyCAst_getter_postfix_expression_1_postfix_expression(PyObject *_self)
+{
+	PyCAst_object_postfix_expression_1 *self=(PyCAst_object_postfix_expression_1*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_postfix_expression());
+}
+
+static PyObject *PyCAst_getter_postfix_expression_1_argument_expression_list(PyObject *_self)
+{
+	PyCAst_object_postfix_expression_1 *self=(PyCAst_object_postfix_expression_1*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_argument_expression_list());
+}
+
 
 
 	
@@ -3638,10 +4419,10 @@ static int PyCAst_init_postfix_expression_2(PyCAst_object_postfix_expression_2 *
 {
     LOG(COL_FG_CYAN<<"initializing PyCAst::postfix_expression_2 with "<<PyTuple_Size(args)<<" arguments");
 	
-	if(PyTuple_Size(args)!=2)
+	if(PyTuple_Size(args)!=3)
 	{
 		LOG("Detected insufficient arguments")
-		PyErr_SetString(PyExc_TypeError,"Insufficient number of arguments. Expecting 2 argument(s).");
+		PyErr_SetString(PyExc_TypeError,"Insufficient number of arguments. Expecting 3 argument(s).");
 		return -1;
 	}
 	LOG("Parsing Arguments")
@@ -3654,15 +4435,22 @@ static int PyCAst_init_postfix_expression_2(PyCAst_object_postfix_expression_2 *
 		PyErr_SetString(PyExc_TypeError,"Parameter 1 cannot be None");
 		return -1;
 	}
-    	PyCAst_object_token* _arg_token=(PyCAst_object_token*)PyTuple_GetItem(args,1);
-	if((PyObject*)_arg_token==Py_None)
+    	PyCAst_object_token* _arg_token1=(PyCAst_object_token*)PyTuple_GetItem(args,1);
+	if((PyObject*)_arg_token1==Py_None)
 	{
-		Py_DECREF(_arg_token);
+		Py_DECREF(_arg_token1);
 		PyErr_SetString(PyExc_TypeError,"Parameter 2 cannot be None");
 		return -1;
 	}
+    	PyCAst_object_token* _arg_token2=(PyCAst_object_token*)PyTuple_GetItem(args,2);
+	if((PyObject*)_arg_token2==Py_None)
+	{
+		Py_DECREF(_arg_token2);
+		PyErr_SetString(PyExc_TypeError,"Parameter 3 cannot be None");
+		return -1;
+	}
 
-    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::postfix_expression_2>(new CAst::postfix_expression_2(_arg_postfix_expression->_p_cast_object,_arg_token->_p_cast_object));
+    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::postfix_expression_2>(new CAst::postfix_expression_2(_arg_postfix_expression->_p_cast_object,_arg_token1->_p_cast_object,_arg_token2->_p_cast_object));
     return 0;
 }
 
@@ -3699,6 +4487,33 @@ static PyObject *PyCAst_getter_postfix_expression_2_refCount(PyObject *_self)
 	);
 }
 
+static PyObject *PyCAst_getter_postfix_expression_2_postfix_expression(PyObject *_self)
+{
+	PyCAst_object_postfix_expression_2 *self=(PyCAst_object_postfix_expression_2*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_postfix_expression());
+}
+
+static PyObject *PyCAst_getter_postfix_expression_2_token1(PyObject *_self)
+{
+	PyCAst_object_postfix_expression_2 *self=(PyCAst_object_postfix_expression_2*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token1());
+}
+
+static PyObject *PyCAst_getter_postfix_expression_2_token2(PyObject *_self)
+{
+	PyCAst_object_postfix_expression_2 *self=(PyCAst_object_postfix_expression_2*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token2());
+}
+
 
 
 	
@@ -3724,31 +4539,24 @@ static int PyCAst_init_postfix_expression_3(PyCAst_object_postfix_expression_3 *
 {
     LOG(COL_FG_CYAN<<"initializing PyCAst::postfix_expression_3 with "<<PyTuple_Size(args)<<" arguments");
 	
-	if(PyTuple_Size(args)!=2)
+	if(PyTuple_Size(args)!=1)
 	{
 		LOG("Detected insufficient arguments")
-		PyErr_SetString(PyExc_TypeError,"Insufficient number of arguments. Expecting 2 argument(s).");
+		PyErr_SetString(PyExc_TypeError,"Insufficient number of arguments. Expecting 1 argument(s).");
 		return -1;
 	}
 	LOG("Parsing Arguments")
 
 
-    	PyCAst_object_postfix_expression* _arg_postfix_expression=(PyCAst_object_postfix_expression*)PyTuple_GetItem(args,0);
-	if((PyObject*)_arg_postfix_expression==Py_None)
+    	PyCAst_object_primary_expression* _arg_primary_expression=(PyCAst_object_primary_expression*)PyTuple_GetItem(args,0);
+	if((PyObject*)_arg_primary_expression==Py_None)
 	{
-		Py_DECREF(_arg_postfix_expression);
+		Py_DECREF(_arg_primary_expression);
 		PyErr_SetString(PyExc_TypeError,"Parameter 1 cannot be None");
 		return -1;
 	}
-    	PyCAst_object_expression* _arg_expression=(PyCAst_object_expression*)PyTuple_GetItem(args,1);
-	if((PyObject*)_arg_expression==Py_None)
-	{
-		Py_DECREF(_arg_expression);
-		PyErr_SetString(PyExc_TypeError,"Parameter 2 cannot be None");
-		return -1;
-	}
 
-    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::postfix_expression_3>(new CAst::postfix_expression_3(_arg_postfix_expression->_p_cast_object,_arg_expression->_p_cast_object));
+    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::postfix_expression_3>(new CAst::postfix_expression_3(_arg_primary_expression->_p_cast_object));
     return 0;
 }
 
@@ -3785,6 +4593,15 @@ static PyObject *PyCAst_getter_postfix_expression_3_refCount(PyObject *_self)
 	);
 }
 
+static PyObject *PyCAst_getter_postfix_expression_3_primary_expression(PyObject *_self)
+{
+	PyCAst_object_postfix_expression_3 *self=(PyCAst_object_postfix_expression_3*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_primary_expression());
+}
+
 
 
 	
@@ -3810,10 +4627,10 @@ static int PyCAst_init_postfix_expression_4(PyCAst_object_postfix_expression_4 *
 {
     LOG(COL_FG_CYAN<<"initializing PyCAst::postfix_expression_4 with "<<PyTuple_Size(args)<<" arguments");
 	
-	if(PyTuple_Size(args)!=3)
+	if(PyTuple_Size(args)!=2)
 	{
 		LOG("Detected insufficient arguments")
-		PyErr_SetString(PyExc_TypeError,"Insufficient number of arguments. Expecting 3 argument(s).");
+		PyErr_SetString(PyExc_TypeError,"Insufficient number of arguments. Expecting 2 argument(s).");
 		return -1;
 	}
 	LOG("Parsing Arguments")
@@ -3826,22 +4643,15 @@ static int PyCAst_init_postfix_expression_4(PyCAst_object_postfix_expression_4 *
 		PyErr_SetString(PyExc_TypeError,"Parameter 1 cannot be None");
 		return -1;
 	}
-    	PyCAst_object_token* _arg_token1=(PyCAst_object_token*)PyTuple_GetItem(args,1);
-	if((PyObject*)_arg_token1==Py_None)
+    	PyCAst_object_token* _arg_token=(PyCAst_object_token*)PyTuple_GetItem(args,1);
+	if((PyObject*)_arg_token==Py_None)
 	{
-		Py_DECREF(_arg_token1);
+		Py_DECREF(_arg_token);
 		PyErr_SetString(PyExc_TypeError,"Parameter 2 cannot be None");
 		return -1;
 	}
-    	PyCAst_object_token* _arg_token2=(PyCAst_object_token*)PyTuple_GetItem(args,2);
-	if((PyObject*)_arg_token2==Py_None)
-	{
-		Py_DECREF(_arg_token2);
-		PyErr_SetString(PyExc_TypeError,"Parameter 3 cannot be None");
-		return -1;
-	}
 
-    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::postfix_expression_4>(new CAst::postfix_expression_4(_arg_postfix_expression->_p_cast_object,_arg_token1->_p_cast_object,_arg_token2->_p_cast_object));
+    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::postfix_expression_4>(new CAst::postfix_expression_4(_arg_postfix_expression->_p_cast_object,_arg_token->_p_cast_object));
     return 0;
 }
 
@@ -3876,6 +4686,24 @@ static PyObject *PyCAst_getter_postfix_expression_4_refCount(PyObject *_self)
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_postfix_expression_4_postfix_expression(PyObject *_self)
+{
+	PyCAst_object_postfix_expression_4 *self=(PyCAst_object_postfix_expression_4*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_postfix_expression());
+}
+
+static PyObject *PyCAst_getter_postfix_expression_4_token(PyObject *_self)
+{
+	PyCAst_object_postfix_expression_4 *self=(PyCAst_object_postfix_expression_4*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token());
 }
 
 
@@ -3919,14 +4747,15 @@ static int PyCAst_init_postfix_expression_5(PyCAst_object_postfix_expression_5 *
 		PyErr_SetString(PyExc_TypeError,"Parameter 1 cannot be None");
 		return -1;
 	}
-    	PyCAst_object_argument_expression_list* _arg_argument_expression_list=(PyCAst_object_argument_expression_list*)PyTuple_GetItem(args,1);
-	if((PyObject*)_arg_argument_expression_list==Py_None)
+    	PyCAst_object_expression* _arg_expression=(PyCAst_object_expression*)PyTuple_GetItem(args,1);
+	if((PyObject*)_arg_expression==Py_None)
 	{
-		Py_DECREF(_arg_argument_expression_list);
-		_arg_argument_expression_list=(PyCAst_object_argument_expression_list*)PyCAst_new_argument_expression_list(&PyCAst_type_argument_expression_list,NULL,NULL);
+		Py_DECREF(_arg_expression);
+		PyErr_SetString(PyExc_TypeError,"Parameter 2 cannot be None");
+		return -1;
 	}
 
-    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::postfix_expression_5>(new CAst::postfix_expression_5(_arg_postfix_expression->_p_cast_object,_arg_argument_expression_list->_p_cast_object));
+    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::postfix_expression_5>(new CAst::postfix_expression_5(_arg_postfix_expression->_p_cast_object,_arg_expression->_p_cast_object));
     return 0;
 }
 
@@ -3961,6 +4790,24 @@ static PyObject *PyCAst_getter_postfix_expression_5_refCount(PyObject *_self)
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_postfix_expression_5_postfix_expression(PyObject *_self)
+{
+	PyCAst_object_postfix_expression_5 *self=(PyCAst_object_postfix_expression_5*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_postfix_expression());
+}
+
+static PyObject *PyCAst_getter_postfix_expression_5_expression(PyObject *_self)
+{
+	PyCAst_object_postfix_expression_5 *self=(PyCAst_object_postfix_expression_5*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_expression());
 }
 
 
@@ -4050,6 +4897,24 @@ static PyObject *PyCAst_getter_and_expression_item_refCount(PyObject *_self)
 	);
 }
 
+static PyObject *PyCAst_getter_and_expression_item_token(PyObject *_self)
+{
+	PyCAst_object_and_expression_item *self=(PyCAst_object_and_expression_item*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token());
+}
+
+static PyObject *PyCAst_getter_and_expression_item_equality_expression(PyObject *_self)
+{
+	PyCAst_object_and_expression_item *self=(PyCAst_object_and_expression_item*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_equality_expression());
+}
+
 
 
 
@@ -4122,6 +4987,39 @@ static PyObject *PyCAst_getter_and_expression_refCount(PyObject *_self)
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_and_expression_size(PyObject *_self)
+{
+	PyCAst_object_and_expression *self=(PyCAst_object_and_expression*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return PyInt_FromLong
+	(
+		self->_p_cast_object->size()
+	);
+}
+
+
+
+static Py_ssize_t PyCAst_list_length_and_expression(PyObject *_self)
+{
+	PyCAst_object_and_expression *self=(PyCAst_object_and_expression*)(_self);
+	if(self->_p_cast_object.isNull())return 0;
+	return self->_p_cast_object->size();
+	
+}
+
+
+static PyObject* PyCAst_list_item_and_expression(PyObject *_self,Py_ssize_t index)
+{
+	PyCAst_object_and_expression *self=(PyCAst_object_and_expression*)(_self);
+	if(self->_p_cast_object.isNull())Py_RETURN_NONE;
+	if(abs(index)>self->_p_cast_object->size()) PyErr_SetString(PyExc_IndexError,"Index out of range");
+	CAst::ReferenceCountedAutoPointer<CAst::and_expression_item> item=self->_p_cast_object->operator[](index);
+	
+	return CAstToPyCAst(item);
 }
 
 
@@ -4259,6 +5157,15 @@ static PyObject *PyCAst_getter_statement_1_refCount(PyObject *_self)
 	);
 }
 
+static PyObject *PyCAst_getter_statement_1_jump_statement(PyObject *_self)
+{
+	PyCAst_object_statement_1 *self=(PyCAst_object_statement_1*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_jump_statement());
+}
+
 
 
 	
@@ -4336,6 +5243,15 @@ static PyObject *PyCAst_getter_statement_2_refCount(PyObject *_self)
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_statement_2_labeled_statement(PyObject *_self)
+{
+	PyCAst_object_statement_2 *self=(PyCAst_object_statement_2*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_labeled_statement());
 }
 
 
@@ -4417,6 +5333,15 @@ static PyObject *PyCAst_getter_statement_3_refCount(PyObject *_self)
 	);
 }
 
+static PyObject *PyCAst_getter_statement_3_compound_statement(PyObject *_self)
+{
+	PyCAst_object_statement_3 *self=(PyCAst_object_statement_3*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_compound_statement());
+}
+
 
 
 	
@@ -4494,6 +5419,15 @@ static PyObject *PyCAst_getter_statement_4_refCount(PyObject *_self)
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_statement_4_expression_statement(PyObject *_self)
+{
+	PyCAst_object_statement_4 *self=(PyCAst_object_statement_4*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_expression_statement());
 }
 
 
@@ -4575,6 +5509,15 @@ static PyObject *PyCAst_getter_statement_5_refCount(PyObject *_self)
 	);
 }
 
+static PyObject *PyCAst_getter_statement_5_selection_statement(PyObject *_self)
+{
+	PyCAst_object_statement_5 *self=(PyCAst_object_statement_5*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_selection_statement());
+}
+
 
 
 	
@@ -4652,6 +5595,15 @@ static PyObject *PyCAst_getter_statement_6_refCount(PyObject *_self)
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_statement_6_iteration_statement(PyObject *_self)
+{
+	PyCAst_object_statement_6 *self=(PyCAst_object_statement_6*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_iteration_statement());
 }
 
 
@@ -4796,6 +5748,24 @@ static PyObject *PyCAst_getter_cast_expression_1_refCount(PyObject *_self)
 	);
 }
 
+static PyObject *PyCAst_getter_cast_expression_1_type_name(PyObject *_self)
+{
+	PyCAst_object_cast_expression_1 *self=(PyCAst_object_cast_expression_1*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_type_name());
+}
+
+static PyObject *PyCAst_getter_cast_expression_1_cast_expression(PyObject *_self)
+{
+	PyCAst_object_cast_expression_1 *self=(PyCAst_object_cast_expression_1*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_cast_expression());
+}
+
 
 
 	
@@ -4873,6 +5843,15 @@ static PyObject *PyCAst_getter_cast_expression_2_refCount(PyObject *_self)
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_cast_expression_2_unary_expression(PyObject *_self)
+{
+	PyCAst_object_cast_expression_2 *self=(PyCAst_object_cast_expression_2*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_unary_expression());
 }
 
 
@@ -4968,6 +5947,33 @@ static PyObject *PyCAst_getter_init_declarator_refCount(PyObject *_self)
 	);
 }
 
+static PyObject *PyCAst_getter_init_declarator_declarator(PyObject *_self)
+{
+	PyCAst_object_init_declarator *self=(PyCAst_object_init_declarator*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_declarator());
+}
+
+static PyObject *PyCAst_getter_init_declarator_token(PyObject *_self)
+{
+	PyCAst_object_init_declarator *self=(PyCAst_object_init_declarator*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token());
+}
+
+static PyObject *PyCAst_getter_init_declarator_initializer(PyObject *_self)
+{
+	PyCAst_object_init_declarator *self=(PyCAst_object_init_declarator*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_initializer());
+}
+
 
 
 
@@ -5055,6 +6061,24 @@ static PyObject *PyCAst_getter_struct_declarator_list_item_refCount(PyObject *_s
 	);
 }
 
+static PyObject *PyCAst_getter_struct_declarator_list_item_token(PyObject *_self)
+{
+	PyCAst_object_struct_declarator_list_item *self=(PyCAst_object_struct_declarator_list_item*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token());
+}
+
+static PyObject *PyCAst_getter_struct_declarator_list_item_struct_declarator(PyObject *_self)
+{
+	PyCAst_object_struct_declarator_list_item *self=(PyCAst_object_struct_declarator_list_item*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_struct_declarator());
+}
+
 
 
 
@@ -5127,6 +6151,39 @@ static PyObject *PyCAst_getter_struct_declarator_list_refCount(PyObject *_self)
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_struct_declarator_list_size(PyObject *_self)
+{
+	PyCAst_object_struct_declarator_list *self=(PyCAst_object_struct_declarator_list*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return PyInt_FromLong
+	(
+		self->_p_cast_object->size()
+	);
+}
+
+
+
+static Py_ssize_t PyCAst_list_length_struct_declarator_list(PyObject *_self)
+{
+	PyCAst_object_struct_declarator_list *self=(PyCAst_object_struct_declarator_list*)(_self);
+	if(self->_p_cast_object.isNull())return 0;
+	return self->_p_cast_object->size();
+	
+}
+
+
+static PyObject* PyCAst_list_item_struct_declarator_list(PyObject *_self,Py_ssize_t index)
+{
+	PyCAst_object_struct_declarator_list *self=(PyCAst_object_struct_declarator_list*)(_self);
+	if(self->_p_cast_object.isNull())Py_RETURN_NONE;
+	if(abs(index)>self->_p_cast_object->size()) PyErr_SetString(PyExc_IndexError,"Index out of range");
+	CAst::ReferenceCountedAutoPointer<CAst::struct_declarator_list_item> item=self->_p_cast_object->operator[](index);
+	
+	return CAstToPyCAst(item);
 }
 
 
@@ -5216,6 +6273,24 @@ static PyObject *PyCAst_getter_logical_or_expression_item_refCount(PyObject *_se
 	);
 }
 
+static PyObject *PyCAst_getter_logical_or_expression_item_token(PyObject *_self)
+{
+	PyCAst_object_logical_or_expression_item *self=(PyCAst_object_logical_or_expression_item*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token());
+}
+
+static PyObject *PyCAst_getter_logical_or_expression_item_logical_and_expression(PyObject *_self)
+{
+	PyCAst_object_logical_or_expression_item *self=(PyCAst_object_logical_or_expression_item*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_logical_and_expression());
+}
+
 
 
 
@@ -5288,6 +6363,39 @@ static PyObject *PyCAst_getter_logical_or_expression_refCount(PyObject *_self)
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_logical_or_expression_size(PyObject *_self)
+{
+	PyCAst_object_logical_or_expression *self=(PyCAst_object_logical_or_expression*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return PyInt_FromLong
+	(
+		self->_p_cast_object->size()
+	);
+}
+
+
+
+static Py_ssize_t PyCAst_list_length_logical_or_expression(PyObject *_self)
+{
+	PyCAst_object_logical_or_expression *self=(PyCAst_object_logical_or_expression*)(_self);
+	if(self->_p_cast_object.isNull())return 0;
+	return self->_p_cast_object->size();
+	
+}
+
+
+static PyObject* PyCAst_list_item_logical_or_expression(PyObject *_self,Py_ssize_t index)
+{
+	PyCAst_object_logical_or_expression *self=(PyCAst_object_logical_or_expression*)(_self);
+	if(self->_p_cast_object.isNull())Py_RETURN_NONE;
+	if(abs(index)>self->_p_cast_object->size()) PyErr_SetString(PyExc_IndexError,"Index out of range");
+	CAst::ReferenceCountedAutoPointer<CAst::logical_or_expression_item> item=self->_p_cast_object->operator[](index);
+	
+	return CAstToPyCAst(item);
 }
 
 
@@ -5369,6 +6477,15 @@ static PyObject *PyCAst_getter_unary_operator_refCount(PyObject *_self)
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_unary_operator_token(PyObject *_self)
+{
+	PyCAst_object_unary_operator *self=(PyCAst_object_unary_operator*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token());
 }
 
 
@@ -5458,6 +6575,24 @@ static PyObject *PyCAst_getter_relational_expression_item_refCount(PyObject *_se
 	);
 }
 
+static PyObject *PyCAst_getter_relational_expression_item_token(PyObject *_self)
+{
+	PyCAst_object_relational_expression_item *self=(PyCAst_object_relational_expression_item*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token());
+}
+
+static PyObject *PyCAst_getter_relational_expression_item_shift_expression(PyObject *_self)
+{
+	PyCAst_object_relational_expression_item *self=(PyCAst_object_relational_expression_item*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_shift_expression());
+}
+
 
 
 
@@ -5530,6 +6665,39 @@ static PyObject *PyCAst_getter_relational_expression_refCount(PyObject *_self)
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_relational_expression_size(PyObject *_self)
+{
+	PyCAst_object_relational_expression *self=(PyCAst_object_relational_expression*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return PyInt_FromLong
+	(
+		self->_p_cast_object->size()
+	);
+}
+
+
+
+static Py_ssize_t PyCAst_list_length_relational_expression(PyObject *_self)
+{
+	PyCAst_object_relational_expression *self=(PyCAst_object_relational_expression*)(_self);
+	if(self->_p_cast_object.isNull())return 0;
+	return self->_p_cast_object->size();
+	
+}
+
+
+static PyObject* PyCAst_list_item_relational_expression(PyObject *_self,Py_ssize_t index)
+{
+	PyCAst_object_relational_expression *self=(PyCAst_object_relational_expression*)(_self);
+	if(self->_p_cast_object.isNull())Py_RETURN_NONE;
+	if(abs(index)>self->_p_cast_object->size()) PyErr_SetString(PyExc_IndexError,"Index out of range");
+	CAst::ReferenceCountedAutoPointer<CAst::relational_expression_item> item=self->_p_cast_object->operator[](index);
+	
+	return CAstToPyCAst(item);
 }
 
 
@@ -5611,6 +6779,15 @@ static PyObject *PyCAst_getter_struct_or_union_refCount(PyObject *_self)
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_struct_or_union_token(PyObject *_self)
+{
+	PyCAst_object_struct_or_union *self=(PyCAst_object_struct_or_union*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token());
 }
 
 
@@ -5706,6 +6883,33 @@ static PyObject *PyCAst_getter_enumerator_refCount(PyObject *_self)
 	);
 }
 
+static PyObject *PyCAst_getter_enumerator_token1(PyObject *_self)
+{
+	PyCAst_object_enumerator *self=(PyCAst_object_enumerator*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token1());
+}
+
+static PyObject *PyCAst_getter_enumerator_token2(PyObject *_self)
+{
+	PyCAst_object_enumerator *self=(PyCAst_object_enumerator*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token2());
+}
+
+static PyObject *PyCAst_getter_enumerator_constant_expression(PyObject *_self)
+{
+	PyCAst_object_enumerator *self=(PyCAst_object_enumerator*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_constant_expression());
+}
+
 
 
 
@@ -5787,38 +6991,24 @@ static int PyCAst_init_assignment_expression_1(PyCAst_object_assignment_expressi
 {
     LOG(COL_FG_CYAN<<"initializing PyCAst::assignment_expression_1 with "<<PyTuple_Size(args)<<" arguments");
 	
-	if(PyTuple_Size(args)!=3)
+	if(PyTuple_Size(args)!=1)
 	{
 		LOG("Detected insufficient arguments")
-		PyErr_SetString(PyExc_TypeError,"Insufficient number of arguments. Expecting 3 argument(s).");
+		PyErr_SetString(PyExc_TypeError,"Insufficient number of arguments. Expecting 1 argument(s).");
 		return -1;
 	}
 	LOG("Parsing Arguments")
 
 
-    	PyCAst_object_unary_expression* _arg_unary_expression=(PyCAst_object_unary_expression*)PyTuple_GetItem(args,0);
-	if((PyObject*)_arg_unary_expression==Py_None)
+    	PyCAst_object_conditional_expression* _arg_conditional_expression=(PyCAst_object_conditional_expression*)PyTuple_GetItem(args,0);
+	if((PyObject*)_arg_conditional_expression==Py_None)
 	{
-		Py_DECREF(_arg_unary_expression);
+		Py_DECREF(_arg_conditional_expression);
 		PyErr_SetString(PyExc_TypeError,"Parameter 1 cannot be None");
 		return -1;
 	}
-    	PyCAst_object_assignment_operator* _arg_assignment_operator=(PyCAst_object_assignment_operator*)PyTuple_GetItem(args,1);
-	if((PyObject*)_arg_assignment_operator==Py_None)
-	{
-		Py_DECREF(_arg_assignment_operator);
-		PyErr_SetString(PyExc_TypeError,"Parameter 2 cannot be None");
-		return -1;
-	}
-    	PyCAst_object_assignment_expression* _arg_assignment_expression=(PyCAst_object_assignment_expression*)PyTuple_GetItem(args,2);
-	if((PyObject*)_arg_assignment_expression==Py_None)
-	{
-		Py_DECREF(_arg_assignment_expression);
-		PyErr_SetString(PyExc_TypeError,"Parameter 3 cannot be None");
-		return -1;
-	}
 
-    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::assignment_expression_1>(new CAst::assignment_expression_1(_arg_unary_expression->_p_cast_object,_arg_assignment_operator->_p_cast_object,_arg_assignment_expression->_p_cast_object));
+    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::assignment_expression_1>(new CAst::assignment_expression_1(_arg_conditional_expression->_p_cast_object));
     return 0;
 }
 
@@ -5855,6 +7045,15 @@ static PyObject *PyCAst_getter_assignment_expression_1_refCount(PyObject *_self)
 	);
 }
 
+static PyObject *PyCAst_getter_assignment_expression_1_conditional_expression(PyObject *_self)
+{
+	PyCAst_object_assignment_expression_1 *self=(PyCAst_object_assignment_expression_1*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_conditional_expression());
+}
+
 
 
 	
@@ -5880,24 +7079,38 @@ static int PyCAst_init_assignment_expression_2(PyCAst_object_assignment_expressi
 {
     LOG(COL_FG_CYAN<<"initializing PyCAst::assignment_expression_2 with "<<PyTuple_Size(args)<<" arguments");
 	
-	if(PyTuple_Size(args)!=1)
+	if(PyTuple_Size(args)!=3)
 	{
 		LOG("Detected insufficient arguments")
-		PyErr_SetString(PyExc_TypeError,"Insufficient number of arguments. Expecting 1 argument(s).");
+		PyErr_SetString(PyExc_TypeError,"Insufficient number of arguments. Expecting 3 argument(s).");
 		return -1;
 	}
 	LOG("Parsing Arguments")
 
 
-    	PyCAst_object_conditional_expression* _arg_conditional_expression=(PyCAst_object_conditional_expression*)PyTuple_GetItem(args,0);
-	if((PyObject*)_arg_conditional_expression==Py_None)
+    	PyCAst_object_unary_expression* _arg_unary_expression=(PyCAst_object_unary_expression*)PyTuple_GetItem(args,0);
+	if((PyObject*)_arg_unary_expression==Py_None)
 	{
-		Py_DECREF(_arg_conditional_expression);
+		Py_DECREF(_arg_unary_expression);
 		PyErr_SetString(PyExc_TypeError,"Parameter 1 cannot be None");
 		return -1;
 	}
+    	PyCAst_object_assignment_operator* _arg_assignment_operator=(PyCAst_object_assignment_operator*)PyTuple_GetItem(args,1);
+	if((PyObject*)_arg_assignment_operator==Py_None)
+	{
+		Py_DECREF(_arg_assignment_operator);
+		PyErr_SetString(PyExc_TypeError,"Parameter 2 cannot be None");
+		return -1;
+	}
+    	PyCAst_object_assignment_expression* _arg_assignment_expression=(PyCAst_object_assignment_expression*)PyTuple_GetItem(args,2);
+	if((PyObject*)_arg_assignment_expression==Py_None)
+	{
+		Py_DECREF(_arg_assignment_expression);
+		PyErr_SetString(PyExc_TypeError,"Parameter 3 cannot be None");
+		return -1;
+	}
 
-    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::assignment_expression_2>(new CAst::assignment_expression_2(_arg_conditional_expression->_p_cast_object));
+    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::assignment_expression_2>(new CAst::assignment_expression_2(_arg_unary_expression->_p_cast_object,_arg_assignment_operator->_p_cast_object,_arg_assignment_expression->_p_cast_object));
     return 0;
 }
 
@@ -5932,6 +7145,33 @@ static PyObject *PyCAst_getter_assignment_expression_2_refCount(PyObject *_self)
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_assignment_expression_2_unary_expression(PyObject *_self)
+{
+	PyCAst_object_assignment_expression_2 *self=(PyCAst_object_assignment_expression_2*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_unary_expression());
+}
+
+static PyObject *PyCAst_getter_assignment_expression_2_assignment_operator(PyObject *_self)
+{
+	PyCAst_object_assignment_expression_2 *self=(PyCAst_object_assignment_expression_2*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_assignment_operator());
+}
+
+static PyObject *PyCAst_getter_assignment_expression_2_assignment_expression(PyObject *_self)
+{
+	PyCAst_object_assignment_expression_2 *self=(PyCAst_object_assignment_expression_2*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_assignment_expression());
 }
 
 
@@ -6025,6 +7265,33 @@ static PyObject *PyCAst_getter_parameter_type_list_refCount(PyObject *_self)
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_parameter_type_list_parameter_list(PyObject *_self)
+{
+	PyCAst_object_parameter_type_list *self=(PyCAst_object_parameter_type_list*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_parameter_list());
+}
+
+static PyObject *PyCAst_getter_parameter_type_list_token1(PyObject *_self)
+{
+	PyCAst_object_parameter_type_list *self=(PyCAst_object_parameter_type_list*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token1());
+}
+
+static PyObject *PyCAst_getter_parameter_type_list_token2(PyObject *_self)
+{
+	PyCAst_object_parameter_type_list *self=(PyCAst_object_parameter_type_list*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token2());
 }
 
 
@@ -6124,14 +7391,15 @@ static int PyCAst_init_parameter_declaration_1(PyCAst_object_parameter_declarati
 		PyErr_SetString(PyExc_TypeError,"Parameter 1 cannot be None");
 		return -1;
 	}
-    	PyCAst_object_declarator* _arg_declarator=(PyCAst_object_declarator*)PyTuple_GetItem(args,1);
-	if((PyObject*)_arg_declarator==Py_None)
+    	PyCAst_object_abstract_declarator* _arg_abstract_declarator=(PyCAst_object_abstract_declarator*)PyTuple_GetItem(args,1);
+	if((PyObject*)_arg_abstract_declarator==Py_None)
 	{
-		Py_DECREF(_arg_declarator);
-		_arg_declarator=(PyCAst_object_declarator*)PyCAst_new_declarator(&PyCAst_type_declarator,NULL,NULL);
+		Py_DECREF(_arg_abstract_declarator);
+		PyErr_SetString(PyExc_TypeError,"Parameter 2 cannot be None");
+		return -1;
 	}
 
-    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::parameter_declaration_1>(new CAst::parameter_declaration_1(_arg_declaration_specifiers->_p_cast_object,_arg_declarator->_p_cast_object));
+    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::parameter_declaration_1>(new CAst::parameter_declaration_1(_arg_declaration_specifiers->_p_cast_object,_arg_abstract_declarator->_p_cast_object));
     return 0;
 }
 
@@ -6166,6 +7434,24 @@ static PyObject *PyCAst_getter_parameter_declaration_1_refCount(PyObject *_self)
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_parameter_declaration_1_declaration_specifiers(PyObject *_self)
+{
+	PyCAst_object_parameter_declaration_1 *self=(PyCAst_object_parameter_declaration_1*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_declaration_specifiers());
+}
+
+static PyObject *PyCAst_getter_parameter_declaration_1_abstract_declarator(PyObject *_self)
+{
+	PyCAst_object_parameter_declaration_1 *self=(PyCAst_object_parameter_declaration_1*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_abstract_declarator());
 }
 
 
@@ -6209,15 +7495,14 @@ static int PyCAst_init_parameter_declaration_2(PyCAst_object_parameter_declarati
 		PyErr_SetString(PyExc_TypeError,"Parameter 1 cannot be None");
 		return -1;
 	}
-    	PyCAst_object_abstract_declarator* _arg_abstract_declarator=(PyCAst_object_abstract_declarator*)PyTuple_GetItem(args,1);
-	if((PyObject*)_arg_abstract_declarator==Py_None)
+    	PyCAst_object_declarator* _arg_declarator=(PyCAst_object_declarator*)PyTuple_GetItem(args,1);
+	if((PyObject*)_arg_declarator==Py_None)
 	{
-		Py_DECREF(_arg_abstract_declarator);
-		PyErr_SetString(PyExc_TypeError,"Parameter 2 cannot be None");
-		return -1;
+		Py_DECREF(_arg_declarator);
+		_arg_declarator=(PyCAst_object_declarator*)PyCAst_new_declarator(&PyCAst_type_declarator,NULL,NULL);
 	}
 
-    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::parameter_declaration_2>(new CAst::parameter_declaration_2(_arg_declaration_specifiers->_p_cast_object,_arg_abstract_declarator->_p_cast_object));
+    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::parameter_declaration_2>(new CAst::parameter_declaration_2(_arg_declaration_specifiers->_p_cast_object,_arg_declarator->_p_cast_object));
     return 0;
 }
 
@@ -6252,6 +7537,24 @@ static PyObject *PyCAst_getter_parameter_declaration_2_refCount(PyObject *_self)
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_parameter_declaration_2_declaration_specifiers(PyObject *_self)
+{
+	PyCAst_object_parameter_declaration_2 *self=(PyCAst_object_parameter_declaration_2*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_declaration_specifiers());
+}
+
+static PyObject *PyCAst_getter_parameter_declaration_2_declarator(PyObject *_self)
+{
+	PyCAst_object_parameter_declaration_2 *self=(PyCAst_object_parameter_declaration_2*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_declarator());
 }
 
 
@@ -6341,6 +7644,24 @@ static PyObject *PyCAst_getter_multiplicative_expression_item_refCount(PyObject 
 	);
 }
 
+static PyObject *PyCAst_getter_multiplicative_expression_item_token(PyObject *_self)
+{
+	PyCAst_object_multiplicative_expression_item *self=(PyCAst_object_multiplicative_expression_item*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token());
+}
+
+static PyObject *PyCAst_getter_multiplicative_expression_item_cast_expression(PyObject *_self)
+{
+	PyCAst_object_multiplicative_expression_item *self=(PyCAst_object_multiplicative_expression_item*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_cast_expression());
+}
+
 
 
 
@@ -6413,6 +7734,39 @@ static PyObject *PyCAst_getter_multiplicative_expression_refCount(PyObject *_sel
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_multiplicative_expression_size(PyObject *_self)
+{
+	PyCAst_object_multiplicative_expression *self=(PyCAst_object_multiplicative_expression*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return PyInt_FromLong
+	(
+		self->_p_cast_object->size()
+	);
+}
+
+
+
+static Py_ssize_t PyCAst_list_length_multiplicative_expression(PyObject *_self)
+{
+	PyCAst_object_multiplicative_expression *self=(PyCAst_object_multiplicative_expression*)(_self);
+	if(self->_p_cast_object.isNull())return 0;
+	return self->_p_cast_object->size();
+	
+}
+
+
+static PyObject* PyCAst_list_item_multiplicative_expression(PyObject *_self,Py_ssize_t index)
+{
+	PyCAst_object_multiplicative_expression *self=(PyCAst_object_multiplicative_expression*)(_self);
+	if(self->_p_cast_object.isNull())Py_RETURN_NONE;
+	if(abs(index)>self->_p_cast_object->size()) PyErr_SetString(PyExc_IndexError,"Index out of range");
+	CAst::ReferenceCountedAutoPointer<CAst::multiplicative_expression_item> item=self->_p_cast_object->operator[](index);
+	
+	return CAstToPyCAst(item);
 }
 
 
@@ -6496,6 +7850,15 @@ static PyObject *PyCAst_getter_type_qualifier_list_item_refCount(PyObject *_self
 	);
 }
 
+static PyObject *PyCAst_getter_type_qualifier_list_item_type_qualifier(PyObject *_self)
+{
+	PyCAst_object_type_qualifier_list_item *self=(PyCAst_object_type_qualifier_list_item*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_type_qualifier());
+}
+
 
 
 
@@ -6568,6 +7931,39 @@ static PyObject *PyCAst_getter_type_qualifier_list_refCount(PyObject *_self)
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_type_qualifier_list_size(PyObject *_self)
+{
+	PyCAst_object_type_qualifier_list *self=(PyCAst_object_type_qualifier_list*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return PyInt_FromLong
+	(
+		self->_p_cast_object->size()
+	);
+}
+
+
+
+static Py_ssize_t PyCAst_list_length_type_qualifier_list(PyObject *_self)
+{
+	PyCAst_object_type_qualifier_list *self=(PyCAst_object_type_qualifier_list*)(_self);
+	if(self->_p_cast_object.isNull())return 0;
+	return self->_p_cast_object->size();
+	
+}
+
+
+static PyObject* PyCAst_list_item_type_qualifier_list(PyObject *_self,Py_ssize_t index)
+{
+	PyCAst_object_type_qualifier_list *self=(PyCAst_object_type_qualifier_list*)(_self);
+	if(self->_p_cast_object.isNull())Py_RETURN_NONE;
+	if(abs(index)>self->_p_cast_object->size()) PyErr_SetString(PyExc_IndexError,"Index out of range");
+	CAst::ReferenceCountedAutoPointer<CAst::type_qualifier_list_item> item=self->_p_cast_object->operator[](index);
+	
+	return CAstToPyCAst(item);
 }
 
 
@@ -6657,6 +8053,24 @@ static PyObject *PyCAst_getter_argument_expression_list_item_refCount(PyObject *
 	);
 }
 
+static PyObject *PyCAst_getter_argument_expression_list_item_token(PyObject *_self)
+{
+	PyCAst_object_argument_expression_list_item *self=(PyCAst_object_argument_expression_list_item*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token());
+}
+
+static PyObject *PyCAst_getter_argument_expression_list_item_assignment_expression(PyObject *_self)
+{
+	PyCAst_object_argument_expression_list_item *self=(PyCAst_object_argument_expression_list_item*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_assignment_expression());
+}
+
 
 
 
@@ -6729,6 +8143,39 @@ static PyObject *PyCAst_getter_argument_expression_list_refCount(PyObject *_self
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_argument_expression_list_size(PyObject *_self)
+{
+	PyCAst_object_argument_expression_list *self=(PyCAst_object_argument_expression_list*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return PyInt_FromLong
+	(
+		self->_p_cast_object->size()
+	);
+}
+
+
+
+static Py_ssize_t PyCAst_list_length_argument_expression_list(PyObject *_self)
+{
+	PyCAst_object_argument_expression_list *self=(PyCAst_object_argument_expression_list*)(_self);
+	if(self->_p_cast_object.isNull())return 0;
+	return self->_p_cast_object->size();
+	
+}
+
+
+static PyObject* PyCAst_list_item_argument_expression_list(PyObject *_self,Py_ssize_t index)
+{
+	PyCAst_object_argument_expression_list *self=(PyCAst_object_argument_expression_list*)(_self);
+	if(self->_p_cast_object.isNull())Py_RETURN_NONE;
+	if(abs(index)>self->_p_cast_object->size()) PyErr_SetString(PyExc_IndexError,"Index out of range");
+	CAst::ReferenceCountedAutoPointer<CAst::argument_expression_list_item> item=self->_p_cast_object->operator[](index);
+	
+	return CAstToPyCAst(item);
 }
 
 
@@ -6866,6 +8313,15 @@ static PyObject *PyCAst_getter_direct_abstract_declarator_1_refCount(PyObject *_
 	);
 }
 
+static PyObject *PyCAst_getter_direct_abstract_declarator_1_abstract_declarator(PyObject *_self)
+{
+	PyCAst_object_direct_abstract_declarator_1 *self=(PyCAst_object_direct_abstract_declarator_1*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_abstract_declarator());
+}
+
 
 
 	
@@ -6950,6 +8406,24 @@ static PyObject *PyCAst_getter_direct_abstract_declarator_2_refCount(PyObject *_
 	);
 }
 
+static PyObject *PyCAst_getter_direct_abstract_declarator_2_direct_abstract_declarator(PyObject *_self)
+{
+	PyCAst_object_direct_abstract_declarator_2 *self=(PyCAst_object_direct_abstract_declarator_2*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_direct_abstract_declarator());
+}
+
+static PyObject *PyCAst_getter_direct_abstract_declarator_2_parameter_type_list(PyObject *_self)
+{
+	PyCAst_object_direct_abstract_declarator_2 *self=(PyCAst_object_direct_abstract_declarator_2*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_parameter_type_list());
+}
+
 
 
 	
@@ -7032,6 +8506,24 @@ static PyObject *PyCAst_getter_direct_abstract_declarator_3_refCount(PyObject *_
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_direct_abstract_declarator_3_direct_abstract_declarator(PyObject *_self)
+{
+	PyCAst_object_direct_abstract_declarator_3 *self=(PyCAst_object_direct_abstract_declarator_3*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_direct_abstract_declarator());
+}
+
+static PyObject *PyCAst_getter_direct_abstract_declarator_3_constant_expression(PyObject *_self)
+{
+	PyCAst_object_direct_abstract_declarator_3 *self=(PyCAst_object_direct_abstract_declarator_3*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_constant_expression());
 }
 
 
@@ -7121,6 +8613,24 @@ static PyObject *PyCAst_getter_equality_expression_item_refCount(PyObject *_self
 	);
 }
 
+static PyObject *PyCAst_getter_equality_expression_item_token(PyObject *_self)
+{
+	PyCAst_object_equality_expression_item *self=(PyCAst_object_equality_expression_item*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token());
+}
+
+static PyObject *PyCAst_getter_equality_expression_item_relational_expression(PyObject *_self)
+{
+	PyCAst_object_equality_expression_item *self=(PyCAst_object_equality_expression_item*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_relational_expression());
+}
+
 
 
 
@@ -7193,6 +8703,39 @@ static PyObject *PyCAst_getter_equality_expression_refCount(PyObject *_self)
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_equality_expression_size(PyObject *_self)
+{
+	PyCAst_object_equality_expression *self=(PyCAst_object_equality_expression*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return PyInt_FromLong
+	(
+		self->_p_cast_object->size()
+	);
+}
+
+
+
+static Py_ssize_t PyCAst_list_length_equality_expression(PyObject *_self)
+{
+	PyCAst_object_equality_expression *self=(PyCAst_object_equality_expression*)(_self);
+	if(self->_p_cast_object.isNull())return 0;
+	return self->_p_cast_object->size();
+	
+}
+
+
+static PyObject* PyCAst_list_item_equality_expression(PyObject *_self,Py_ssize_t index)
+{
+	PyCAst_object_equality_expression *self=(PyCAst_object_equality_expression*)(_self);
+	if(self->_p_cast_object.isNull())Py_RETURN_NONE;
+	if(abs(index)>self->_p_cast_object->size()) PyErr_SetString(PyExc_IndexError,"Index out of range");
+	CAst::ReferenceCountedAutoPointer<CAst::equality_expression_item> item=self->_p_cast_object->operator[](index);
+	
+	return CAstToPyCAst(item);
 }
 
 
@@ -7285,15 +8828,15 @@ static int PyCAst_init_primary_expression_1(PyCAst_object_primary_expression_1 *
 	LOG("Parsing Arguments")
 
 
-    	PyCAst_object_expression* _arg_expression=(PyCAst_object_expression*)PyTuple_GetItem(args,0);
-	if((PyObject*)_arg_expression==Py_None)
+    	PyCAst_object_token* _arg_token=(PyCAst_object_token*)PyTuple_GetItem(args,0);
+	if((PyObject*)_arg_token==Py_None)
 	{
-		Py_DECREF(_arg_expression);
+		Py_DECREF(_arg_token);
 		PyErr_SetString(PyExc_TypeError,"Parameter 1 cannot be None");
 		return -1;
 	}
 
-    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::primary_expression_1>(new CAst::primary_expression_1(_arg_expression->_p_cast_object));
+    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::primary_expression_1>(new CAst::primary_expression_1(_arg_token->_p_cast_object));
     return 0;
 }
 
@@ -7330,6 +8873,15 @@ static PyObject *PyCAst_getter_primary_expression_1_refCount(PyObject *_self)
 	);
 }
 
+static PyObject *PyCAst_getter_primary_expression_1_token(PyObject *_self)
+{
+	PyCAst_object_primary_expression_1 *self=(PyCAst_object_primary_expression_1*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token());
+}
+
 
 
 	
@@ -7364,15 +8916,15 @@ static int PyCAst_init_primary_expression_2(PyCAst_object_primary_expression_2 *
 	LOG("Parsing Arguments")
 
 
-    	PyCAst_object_token* _arg_token=(PyCAst_object_token*)PyTuple_GetItem(args,0);
-	if((PyObject*)_arg_token==Py_None)
+    	PyCAst_object_expression* _arg_expression=(PyCAst_object_expression*)PyTuple_GetItem(args,0);
+	if((PyObject*)_arg_expression==Py_None)
 	{
-		Py_DECREF(_arg_token);
+		Py_DECREF(_arg_expression);
 		PyErr_SetString(PyExc_TypeError,"Parameter 1 cannot be None");
 		return -1;
 	}
 
-    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::primary_expression_2>(new CAst::primary_expression_2(_arg_token->_p_cast_object));
+    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::primary_expression_2>(new CAst::primary_expression_2(_arg_expression->_p_cast_object));
     return 0;
 }
 
@@ -7407,6 +8959,15 @@ static PyObject *PyCAst_getter_primary_expression_2_refCount(PyObject *_self)
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_primary_expression_2_expression(PyObject *_self)
+{
+	PyCAst_object_primary_expression_2 *self=(PyCAst_object_primary_expression_2*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_expression());
 }
 
 
@@ -7445,15 +9006,15 @@ static int PyCAst_init_declaration_specifiers_item_1(PyCAst_object_declaration_s
 	LOG("Parsing Arguments")
 
 
-    	PyCAst_object_type_qualifier* _arg_type_qualifier=(PyCAst_object_type_qualifier*)PyTuple_GetItem(args,0);
-	if((PyObject*)_arg_type_qualifier==Py_None)
+    	PyCAst_object_storage_class_specifier* _arg_storage_class_specifier=(PyCAst_object_storage_class_specifier*)PyTuple_GetItem(args,0);
+	if((PyObject*)_arg_storage_class_specifier==Py_None)
 	{
-		Py_DECREF(_arg_type_qualifier);
+		Py_DECREF(_arg_storage_class_specifier);
 		PyErr_SetString(PyExc_TypeError,"Parameter 1 cannot be None");
 		return -1;
 	}
 
-    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::declaration_specifiers_item_1>(new CAst::declaration_specifiers_item_1(_arg_type_qualifier->_p_cast_object));
+    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::declaration_specifiers_item_1>(new CAst::declaration_specifiers_item_1(_arg_storage_class_specifier->_p_cast_object));
     return 0;
 }
 
@@ -7488,6 +9049,15 @@ static PyObject *PyCAst_getter_declaration_specifiers_item_1_refCount(PyObject *
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_declaration_specifiers_item_1_storage_class_specifier(PyObject *_self)
+{
+	PyCAst_object_declaration_specifiers_item_1 *self=(PyCAst_object_declaration_specifiers_item_1*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_storage_class_specifier());
 }
 
 
@@ -7569,6 +9139,15 @@ static PyObject *PyCAst_getter_declaration_specifiers_item_2_refCount(PyObject *
 	);
 }
 
+static PyObject *PyCAst_getter_declaration_specifiers_item_2_type_specifier(PyObject *_self)
+{
+	PyCAst_object_declaration_specifiers_item_2 *self=(PyCAst_object_declaration_specifiers_item_2*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_type_specifier());
+}
+
 
 
 	
@@ -7603,15 +9182,15 @@ static int PyCAst_init_declaration_specifiers_item_3(PyCAst_object_declaration_s
 	LOG("Parsing Arguments")
 
 
-    	PyCAst_object_storage_class_specifier* _arg_storage_class_specifier=(PyCAst_object_storage_class_specifier*)PyTuple_GetItem(args,0);
-	if((PyObject*)_arg_storage_class_specifier==Py_None)
+    	PyCAst_object_type_qualifier* _arg_type_qualifier=(PyCAst_object_type_qualifier*)PyTuple_GetItem(args,0);
+	if((PyObject*)_arg_type_qualifier==Py_None)
 	{
-		Py_DECREF(_arg_storage_class_specifier);
+		Py_DECREF(_arg_type_qualifier);
 		PyErr_SetString(PyExc_TypeError,"Parameter 1 cannot be None");
 		return -1;
 	}
 
-    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::declaration_specifiers_item_3>(new CAst::declaration_specifiers_item_3(_arg_storage_class_specifier->_p_cast_object));
+    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::declaration_specifiers_item_3>(new CAst::declaration_specifiers_item_3(_arg_type_qualifier->_p_cast_object));
     return 0;
 }
 
@@ -7646,6 +9225,15 @@ static PyObject *PyCAst_getter_declaration_specifiers_item_3_refCount(PyObject *
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_declaration_specifiers_item_3_type_qualifier(PyObject *_self)
+{
+	PyCAst_object_declaration_specifiers_item_3 *self=(PyCAst_object_declaration_specifiers_item_3*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_type_qualifier());
 }
 
 
@@ -7712,6 +9300,94 @@ static PyObject *PyCAst_getter_declaration_specifiers_isNull(PyObject *_self)
 static PyObject *PyCAst_getter_declaration_specifiers_refCount(PyObject *_self)
 {
 	PyCAst_object_declaration_specifiers *self=(PyCAst_object_declaration_specifiers*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return PyInt_FromLong
+	(
+		self->_p_cast_object.refCount()
+	);
+}
+
+static PyObject *PyCAst_getter_declaration_specifiers_size(PyObject *_self)
+{
+	PyCAst_object_declaration_specifiers *self=(PyCAst_object_declaration_specifiers*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return PyInt_FromLong
+	(
+		self->_p_cast_object->size()
+	);
+}
+
+
+
+static Py_ssize_t PyCAst_list_length_declaration_specifiers(PyObject *_self)
+{
+	PyCAst_object_declaration_specifiers *self=(PyCAst_object_declaration_specifiers*)(_self);
+	if(self->_p_cast_object.isNull())return 0;
+	return self->_p_cast_object->size();
+	
+}
+
+
+static PyObject* PyCAst_list_item_declaration_specifiers(PyObject *_self,Py_ssize_t index)
+{
+	PyCAst_object_declaration_specifiers *self=(PyCAst_object_declaration_specifiers*)(_self);
+	if(self->_p_cast_object.isNull())Py_RETURN_NONE;
+	if(abs(index)>self->_p_cast_object->size()) PyErr_SetString(PyExc_IndexError,"Index out of range");
+	CAst::ReferenceCountedAutoPointer<CAst::declaration_specifiers_item> item=self->_p_cast_object->operator[](index);
+	
+	return CAstToPyCAst(item);
+}
+
+
+
+
+
+	
+static PyObject * PyCAst_new_declaration_specifiers_item(PyTypeObject *type, PyObject *args, PyObject *kwds)
+{
+    LOG(COL_FG_CYAN<<"new PyCAst::declaration_specifiers_item");
+    PyCAst_object_declaration_specifiers_item *self;
+    self = (PyCAst_object_declaration_specifiers_item*)type->tp_alloc(type, 0);
+    return (PyObject *)self;
+}
+
+	
+static void PyCAst_dealloc_declaration_specifiers_item(PyObject *_self)
+{
+    LOG(COL_FG_MAGENTA<<"Deallocating PyCAst::declaration_specifiers_item");
+    PyCAst_object_declaration_specifiers_item *self=(PyCAst_object_declaration_specifiers_item*)_self;
+    self->_p_cast_object.clear();
+    self->ob_type->tp_free((PyObject*)self);
+}
+
+static PyObject *PyCAst_getter_declaration_specifiers_item_code(PyObject *_self)
+{
+	PyCAst_object_declaration_specifiers_item *self=(PyCAst_object_declaration_specifiers_item*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+}
+
+static PyObject *PyCAst_getter_declaration_specifiers_item_isNull(PyObject *_self)
+{
+	PyCAst_object_declaration_specifiers_item *self=(PyCAst_object_declaration_specifiers_item*)(_self);
+
+	
+	if(self->_p_cast_object.isNull())	{Py_RETURN_TRUE;}
+	else					{Py_RETURN_FALSE;}
+}
+
+static PyObject *PyCAst_getter_declaration_specifiers_item_refCount(PyObject *_self)
+{
+	PyCAst_object_declaration_specifiers_item *self=(PyCAst_object_declaration_specifiers_item*)(_self);
 	if(self->_p_cast_object.isNull())
 		Py_RETURN_NONE;
 	
@@ -7808,6 +9484,24 @@ static PyObject *PyCAst_getter_declaration_refCount(PyObject *_self)
 	);
 }
 
+static PyObject *PyCAst_getter_declaration_declaration_specifiers(PyObject *_self)
+{
+	PyCAst_object_declaration *self=(PyCAst_object_declaration*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_declaration_specifiers());
+}
+
+static PyObject *PyCAst_getter_declaration_init_declarator_list(PyObject *_self)
+{
+	PyCAst_object_declaration *self=(PyCAst_object_declaration*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_init_declarator_list());
+}
+
 
 
 
@@ -7889,30 +9583,24 @@ static int PyCAst_init_direct_declarator_1(PyCAst_object_direct_declarator_1 *se
 {
     LOG(COL_FG_CYAN<<"initializing PyCAst::direct_declarator_1 with "<<PyTuple_Size(args)<<" arguments");
 	
-	if(PyTuple_Size(args)!=2)
+	if(PyTuple_Size(args)!=1)
 	{
 		LOG("Detected insufficient arguments")
-		PyErr_SetString(PyExc_TypeError,"Insufficient number of arguments. Expecting 2 argument(s).");
+		PyErr_SetString(PyExc_TypeError,"Insufficient number of arguments. Expecting 1 argument(s).");
 		return -1;
 	}
 	LOG("Parsing Arguments")
 
 
-    	PyCAst_object_direct_declarator* _arg_direct_declarator=(PyCAst_object_direct_declarator*)PyTuple_GetItem(args,0);
-	if((PyObject*)_arg_direct_declarator==Py_None)
+    	PyCAst_object_declarator* _arg_declarator=(PyCAst_object_declarator*)PyTuple_GetItem(args,0);
+	if((PyObject*)_arg_declarator==Py_None)
 	{
-		Py_DECREF(_arg_direct_declarator);
+		Py_DECREF(_arg_declarator);
 		PyErr_SetString(PyExc_TypeError,"Parameter 1 cannot be None");
 		return -1;
 	}
-    	PyCAst_object_constant_expression* _arg_constant_expression=(PyCAst_object_constant_expression*)PyTuple_GetItem(args,1);
-	if((PyObject*)_arg_constant_expression==Py_None)
-	{
-		Py_DECREF(_arg_constant_expression);
-		_arg_constant_expression=(PyCAst_object_constant_expression*)PyCAst_new_constant_expression(&PyCAst_type_constant_expression,NULL,NULL);
-	}
 
-    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::direct_declarator_1>(new CAst::direct_declarator_1(_arg_direct_declarator->_p_cast_object,_arg_constant_expression->_p_cast_object));
+    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::direct_declarator_1>(new CAst::direct_declarator_1(_arg_declarator->_p_cast_object));
     return 0;
 }
 
@@ -7949,6 +9637,15 @@ static PyObject *PyCAst_getter_direct_declarator_1_refCount(PyObject *_self)
 	);
 }
 
+static PyObject *PyCAst_getter_direct_declarator_1_declarator(PyObject *_self)
+{
+	PyCAst_object_direct_declarator_1 *self=(PyCAst_object_direct_declarator_1*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_declarator());
+}
+
 
 
 	
@@ -7974,24 +9671,30 @@ static int PyCAst_init_direct_declarator_2(PyCAst_object_direct_declarator_2 *se
 {
     LOG(COL_FG_CYAN<<"initializing PyCAst::direct_declarator_2 with "<<PyTuple_Size(args)<<" arguments");
 	
-	if(PyTuple_Size(args)!=1)
+	if(PyTuple_Size(args)!=2)
 	{
 		LOG("Detected insufficient arguments")
-		PyErr_SetString(PyExc_TypeError,"Insufficient number of arguments. Expecting 1 argument(s).");
+		PyErr_SetString(PyExc_TypeError,"Insufficient number of arguments. Expecting 2 argument(s).");
 		return -1;
 	}
 	LOG("Parsing Arguments")
 
 
-    	PyCAst_object_token* _arg_token=(PyCAst_object_token*)PyTuple_GetItem(args,0);
-	if((PyObject*)_arg_token==Py_None)
+    	PyCAst_object_direct_declarator* _arg_direct_declarator=(PyCAst_object_direct_declarator*)PyTuple_GetItem(args,0);
+	if((PyObject*)_arg_direct_declarator==Py_None)
 	{
-		Py_DECREF(_arg_token);
+		Py_DECREF(_arg_direct_declarator);
 		PyErr_SetString(PyExc_TypeError,"Parameter 1 cannot be None");
 		return -1;
 	}
+    	PyCAst_object_constant_expression* _arg_constant_expression=(PyCAst_object_constant_expression*)PyTuple_GetItem(args,1);
+	if((PyObject*)_arg_constant_expression==Py_None)
+	{
+		Py_DECREF(_arg_constant_expression);
+		_arg_constant_expression=(PyCAst_object_constant_expression*)PyCAst_new_constant_expression(&PyCAst_type_constant_expression,NULL,NULL);
+	}
 
-    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::direct_declarator_2>(new CAst::direct_declarator_2(_arg_token->_p_cast_object));
+    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::direct_declarator_2>(new CAst::direct_declarator_2(_arg_direct_declarator->_p_cast_object,_arg_constant_expression->_p_cast_object));
     return 0;
 }
 
@@ -8026,6 +9729,24 @@ static PyObject *PyCAst_getter_direct_declarator_2_refCount(PyObject *_self)
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_direct_declarator_2_direct_declarator(PyObject *_self)
+{
+	PyCAst_object_direct_declarator_2 *self=(PyCAst_object_direct_declarator_2*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_direct_declarator());
+}
+
+static PyObject *PyCAst_getter_direct_declarator_2_constant_expression(PyObject *_self)
+{
+	PyCAst_object_direct_declarator_2 *self=(PyCAst_object_direct_declarator_2*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_constant_expression());
 }
 
 
@@ -8113,6 +9834,24 @@ static PyObject *PyCAst_getter_direct_declarator_3_refCount(PyObject *_self)
 	);
 }
 
+static PyObject *PyCAst_getter_direct_declarator_3_direct_declarator(PyObject *_self)
+{
+	PyCAst_object_direct_declarator_3 *self=(PyCAst_object_direct_declarator_3*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_direct_declarator());
+}
+
+static PyObject *PyCAst_getter_direct_declarator_3_parameter_type_list(PyObject *_self)
+{
+	PyCAst_object_direct_declarator_3 *self=(PyCAst_object_direct_declarator_3*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_parameter_type_list());
+}
+
 
 
 	
@@ -8138,24 +9877,31 @@ static int PyCAst_init_direct_declarator_4(PyCAst_object_direct_declarator_4 *se
 {
     LOG(COL_FG_CYAN<<"initializing PyCAst::direct_declarator_4 with "<<PyTuple_Size(args)<<" arguments");
 	
-	if(PyTuple_Size(args)!=1)
+	if(PyTuple_Size(args)!=2)
 	{
 		LOG("Detected insufficient arguments")
-		PyErr_SetString(PyExc_TypeError,"Insufficient number of arguments. Expecting 1 argument(s).");
+		PyErr_SetString(PyExc_TypeError,"Insufficient number of arguments. Expecting 2 argument(s).");
 		return -1;
 	}
 	LOG("Parsing Arguments")
 
 
-    	PyCAst_object_declarator* _arg_declarator=(PyCAst_object_declarator*)PyTuple_GetItem(args,0);
-	if((PyObject*)_arg_declarator==Py_None)
+    	PyCAst_object_direct_declarator* _arg_direct_declarator=(PyCAst_object_direct_declarator*)PyTuple_GetItem(args,0);
+	if((PyObject*)_arg_direct_declarator==Py_None)
 	{
-		Py_DECREF(_arg_declarator);
+		Py_DECREF(_arg_direct_declarator);
 		PyErr_SetString(PyExc_TypeError,"Parameter 1 cannot be None");
 		return -1;
 	}
+    	PyCAst_object_identifier_list* _arg_identifier_list=(PyCAst_object_identifier_list*)PyTuple_GetItem(args,1);
+	if((PyObject*)_arg_identifier_list==Py_None)
+	{
+		Py_DECREF(_arg_identifier_list);
+		PyErr_SetString(PyExc_TypeError,"Parameter 2 cannot be None");
+		return -1;
+	}
 
-    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::direct_declarator_4>(new CAst::direct_declarator_4(_arg_declarator->_p_cast_object));
+    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::direct_declarator_4>(new CAst::direct_declarator_4(_arg_direct_declarator->_p_cast_object,_arg_identifier_list->_p_cast_object));
     return 0;
 }
 
@@ -8192,6 +9938,24 @@ static PyObject *PyCAst_getter_direct_declarator_4_refCount(PyObject *_self)
 	);
 }
 
+static PyObject *PyCAst_getter_direct_declarator_4_direct_declarator(PyObject *_self)
+{
+	PyCAst_object_direct_declarator_4 *self=(PyCAst_object_direct_declarator_4*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_direct_declarator());
+}
+
+static PyObject *PyCAst_getter_direct_declarator_4_identifier_list(PyObject *_self)
+{
+	PyCAst_object_direct_declarator_4 *self=(PyCAst_object_direct_declarator_4*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_identifier_list());
+}
+
 
 
 	
@@ -8217,31 +9981,24 @@ static int PyCAst_init_direct_declarator_5(PyCAst_object_direct_declarator_5 *se
 {
     LOG(COL_FG_CYAN<<"initializing PyCAst::direct_declarator_5 with "<<PyTuple_Size(args)<<" arguments");
 	
-	if(PyTuple_Size(args)!=2)
+	if(PyTuple_Size(args)!=1)
 	{
 		LOG("Detected insufficient arguments")
-		PyErr_SetString(PyExc_TypeError,"Insufficient number of arguments. Expecting 2 argument(s).");
+		PyErr_SetString(PyExc_TypeError,"Insufficient number of arguments. Expecting 1 argument(s).");
 		return -1;
 	}
 	LOG("Parsing Arguments")
 
 
-    	PyCAst_object_direct_declarator* _arg_direct_declarator=(PyCAst_object_direct_declarator*)PyTuple_GetItem(args,0);
-	if((PyObject*)_arg_direct_declarator==Py_None)
+    	PyCAst_object_token* _arg_token=(PyCAst_object_token*)PyTuple_GetItem(args,0);
+	if((PyObject*)_arg_token==Py_None)
 	{
-		Py_DECREF(_arg_direct_declarator);
+		Py_DECREF(_arg_token);
 		PyErr_SetString(PyExc_TypeError,"Parameter 1 cannot be None");
 		return -1;
 	}
-    	PyCAst_object_identifier_list* _arg_identifier_list=(PyCAst_object_identifier_list*)PyTuple_GetItem(args,1);
-	if((PyObject*)_arg_identifier_list==Py_None)
-	{
-		Py_DECREF(_arg_identifier_list);
-		PyErr_SetString(PyExc_TypeError,"Parameter 2 cannot be None");
-		return -1;
-	}
 
-    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::direct_declarator_5>(new CAst::direct_declarator_5(_arg_direct_declarator->_p_cast_object,_arg_identifier_list->_p_cast_object));
+    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::direct_declarator_5>(new CAst::direct_declarator_5(_arg_token->_p_cast_object));
     return 0;
 }
 
@@ -8276,6 +10033,15 @@ static PyObject *PyCAst_getter_direct_declarator_5_refCount(PyObject *_self)
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_direct_declarator_5_token(PyObject *_self)
+{
+	PyCAst_object_direct_declarator_5 *self=(PyCAst_object_direct_declarator_5*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token());
 }
 
 
@@ -8365,6 +10131,24 @@ static PyObject *PyCAst_getter_logical_and_expression_item_refCount(PyObject *_s
 	);
 }
 
+static PyObject *PyCAst_getter_logical_and_expression_item_token(PyObject *_self)
+{
+	PyCAst_object_logical_and_expression_item *self=(PyCAst_object_logical_and_expression_item*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token());
+}
+
+static PyObject *PyCAst_getter_logical_and_expression_item_inclusive_or_expression(PyObject *_self)
+{
+	PyCAst_object_logical_and_expression_item *self=(PyCAst_object_logical_and_expression_item*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_inclusive_or_expression());
+}
+
 
 
 
@@ -8437,6 +10221,39 @@ static PyObject *PyCAst_getter_logical_and_expression_refCount(PyObject *_self)
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_logical_and_expression_size(PyObject *_self)
+{
+	PyCAst_object_logical_and_expression *self=(PyCAst_object_logical_and_expression*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return PyInt_FromLong
+	(
+		self->_p_cast_object->size()
+	);
+}
+
+
+
+static Py_ssize_t PyCAst_list_length_logical_and_expression(PyObject *_self)
+{
+	PyCAst_object_logical_and_expression *self=(PyCAst_object_logical_and_expression*)(_self);
+	if(self->_p_cast_object.isNull())return 0;
+	return self->_p_cast_object->size();
+	
+}
+
+
+static PyObject* PyCAst_list_item_logical_and_expression(PyObject *_self,Py_ssize_t index)
+{
+	PyCAst_object_logical_and_expression *self=(PyCAst_object_logical_and_expression*)(_self);
+	if(self->_p_cast_object.isNull())Py_RETURN_NONE;
+	if(abs(index)>self->_p_cast_object->size()) PyErr_SetString(PyExc_IndexError,"Index out of range");
+	CAst::ReferenceCountedAutoPointer<CAst::logical_and_expression_item> item=self->_p_cast_object->operator[](index);
+	
+	return CAstToPyCAst(item);
 }
 
 
@@ -8526,6 +10343,24 @@ static PyObject *PyCAst_getter_init_declarator_list_item_refCount(PyObject *_sel
 	);
 }
 
+static PyObject *PyCAst_getter_init_declarator_list_item_token(PyObject *_self)
+{
+	PyCAst_object_init_declarator_list_item *self=(PyCAst_object_init_declarator_list_item*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token());
+}
+
+static PyObject *PyCAst_getter_init_declarator_list_item_init_declarator(PyObject *_self)
+{
+	PyCAst_object_init_declarator_list_item *self=(PyCAst_object_init_declarator_list_item*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_init_declarator());
+}
+
 
 
 
@@ -8598,6 +10433,39 @@ static PyObject *PyCAst_getter_init_declarator_list_refCount(PyObject *_self)
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_init_declarator_list_size(PyObject *_self)
+{
+	PyCAst_object_init_declarator_list *self=(PyCAst_object_init_declarator_list*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return PyInt_FromLong
+	(
+		self->_p_cast_object->size()
+	);
+}
+
+
+
+static Py_ssize_t PyCAst_list_length_init_declarator_list(PyObject *_self)
+{
+	PyCAst_object_init_declarator_list *self=(PyCAst_object_init_declarator_list*)(_self);
+	if(self->_p_cast_object.isNull())return 0;
+	return self->_p_cast_object->size();
+	
+}
+
+
+static PyObject* PyCAst_list_item_init_declarator_list(PyObject *_self,Py_ssize_t index)
+{
+	PyCAst_object_init_declarator_list *self=(PyCAst_object_init_declarator_list*)(_self);
+	if(self->_p_cast_object.isNull())Py_RETURN_NONE;
+	if(abs(index)>self->_p_cast_object->size()) PyErr_SetString(PyExc_IndexError,"Index out of range");
+	CAst::ReferenceCountedAutoPointer<CAst::init_declarator_list_item> item=self->_p_cast_object->operator[](index);
+	
+	return CAstToPyCAst(item);
 }
 
 
@@ -8687,6 +10555,24 @@ static PyObject *PyCAst_getter_shift_expression_item_refCount(PyObject *_self)
 	);
 }
 
+static PyObject *PyCAst_getter_shift_expression_item_token(PyObject *_self)
+{
+	PyCAst_object_shift_expression_item *self=(PyCAst_object_shift_expression_item*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token());
+}
+
+static PyObject *PyCAst_getter_shift_expression_item_additive_expression(PyObject *_self)
+{
+	PyCAst_object_shift_expression_item *self=(PyCAst_object_shift_expression_item*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_additive_expression());
+}
+
 
 
 
@@ -8759,6 +10645,39 @@ static PyObject *PyCAst_getter_shift_expression_refCount(PyObject *_self)
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_shift_expression_size(PyObject *_self)
+{
+	PyCAst_object_shift_expression *self=(PyCAst_object_shift_expression*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return PyInt_FromLong
+	(
+		self->_p_cast_object->size()
+	);
+}
+
+
+
+static Py_ssize_t PyCAst_list_length_shift_expression(PyObject *_self)
+{
+	PyCAst_object_shift_expression *self=(PyCAst_object_shift_expression*)(_self);
+	if(self->_p_cast_object.isNull())return 0;
+	return self->_p_cast_object->size();
+	
+}
+
+
+static PyObject* PyCAst_list_item_shift_expression(PyObject *_self,Py_ssize_t index)
+{
+	PyCAst_object_shift_expression *self=(PyCAst_object_shift_expression*)(_self);
+	if(self->_p_cast_object.isNull())Py_RETURN_NONE;
+	if(abs(index)>self->_p_cast_object->size()) PyErr_SetString(PyExc_IndexError,"Index out of range");
+	CAst::ReferenceCountedAutoPointer<CAst::shift_expression_item> item=self->_p_cast_object->operator[](index);
+	
+	return CAstToPyCAst(item);
 }
 
 
@@ -8848,6 +10767,24 @@ static PyObject *PyCAst_getter_identifier_list_item_refCount(PyObject *_self)
 	);
 }
 
+static PyObject *PyCAst_getter_identifier_list_item_token1(PyObject *_self)
+{
+	PyCAst_object_identifier_list_item *self=(PyCAst_object_identifier_list_item*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token1());
+}
+
+static PyObject *PyCAst_getter_identifier_list_item_token2(PyObject *_self)
+{
+	PyCAst_object_identifier_list_item *self=(PyCAst_object_identifier_list_item*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token2());
+}
+
 
 
 
@@ -8920,6 +10857,39 @@ static PyObject *PyCAst_getter_identifier_list_refCount(PyObject *_self)
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_identifier_list_size(PyObject *_self)
+{
+	PyCAst_object_identifier_list *self=(PyCAst_object_identifier_list*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return PyInt_FromLong
+	(
+		self->_p_cast_object->size()
+	);
+}
+
+
+
+static Py_ssize_t PyCAst_list_length_identifier_list(PyObject *_self)
+{
+	PyCAst_object_identifier_list *self=(PyCAst_object_identifier_list*)(_self);
+	if(self->_p_cast_object.isNull())return 0;
+	return self->_p_cast_object->size();
+	
+}
+
+
+static PyObject* PyCAst_list_item_identifier_list(PyObject *_self,Py_ssize_t index)
+{
+	PyCAst_object_identifier_list *self=(PyCAst_object_identifier_list*)(_self);
+	if(self->_p_cast_object.isNull())Py_RETURN_NONE;
+	if(abs(index)>self->_p_cast_object->size()) PyErr_SetString(PyExc_IndexError,"Index out of range");
+	CAst::ReferenceCountedAutoPointer<CAst::identifier_list_item> item=self->_p_cast_object->operator[](index);
+	
+	return CAstToPyCAst(item);
 }
 
 
@@ -9056,6 +11026,15 @@ static PyObject *PyCAst_getter_jump_statement_1_refCount(PyObject *_self)
 	);
 }
 
+static PyObject *PyCAst_getter_jump_statement_1_expression(PyObject *_self)
+{
+	PyCAst_object_jump_statement_1 *self=(PyCAst_object_jump_statement_1*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_expression());
+}
+
 
 
 	
@@ -9135,6 +11114,15 @@ static PyObject *PyCAst_getter_jump_statement_2_refCount(PyObject *_self)
 	);
 }
 
+static PyObject *PyCAst_getter_jump_statement_2_token(PyObject *_self)
+{
+	PyCAst_object_jump_statement_2 *self=(PyCAst_object_jump_statement_2*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token());
+}
+
 
 
 	
@@ -9212,6 +11200,15 @@ static PyObject *PyCAst_getter_jump_statement_3_refCount(PyObject *_self)
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_jump_statement_3_token(PyObject *_self)
+{
+	PyCAst_object_jump_statement_3 *self=(PyCAst_object_jump_statement_3*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token());
 }
 
 
@@ -9304,6 +11301,33 @@ static PyObject *PyCAst_getter_struct_declarator_refCount(PyObject *_self)
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_struct_declarator_declarator(PyObject *_self)
+{
+	PyCAst_object_struct_declarator *self=(PyCAst_object_struct_declarator*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_declarator());
+}
+
+static PyObject *PyCAst_getter_struct_declarator_token(PyObject *_self)
+{
+	PyCAst_object_struct_declarator *self=(PyCAst_object_struct_declarator*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token());
+}
+
+static PyObject *PyCAst_getter_struct_declarator_constant_expression(PyObject *_self)
+{
+	PyCAst_object_struct_declarator *self=(PyCAst_object_struct_declarator*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_constant_expression());
 }
 
 
@@ -9406,6 +11430,42 @@ static PyObject *PyCAst_getter_function_definition_refCount(PyObject *_self)
 	);
 }
 
+static PyObject *PyCAst_getter_function_definition_declaration_specifiers(PyObject *_self)
+{
+	PyCAst_object_function_definition *self=(PyCAst_object_function_definition*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_declaration_specifiers());
+}
+
+static PyObject *PyCAst_getter_function_definition_declarator(PyObject *_self)
+{
+	PyCAst_object_function_definition *self=(PyCAst_object_function_definition*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_declarator());
+}
+
+static PyObject *PyCAst_getter_function_definition_declaration_list(PyObject *_self)
+{
+	PyCAst_object_function_definition *self=(PyCAst_object_function_definition*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_declaration_list());
+}
+
+static PyObject *PyCAst_getter_function_definition_compound_statement(PyObject *_self)
+{
+	PyCAst_object_function_definition *self=(PyCAst_object_function_definition*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_compound_statement());
+}
+
 
 
 
@@ -9493,6 +11553,24 @@ static PyObject *PyCAst_getter_parameter_list_item_refCount(PyObject *_self)
 	);
 }
 
+static PyObject *PyCAst_getter_parameter_list_item_token(PyObject *_self)
+{
+	PyCAst_object_parameter_list_item *self=(PyCAst_object_parameter_list_item*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token());
+}
+
+static PyObject *PyCAst_getter_parameter_list_item_parameter_declaration(PyObject *_self)
+{
+	PyCAst_object_parameter_list_item *self=(PyCAst_object_parameter_list_item*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_parameter_declaration());
+}
+
 
 
 
@@ -9565,6 +11643,39 @@ static PyObject *PyCAst_getter_parameter_list_refCount(PyObject *_self)
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_parameter_list_size(PyObject *_self)
+{
+	PyCAst_object_parameter_list *self=(PyCAst_object_parameter_list*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return PyInt_FromLong
+	(
+		self->_p_cast_object->size()
+	);
+}
+
+
+
+static Py_ssize_t PyCAst_list_length_parameter_list(PyObject *_self)
+{
+	PyCAst_object_parameter_list *self=(PyCAst_object_parameter_list*)(_self);
+	if(self->_p_cast_object.isNull())return 0;
+	return self->_p_cast_object->size();
+	
+}
+
+
+static PyObject* PyCAst_list_item_parameter_list(PyObject *_self,Py_ssize_t index)
+{
+	PyCAst_object_parameter_list *self=(PyCAst_object_parameter_list*)(_self);
+	if(self->_p_cast_object.isNull())Py_RETURN_NONE;
+	if(abs(index)>self->_p_cast_object->size()) PyErr_SetString(PyExc_IndexError,"Index out of range");
+	CAst::ReferenceCountedAutoPointer<CAst::parameter_list_item> item=self->_p_cast_object->operator[](index);
+	
+	return CAstToPyCAst(item);
 }
 
 
@@ -9665,6 +11776,42 @@ static PyObject *PyCAst_getter_enum_specifier_refCount(PyObject *_self)
 	);
 }
 
+static PyObject *PyCAst_getter_enum_specifier_token1(PyObject *_self)
+{
+	PyCAst_object_enum_specifier *self=(PyCAst_object_enum_specifier*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token1());
+}
+
+static PyObject *PyCAst_getter_enum_specifier_token2(PyObject *_self)
+{
+	PyCAst_object_enum_specifier *self=(PyCAst_object_enum_specifier*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token2());
+}
+
+static PyObject *PyCAst_getter_enum_specifier_enumerator_list(PyObject *_self)
+{
+	PyCAst_object_enum_specifier *self=(PyCAst_object_enum_specifier*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_enumerator_list());
+}
+
+static PyObject *PyCAst_getter_enum_specifier_token3(PyObject *_self)
+{
+	PyCAst_object_enum_specifier *self=(PyCAst_object_enum_specifier*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token3());
+}
+
 
 
 
@@ -9744,6 +11891,15 @@ static PyObject *PyCAst_getter_type_qualifier_refCount(PyObject *_self)
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_type_qualifier_token(PyObject *_self)
+{
+	PyCAst_object_type_qualifier *self=(PyCAst_object_type_qualifier*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token());
 }
 
 
@@ -9833,6 +11989,24 @@ static PyObject *PyCAst_getter_enumerator_list_item_refCount(PyObject *_self)
 	);
 }
 
+static PyObject *PyCAst_getter_enumerator_list_item_token(PyObject *_self)
+{
+	PyCAst_object_enumerator_list_item *self=(PyCAst_object_enumerator_list_item*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token());
+}
+
+static PyObject *PyCAst_getter_enumerator_list_item_enumerator(PyObject *_self)
+{
+	PyCAst_object_enumerator_list_item *self=(PyCAst_object_enumerator_list_item*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_enumerator());
+}
+
 
 
 
@@ -9905,6 +12079,39 @@ static PyObject *PyCAst_getter_enumerator_list_refCount(PyObject *_self)
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_enumerator_list_size(PyObject *_self)
+{
+	PyCAst_object_enumerator_list *self=(PyCAst_object_enumerator_list*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return PyInt_FromLong
+	(
+		self->_p_cast_object->size()
+	);
+}
+
+
+
+static Py_ssize_t PyCAst_list_length_enumerator_list(PyObject *_self)
+{
+	PyCAst_object_enumerator_list *self=(PyCAst_object_enumerator_list*)(_self);
+	if(self->_p_cast_object.isNull())return 0;
+	return self->_p_cast_object->size();
+	
+}
+
+
+static PyObject* PyCAst_list_item_enumerator_list(PyObject *_self,Py_ssize_t index)
+{
+	PyCAst_object_enumerator_list *self=(PyCAst_object_enumerator_list*)(_self);
+	if(self->_p_cast_object.isNull())Py_RETURN_NONE;
+	if(abs(index)>self->_p_cast_object->size()) PyErr_SetString(PyExc_IndexError,"Index out of range");
+	CAst::ReferenceCountedAutoPointer<CAst::enumerator_list_item> item=self->_p_cast_object->operator[](index);
+	
+	return CAstToPyCAst(item);
 }
 
 
@@ -10049,6 +12256,24 @@ static PyObject *PyCAst_getter_labeled_statement_1_refCount(PyObject *_self)
 	);
 }
 
+static PyObject *PyCAst_getter_labeled_statement_1_constant_expression(PyObject *_self)
+{
+	PyCAst_object_labeled_statement_1 *self=(PyCAst_object_labeled_statement_1*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_constant_expression());
+}
+
+static PyObject *PyCAst_getter_labeled_statement_1_statement(PyObject *_self)
+{
+	PyCAst_object_labeled_statement_1 *self=(PyCAst_object_labeled_statement_1*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_statement());
+}
+
 
 
 	
@@ -10135,6 +12360,24 @@ static PyObject *PyCAst_getter_labeled_statement_2_refCount(PyObject *_self)
 	);
 }
 
+static PyObject *PyCAst_getter_labeled_statement_2_token(PyObject *_self)
+{
+	PyCAst_object_labeled_statement_2 *self=(PyCAst_object_labeled_statement_2*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token());
+}
+
+static PyObject *PyCAst_getter_labeled_statement_2_statement(PyObject *_self)
+{
+	PyCAst_object_labeled_statement_2 *self=(PyCAst_object_labeled_statement_2*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_statement());
+}
+
 
 
 
@@ -10216,6 +12459,15 @@ static PyObject *PyCAst_getter_declaration_list_item_refCount(PyObject *_self)
 	);
 }
 
+static PyObject *PyCAst_getter_declaration_list_item_declaration(PyObject *_self)
+{
+	PyCAst_object_declaration_list_item *self=(PyCAst_object_declaration_list_item*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_declaration());
+}
+
 
 
 
@@ -10290,6 +12542,39 @@ static PyObject *PyCAst_getter_declaration_list_refCount(PyObject *_self)
 	);
 }
 
+static PyObject *PyCAst_getter_declaration_list_size(PyObject *_self)
+{
+	PyCAst_object_declaration_list *self=(PyCAst_object_declaration_list*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return PyInt_FromLong
+	(
+		self->_p_cast_object->size()
+	);
+}
+
+
+
+static Py_ssize_t PyCAst_list_length_declaration_list(PyObject *_self)
+{
+	PyCAst_object_declaration_list *self=(PyCAst_object_declaration_list*)(_self);
+	if(self->_p_cast_object.isNull())return 0;
+	return self->_p_cast_object->size();
+	
+}
+
+
+static PyObject* PyCAst_list_item_declaration_list(PyObject *_self,Py_ssize_t index)
+{
+	PyCAst_object_declaration_list *self=(PyCAst_object_declaration_list*)(_self);
+	if(self->_p_cast_object.isNull())Py_RETURN_NONE;
+	if(abs(index)>self->_p_cast_object->size()) PyErr_SetString(PyExc_IndexError,"Index out of range");
+	CAst::ReferenceCountedAutoPointer<CAst::declaration_list_item> item=self->_p_cast_object->operator[](index);
+	
+	return CAstToPyCAst(item);
+}
+
 
 
 
@@ -10326,15 +12611,15 @@ static int PyCAst_init_specifier_qualifier_list_item_1(PyCAst_object_specifier_q
 	LOG("Parsing Arguments")
 
 
-    	PyCAst_object_type_specifier* _arg_type_specifier=(PyCAst_object_type_specifier*)PyTuple_GetItem(args,0);
-	if((PyObject*)_arg_type_specifier==Py_None)
+    	PyCAst_object_type_qualifier* _arg_type_qualifier=(PyCAst_object_type_qualifier*)PyTuple_GetItem(args,0);
+	if((PyObject*)_arg_type_qualifier==Py_None)
 	{
-		Py_DECREF(_arg_type_specifier);
+		Py_DECREF(_arg_type_qualifier);
 		PyErr_SetString(PyExc_TypeError,"Parameter 1 cannot be None");
 		return -1;
 	}
 
-    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::specifier_qualifier_list_item_1>(new CAst::specifier_qualifier_list_item_1(_arg_type_specifier->_p_cast_object));
+    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::specifier_qualifier_list_item_1>(new CAst::specifier_qualifier_list_item_1(_arg_type_qualifier->_p_cast_object));
     return 0;
 }
 
@@ -10371,6 +12656,15 @@ static PyObject *PyCAst_getter_specifier_qualifier_list_item_1_refCount(PyObject
 	);
 }
 
+static PyObject *PyCAst_getter_specifier_qualifier_list_item_1_type_qualifier(PyObject *_self)
+{
+	PyCAst_object_specifier_qualifier_list_item_1 *self=(PyCAst_object_specifier_qualifier_list_item_1*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_type_qualifier());
+}
+
 
 
 	
@@ -10405,15 +12699,15 @@ static int PyCAst_init_specifier_qualifier_list_item_2(PyCAst_object_specifier_q
 	LOG("Parsing Arguments")
 
 
-    	PyCAst_object_type_qualifier* _arg_type_qualifier=(PyCAst_object_type_qualifier*)PyTuple_GetItem(args,0);
-	if((PyObject*)_arg_type_qualifier==Py_None)
+    	PyCAst_object_type_specifier* _arg_type_specifier=(PyCAst_object_type_specifier*)PyTuple_GetItem(args,0);
+	if((PyObject*)_arg_type_specifier==Py_None)
 	{
-		Py_DECREF(_arg_type_qualifier);
+		Py_DECREF(_arg_type_specifier);
 		PyErr_SetString(PyExc_TypeError,"Parameter 1 cannot be None");
 		return -1;
 	}
 
-    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::specifier_qualifier_list_item_2>(new CAst::specifier_qualifier_list_item_2(_arg_type_qualifier->_p_cast_object));
+    self->_p_cast_object=CAst::ReferenceCountedAutoPointer<CAst::specifier_qualifier_list_item_2>(new CAst::specifier_qualifier_list_item_2(_arg_type_specifier->_p_cast_object));
     return 0;
 }
 
@@ -10448,6 +12742,15 @@ static PyObject *PyCAst_getter_specifier_qualifier_list_item_2_refCount(PyObject
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_specifier_qualifier_list_item_2_type_specifier(PyObject *_self)
+{
+	PyCAst_object_specifier_qualifier_list_item_2 *self=(PyCAst_object_specifier_qualifier_list_item_2*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_type_specifier());
 }
 
 
@@ -10514,6 +12817,94 @@ static PyObject *PyCAst_getter_specifier_qualifier_list_isNull(PyObject *_self)
 static PyObject *PyCAst_getter_specifier_qualifier_list_refCount(PyObject *_self)
 {
 	PyCAst_object_specifier_qualifier_list *self=(PyCAst_object_specifier_qualifier_list*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return PyInt_FromLong
+	(
+		self->_p_cast_object.refCount()
+	);
+}
+
+static PyObject *PyCAst_getter_specifier_qualifier_list_size(PyObject *_self)
+{
+	PyCAst_object_specifier_qualifier_list *self=(PyCAst_object_specifier_qualifier_list*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return PyInt_FromLong
+	(
+		self->_p_cast_object->size()
+	);
+}
+
+
+
+static Py_ssize_t PyCAst_list_length_specifier_qualifier_list(PyObject *_self)
+{
+	PyCAst_object_specifier_qualifier_list *self=(PyCAst_object_specifier_qualifier_list*)(_self);
+	if(self->_p_cast_object.isNull())return 0;
+	return self->_p_cast_object->size();
+	
+}
+
+
+static PyObject* PyCAst_list_item_specifier_qualifier_list(PyObject *_self,Py_ssize_t index)
+{
+	PyCAst_object_specifier_qualifier_list *self=(PyCAst_object_specifier_qualifier_list*)(_self);
+	if(self->_p_cast_object.isNull())Py_RETURN_NONE;
+	if(abs(index)>self->_p_cast_object->size()) PyErr_SetString(PyExc_IndexError,"Index out of range");
+	CAst::ReferenceCountedAutoPointer<CAst::specifier_qualifier_list_item> item=self->_p_cast_object->operator[](index);
+	
+	return CAstToPyCAst(item);
+}
+
+
+
+
+
+	
+static PyObject * PyCAst_new_specifier_qualifier_list_item(PyTypeObject *type, PyObject *args, PyObject *kwds)
+{
+    LOG(COL_FG_CYAN<<"new PyCAst::specifier_qualifier_list_item");
+    PyCAst_object_specifier_qualifier_list_item *self;
+    self = (PyCAst_object_specifier_qualifier_list_item*)type->tp_alloc(type, 0);
+    return (PyObject *)self;
+}
+
+	
+static void PyCAst_dealloc_specifier_qualifier_list_item(PyObject *_self)
+{
+    LOG(COL_FG_MAGENTA<<"Deallocating PyCAst::specifier_qualifier_list_item");
+    PyCAst_object_specifier_qualifier_list_item *self=(PyCAst_object_specifier_qualifier_list_item*)_self;
+    self->_p_cast_object.clear();
+    self->ob_type->tp_free((PyObject*)self);
+}
+
+static PyObject *PyCAst_getter_specifier_qualifier_list_item_code(PyObject *_self)
+{
+	PyCAst_object_specifier_qualifier_list_item *self=(PyCAst_object_specifier_qualifier_list_item*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return PyString_FromString
+	(
+		self->_p_cast_object->code().c_str()
+	);
+}
+
+static PyObject *PyCAst_getter_specifier_qualifier_list_item_isNull(PyObject *_self)
+{
+	PyCAst_object_specifier_qualifier_list_item *self=(PyCAst_object_specifier_qualifier_list_item*)(_self);
+
+	
+	if(self->_p_cast_object.isNull())	{Py_RETURN_TRUE;}
+	else					{Py_RETURN_FALSE;}
+}
+
+static PyObject *PyCAst_getter_specifier_qualifier_list_item_refCount(PyObject *_self)
+{
+	PyCAst_object_specifier_qualifier_list_item *self=(PyCAst_object_specifier_qualifier_list_item*)(_self);
 	if(self->_p_cast_object.isNull())
 		Py_RETURN_NONE;
 	
@@ -10604,6 +12995,15 @@ static PyObject *PyCAst_getter_translation_unit_item_refCount(PyObject *_self)
 	);
 }
 
+static PyObject *PyCAst_getter_translation_unit_item_external_declaration(PyObject *_self)
+{
+	PyCAst_object_translation_unit_item *self=(PyCAst_object_translation_unit_item*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_external_declaration());
+}
+
 
 
 
@@ -10676,6 +13076,39 @@ static PyObject *PyCAst_getter_translation_unit_refCount(PyObject *_self)
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_translation_unit_size(PyObject *_self)
+{
+	PyCAst_object_translation_unit *self=(PyCAst_object_translation_unit*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return PyInt_FromLong
+	(
+		self->_p_cast_object->size()
+	);
+}
+
+
+
+static Py_ssize_t PyCAst_list_length_translation_unit(PyObject *_self)
+{
+	PyCAst_object_translation_unit *self=(PyCAst_object_translation_unit*)(_self);
+	if(self->_p_cast_object.isNull())return 0;
+	return self->_p_cast_object->size();
+	
+}
+
+
+static PyObject* PyCAst_list_item_translation_unit(PyObject *_self,Py_ssize_t index)
+{
+	PyCAst_object_translation_unit *self=(PyCAst_object_translation_unit*)(_self);
+	if(self->_p_cast_object.isNull())Py_RETURN_NONE;
+	if(abs(index)>self->_p_cast_object->size()) PyErr_SetString(PyExc_IndexError,"Index out of range");
+	CAst::ReferenceCountedAutoPointer<CAst::translation_unit_item> item=self->_p_cast_object->operator[](index);
+	
+	return CAstToPyCAst(item);
 }
 
 
@@ -10757,6 +13190,15 @@ static PyObject *PyCAst_getter_constant_expression_refCount(PyObject *_self)
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_constant_expression_conditional_expression(PyObject *_self)
+{
+	PyCAst_object_constant_expression *self=(PyCAst_object_constant_expression*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_conditional_expression());
 }
 
 
@@ -10846,6 +13288,24 @@ static PyObject *PyCAst_getter_initializer_list_item_refCount(PyObject *_self)
 	);
 }
 
+static PyObject *PyCAst_getter_initializer_list_item_token(PyObject *_self)
+{
+	PyCAst_object_initializer_list_item *self=(PyCAst_object_initializer_list_item*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token());
+}
+
+static PyObject *PyCAst_getter_initializer_list_item_initializer(PyObject *_self)
+{
+	PyCAst_object_initializer_list_item *self=(PyCAst_object_initializer_list_item*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_initializer());
+}
+
 
 
 
@@ -10918,6 +13378,39 @@ static PyObject *PyCAst_getter_initializer_list_refCount(PyObject *_self)
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_initializer_list_size(PyObject *_self)
+{
+	PyCAst_object_initializer_list *self=(PyCAst_object_initializer_list*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return PyInt_FromLong
+	(
+		self->_p_cast_object->size()
+	);
+}
+
+
+
+static Py_ssize_t PyCAst_list_length_initializer_list(PyObject *_self)
+{
+	PyCAst_object_initializer_list *self=(PyCAst_object_initializer_list*)(_self);
+	if(self->_p_cast_object.isNull())return 0;
+	return self->_p_cast_object->size();
+	
+}
+
+
+static PyObject* PyCAst_list_item_initializer_list(PyObject *_self,Py_ssize_t index)
+{
+	PyCAst_object_initializer_list *self=(PyCAst_object_initializer_list*)(_self);
+	if(self->_p_cast_object.isNull())Py_RETURN_NONE;
+	if(abs(index)>self->_p_cast_object->size()) PyErr_SetString(PyExc_IndexError,"Index out of range");
+	CAst::ReferenceCountedAutoPointer<CAst::initializer_list_item> item=self->_p_cast_object->operator[](index);
+	
+	return CAstToPyCAst(item);
 }
 
 
@@ -11001,6 +13494,15 @@ static PyObject *PyCAst_getter_statement_list_item_refCount(PyObject *_self)
 	);
 }
 
+static PyObject *PyCAst_getter_statement_list_item_statement(PyObject *_self)
+{
+	PyCAst_object_statement_list_item *self=(PyCAst_object_statement_list_item*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_statement());
+}
+
 
 
 
@@ -11073,6 +13575,39 @@ static PyObject *PyCAst_getter_statement_list_refCount(PyObject *_self)
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_statement_list_size(PyObject *_self)
+{
+	PyCAst_object_statement_list *self=(PyCAst_object_statement_list*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return PyInt_FromLong
+	(
+		self->_p_cast_object->size()
+	);
+}
+
+
+
+static Py_ssize_t PyCAst_list_length_statement_list(PyObject *_self)
+{
+	PyCAst_object_statement_list *self=(PyCAst_object_statement_list*)(_self);
+	if(self->_p_cast_object.isNull())return 0;
+	return self->_p_cast_object->size();
+	
+}
+
+
+static PyObject* PyCAst_list_item_statement_list(PyObject *_self,Py_ssize_t index)
+{
+	PyCAst_object_statement_list *self=(PyCAst_object_statement_list*)(_self);
+	if(self->_p_cast_object.isNull())Py_RETURN_NONE;
+	if(abs(index)>self->_p_cast_object->size()) PyErr_SetString(PyExc_IndexError,"Index out of range");
+	CAst::ReferenceCountedAutoPointer<CAst::statement_list_item> item=self->_p_cast_object->operator[](index);
+	
+	return CAstToPyCAst(item);
 }
 
 
@@ -11162,6 +13697,24 @@ static PyObject *PyCAst_getter_expression_item_refCount(PyObject *_self)
 	);
 }
 
+static PyObject *PyCAst_getter_expression_item_token(PyObject *_self)
+{
+	PyCAst_object_expression_item *self=(PyCAst_object_expression_item*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_token());
+}
+
+static PyObject *PyCAst_getter_expression_item_assignment_expression(PyObject *_self)
+{
+	PyCAst_object_expression_item *self=(PyCAst_object_expression_item*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_assignment_expression());
+}
+
 
 
 
@@ -11234,6 +13787,39 @@ static PyObject *PyCAst_getter_expression_refCount(PyObject *_self)
 	(
 		self->_p_cast_object.refCount()
 	);
+}
+
+static PyObject *PyCAst_getter_expression_size(PyObject *_self)
+{
+	PyCAst_object_expression *self=(PyCAst_object_expression*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return PyInt_FromLong
+	(
+		self->_p_cast_object->size()
+	);
+}
+
+
+
+static Py_ssize_t PyCAst_list_length_expression(PyObject *_self)
+{
+	PyCAst_object_expression *self=(PyCAst_object_expression*)(_self);
+	if(self->_p_cast_object.isNull())return 0;
+	return self->_p_cast_object->size();
+	
+}
+
+
+static PyObject* PyCAst_list_item_expression(PyObject *_self,Py_ssize_t index)
+{
+	PyCAst_object_expression *self=(PyCAst_object_expression*)(_self);
+	if(self->_p_cast_object.isNull())Py_RETURN_NONE;
+	if(abs(index)>self->_p_cast_object->size()) PyErr_SetString(PyExc_IndexError,"Index out of range");
+	CAst::ReferenceCountedAutoPointer<CAst::expression_item> item=self->_p_cast_object->operator[](index);
+	
+	return CAstToPyCAst(item);
 }
 
 
@@ -11323,6 +13909,24 @@ static PyObject *PyCAst_getter_declarator_refCount(PyObject *_self)
 	);
 }
 
+static PyObject *PyCAst_getter_declarator_pointer(PyObject *_self)
+{
+	PyCAst_object_declarator *self=(PyCAst_object_declarator*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_pointer());
+}
+
+static PyObject *PyCAst_getter_declarator_direct_declarator(PyObject *_self)
+{
+	PyCAst_object_declarator *self=(PyCAst_object_declarator*)(_self);
+	if(self->_p_cast_object.isNull())
+		Py_RETURN_NONE;
+	
+	return CAstToPyCAst(self->_p_cast_object->p_direct_declarator());
+}
+
 
 
 
@@ -11348,10 +13952,8 @@ static PyObject * parseFile(PyObject *self, PyObject *args)
 	const char* fileName=PyString_AsString(fn);
 
 	CAst::ReferenceCountedAutoPointer<CAst::translation_unit> root=parseFile(fileName);
+	return CAstToPyCAst(root);
 
-	PyCAst_object_translation_unit *pyRoot=(PyCAst_object_translation_unit*)PyCAst_new_translation_unit(&PyCAst_type_translation_unit, NULL, NULL);
-	pyRoot->_p_cast_object=root;
-	return (PyObject*)pyRoot;
 }
 
 static PyMethodDef module_methods[] = {	{"parseFile",parseFile, METH_VARARGS,"Parses a File for C AST"},{ NULL,NULL,0,NULL }};
@@ -11420,9 +14022,11 @@ initPyCAst(void)
 	if (PyType_Ready(&PyCAst_type_multiplicative_expression) < 0) {printf("Initialization of multiplicative_expression FAILED");return;}
 	if (PyType_Ready(&PyCAst_type_initializer_list) < 0) {printf("Initialization of initializer_list FAILED");return;}
 	if (PyType_Ready(&PyCAst_type_argument_expression_list) < 0) {printf("Initialization of argument_expression_list FAILED");return;}
+	if (PyType_Ready(&PyCAst_type_pointer_item) < 0) {printf("Initialization of pointer_item FAILED");return;}
 	if (PyType_Ready(&PyCAst_type_logical_and_expression) < 0) {printf("Initialization of logical_and_expression FAILED");return;}
 	if (PyType_Ready(&PyCAst_type_declarator) < 0) {printf("Initialization of declarator FAILED");return;}
 	if (PyType_Ready(&PyCAst_type_shift_expression) < 0) {printf("Initialization of shift_expression FAILED");return;}
+	if (PyType_Ready(&PyCAst_type_declaration_specifiers_item) < 0) {printf("Initialization of declaration_specifiers_item FAILED");return;}
 	if (PyType_Ready(&PyCAst_type_struct_declarator) < 0) {printf("Initialization of struct_declarator FAILED");return;}
 	if (PyType_Ready(&PyCAst_type_struct_declarator_list_item) < 0) {printf("Initialization of struct_declarator_list_item FAILED");return;}
 	if (PyType_Ready(&PyCAst_type_type_qualifier) < 0) {printf("Initialization of type_qualifier FAILED");return;}
@@ -11451,6 +14055,7 @@ initPyCAst(void)
 	if (PyType_Ready(&PyCAst_type_inclusive_or_expression_item) < 0) {printf("Initialization of inclusive_or_expression_item FAILED");return;}
 	if (PyType_Ready(&PyCAst_type_struct_declarator_list) < 0) {printf("Initialization of struct_declarator_list FAILED");return;}
 	if (PyType_Ready(&PyCAst_type_constant_expression) < 0) {printf("Initialization of constant_expression FAILED");return;}
+	if (PyType_Ready(&PyCAst_type_specifier_qualifier_list_item) < 0) {printf("Initialization of specifier_qualifier_list_item FAILED");return;}
 	if (PyType_Ready(&PyCAst_type_specifier_qualifier_list_item_1) < 0) {printf("Initialization of specifier_qualifier_list_item_1 FAILED");return;}
 	if (PyType_Ready(&PyCAst_type_specifier_qualifier_list_item_2) < 0) {printf("Initialization of specifier_qualifier_list_item_2 FAILED");return;}
 	if (PyType_Ready(&PyCAst_type_parameter_declaration) < 0) {printf("Initialization of parameter_declaration FAILED");return;}
@@ -11625,12 +14230,16 @@ initPyCAst(void)
 	PyModule_AddObject(m,"initializer_list", (PyObject *)&PyCAst_type_initializer_list);
 	Py_INCREF(&PyCAst_type_argument_expression_list);
 	PyModule_AddObject(m,"argument_expression_list", (PyObject *)&PyCAst_type_argument_expression_list);
+	Py_INCREF(&PyCAst_type_pointer_item);
+	PyModule_AddObject(m,"pointer_item", (PyObject *)&PyCAst_type_pointer_item);
 	Py_INCREF(&PyCAst_type_logical_and_expression);
 	PyModule_AddObject(m,"logical_and_expression", (PyObject *)&PyCAst_type_logical_and_expression);
 	Py_INCREF(&PyCAst_type_declarator);
 	PyModule_AddObject(m,"declarator", (PyObject *)&PyCAst_type_declarator);
 	Py_INCREF(&PyCAst_type_shift_expression);
 	PyModule_AddObject(m,"shift_expression", (PyObject *)&PyCAst_type_shift_expression);
+	Py_INCREF(&PyCAst_type_declaration_specifiers_item);
+	PyModule_AddObject(m,"declaration_specifiers_item", (PyObject *)&PyCAst_type_declaration_specifiers_item);
 	Py_INCREF(&PyCAst_type_struct_declarator);
 	PyModule_AddObject(m,"struct_declarator", (PyObject *)&PyCAst_type_struct_declarator);
 	Py_INCREF(&PyCAst_type_struct_declarator_list_item);
@@ -11687,6 +14296,8 @@ initPyCAst(void)
 	PyModule_AddObject(m,"struct_declarator_list", (PyObject *)&PyCAst_type_struct_declarator_list);
 	Py_INCREF(&PyCAst_type_constant_expression);
 	PyModule_AddObject(m,"constant_expression", (PyObject *)&PyCAst_type_constant_expression);
+	Py_INCREF(&PyCAst_type_specifier_qualifier_list_item);
+	PyModule_AddObject(m,"specifier_qualifier_list_item", (PyObject *)&PyCAst_type_specifier_qualifier_list_item);
 	Py_INCREF(&PyCAst_type_specifier_qualifier_list_item_1);
 	PyModule_AddObject(m,"specifier_qualifier_list_item_1", (PyObject *)&PyCAst_type_specifier_qualifier_list_item_1);
 	Py_INCREF(&PyCAst_type_specifier_qualifier_list_item_2);

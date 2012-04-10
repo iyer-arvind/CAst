@@ -1,5 +1,6 @@
 #set h=$list($object.handlers)[0]
 $utils.pyClassCreator.stdClassHeader($h)
 
-#set h={"className":$object.ruleName,"parameters":[]}
+
+#set h={"className":$object.ruleName,"parameters":[],"listClass":True}
 $utils.pyClassCreator.stdClassHeader($h)

@@ -2,5 +2,8 @@
 $utils.pyClassCreator.stdClassHeader($h)
 #end for
 
-#set h={"className":$object.ruleName}
+#set h={"className":$object.ruleName,"listClass":True}
 $utils.pyClassCreator.stdClassHeader($h)
+
+#set listCls={"className":$object.ruleName+"_item","parameters":[]}
+$utils.pyClassCreator.stdClassHeader($listCls,["noInit"])
