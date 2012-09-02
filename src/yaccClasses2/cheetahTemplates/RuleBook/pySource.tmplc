@@ -56,7 +56,7 @@ static PyObject * parseFile(PyObject *self, PyObject *args)
 	##return (PyObject*)pyRoot;
 }
 
-static PyMethodDef module_methods[] = {	{"parseFile",parseFile, METH_VARARGS,"Parses a File for C AST"},{ NULL,NULL,0,NULL }};
+static PyMethodDef module_methods[] = {	{"parseFile",parseFile, METH_VARARGS,"Parses a File for CAST"},{ NULL,NULL,0,NULL }};
 
 
 

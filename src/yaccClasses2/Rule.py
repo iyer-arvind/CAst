@@ -53,7 +53,7 @@ class RuleBook(dict):
 					else:
 						target=ruleTokenNodes["rule:"+p.name]
 					graph.add_edge(pydot.Edge(ruleTokenNodes["rule:"+r],target))
-		graph.write_png('example2_graph.png')
+		graph.write_png('graph.png')
 
 	def __str__(self):
 		return "\n\n".join([str(self[i]) for i in self])

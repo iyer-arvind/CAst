@@ -33,30 +33,30 @@ class IndexError: public std::exception
 
 
 //! This is the enumeration of the class ids 
-#set ID_LIST=[("ID_CAST",0),("ID_TOKEN",1)]
-#for r in $object:
-#set h=$object[$r].handler
-#if $len($h.handlers)>1 
-#echo ID_LIST.append(("ID_"+$r.upper(),$object[$r].classId))
-	#if $h.__class__.__name__=="ListHandlerGroup":
-#echo ID_LIST.append(("ID_"+$r.upper()+"_ITEM",$object[$r].classId+1))
-	#end if
-#else
-	#if $h.__class__.__name__=="ListHandlerGroup":
-#echo ID_LIST.append(("ID_"+$r.upper(),$object[$r].classId))
-	#end if
-#end if
-#for i,hh in enumerate($h.handlers)
-#set nn="ID_"+$hh.className.upper()
-#set n=$object[$r].classId+$i+(1 if $len($h.handlers)>1 else 0)+(1 if $h.__class__.__name__=="ListHandlerGroup" else 0)
-#echo ID_LIST.append(($nn,$n))
-#end for
-#end for
+###set ID_LIST=[("ID_CAST",0),("ID_TOKEN",1)]
+###for r in $object:
+###set h=$object[$r].handler
+###if $len($h.handlers)>1 
+###echo ID_LIST.append(("ID_"+$r.upper(),$object[$r].classId))
+##	#if $h.__class__.__name__=="ListHandlerGroup":
+###echo ID_LIST.append(("ID_"+$r.upper()+"_ITEM",$object[$r].classId+1))
+##	#end if
+###else
+##	#if $h.__class__.__name__=="ListHandlerGroup":
+###echo ID_LIST.append(("ID_"+$r.upper(),$object[$r].classId))
+##	#end if
+###end if
+###for i,hh in enumerate($h.handlers)
+###set nn="ID_"+$hh.className.upper()
+###set n=$object[$r].classId+$i+(1 if $len($h.handlers)>1 else 0)+(1 if $h.__class__.__name__=="ListHandlerGroup" else 0)
+###echo ID_LIST.append(($nn,$n))
+###end for
+###end for
 
 enum CAST_CLASS_ID
 {
-#for n,i in sorted(ID_LIST,key=lambda x:x[1])
-	#set nn="%40s"%$n
+#for n,i in sorted($utils.classId.getClassId($object),key=lambda x:x[1])
+	#set nn="%40s"%("ID_"+$n.upper())
 	$nn = $i,
 #end for
 };
@@ -331,6 +331,12 @@ $object[$i].dump("cHeader")
 
 
 #end for
+
+ReferencedCountedAutoPointer<CAst> CAstCast(ReferenceCountedAutoPointer<CAst> ,CAST_CLASS_ID toId)
+{
+	
+}
+
 }
 
 

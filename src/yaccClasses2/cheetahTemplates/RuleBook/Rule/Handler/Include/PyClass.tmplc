@@ -118,7 +118,7 @@ static PyObject* PyCAst_list_item_${name}(PyObject *_self,Py_ssize_t index)
 	if(self->_p_cast_object.isNull())Py_RETURN_NONE;
 	if(abs(index)>self->_p_cast_object->size()) PyErr_SetString(PyExc_IndexError,"Index out of range");
 	CAst::ReferenceCountedAutoPointer<CAst::${name}_item> item=self->_p_cast_object->operator[](index);
-	
+
 	return CAstToPyCAst(item);
 	##PyCAst_object_${name}_item *pyItem=(PyCAst_object_${name}_item *)PyCAst_new_${name}_item(&PyCAst_type_${name}_item,NULL,NULL);
 	##pyItem->_p_cast_object=item;
