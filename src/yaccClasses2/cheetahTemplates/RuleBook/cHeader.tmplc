@@ -332,7 +332,7 @@ $object[$i].dump("cHeader")
 
 #end for
 
-ReferencedCountedAutoPointer<CAst> CAstCast(ReferenceCountedAutoPointer<CAst> ,CAST_CLASS_ID toId)
+inline ReferenceCountedAutoPointer<CAst> CAstCast(ReferenceCountedAutoPointer<CAst> ,CAST_CLASS_ID toId)
 {
 	
 }

@@ -22,6 +22,7 @@ PyObject * CAstToPyCAst(CAst::ReferenceCountedAutoPointer<CAst::CAst> pointer)
 	switch(id)
 	{
 #for typ,id in $utils.classId.getClassId($object)
+#if $id:
 		case $id:
 		{
 			LOG(COL_FG_GREEN<<" Casting $typ with id $id to PyCAst_object_${typ}")
@@ -29,6 +30,7 @@ PyObject * CAstToPyCAst(CAst::ReferenceCountedAutoPointer<CAst::CAst> pointer)
 			pyObj->_p_cast_object=pointer;
 			return (PyObject*)pyObj;
 		}
+#end if
 #end for
 		default:
 		{
@@ -47,9 +49,9 @@ PyObject * PyCAstTunnel(CAst::ReferenceCountedAutoPointer<CAst::CAst> pointer,CA
 #if len($object[rn].handler.handlers)>1:
 #for h in $object[rn].handler.handlers:
 #if $object[rn].handler.__class__.__name__=="ListHandlerGroup"
-	//${h.className} -> dynamic_cast -> ${rn}_item
+	//!${h.className} -> ${rn}_item
 #else
-	//${h.className} -> dynamic_cast -> ${rn}
+	//!${h.className} -> ${rn}
 #end if
 #end for
 #end if
@@ -57,11 +59,11 @@ PyObject * PyCAstTunnel(CAst::ReferenceCountedAutoPointer<CAst::CAst> pointer,CA
 #set ipnn=[ p for p in $h.parameters if (($p.isIncluded) and (None not in $p.possibleValues))]
 #set ipn=[ p.argName for p in $h.parameters if (($p.isIncluded) and (None in $p.possibleValues))]
 #if(len($ipnn)==1)
-	//$ipnn[0].parameterType.name -> conditional_others_null_cast -> $h.className ($ipn)
+	//!$ipnn[0].parameterType.name -> $h.className
 #end if
 #end for
 #if $object[rn].handler.__class__.__name__ == "ListHandlerGroup"
-	//${rn}_item -> unity_length_list_cast -> $rn
+	//!${rn}_item -> $rn
 #end if
 #end for
 }
