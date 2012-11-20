@@ -19,7 +19,8 @@ int main(int argc,char **argv)
 	//std::cout<<"\n"<<root->code()<<"\n";
 
 	CAst::Ptr::storage_class_specifier scs(_T("register"));
-	CAst::Ptr::declaration_specifiers_item ts(_T("register"));
+	CAst::Ptr::declaration_specifiers ts(_T("register"));
+	ts->append(_T("int"));
 	std::cout<<ts->code();
 	return 0;
 }

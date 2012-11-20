@@ -102,7 +102,6 @@ enum CAST_CLASS_ID
 
 
 
-
 /**
  *  \brief Simple Reference Counting class
  *
@@ -208,6 +207,7 @@ class ReferenceCountedAutoPointer
 		template<typename Y>
 		friend class ReferenceCountedAutoPointer;
 
+
 		template<typename Y>
 		ReferenceCountedAutoPointer(const ReferenceCountedAutoPointer<Y>&other ):
 				__data(0),
@@ -224,7 +224,7 @@ class ReferenceCountedAutoPointer
 			if(!__data)
 			{
 				LOG(COL_FG_RED<<COL_BG_YELLOW<<"TUNNELING ")
-				ReferenceCountedAutoPointer<DataType> _other=CAstCast(other,DataType::ID);
+				ReferenceCountedAutoPointer<DataType> _other=CAstCast((ReferenceCountedAutoPointer<DataType>&)other,DataType::ID);
 				LOG(COL_FG_RED<<COL_BG_YELLOW<<"TUNNELING Done successfully")
 				__data=_other.__data;
 				__refCount=_other.__refCount;
@@ -232,12 +232,11 @@ class ReferenceCountedAutoPointer
 			}
 			else
 			{
-                                LOG(COL_FG_RED<<COL_BG_YELLOW<<"dynamic_cast worked")
+		                LOG(COL_FG_RED<<COL_BG_YELLOW<<"dynamic_cast worked")
 				__refCount=other.__refCount;
 				__refCountUp();
 			}
 		}
-
 		/**
 		 * \brief Assignment operator
                  *
@@ -249,6 +248,7 @@ class ReferenceCountedAutoPointer
 			__refCount=other.__refCount;
 			__data=other.__data;
 			__refCountUp();
+			return *this;
 		}
 		template<typename Y>
 		ReferenceCountedAutoPointer& operator=(const ReferenceCountedAutoPointer<Y>&other)
@@ -261,6 +261,7 @@ class ReferenceCountedAutoPointer
 				throw TypeError();
 			}
 			__refCountUp();
+			return *this;
 		}
 		/**
 		 * \brief Returns the reference count
@@ -305,6 +306,7 @@ class ReferenceCountedAutoPointer
 		}
 			
 };
+
 
 template<typename DataType>
 CAST_CLASS_ID ReferenceCountedAutoPointer<DataType>::DATA_ID=DataType::ID;
@@ -366,6 +368,8 @@ class token:public CAst
 		virtual ~token()
 		{}
 };
+
+
 namespace Ptr
 {
 	typedef ReferenceCountedAutoPointer<token> token;

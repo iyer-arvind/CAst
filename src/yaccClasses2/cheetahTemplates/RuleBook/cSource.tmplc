@@ -6,6 +6,9 @@ namespace CAst
 
 CAST_CLASS_ID CAst::ID=ID_CAST;
 CAST_CLASS_ID token::ID=ID_TOKEN;
+
+
+
 #for i in $object:
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -36,6 +39,16 @@ CAstPtr SingleParameterCast(const CAstPtr &c)
 {
 	LOG(COL_FG_WHITE<<COL_BG_RED<<"Single Parameter Cast")
 	return ReferenceCountedAutoPointer<To>(new To(ReferenceCountedAutoPointer<From>(c)));
+}
+
+template<typename From,typename To>
+CAstPtr ListItemToList(const CAstPtr &c)
+{
+
+	LOG(COL_FG_WHITE<<COL_BG_RED<<"List Item to List Cast")
+	ReferenceCountedAutoPointer<To> listPtr(new To() );
+	listPtr->append(ReferenceCountedAutoPointer<From>(c));
+	return listPtr;
 }
 
 class TokenAwareClassId
@@ -142,10 +155,12 @@ void __initialize_cast_routes__()
 #end if
 #end for
 #if $object[rn].handler.__class__.__name__ == "ListHandlerGroup"
-	#set from_id=$idDict[$rn+"_item"]
-	#set to_id=$idDict[$rn]
-	//__CAstGraph.addEdge($from_id,$to_id);
-#####	//!${rn}_item -> $rn //! $from_id -> $to_id
+	#set fromClass=$rn+"_item"
+	#set toClass=$rn
+	#set fromId=$idDict[$fromClass]
+	#set toId=$idDict[$toClass]
+	//LIST item $fromClass to LIST $toClass
+	__CAstGraph.addEdge(TokenAwareClassId(CAST_CLASS_ID($fromId)),TokenAwareClassId(CAST_CLASS_ID($toId)),&ListItemToList<$fromClass,$toClass>);
 #end if
 #end for
 }
