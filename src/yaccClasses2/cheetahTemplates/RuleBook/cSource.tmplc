@@ -1,7 +1,11 @@
 \#include "CAst.h"
+\#include "Paths.h"
 
 namespace CAst
 {
+
+CAST_CLASS_ID CAst::ID=ID_CAST;
+CAST_CLASS_ID token::ID=ID_TOKEN;
 #for i in $object:
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -16,12 +20,164 @@ $object[$i].dump("cSource")
 
 
 
-
-
-
-
-
 #end for
+
+template<typename From,typename To>
+CAstPtr SimpleUpCast(const CAstPtr &c)
+{
+	LOG(COL_FG_WHITE<<COL_BG_RED<<"Simple Up Cast")
+	if(c->classId()!=From::ID)
+		throw TypeError();
+	return c;
+}
+
+template<typename From,typename To>
+CAstPtr SingleParameterCast(const CAstPtr &c)
+{
+	LOG(COL_FG_WHITE<<COL_BG_RED<<"Single Parameter Cast")
+	return ReferenceCountedAutoPointer<To>(new To(ReferenceCountedAutoPointer<From>(c)));
+}
+
+class TokenAwareClassId
+{
+	private:
+		CAST_CLASS_ID _id;
+		std::string _token;
+	public:
+		TokenAwareClassId():_id(CAST_CLASS_ID(0)),_token("")
+		{}
+		TokenAwareClassId(CAST_CLASS_ID id,std::string token=""):
+				_id(id),_token(token)
+		{}
+		bool operator==(const TokenAwareClassId& other)const
+		{
+			if(_id==ID_TOKEN)
+				return ((_id==other._id) &&  (_token==other._token));
+			else
+				return _id==other._id;
+		}
+
+		bool operator<(const TokenAwareClassId& other)const
+		{
+
+
+			if(_id==ID_TOKEN)
+				if(_id==other._id)
+					return _token<other._token;
+				else
+					return _id<other._id;
+			else
+				return _id<other._id;
+		}
+	
+		std::ostream& toStream(std::ostream &stream)const
+		{	stream<<(int)_id;
+			if(_id==ID_TOKEN)stream<<":"<<_token;
+			return stream;
+		}
+};
+
+inline std::ostream& operator<<(std::ostream& stream,const TokenAwareClassId& taci ){return taci.toStream(stream);}
+typedef Graphs::Paths<TokenAwareClassId,CAstPtr > CAstGraphType;
+CAstGraphType __CAstGraph;
+
+
+void __initialize_cast_routes__()
+{
+	std::cout<<"Initializing CAst tunnelling rules";
+
+#set idDict=dict($utils.classId.getClassId($object))
+#for rn in $object:
+
+#####////////// = = = = = = = = = = = == == == $rn $object[rn].handler.__class__.__name__
+#if len($object[rn].handler.handlers)>1:
+#for h in $object[rn].handler.handlers:
+#if $object[rn].handler.__class__.__name__=="ListHandlerGroup"
+	#set fromClass=$h.className
+	#set toClass=$rn+"_item"
+	#set fromId=$idDict[$fromClass]
+	#set toId=$idDict[$toClass]
+	//! LIST_ITEM_VIRTUAL $fromClass -> $toClass   ::upcast (check the actual id of the element is $toId) should not require anything 
+	#if(fromClass=='token')
+	//APPEND all possibilities
+	__CAstGraph.addEdge(TokenAwareClassId(CAST_CLASS_ID($fromId)),TokenAwareClassId(CAST_CLASS_ID($toId)),&SimpleUpCast<$fromClass,$toClass>);
+	#else
+	__CAstGraph.addEdge(TokenAwareClassId(CAST_CLASS_ID($fromId)),TokenAwareClassId(CAST_CLASS_ID($toId)),&SimpleUpCast<$fromClass,$toClass>);
+	#end if
+#else
+	#set fromClass=$h.className
+	#set toClass=$rn
+	#set fromId=$idDict[$fromClass]
+	#set toId=$idDict[$toClass]
+	//!${h.className} -> ${rn}   //!   ::downcast $fromId -> $toId 
+	#if(fromClass=='token')
+	//APPEND all possibilities
+	__CAstGraph.addEdge(TokenAwareClassId(CAST_CLASS_ID($fromId)),TokenAwareClassId(CAST_CLASS_ID($toId)),&SimpleUpCast<$fromClass,$toClass>);
+	#else
+	__CAstGraph.addEdge(TokenAwareClassId(CAST_CLASS_ID($fromId)),TokenAwareClassId(CAST_CLASS_ID($toId)),&SimpleUpCast<$fromClass,$toClass>);
+	#end if
+
+#end if
+#end for
+#end if
+#for h in $object[rn].handler.handlers:
+#set ipnn=[ p for p in $h.parameters if (($p.isIncluded) and (None not in $p.possibleValues))]
+#set ipn=[ p.argName for p in $h.parameters if (($p.isIncluded) and (None in $p.possibleValues))]
+#if(len($ipnn)==1)
+	#set fromClass=$ipnn[0].parameterType.name
+	#set toClass=$h.className
+	#set fromId=$idDict[$fromClass]
+	#set toId=$idDict[$toClass]
+	#set pName=",".join([ "obj" if p == $ipnn[0] else "NULL" for p in $h.parameters if ($p.isIncluded)])
+	//!$fromClass -> $toClass  //! :::::::(check if other parameters are Null)this will require a constructor call
+	#if(fromClass=='token')
+	//APPEND all possibilities 
+	#for p in $ipnn[0].possibleValues
+	#set pn=$p.code
+	__CAstGraph.addEdge(TokenAwareClassId(CAST_CLASS_ID($fromId),"$pn"),TokenAwareClassId(CAST_CLASS_ID($toId)),&SingleParameterCast<$fromClass,$toClass>);
+	#end for
+	#else
+	__CAstGraph.addEdge(TokenAwareClassId(CAST_CLASS_ID($fromId)),TokenAwareClassId(CAST_CLASS_ID($toId)),&SingleParameterCast<$fromClass,$toClass>);
+	#end if
+#end if
+#end for
+#if $object[rn].handler.__class__.__name__ == "ListHandlerGroup"
+	#set from_id=$idDict[$rn+"_item"]
+	#set to_id=$idDict[$rn]
+	//__CAstGraph.addEdge($from_id,$to_id);
+#####	//!${rn}_item -> $rn //! $from_id -> $to_id
+#end if
+#end for
+}
+
+
+CAstPtr CAstCast(CAstPtr obj,CAST_CLASS_ID toId)
+{
+	LOG(COL_BG_WHITE<<COL_FG_BLUE<<"Tunnelling from "<<(int)obj->classId()<<" to "<<(int)toId)
+	TokenAwareClassId _fromId,_toId(toId);
+	if(obj->classId()==ID_TOKEN)
+	{
+		LOG(COL_BG_BLUE<<COL_FG_WHITE<<"Token is "<<((Ptr::token)obj)->text())
+		_fromId=TokenAwareClassId(ID_TOKEN,((Ptr::token)obj)->text());
+	}
+	else
+	{
+		_fromId=TokenAwareClassId(obj->classId());
+	}
+
+
+	CAstGraphType::RouteType r=__CAstGraph.getRoute(_fromId,_toId);
+	LOG(COL_BG_WHITE<<COL_FG_RED<<"Length of route from "<<_fromId<<" to "<<_toId<<": "<<r.size())
+	if(r.size()==0)
+	{
+		LOG(COL_BG_WHITE<<COL_FG_BLUE<<"Tunnelling failed from"<<(int)obj->classId()<<" to "<<(int)toId)
+		throw TypeError();
+	}
+	return __CAstGraph.parse(_fromId,_toId,obj);
+}
+
+
+
 }
 
 

@@ -65,6 +65,20 @@ class ${h.className}#echo ":public "+$h.parent if $h.parent else ""
 					$p
 #end for
 				);
+#set ipnn=[ p for p in $h.parameters if (($p.isIncluded) and (None not in $p.possibleValues))]
+#set ipn=[ p.argName for p in $h.parameters if (($p.isIncluded) and (None in $p.possibleValues))]
+#if(len($ipnn)==1 and len($fparamLst)>1)
+#set p=$fparamLst[paramLst.index($ipnn[0])].replace(',','')
+		/** 
+		 * \brief Single parameter constructor of ${h.className}
+		 *
+		 * This function handles the ${h.className}
+                 */
+		${h.className}	
+				(
+					$p
+				);
+#end if
 		/**
                  * \brief Returns the name of the class.
                  *
@@ -122,6 +136,10 @@ class ${h.className}#echo ":public "+$h.parent if $h.parent else ""
 		virtual ~${h.className}()
 		{}
 };
+namespace Ptr
+{
+	typedef ReferenceCountedAutoPointer<${h.className}> ${h.className};
+}
 
 
 
@@ -171,6 +189,50 @@ ${h.className}::${h.className}
 	LOG(COL_FG_GREEN<<"Created object of $h.className: "<<this)
 }
 
+#set paramLst=[ p for p in $h.parameters if ($p.isIncluded)]
+#set ipnn=[ p for p in $h.parameters if (($p.isIncluded) and (None not in $p.possibleValues))]
+#set ipn=[ p.argName for p in $h.parameters if (($p.isIncluded) and (None in $p.possibleValues))]
+#if(len($ipnn)==1 and len($paramLst)>1)
+#set p=$ipnn[0]
+#set pText="ReferenceCountedAutoPointer<"+p.parameterType.name+"> "+p.argName
+#set iText=",\n\t\t".join([$pp.memName+"("+($pp.argName if $pp==$p else "NULL") +")" for pp in $h.parameters if $pp.isIncluded])
+${h.className}::${h.className}
+	(
+		$pText
+	):
+#if $h.parent is not None
+		${h.parent}() #echo "," if len($iText) else ""
+#end if
+		$iText
+{
+#for p in $h.parameters:
+#if $p.isIncluded:
+#if $p.parameterType.name == "token":
+#set checkList=[]
+#for $pv in $p.possibleValues:
+	#if $pv.__class__.__name__=="ValuedToken":
+		#set checkList=[]
+		#break
+	#end if
+	#if $pv is None:
+		#echo checkList.insert(0,$p.memName+".isNull()")
+		#continue
+	#end if
+	#echo $checkList.append($p.memName+"->text()==\""+$pv.code+"\"")
+#end for
+#if len($checkList):
+	#set checkStr="||".join($checkList)
+	AssertTokenType($checkStr)
+#end if
+#if None not in $p.possibleValues
+	AssertNotNullRule($p.memName)
+#end if
+#end if
+#end if
+#end for
+	LOG(COL_FG_GREEN<<"Created object of $h.className: "<<this)
+}
+#end if
 
 std::ostream& $h.className::codeStream(std::ostream& stream)const
 {

@@ -107,5 +107,9 @@ class $object.ruleName:public CAst
 		virtual ~${object.ruleName}(){}
 };
 
+namespace Ptr
+{
+	typedef ReferenceCountedAutoPointer<${object.ruleName}> ${object.ruleName};
+}
 
 #end def

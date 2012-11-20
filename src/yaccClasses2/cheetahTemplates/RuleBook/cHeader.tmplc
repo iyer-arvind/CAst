@@ -2,10 +2,12 @@
 \#define CAST_HEADER_INCLUDED
 \#include <string>
 \#include <vector>
+\#include <stack>
 \#include <exception>
 \#include <assert.h>
 \#include <iostream>
 \#include <sstream>
+\#include <stdlib.h>
 
 \#define COL_CLEAR 	"\033[0m"
 \#define COL_FG_RED 	"\033[31m"
@@ -15,6 +17,14 @@
 \#define COL_FG_MAGENTA "\033[35m"
 \#define COL_FG_CYAN	"\033[36m"
 \#define COL_FG_WHITE 	"\033[37m"
+
+\#define COL_BG_RED 	"\033[41m"
+\#define COL_BG_GREEN 	"\033[42m"
+\#define COL_BG_YELLOW 	"\033[43m"
+\#define COL_BG_BLUE 	"\033[44m"
+\#define COL_BG_MAGENTA "\033[45m"
+\#define COL_BG_CYAN	"\033[46m"
+\#define COL_BG_WHITE 	"\033[47m"
 
 
 
@@ -31,6 +41,31 @@ class IndexError: public std::exception
   }
 };
 
+
+
+class ValueError: public std::exception
+{
+  private:
+	const std::string& _check;
+  public:
+	ValueError(const std::string& check):
+			std::exception(),
+			_check(check)
+	{}
+  virtual const char* what() const throw()
+  {
+    return _check.c_str();
+  }
+};
+
+class TypeError: public std::exception
+{
+  public:
+  virtual const char* what() const throw()
+  {
+    return "Error converting type";
+  }
+};
 
 //! This is the enumeration of the class ids 
 ###set ID_LIST=[("ID_CAST",0),("ID_TOKEN",1)]
@@ -178,9 +213,29 @@ class ReferenceCountedAutoPointer
 				__data(0),
 				__refCount(0)
 		{
+			
+			if(!other.__data)
+			{
+				LOG(COL_FG_RED<<"NULL AP ")
+				return;
+			}
+			LOG(COL_FG_RED<<COL_BG_YELLOW<<"Converting "<<"from "<<other->name()<<" to "<<DataType::ID)
 			__data=dynamic_cast<DataType*>(other.__data);
-			__refCount=other.__refCount;
-			__refCountUp();
+			if(!__data)
+			{
+				LOG(COL_FG_RED<<COL_BG_YELLOW<<"TUNNELING ")
+				ReferenceCountedAutoPointer<DataType> _other=CAstCast(other,DataType::ID);
+				LOG(COL_FG_RED<<COL_BG_YELLOW<<"TUNNELING Done successfully")
+				__data=_other.__data;
+				__refCount=_other.__refCount;
+				__refCountUp();
+			}
+			else
+			{
+                                LOG(COL_FG_RED<<COL_BG_YELLOW<<"dynamic_cast worked")
+				__refCount=other.__refCount;
+				__refCountUp();
+			}
 		}
 
 		/**
@@ -201,6 +256,10 @@ class ReferenceCountedAutoPointer
 			__clear();
 			__refCount=other.__refCount;
 			__data=dynamic_cast<DataType*>(other.__data);
+			if(!__data)
+			{
+				throw TypeError();
+			}
 			__refCountUp();
 		}
 		/**
@@ -247,7 +306,6 @@ class ReferenceCountedAutoPointer
 			
 };
 
-
 template<typename DataType>
 CAST_CLASS_ID ReferenceCountedAutoPointer<DataType>::DATA_ID=DataType::ID;
 
@@ -260,6 +318,7 @@ CAST_CLASS_ID ReferenceCountedAutoPointer<DataType>::DATA_ID=DataType::ID;
 class CAst
 {
 	public:
+		static CAST_CLASS_ID ID;
 		/** Returns the name of the class */
 		virtual std::string name()const=0;
 
@@ -307,9 +366,14 @@ class token:public CAst
 		virtual ~token()
 		{}
 };
+namespace Ptr
+{
+	typedef ReferenceCountedAutoPointer<token> token;
+}
+
 
 \#define AssertNotNullRule(rule) assert(!rule.isNull());
-\#define AssertTokenType(expr) assert(expr);
+\#define AssertTokenType(expr) if(!(expr)){std::cerr<<"Assertion: '"<<\#expr<<"' failed @"<<__FILE__<<__LINE__;throw ValueError(\#expr);};
 
 #for i in $object:
 
@@ -332,13 +396,19 @@ $object[$i].dump("cHeader")
 
 #end for
 
-inline ReferenceCountedAutoPointer<CAst> CAstCast(ReferenceCountedAutoPointer<CAst> ,CAST_CLASS_ID toId)
+
+typedef  ReferenceCountedAutoPointer<CAst> CAstPtr;
+void __initialize_cast_routes__() __attribute__((constructor));
+CAstPtr CAstCast(CAstPtr obj,CAST_CLASS_ID toId);
+
+
+
+}
+
+inline CAst::Ptr::token _T(std::string s)
 {
-	
+	return CAst::Ptr::token(new CAst::token(s));
 }
-
-}
-
 
 \#define CAP(TYPE,OBJ) CAst::ReferenceCountedAutoPointer<CAst::TYPE>(obj)
 \#include <cstdio>

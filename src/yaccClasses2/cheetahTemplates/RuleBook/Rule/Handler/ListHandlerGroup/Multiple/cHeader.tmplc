@@ -5,6 +5,7 @@ class ${object.ruleName}_item:public CAst
 {
 	
 	public:
+		static CAST_CLASS_ID ID;
 		/**
                  * \brief Interface for the child classes to return the name
                  *
@@ -29,6 +30,13 @@ class ${object.ruleName}_item:public CAst
 		}
 
 };
+
+
+namespace Ptr
+{
+	typedef ReferenceCountedAutoPointer<${object.ruleName}_item> ${object.ruleName}_item;
+}
+
 #for $h in $object.handlers:
 #set $h.parent=$object.ruleName+"_item"
 $utils.simpleClassCreator.declareClass($h)

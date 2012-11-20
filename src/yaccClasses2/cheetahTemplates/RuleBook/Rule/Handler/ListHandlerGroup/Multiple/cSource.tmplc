@@ -5,3 +5,4 @@ $utils.simpleClassCreator.defineClass($h)
 #end for
 
 CAST_CLASS_ID ${object.ruleName}::ID=ID_$object.ruleName.upper();
+CAST_CLASS_ID ${object.ruleName}_item::ID=ID_${object.ruleName.upper()}_ITEM;

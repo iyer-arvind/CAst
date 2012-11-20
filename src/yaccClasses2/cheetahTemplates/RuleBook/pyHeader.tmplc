@@ -41,29 +41,3 @@ PyObject * CAstToPyCAst(CAst::ReferenceCountedAutoPointer<CAst::CAst> pointer)
 	
 	
 }
-PyObject * PyCAstTunnel(CAst::ReferenceCountedAutoPointer<CAst::CAst> pointer,CAst::CAST_CLASS_ID id)
-{
-#for rn in $object:
-
-////////// = = = = = = = = = = = == == == $rn $object[rn].handler.__class__.__name__
-#if len($object[rn].handler.handlers)>1:
-#for h in $object[rn].handler.handlers:
-#if $object[rn].handler.__class__.__name__=="ListHandlerGroup"
-	//!${h.className} -> ${rn}_item
-#else
-	//!${h.className} -> ${rn}
-#end if
-#end for
-#end if
-#for h in $object[rn].handler.handlers:
-#set ipnn=[ p for p in $h.parameters if (($p.isIncluded) and (None not in $p.possibleValues))]
-#set ipn=[ p.argName for p in $h.parameters if (($p.isIncluded) and (None in $p.possibleValues))]
-#if(len($ipnn)==1)
-	//!$ipnn[0].parameterType.name -> $h.className
-#end if
-#end for
-#if $object[rn].handler.__class__.__name__ == "ListHandlerGroup"
-	//!${rn}_item -> $rn
-#end if
-#end for
-}

@@ -1,24 +1,23 @@
 
 #def getClassId($object)
-#set ID_LIST=[("cast",0),("token",1)]
-#for r in $object:
-#set h=$object[$r].handler
-#if $len($h.handlers)>1 
-#echo ID_LIST.append(($r,$object[$r].classId))
-	#if $h.__class__.__name__=="ListHandlerGroup":
-#echo ID_LIST.append(($r+"_item",$object[$r].classId+1))
-	#end if
-#else
-	#if $h.__class__.__name__=="ListHandlerGroup":
-#echo ID_LIST.append(($r,$object[$r].classId))
-	#end if
-#end if
-#for i,hh in enumerate($h.handlers)
-#set nn=$hh.className
-#set n=$object[$r].classId+$i+(1 if $len($h.handlers)>1 else 0)+(1 if $h.__class__.__name__=="ListHandlerGroup" else 0)
-#echo ID_LIST.append(($nn,$n))
-#set $hh.classId=$n
-#end for
-#end for
-#return ID_LIST
+	#set ID_LIST=[("cast",0),("token",1)]
+	#for r in $object:
+		#set h=$object[$r].handler
+		#if $len($h.handlers)>1 
+			#echo ID_LIST.append(($r,$object[$r].classId))
+			#if $h.__class__.__name__=="ListHandlerGroup":
+				#echo ID_LIST.append(($r+"_item",$object[$r].classId+1))
+			#end if
+		#else
+			#if $h.__class__.__name__=="ListHandlerGroup":
+				#echo ID_LIST.append(($r,$object[$r].classId))
+			#end if
+		#end if
+		#for i,hh in enumerate($h.handlers)
+			#set nn=$hh.className
+			#set n=$object[$r].classId+$i+(1 if $len($h.handlers)>1 else 0)+(1 if $h.__class__.__name__=="ListHandlerGroup" else 0)
+			#echo ID_LIST.append(($nn,$n))
+		#end for
+	#end for
+	#return ID_LIST
 #end def

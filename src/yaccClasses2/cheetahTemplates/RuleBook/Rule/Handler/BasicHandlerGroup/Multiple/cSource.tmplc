@@ -1,4 +1,6 @@
 
+CAST_CLASS_ID ${object.ruleName}::ID=ID_$object.ruleName.upper();
+
 #for $h in $object.handlers:
 #set $h.parent=$object.ruleName
 $utils.simpleClassCreator.defineClass($h)
