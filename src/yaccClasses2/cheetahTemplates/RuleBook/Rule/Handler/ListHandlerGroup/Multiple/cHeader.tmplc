@@ -5,6 +5,11 @@ class ${object.ruleName}_item:public CAst
 {
 	
 	public:
+		${object.ruleName}_item():
+			CAst()
+		{
+		}
+
 		static CAST_CLASS_ID ID;
 		/**
                  * \brief Interface for the child classes to return the name
@@ -21,6 +26,7 @@ class ${object.ruleName}_item:public CAst
 		virtual ~${object.ruleName}_item(){};
 
 		virtual std::ostream& codeStream(std::ostream& stream)const=0;
+		virtual std::ostream& graphStream(std::ostream& stream,GraphProps graphProps=GraphProps())const=0;
 
 		std::string code()const
 		{

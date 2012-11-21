@@ -88,7 +88,38 @@ class $object.ruleName:public CAst
 			return _itemList[i];
 		}
 
-
+		/**
+		 * \brief Writes graph to the graph stream
+		 *
+		 *
+		 */
+		virtual std::ostream& graphStream(std::ostream& stream,GraphProps graphProps=GraphProps())const
+		{
+			if(_itemList.size()>1)
+			{
+				stream<<"node_"<<this->nodeId();
+				if(graphProps.count("memberName"))stream<<"[label=\""<<graphProps["memberName"]<<"\"]";
+				stream<<";\n";
+				stream<<"node_"<<this->nodeId()<<" [label=\""<<this->name()<<"\",shape=rectangle];\n";
+				stream<<"subgraph cluster_"<<nodeId()<<"\n{\ncolor=lightgrey;\n";
+				stream<<"rankdir=TB;\n";
+				int n=0;
+				for(C${object.ruleName}IterType i=_itemList.begin();i!=_itemList.end();i++)
+				{
+					GraphProps g;
+					char nm[6];
+					sprintf(nm,"[%d]",n++);
+					g["memberName"]=(const char*)nm;
+					stream<<"node_"<<this->nodeId()<<" -> ";
+					(*i)->graphStream(stream,g);
+				}
+				stream<<"}";
+			}else if(_itemList.size()==1)
+			{
+					(*_itemList.begin())->graphStream(stream,graphProps);
+			}
+			return stream;
+		}
 
 		/**
 		 * \brief Writes code to the code stream
@@ -103,6 +134,8 @@ class $object.ruleName:public CAst
 			}
 			return stream;
 		}
+
+
 
 		virtual ~${object.ruleName}(){}
 };

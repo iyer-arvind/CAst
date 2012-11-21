@@ -3,6 +3,7 @@
 \#include <string>
 \#include <vector>
 \#include <stack>
+\#include <map>
 \#include <exception>
 \#include <assert.h>
 \#include <iostream>
@@ -307,10 +308,10 @@ class ReferenceCountedAutoPointer
 			
 };
 
+typedef std::map<std::string,std::string> GraphProps;
 
 template<typename DataType>
 CAST_CLASS_ID ReferenceCountedAutoPointer<DataType>::DATA_ID=DataType::ID;
-
 
 /**
  *
@@ -319,7 +320,15 @@ CAST_CLASS_ID ReferenceCountedAutoPointer<DataType>::DATA_ID=DataType::ID;
  */
 class CAst
 {
+	private:
+		static unsigned int nodeCount;
+		unsigned int _nodeId;
 	public:
+		CAst():_nodeId(nodeCount++)
+		{}
+		
+		virtual unsigned int nodeId()const {return _nodeId;}
+
 		static CAST_CLASS_ID ID;
 		/** Returns the name of the class */
 		virtual std::string name()const=0;
@@ -329,9 +338,12 @@ class CAst
 
 		/** The destructor */
 		virtual ~CAst()
-		{}
+		{
+			LOG("DELETED:"<<_nodeId)
+		}
 
 		virtual std::ostream& codeStream(std::ostream& stream)const=0;
+		virtual std::ostream& graphStream(std::ostream& stream,GraphProps graphProps=GraphProps())const=0;
 
 		std::string code()const
 		{
@@ -340,7 +352,21 @@ class CAst
 			return stream.str();
 		}
 
+		std::string graph()const
+		{
+			std::stringstream stream;
+			stream<<"digraph G\n{\n";
+			stream<<"edge [labelfontsize=6];\n";
+			graphStream(stream);
+			stream<<"}\n";
+			return stream.str();
+		}
+
 };
+namespace Ptr
+{
+	typedef ReferenceCountedAutoPointer<CAst> CAst;
+}
 
 class token:public CAst
 {
@@ -351,7 +377,8 @@ class token:public CAst
 	public:
 		/** The constructor takes the string*/
 		token(std::string text):
-			_text(text)
+			_text(text),
+			CAst()
 		{}
 
 
@@ -362,8 +389,24 @@ class token:public CAst
 		/** Returns the class ID of the class */
 		virtual CAST_CLASS_ID classId()const{return ID_TOKEN;};
 
-	
-		std::ostream& codeStream(std::ostream& stream)const{return stream<<_text<<" ";}
+		/** Prints the code for the node */
+		std::ostream& codeStream(std::ostream& stream)const{return stream<<" "<<_text;}
+
+		/** Prints the ast of the node */
+		std::ostream& graphStream(std::ostream& stream,GraphProps graphProps=GraphProps())const
+		{
+
+			stream<<"node_"<<this->nodeId();
+			if(graphProps.count("memberName"))stream<<"[label=\""<<graphProps["memberName"]<<"\"]";
+			stream<<";\n";
+
+
+
+			if(_text[0]=='\"')
+			return stream<<"node_"<<nodeId()<<" [label="<<_text<<", fillcolor=grey];\n";
+			return stream<<"node_"<<nodeId()<<" [label=\""<<_text<<"\", fillcolor=grey];\n";
+		}
+		
 		/** The destructor */
 		virtual ~token()
 		{}

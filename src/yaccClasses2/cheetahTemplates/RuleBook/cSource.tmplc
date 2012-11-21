@@ -6,7 +6,7 @@ namespace CAst
 
 CAST_CLASS_ID CAst::ID=ID_CAST;
 CAST_CLASS_ID token::ID=ID_TOKEN;
-
+unsigned int CAst::nodeCount=0;
 
 
 #for i in $object:
@@ -97,7 +97,7 @@ CAstGraphType __CAstGraph;
 
 void __initialize_cast_routes__()
 {
-	std::cout<<"Initializing CAst tunnelling rules";
+	LOG("Initializing CAst tunnelling rules")
 
 #set idDict=dict($utils.classId.getClassId($object))
 #for rn in $object:

@@ -10,6 +10,9 @@
 class ${object.ruleName}:public CAst
 {
 	public:
+		${object.ruleName}():CAst()
+		{}
+
 		static CAST_CLASS_ID ID;
 		/**
                  * \brief Interface for the child classes to return the name
@@ -26,6 +29,7 @@ class ${object.ruleName}:public CAst
 		virtual ~${object.ruleName}(){};
 
 		virtual std::ostream& codeStream(std::ostream& stream)const=0;
+		virtual std::ostream& graphStream(std::ostream& stream,GraphProps graphProps=GraphProps())const=0;
 };
 
 namespace Ptr

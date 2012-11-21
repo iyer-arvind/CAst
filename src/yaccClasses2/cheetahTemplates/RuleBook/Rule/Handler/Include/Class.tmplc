@@ -118,18 +118,27 @@ class ${h.className}#echo ":public "+$h.parent if $h.parent else ""
 		 */
 		virtual std::ostream& codeStream(std::ostream&)const;
 
-#if $h.parent is None
-		/** 
-                 * \brief Returns the code as a string
+
+		/**
+		 * \brief Writes code to the code stream
+		 *
 		 *
 		 */
-		std::string code()const
-		{
-			std::stringstream stream;
-			codeStream(stream);
-			return stream.str();
-		}
-#end if 
+		virtual std::ostream& graphStream(std::ostream&,GraphProps graphProps=GraphProps())const;
+
+
+//#if $h.parent is None
+//		/** 
+//                 * \brief Returns the code as a string
+//		 *
+//		 */
+//		std::string code()const
+//		{
+//			std::stringstream stream;
+//			codeStream(stream);
+//			return stream.str();
+//		}
+//#end if 
 		/**
 		 * \brief Default destructor. 
 		 */
@@ -155,11 +164,11 @@ CAST_CLASS_ID ${h.className}::ID=ID_$h.className.upper();
 ${h.className}::${h.className}
 	(
 		$pText
-	):
+	): 	
 #if $h.parent is not None
-		${h.parent}() #echo "," if len($iText) else ""
+		${h.parent}() #echo "," if len($iText) else "" 
 #end if
-		$iText
+		$iText 
 {
 #for p in $h.parameters:
 #if $p.isIncluded:
@@ -249,6 +258,47 @@ std::ostream& $h.className::codeStream(std::ostream& stream)const
 #end if
 
 #end for
+	return stream;
+}
+
+std::ostream& $h.className::graphStream(std::ostream& stream,GraphProps graphProps)const
+{
+	int _nnCount=0;
+	Ptr::CAst _nnp=NULL;
+#for $p in $h.parameters
+#if($p.isIncluded)
+	if( ! ${p.memName}.isNull()){_nnCount++;_nnp=${p.memName};}
+#end if
+#end for
+
+
+	if(_nnCount==1)
+	{
+		_nnp->graphStream(stream,graphProps);
+	}
+	else
+	{
+		stream<<"node_"<<this->nodeId();
+		if(graphProps.count("memberName"))stream<<"[label=\""<<graphProps["memberName"]<<"\"]";
+		stream<<";\n";
+		stream<<"node_"<<this->nodeId()<<" [label=\""<<this->name()<<"\",shape=rectangle];\n";
+#for $p in $h.parameters
+#if($p.isIncluded)
+		if( ! ${p.memName}.isNull())
+		{
+			GraphProps g;
+			g["memberName"]="${p.memName}";
+			stream<<"node_"<<this->nodeId()<<" -> ";
+			$p.memName->graphStream(stream,g);
+		}
+		else
+		{
+			//stream<<this->name()<<" -> "<<$p.memName<<"\n";
+		}
+#end if
+#end for
+	}
+	//stream<<"/*=END=$h.className=*/\n";
 	return stream;
 }
 #end def
