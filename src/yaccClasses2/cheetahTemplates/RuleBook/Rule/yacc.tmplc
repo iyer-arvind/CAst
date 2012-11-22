@@ -16,7 +16,11 @@ CAst::${p.handler.className} *obj=new CAst::${p.handler.className}(#slurp
 	#if $pj is None:
 		#echo args.append("NULL")
 	#elif $pp.parameterType.name=="token"
-		#echo args.append("new CAst::token($<_t_string>"+str($pj+1)+")")
+		#if($pp.parameterType.__class__.__name__=="ValuedToken")
+			#echo args.append("new CAst::token($<_t_string>"+str($pj+1)+",true)")
+		#else
+			#echo args.append("new CAst::token($<_t_string>"+str($pj+1)+")")
+		#end if
 	#else
 		#echo args.append("$<_t_"+$pp.parameterType.name+">"+str($pj+1))
 	#end if 

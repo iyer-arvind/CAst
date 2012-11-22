@@ -356,6 +356,7 @@ class CAst
 		{
 			std::stringstream stream;
 			stream<<"digraph G\n{\n";
+			stream<<"rankdir=LR;\n";
 			stream<<"edge [labelfontsize=6];\n";
 			graphStream(stream);
 			stream<<"}\n";
@@ -372,17 +373,22 @@ class token:public CAst
 {
 	private:
 		std::string _text;
+		bool _valued;
 	public:
 		static CAST_CLASS_ID ID;
 	public:
 		/** The constructor takes the string*/
-		token(std::string text):
+		token(std::string text,bool valued=false):
 			_text(text),
+			_valued(valued),
 			CAst()
 		{}
 
 
 		const std::string& text()const {return _text;}
+
+		bool valued()const {return _valued;}
+
 		/** Returns the name of the class */
 		virtual std::string name()const{return "token";};
 
@@ -452,9 +458,9 @@ CAstPtr CAstCast(CAstPtr obj,CAST_CLASS_ID toId);
 
 }
 
-inline CAst::Ptr::token _T(std::string s)
+inline CAst::Ptr::token _T(std::string s,bool valued=false)
 {
-	return CAst::Ptr::token(new CAst::token(s));
+	return CAst::Ptr::token(new CAst::token(s,valued));
 }
 
 \#define CAP(TYPE,OBJ) CAst::ReferenceCountedAutoPointer<CAst::TYPE>(obj)

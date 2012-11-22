@@ -145,10 +145,14 @@ void __initialize_cast_routes__()
 	//!$fromClass -> $toClass  //! :::::::(check if other parameters are Null)this will require a constructor call
 	#if(fromClass=='token')
 	//APPEND all possibilities 
+	#if $ipnn[0].parameterType.__class__.__name__=="ValuedToken"
+	__CAstGraph.addEdge(TokenAwareClassId(CAST_CLASS_ID($fromId),"ValuedToken"),TokenAwareClassId(CAST_CLASS_ID($toId)),&SingleParameterCast<$fromClass,$toClass>);
+	#else
 	#for p in $ipnn[0].possibleValues
 	#set pn=$p.code
 	__CAstGraph.addEdge(TokenAwareClassId(CAST_CLASS_ID($fromId),"$pn"),TokenAwareClassId(CAST_CLASS_ID($toId)),&SingleParameterCast<$fromClass,$toClass>);
 	#end for
+	#end if
 	#else
 	__CAstGraph.addEdge(TokenAwareClassId(CAST_CLASS_ID($fromId)),TokenAwareClassId(CAST_CLASS_ID($toId)),&SingleParameterCast<$fromClass,$toClass>);
 	#end if
@@ -172,8 +176,17 @@ CAstPtr CAstCast(CAstPtr obj,CAST_CLASS_ID toId)
 	TokenAwareClassId _fromId,_toId(toId);
 	if(obj->classId()==ID_TOKEN)
 	{
-		LOG(COL_BG_BLUE<<COL_FG_WHITE<<"Token is "<<((Ptr::token)obj)->text())
-		_fromId=TokenAwareClassId(ID_TOKEN,((Ptr::token)obj)->text());
+		Ptr::token t(obj);
+		if(t->valued())
+		{
+			LOG(COL_BG_BLUE<<COL_FG_WHITE<<"Token is Valued");
+			_fromId=TokenAwareClassId(ID_TOKEN,"ValuedToken");
+		}
+		else
+		{
+			LOG(COL_BG_BLUE<<COL_FG_WHITE<<"Token is "<<t->text())
+			_fromId=TokenAwareClassId(ID_TOKEN,t->text());
+		}
 	}
 	else
 	{

@@ -102,7 +102,6 @@ class $object.ruleName:public CAst
 				stream<<";\n";
 				stream<<"node_"<<this->nodeId()<<" [label=\""<<this->name()<<"\",shape=rectangle];\n";
 				stream<<"subgraph cluster_"<<nodeId()<<"\n{\ncolor=lightgrey;\n";
-				stream<<"rankdir=TB;\n";
 				int n=0;
 				for(C${object.ruleName}IterType i=_itemList.begin();i!=_itemList.end();i++)
 				{

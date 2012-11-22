@@ -354,12 +354,16 @@ labeled_statement
 	| CASE constant_expression ':' statement
 	| DEFAULT ':' statement
 	;
+statement_or_declaration_list
+	: statement
+	| declaration
+	| statement_or_declaration_list statement
+	| statement_or_declaration_list declaration
+	;
 
 compound_statement
 	: '{' '}'
-	| '{' statement_list '}'
-	| '{' declaration_list '}'
-	| '{' declaration_list statement_list '}'
+	| '{' statement_or_declaration_list '}'
 	;
 
 declaration_list
