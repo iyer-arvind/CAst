@@ -30,6 +30,11 @@ class $object.ruleName:public CAst
 		{
 			LOG("Created List object of $object.ruleName: "<<this)
 		}
+	
+		${object.ruleName}(std::initializer_list<Ptr::CAst> iList):CAst()
+		{
+			LOG("Not Available")
+		}
 
 		/**
 		 * \brief Append an item to the back of the list

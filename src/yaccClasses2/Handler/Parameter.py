@@ -29,7 +29,7 @@ class ParameterList(list):
 	def finalize(self):
 		included=[p for p in self if p.isIncluded]
 		types=[p.parameterType.name for p in included]
-		print types
+		#print types
 		for i in included:
 			if(i.index>0):continue
 			if types.count(i.parameterType.name)>1:

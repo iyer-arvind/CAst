@@ -7,6 +7,8 @@ from ..Template import TemplateFill
 
 import copy
 
+from ..Arguments import yaccFile
+
 class ListHandlerGroup(object):
 	def __init__(self,handlers,rule):
 		self.rule=rule
@@ -14,14 +16,22 @@ class ListHandlerGroup(object):
 		self.ruleName=self.rule.ruleName
 		if len(self.handlers)>1 :
 			for i,h in enumerate(self.handlers):
-				h.className=self.ruleName+"_item_"+str(i+1)
+				if tuple(h.masterPattern) in self.rule.ruleBook.aliases:
+					h.className=self.rule.ruleBook.aliases[tuple(h.masterPattern)]+"_item"
+				else:	
+					h.className=self.ruleName+"_item"+str(i+1)
 				h.parameters.finalize()
 				h.parentClassName=self.ruleName
 		else:
 			for i,h in enumerate(self.handlers):
-				h.className=self.ruleName+"_item"
+				if tuple(h.masterPattern) in self.rule.ruleBook.aliases:
+					h.className=self.rule.ruleBook.aliases[tuple(h.masterPattern)]+"_item"
+				else:	
+					h.className=self.ruleName+"_item"
 				h.parameters.finalize()
 				h.parentClassName=self.ruleName
+
+
 	def dump(self,s):
 		if(len(self.handlers)==1):
 			return TemplateFill(self,"RuleBook","Rule","Handler","ListHandlerGroup","Single",s)
@@ -40,6 +50,7 @@ class ListHandler(object):
 		self.selfIndex=pattern.index(rule)
 		self.parameters[self.selfIndex].isIncluded=False
 		self.className="<noname>"
+
 
 	def strOut(self,pattern):
 		if self.selfRule not in pattern:
@@ -103,7 +114,7 @@ class ListHandler(object):
 		
 
 def Check(rule):
-	print "\n\n\n",repr(rule)
+	#print "\n\n\n",repr(rule)
 	patterns=sorted(rule.patterns,key=lambda x:-len(x))
 	flag=True
 	accumulators=[]
@@ -112,7 +123,7 @@ def Check(rule):
 			for pp in accumulators:
 				itr,indices=p.isTokenReplaced(pp)
 				if itr:
-					print "A token replaced:",indices
+					#print "A token replaced:",indices
 					for i in indices:
 						pp.handler.includeParameter(i)
 					p.handler=pp.handler
@@ -125,7 +136,7 @@ def Check(rule):
 			for pp in accumulators:
 				iss,absent=p.isSubset(pp)
 				if iss:
-					print "A subset"
+					#print "A subset"
 					p.handler=pp.handler
 					for i in absent:
 						if pp[i]!=rule:
@@ -140,7 +151,7 @@ def Check(rule):
 
 
 	if(flag):
-		print "\033[41;37;mListHandler Suitable for "+repr(rule)+"\033[0m"
+		#print "\033[41;37;mListHandler Suitable for "+repr(rule)+"\033[0m"
 		return ListHandlerGroup(set([p.handler for p in patterns]),rule)
 	else:
 		for p in patterns:

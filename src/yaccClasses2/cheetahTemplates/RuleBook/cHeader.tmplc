@@ -9,6 +9,9 @@
 \#include <iostream>
 \#include <sstream>
 \#include <stdlib.h>
+\#include <initializer_list>
+
+
 
 \#define COL_CLEAR 	"\033[0m"
 \#define COL_FG_RED 	"\033[31m"
@@ -59,6 +62,22 @@ class ValueError: public std::exception
   }
 };
 
+class ArgumentError: public std::exception
+{
+  private:
+	const std::string& _check;
+  public:
+	ArgumentError(const std::string& check):
+			std::exception(),
+			_check(check)
+	{}
+  virtual const char* what() const throw()
+  {
+    return _check.c_str();
+  }
+};
+
+
 class TypeError: public std::exception
 {
   public:
@@ -98,8 +117,7 @@ enum CAST_CLASS_ID
 };
 
 
-
-
+class CAst;
 
 
 
@@ -162,6 +180,12 @@ class ReferenceCountedAutoPointer
 				__refCount(0)
 		{
 			LOG(COL_FG_RED<<"NULL DATA")
+		}
+
+		ReferenceCountedAutoPointer(std::initializer_list< ReferenceCountedAutoPointer<CAst> > iList):
+				__data(new DataType(iList)),
+				__refCount(new int(1))
+		{
 		}
 
 		/** 
@@ -238,6 +262,7 @@ class ReferenceCountedAutoPointer
 				__refCountUp();
 			}
 		}
+
 		/**
 		 * \brief Assignment operator
                  *
@@ -461,6 +486,11 @@ CAstPtr CAstCast(CAstPtr obj,CAST_CLASS_ID toId);
 inline CAst::Ptr::token _T(std::string s,bool valued=false)
 {
 	return CAst::Ptr::token(new CAst::token(s,valued));
+}
+
+inline CAst::Ptr::token _V(std::string s)
+{
+	return CAst::Ptr::token(new CAst::token(s,true));
 }
 
 \#define CAP(TYPE,OBJ) CAst::ReferenceCountedAutoPointer<CAst::TYPE>(obj)

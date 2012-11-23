@@ -16,6 +16,7 @@ class YaccFile(object):
 		tokens=[]
 		codeLines=[]
 		rules={}
+		ruleAliases={}
 		with open(self.fileName) as fh:
 			for l in fh:
 				l=l.strip('\n')
@@ -43,12 +44,19 @@ class YaccFile(object):
 						if(l==';'):
 							continue
 						
+						if("/*" in l):
+							alias=l[l.index('/*')+2:l.index('*/')].strip()
+							l=l[0:l.index('/*')]
+						else:
+							alias=None
 						rules[currentRule].append(tuple(l.split()[1:]))
+						if(alias):
+							ruleAliases[rules[currentRule][-1]]=alias
 				if(mode>1):
 					codeLines.append(l)
 
 				
-		
+		self.ruleAliases=ruleAliases
 		self.rules=rules
 		self.tokens=tokens
 		self.codeLines=codeLines
@@ -73,4 +81,5 @@ class YaccFile(object):
 		#self.start=start
 		#self.ruleMap[self.start].isStart=True
 		
-
+if(__name__=="__main__"):
+	print Arguments.yaccFile.ruleAliases

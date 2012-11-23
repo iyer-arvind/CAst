@@ -4,13 +4,19 @@ import Rule
 
 
 ruleBook=Rule.RuleBook(Arguments.yaccFile)
+
 #ruleBook.graph("test.png")
 import Resolve
 for r in ruleBook:
 	rule=ruleBook[r]
 	Resolve.resolve(rule)
 
-print ruleBook
+for r in ruleBook:
+	for p in ruleBook[r].patterns:
+		p.handler.getParameterMap(p)
+
+	
+#print ruleBook
 if(Arguments.cFile is not None):
 	with open(Arguments.cFile+".h","w") as chFile:
 		chFile.write(ruleBook.dump("cHeader"))

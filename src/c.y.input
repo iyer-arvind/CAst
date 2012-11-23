@@ -26,9 +26,9 @@ postfix_expression
 	: primary_expression									
 	| postfix_expression '[' expression ']'                                                 
 	| postfix_expression '(' ')'                                                            
-	| postfix_expression '(' argument_expression_list ')'                                   
+	| postfix_expression '(' argument_expression_list ')'                                   /*function_call*/
 	| postfix_expression '.' IDENTIFIER                                                     
-	| postfix_expression PTR_OP IDENTIFIER                                                  
+	| postfix_expression PTR_OP IDENTIFIER                                                  /*increment*/
 	| postfix_expression INC_OP                                                             
 	| postfix_expression DEC_OP                                                             
 	;

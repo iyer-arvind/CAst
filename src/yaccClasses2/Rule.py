@@ -5,10 +5,12 @@ import Token
 import pydot
 
 
+
 class Rule(object):
-	def __init__(self,ruleName):
+	def __init__(self,ruleName,ruleBook):
 		self.ruleName=ruleName
-		self.name=ruleName
+		self.ruleBook=ruleBook
+		self.name=self.ruleName
 		self.patterns=[]
 	def __str__(self):
 		_st="\033[32m"+self.ruleName+" "*(80-len(self.ruleName))+"\033[0m\033[48;5;215;30;2m"+self.handler.__class__.__name__+"\033[0m\n     "+"\n     ".join([str(p) for p in self.patterns])
@@ -24,16 +26,21 @@ class RuleBook(dict):
 	def __init__(self,yaccFile):
 		self.yaccFile=yaccFile
 		self.__createRules()
-
+		self.__createAliases()
+	
 	def __createRules(self):
 		for i,r in enumerate(self.yaccFile.rules):
-			self[r]=Rule(r)
+			self[r]=Rule(r,self)
 			self[r].classId=(i<<4)+16
 		for r in self.yaccFile.rules:
 			patterns=[Pattern(p,self) for p in self.yaccFile.rules[r]]
 			self[r].patterns=patterns
 			self[r].isStart=False
 		self[self.yaccFile.start].isStart=True
+	def __createAliases(self):
+		self.aliases={}
+		for p in self.yaccFile.ruleAliases:
+			self.aliases[Pattern(p,self)]=self.yaccFile.ruleAliases[p]
 			
 
 	def graph(self,fn):
@@ -56,7 +63,8 @@ class RuleBook(dict):
 		graph.write_png('graph.png')
 
 	def __str__(self):
-		return "\n\n".join([str(self[i]) for i in self])
+		a="\n\n".join([str(self[i]) for i in self])
+		return ""
 
 	def dump(self,s):
 		return TemplateFill(self,"RuleBook",s)

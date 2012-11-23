@@ -11,12 +11,19 @@ class BasicHandlerGroup(object):
 		self.ruleName=self.rule.name
 		if len(self.handlers)>1 :
 			for i,h in enumerate(self.handlers):
-				h.className=self.ruleName+"_"+str(i+1)
+				if tuple(h.masterPattern) in self.rule.ruleBook.aliases:
+					h.className=self.rule.ruleBook.aliases[tuple(h.masterPattern)]
+				else:	
+					h.className=self.ruleName+"_"+str(i+1)
 				h.parameters.finalize()
 				h.parentClassName=self.ruleName
 				#h.classId=self.rule.classId+(i+1)
 		else:
 			for i,h in enumerate(self.handlers):
+				if tuple(h.masterPattern) in self.rule.ruleBook.aliases:
+					h.className=self.rule.ruleBook.aliases[tuple(h.masterPattern)]
+				else:	
+					h.className=self.ruleName
 				h.className=self.ruleName
 				h.parameters.finalize()
 				h.parentClassName=self.ruleName
@@ -78,7 +85,7 @@ class BasicHandler(object):
 
 
 def Check(rule):
-	print "\n\n\n",repr(rule)
+	#print "\n\n\n",repr(rule)
 	patterns=sorted(rule.patterns,key=lambda x:-len(x))
 	subs=set()
 	for i1,p1 in enumerate(patterns):
@@ -89,9 +96,9 @@ def Check(rule):
 				continue
 			if p1.handler is None: p1.handler=BasicHandler(p1)
 			iss,absent=p2.isSubset(p1)
-			print repr(p1),repr(p2)
+			#print repr(p1),repr(p2)
 			if iss:
-				print "p2 is subset of p1"
+				#print "p2 is subset of p1"
 				p2.handler=p1.handler
 				for a in absent:
 					p1.handler.includeParameter(a)
@@ -99,7 +106,7 @@ def Check(rule):
 				continue
 			itr,indices=p2.isTokenReplaced(p1)
 			if itr:
-				print "p2 is token replacement of p1"
+				#print "p2 is token replacement of p1"
 				
 				for i in indices:
 					p1.handler.includeParameter(i)

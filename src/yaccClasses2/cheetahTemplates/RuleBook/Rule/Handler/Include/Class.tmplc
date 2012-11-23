@@ -79,6 +79,10 @@ class ${h.className}#echo ":public "+$h.parent if $h.parent else ""
 					$p
 				);
 #end if
+		${h.className}
+				(
+					const std::initializer_list<Ptr::CAst> init
+				);
 		/**
                  * \brief Returns the name of the class.
                  *
@@ -127,6 +131,8 @@ class ${h.className}#echo ":public "+$h.parent if $h.parent else ""
 		virtual std::ostream& graphStream(std::ostream&,GraphProps graphProps=GraphProps())const;
 
 
+
+
 //#if $h.parent is None
 //		/** 
 //                 * \brief Returns the code as a string
@@ -145,6 +151,8 @@ class ${h.className}#echo ":public "+$h.parent if $h.parent else ""
 		virtual ~${h.className}()
 		{}
 };
+
+
 namespace Ptr
 {
 	typedef ReferenceCountedAutoPointer<${h.className}> ${h.className};
@@ -241,6 +249,26 @@ ${h.className}::${h.className}
 #end for
 	LOG(COL_FG_GREEN<<"Created object of $h.className: "<<this)
 }
+
+${h.className}::${h.className}
+	(
+		const std::initializer_list<Ptr::CAst> iList
+	)#slurp
+#if $h.parent is not None
+		:${h.parent}()
+#end if
+	{
+
+		#set ip=[$p for $p in $h.parameters if $p.isIncluded]
+		#set nip=len(ip)
+		if(iList.size()!= ${nip})throw ArgumentError("Incorrect number of argument");
+		std::initializer_list<Ptr::CAst>::const_iterator iListIter=iList.begin();
+		#for p in $ip
+		$p.memName=ReferenceCountedAutoPointer<${p.parameterType.name}>(*iListIter++);
+		#end for
+		
+		
+	}
 #end if
 
 std::ostream& $h.className::codeStream(std::ostream& stream)const
@@ -301,4 +329,5 @@ std::ostream& $h.className::graphStream(std::ostream& stream,GraphProps graphPro
 	//stream<<"/*=END=$h.className=*/\n";
 	return stream;
 }
+
 #end def

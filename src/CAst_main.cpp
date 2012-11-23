@@ -16,17 +16,15 @@ int main(int argc,char **argv)
 	//yyparse();
 	//std::cout<<"\n"<<root->graph()<<"\n";
 
-	CAst::Ptr::multiplicative_expression_item mi(new CAst::multiplicative_expression_item(_T("*"),_T("10",true)));
-	CAst::Ptr::multiplicative_expression m(_T("a",true));m->append(mi);
-	CAst::Ptr::argument_expression_list ael(_T("\"\%d\"",true));ael->append(new CAst::argument_expression_list_item(_T(","),m));
-	CAst::Ptr::postfix_expression_1 pe(new CAst::postfix_expression_1(_T("printf",true),ael));
+	CAst::multiplicative_expression_item a={_T("*"),_V("10")};
+	CAst::Ptr::multiplicative_expression_item mi={_T("*"),_V("10")};
+	CAst::Ptr::multiplicative_expression m(_V("a"));m->append(mi);
+	CAst::Ptr::argument_expression_list ael(_V("\"\%d\""));ael->append(new CAst::argument_expression_list_item(_T(","),m));
+	CAst::Ptr::function_call pe(new CAst::function_call(_V("printf"),ael));
 	
 
-	//CAst::Ptr::storage_class_specifier scs(_T("register"));
-	//CAst::Ptr::declaration_specifiers ts(_T("register"));
-	//ts->append(_T("int"));
-	CAst::Ptr::CAst r=pe;
-	std::cout<<r->code();
+	CAst::Ptr::CAst root=pe;
+	std::cout<<root->graph();
 	return 0;
 }
 
