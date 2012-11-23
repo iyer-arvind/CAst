@@ -25,12 +25,12 @@ primary_expression
 postfix_expression
 	: primary_expression									
 	| postfix_expression '[' expression ']'                                                 
-	| postfix_expression '(' ')'                                                            
+	| postfix_expression '(' ')'                                                            /*function_call*/
 	| postfix_expression '(' argument_expression_list ')'                                   /*function_call*/
 	| postfix_expression '.' IDENTIFIER                                                     
-	| postfix_expression PTR_OP IDENTIFIER                                                  /*increment*/
-	| postfix_expression INC_OP                                                             
-	| postfix_expression DEC_OP                                                             
+	| postfix_expression PTR_OP IDENTIFIER                                                  
+	| postfix_expression INC_OP                                                             /*increment*/
+	| postfix_expression DEC_OP                                                             /*increment*/
 	;
 
 argument_expression_list
@@ -125,8 +125,8 @@ conditional_expression
 	;
 
 assignment_expression
-	: conditional_expression								
-	| unary_expression assignment_operator assignment_expression				
+	: conditional_expression								/*conditional*/
+	| unary_expression assignment_operator assignment_expression				/*assignment*/
 	;
 
 assignment_operator
@@ -390,9 +390,12 @@ selection_statement
 iteration_statement
 	: WHILE '(' expression ')' statement
 	| DO statement WHILE '(' expression ')' ';'
-	| FOR '(' expression_statement expression_statement ')' statement
-	| FOR '(' expression_statement expression_statement expression ')' statement
+	| FOR '(' declaration expression_statement ')' statement				/*for_dec_loop*/
+	| FOR '(' expression_statement expression_statement ')' statement					/*for_exp_loop*/
+	| FOR '(' declaration expression_statement expression ')' statement			/*for_dec_loop*/
+	| FOR '(' expression_statement expression_statement expression ')' statement			/*for_exp_loop*/
 	;
+
 
 jump_statement
 	: GOTO IDENTIFIER ';'
